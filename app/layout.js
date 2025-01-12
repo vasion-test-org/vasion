@@ -4,13 +4,16 @@ import StoryblokProvider from "@/components/StoryblokProvider"
 import './globals.css';
 
 export const metadata = {
-  title: 'Storyblok and Next.js 13',
-  description: 'A Next.js and Storyblok app using app router ',
+  title: 'Vasion',
+  description: 'Vasion site',
 }
 
 storyblokInit({
-  accessToken: 'your-access-token',
-  use: [apiPlugin]
+  accessToken: 'Qf9Z8O8vNFQw8drmarBGMwtt',
+  use: [apiPlugin],
+  apiOptions: {
+  region: "us",
+},
 })
 
 export default function RootLayout({ children }) {
