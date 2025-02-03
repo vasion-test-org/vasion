@@ -3,28 +3,39 @@ import RichTextRenderer from '@/components/RichTextRenderer';
 import styled from 'styled-components';
 import Image from '@/components/globalComponents/Image';
 import Button from '@/components/globalComponents/Button';
+import { storyblokEditable } from '@storyblok/react/rsc';
 // import media from 'styles/media';
 // import colors from 'styles/colors';
 // import text from 'styles/text';
 
-const Card = ({content}) => {
-  // console.log(content.content[0].Content)
-return (
-<CardWrapper>
-  {content.Image && <Image imageAlt={content.Image.alt} imageSrc={content.Image.filename}/>}
-  <ContentWrapper>
-    <RichTextRenderer document={content.content[0].Content}/>
-  </ContentWrapper>
-  {/* <Button buttonData={content.Button[0]}/> */}
-</CardWrapper>
-)
-}
+const Card = ({ content }) => {
+  console.log('card-content', content);
+  return (
+    <CardWrapper>
+      {content.Image && (
+        <Image imageAlt={content.Image.alt} imageSrc={content.Image.filename} />
+      )}
+      <ContentWrapper>
+        {content.content.map((copy) => (
+          <div key={copy.component} {...storyblokEditable(copy)}>
+            <RichTextRenderer
+              className={copy.component}
+              document={copy.copy}
+              centered
+            />
+          </div>
+        ))}
+      </ContentWrapper>
+      {/* <Button buttonData={content.Button[0]}/> */}
+    </CardWrapper>
+  );
+};
 
-export default Card
+export default Card;
 
 const ContentWrapper = styled.div`
   padding: 1.111vw;
-`
+`;
 const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -33,4 +44,4 @@ const CardWrapper = styled.div`
   width: 28.333vw;
   gap: 1.111vw;
   border-radius: 1.111vw;
-`
+`;

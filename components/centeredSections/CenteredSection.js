@@ -11,16 +11,26 @@ import RichTextRenderer from '@/components/RichTextRenderer';
 // import text from 'styles/text';
 const CenteredSection = ({ blok }) => {
   const { mobile, tablet } = useContext(ScreenContext);
+  // console.log(blok.centered_copy);
   return (
     <CenteredWrapper {...storyblokEditable(blok)}>
-      <RichTextRenderer document={blok.intro_content[0].Content} centered />
-      {blok.media.map((mediaOptions) => (
+      {blok.centered_copy.map((copy) => (
+        <div {...storyblokEditable(copy)}
+        key={copy.component}>
+          <RichTextRenderer
+            document={copy.copy}
+          />
+        </div>
+      ))}
+
+      {blok?.media?.map((mediaOptions) => (
         <Image
           key={mediaOptions.alt}
           imageAlt={mediaOptions.alt}
           imageSrc={mediaOptions.filename}
         />
       ))}
+
       {blok.cards && <Cards cardData={blok.cards} />}
       {blok.grid && <Grid gridData={blok.grid} />}
     </CenteredWrapper>

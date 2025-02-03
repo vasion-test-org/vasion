@@ -15,7 +15,7 @@ export const addDebouncedEventListener = (
   element.addEventListener(event, debouncedCallback)
 }
 
-export const pxToVw = (px) => {
+export const pxToVw = (px,  defaultWidth = 1600) => {
   if (isBrowser()) {
     const vw = px / window.innerWidth * 100
     return vw

@@ -5,11 +5,11 @@ import { storyblokInit, apiPlugin, RichTextSchema, } from "@storyblok/react/rsc"
 
 /** 2. Import your components */
 import Page from "./Page";
-import Teaser from "./Teaser";
 import Grid from "./Grid";
-import Feature from "./Feature";
 import CenteredSection from "./centeredSections/CenteredSection";
-
+import LogoCube from "./LogoCube";
+import SideBySide from "./SideBySide";
+import PillCta from "./PillCta";
 // const mySchema = cloneDeep(RichTextSchema); 
 /** 3. Initialize it as usual */
 storyblokInit({
@@ -30,11 +30,12 @@ storyblokInit({
   //   },
   // },
   components: {
-    teaser: Teaser,
     page: Page,
     grid: Grid,
-    feature: Feature,
     centered_section: CenteredSection, 
+    logo_cube: LogoCube,
+    side_by_side: SideBySide,
+    pill_cta: PillCta,
   },
 });
 
