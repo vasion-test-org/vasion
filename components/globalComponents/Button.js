@@ -5,16 +5,20 @@ import styled from 'styled-components';
 // import colors from 'styles/colors';
 // import text from 'styles/text';
 const Button = ({ buttonData }) => {
-
+console.log(buttonData)
 return (
-<ButtonWrapper>
-
+<ButtonWrapper layout={buttonData.layout}>
+  <Link></Link>
 </ButtonWrapper>
 )
 }
 
 export default Button
 
+const Link = styled.div`
+  
+`
 const ButtonWrapper = styled.div`
-  width: min-content;
+  display: flex;
+  flex-direction: ${props => `${props.layout}`};
 `

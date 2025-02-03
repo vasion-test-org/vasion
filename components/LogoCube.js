@@ -1,87 +1,58 @@
-import React, { useEffect } from 'react';
-import Image from 'next/image';
-import gsap from 'gsap';
+import React, { useEffect } from "react";
+import gsap from "gsap";
 import styled, { ThemeProvider } from "styled-components";
-import { storyblokEditable } from '@storyblok/react/rsc';
-import media from '@/styles/media';
-import { lightTheme, darkTheme } from "@/styles/theme";
-// import colors from 'styles/colors';
-// import text from 'styles/text';
-import { horizontalLoop } from '@/functions/horizontalLoop';
-import RichTextRenderer from './RichTextRenderer';
-
-const themes = {
-  light: lightTheme,
-  dark: darkTheme,
-};
+import { storyblokEditable } from "@storyblok/react/rsc";
+import media from "@/styles/media";
+import { useAvailableThemes } from "@/context/ThemeContext"; 
+import { horizontalLoop } from "@/functions/horizontalLoop";
+import RichTextRenderer from "./RichTextRenderer";
 
 const LogoCube = ({ blok }) => {
-  const selectedTheme = themes[blok.theme] || lightTheme; 
-  // console.log(blok)
+  const themes = useAvailableThemes(); 
+  const selectedTheme = themes[blok.theme] || themes.light; 
+
   useEffect(() => {
-    const logosArr = gsap.utils.toArray('.cubeLogos');
-    horizontalLoop(logosArr, {deep: false, repeat: -1 });
+    const logosArr = gsap.utils.toArray(".cubeLogos");
+    horizontalLoop(logosArr, { deep: false, repeat: -1 });
   }, []);
 
   const defaultLogos = [
-    {
-      alt: "nascar logo",
-      image: '/images/icons/nascar.png',
-    },
-    {
-      alt: "espn logo",
-      image: '/images/icons/espn.png',
-    },
-    {
-      alt: "metlife logo",
-      image: '/images/icons/metlife.png',
-    },
-    {
-      alt: "priceline logo",
-      image: '/images/icons/priceline.png',
-    },
-    {
-      alt: "jpMorgan logo",
-      image: '/images/icons/jpMorgan.png',
-    },
-    {
-      alt: "GE logo",
-      image: '/images/icons/GE.png',
-    },
-    {
-      alt: "Yahoo logo",
-      image: '/images/icons/Yahoo.png',
-    },
-    {
-      alt: "Aon logo",
-      image: '/images/icons/Aon.png',
-    },
+    { alt: "nascar logo", image: "/images/icons/nascar.png" },
+    { alt: "espn logo", image: "/images/icons/espn.png" },
+    { alt: "metlife logo", image: "/images/icons/metlife.png" },
+    { alt: "priceline logo", image: "/images/icons/priceline.png" },
+    { alt: "jpMorgan logo", image: "/images/icons/jpMorgan.png" },
+    { alt: "GE logo", image: "/images/icons/GE.png" },
+    { alt: "Yahoo logo", image: "/images/icons/Yahoo.png" },
+    { alt: "Aon logo", image: "/images/icons/Aon.png" },
   ];
 
   const logosToDisplay = blok.logos?.length > 0 ? blok.logos : defaultLogos;
 
   const allLogos = logosToDisplay.map((logo, index) => (
-    <LogosDiv key={logo.filename || logo.alt || index} className='cubeLogos'>
+    <LogosDiv key={logo.filename || logo.alt || index} className="cubeLogos">
       <Logo alt={logo.alt || "Default Logo"} src={logo.filename || logo.image} />
     </LogosDiv>
   ));
 
   return (
     <ThemeProvider theme={selectedTheme}>
-    <CubeWrapper {...storyblokEditable(blok)}>
-      <CardContainer>
-        <Header document={blok.header} blok={blok}/> 
-        <LogoContainer>{allLogos}</LogoContainer>
-      </CardContainer>
-    </CubeWrapper>
+      <CubeWrapper {...storyblokEditable(blok)}>
+        <CardContainer>
+          <RichTextRenderer document={blok.header} blok={blok} />
+          <LogoContainer>{allLogos}</LogoContainer>
+        </CardContainer>
+      </CubeWrapper>
     </ThemeProvider>
   );
 };
 
+// Styled Components
 const LogosDiv = styled.div`
   width: auto;
   height: auto;
 `;
+
 const Logo = styled.img`
   height: 6.944vw;
   width: 13.889vw;
@@ -101,6 +72,7 @@ const Logo = styled.img`
     width: 46.729vw;
   }
 `;
+
 const LogoContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -111,30 +83,26 @@ const LogoContainer = styled.div`
 
   ${media.fullWidth} {
     gap: 20px;
-    /* width: 1147px; */
   }
 
   ${media.tablet} {
     gap: 1.953vw;
-    /* width: 79.297vw; */
   }
 
   ${media.mobile} {
-    /* width: 74.766vw; */
     gap: 4.673vw;
   }
 `;
 
-const Header = styled(RichTextRenderer)`
-
-`;
+const Header = styled(RichTextRenderer)``;
 
 const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: ${(props) => props.theme.cardBg};
+  background: ${(props) => props.theme.cardBg}; 
+  color: ${(props) => props.theme.textColor};
   overflow: hidden;
   width: 90.556vw;
   border-radius: 1.667vw;
@@ -183,4 +151,5 @@ const CubeWrapper = styled.div`
     padding: 9.346vw 0;
   }
 `;
+
 export default LogoCube;

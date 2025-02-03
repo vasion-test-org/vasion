@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import media from '@/styles/media';
 // import colors from '@/styles/colors';
 // import text from '@/styles/text';
-const BodyCopy = ({ className, children }) => {
-  return <StyledBodyCopy className={className}>{children}</StyledBodyCopy>;
+const BodyCopy = ({ className, children, alignment }) => {
+  return <StyledBodyCopy alignment={alignment} className={className}>{children}</StyledBodyCopy>;
 };
 
 export default BodyCopy;
@@ -13,6 +13,7 @@ export default BodyCopy;
 const StyledBodyCopy = styled.div`
   font-family: 'Archivo';
   font-weight: 400;
+  text-align: ${props => `${props.alignment}`};
 
   strong {
       font-weight: 600;

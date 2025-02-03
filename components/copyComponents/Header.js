@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
-import { storyblokEditable } from '@storyblok/react/rsc';
+// import { storyblokEditable } from '@storyblok/react/rsc';
 
 const Header = ({ as: Tag = 'h1', children }) => {
   return <StyledHeader as={Tag} level={Tag}>{children}</StyledHeader>;
