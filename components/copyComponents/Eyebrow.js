@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import media from '@/styles/media';
 
 const Eyebrow = ({ className, children }) => {
-  console.log(className)
   return <StyledEyebrow className={className}>{children}</StyledEyebrow>;
 };
 

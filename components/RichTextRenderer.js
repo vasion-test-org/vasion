@@ -1,4 +1,4 @@
-import { render, MARK_STYLED, NODE_HEADING, NODE_PARAGRAPH } from 'storyblok-rich-text-react-renderer';
+import { render, MARK_STYLED, MARK_BOLD, NODE_HEADING, NODE_PARAGRAPH } from 'storyblok-rich-text-react-renderer';
 import React from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
@@ -15,6 +15,7 @@ const RichTextRenderer = ({ document, centered }) => {
       }
       return <BodyCopy className={className}>{children}</BodyCopy>;
     },
+    [MARK_BOLD]: (children) => <strong>{children}</strong>,
   };
 
   const customNodeResolvers = {
