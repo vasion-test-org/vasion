@@ -8,7 +8,7 @@ import RichTextRenderer from './RichTextRenderer';
 // import text from 'styles/text';
 
 const CTA = (blok) => {
-  console.log(blok)
+  // console.log(blok)
 return (
 <CtaWrapper {...storyblokEditable(blok)}>
  hellow wrapper

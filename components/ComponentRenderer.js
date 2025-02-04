@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import RichTextRenderer from './RichTextRenderer';
 const ComponentRenderer = ({ blok }) => {
   if (!blok) return null;
-  console.log(blok);
+  // console.log(blok);
   switch (blok.component) {
     case 'image':
       return (

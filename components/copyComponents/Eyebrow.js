@@ -32,7 +32,6 @@ const StyledEyebrow = styled.div`
   }
   }
 
-    
   &.tag {
     font-weight: 600;
     font-size: 0.694vw;
@@ -74,6 +73,4 @@ const StyledEyebrow = styled.div`
     line-height: 2.804vw;
   }
   }
-  
-  
 `;

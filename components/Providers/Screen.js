@@ -1,3 +1,4 @@
+'use client'
 import React, { createContext, useState, useEffect, useMemo } from "react"
 import { addDebouncedEventListener, isBrowser } from "@/functions/functions"
 import { desktop, tablet, mobile } from "@/styles/media"

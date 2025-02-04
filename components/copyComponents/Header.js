@@ -11,7 +11,6 @@ export default Header;
 
 const StyledHeader = styled.div`
   font-family: 'Archivo';
-  color: ${(props) => props.theme.textColor};
   
   ${({ level }) => level === 'h1' && `
     font-weight: 800;

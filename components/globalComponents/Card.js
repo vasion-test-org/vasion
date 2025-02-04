@@ -9,7 +9,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 // import text from 'styles/text';
 
 const Card = ({ content }) => {
-  console.log('card-content', content);
+  // console.log('card-content', content);
   return (
     <CardWrapper>
       {content.Image && (

@@ -1,10 +1,94 @@
+import { pxToVw } from "@/functions/functions";
+import colors from "./colors";
+
 export const defaultTheme = {
-  textColor: "#ffffff",
-  cardBg: "#3D2562",
+  logoCube: {
+    textColor: "#ffffff",
+    cardBg: "#3D2562",
+  },
+  centered: {
+    textColor: "#000000",
+    background: "#FFFFFF",
+  }
 };
 
 export const darkTheme = {
-  textColor: "#000000",
-  cardBg: "#2a2a2a",
+  logoCube: {
+    textColor: "#ffffff",
+    cardBg: "#3D2562",
+  },
+  centered: {
+    textColor: "#ffffff",
+    background: "#000000",
+  }
+};
+
+export const buttonThemes = {
+  primary: {
+    textColor: "#ffffff",
+    mainColor: "#ff5100",
+    complimentaryColor: "#ffffff",
+    textDecoration: "unset",
+    borderRadius: '28px',
+    padding: '12px 16px',
+    border: '1px solid #ff5100',
+    hoverBgColor: "#ffffff",
+    hoverTextColor: "#ff5100"
+  },
+  secondary: {
+    textColor: "#ff5100",
+    mainColor: "#ffffff",
+    complimentaryColor: "#ff5100",
+    textDecoration: "unset",
+    borderRadius: '28px',
+    padding: '12px 16px',
+    border: '1px solid #ff5100"',
+    hoverBgColor: "#ff5100",
+    hoverTextColor: "#ffffff"
+  },
+  orange_link: {
+    textColor: "#ff5100",
+    mainColor: "#ffffff",
+    complimentaryColor: "#CC4800",
+    textDecoration: "underline",
+    borderRadius: 'unset',
+    padding: '0',
+    border: 'unset',
+    hoverBgColor: 'unset',
+     hoverTextColor: "#CC4800"
+  },
+  grey_link: {
+    textColor: "#808085",
+    mainColor: "#ffffff",
+    complimentaryColor: "#808085",
+    textDecoration: "underline",
+    borderRadius: 'unset',
+    padding: '0',
+    border: 'unset',
+    hoverBgColor: 'unset',
+     hoverTextColor: "#808085"
+  },
+  black_link: {
+    textColor: "#1B1D21",
+    mainColor: "#ffffff",
+    complimentaryColor: "#1B1D21",
+    textDecoration: "underline",
+    borderRadius: 'unset',
+    padding: '0',
+    border: 'unset',
+    hoverBgColor: 'unset',
+     hoverTextColor: "#1B1D21"
+  },
+  white_link: {
+    textColor: "#ffffff",
+    mainColor: "#ffffff",
+    complimentaryColor: "#ffffff",
+    textDecoration: "underline",
+    borderRadius: 'unset',
+    padding: '0',
+    border: 'unset',
+    hoverBgColor: 'unset',
+     hoverTextColor: "#ffffff"
+  },
 };
 

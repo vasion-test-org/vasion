@@ -1,32 +1,27 @@
-import React from 'react';
+"use client";
 
-import styled from 'styled-components';
-import media from '@/styles/media';
-// import colors from 'styles/colors';
-// import text from 'styles/text';
+import React, { useContext, useState, useEffect } from "react";
+import styled from "styled-components";
+import media from "@/styles/media";
+import useMedia from "@/functions/useMedia";
 
-const Image = ({imageAlt, imageSrc, style}) => {
-  // console.log(imageAlt, imageSrc)
-return (
-<ImageWrapper alt={imageAlt} src={imageSrc} border_radius={style.border_radius}/>
-)
-}
+const Image = ({ images, borderRadius }) => {
+  let imageSrc = useMedia(images?.[0], images?.[0], images?.[1], images?.[2])
+
+  if (!imageSrc) return null;
+// console.log(borderRadius)
+  return <ImageWrapper alt={imageSrc.imageAlt} src={imageSrc.filename} borderRadius={borderRadius} />;
+};
 
 const ImageWrapper = styled.img`
   width: auto;
   height: auto;
-  border-radius: ${props => `${props.border_radius}px`};
+  border-radius: ${(props) => `${props.borderRadius || 0}px`};
 
   ${media.fullWidth} {
-    border-radius: ${props => `${props.border_radius}px`};
+    border-radius: ${(props) => `${props.borderRadius || 0}px`};
   }
-  
-  ${media.tablet} {
-  
-  }
-  
-  ${media.mobile} {
-  
-  }
-`
-export default Image
+`;
+
+export default Image;
+

@@ -6,6 +6,7 @@ import Card from '@/components/globalComponents/Card';
 // import colors from 'styles/colors';
 // import text from 'styles/text';
 const Cards = ({cardData}) => {
+  console.log(cardData)
 return (
 <CardsContainer>
   {cardData.map((card, index) => 

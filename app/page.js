@@ -1,7 +1,5 @@
-import {
-  getStoryblokApi,
-} from "@storyblok/react/rsc";
-import StoryblokStory from "@storyblok/react/story";
+import { getStoryblokApi } from '@storyblok/react/rsc';
+import StoryblokStory from '@storyblok/react/story';
 
 export default async function Home() {
   const { data } = await fetchData();
@@ -14,8 +12,10 @@ export default async function Home() {
 }
 
 export async function fetchData() {
-  let sbParams = { version: "draft" };
+  let sbParams = { version: 'draft' };
 
   const storyblokApi = getStoryblokApi();
-  return await storyblokApi.get(`cdn/stories/home`, sbParams, {cache: "no-store"});
+  return await storyblokApi.get(`cdn/stories/home`, sbParams, {
+    cache: 'no-store',
+  });
 }

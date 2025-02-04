@@ -101,8 +101,8 @@ const CardContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: ${(props) => props.theme.cardBg}; 
-  color: ${(props) => props.theme.textColor};
+  background: ${(props) => props.theme.logoCube.cardBg}; 
+  color: ${(props) => props.theme.logoCube.textColor};
   overflow: hidden;
   width: 90.556vw;
   border-radius: 1.667vw;
