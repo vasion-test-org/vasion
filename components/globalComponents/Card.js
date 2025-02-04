@@ -9,24 +9,23 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 // import text from 'styles/text';
 
 const Card = ({ content }) => {
-  // console.log('card-content', content);
+  console.log('card-content', content);
   return (
     <CardWrapper>
       {content.Image && (
-        <Image imageAlt={content.Image.alt} imageSrc={content.Image.filename} />
+        <Image imageAlt={content.Image.alt} filename={content.Image.filename} />
       )}
       <ContentWrapper>
-        {content.content.map((copy) => (
-          <div key={copy.component} {...storyblokEditable(copy)}>
+        {content.content.map((copy, index) => (
+          <div key={`card-copy-${index}`} {...storyblokEditable(copy)}>
             <RichTextRenderer
               className={copy.component}
               document={copy.copy}
-              centered
             />
           </div>
         ))}
+      <Button buttonData={content.Button[0]}/>
       </ContentWrapper>
-      {/* <Button buttonData={content.Button[0]}/> */}
     </CardWrapper>
   );
 };
@@ -34,14 +33,19 @@ const Card = ({ content }) => {
 export default Card;
 
 const ContentWrapper = styled.div`
-  padding: 1.111vw;
+  display: flex;
+  flex-direction: column;
+  padding: 0vw 1.111vw 1.111vw 1.111vw;
+  gap: 1.111vw;
 `;
+
 const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: auto;
   overflow: hidden;
-  width: 28.333vw;
+  width: clamp(24.306vw, 100%, 28.333vw);
   gap: 1.111vw;
   border-radius: 1.111vw;
+  text-align: left;
 `;

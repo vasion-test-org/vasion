@@ -139,7 +139,7 @@ const CubeWrapper = styled.div`
   padding: 4.167vw 0;
 
   ${media.fullWidth} {
-    width: 1440px;
+    width: 1600px;
     padding: 60px 0;
   }
 

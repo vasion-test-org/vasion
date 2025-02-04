@@ -6,14 +6,13 @@ import Header from '@/components/copyComponents/Header';
 import BodyCopy from '@/components/copyComponents/BodyCopy'; 
 import Eyebrow from '@/components/copyComponents/Eyebrow';
 
-const RichTextRenderer = ({ document, centered, alignment }) => {
-  // console.log(alignment)
+const RichTextRenderer = ({ document, centered }) => {
   const customMarkResolvers = {
     [MARK_STYLED]: (children, { class: className }) => {
       if (['eyebrow', 'tag', 'tagLight'].includes(className)) {
         return <Eyebrow className={className}>{children}</Eyebrow>;
       }
-      return <BodyCopy alignment={alignment} className={className}>{children}</BodyCopy>;
+      return <BodyCopy className={className}>{children}</BodyCopy>;
     },
     [MARK_BOLD]: (children) => <strong>{children}</strong>,
   };
@@ -28,7 +27,7 @@ const RichTextRenderer = ({ document, centered, alignment }) => {
         if (['eyebrow', 'tag', 'tagLight'].includes(className)) {
           return <Eyebrow className={className}>{children}</Eyebrow>;
         }
-      return <BodyCopy alignment={alignment} className={className}>{children}</BodyCopy>;
+      return <BodyCopy className={className}>{children}</BodyCopy>;
     },
   };
 

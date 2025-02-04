@@ -23,7 +23,7 @@ const CenteredSection = ({ blok }) => {
         <ContentWrapper>
           {blok.centered_copy.map((copy) => (
             <div {...storyblokEditable(copy)} key={copy.component}>
-              <RichTextRenderer document={copy.copy} alignment={copy.alignment} />
+              <RichTextRenderer document={copy.copy} />
             </div>
           ))}
           {blok.buttons.map((buttonData) => (

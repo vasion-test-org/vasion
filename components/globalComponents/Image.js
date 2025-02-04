@@ -5,12 +5,12 @@ import styled from "styled-components";
 import media from "@/styles/media";
 import useMedia from "@/functions/useMedia";
 
-const Image = ({ images, borderRadius }) => {
-  let imageSrc = useMedia(images?.[0], images?.[0], images?.[1], images?.[2])
+const Image = ({ images, borderRadius, filename }) => {
+  let imageSrc = filename ? filename : useMedia(images?.[0].filename, images?.[0].filename, images?.[1].filename, images?.[2].filename)
 
   if (!imageSrc) return null;
-// console.log(borderRadius)
-  return <ImageWrapper alt={imageSrc.imageAlt} src={imageSrc.filename} borderRadius={borderRadius} />;
+
+  return <ImageWrapper alt={imageSrc.imageAlt} src={imageSrc} borderRadius={borderRadius} />;
 };
 
 const ImageWrapper = styled.img`
