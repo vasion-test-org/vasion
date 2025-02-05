@@ -19,8 +19,8 @@ const StyledBodyCopy = styled.div`
     }
 
   &.bodySm {
-    font-size: 0.972vw;
-    line-height: 1.25vw;
+    font-size: 0.875vw;
+    line-height: 1.125vw;
 
     ${media.fullWidth} {
       font-size: 14px;
@@ -39,8 +39,8 @@ const StyledBodyCopy = styled.div`
   }
   
   &.bodyMd {
-    font-size: 1.111vw;
-    line-height: 1.528vw;
+    font-size: 1vw;
+    line-height: 1.375vw;
 
     ${media.fullWidth} {
       font-size: 16px;
@@ -60,8 +60,8 @@ const StyledBodyCopy = styled.div`
 
     
   &.bodyLrg {
-    font-size: 1.25vw;
-    line-height: 1.667vw;
+    font-size: 1.125vw;
+    line-height: 1.5vw;
 
     ${media.fullWidth} {
       font-size: 18px;
@@ -80,8 +80,8 @@ const StyledBodyCopy = styled.div`
   }
 
   &.bodyXL {
-    font-size: 1.597vw;
-    line-height: 2.083vw;
+    font-size: 1.438vw;
+      line-height: 1.875vw;
     
     ${media.fullWidth} {
       font-size: 23px;

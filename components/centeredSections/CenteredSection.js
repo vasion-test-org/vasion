@@ -26,7 +26,7 @@ const CenteredSection = ({ blok }) => {
               <RichTextRenderer document={copy.copy} />
             </div>
           ))}
-          {blok.buttons.map((buttonData) => (
+          {blok?.buttons?.map((buttonData) => (
              <div {...storyblokEditable(buttonData)} key={buttonData.link_text}>
             <Button key={buttonData.link_text} buttonData={buttonData} />
             </div>
@@ -54,8 +54,8 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 75.278vw;
-  gap: 1.111vw;
+  width: 67.75vw;
+  gap: 1vw;
 `;
 
 const CenteredWrapper = styled.div`
@@ -63,10 +63,10 @@ const CenteredWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.111vw;
+  gap: 1vw;
   /* background: ${(props) => props.theme.cardBg};  */
   color: ${(props) => props.theme.centered.textColor}; 
-  padding: 4.167vw 0;
+  padding: 3.75vw 0;
 
   ${media.fullWidth} {
     padding: 60px 0;

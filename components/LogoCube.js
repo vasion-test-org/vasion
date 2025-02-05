@@ -54,8 +54,8 @@ const LogosDiv = styled.div`
 `;
 
 const Logo = styled.img`
-  height: 6.944vw;
-  width: 13.889vw;
+height: 6.25vw;
+width: 12.5vw;
 
   ${media.fullWidth} {
     height: 100px;
@@ -78,7 +78,7 @@ const LogoContainer = styled.div`
   flex-direction: row;
   height: auto;
   overflow: hidden;
-  gap: 1.389vw;
+  gap: 1.25vw;
   width: 77.222vw;
 
   ${media.fullWidth} {
@@ -104,10 +104,10 @@ const CardContainer = styled.div`
   background: ${(props) => props.theme.logoCube.cardBg}; 
   color: ${(props) => props.theme.logoCube.textColor};
   overflow: hidden;
-  width: 90.556vw;
-  border-radius: 1.667vw;
-  padding: 4.167vw 6.667vw;
-  gap: 2.778vw;
+  width: 81.5vw;
+    border-radius: 1.5vw;
+    padding: 3.75vw 6vw;
+    gap: 2.5vw;
 
   ${media.fullWidth} {
     width: 1304px;
@@ -136,7 +136,7 @@ const CubeWrapper = styled.div`
   justify-content: center;
   height: auto;
   width: 100%;
-  padding: 4.167vw 0;
+  padding: 3.75vw 0;
 
   ${media.fullWidth} {
     width: 1600px;

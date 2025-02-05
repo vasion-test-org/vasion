@@ -14,8 +14,8 @@ const StyledHeader = styled.div`
   
   ${({ level }) => level === 'h1' && `
     font-weight: 800;
-    font-size: 4.028vw;
-    line-height: 4.444vw;
+    font-size: 3.625vw;
+      line-height: 4vw;
     
     ${media.fullWidth} {
       font-size: 58px;
@@ -35,8 +35,8 @@ const StyledHeader = styled.div`
 
   ${({ level }) => level === 'h2' && `
    font-weight: 700;
-    font-size: 3.194vw;
-    line-height: 3.889vw;
+    font-size: 2.875vw;
+    line-height: 3.5vw;
 
     ${media.fullWidth} {
     font-size: 46px;
@@ -56,8 +56,8 @@ const StyledHeader = styled.div`
 
   ${({ level }) => level === 'h3' && `
      font-weight: 700;
-    font-size: 2.222vw;
-    line-height: 2.778vw;
+     font-size: 2vw;
+    line-height: 2.5vw;
 
     ${media.fullWidth} {
          font-size: 32px;
@@ -77,12 +77,12 @@ const StyledHeader = styled.div`
 
   ${({ level }) => level === 'h4' && `
       font-weight: 700;
-    font-size: 6.075vw;
-    line-height: 7.477vw;
+    font-size: 1.625vw;
+      line-height: 2vw;
 
     ${media.fullWidth} {
-        font-size: 6.075vw;
-    line-height: 7.477vw;
+       font-size: 26px;
+      line-height: 32px;
     }
 
     ${media.tablet} {
@@ -101,8 +101,8 @@ const StyledHeader = styled.div`
     line-height: 24px;
 
     ${media.fullWidth} {
-       font-size: 4.673vw;
-    line-height: 5.607vw;
+     font-size: 1.25vw;
+      line-height: 1.5vw;
     }
 
     ${media.tablet} {

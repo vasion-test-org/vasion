@@ -13,8 +13,8 @@ const StyledEyebrow = styled.div`
  
   &.eyebrow {
     font-weight: 700;
-    font-size: .972vw;
-    line-height: 1.25vw;
+    font-size: 0.875vw;
+    line-height: 1.125vw;
 
     ${media.fullWidth} {
     font-size: 14px;
@@ -34,8 +34,8 @@ const StyledEyebrow = styled.div`
 
   &.tag {
     font-weight: 600;
-    font-size: 0.694vw;
-    line-height: 0.833vw;
+    font-size: 0.625vw;
+    line-height: 0.75vw;
 
     ${media.fullWidth} {
       font-size: 10px;
@@ -55,8 +55,8 @@ const StyledEyebrow = styled.div`
 
   &.tagLight {
     font-weight: 400;
-    font-size: 0.694vw;
-    line-height: 0.833vw;
+    font-size: 0.625vw;
+      line-height: 0.75vw;
 
     ${media.fullWidth} {
       font-size: 10px;
