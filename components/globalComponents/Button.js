@@ -1,28 +1,27 @@
-import React from 'react';
-
+import React from "react";
 import Link from "next/link";
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import text from '@/styles/text';
-// import media from 'styles/media';
-// import colors from 'styles/colors';
+import styled, { ThemeProvider } from "styled-components";
+import { useAvailableThemes } from "@/context/ThemeContext";
+import text from "@/styles/text";
 
 const Button = ({ buttonData }) => {
-  // console.log(buttonData);
   const themes = useAvailableThemes();
   const selectedTheme = themes.button?.[buttonData.theme] || themes.button.primary;
 
-  const href = buttonData.link_url.email ? `mailto:${buttonData.link_url.email}` : buttonData.link_url.url || "#";
-  const isExternal = buttonData.link_url.url?.startsWith("http") || buttonData.link_url.email;
-  const target = buttonData.link_url.target === "_blank" || isExternal ? "_blank" : undefined;
+  const href = buttonData?.link_url.email 
+    ? `mailto:${buttonData?.link_url.email}` 
+    : buttonData?.link_url.url || "#";
+
+  const isExternal = buttonData?.link_url?.url?.startsWith("http") || buttonData?.link_url?.email;
+  const target = buttonData?.link_url?.target === "_blank" || isExternal ? "_blank" : undefined;
   const rel = target === "_blank" ? "noopener noreferrer" : undefined;
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <ButtonWrapper layout={buttonData.layout}>
-       <Link href={href} passHref target={target} rel={rel}>
-          <StyledLink size={buttonData.link_size}>{buttonData.link_text}</StyledLink>
-        </Link>
+      <ButtonWrapper layout={buttonData?.layout} size={buttonData?.link_size}>
+        <NextLink href={href} passHref target={target} rel={rel}>
+          {buttonData?.link_text}
+        </NextLink>
       </ButtonWrapper>
     </ThemeProvider>
   );
@@ -30,25 +29,35 @@ const Button = ({ buttonData }) => {
 
 export default Button;
 
-const StyledLink = styled.div`
-  cursor: pointer;
-  width: max-content;
+const NextLink = styled(Link)`
+  display: inline-flex; 
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: auto;
+  padding: ${(props) => props.theme.padding};
   background: ${(props) => props.theme.mainColor};
   color: ${(props) => props.theme.textColor};
-  padding: ${(props) => props.theme.padding};
   border-radius: ${(props) => props.theme.borderRadius};
-  border: ${(props) => props.theme.complimentaryColor};
+  border: 1px solid ${(props) => props.theme.complimentaryColor};
 
   &:hover {
     background: ${(props) => props.theme.hoverBgColor};
     color: ${(props) => props.theme.hoverTextColor};
     border: ${(props) => props.theme.border};
-    text-decoration: ${(props) => props.theme.textDecoration};
   }
 `;
+
 const ButtonWrapper = styled.div`
   display: flex;
-  flex-direction: ${(props) => `${props.layout || "row"}`};
-  ${(props) => (props.size === "Small" ? text.bodySm : props.size === "Large" ? text.bodyLg : text.bodyMd)};
-
+  flex-direction: ${(props) => props.layout || "row"};
+  gap: 1.5vw;
+  ${(props) =>
+    props.size === "Small"
+      ? text.bodySm
+      : props.size === "Large"
+      ? text.bodyLg
+      : text.bodyMd};
+  width: max-content; 
 `;
+

@@ -2,24 +2,32 @@ import { pxToVw } from "@/functions/functions";
 import colors from "./colors";
 
 export const defaultTheme = {
+  hero: {
+    textColor: "#1B1D21",
+    bg: "#F5F4F7",
+  },
   logoCube: {
     textColor: "#ffffff",
     cardBg: "#3D2562",
   },
   centered: {
-    textColor: "#000000",
+    textColor: "#1B1D21",
     background: "#FFFFFF",
   }
 };
 
 export const darkTheme = {
+  hero: {
+    textColor: "#ffffff",
+    bg: "linear-gradient(180deg, #583F99 0%, #3D2562 100%)",
+  },
   logoCube: {
     textColor: "#ffffff",
     cardBg: "#3D2562",
   },
   centered: {
     textColor: "#ffffff",
-    background: "#000000",
+    background: "#1B1D21",
   }
 };
 

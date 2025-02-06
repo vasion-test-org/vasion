@@ -1,5 +1,5 @@
 import React from 'react';
-import RichTextRenderer from '@/components/RichTextRenderer';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import styled from 'styled-components';
 import Icon from '@/components/globalComponents/Icon';
 import Button from '@/components/globalComponents/Button';
