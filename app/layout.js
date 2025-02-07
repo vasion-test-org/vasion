@@ -21,7 +21,9 @@ export default function RootLayout({ children }) {
     <ThemeProviderWrapper>
       <StoryblokProvider>
         <html lang='en'>
-          <body>{children}</body>
+          <body>
+            {children}
+            </body>
         </html>
       </StoryblokProvider>
     </ThemeProviderWrapper>

@@ -6,7 +6,7 @@ import media from "@/styles/media";
 import useMedia from "@/functions/useMedia";
 
 const Image = ({ images, borderradius, filename }) => {
-  console.log('images',images)
+  // console.log('images',images)
   let imageSrc = filename ? filename : useMedia(images?.[0]?.filename, images?.[0]?.filename, images?.[1]?.filename || images?.[0]?.filename, images?.[2]?.filename || images?.[0]?.filename)
 
   if (!imageSrc) return null;

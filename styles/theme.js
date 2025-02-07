@@ -39,7 +39,7 @@ export const buttonThemes = {
     textDecoration: "unset",
     borderRadius: '28px',
     padding: '12px 16px',
-    border: '1px solid #ff5100',
+    border: '#ff5100',
     hoverBgColor: "#ffffff",
     hoverTextColor: "#ff5100"
   },
@@ -50,7 +50,7 @@ export const buttonThemes = {
     textDecoration: "unset",
     borderRadius: '28px',
     padding: '12px 16px',
-    border: '1px solid #ff5100"',
+    border: '#ff5100',
     hoverBgColor: "#ff5100",
     hoverTextColor: "#ffffff"
   },

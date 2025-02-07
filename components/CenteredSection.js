@@ -1,3 +1,4 @@
+'use client'
 import React, { useContext } from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';

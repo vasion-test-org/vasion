@@ -30,7 +30,7 @@ const SideBySideWrapper = styled.div`
     props.spacing === 'default'
       ? '3.75vw 0'
       : props.spacing
-      ? `${props.spacing}px 0`
+      ? `calc(${props.spacing}px / 1600 * 100vw) 0`
       : '3.75vw 0'};
 
   gap: 3.75vw;
