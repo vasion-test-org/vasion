@@ -1,34 +1,92 @@
-import React from 'react';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import Image from '../globalComponents/Image';
-import media from '@/styles/media';
-import styled from 'styled-components';
-import RichTextRenderer from './RichTextRenderer';
+import React from "react";
+import { storyblokEditable } from "@storyblok/react/rsc";
+import Image from "../globalComponents/Image";
+import styled from "styled-components";
+import media from "@/styles/media";
+import RichTextRenderer from "./RichTextRenderer";
+import LogoCube from "../LogoCube";
+
 const ComponentRenderer = ({ blok }) => {
   if (!blok) return null;
-  // console.log(blok);
+
+  console.log("Rendering:", blok.component, "Preview Mode:", blok?.preview || "N/A");
+
+  // Handle `personalized_page` and extract `personalized_section`
+  if (blok.component === "personalized_page" && Array.isArray(blok.personalized_section)) {
+    return (
+      <SectionWrapper {...storyblokEditable(blok)}>
+        {blok.personalized_section.map((section) => (
+          <ComponentRenderer key={section._uid} blok={section} />
+        ))}
+      </SectionWrapper>
+    );
+  }
+
+  // Handle `personalized_section` based on preview mode
+  if (blok.component === "personalized_section") {
+    let contentBlocks = blok.english_blocks || [];
+
+    if (blok.preview === "french" && blok.french_blocks.length > 0) {
+      contentBlocks = blok.french_blocks;
+    } else if (blok.preview === "german" && blok.german_blocks.length > 0) {
+      contentBlocks = blok.german_blocks;
+    }
+
+    return (
+      <SectionWrapper {...storyblokEditable(blok)}>
+        {contentBlocks.map((block) => (
+          <ComponentRenderer key={block._uid} blok={block} />
+        ))}
+      </SectionWrapper>
+    );
+  }
+
+  // Handle individual components
   switch (blok.component) {
-    case 'assets':
+    case "assets":
       return (
         <BlockWrapper {...storyblokEditable(blok)}>
           <Image images={blok.media} borderradius={blok.border_radius} />
         </BlockWrapper>
       );
-    case 'copy_block':
+    case "copy_block":
       return (
         <CopyDiv>
-          {blok.copy_block_sections.map((copy, index) => (
+          {blok?.copy_block_sections?.map((copy, index) => (
             <BlockWrapper key={index} {...storyblokEditable(copy)}>
               <RichTextRenderer document={copy.copy} />
             </BlockWrapper>
           ))}
         </CopyDiv>
       );
-
+    case "logo_cube":
+      return <LogoCube blok={blok} />;
     default:
-      return null;
+      return <BlockWrapper {...storyblokEditable(blok)}>Unknown Component</BlockWrapper>;
   }
 };
+
+const SectionWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 2vw;
+  padding: 2vw;
+
+  ${media.fullWidth} {
+    gap: 24px;
+    padding: 24px;
+  }
+
+  ${media.tablet} {
+    gap: 16px;
+    padding: 16px;
+  }
+
+  ${media.mobile} {
+    gap: 12px;
+    padding: 12px;
+  }
+`;
 
 const CopyDiv = styled.div`
   display: flex;
@@ -40,12 +98,8 @@ const CopyDiv = styled.div`
     width: 612px;
     gap: 16px;
   }
-
-  ${media.tablet} {
-  }
-
-  ${media.mobile} {
-  }
 `;
+
 const BlockWrapper = styled.div``;
+
 export default ComponentRenderer;

@@ -10,7 +10,7 @@ import RichTextRenderer from './renderers/RichTextRenderer';
 const LogoCube = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-
+  console.log(blok)
   useEffect(() => {
     const logosArr = gsap.utils.toArray('.cubeLogos');
     horizontalLoop(logosArr, { deep: false, repeat: -1 });

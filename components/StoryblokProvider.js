@@ -1,7 +1,7 @@
 /** 1. Tag it as client component */
 "use client";
-import { storyblokInit, apiPlugin, RichTextSchema, } from "@storyblok/react/rsc";
-// import cloneDeep from "clone-deep";
+
+import { storyblokInit, apiPlugin } from "@storyblok/react/rsc";
 
 /** 2. Import your components */
 import Page from "./Page";
@@ -11,33 +11,26 @@ import LogoCube from "./LogoCube";
 import SideBySide from "./SideBySide";
 import PillCta from "./PillCta";
 import Hero from "./Hero";
-// const mySchema = cloneDeep(RichTextSchema); 
-/** 3. Initialize it as usual */
+import ComponentRenderer from "@/components/renderers/ComponentRenderer"; // Handles all components
+
+/** 3. Initialize Storyblok */
 storyblokInit({
   accessToken: "Qf9Z8O8vNFQw8drmarBGMwtt",
   use: [apiPlugin],
   apiOptions: {
     region: "us",
   },
-  // richText: {
-  //   schema: mySchema,
-  //   resolver: (component, blok) => {
-  //     switch (component) {
-  //       case "my-custom-component":
-  //         return `<div class="my-component-class">${blok.text}</div>`;
-  //       default:
-  //         return "Resolver not defined";
-  //     }
-  //   },
-  // },
   components: {
     page: Page,
     grid: Grid,
-    centered_section: CenteredSection, 
+    centered_section: CenteredSection,
     logo_cube: LogoCube,
     side_by_side: SideBySide,
     pill_cta: PillCta,
-    hero: Hero
+    hero: Hero,
+    personalized_page: ComponentRenderer, // Ensures personalized pages are handled
+    personalized_section: ComponentRenderer, // Ensures personalized sections work correctly
+    component_renderer: ComponentRenderer, // Handles general component rendering
   },
 });
 

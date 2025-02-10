@@ -10,7 +10,7 @@ import useMedia from '@/functions/useMedia'; // Import your media hook
 const RichTextRenderer = ({ document, centered }) => {
   if (!document) return null;
 
-  console.log("Incoming Document:", document);
+  // console.log("Incoming Document:", document);
 
   // Extract the default heading from the document content
   const defaultHeader = document.content?.find((item) => item.type === 'heading') || null;
@@ -28,15 +28,15 @@ const RichTextRenderer = ({ document, centered }) => {
   const mobileHeaderContent = mobileHeader?.content || null;
   const mobileHeaderLevel = mobileHeader?.attrs?.level || defaultHeaderLevel;
 
-  console.log("Default Header:", defaultHeaderContent, "Level:", defaultHeaderLevel);
-  console.log("Tablet Header:", tabletHeaderContent, "Level:", tabletHeaderLevel);
-  console.log("Mobile Header:", mobileHeaderContent, "Level:", mobileHeaderLevel);
+  // console.log("Default Header:", defaultHeaderContent, "Level:", defaultHeaderLevel);
+  // console.log("Tablet Header:", tabletHeaderContent, "Level:", tabletHeaderLevel);
+  // console.log("Mobile Header:", mobileHeaderContent, "Level:", mobileHeaderLevel);
 
   // Use useMedia to dynamically switch header content and level
   const selectedHeaderContent = useMedia(defaultHeaderContent, defaultHeaderContent, tabletHeaderContent || defaultHeaderContent, mobileHeaderContent || defaultHeaderContent);
   const selectedHeaderLevel = useMedia(defaultHeaderLevel, defaultHeaderLevel, tabletHeaderLevel || defaultHeaderLevel, mobileHeaderLevel || defaultHeaderLevel);
 
-  console.log("Selected Header Content:", selectedHeaderContent, "Level:", selectedHeaderLevel);
+  // console.log("Selected Header Content:", selectedHeaderContent, "Level:", selectedHeaderLevel);
 
   // Function to extract text from structured content
   const extractText = (contentArray) => {

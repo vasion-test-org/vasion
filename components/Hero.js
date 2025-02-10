@@ -11,9 +11,14 @@ import Image from './globalComponents/Image';
 const Hero = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  // console.log(blok);
+  let customTheme = blok.custom_theme?.[0] || {};
+  if(!blok.custom_theme_builder) {
+    customTheme = undefined
+  }
+
+  // console.log( blok);
   return (
-    <ThemeProvider theme={selectedTheme}>
+    <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
       <HeroBGWrapper>
         <HeroWrapper
           layout={blok.hero_layout}
@@ -93,7 +98,8 @@ const HeroWrapper = styled.div`
   flex-direction: ${(props) => `${props.layout || 'row'}`};
   align-items: center;
   justify-content: space-between;
-  color: ${(props) => props.theme.hero.textColor};
+  color: ${(props) =>
+    props.theme.customtheme?.text_color?.value || props.theme.hero.textColor};
   padding: ${(props) =>
     props.spacing === 'default'
       ? '6vw 9.25vw'
@@ -131,6 +137,7 @@ const HeroBGWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${(props) => props.theme.hero.bg};
+  background: ${(props) =>
+    props.theme.customtheme?.background_color?.value || props.theme.hero.bg};
 `;
 export default Hero;
