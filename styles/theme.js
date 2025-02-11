@@ -13,6 +13,10 @@ export const defaultTheme = {
   centered: {
     textColor: "#1B1D21",
     background: "#FFFFFF",
+  },
+  testimonial: {
+    textColor: "#1B1D21",
+    bg: "#F5F4F7",
   }
 };
 
@@ -28,6 +32,10 @@ export const darkTheme = {
   centered: {
     textColor: "#ffffff",
     background: "#1B1D21",
+  },
+  testimonial: {
+    textColor: "#ffffff",
+    bg: "linear-gradient(278deg, #803235 -1.77%, #190C30 32.97%, #3D2562 87.16%)",
   }
 };
 

@@ -51,7 +51,6 @@ const RichTextRenderer = ({ document, centered }) => {
       }
       return <BodyCopy className={className}>{children}</BodyCopy>;
     },
-    [MARK_BOLD]: (children) => <strong>{children}</strong>,
   };
 
   const customNodeResolvers = {
@@ -70,7 +69,59 @@ const RichTextRenderer = ({ document, centered }) => {
     },
   };
 
-  return <div>{render(document, { markResolvers: customMarkResolvers, nodeResolvers: customNodeResolvers })}</div>;
+  return <RichWrapper>{render(document, { markResolvers: customMarkResolvers, nodeResolvers: customNodeResolvers })}</RichWrapper>;
 };
 
+const RichWrapper = styled.div`
+  ul {
+    list-style: none; 
+  margin-left: 0; 
+    li {
+  position: relative;
+  padding-left: 1.563vw; 
+  margin-bottom: 1.25vw;
+  ${media.fullWidth} {
+    padding-left: 25px; 
+  margin-bottom: 20px;
+}
+
+${media.tablet} {
+  padding-left: 2.441vw; 
+  margin-bottom: 1.953vw;
+}
+
+${media.mobile} {
+  padding-left: 5.208vw; 
+  margin-bottom: 4.167vw;
+}
+}
+
+li::before {
+  content: '';
+  position: absolute;
+  background-image: url('images/icons/orange-check-icon.webp');
+  background-size: contain; /* Ensure the image scales correctly */
+  background-repeat: no-repeat;
+  left: 0;
+  top: 0;
+  width: 1.25vw;  
+  height: 1.25vw; 
+
+  ${media.fullWidth} {
+    width: 20px;  
+  height: 20px; 
+}
+
+${media.tablet} {
+  width: 1.953vw;  
+  height: 1.953vw; 
+}
+
+${media.mobile} {
+  width: 4.167vw;  
+  height: 4.167vw; 
+}
+}
+  }
+`
 export default RichTextRenderer;

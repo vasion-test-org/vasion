@@ -97,12 +97,12 @@ const StyledHeader = styled.div`
   `}
     ${({ level }) => level === 'h5' && `
       font-weight: 700;
-    font-size: 20px;
-    line-height: 24px;
+    font-size: 1.25vw;
+    line-height: 1.5vw;
 
     ${media.fullWidth} {
-     font-size: 1.25vw;
-      line-height: 1.5vw;
+        font-size: 20px;
+    line-height: 24px;
     }
 
     ${media.tablet} {

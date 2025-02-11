@@ -14,9 +14,9 @@ const StyledBodyCopy = styled.div`
   font-family: 'Archivo';
   font-weight: 400;
 
-  strong {
-      font-weight: 600;
-    }
+  &.bold {
+    font-weight: 600;
+  }
 
   &.bodySm {
     font-size: 0.875vw;
@@ -60,6 +60,7 @@ const StyledBodyCopy = styled.div`
 
     
   &.bodyLrg {
+    
     font-size: 1.125vw;
     line-height: 1.5vw;
 

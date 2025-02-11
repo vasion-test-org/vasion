@@ -102,6 +102,16 @@ const CopyDiv = styled.div`
     width: 612px;
     gap: 16px;
   }
+
+  ${media.tablet} {
+    width: 38.672vw;
+    gap: 1.563vw;
+  }
+  
+  ${media.mobile} {
+    width: 78.333vw;
+    gap: 3.333vw;
+  }
 `;
 
 const BlockWrapper = styled.div``;

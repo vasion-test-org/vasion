@@ -12,6 +12,7 @@ import SideBySide from "./SideBySide";
 import PillCta from "./PillCta";
 import Hero from "./Hero";
 import ComponentRenderer from "@/components/renderers/ComponentRenderer"; // Handles all components
+import Testimonial from "./Testimonial";
 
 /** 3. Initialize Storyblok */
 storyblokInit({
@@ -28,6 +29,7 @@ storyblokInit({
     side_by_side: SideBySide,
     pill_cta: PillCta,
     hero: Hero,
+    testimonial: Testimonial,
     personalized_page: ComponentRenderer, // Ensures personalized pages are handled
     personalized_section: ComponentRenderer, // Ensures personalized sections work correctly
     component_renderer: ComponentRenderer, // Handles general component rendering
