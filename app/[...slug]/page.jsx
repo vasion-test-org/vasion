@@ -1,15 +1,20 @@
 import { getStoryblokApi } from "@storyblok/react/rsc";
 import StoryblokStory from "@storyblok/react/story";
+import { notFound } from "next/navigation";
 
-export default async function DynamicPage({ params, locale }) {
+export default async function DynamicPage({ params }) {
   const slugArray = params.slug || [];
-  const slug = slugArray.join("/");
+  const isLocalized = ["fr", "de"].includes(slugArray[0]);
+  const locale = isLocalized ? slugArray[0] : "en";
+  const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");
 
-  // Fetch the correct language version
-  const { story } = await fetchData(slug, locale);
+  // console.log([Request] Slug: ${storySlug}, Locale: ${locale});
+
+  // Fetch Storyblok content
+  const { story } = await fetchData(storySlug, locale);
 
   if (!story) {
-    return <h1>404 - Page Not Found</h1>; // Prevents breaking if the story is missing
+    notFound();
   }
 
   return (
@@ -18,6 +23,7 @@ export default async function DynamicPage({ params, locale }) {
     </div>
   );
 }
+
 
 async function fetchData(slug, locale) {
   const storyblokApi = getStoryblokApi();
@@ -32,29 +38,33 @@ async function fetchData(slug, locale) {
     let story = data.story;
 
     if (!story) {
-      console.error(`[ Server ] Story not found for slug: ${slug} and locale: ${locale}`);
+      // console.error([ Server ] Story not found for slug: ${slug} and locale: ${locale});
       return null;
     }
 
+    // ✅ Ensure personalized sections render correct language
     if (story.content.personalized_section) {
       let selectedBlocks = [];
 
-      if (locale === "fr") {
-        selectedBlocks = story.content.personalized_section.map(section => ({
-          ...section,
-          blocks: section.french_blocks.length > 0 ? section.french_blocks : section.english_blocks,
-        }));
-      } else if (locale === "de") {
-        selectedBlocks = story.content.personalized_section.map(section => ({
-          ...section,
-          blocks: section.german_blocks.length > 0 ? section.german_blocks : section.english_blocks,
-        }));
-      } else {
-        selectedBlocks = story.content.personalized_section.map(section => ({
-          ...section,
-          blocks: section.english_blocks,
-        }));
-      }
+      // ✅ Fix: Now French and German properly take priority over English
+      story.content.personalized_section.forEach(section => {
+        if (locale === "fr" && section.french_blocks.length > 0) {
+          selectedBlocks.push({
+            ...section,
+            blocks: section.french_blocks,
+          });
+        } else if (locale === "de" && section.german_blocks.length > 0) {
+          selectedBlocks.push({
+            ...section,
+            blocks: section.german_blocks,
+          });
+        } else {
+          selectedBlocks.push({
+            ...section,
+            blocks: section.english_blocks, // Default to English
+          });
+        }
+      });
 
       story = {
         ...story,
@@ -65,12 +75,14 @@ async function fetchData(slug, locale) {
       };
     }
 
+    // console.log([✅ Success] Story fetched: ${story.full_slug} (${locale}));
     return { story };
   } catch (error) {
-    console.error(`[ Server ] Error fetching story: ${error.message}`);
+    // console.error([❌ Server ] Error fetching story: ${error.message});
     return { story: null };
   }
 }
+
 
 export async function generateStaticParams() {
   const storyblokApi = getStoryblokApi();

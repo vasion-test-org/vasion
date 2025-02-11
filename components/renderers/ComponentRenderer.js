@@ -24,11 +24,15 @@ const ComponentRenderer = ({ blok }) => {
 
   // Handle `personalized_section` based on preview mode
   if (blok.component === "personalized_section") {
-    let contentBlocks = blok.english_blocks || [];
+    let contentBlocks = []; // ✅ Starts as an empty array
 
+    if (blok.preview === "english" && blok.english_blocks.length > 0) {
+      contentBlocks = blok.english_blocks;
+    } 
     if (blok.preview === "french" && blok.french_blocks.length > 0) {
       contentBlocks = blok.french_blocks;
-    } else if (blok.preview === "german" && blok.german_blocks.length > 0) {
+    } 
+    if (blok.preview === "german" && blok.german_blocks.length > 0) {
       contentBlocks = blok.german_blocks;
     }
 
