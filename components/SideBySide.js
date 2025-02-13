@@ -8,7 +8,7 @@ import media, { mobile, desktop, tablet } from '@/styles/media';
 import ComponentRenderer from './renderers/ComponentRenderer';
 
 const SideBySide = ({ blok }) => {
-  console.log(blok)
+  // console.log(blok)
   return (
     <SideBySideWrapper
       spacing={blok.section_spacing}

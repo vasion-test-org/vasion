@@ -9,7 +9,7 @@ import LogoCube from "../LogoCube";
 const ComponentRenderer = ({ blok }) => {
   if (!blok) return null;
 
-  console.log("Rendering:", blok.component, "Preview Mode:", blok?.preview || "N/A");
+  // console.log("Rendering:", blok.component, "Preview Mode:", blok?.preview || "N/A");
 
   // Handle `personalized_page` and extract `personalized_section`
   if (blok.component === "personalized_page" && Array.isArray(blok.personalized_section)) {

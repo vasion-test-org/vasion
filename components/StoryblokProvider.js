@@ -5,7 +5,7 @@ import { storyblokInit, apiPlugin } from "@storyblok/react/rsc";
 
 /** 2. Import your components */
 import Page from "./Page";
-import Grid from "./Grid";
+import Grid from "@/components/centeredSections/Grid";
 import CenteredSection from "./CenteredSection";
 import LogoCube from "./LogoCube";
 import SideBySide from "./SideBySide";

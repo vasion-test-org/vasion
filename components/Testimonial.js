@@ -11,7 +11,7 @@ import Image from './globalComponents/Image';
 const Testimonial = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  console.log(blok);
+  // console.log(blok);
 
   return (
     <ThemeProvider theme={selectedTheme}>

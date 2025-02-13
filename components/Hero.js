@@ -56,11 +56,28 @@ const Hero = ({ blok }) => {
   );
 };
 
+
 const ButtonRow = styled.div`
   display: flex;
   flex-direction: row;
   gap: 0.75vw;
   margin-top: 2vw;
+
+  ${media.fullWidth} {
+    gap: 12px;
+  margin-top: 32px;
+  }
+  
+  ${media.tablet} {
+    gap: 1.172vw;
+  margin-top: 3.125vw;
+  
+  }
+  
+  ${media.mobile} {
+    gap: 2.5vw;
+    margin-top: 6.667vw;
+  }
 `;
 const ContentWrapper = styled.div`
   display: flex;
@@ -86,10 +103,11 @@ const ContentWrapper = styled.div`
   }
 
   ${media.tablet} {
-    
+    width: clamp(39.453vw, 100%, 58.984vw);
   }
 
   ${media.mobile} {
+    width: 89.167vw;
   }
 `;
 
@@ -127,9 +145,28 @@ const HeroWrapper = styled.div`
   }
 
   ${media.tablet} {
+    max-width: 100%;
+    padding: ${(props) =>
+      props.spacing === 'default'
+        ? '5.859vw 3.906vw'
+        : props.spacing
+        ? `calc(${props.spacing} / 1024 * 100vw) 3.906vw`
+        : '5.859vw 3.906vw'};
+    gap: ${(props) =>
+      props.gap === 'default' ? '3.906vw' : props.gap ? `${props.gap}px` : '3.906vw'};
   }
 
   ${media.mobile} {
+    flex-direction: column;
+    max-width: 100%;
+    padding: ${(props) =>
+      props.spacing === 'default'
+        ? '5.417vw'
+        : props.spacing
+        ? `calc(${props.spacing} / 480 * 100vw) 5.417vw`
+        : '5.417vw'};
+    gap: ${(props) =>
+      props.gap === 'default' ? '5.417vw' : props.gap ? `${props.gap}px` : '5.417vw'};
   }
 `;
 

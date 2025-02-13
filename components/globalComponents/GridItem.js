@@ -8,10 +8,11 @@ import media from '@/styles/media';
 // import colors from 'styles/colors';
 // import text from 'styles/text';
 
-const GridItem = ({ content }) => {
+const GridItem = ({ content, alignment }) => {
   // console.log(content.content[0].Content)
+  console.log(alignment)
   return (
-    <GridItemWrapper>
+    <GridItemWrapper alignment={alignment}>
       {content.icon && (
         <Icon imageAlt={content.icon.alt} imageSrc={content.icon.filename} />
       )}
@@ -35,7 +36,8 @@ const GridItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: auto;
-  text-align: left;
+  align-items: ${props => props.alignment || 'unset'};;
+  text-align: ${props => props.alignment || 'left'};
   width: clamp(18.5vw, 100%, 25.5vw);
   gap: 1vw;
 

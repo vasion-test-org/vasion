@@ -17,7 +17,7 @@ const CenteredSection = ({ blok }) => {
   const { mobile, tablet } = useContext(ScreenContext);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  // console.log(blok)
+  // console.log(blok.grid_alignment)
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper {...storyblokEditable(blok)}>
@@ -47,7 +47,7 @@ const CenteredSection = ({ blok }) => {
           <Cards cardData={blok.cards} />
         )}
         {blok.component_type === 'grid' && blok.grid && (
-          <Grid gridData={blok.grid} />
+          <Grid gridData={blok.grid} alignment={blok.grid_alignment}/>
         )}
       </CenteredWrapper>
     </ThemeProvider>
@@ -61,6 +61,20 @@ const ContentWrapper = styled.div`
   justify-content: center;
   width: 67.75vw;
   gap: 1vw;
+
+  ${media.fullWidth} {
+    width: 1084px;
+  gap: 16px;
+  }
+  
+  ${media.tablet} {
+  
+  }
+  
+  ${media.mobile} {
+    width: 89.167vw;
+    gap: 3.333vw;
+  }
 `;
 
 const CenteredWrapper = styled.div`
@@ -69,18 +83,25 @@ const CenteredWrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 1vw;
-  /* background: ${(props) => props.theme.cardBg};  */
   color: ${(props) => props.theme.centered.textColor};
   padding: 3.75vw 0;
+  padding: ${(props) =>
+      props.spacing === 'default'
+        ? '3.75vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '3.75vw 0'};
 
   ${media.fullWidth} {
+    gap: 16px;
     padding: 60px 0;
   }
 
   ${media.tablet} {
-  }
+    gap: 1.563vw;  }
 
   ${media.mobile} {
+    gap: 3.333vw;
   }
 `;
 
