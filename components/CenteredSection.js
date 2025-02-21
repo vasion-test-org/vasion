@@ -35,12 +35,12 @@ const CenteredSection = ({ blok }) => {
         </ContentWrapper>
 
         {blok.component_type === 'media' && blok?.media && (
-          <div {...storyblokEditable(blok.media)}>
+          <MediaWrapper {...storyblokEditable(blok.media)}>
             <Image
               images={blok.media?.[0]?.media}
               borderRadius={blok.media?.[0]?.border_radius}
             />
-          </div>
+          </MediaWrapper>
         )}
 
         {blok.component_type === 'cards' && blok.cards && (
@@ -54,6 +54,21 @@ const CenteredSection = ({ blok }) => {
   );
 };
 
+const MediaWrapper = styled.div`
+  max-width: 67.75vw;
+
+  ${media.fullWidth} {
+    max-width: 1084px;
+  }
+  
+  ${media.tablet} {
+    max-width: 92.188vw;
+  }
+  
+  ${media.mobile} {
+    max-width: 89.167vw;
+  }
+`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;

@@ -16,7 +16,7 @@ const Hero = ({ blok }) => {
     customTheme = undefined
   }
 
-  // console.log( blok);
+  console.log( blok);
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
       <HeroBGWrapper>
@@ -28,7 +28,7 @@ const Hero = ({ blok }) => {
           <ContentWrapper>
             {blok.hero_copy.map((copy) => (
               <div {...storyblokEditable(copy)} key={copy.component}>
-                <RichTextRenderer document={copy.copy} />
+                <RichTextRenderer document={copy.copy} responsiveTextStyles={copy.responsive_text_styles}/>
               </div>
             ))}
             <ButtonRow>

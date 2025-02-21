@@ -58,17 +58,29 @@ align-items: center;
   color: ${(props) => props.theme.pillCta.textColor};
   text-align: left;
   justify-content: space-between;
+  gap: 3.75vw;
 
   ${media.fullWidth} {
+    gap: 60px;
     padding: 60px 96px;
+    width: 1304px;
+    border-radius: 24px;
   }
   
   ${media.tablet} {
-  
+    gap: 5.859vw;
+    width: 92.188vw;
+    border-radius: 2.344vw;
+    padding: 5.859vw 3.906vw;
   }
   
   ${media.mobile} {
-  
+    flex-direction: column;
+    text-align: center;
+    gap: 3.333vw;
+    padding: 8.333vw 5vw;
+    width: 89.167vw;
+    border-radius: 5vw;
   }
 `;
 
