@@ -11,6 +11,7 @@ const SideBySide = ({ blok }) => {
   // console.log(blok)
   return (
     <SideBySideWrapper
+    flipped={blok.flipped}
       spacing={blok.section_spacing}
       {...storyblokEditable(blok)}
       gap={blok.gap}
@@ -59,10 +60,10 @@ gap: ${(props) =>
   ${media.tablet} {
     padding: ${(props) =>
     props.spacing === 'default'
-      ? '3.906vw 0'
+      ? '3.906vw 3.906vw'
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.906vw 0'};
+      ? `${props.spacing}px 3.906vw`
+      : '3.906vw 3.906vw'};
     gap: ${(props) =>
     props.gap === 'default'
       ? '3.906vw'
@@ -72,13 +73,13 @@ gap: ${(props) =>
   }
 
   ${media.mobile} {
-    flex-direction: column;
+    flex-direction: ${props => props.flipped ? 'column-reverse' : 'column'};
     padding: ${(props) =>
     props.spacing === 'default'
-      ? '5.417vw 0'
+      ? '5.417vw 5.417vw'
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '5.417vw 0'};
+      ? `${props.spacing}px 5.417vw`
+      : '5.417vw 5.417vw'};
     gap: ${(props) =>
     props.gap === 'default'
       ? '6.667vw'

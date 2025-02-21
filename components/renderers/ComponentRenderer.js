@@ -104,12 +104,12 @@ const CopyDiv = styled.div`
   }
 
   ${media.tablet} {
-    width: 38.672vw;
+    width: 41.016vw;
     gap: 1.563vw;
   }
   
   ${media.mobile} {
-    width: 78.333vw;
+    width: 89.167vw;
     gap: 3.333vw;
   }
 `;

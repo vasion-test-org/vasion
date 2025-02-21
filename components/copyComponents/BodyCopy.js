@@ -33,8 +33,8 @@ const StyledBodyCopy = styled.div`
     }
 
     ${media.mobile} {
-      font-size: 3.271vw;
-      line-height: 4.206vw;
+      font-size: 2.917vw;
+      line-height: 3.75vw;
     }
   }
   
@@ -75,8 +75,8 @@ const StyledBodyCopy = styled.div`
     }
 
     ${media.mobile} {
-      font-size: 4.206vw;
-      line-height: 5.607vw;
+      font-size: 3.75vw;
+      line-height: 4.583vw;
     }
   }
 

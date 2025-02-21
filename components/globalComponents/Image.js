@@ -23,6 +23,14 @@ const ImageWrapper = styled.img`
   ${media.fullWidth} {
     border-radius: ${(props) => `${props.borderradius || 0}px`};
   }
+
+  ${media.tablet} {
+    
+  }
+  
+  ${media.mobile} {
+  
+  }
 `;
 
 export default Image;

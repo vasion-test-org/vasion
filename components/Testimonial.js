@@ -64,6 +64,14 @@ const SourceWrapper = styled.div`
 `
 const ImageWrapper = styled.div`
   align-content: center;
+
+  ${media.tablet} {
+    max-width: 32.813vw;
+  }
+  
+  ${media.mobile} {
+  max-width: 89.167vw;
+  }
 `;
 const TestimonialEyebrow = styled(Eyebrow)`
   margin-bottom: 2vw;
@@ -90,10 +98,11 @@ const TestimonialContent = styled.div`
   
   ${media.tablet} {
     text-indent: -1.563vw;
+    width: 45.703vw;
   }
   
   ${media.mobile} {
-  
+    width: 89.167vw;
   }
 `;
 const TestimonialCard = styled.div`
@@ -122,6 +131,10 @@ const TestimonialCard = styled.div`
   
   ${media.mobile} {
     flex-direction: column;
+    border-radius: unset;
+  width: 100%;
+  gap: 8.333vw;
+  padding: 6.667vw 5.417vw;
   }
 `;
 const TestimonialWrapper = styled.div`
@@ -150,12 +163,17 @@ const TestimonialWrapper = styled.div`
     props.spacing === 'default'
       ? '3.906vw 0vw'
       : props.spacing
-      ? `calc(${props.spacing} / 1600 * 100vw) 0vw`
+      ? `calc(${props.spacing} / 1024 * 100vw) 0vw`
       : '3.906vw 0vw'};
       }
       
       ${media.mobile} {
-      
+        padding: ${(props) =>
+    props.spacing === 'default'
+      ? '3.906vw 0vw 0vw 0vw'
+      : props.spacing
+      ? `calc(${props.spacing} / 428 * 100vw) 0vw`
+      : '3.906vw 0vw 0vw 0vw'};
       }
 `;
 export default Testimonial;

@@ -10,6 +10,10 @@ export const defaultTheme = {
     textColor: "#ffffff",
     cardBg: "#3D2562",
   },
+  pillCta: {
+    textColor: "#ffffff",
+    cardBg: "#3D2562",
+  },
   centered: {
     textColor: "#1B1D21",
     background: "#FFFFFF",
@@ -26,6 +30,10 @@ export const darkTheme = {
     bg: "linear-gradient(180deg, #583F99 0%, #3D2562 100%)",
   },
   logoCube: {
+    textColor: "#ffffff",
+    cardBg: "#3D2562",
+  },
+  pillCta: {
     textColor: "#ffffff",
     cardBg: "#3D2562",
   },

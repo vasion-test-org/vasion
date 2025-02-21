@@ -94,13 +94,30 @@ const CenteredWrapper = styled.div`
 
   ${media.fullWidth} {
     gap: 16px;
-    padding: 60px 0;
+    padding: ${(props) =>
+      props.spacing === 'default'
+        ? '60px 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '60px 0'};
   }
 
   ${media.tablet} {
+    padding: ${(props) =>
+      props.spacing === 'default'
+        ? '5.859vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '5.859vw 0'};
     gap: 1.563vw;  }
 
   ${media.mobile} {
+    padding: ${(props) =>
+      props.spacing === 'default'
+        ? '12.5vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '12.5vw 0'};
     gap: 3.333vw;
   }
 `;
