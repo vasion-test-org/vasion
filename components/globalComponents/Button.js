@@ -1,32 +1,33 @@
+'use client'
 import React from 'react';
 import Link from 'next/link';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import text from '@/styles/text';
 
-const Button = ({ buttonData }) => {
+const Button = ({ $buttonData }) => {
   const themes = useAvailableThemes();
   const selectedTheme =
-    themes.button?.[buttonData.theme] || themes.button.primary;
+    themes.button?.[$buttonData.theme] || themes.button.primary;
 
-  const href = buttonData?.link_url.email
-    ? `mailto:${buttonData?.link_url.email}`
-    : buttonData?.link_url.url || '#';
+  const href = $buttonData?.link_url.email
+    ? `mailto:${$buttonData?.link_url.email}`
+    : $buttonData?.link_url.url || '#';
 
   const isExternal =
-    buttonData?.link_url?.url?.startsWith('http') ||
-    buttonData?.link_url?.email;
+    $buttonData?.link_url?.url?.startsWith('http') ||
+    $buttonData?.link_url?.email;
   const target =
-    buttonData?.link_url?.target === '_blank' || isExternal
+    $buttonData?.link_url?.target === '_blank' || isExternal
       ? '_blank'
       : undefined;
   const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
 
   return (
-    <ButtonWrapper layout={buttonData?.layout} size={buttonData?.link_size}>
+    <ButtonWrapper layout={$buttonData?.layout} size={$buttonData?.link_size}>
       <ThemeProvider theme={selectedTheme}>
         <NextLink href={href} passHref target={target} rel={rel}>
-          {buttonData?.link_text}
+          {$buttonData?.link_text}
         </NextLink>
       </ThemeProvider>
     </ButtonWrapper>

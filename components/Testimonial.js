@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect } from 'react';
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
@@ -5,9 +6,9 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import media from '@/styles/media';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { horizontalLoop } from '@/functions/horizontalLoop';
-import RichTextRenderer from './renderers/RichTextRenderer';
-import Eyebrow from './copyComponents/Eyebrow';
-import Image from './globalComponents/Image';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import Eyebrow from '@/components/copyComponents/Eyebrow';
+import Image from '@/components/globalComponents/Image';
 const Testimonial = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
@@ -33,10 +34,10 @@ const Testimonial = ({ blok }) => {
               </SourceWrapper>
             )}
           </TestimonialContent>
-          {blok.media && (
+          {blok?.media && (
             <ImageWrapper {...storyblokEditable(blok)}>
               <Image
-                images={blok.media[0].media}
+                images={blok.media[0]?.media}
                 // borderRadius={blok.hero_asset?.[0]?.border_radius}
               />
             </ImageWrapper>

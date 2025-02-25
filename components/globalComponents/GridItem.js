@@ -15,7 +15,7 @@ const GridItem = ({ content, alignment }) => {
     <GridItemWrapper alignment={alignment}>
       {content.icon && (
         <div key={content.icon.filename} {...storyblokEditable(content.icon)}>
-        <Icon imageAlt={content.icon.alt} imageSrc={content.icon.filename} />
+          <Icon imageAlt={content.icon.alt} imageSrc={content.icon.filename} />
         </div>
       )}
       {content.content.map((copy) => (
@@ -27,7 +27,7 @@ const GridItem = ({ content, alignment }) => {
           />
         </div>
       ))}
-      {/* <Button buttonData={content.Button[0]}/> */}
+      {/* <Button $buttonData={content.Button[0]}/> */}
     </GridItemWrapper>
   );
 };
@@ -38,8 +38,8 @@ const GridItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: auto;
-  align-items: ${props => props.alignment || 'unset'};;
-  text-align: ${props => props.alignment || 'left'};
+  align-items: ${(props) => props.alignment || 'unset'};
+  text-align: ${(props) => props.alignment || 'left'};
   width: clamp(18.5vw, 100%, 25.5vw);
   gap: 1vw;
 

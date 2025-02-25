@@ -1,7 +1,7 @@
-import { getStoryblokApi } from "@storyblok/react/rsc";
-import StoryblokStory from "@storyblok/react/story";
-import { notFound } from "next/navigation";
+import { StoryblokStory } from "@storyblok/react/rsc";
 
+import { notFound } from "next/navigation";
+import { getStoryblokApi } from "@/lib/storyblok";
 export default async function DynamicPage(props) {
   const { params } = props;
   const slugArray = (await params).slug || [];
@@ -18,6 +18,7 @@ export default async function DynamicPage(props) {
     notFound();
   }
 
+  console.log(story)
   return (
     <div>
       <StoryblokStory story={story} />

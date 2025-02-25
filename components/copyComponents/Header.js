@@ -4,15 +4,21 @@ import media from '@/styles/media';
 // import { storyblokEditable } from '@storyblok/react/rsc';
 
 const Header = ({ as: Tag = 'h1', children }) => {
-  return <StyledHeader as={Tag} level={Tag}>{children}</StyledHeader>;
+  return (
+    <StyledHeader as={Tag} $level={Tag}>
+      {children}
+    </StyledHeader>
+  );
 };
 
 export default Header;
 
 const StyledHeader = styled.div`
   font-family: 'Archivo';
-  
-  ${({ level }) => level === 'h1' && `
+
+  ${({ $level }) =>
+    $level === 'h1' &&
+    `
     font-weight: 800;
     font-size: 3.625vw;
       line-height: 4vw;
@@ -33,7 +39,9 @@ const StyledHeader = styled.div`
     }
   `}
 
-  ${({ level }) => level === 'h2' && `
+  ${({ $level }) =>
+    $level === 'h2' &&
+    `
    font-weight: 700;
     font-size: 2.875vw;
     line-height: 3.5vw;
@@ -54,7 +62,9 @@ const StyledHeader = styled.div`
     }
   `}
 
-  ${({ level }) => level === 'h3' && `
+  ${({ $level }) =>
+    $level === 'h3' &&
+    `
      font-weight: 700;
      font-size: 2vw;
     line-height: 2.5vw;
@@ -75,7 +85,9 @@ const StyledHeader = styled.div`
     }
   `}
 
-  ${({ level }) => level === 'h4' && `
+  ${({ $level }) =>
+    $level === 'h4' &&
+    `
       font-weight: 700;
     font-size: 1.625vw;
       line-height: 2vw;
@@ -95,7 +107,9 @@ const StyledHeader = styled.div`
       line-height: 5.607vw;
     }
   `}
-    ${({ level }) => level === 'h5' && `
+    ${({ $level }) =>
+    $level === 'h5' &&
+    `
       font-weight: 700;
     font-size: 1.25vw;
     line-height: 1.5vw;

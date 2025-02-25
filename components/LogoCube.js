@@ -1,11 +1,12 @@
+'use client'
 import React, { useEffect } from 'react';
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
-import { storyblokEditable } from '@storyblok/react/rsc';
+import { storyblokEditable } from "@storyblok/react/rsc";
 import media from '@/styles/media';
 import { horizontalLoop } from '@/functions/horizontalLoop';
-import RichTextRenderer from './renderers/RichTextRenderer';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 const LogoCube = ({ blok }) => {
   const themes = useAvailableThemes();

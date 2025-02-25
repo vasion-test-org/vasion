@@ -1,10 +1,12 @@
+'use client'
+
 import React from "react";
 import { storyblokEditable } from "@storyblok/react/rsc";
-import Image from "../globalComponents/Image";
+import Image from "@/components/globalComponents/Image";
 import styled from "styled-components";
 import media from "@/styles/media";
-import RichTextRenderer from "./RichTextRenderer";
-import LogoCube from "../LogoCube";
+import RichTextRenderer from "@/components/renderers/RichTextRenderer";
+import LogoCube from "@/components/LogoCube";
 
 const ComponentRenderer = ({ blok }) => {
   if (!blok) return null;

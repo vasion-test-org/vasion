@@ -10,7 +10,7 @@ export const defaultTheme = {
     textColor: "#ffffff",
     cardBg: "#3D2562",
   },
-  pillCta: {
+  cta: {
     textColor: "#ffffff",
     cardBg: "#3D2562",
   },
@@ -33,9 +33,9 @@ export const darkTheme = {
     textColor: "#ffffff",
     cardBg: "#3D2562",
   },
-  pillCta: {
+  cta: {
     textColor: "#ffffff",
-    cardBg: "#3D2562",
+    cardBg: "linear-gradient(180deg, #190C30 -0.27%, #3D2562 126.67%)",
   },
   centered: {
     textColor: "#ffffff",

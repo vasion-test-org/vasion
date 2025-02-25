@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 
 import styled from 'styled-components';
@@ -11,7 +12,7 @@ const SideBySide = ({ blok }) => {
   // console.log(blok)
   return (
     <SideBySideWrapper
-    flipped={blok.flipped}
+    flipped={blok.flipped ? "true" : undefined}
       spacing={blok.section_spacing}
       {...storyblokEditable(blok)}
       gap={blok.gap}
@@ -73,7 +74,7 @@ gap: ${(props) =>
   }
 
   ${media.mobile} {
-    flex-direction: ${props => props.flipped ? 'column-reverse' : 'column'};
+    flex-direction: ${(props) => (props.flipped === "true" ? 'column-reverse' : 'column')};
     padding: ${(props) =>
     props.spacing === 'default'
       ? '5.417vw 5.417vw'

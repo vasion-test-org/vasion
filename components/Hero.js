@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
@@ -6,17 +7,17 @@ import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { ScreenContext } from '@/components/Providers/Screen';
-import Button from './globalComponents/Button';
-import Image from './globalComponents/Image';
+import Button from '@/components/globalComponents/Button';
+import Image from '@/components/globalComponents/Image';
 const Hero = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   let customTheme = blok.custom_theme?.[0] || {};
-  if(!blok.custom_theme_builder) {
-    customTheme = undefined
+  if (!blok.custom_theme_builder) {
+    customTheme = undefined;
   }
 
-  console.log( blok);
+  // console.log( blok);
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
       <HeroBGWrapper>
@@ -28,16 +29,22 @@ const Hero = ({ blok }) => {
           <ContentWrapper>
             {blok.hero_copy.map((copy) => (
               <div {...storyblokEditable(copy)} key={copy.component}>
-                <RichTextRenderer document={copy.copy} responsiveTextStyles={copy.responsive_text_styles}/>
+                <RichTextRenderer
+                  document={copy.copy}
+                  responsiveTextStyles={copy.responsive_text_styles}
+                />
               </div>
             ))}
             <ButtonRow>
-              {blok?.button_group?.map((buttonData) => (
+              {blok?.button_group?.map(($buttonData) => (
                 <div
-                  {...storyblokEditable(buttonData)}
-                  key={buttonData?.link_text}
+                  {...storyblokEditable($buttonData)}
+                  key={$buttonData?.link_text}
                 >
-                  <Button key={buttonData?.link_text} buttonData={buttonData} />
+                  <Button
+                    key={$buttonData?.link_text}
+                    $buttonData={$buttonData}
+                  />
                 </div>
               ))}
             </ButtonRow>
@@ -56,7 +63,6 @@ const Hero = ({ blok }) => {
   );
 };
 
-
 const ButtonRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -65,15 +71,14 @@ const ButtonRow = styled.div`
 
   ${media.fullWidth} {
     gap: 12px;
-  margin-top: 32px;
+    margin-top: 32px;
   }
-  
+
   ${media.tablet} {
     gap: 1.172vw;
-  margin-top: 3.125vw;
-  
+    margin-top: 3.125vw;
   }
-  
+
   ${media.mobile} {
     gap: 2.5vw;
     margin-top: 6.667vw;
@@ -153,7 +158,11 @@ const HeroWrapper = styled.div`
         ? `calc(${props.spacing} / 1024 * 100vw) 3.906vw`
         : '5.859vw 3.906vw'};
     gap: ${(props) =>
-      props.gap === 'default' ? '3.906vw' : props.gap ? `${props.gap}px` : '3.906vw'};
+      props.gap === 'default'
+        ? '3.906vw'
+        : props.gap
+        ? `${props.gap}px`
+        : '3.906vw'};
   }
 
   ${media.mobile} {
@@ -166,7 +175,11 @@ const HeroWrapper = styled.div`
         ? `calc(${props.spacing} / 480 * 100vw) 5.417vw`
         : '5.417vw'};
     gap: ${(props) =>
-      props.gap === 'default' ? '5.417vw' : props.gap ? `${props.gap}px` : '5.417vw'};
+      props.gap === 'default'
+        ? '5.417vw'
+        : props.gap
+        ? `${props.gap}px`
+        : '5.417vw'};
   }
 `;
 

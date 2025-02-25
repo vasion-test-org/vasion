@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useContext } from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
@@ -17,7 +17,7 @@ const CenteredSection = ({ blok }) => {
   const { mobile, tablet } = useContext(ScreenContext);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  // console.log(blok.grid_alignment)
+  // console.log(blok)
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper {...storyblokEditable(blok)}>
@@ -27,9 +27,12 @@ const CenteredSection = ({ blok }) => {
               <RichTextRenderer document={copy.copy} />
             </div>
           ))}
-          {blok?.button_group?.map((buttonData) => (
-            <div {...storyblokEditable(buttonData)} key={buttonData.link_text}>
-              <Button key={buttonData.link_text} buttonData={buttonData} />
+          {blok?.button_group?.map(($buttonData) => (
+            <div
+              {...storyblokEditable($buttonData)}
+              key={$buttonData.link_text}
+            >
+              <Button key={$buttonData.link_text} $buttonData={$buttonData} />
             </div>
           ))}
         </ContentWrapper>
@@ -43,11 +46,11 @@ const CenteredSection = ({ blok }) => {
           </MediaWrapper>
         )}
 
-        {blok.component_type === 'cards' && blok.cards && (
+        {blok.component_type === 'card' && blok.cards && (
           <Cards cardData={blok.cards} />
         )}
         {blok.component_type === 'grid' && blok.grid && (
-          <Grid gridData={blok.grid} alignment={blok.grid_alignment}/>
+          <Grid gridData={blok.grid} alignment={blok.grid_alignment} />
         )}
       </CenteredWrapper>
     </ThemeProvider>
@@ -60,15 +63,15 @@ const MediaWrapper = styled.div`
   ${media.fullWidth} {
     max-width: 1084px;
   }
-  
+
   ${media.tablet} {
     max-width: 92.188vw;
   }
-  
+
   ${media.mobile} {
     max-width: 89.167vw;
   }
-`
+`;
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -79,13 +82,12 @@ const ContentWrapper = styled.div`
 
   ${media.fullWidth} {
     width: 1084px;
-  gap: 16px;
+    gap: 16px;
   }
-  
+
   ${media.tablet} {
-  
   }
-  
+
   ${media.mobile} {
     width: 89.167vw;
     gap: 3.333vw;
@@ -101,11 +103,11 @@ const CenteredWrapper = styled.div`
   color: ${(props) => props.theme.centered.textColor};
   padding: 3.75vw 0;
   padding: ${(props) =>
-      props.spacing === 'default'
-        ? '3.75vw 0'
-        : props.spacing
-        ? `${props.spacing}px 0`
-        : '3.75vw 0'};
+    props.spacing === 'default'
+      ? '3.75vw 0'
+      : props.spacing
+      ? `${props.spacing}px 0`
+      : '3.75vw 0'};
 
   ${media.fullWidth} {
     gap: 16px;
@@ -124,7 +126,8 @@ const CenteredWrapper = styled.div`
         : props.spacing
         ? `${props.spacing}px 0`
         : '5.859vw 0'};
-    gap: 1.563vw;  }
+    gap: 1.563vw;
+  }
 
   ${media.mobile} {
     padding: ${(props) =>

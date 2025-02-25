@@ -9,7 +9,7 @@ import media from '@/styles/media';
 // import text from 'styles/text';
 
 const Card = ({ content }) => {
-  console.log('card-content', content);
+  // console.log('card-content', content);
   return (
     <CardWrapper>
       {content.Image && (
@@ -21,7 +21,7 @@ const Card = ({ content }) => {
             <RichTextRenderer className={copy.component} document={copy.copy} />
           </div>
         ))}
-        <Button buttonData={content.Button[0]} />
+        <Button $buttonData={content.Button[0]} />
       </ContentWrapper>
     </CardWrapper>
   );

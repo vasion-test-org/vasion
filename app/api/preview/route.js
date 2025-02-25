@@ -1,4 +1,4 @@
-import { getStoryblokApi } from "@storyblok/react/rsc";
+import { getStoryblokApi } from "@/lib/storyblok";
 
 export async function GET(req) {
   const token = req.nextUrl.searchParams.get("token");

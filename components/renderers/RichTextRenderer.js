@@ -1,3 +1,4 @@
+'use client'
 import { render, MARK_STYLED, NODE_HEADING, NODE_PARAGRAPH } from 'storyblok-rich-text-react-renderer';
 import React from 'react';
 import styled from 'styled-components';
@@ -30,12 +31,6 @@ const RichTextRenderer = ({ document, centered, responsiveTextStyles = [] }) => 
   const tabletBodyClass = responsiveTextStyles[0] || defaultBodyClass;
   const mobileBodyClass = responsiveTextStyles[1] || tabletBodyClass;
 
-  // Use useMedia to dynamically switch body copy class
-  const selectedBodyClass = useMedia(defaultBodyClass, tabletBodyClass, mobileBodyClass);
-
-  console.log("Responsive Text Styles:", responsiveTextStyles);
-  console.log("Selected Header Style:", selectedHeaderStyle);
-  console.log("Selected Body Class:", selectedBodyClass);
 
   // Function to extract text from structured content
   const extractText = (contentArray) => {

@@ -1,3 +1,4 @@
+'use client'
 import { useCallback, useEffect, useState } from "react"
 import { desktop, tablet, mobile } from "@/styles/media"
 import { isBrowser } from "./functions"
