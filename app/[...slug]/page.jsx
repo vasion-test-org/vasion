@@ -18,7 +18,7 @@ export default async function DynamicPage(props) {
     notFound();
   }
 
-  console.log(story)
+  // console.log(story)
   return (
     <div>
       <StoryblokStory story={story} />

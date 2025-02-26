@@ -21,7 +21,7 @@ const RichTextRenderer = ({ document, centered, responsiveTextStyles = [] }) => 
   const mobileStyle = responsiveTextStyles[1] || tabletStyle;
 
   // Use useMedia to dynamically switch header style
-  const selectedHeaderStyle = useMedia(`h${defaultHeaderLevel}`, tabletStyle, mobileStyle);
+  const selectedHeaderStyle = useMedia(`h${defaultHeaderLevel}`, `h${defaultHeaderLevel}`, tabletStyle, mobileStyle);
 
   // Extract default body copy class and responsive styles
   const defaultBodyClass =

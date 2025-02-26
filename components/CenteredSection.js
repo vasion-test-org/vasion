@@ -12,7 +12,8 @@ import Cards from '@/components/centeredSections/Cards';
 import Grid from '@/components/centeredSections/Grid';
 import Image from '@/components/globalComponents/Image';
 import Button from '@/components/globalComponents/Button';
-
+import Accordion from '@/components/centeredSections/Accordion';
+import Stats from "@/components/centeredSections/Stats";
 const CenteredSection = ({ blok }) => {
   const { mobile, tablet } = useContext(ScreenContext);
   const themes = useAvailableThemes();
@@ -27,36 +28,73 @@ const CenteredSection = ({ blok }) => {
               <RichTextRenderer document={copy.copy} />
             </div>
           ))}
-          {blok?.button_group?.map(($buttonData) => (
-            <div
-              {...storyblokEditable($buttonData)}
-              key={$buttonData.link_text}
-            >
-              <Button key={$buttonData.link_text} $buttonData={$buttonData} />
-            </div>
-          ))}
+          {blok.button_position === 'above' &&
+            blok?.button_group?.map(($buttonData) => (
+              <div
+                {...storyblokEditable($buttonData)}
+                key={$buttonData.link_text}
+              >
+                <Button key={$buttonData.link_text} $buttonData={$buttonData} />
+              </div>
+            ))}
         </ContentWrapper>
+        <AttachedComponent>
+          {blok.component_type === 'media' && blok?.media && (
+            <MediaWrapper {...storyblokEditable(blok.media)}>
+              <Image
+                images={blok.media?.[0]?.media}
+                borderRadius={blok.media?.[0]?.border_radius}
+              />
+            </MediaWrapper>
+          )}
 
-        {blok.component_type === 'media' && blok?.media && (
-          <MediaWrapper {...storyblokEditable(blok.media)}>
-            <Image
-              images={blok.media?.[0]?.media}
-              borderRadius={blok.media?.[0]?.border_radius}
-            />
-          </MediaWrapper>
-        )}
-
-        {blok.component_type === 'card' && blok.cards && (
-          <Cards cardData={blok.cards} />
-        )}
-        {blok.component_type === 'grid' && blok.grid && (
-          <Grid gridData={blok.grid} alignment={blok.grid_alignment} />
-        )}
+          {blok.component_type === 'card' && blok.cards && (
+            <Cards cardData={blok.cards} />
+          )}
+          {blok.component_type === 'grid' && blok.grid && (
+            <Grid gridData={blok.grid} alignment={blok.grid_alignment} />
+          )}
+          {blok.component_type === 'stats' && blok.stats && (
+            <Stats statsData={blok.stats} alignment={blok.stats_alignment} />
+          )}
+          {blok.component_type === 'accordion' && blok.accordion && (
+            <Accordion accordionData={blok.accordion} />
+          )}
+        </AttachedComponent>
+          {blok.button_position === 'below' &&
+            blok?.button_group?.map(($buttonData) => (
+              <div
+                buttonPosition={blok.button_position}
+                {...storyblokEditable($buttonData)}
+                key={$buttonData.link_text}
+              >
+                <Button key={$buttonData.link_text} $buttonData={$buttonData} />
+              </div>
+            ))}
       </CenteredWrapper>
     </ThemeProvider>
   );
 };
 
+const AttachedComponent = styled.div`
+display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 40px 0;
+
+  ${media.fullWidth} {
+    margin: 2.5vw 0;
+  }
+
+  ${media.tablet} {
+    margin: 3.906vw 0;
+  }
+
+  ${media.mobile} {
+    margin: 8.333vw 0;
+  }
+`;
 const MediaWrapper = styled.div`
   max-width: 67.75vw;
 
@@ -79,6 +117,7 @@ const ContentWrapper = styled.div`
   justify-content: center;
   width: 67.75vw;
   gap: 1vw;
+  text-align: center;
 
   ${media.fullWidth} {
     width: 1084px;

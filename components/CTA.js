@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React from 'react';
 
 import styled, { ThemeProvider } from 'styled-components';
@@ -22,9 +22,7 @@ const CTA = ({ blok }) => {
     blok?.image?.[2] || blok?.image?.[0]
   );
 
-  console.log(
-    blok
-  );
+  // console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <PillContainer>
@@ -62,7 +60,7 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   text-align: ${(props) =>
-  ['pill', 'image'].includes(props.$ctastyle) ? 'left' : 'center'};
+    ['pill', 'image'].includes(props.$ctastyle) ? 'left' : 'center'};
   gap: 1vw;
 
   ${media.fullWidth} {
@@ -83,7 +81,9 @@ const CtaWrapper = styled.div`
   align-items: center;
   overflow: hidden;
   background: ${(props) =>
-    props.$ctastyle === 'image' ? `url(${props.$bgimg})` : props.theme.cta.cardBg};
+    props.$ctastyle === 'image'
+      ? `url(${props.$bgimg})`
+      : props.theme.cta.cardBg};
   background-size: cover;
   color: ${(props) => props.theme.cta.textColor};
   justify-content: space-between;
@@ -93,7 +93,8 @@ const CtaWrapper = styled.div`
       ? '3.75vw 6vw'
       : props.$ctastyle === 'image'
       ? '6vw 3.75vw 9.25vw 56.25vw'
-       : props.$ctastyle === 'centered' ? '6vw 9.25vw'
+      : props.$ctastyle === 'centered'
+      ? '6vw 9.25vw'
       : '6vw 0'};
   width: ${(props) =>
     props.$ctastyle === 'pill'
@@ -105,8 +106,8 @@ const CtaWrapper = styled.div`
     props.$ctastyle === 'pill' || props.$ctastyle === 'image'
       ? '1.5vw'
       : 'unset'};
- text-align: ${(props) =>
-  ['pill', 'image'].includes(props.$ctastyle) ? 'left' : 'center'};
+  text-align: ${(props) =>
+    ['pill', 'image'].includes(props.$ctastyle) ? 'left' : 'center'};
   gap: 3.75vw;
 
   ${media.fullWidth} {

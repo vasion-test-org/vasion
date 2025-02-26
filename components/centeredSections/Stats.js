@@ -2,37 +2,37 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import GridItem from '@/components/globalComponents/GridItem';
+import StatItem from '@/components/globalComponents/StatItem';
 import media from '@/styles/media';
 // import colors from 'styles/colors';
 // import text from 'styles/text';
-const Grid = ({gridData, alignment}) => {
+const Stats = ({statsData, alignment}) => {
   // console.log(gridData)
 return (
-<GridContainer>
-  {gridData.map((gridItem, index) => 
-    <GridItem key={`grid-item-${index}`} content={gridItem} alignment={alignment}/>
+<StatsContainer>
+  {statsData.map((statItem, index) => 
+    <StatItem key={`stat-item-${index}`} statItem={statItem} alignment={alignment}/>
   )}
-</GridContainer>
+</StatsContainer>
 )
 }
 
-export default Grid
+export default Stats
 
-const GridContainer = styled.div`
+const StatsContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
   width: 81.5vw;
-  gap: 2.5vw;
+  gap: 3.75vw;
 
   ${media.fullWidth} {
     width: 1304px;
-    gap: 40px;
+    gap: 60px;
   }
   
   ${media.tablet} {
     width: 92.188vw;
-    gap: 1.953vw;
+    gap: 2.344vw;
   }
   
   ${media.mobile} {
