@@ -4,25 +4,42 @@ import React from 'react';
 import styled from 'styled-components';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import media from 'styles/media';
+import text from '@/styles/text';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import colors from '@/styles/colors';
+import Button from '@/components/globalComponents/Button';
 const StatItem = ({ statItem }) => {
-  console.log(statItem)
+
 return (
 <StatContainer>
- herro
+ <Stat>{statItem.stat}</Stat>
+ <RichTextRenderer document={statItem.copy[0].copy}/>
+ {statItem.link[0] &&     <div
+                {...storyblokEditable(statItem.link[0])}
+              >
+                <Button key={statItem.link[0].link_text} $buttonData={statItem.link[0]} />
+              </div>}
 </StatContainer>
 )
 }
 
+const Stat = styled.p`
+  ${text.stat};
+  color: ${colors.primaryOrange};
+`
 const StatContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
   width: 24.625vw;
+  gap: 1.5vw;
 
   ${media.fullWidth} {
     width: 395px;
+    gap: 24px;
+
   }
   
   ${media.tablet} {
