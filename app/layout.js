@@ -2,6 +2,7 @@
 import { storyblokInit, apiPlugin } from '@storyblok/react/rsc';
 import StoryblokProvider from '@/components/StoryblokProvider';
 import { ThemeProviderWrapper } from '@/context/ThemeContext';
+import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
 import './globals.css';
 
 export const metadata = {
@@ -13,10 +14,12 @@ export default function RootLayout({ children }) {
   return (
     <ThemeProviderWrapper>
       <StoryblokProvider>
-        <html lang='en'>
-          <body>{children}</body>
-          {/* <StoryblokBridgeLoader options={{}} /> */}
-        </html>
+        <StyledComponentsRegistry>
+          <html lang='en'>
+            <body>{children}</body>
+            {/* <StoryblokBridgeLoader options={{}} /> */}
+          </html>
+        </StyledComponentsRegistry>
       </StoryblokProvider>
     </ThemeProviderWrapper>
   );

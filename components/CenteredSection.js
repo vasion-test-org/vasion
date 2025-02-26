@@ -13,7 +13,7 @@ import Grid from '@/components/centeredSections/Grid';
 import Image from '@/components/globalComponents/Image';
 import Button from '@/components/globalComponents/Button';
 import Accordion from '@/components/centeredSections/Accordion';
-import Stats from "@/components/centeredSections/Stats";
+import Stats from '@/components/centeredSections/Stats';
 const CenteredSection = ({ blok }) => {
   const { mobile, tablet } = useContext(ScreenContext);
   const themes = useAvailableThemes();
@@ -61,23 +61,23 @@ const CenteredSection = ({ blok }) => {
             <Accordion accordionData={blok.accordion} />
           )}
         </AttachedComponent>
-          {blok.button_position === 'below' &&
-            blok?.button_group?.map(($buttonData) => (
-              <div
-                buttonPosition={blok.button_position}
-                {...storyblokEditable($buttonData)}
-                key={$buttonData.link_text}
-              >
-                <Button key={$buttonData.link_text} $buttonData={$buttonData} />
-              </div>
-            ))}
+        {blok.button_position === 'below' &&
+          blok?.button_group?.map(($buttonData) => (
+            <div
+              buttonPosition={blok.button_position}
+              {...storyblokEditable($buttonData)}
+              key={$buttonData.link_text}
+            >
+              <Button key={$buttonData.link_text} $buttonData={$buttonData} />
+            </div>
+          ))}
       </CenteredWrapper>
     </ThemeProvider>
   );
 };
 
 const AttachedComponent = styled.div`
-display: flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
