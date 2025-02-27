@@ -93,7 +93,7 @@ const RichWrapper = styled.div`
     li::before {
       content: '';
       position: absolute;
-      background-image: url('images/icons/orange-check-icon.webp');
+      background-image: url('/images/icons/orange-check-icon.webp');
       background-size: contain;
       background-repeat: no-repeat;
       left: 0;

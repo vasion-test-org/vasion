@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React from "react";
 import { storyblokEditable } from "@storyblok/react/rsc";
@@ -7,11 +7,16 @@ import styled from "styled-components";
 import media from "@/styles/media";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import LogoCube from "@/components/LogoCube";
+import { usePathname } from "next/navigation";
 
 const ComponentRenderer = ({ blok }) => {
   if (!blok) return null;
+  console.log(blok);
 
-  // console.log("Rendering:", blok.component, "Preview Mode:", blok?.preview || "N/A");
+  const pathname = usePathname();
+  const isFrench = pathname.startsWith("/fr");
+  const isGerman = pathname.startsWith("/de");
+  const isEnglish = !isFrench && !isGerman; // Defaults to English if no locale is found
 
   // Handle `personalized_page` and extract `personalized_section`
   if (blok.component === "personalized_page" && Array.isArray(blok.personalized_section)) {
@@ -24,17 +29,17 @@ const ComponentRenderer = ({ blok }) => {
     );
   }
 
-  // Handle `personalized_section` based on preview mode
+  // Handle `personalized_section` based on URL locale instead of `blok.preview`
   if (blok.component === "personalized_section") {
-    let contentBlocks = []; // ✅ Starts as an empty array
+    let contentBlocks = [];
 
-    if (blok.preview === "english" && blok.english_blocks.length > 0) {
+    if (isEnglish && blok.english_blocks.length > 0) {
       contentBlocks = blok.english_blocks;
     } 
-    if (blok.preview === "french" && blok.french_blocks.length > 0) {
+    if (isFrench && blok.french_blocks.length > 0) {
       contentBlocks = blok.french_blocks;
     } 
-    if (blok.preview === "german" && blok.german_blocks.length > 0) {
+    if (isGerman && blok.german_blocks.length > 0) {
       contentBlocks = blok.german_blocks;
     }
 
