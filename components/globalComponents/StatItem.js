@@ -37,7 +37,7 @@ const StatContainer = styled.div`
   gap: 1.5vw;
 
   ${media.fullWidth} {
-    width: 395px;
+    width: 394px;
     gap: 24px;
 
   }
