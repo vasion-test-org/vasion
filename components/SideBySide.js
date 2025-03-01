@@ -12,6 +12,7 @@ const SideBySide = ({ blok }) => {
   // console.log(blok)
   return (
     <SideBySideWrapper
+    spacingOffset={blok.offset_spacing}
     flipped={blok.flipped ? "true" : undefined}
       spacing={blok.section_spacing}
       {...storyblokEditable(blok)}
@@ -29,14 +30,18 @@ const SideBySideWrapper = styled.div`
   align-items: center;
   justify-content: center;
   text-align: left;
-  padding: ${(props) =>
-    props.spacing === 'default'
-      ? '3.75vw 0'
-      : props.spacing
-      ? `calc(${props.spacing}px / 1600 * 100vw) 0`
-      : '3.75vw 0'};
 
-gap: ${(props) =>
+  padding: ${(props) => {
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default' ? '3.75vw 0 0' : props.spacing ? `calc(${props.spacing}px / 1600 * 100vw) 0 0` : '3.75vw 0 0';
+    }
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default' ? '0 0 3.75vw' : props.spacing ? `0 0 calc(${props.spacing}px / 1600 * 100vw)` : '0 0 3.75vw';
+    }
+    return props.spacing === 'default' ? '3.75vw 0' : props.spacing ? `calc(${props.spacing}px / 1600 * 100vw) 0` : '3.75vw 0';
+  }};
+
+  gap: ${(props) =>
     props.gap === 'default'
       ? '7.75vw'
       : props.gap
@@ -44,49 +49,59 @@ gap: ${(props) =>
       : '7.75vw'};
 
   ${media.fullWidth} {
-    padding: ${(props) =>
-    props.spacing === 'default'
-      ? '60px 0'
-      : props.spacing
-      ? `${props.spacing}px 0`
-      : '60px 0'};
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default' ? '60px 0 0' : props.spacing ? `${props.spacing}px 0 0` : '60px 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default' ? '0 0 60px' : props.spacing ? `0 0 ${props.spacing}px` : '0 0 60px';
+      }
+      return props.spacing === 'default' ? '60px 0' : props.spacing ? `${props.spacing}px 0` : '60px 0';
+    }};
     gap: ${(props) =>
-    props.gap === 'default'
-      ? '124px'
-      : props.gap
-      ? `${props.gap}px`
-      : '124px'};
+      props.gap === 'default'
+        ? '124px'
+        : props.gap
+        ? `${props.gap}px`
+        : '124px'};
   }
 
   ${media.tablet} {
-    padding: ${(props) =>
-    props.spacing === 'default'
-      ? '3.906vw 3.906vw'
-      : props.spacing
-      ? `${props.spacing}px 3.906vw`
-      : '3.906vw 3.906vw'};
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default' ? '3.906vw 3.906vw 0' : props.spacing ? `${props.spacing}px 3.906vw 0` : '3.906vw 3.906vw 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default' ? '0 3.906vw 3.906vw' : props.spacing ? `0 3.906vw ${props.spacing}px` : '0 3.906vw 3.906vw';
+      }
+      return props.spacing === 'default' ? '3.906vw 3.906vw' : props.spacing ? `${props.spacing}px 3.906vw` : '3.906vw 3.906vw';
+    }};
     gap: ${(props) =>
-    props.gap === 'default'
-      ? '3.906vw'
-      : props.gap
-      ? `${props.gap}px`
-      : '3.906vw'};
+      props.gap === 'default'
+        ? '3.906vw'
+        : props.gap
+        ? `${props.gap}px`
+        : '3.906vw'};
   }
 
   ${media.mobile} {
     flex-direction: ${(props) => (props.flipped === "true" ? 'column-reverse' : 'column')};
-    padding: ${(props) =>
-    props.spacing === 'default'
-      ? '5.417vw 5.417vw'
-      : props.spacing
-      ? `${props.spacing}px 5.417vw`
-      : '5.417vw 5.417vw'};
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default' ? '5.417vw 5.417vw 0' : props.spacing ? `${props.spacing}px 5.417vw 0` : '5.417vw 5.417vw 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default' ? '0 5.417vw 5.417vw' : props.spacing ? `0 5.417vw ${props.spacing}px` : '0 5.417vw 5.417vw';
+      }
+      return props.spacing === 'default' ? '5.417vw 5.417vw' : props.spacing ? `${props.spacing}px 5.417vw` : '5.417vw 5.417vw';
+    }};
     gap: ${(props) =>
-    props.gap === 'default'
-      ? '6.667vw'
-      : props.gap
-      ? `${props.gap}px`
-      : '6.667vw'};
+      props.gap === 'default'
+        ? '6.667vw'
+        : props.gap
+        ? `${props.gap}px`
+        : '6.667vw'};
   }
 `;
+
 export default SideBySide;

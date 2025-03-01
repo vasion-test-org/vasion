@@ -466,23 +466,23 @@ line-height: 40px;
   font-weight: 400;
 
     ${media.fullWidth} {
-      font-size: 14px;
-      line-height: 18px;
+      font-size: 14px !important;
+      line-height: 18px !important;
     }
     
     ${media.desktop} {
-     font-size: 0.972vw;
-      line-height: 1.25vw;
+     font-size: 0.972vw !important;
+      line-height: 1.25vw !important;
     }
 
     ${media.tablet} {
-       font-size: 1.367vw;
-      line-height: 1.758vw;
+       font-size: 1.367vw !important;
+      line-height: 1.758vw !important;
     }
 
     ${media.mobile} {
-      font-size: 3.271vw;
-      line-height: 4.206vw;
+      font-size: 3.271vw !important;
+      line-height: 4.206vw !important;
     }
     `,
   bodySmBold: `

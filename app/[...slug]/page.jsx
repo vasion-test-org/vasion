@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { getStoryblokApi } from "@/lib/storyblok";
 
 export default async function DynamicPage({ params }) {
-  const slugArray = params?.slug || [];
+  const { slug } = await params; 
+  const slugArray = slug || [];
   const isLocalized = ["fr", "de"].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : "en";
   const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");

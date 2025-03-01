@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 
 const ComponentRenderer = ({ blok }) => {
   if (!blok) return null;
-  console.log(blok);
+  // console.log(blok);
 
   const pathname = usePathname();
   const isFrench = pathname.startsWith("/fr");
@@ -65,7 +65,7 @@ const ComponentRenderer = ({ blok }) => {
         <CopyDiv>
           {blok?.copy_block_sections?.map((copy, index) => (
             <BlockWrapper key={index} {...storyblokEditable(copy)}>
-              <RichTextRenderer document={copy.copy} />
+              <RichTextRenderer document={copy?.copy} />
             </BlockWrapper>
           ))}
         </CopyDiv>

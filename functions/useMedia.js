@@ -4,30 +4,38 @@ import { desktop, tablet, mobile } from "@/styles/media"
 import { isBrowser } from "./functions"
 
 export default function useMedia(fw, d, t, m) {
+  const [current, setCurrent] = useState(() => {
+    if (!isBrowser()) return d; // Ensure this doesn't run on SSR
+    if (window.innerWidth > desktop) return fw;
+    if (window.innerWidth > tablet) return d;
+    if (window.innerWidth > mobile) return t;
+    return m;
+  });
+
   const handleUpdate = useCallback(() => {
-    if (isBrowser()) {
-      if (window.innerWidth > desktop) {
-        setCurrent(fw)
-      } else if (window.innerWidth > tablet) {
-        setCurrent(d)
-      } else if (window.innerWidth > mobile) {
-        setCurrent(t)
-      } else setCurrent(m)
-    }
-  }, [fw, d, t, m])
+    if (!isBrowser()) return;
 
-  const [current, setCurrent] = useState(d)
+    let newValue;
+    if (window.innerWidth > desktop) {
+      newValue = fw;
+    } else if (window.innerWidth > tablet) {
+      newValue = d;
+    } else if (window.innerWidth > mobile) {
+      newValue = t;
+    } else {
+      newValue = m;
+    }
+
+    // Prevent unnecessary state updates (which cause unmount/remount issues)
+    setCurrent((prev) => (prev !== newValue ? newValue : prev));
+  }, [fw, d, t, m]);
 
   useEffect(() => {
-    handleUpdate()
-  }, [handleUpdate])
-
-  useEffect(() => {
     if (isBrowser()) {
-      window.addEventListener("resize", handleUpdate)
-      return () => window.removeEventListener("resize", handleUpdate)
+      window.addEventListener("resize", handleUpdate);
+      return () => window.removeEventListener("resize", handleUpdate);
     }
-  }, [handleUpdate])
+  }, [handleUpdate]);
 
-  return current
+  return current;
 }

@@ -166,7 +166,7 @@ const HeroWrapper = styled.div`
   }
 
   ${media.mobile} {
-    flex-direction: column;
+    flex-direction: column-reverse;
     max-width: 100%;
     padding: ${(props) =>
       props.spacing === 'default'

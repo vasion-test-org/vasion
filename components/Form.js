@@ -22,6 +22,7 @@ const Form = ({ blok }) => {
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
   const originRef = useRef('va');
+  console.log(blok);
 
   useEffect(() => {
     function getOriginDomain(url) {
@@ -130,7 +131,7 @@ const Form = ({ blok }) => {
     window.MktoForms2.loadForm(
       'https://info.printerlogic.com',
       '338-HTA-134',
-      blok.id,
+      blok.form_id,
       (form) => {
         form.onSuccess(() => {
           if (blok.animated) {
@@ -143,7 +144,7 @@ const Form = ({ blok }) => {
         });
       }
     );
-  }, [isLoaded, blok.id, blok.redirectLink]);
+  }, [isLoaded, blok.form_id, blok.redirectLink]);
 
   const loadScript = () => {
     var s = document.createElement('script');
@@ -162,16 +163,195 @@ const Form = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <MarketoForm
-        className='marketoForm'
-        // mode={props.mode}
-        id={`mktoForm_${blok.form_id}`}
-      ></MarketoForm>
-      herrrrro
+      <FormContainer>
+      {blok.header && <FormHeader>{blok.header}</FormHeader>}
+        <MarketoForm
+          className='marketoForm'
+          // mode={props.mode}
+          id={`mktoForm_${blok.form_id}`}
+        ></MarketoForm>
+      </FormContainer>
     </ThemeProvider>
   );
 };
 
-const MarketoForm = styled.form``;
+const MarketoForm = styled.form`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  width: 31.25vw !important;
+  gap: 1.25vw;
+  align-items: left;
+  text-align: center;
+`;
+const FormHeader = styled.h4`
+  ${text.h4};
+  margin-bottom: 2vw;
+  align-self: center;
 
+  ${media.fullWidth} {
+  
+  }
+  
+  ${media.tablet} {
+  
+  }
+  
+  ${media.mobile} {
+  
+  }
+`
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: ${(props) => props.theme.form.formBg};
+  color: ${(props) => props.theme.form.textColor} !important;
+  border-radius: 2vw;
+  padding: 2vw;
+  width: 35.25vw;
+
+  .mktoCaptchaDisclaimer {
+    display: none;
+  }
+  .mktoFormRow:has(> .mktoPlaceholder) {
+  display: none;
+}
+
+.mktoFormRow:has(a[href*="vasion.com/privacy-policy"]) span {
+  ${text.bodySm};
+  text-align: center;
+  color: white;
+
+  a {
+    color: ${colors.primaryOrange};
+  }
+}
+
+.mktoFormRow:has(> input[type="hidden"]) {
+  display: none;
+}
+
+
+.mktoButtonRow {
+  width: 100%;
+}
+
+button {
+  ${text.bodyMdBold};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: ${colors.primaryOrange};
+  color: white;
+  width: 100%;
+  padding: 0.75vw 0;
+  border-radius: 2.375vw;
+
+  &:hover {
+    background: white;
+    color: ${colors.primaryOrange};
+    border: 1px solid ${colors.primaryOrange};
+  }
+}
+  label {
+    display: none;
+  }
+  input {
+    ${text.bodyMd};
+    padding: 1vw;
+    border-radius: 0.25vw;
+    height: 3.375vw;
+    border: 1px solid ${(props) => props.theme.form.inputBorder};
+    background: ${(props) => props.theme.form.inputBg};
+    color: ${(props) => props.theme.form.textColor};
+
+    &#FirstName {
+      width: 15vw !important;
+    }
+
+    &#LastName {
+      width: 15vw !important;
+    }
+
+    &#Email {
+      width: 31.25vw !important;
+    }
+
+    &#Phone {
+      width: 31.25vw !important;
+    }
+
+    &#Company {
+      width: 31.25vw !important;
+    }
+
+    &#How_did_you_hear_about_us__c {
+      width: 31.25vw !important;
+    }
+
+    ${media.fullWidth} {
+    
+    }
+    
+    ${media.tablet} {
+    
+    }
+    
+    ${media.mobile} {
+    
+    }
+  }
+
+  input:focus {
+    background: ${(props) => props.theme.form.formBg};
+  }
+
+  input:invalid {
+    border: 0.063vw solid #FFB4AB;
+  }
+
+  .mktoErrorMsg {
+    ${text.bodySm};
+    color: #FFB4AB;
+    margin-top: 0.5vw;
+  }
+
+  select {
+    ${text.bodyMd};
+    width: 31.25vw !important;
+    padding: 1vw;
+    border-radius: 0.25vw;
+    height: 3.375vw;
+    border: 1px solid ${(props) => props.theme.form.inputBorder};
+    background: ${(props) => props.theme.form.inputBg};
+    color: ${(props) => props.theme.form.textColor};
+
+    option {
+      ${text.bodyMd};
+    }
+    
+    ${media.fullWidth} {
+    
+    }
+    
+    ${media.tablet} {
+    
+    }
+    
+    ${media.mobile} {
+    
+    }
+  }
+  ${media.fullWidth} {
+  
+  }
+  
+  ${media.tablet} {
+  
+  }
+  
+  ${media.mobile} {
+  
+  }
+`;
 export default Form;

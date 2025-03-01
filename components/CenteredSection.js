@@ -1,12 +1,11 @@
 'use client';
-import React, { useContext } from 'react';
+import React from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
 import media from '@/styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 import { useAvailableThemes } from '@/context/ThemeContext';
-import { ScreenContext } from '@/components/Providers/Screen';
 
 import Cards from '@/components/centeredSections/Cards';
 import Grid from '@/components/centeredSections/Grid';
@@ -15,17 +14,16 @@ import Button from '@/components/globalComponents/Button';
 import Accordion from '@/components/centeredSections/Accordion';
 import Stats from '@/components/centeredSections/Stats';
 const CenteredSection = ({ blok }) => {
-  const { mobile, tablet } = useContext(ScreenContext);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  // console.log(blok)
+  console.log(blok)
   return (
     <ThemeProvider theme={selectedTheme}>
-      <CenteredWrapper {...storyblokEditable(blok)}>
+      <CenteredWrapper spacingOffset={blok.offset_spacing} spacing={blok.section_spacing} {...storyblokEditable(blok)}>
         <ContentWrapper>
           {blok.centered_copy.map((copy) => (
             <div {...storyblokEditable(copy)} key={copy.component}>
-              <RichTextRenderer document={copy.copy} />
+              <RichTextRenderer document={copy?.copy} />
             </div>
           ))}
           {blok.button_position === 'above' &&
@@ -140,43 +138,56 @@ const CenteredWrapper = styled.div`
   justify-content: center;
   gap: 1vw;
   color: ${(props) => props.theme.centered.textColor};
-  padding: 3.75vw 0;
-  padding: ${(props) =>
-    props.spacing === 'default'
-      ? '3.75vw 0'
-      : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0'};
+  padding: ${(props) => {
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default' ? '3.75vw 0 0' : props.spacing ? `${props.spacing}px 0 0` : '3.75vw 0 0';
+    }
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default' ? '0 0 3.75vw' : props.spacing ? `0 0 ${props.spacing}px` : '0 0 3.75vw';
+    }
+    return props.spacing === 'default' ? '3.75vw 0' : props.spacing ? `${props.spacing}px 0` : '3.75vw 0';
+  }};
 
   ${media.fullWidth} {
     gap: 16px;
-    padding: ${(props) =>
-      props.spacing === 'default'
-        ? '60px 0'
-        : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0'};
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default' ? '60px 0 0' : props.spacing ? `${props.spacing}px 0 0` : '60px 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default' ? '0 0 60px' : props.spacing ? `0 0 ${props.spacing}px` : '0 0 60px';
+      }
+      return props.spacing === 'default' ? '60px 0' : props.spacing ? `${props.spacing}px 0` : '60px 0';
+    }};
   }
 
   ${media.tablet} {
-    padding: ${(props) =>
-      props.spacing === 'default'
-        ? '5.859vw 0'
-        : props.spacing
-        ? `${props.spacing}px 0`
-        : '5.859vw 0'};
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default' ? '5.859vw 0 0' : props.spacing ? `${props.spacing}px 0 0` : '5.859vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default' ? '0 0 5.859vw' : props.spacing ? `0 0 ${props.spacing}px` : '0 0 5.859vw';
+      }
+      return props.spacing === 'default' ? '5.859vw 0' : props.spacing ? `${props.spacing}px 0` : '5.859vw 0';
+    }};
     gap: 1.563vw;
   }
 
   ${media.mobile} {
-    padding: ${(props) =>
-      props.spacing === 'default'
-        ? '12.5vw 0'
-        : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0'};
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default' ? '12.5vw 0 0' : props.spacing ? `${props.spacing}px 0 0` : '12.5vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default' ? '0 0 12.5vw' : props.spacing ? `0 0 ${props.spacing}px` : '0 0 12.5vw';
+      }
+      return props.spacing === 'default' ? '12.5vw 0' : props.spacing ? `${props.spacing}px 0` : '12.5vw 0';
+    }};
     gap: 3.333vw;
   }
 `;
+
+
 
 export default CenteredSection;

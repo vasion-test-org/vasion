@@ -21,6 +21,13 @@ export const defaultTheme = {
   testimonial: {
     textColor: "#1B1D21",
     bg: "#F5F4F7",
+  },
+  form: {
+    textColor: "#1B1D21",
+    formBg: "#ffffff",
+    inputBg: "#584282",
+    inputBorder: "#ffffff",
+    buttonBg:  "#ff5100",
   }
 };
 
@@ -44,6 +51,12 @@ export const darkTheme = {
   testimonial: {
     textColor: "#ffffff",
     bg: "linear-gradient(278deg, #803235 -1.77%, #190C30 32.97%, #3D2562 87.16%)",
+  },
+  form: {
+    textColor: "#ffffff",
+    formBg: "linear-gradient(180deg, #583F99 0%, #3D2562 100%)",
+    inputBg: "#584282",
+    inputBorder: "rgba(255, 255, 255, 0.30)",
   }
 };
 
