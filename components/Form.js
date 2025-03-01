@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
