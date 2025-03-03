@@ -6,12 +6,12 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import media from 'styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 const LongFormText = ({ blok }) => {
-  console.log(blok.copy.content[0])
+  // console.log(blok.copy.content[0])
 return (
 <LongFormTextContainer {...storyblokEditable(blok.copy)}>
-  {blok.copy.content.map((copy, index) =>  
-   <RichTextRenderer key={`copy-${index}`} document={copy}/>
-)}
+
+   <RichTextRenderer key={`copy-`} document={blok.copy}/>
+
  
 </LongFormTextContainer>
 )
@@ -23,6 +23,19 @@ align-items: center;
 justify-content: center;
 margin: 0 auto;
   width: 81.5vw;
+
+  div {
+    margin-bottom: 1.563vw;
+  }
+
+  h1, h2, h3, h4, h5 {
+    margin-bottom: 1.563vw;
+  }
+
+  div:empty {
+    margin-bottom: unset;
+}
+
 
   ${media.fullWidth} {
     width: 1304px;

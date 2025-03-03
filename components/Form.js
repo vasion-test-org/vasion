@@ -205,10 +205,14 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   background: ${(props) => props.theme.form.formBg};
-  color: ${(props) => props.theme.form.textColor} !important;
+  color: ${(props) => props.theme.form.textColor};
   border-radius: 2vw;
   padding: 2vw;
   width: 35.25vw;
+
+  .mktoFieldDescriptor {
+    max-height: 3.375vw !important;
+  }
 
   .mktoCaptchaDisclaimer {
     display: none;
@@ -263,7 +267,7 @@ button {
     height: 3.375vw;
     border: 1px solid ${(props) => props.theme.form.inputBorder};
     background: ${(props) => props.theme.form.inputBg};
-    color: ${(props) => props.theme.form.textColor};
+    color: ${(props) => props.theme.form.placeHolderColor};
 
     &#FirstName {
       width: 15vw !important;
@@ -324,7 +328,7 @@ button {
     height: 3.375vw;
     border: 1px solid ${(props) => props.theme.form.inputBorder};
     background: ${(props) => props.theme.form.inputBg};
-    color: ${(props) => props.theme.form.textColor};
+    color: ${(props) => props.theme.form.placeHolderColor};
 
     option {
       ${text.bodyMd};

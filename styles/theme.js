@@ -53,10 +53,11 @@ export const darkTheme = {
     bg: "linear-gradient(278deg, #803235 -1.77%, #190C30 32.97%, #3D2562 87.16%)",
   },
   form: {
-    textColor: "#ffffff",
+    textColor: "#c1b8d7",
     formBg: "linear-gradient(180deg, #583F99 0%, #3D2562 100%)",
     inputBg: "#584282",
     inputBorder: "rgba(255, 255, 255, 0.30)",
+    placeHolderColor: "rgba(255, 255, 255, 0.60)",
   }
 };
 

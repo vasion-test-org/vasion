@@ -10,27 +10,7 @@ import useMedia from '@/functions/useMedia';
 
 const RichTextRenderer = ({ document, centered, responsiveTextStyles = [] }) => {
   if (!document) return null;
-
-  // Extract the default heading from the document content
-  const defaultHeader = document.content?.find((item) => item.type === 'heading') || null;
-  const defaultHeaderContent = defaultHeader?.content || null;
-  const defaultHeaderLevel = defaultHeader?.attrs?.level || 1;
-
-  // Determine responsive text styles for headers
-  const tabletStyle = responsiveTextStyles[0] || `h${defaultHeaderLevel}`;
-  const mobileStyle = responsiveTextStyles[1] || tabletStyle;
-
-  // Use useMedia to dynamically switch header style
-  const selectedHeaderStyle = useMedia(`h${defaultHeaderLevel}`, `h${defaultHeaderLevel}`, tabletStyle, mobileStyle);
-
-  // Extract default body copy class and responsive styles
-  const defaultBodyClass =
-    document.content?.find((item) => item.type === 'paragraph')?.content?.[0]?.marks?.find((mark) => mark.type === 'styled')?.attrs?.class || '';
-
-  // Get body copy responsive styles
-  const tabletBodyClass = responsiveTextStyles[0] || defaultBodyClass;
-  const mobileBodyClass = responsiveTextStyles[1] || tabletBodyClass;
-
+  // console.log(document);
 
   // Function to extract text from structured content
   const extractText = (contentArray) => {
@@ -40,53 +20,61 @@ const RichTextRenderer = ({ document, centered, responsiveTextStyles = [] }) => 
 
   const customMarkResolvers = {
     [MARK_STYLED]: (children, { class: className }) => {
-      // Apply responsive class switching using useMedia
-      const selectedClassName = useMedia(className, className, tabletBodyClass, mobileBodyClass);
-
-      if (['eyebrow', 'tag', 'tagLight'].includes(className)) {
-        return <Eyebrow className={className}>{children}</Eyebrow>;
-      }
-      return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
+      return <BodyCopy className={className}>{children}</BodyCopy>;
     },
   };
 
   const customNodeResolvers = {
-    [NODE_HEADING]: (children, { level }) => {
-      const resolvedChildren = extractText(defaultHeaderContent) || children;
-      return <Header as={selectedHeaderStyle}>{resolvedChildren}</Header>;
+    [NODE_HEADING]: (children, node) => {
+      const level = node?.level || 1; // Get the actual heading level
+      const headingText = extractText(node.content) || children;
+  
+      // Apply useMedia inside the node resolver
+      const tabletStyle = responsiveTextStyles[0] || `h${level}`;
+      const mobileStyle = responsiveTextStyles[1] || tabletStyle;
+      const selectedHeaderStyle = useMedia(`h${level}`, `h${level}`, tabletStyle, mobileStyle);
+  // console.log(node, "headerStyle");
+      return <Header as={selectedHeaderStyle}>{headingText}</Header>;
     },
+
     [NODE_PARAGRAPH]: (children, node) => {
       const className =
         node?.content?.[0]?.marks?.find((mark) => mark.type === 'styled')?.attrs?.class || '';
 
-      // Apply responsive class switching
-      const selectedClassName = useMedia(className, className, tabletBodyClass, mobileBodyClass);
+      const selectedClassName = useMedia(className, className, responsiveTextStyles[0], responsiveTextStyles[1]);
 
       return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
     },
   };
 
-  return <RichWrapper>{render(document, { markResolvers: customMarkResolvers, nodeResolvers: customNodeResolvers })}</RichWrapper>;
+  return (
+    <RichWrapper>
+      {render(document, {
+        markResolvers: customMarkResolvers,
+        nodeResolvers: customNodeResolvers,
+      })}
+    </RichWrapper>
+  );
 };
 
 const RichWrapper = styled.div`
   ul {
-    list-style: none; 
-    margin-left: 0; 
+    list-style: none;
+    margin-left: 0;
     li {
       position: relative;
-      padding-left: 1.563vw; 
+      padding-left: 1.563vw;
       margin-bottom: 1.25vw;
       ${media.fullWidth} {
-        padding-left: 25px; 
+        padding-left: 25px;
         margin-bottom: 20px;
       }
       ${media.tablet} {
-        padding-left: 2.441vw; 
+        padding-left: 2.441vw;
         margin-bottom: 1.953vw;
       }
       ${media.mobile} {
-        padding-left: 5.208vw; 
+        padding-left: 5.208vw;
         margin-bottom: 4.167vw;
       }
     }
@@ -98,19 +86,19 @@ const RichWrapper = styled.div`
       background-repeat: no-repeat;
       left: 0;
       top: 0;
-      width: 1.25vw;  
-      height: 1.25vw; 
+      width: 1.25vw;
+      height: 1.25vw;
       ${media.fullWidth} {
-        width: 20px;  
-        height: 20px; 
+        width: 20px;
+        height: 20px;
       }
       ${media.tablet} {
-        width: 1.953vw;  
-        height: 1.953vw; 
+        width: 1.953vw;
+        height: 1.953vw;
       }
       ${media.mobile} {
-        width: 4.167vw;  
-        height: 4.167vw; 
+        width: 4.167vw;
+        height: 4.167vw;
       }
     }
   }
