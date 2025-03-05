@@ -4,16 +4,10 @@ import { draftMode } from 'next/headers';
 
 export default async function Home() {
   const { isEnabled } = await draftMode();
-  const story = await fetchData("home", isEnabled); // 🔹 Now fetching only "home"
+  const story = await fetchData("home", isEnabled);
 
-  // ✅ Prevents crash if no story is found
   if (!story) {
-    return (
-      <div>
-        <h1>Homepage Not Found</h1>
-        <p>The requested homepage content is missing in Storyblok.</p>
-      </div>
-    );
+    return <h1>Homepage Not Found</h1>;
   }
 
   return (
@@ -23,5 +17,5 @@ export default async function Home() {
   );
 }
 
-// ✅ Force Next.js to use Dynamic Rendering
+// ✅ Force Dynamic Rendering to prevent Vercel caching issues
 export const dynamic = "force-dynamic";

@@ -1,38 +1,21 @@
-import { NextResponse } from "next/server";
-import { getStoryblokApi } from "@/lib/storyblok";
+// app/api/preview/route.js
+import { draftMode } from 'next/headers';
+import { NextResponse } from 'next/server';
 
-export async function GET(req) {
-  const { searchParams } = new URL(req.url);
-  const token = searchParams.get("token");
-  const redirectPath = searchParams.get("redirect") || "/";
-  const slug = searchParams.get("slug") || "home";
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const token = searchParams.get('token');
+  const slug = searchParams.get('slug') || '';
 
-  // Replace with your actual preview token
+  // Verify the secret token
   if (token !== "Qf9Z8O8vNFQw8drmarBGMwtt") {
-    return new NextResponse("Invalid preview token", { status: 401 });
+    return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
   }
 
-  try {
-    // ✅ Fetch draft content to verify Storyblok response
-    const storyblokApi = getStoryblokApi();
-    const { data } = await storyblokApi.get(`cdn/stories/${slug}`, {
-      version: "draft",
-    });
+  // Enable Draft Mode
+  draftMode().enable();
 
-    if (!data.story) {
-      return new NextResponse("Story not found", { status: 404 });
-    }
-
-    // ✅ Use `Set-Cookie` headers instead of `cookies()`
-    const headers = new Headers();
-    headers.append("Set-Cookie", `__prerender_bypass=1; Path=/; HttpOnly`);
-    headers.append("Set-Cookie", `__next_preview_data=1; Path=/; HttpOnly`);
-
-    const absoluteRedirectUrl = new URL(`${redirectPath}?_storyblok_preview=true`, req.nextUrl.origin).toString();
-
-    return NextResponse.redirect(absoluteRedirectUrl, { status: 307, headers });
-  } catch (error) {
-    console.error(`[❌ Error] Fetching Storyblok Preview: ${error.message}`);
-    return new NextResponse(`Error fetching preview content: ${error.message}`, { status: 500 });
-  }
+  // Redirect to the specified slug
+  const redirectUrl = `/${slug}`;
+  return NextResponse.redirect(redirectUrl);
 }

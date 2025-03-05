@@ -1,25 +1,15 @@
-import { getStoryblokApi } from '@/lib/storyblok';
+// lib/fetchData.js
+import { getStoryblokApi } from '@storyblok/react/rsc';
 
-/**
- * Fetch Storyblok data dynamically based on slug and preview mode
- */
-export async function fetchData(slug = "home", isPreview = false) {
+export async function fetchData(slug, isPreview) {
   const storyblokApi = getStoryblokApi();
+  const version = isPreview ? 'draft' : 'published';
 
   try {
-    const { data } = await storyblokApi.get(`cdn/stories/${slug}`, {
-      version: isPreview ? "draft" : "published",
-    });
-
-    if (!data?.story) {
-      console.error(`[❌ Error] Storyblok: Story not found for slug "${slug}"`);
-      return null; // Prevents crashes
-    }
-
-    console.log(`[✅ Success] Story fetched: ${data.story.full_slug}`);
+    const { data } = await storyblokApi.get(`cdn/stories/${slug}`, { version });
     return data.story;
   } catch (error) {
-    console.error(`[❌ Error] Storyblok fetch failed: ${error.message}`);
+    console.error('Error fetching data:', error);
     return null;
   }
 }
