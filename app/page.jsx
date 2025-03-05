@@ -17,5 +17,4 @@ export default async function Home() {
   );
 }
 
-// ✅ Force Dynamic Rendering to prevent Vercel caching issues
 export const dynamic = "force-dynamic";

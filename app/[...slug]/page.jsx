@@ -1,21 +1,50 @@
 import { StoryblokStory } from "@storyblok/react/rsc";
 import { notFound } from "next/navigation";
-import { fetchData } from "@/lib/fetchData"; // ✅ Import only, do not redefine it
-import { draftMode } from "next/headers";
-import { getStoryblokApi } from "@/lib/storyblok"; // ✅ Import Storyblok API
+import { getStoryblokApi } from "@/lib/storyblok";
 
 export default async function DynamicPage({ params }) {
-  const { isEnabled } = draftMode();
-  const slug = params.slug ? params.slug.join('/') : 'home';
-  const story = await fetchData(slug, isEnabled);
+  const { slug } = await params; 
+  const slugArray = slug || [];
+  const isLocalized = ["fr", "de"].includes(slugArray[0]);
+  const locale = isLocalized ? slugArray[0] : "en";
+  const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");
+
+  const story = await fetchData(storySlug, locale);
 
   if (!story) {
     notFound();
   }
 
-  return <StoryblokStory story={story} />;
+  return (
+    <div>
+      <StoryblokStory story={story} />
+    </div>
+  );
 }
-// Generates static paths for localized routes
+
+async function fetchData(slug, locale) {
+  const storyblokApi = getStoryblokApi();
+
+  const sbParams = {
+    version: "published", 
+    language: locale, 
+  };
+
+  try {
+    const { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
+    if (!data.story) {
+      console.error(`[❌ Server ] Story not found for slug: ${slug} and locale: ${locale}`);
+      return null;
+    }
+
+    console.log(`[✅ Success] Story fetched: ${data.story.full_slug} (${locale})`);
+    return data.story;
+  } catch (error) {
+    console.error(`[❌ Server ] Error fetching story: ${error.message}`);
+    return null;
+  }
+}
+
 export async function generateStaticParams() {
   const storyblokApi = getStoryblokApi();
   const { data } = await storyblokApi.get("cdn/stories/", { version: "published" });
@@ -25,7 +54,6 @@ export async function generateStaticParams() {
   for (const story of data.stories) {
     const slug = story.slug.split("/");
 
-    // Generate paths for each available locale
     params.push({ slug, locale: "en" });
 
     if (story.translated_slugs) {

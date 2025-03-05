@@ -1,4 +1,4 @@
-// lib/fetchData.js
+
 import { getStoryblokApi } from '@storyblok/react/rsc';
 
 export async function fetchData(slug, isPreview) {
