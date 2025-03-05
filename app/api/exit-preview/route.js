@@ -1,17 +1,12 @@
-export default async function exit(req, res) {
-  const { slug = "" } = req.query;
-  // Exit the current user from "Preview Mode". This function accepts no args.
-  res.clearPreviewData();
- 
-  // set the cookies to None
-  const cookies = res.getHeader("Set-Cookie");
-  res.setHeader(
-    "Set-Cookie",
-    cookies.map((cookie) =>
-      cookie.replace("SameSite=Lax", "SameSite=None;Secure")
-    )
-  );
- 
-  // Redirect the user back to the index page.
-  res.redirect(`/${slug}`);
+export async function GET(req) {
+  const { searchParams } = new URL(req.url);
+  const slug = searchParams.get("slug") || "";
+
+  return new Response(null, {
+    status: 307,
+    headers: {
+      Location: `/${slug}`, 
+      "Set-Cookie": "__prerender_bypass=; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=0",
+    },
+  });
 }
