@@ -16,10 +16,14 @@ import Stats from '@/components/centeredSections/Stats';
 const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  console.log(blok)
+  console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
-      <CenteredWrapper spacingOffset={blok.offset_spacing} spacing={blok.section_spacing} {...storyblokEditable(blok)}>
+      <CenteredWrapper
+        spacingOffset={blok.offset_spacing}
+        spacing={blok.section_spacing}
+        {...storyblokEditable(blok)}
+      >
         <ContentWrapper>
           {blok.centered_copy.map((copy) => (
             <div {...storyblokEditable(copy)} key={copy.component}>
@@ -36,29 +40,31 @@ const CenteredSection = ({ blok }) => {
               </div>
             ))}
         </ContentWrapper>
-        <AttachedComponent>
-          {blok.component_type === 'media' && blok?.media && (
-            <MediaWrapper {...storyblokEditable(blok.media)}>
-              <Image
-                images={blok.media?.[0]?.media}
-                borderRadius={blok.media?.[0]?.border_radius}
-              />
-            </MediaWrapper>
-          )}
+        {blok.component_type !== '' && (
+          <AttachedComponent>
+            {blok.component_type === 'media' && blok?.media && (
+              <MediaWrapper {...storyblokEditable(blok.media)}>
+                <Image
+                  images={blok.media?.[0]?.media}
+                  borderRadius={blok.media?.[0]?.border_radius}
+                />
+              </MediaWrapper>
+            )}
 
-          {blok.component_type === 'card' && blok.cards && (
-            <Cards cardData={blok.cards} />
-          )}
-          {blok.component_type === 'grid' && blok.grid && (
-            <Grid gridData={blok.grid} alignment={blok.grid_alignment} />
-          )}
-          {blok.component_type === 'stats' && blok.stats && (
-            <Stats statsData={blok.stats} alignment={blok.stats_alignment} />
-          )}
-          {blok.component_type === 'accordion' && blok.accordion && (
-            <Accordion accordionData={blok.accordion} />
-          )}
-        </AttachedComponent>
+            {blok.component_type === 'card' && blok.cards && (
+              <Cards cardData={blok.cards} />
+            )}
+            {blok.component_type === 'grid' && blok.grid && (
+              <Grid gridData={blok.grid} alignment={blok.grid_alignment} />
+            )}
+            {blok.component_type === 'stats' && blok.stats && (
+              <Stats statsData={blok.stats} alignment={blok.stats_alignment} />
+            )}
+            {blok.component_type === 'accordion' && blok.accordion && (
+              <Accordion accordionData={blok.accordion} />
+            )}
+          </AttachedComponent>
+        )}
         {blok.button_position === 'below' &&
           blok?.button_group?.map(($buttonData) => (
             <div
@@ -140,36 +146,72 @@ const CenteredWrapper = styled.div`
   color: ${(props) => props.theme.centered.textColor};
   padding: ${(props) => {
     if (props.spacingOffset === 'top') {
-      return props.spacing === 'default' ? '3.75vw 0 0' : props.spacing ? `${props.spacing}px 0 0` : '3.75vw 0 0';
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
+        : props.spacing
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
     }
     if (props.spacingOffset === 'bottom') {
-      return props.spacing === 'default' ? '0 0 3.75vw' : props.spacing ? `0 0 ${props.spacing}px` : '0 0 3.75vw';
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
+        : props.spacing
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
     }
-    return props.spacing === 'default' ? '3.75vw 0' : props.spacing ? `${props.spacing}px 0` : '3.75vw 0';
+    return props.spacing === 'default'
+      ? '3.75vw 0'
+      : props.spacing
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
     gap: 16px;
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
-        return props.spacing === 'default' ? '60px 0 0' : props.spacing ? `${props.spacing}px 0 0` : '60px 0 0';
+        return props.spacing === 'default'
+          ? '60px 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
       }
       if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default' ? '0 0 60px' : props.spacing ? `0 0 ${props.spacing}px` : '0 0 60px';
+        return props.spacing === 'default'
+          ? '0 0 60px'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
       }
-      return props.spacing === 'default' ? '60px 0' : props.spacing ? `${props.spacing}px 0` : '60px 0';
+      return props.spacing === 'default'
+        ? '60px 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '60px 0';
     }};
   }
 
   ${media.tablet} {
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
-        return props.spacing === 'default' ? '5.859vw 0 0' : props.spacing ? `${props.spacing}px 0 0` : '5.859vw 0 0';
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '5.859vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default' ? '0 0 5.859vw' : props.spacing ? `0 0 ${props.spacing}px` : '0 0 5.859vw';
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 5.859vw';
       }
-      return props.spacing === 'default' ? '5.859vw 0' : props.spacing ? `${props.spacing}px 0` : '5.859vw 0';
+      return props.spacing === 'default'
+        ? '5.859vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '5.859vw 0';
     }};
     gap: 1.563vw;
   }
@@ -177,17 +219,27 @@ const CenteredWrapper = styled.div`
   ${media.mobile} {
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
-        return props.spacing === 'default' ? '12.5vw 0 0' : props.spacing ? `${props.spacing}px 0 0` : '12.5vw 0 0';
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default' ? '0 0 12.5vw' : props.spacing ? `0 0 ${props.spacing}px` : '0 0 12.5vw';
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
       }
-      return props.spacing === 'default' ? '12.5vw 0' : props.spacing ? `${props.spacing}px 0` : '12.5vw 0';
+      return props.spacing === 'default'
+        ? '12.5vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
     }};
     gap: 3.333vw;
   }
 `;
-
-
 
 export default CenteredSection;
