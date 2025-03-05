@@ -7,7 +7,7 @@ export async function GET(request) {
   const slug = searchParams.get('slug') || ''; // page slug
 
   // Secure the preview mode by checking the secret token
-  const PREVIEW_SECRET = "Qf9Z8O8vNFQw8drmarBGMwtt";
+  const PREVIEW_SECRET = process.env.NEXT_PUBLIC_STORYBLOK_TOKEN;
   if (PREVIEW_SECRET && secret !== PREVIEW_SECRET) {
     return new NextResponse('Invalid preview token', { status: 401 });
   }

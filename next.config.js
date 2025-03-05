@@ -4,7 +4,7 @@ const nextConfig = {
     styledComponents: true,
   },
   env: {
-    STORYBLOK_ACCESS_TOKEN: process.env.STORYBLOK_ACCESS_TOKEN,
+    STORYBLOK_ACCESS_TOKEN: process.env.NEXT_PUBLIC_STORYBLOK_TOKEN,
   },
   reactStrictMode: true, // ✅ Enables strict mode for debugging
   eslint: {
