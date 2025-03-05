@@ -1,22 +1,21 @@
-
-// app/api/preview/route.ts
 import { draftMode } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: Request) {
+export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const secret = searchParams.get('secret');   // preview secret token from query (optional)
-  const slug = searchParams.get('slug') || ''; // story slug from query (e.g. "home" or "about/team")
+  const secret = searchParams.get('secret'); // preview secret token (optional)
+  const slug = searchParams.get('slug') || ''; // page slug
 
-  // Optional: verify the secret token for security 
-  if ("Qf9Z8O8vNFQw8drmarBGMwtt" && secret !== "Qf9Z8O8vNFQw8drmarBGMwtt") {
-    return new Response('Invalid preview token', { status: 401 });
+  // Secure the preview mode by checking the secret token
+  const PREVIEW_SECRET = "Qf9Z8O8vNFQw8drmarBGMwtt";
+  if (PREVIEW_SECRET && secret !== PREVIEW_SECRET) {
+    return new NextResponse('Invalid preview token', { status: 401 });
   }
 
-  // Enable Next.js Draft Mode (sets the preview cookie)
-  draftMode().enable();  // Next.js will set __prerender_bypass cookie :contentReference[oaicite:0]{index=0}
+  // Enable Next.js Draft Mode (sets preview cookie)
+  draftMode().enable();
 
-  // Redirect to the story page (prepend "/" to slug or use home if blank)
-  const redirectUrl = '/' + slug;
-  redirect(redirectUrl);
+  // Redirect to the requested page (or home if no slug provided)
+  const redirectUrl = `/${slug}`;
+  return NextResponse.redirect(redirectUrl);
 }
