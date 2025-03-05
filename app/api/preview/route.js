@@ -13,7 +13,7 @@ export async function GET(req) {
   }
 
   try {
-    // Fetch the draft content from Storyblok
+    // ✅ Fetch draft content to verify Storyblok response
     const storyblokApi = getStoryblokApi();
     const { data } = await storyblokApi.get(`cdn/stories/${slug}`, {
       version: "draft",
@@ -23,12 +23,11 @@ export async function GET(req) {
       return new NextResponse("Story not found", { status: 404 });
     }
 
-    // ✅ Fix: Use `new Headers()` instead of `cookies()`
+    // ✅ Use `Set-Cookie` headers instead of `cookies()`
     const headers = new Headers();
     headers.append("Set-Cookie", `__prerender_bypass=1; Path=/; HttpOnly`);
     headers.append("Set-Cookie", `__next_preview_data=1; Path=/; HttpOnly`);
 
-    // ✅ Ensure an absolute URL for redirect
     const absoluteRedirectUrl = new URL(`${redirectPath}?_storyblok_preview=true`, req.nextUrl.origin).toString();
 
     return NextResponse.redirect(absoluteRedirectUrl, { status: 307, headers });
