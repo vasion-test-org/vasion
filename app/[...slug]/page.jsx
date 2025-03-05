@@ -1,27 +1,20 @@
 import { StoryblokStory } from "@storyblok/react/rsc";
 import { notFound } from "next/navigation";
 import { getStoryblokApi } from "@/lib/storyblok";
-import { useStoryblokState } from "@storyblok/react";
 
-export default async function DynamicPage({ params, searchParams }) {
-  const { slug } = params; 
+export default async function DynamicPage({ params }) {
+  const { slug } = await params; 
   const slugArray = slug || [];
   const isLocalized = ["fr", "de"].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : "en";
   const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");
 
-  // Check if Storyblok Preview Mode is enabled
-  const isPreview = searchParams?._storyblok_preview === "true";
-
   // Fetch Storyblok content
-  let story = await fetchData(storySlug, locale, isPreview);
+  const story = await fetchData(storySlug, locale);
 
   if (!story) {
     notFound();
   }
-
-  // Enable real-time updates in Storyblok's Visual Editor
-  story = useStoryblokState(story);
 
   return (
     <div>
@@ -30,13 +23,13 @@ export default async function DynamicPage({ params, searchParams }) {
   );
 }
 
-// Fetches Storyblok content based on slug, locale, and preview mode
-async function fetchData(slug, locale, isPreview) {
+// Fetches Storyblok content based on slug and locale
+async function fetchData(slug, locale) {
   const storyblokApi = getStoryblokApi();
 
   const sbParams = {
-    version: isPreview ? "draft" : "published", // Switches between draft and published versions
-    language: locale, // Fetches the correct language version
+    version: "published", // Change to "draft" for preview
+    language: locale, // Fetch the correct language version
   };
 
   try {
