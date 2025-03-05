@@ -1,20 +1,12 @@
-import { fetchData } from '@/lib/fetchData';
 import { StoryblokStory } from '@storyblok/react/rsc';
-import { draftMode } from 'next/headers';
+import { fetchData } from '../lib/fetchData';
 
 export default async function Home() {
-  const { isEnabled } = await draftMode();
-  const story = await fetchData("home", isEnabled);
-
-  if (!story) {
-    return <h1>Homepage Not Found</h1>;
-  }
+  const { data } = await fetchData();
 
   return (
     <div>
-      <StoryblokStory story={story} />
+      <StoryblokStory story={data.story} />
     </div>
   );
 }
-
-export const dynamic = "force-dynamic";
