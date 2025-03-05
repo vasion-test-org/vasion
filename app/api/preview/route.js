@@ -25,7 +25,7 @@ export async function GET(req) {
       return new NextResponse("Story not found", { status: 404 });
     }
 
-    // Set Next.js Preview Mode
+    // Set Next.js Preview Mode using cookies
     const response = NextResponse.redirect(`${redirectUrl}?_storyblok_preview=true`, 307);
     response.cookies.set("__prerender_bypass", "1", { httpOnly: true, path: "/" });
     response.cookies.set("__next_preview_data", "1", { httpOnly: true, path: "/" });
