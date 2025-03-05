@@ -28,19 +28,19 @@ Create a new empty Space and exchange the preview token with your own in ```app/
 
 ```js
 // in app/layout.js
-storyblokInit({
-  accessToken: "your-preview-token",
-  use: [apiPlugin],
-});
+// storyblokInit({
+//   accessToken: "your-preview-token",
+//   use: [apiPlugin],
+// });
 ```
 
 ```js
 // in components/StoryblokProvider.js
-storyblokInit({
-  accessToken: "your-preview-token",
-  use: [apiPlugin],
-  components
-});
+// storyblokInit({
+//   accessToken: "your-preview-token",
+//   use: [apiPlugin],
+//   components
+// });
 ```
 
 ### 4. Run your project
