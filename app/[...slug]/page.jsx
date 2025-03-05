@@ -1,6 +1,7 @@
-import { StoryblokStory, useStoryblokState } from "@storyblok/react/rsc";
+import { StoryblokStory } from "@storyblok/react/rsc";
 import { notFound } from "next/navigation";
 import { getStoryblokApi } from "@/lib/storyblok";
+import { useStoryblokState } from "@storyblok/react";
 
 export default async function DynamicPage({ params, searchParams }) {
   const { slug } = params; 
