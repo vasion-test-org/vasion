@@ -14,6 +14,9 @@ export default async function DynamicPage({ params, searchParams }) {
   // Check if Storyblok Preview Mode is enabled
   const isPreview = searchParams?._storyblok_preview === "true";
 
+  // Check if Storyblok Preview Mode is enabled
+  const isPreview = searchParams?._storyblok_preview === "true";
+
   // Fetch Storyblok content
   let story = await fetchData(storySlug, locale, isPreview);
 
