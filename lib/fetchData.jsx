@@ -1,15 +1,15 @@
-import { getStoryblokApi } from '@/lib/storyblok';
 
-export async function fetchData(isPreview = false) {
+import { getStoryblokApi } from '@storyblok/react/rsc';
+
+export async function fetchData(slug, isPreview) {
   const storyblokApi = getStoryblokApi();
-  try {
-    const response = await storyblokApi.get('cdn/stories/home', {
-      version: isPreview ? 'draft' : 'published',
-    });
+  const version = isPreview ? 'draft' : 'published';
 
-    return response;
+  try {
+    const { data } = await storyblokApi.get(`cdn/stories/${slug}`, { version });
+    return data.story;
   } catch (error) {
-    console.error(`[❌ Error] Storyblok fetch failed: ${error.message}`);
-    return { data: null }; // Prevents crashes by returning a safe fallback
+    console.error('Error fetching data:', error);
+    return null;
   }
 }
