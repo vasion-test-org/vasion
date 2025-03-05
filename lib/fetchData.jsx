@@ -4,7 +4,6 @@ import { getStoryblokApi } from "@storyblok/react/rsc";
 export async function fetchData(slug, isPreview) {
   const storyblokApi = getStoryblokApi();
 
-  // Select the correct API token for Storyblok
   const apiToken = isPreview
     ? process.env.NEXT_PUBLIC_STORYBLOK_TOKEN
     : process.env.NEXT_PUBLIC_STORYBLOK_TOKEN;
@@ -19,8 +18,8 @@ export async function fetchData(slug, isPreview) {
   try {
     const { data } = await storyblokApi.get(`cdn/stories/${slug}`, {
       version,
-      cache: isPreview ? "no-store" : "force-cache", // Prevent caching in draft mode
-      token: apiToken, // Ensure correct token is used
+      cache: isPreview ? "no-store" : "force-cache", 
+      token: apiToken, 
     });
 
     if (!data.story) {
