@@ -1,4 +1,3 @@
-// app/page.tsx
 import { StoryblokStory } from '@storyblok/react/rsc';
 import { fetchData } from '../lib/fetchData';
 
