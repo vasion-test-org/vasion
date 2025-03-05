@@ -1,9 +1,8 @@
-// components/StoryblokProvider.jsx
 'use client';
-
+ 
 import { getStoryblokApi } from '@/lib/storyblok';
-
+ 
 export default function StoryblokProvider({ children }) {
-  getStoryblokApi();
+  getStoryblokApi(); // Re-initialize on the client
   return children;
 }
