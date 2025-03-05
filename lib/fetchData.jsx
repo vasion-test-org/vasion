@@ -1,4 +1,3 @@
-
 import { getStoryblokApi } from '@storyblok/react/rsc';
 
 export async function fetchData(slug, isPreview) {
@@ -6,7 +5,11 @@ export async function fetchData(slug, isPreview) {
   const version = isPreview ? 'draft' : 'published';
 
   try {
-    const { data } = await storyblokApi.get(`cdn/stories/${slug}`, { version });
+    const { data } = await storyblokApi.get(`cdn/stories/${slug}`, { 
+      version,
+      cache: isPreview ? 'no-store' : 'force-cache', // Prevent caching in draft mode
+    });
+
     return data.story;
   } catch (error) {
     console.error('Error fetching data:', error);

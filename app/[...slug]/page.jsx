@@ -1,31 +1,24 @@
 import { StoryblokStory, useStoryblokState } from "@storyblok/react/rsc";
 import { notFound } from "next/navigation";
 import { getStoryblokApi } from "@/lib/storyblok";
-import { useStoryblokState } from "@storyblok/react";
+import { draftMode } from 'next/headers';
+
+export const revalidate = 60;  // revalidate published pages every 60s (adjust as needed)
 
 export default async function DynamicPage({ params, searchParams }) {
-  const { slug } = params; 
+  const { isEnabled } = await draftMode();
+  const { slug } = params;
   const slugArray = slug || [];
   const isLocalized = ["fr", "de"].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : "en";
   const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");
-  const preview = searchParams?.preview === "true";
+  const preview = isEnabled || searchParams?.preview === "true";
 
-  // Check if Storyblok Preview Mode is enabled
-  const isPreview = searchParams?._storyblok_preview === "true";
-
-  // Check if Storyblok Preview Mode is enabled
-  const isPreview = searchParams?._storyblok_preview === "true";
-
-  // Fetch Storyblok content
-  let story = await fetchData(storySlug, locale, isPreview);
+  const story = await fetchData(storySlug, locale, preview);
 
   if (!story) {
     notFound();
   }
-
-  // Enable real-time updates in Storyblok's Visual Editor
-  story = useStoryblokState(story);
 
   return (
     <div>
@@ -34,13 +27,12 @@ export default async function DynamicPage({ params, searchParams }) {
   );
 }
 
-// Fetches Storyblok content based on slug, locale, and preview mode
-async function fetchData(slug, locale, isPreview) {
+async function fetchData(slug, locale, preview) {
   const storyblokApi = getStoryblokApi();
 
   const sbParams = {
-    version: isPreview ? "draft" : "published", // Switches between draft and published versions
-    language: locale, // Fetches the correct language version
+    version: preview ? "draft" : "published",
+    language: locale,
   };
 
   try {
