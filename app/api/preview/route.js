@@ -1,21 +1,26 @@
-
-import { draftMode } from 'next/headers';
-import { NextResponse } from 'next/server';
-
-export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const token = searchParams.get('token');
-  const slug = searchParams.get('slug') || '';
-
-
-  if (token !== "Qf9Z8O8vNFQw8drmarBGMwtt") {
-    return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
-  }
-
-
-  draftMode().enable();
-
+export default async function preview(req, res) {
+  const { slug = "" } = req.query;
+  // get the storyblok params for the bridge to work
+  const params = req.url.split("?");
  
-  const redirectUrl = `/${slug}`;
-  return NextResponse.redirect(redirectUrl);
+  // Check the secret and next parameters
+  // This secret should only be known to this API route and the CMS
+  if (req.query.secret !== "MY_SECRET_TOKEN") {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+ 
+  // Enable Preview Mode by setting the cookies
+  res.setPreviewData({});
+ 
+  // Set cookie to None, so it can be read in the Storyblok iframe
+  const cookies = res.getHeader("Set-Cookie");
+  res.setHeader(
+    "Set-Cookie",
+    cookies.map((cookie) =>
+      cookie.replace("SameSite=Lax", "SameSite=None;Secure")
+    )
+  );
+ 
+  // Redirect to the path from entry
+  res.redirect(`/${slug}?${params[1]}`);
 }
