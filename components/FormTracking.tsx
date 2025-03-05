@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Script from "next/script";
 
-export default function FormTracking() {
+function FormTrackingComponent() {
   const [domain, setDomain] = useState("www.vasion.com");
   const [language, setLanguage] = useState("en");
   const [isLoaded, setIsLoaded] = useState(false);
-  const searchParams = useSearchParams(); // Next.js way to get URL query parameters
+  const searchParams = useSearchParams(); // Requires Suspense boundary
 
   useEffect(() => {
     if (document.getElementById("mktoForms")) {
@@ -36,15 +36,15 @@ export default function FormTracking() {
       });
     }
 
-    function getCookie(name: string) {
+    function getCookie(name) {
       const value = `; ${document.cookie}`;
       const parts = value.split(`; ${name}=`);
       return parts.length === 2 ? parts.pop()?.split(";").shift() : undefined;
     }
 
-    function checkSubdomain(url: string) {
+    function checkSubdomain(url) {
       const { hostname } = new URL(url);
-      const subdomainMap: Record<string, string> = {
+      const subdomainMap = {
         "fr.vasion.com": "fr",
         "www.vasion.com": "en",
         "de.vasion.com": "de",
@@ -86,5 +86,13 @@ export default function FormTracking() {
         }}
       />
     </>
+  );
+}
+
+export default function FormTracking() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <FormTrackingComponent />
+    </Suspense>
   );
 }
