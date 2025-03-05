@@ -1,33 +1,26 @@
-'use client';
-
-import { useEffect, useState } from 'react';
+import { fetchData } from '@/lib/fetchData';
 import { StoryblokStory, useStoryblokState } from '@storyblok/react/rsc';
 import { draftMode } from 'next/headers';
-import { fetchData } from '@/lib/fetchData';
 
-export default function Home() {
+export default async function Home() {
   const { isEnabled } = draftMode(); // Check if draft mode is enabled
-  const [story, setStory] = useState(null);
 
-  useEffect(() => {
-    async function loadStory() {
-      const fetchedStory = await fetchData("home", isEnabled);
-      setStory(fetchedStory);
-    }
+  // Fetch Storyblok content based on draft mode status
+  const initialStory = await fetchData("home", isEnabled);
 
-    loadStory();
-  }, [isEnabled]);
-
-  // Enable real-time updates in Storyblok Visual Editor
-  const liveStory = useStoryblokState(story);
-
-  if (!liveStory) {
+  if (!initialStory) {
     return <h1>Homepage Not Found</h1>;
   }
 
+  // Enable real-time editing in Storyblok Visual Editor
+  const story = useStoryblokState(initialStory);
+
   return (
     <div>
-      <StoryblokStory story={liveStory} />
+      <StoryblokStory story={story} />
     </div>
   );
 }
+
+// Ensure the page is dynamically rendered when draft mode is enabled
+export const dynamic = "force-dynamic";
