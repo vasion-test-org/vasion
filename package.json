@@ -18,17 +18,17 @@
     "autoprefixer": "10.4.20",
     "clone-deep": "^4.0.1",
     "gsap": "npm:@gsap/business@^3.12.7",
-    "next": "^15.1.7",
+    "next": "^15.2.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "storyblok-rich-text-react-renderer": "^2.9.2",
     "styled-components": "^6.1.15"
   },
   "devDependencies": {
-    "@types/node": "22.13.5",
+    "@types/node": "22.13.9",
     "@types/react": "19.0.10",
     "concurrently": "^9.1.2",
     "rimraf": "^6.0.1",
-    "typescript": "5.7.3"
+    "typescript": "5.8.2"
   }
 }
