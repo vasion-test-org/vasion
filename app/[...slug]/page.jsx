@@ -1,42 +1,31 @@
-'use client';
+import { StoryblokStory, useStoryblokState } from "@storyblok/react/rsc";
+import { notFound } from "next/navigation";
+import { getStoryblokApi } from "@/lib/storyblok";
+import { draftMode } from 'next/headers';
 
-import { useEffect, useState } from 'react';
-import { StoryblokStory, useStoryblokState } from '@storyblok/react/rsc';
-import { fetchData } from '@/lib/fetchData';
-import { useParams } from 'next/navigation';
+export const revalidate = 60;  // revalidate published pages every 60s (adjust as needed)
 
-export default function DynamicPage() {
-  const params = useParams();
-  const slugArray = params?.slug || [];
+export default async function DynamicPage({ params, searchParams }) {
+  const { isEnabled } = await draftMode();
+  const { slug } = params;
+  const slugArray = slug || [];
   const isLocalized = ["fr", "de"].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : "en";
   const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");
+  const preview = isEnabled || searchParams?.preview === "true";
 
-  const [story, setStory] = useState(null);
+  const story = await fetchData(storySlug, locale, preview);
 
-  useEffect(() => {
-    async function loadStory() {
-      const fetchedStory = await fetchData(storySlug, true);
-      setStory(fetchedStory);
-    }
-
-    loadStory();
-  }, [storySlug]);
-
-  // Enable real-time updates
-  const liveStory = useStoryblokState(story);
-
-  if (!liveStory) {
-    return <h1>Page Not Found</h1>;
+  if (!story) {
+    notFound();
   }
 
   return (
     <div>
-      <StoryblokStory story={liveStory} />
+      <StoryblokStory story={story} />
     </div>
   );
 }
-
 
 async function fetchData(slug, locale, preview) {
   const storyblokApi = getStoryblokApi();
