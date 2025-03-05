@@ -3,6 +3,9 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  env: {
+    STORYBLOK_ACCESS_TOKEN: process.env.STORYBLOK_ACCESS_TOKEN,
+  },
   reactStrictMode: true, // ✅ Enables strict mode for debugging
   // experimental: {
   //   reactRoot: true, // ✅ Enables concurrent React
