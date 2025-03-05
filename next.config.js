@@ -3,6 +3,9 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  env: {
+    STORYBLOK_ACCESS_TOKEN: process.env.STORYBLOK_ACCESS_TOKEN,
+  },
   reactStrictMode: true, // ✅ Enables strict mode for debugging
   eslint: {
     ignoreDuringBuilds: true, // ✅ Prevents build failures due to ESLint warnings
@@ -33,11 +36,11 @@ const nextConfig = {
         headers: [
           {
             key: "X-Frame-Options",
-            value: "ALLOWALL", // ✅ Allows embedding your site in an iframe (Storyblok Visual Editor)
+            value: "ALLOWALL", // ✅ Allows embedding your site in an iframe
           },
           {
             key: "Content-Security-Policy",
-            value: "frame-ancestors 'self' https://app.storyblok.com;", // ✅ Allows Storyblok to embed your site
+            value: "frame-ancestors 'self' https://app.storyblok.com https://editor.storyblok.com https://m.storyblok.com;", // ✅ Ensures all Storyblok domains can embed your site
           },
         ],
       },
