@@ -3,13 +3,7 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  env: {
-    STORYBLOK_ACCESS_TOKEN: process.env.STORYBLOK_ACCESS_TOKEN,
-  },
   reactStrictMode: true, // ✅ Enables strict mode for debugging
-  // experimental: {
-  //   reactRoot: true, // ✅ Enables concurrent React
-  // },
   eslint: {
     ignoreDuringBuilds: true, // ✅ Prevents build failures due to ESLint warnings
   },
@@ -30,6 +24,24 @@ const nextConfig = {
     });
 
     return config;
+  },
+
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "ALLOWALL", // ✅ Allows embedding your site in an iframe (Storyblok Visual Editor)
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'self' https://app.storyblok.com;", // ✅ Allows Storyblok to embed your site
+          },
+        ],
+      },
+    ];
   },
 };
 
