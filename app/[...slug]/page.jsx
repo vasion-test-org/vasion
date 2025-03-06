@@ -1,23 +1,27 @@
 import { StoryblokStory } from "@storyblok/react/rsc";
 import { notFound } from "next/navigation";
 import { getStoryblokApi } from "@/lib/storyblok";
-import { draftMode } from 'next/headers';
 
-export const revalidate = 60;  // revalidate published pages every 60s (adjust as needed)
+export const revalidate = 60; // Revalidate published pages every 60s
 
-export default async function DynamicPage({ params, searchParams }) {
-  const { isEnabled } = await draftMode();
-  const { slug } = await params; // Awaiting params
+export default async function DynamicPage({ params }) {
+  const { slug } = params;
   const slugArray = slug || [];
   const isLocalized = ["fr", "de"].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : "en";
   const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");
-  const preview = isEnabled || (await searchParams)?.preview === "true"; // Awaiting searchParams
 
-  const story = await fetchData(storySlug, locale, preview);
+  // First, check if the story exists in published mode
+  let story = await fetchData(storySlug, locale, "published");
 
+  // If not found, check the draft version
   if (!story) {
-    notFound();
+    story = await fetchData(storySlug, locale, "draft");
+  }
+
+  // If still not found, return a 404 page
+  if (!story) {
+    return notFound();
   }
 
   return (
@@ -27,11 +31,11 @@ export default async function DynamicPage({ params, searchParams }) {
   );
 }
 
-async function fetchData(slug, locale, preview) {
+async function fetchData(slug, locale, version) {
   const storyblokApi = getStoryblokApi();
 
   const sbParams = {
-    version: preview ? "draft" : "published",
+    version: version,
     language: locale,
   };
 
@@ -42,10 +46,10 @@ async function fetchData(slug, locale, preview) {
       return null;
     }
 
-    console.log(`[✅ Success] Dynamic Story fetched: ${data.story.full_slug} (${locale}) [${preview ? "Draft" : "Published"}]`);
+    console.log(`[✅ Success] Story fetched: ${data.story.full_slug} (${locale}) [${version}]`);
     return data.story;
   } catch (error) {
-    console.error(`[❌ Server] Dynamic Error fetching story: ${error.message}`);
+    console.error(`[❌ Server] Error fetching story: ${error.message}`);
     return null;
   }
 }
@@ -70,4 +74,3 @@ export async function generateStaticParams() {
 
   return params;
 }
-
