@@ -6,7 +6,7 @@ export async function fetchData(slug, isPreview) {
 
   // Select the correct API token for Storyblok
   const apiToken = isPreview
-  ? process.env.STORYBLOK_PREVIEW_TOKEN // Use the secret token for drafts
+  ? process.env.NEXT_PUBLIC_STORYBLOK_PREVIEW_TOKEN // Use the secret token for drafts
   : process.env.NEXT_PUBLIC_STORYBLOK_API_KEY; // Use the public token for published content
 
   if (!apiToken) {
@@ -28,10 +28,10 @@ export async function fetchData(slug, isPreview) {
       return null;
     }
 
-    console.log(`[✅ Success] Story fetched: ${data.story.full_slug} [${version}]`);
+    console.log(`[✅ Success] FetchData Story fetched: ${data.story.full_slug} [${version}]`);
     return data.story;
   } catch (error) {
-    console.error(`[❌ Error] Failed to fetch Storyblok data:`, error);
+    console.error(`[❌ Error] FetchData Failed to fetch Storyblok data:`, error);
     return null;
   }
 }
