@@ -16,7 +16,7 @@ import Stats from '@/components/centeredSections/Stats';
 const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  console.log(blok);
+  // console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper

@@ -45,7 +45,7 @@ const nextConfig = {
         ],
       },
       {
-        source: "/api/preview",
+        source: "/api/draft",
         headers: [
           {
             key: "Cache-Control",

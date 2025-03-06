@@ -22,7 +22,7 @@ const Form = ({ blok }) => {
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
   const originRef = useRef('va');
-  console.log(blok);
+  // console.log(blok);
 
   useEffect(() => {
     function getOriginDomain(url) {

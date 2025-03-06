@@ -6,7 +6,7 @@ import { draftMode } from 'next/headers';
 export const revalidate = 60;  // revalidate published pages every 60s (adjust as needed)
 
 export default async function DynamicPage({ params, searchParams }) {
-  const { isEnabled } = await draftMode();
+  const { isEnabled } = await draftMode(); // Ensure `isEnabled` is awaited
   const { slug } = params;
   const slugArray = slug || [];
   const isLocalized = ["fr", "de"].includes(slugArray[0]);
