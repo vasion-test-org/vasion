@@ -3,9 +3,9 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  env: {
-    STORYBLOK_ACCESS_TOKEN: process.env.NEXT_PUBLIC_STORYBLOK_API_KEY,
-  },
+  // env: {
+  //   STORYBLOK_ACCESS_TOKEN: process.env.NEXT_PUBLIC_STORYBLOK_API_KEY,
+  // },
   reactStrictMode: true, // ✅ Enables strict mode for debugging
   eslint: {
     ignoreDuringBuilds: true, // ✅ Prevents build failures due to ESLint warnings
