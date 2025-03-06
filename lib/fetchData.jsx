@@ -6,8 +6,8 @@ export async function fetchData(slug, isPreview) {
 
   // Select the correct API token for Storyblok
   const apiToken = isPreview
-    ? process.env.NEXT_PUBLIC_STORYBLOK_TOKEN
-    : process.env.NEXT_PUBLIC_STORYBLOK_TOKEN;
+  ? process.env.STORYBLOK_PREVIEW_TOKEN // Use the secret token for drafts
+  : process.env.NEXT_PUBLIC_STORYBLOK_API_KEY; // Use the public token for published content
 
   if (!apiToken) {
     console.error(`[❌ Error] Missing Storyblok API Token. Check environment variables.`);
