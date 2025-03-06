@@ -7,12 +7,12 @@ export const revalidate = 60;  // revalidate published pages every 60s (adjust a
 
 export default async function DynamicPage({ params, searchParams }) {
   const { isEnabled } = await draftMode();
-  const { slug } = params;
+  const { slug } = await params; // Awaiting params
   const slugArray = slug || [];
   const isLocalized = ["fr", "de"].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : "en";
   const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");
-  const preview = isEnabled || searchParams?.preview === "true";
+  const preview = isEnabled || (await searchParams)?.preview === "true"; // Awaiting searchParams
 
   const story = await fetchData(storySlug, locale, preview);
 
@@ -42,10 +42,10 @@ async function fetchData(slug, locale, preview) {
       return null;
     }
 
-    console.log(`[✅ Success] Story fetched: ${data.story.full_slug} (${locale}) [${preview ? "Draft" : "Published"}]`);
+    console.log(`[✅ Success] Dynamic Story fetched: ${data.story.full_slug} (${locale}) [${preview ? "Draft" : "Published"}]`);
     return data.story;
   } catch (error) {
-    console.error(`[❌ Server] Error fetching story: ${error.message}`);
+    console.error(`[❌ Server] Dynamic Error fetching story: ${error.message}`);
     return null;
   }
 }
@@ -68,6 +68,6 @@ export async function generateStaticParams() {
     }
   }
 
-  console.log("Generated Static Params:", params);
   return params;
 }
+
