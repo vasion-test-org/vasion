@@ -1,6 +1,7 @@
 import { fetchData } from '@/lib/fetchData';
-import { StoryblokStory, useStoryblokState } from '@storyblok/react';  // Update import
+import {useStoryblokState } from '@storyblok/react';  // Update import
 import { draftMode } from 'next/headers';
+import { StoryblokStory } from '@storyblok/react/rsc';
 
 export default async function Home() {
   const { isEnabled } = draftMode(); // Check if draft mode is enabled
