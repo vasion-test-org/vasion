@@ -6,7 +6,7 @@ export async function fetchData(slug, isPreview) {
 
   // Select the correct API token for Storyblok
   const apiToken = isPreview
-  ? process.env.STORYBLOK_PREVIEW_TOKEN // Use the secret token for drafts
+  ? process.env.STORYBLOK_PREVIEW_SECRET // Use the secret token for drafts
   : process.env.NEXT_PUBLIC_STORYBLOK_API_KEY; // Use the public token for published content
 
   if (!apiToken) {
