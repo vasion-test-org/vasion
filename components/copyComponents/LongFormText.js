@@ -6,7 +6,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import media from 'styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 const LongFormText = ({ blok }) => {
-  // console.log(blok.copy.content[0])
+  // console.log(blok)
 return (
 <LongFormTextContainer {...storyblokEditable(blok.copy)}>
 

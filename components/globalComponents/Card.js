@@ -21,7 +21,12 @@ const Card = ({ content }) => {
             <RichTextRenderer className={copy.component} document={copy.copy} />
           </div>
         ))}
-        <Button $buttonData={content.Button[0]} />
+       {content.Button[0] && 
+       <ButtonWrapper>
+         <Button $buttonData={content.Button[0]} />
+       </ButtonWrapper>
+       }
+        
       </ContentWrapper>
     </CardWrapper>
   );
@@ -29,9 +34,13 @@ const Card = ({ content }) => {
 
 export default Card;
 
+const ButtonWrapper = styled.div`
+  margin-top: auto;
+`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100%;
   padding: 0vw 1vw 1vw 1vw;
   gap: 1vw;
 
@@ -54,7 +63,6 @@ const ContentWrapper = styled.div`
 const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: auto;
   overflow: hidden;
   text-align: left;
   width: clamp(21.875vw, 100%, 25.5vw);

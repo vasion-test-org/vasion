@@ -8,7 +8,7 @@ import media from '@/styles/media';
 import text from '@/styles/text';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 const BlogInfo = ({ blok }) => {
-console.log(blok)
+// console.log(blok)
 const formattedDate = new Date(blok?.published_date).toLocaleDateString("en-US", {
   year: "numeric",
   month: "long",

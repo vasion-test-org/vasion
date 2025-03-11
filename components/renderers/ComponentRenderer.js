@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 
 const ComponentRenderer = ({ blok }) => {
   if (!blok) return null;
-  // console.log(blok);
+  console.log(blok);
 
   const pathname = usePathname();
   const isFrench = pathname.startsWith("/fr");
@@ -56,9 +56,9 @@ const ComponentRenderer = ({ blok }) => {
   switch (blok.component) {
     case "assets":
       return (
-        <BlockWrapper {...storyblokEditable(blok)}>
+        <ImageWrapper {...storyblokEditable(blok)}>
           <Image images={blok.media} borderradius={blok.border_radius} />
-        </BlockWrapper>
+        </ImageWrapper>
       );
     case "copy_block":
       return (
@@ -77,6 +77,21 @@ const ComponentRenderer = ({ blok }) => {
   }
 };
 
+const ImageWrapper = styled.div`
+  width: 32vw;
+
+  ${media.fullWidth} {
+    width: 512px;
+  }
+  
+  ${media.tablet} {
+  
+  }
+  
+  ${media.mobile} {
+  
+  }
+`
 const SectionWrapper = styled.section`
   display: flex;
   flex-direction: column;

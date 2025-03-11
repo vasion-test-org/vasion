@@ -9,7 +9,7 @@ import media, { mobile, desktop, tablet } from '@/styles/media';
 import ComponentRenderer from './renderers/ComponentRenderer';
 
 const SideBySide = ({ blok }) => {
-  // console.log(blok)
+  console.log(blok.left_side_component[0].component)
   return (
     <SideBySideWrapper
     spacingOffset={blok.offset_spacing}
@@ -19,7 +19,7 @@ const SideBySide = ({ blok }) => {
       gap={blok.gap}
     >
       <ComponentRenderer blok={blok.left_side_component[0]} />
-      <ComponentRenderer blok={blok.right_side_component[0]} />
+      <ComponentRenderer blok={blok.right_side_component[0]}/>
     </SideBySideWrapper>
   );
 };

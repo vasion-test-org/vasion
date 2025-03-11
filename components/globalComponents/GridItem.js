@@ -10,11 +10,11 @@ import media from '@/styles/media';
 
 const GridItem = ({ content, alignment }) => {
   // console.log(content.content[0].Content)
-  // console.log(content.icon)
+  console.log(content)
   return (
     <GridItemWrapper alignment={alignment}>
       {content.icon && (
-        <div key={content.icon.filename} {...storyblokEditable(content.icon)}>
+        <div key={content.icon.filename} {...storyblokEditable(content)}>
           <Icon imageAlt={content.icon.alt} imageSrc={content.icon.filename} />
         </div>
       )}

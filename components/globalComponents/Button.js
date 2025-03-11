@@ -8,7 +8,7 @@ import text from '@/styles/text';
 const Button = ({ $buttonData }) => {
   const themes = useAvailableThemes();
   const selectedTheme =
-    themes.button?.[$buttonData.theme] || themes.button.primary;
+    themes.button?.[$buttonData?.theme] || themes.button.primary;
 
   const href = $buttonData?.link_url.email
     ? `mailto:${$buttonData?.link_url.email}`

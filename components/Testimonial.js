@@ -7,8 +7,9 @@ import media from '@/styles/media';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { horizontalLoop } from '@/functions/horizontalLoop';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import Eyebrow from '@/components/copyComponents/Eyebrow';
 import Image from '@/components/globalComponents/Image';
+import text from '@/styles/text';
+
 const Testimonial = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
@@ -34,7 +35,7 @@ const Testimonial = ({ blok }) => {
               </SourceWrapper>
             )}
           </TestimonialContent>
-          {blok?.media && (
+          {blok?.media[0] && (
             <ImageWrapper {...storyblokEditable(blok)}>
               <Image
                 images={blok.media[0]?.media}
@@ -65,17 +66,23 @@ const SourceWrapper = styled.div`
 `
 const ImageWrapper = styled.div`
   align-content: center;
+  width: 24vw;
 
-  ${media.tablet} {
-    max-width: 32.813vw;
-  }
-  
-  ${media.mobile} {
-  max-width: 89.167vw;
-  }
+${media.fullWidth} {
+  width: 384px;
+}
+
+${media.tablet} {
+  width: 32.813vw;
+}
+
+${media.mobile} {
+  width: 89.167vw;
+}
 `;
-const TestimonialEyebrow = styled(Eyebrow)`
+const TestimonialEyebrow = styled.p`
   margin-bottom: 2vw;
+  ${text.eyebrow};
 
   ${media.fullWidth} {
     margin-bottom: 32px;

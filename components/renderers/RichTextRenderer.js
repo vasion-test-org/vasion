@@ -7,10 +7,10 @@ import Header from '@/components/copyComponents/Header';
 import BodyCopy from '@/components/copyComponents/BodyCopy';
 import Eyebrow from '@/components/copyComponents/Eyebrow';
 import useMedia from '@/functions/useMedia';
+import CTA from '@/components/CTA';
 
 const RichTextRenderer = ({ document, centered, responsiveTextStyles = [] }) => {
   if (!document) return null;
-  // console.log(document);
 
   // Function to extract text from structured content
   const extractText = (contentArray) => {
