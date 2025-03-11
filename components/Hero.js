@@ -50,12 +50,12 @@ const Hero = ({ blok }) => {
             </ButtonRow>
           </ContentWrapper>
           {blok?.hero_asset && (
-            <div {...storyblokEditable(blok)}>
+            <ImageWrapper {...storyblokEditable(blok)}>
               <Image
                 images={blok.hero_asset}
                 // borderRadius={blok.hero_asset?.[0]?.border_radius}
               />
-            </div>
+            </ImageWrapper>
           )}
         </HeroWrapper>
       </HeroBGWrapper>
@@ -63,6 +63,21 @@ const Hero = ({ blok }) => {
   );
 };
 
+const ImageWrapper = styled.div`
+  max-width: 37.5vw;
+
+  ${media.fullWidth} {
+    max-width: 600px;
+  }
+  
+  ${media.tablet} {
+  
+  }
+  
+  ${media.mobile} {
+  
+  }
+`
 const ButtonRow = styled.div`
   display: flex;
   flex-direction: row;

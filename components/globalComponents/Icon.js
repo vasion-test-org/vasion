@@ -7,7 +7,6 @@ import media from '@/styles/media';
 // import text from 'styles/text';
 
 const Icon = ({imageAlt, imageSrc}) => {
-  // console.log(imageAlt, imageSrc)
 return (
 <IconWrapper alt={imageAlt} src={imageSrc}/>
 )

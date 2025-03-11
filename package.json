@@ -21,6 +21,7 @@
     "next": "^15.2.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-player": "^2.16.0",
     "storyblok-rich-text-react-renderer": "^2.9.2",
     "styled-components": "^6.1.15"
   },

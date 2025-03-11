@@ -31,7 +31,7 @@ const CTA = ({ blok }) => {
           $ctastyle={blok.cta_style}
           {...storyblokEditable(blok)}
         >
-          <ContentWrapper>
+          <ContentWrapper $ctastyle={blok.cta_style}>
             {blok.copy_sections.map((copy) => (
               <div key={copy.component} {...storyblokEditable(copy)}>
                 <RichTextRenderer

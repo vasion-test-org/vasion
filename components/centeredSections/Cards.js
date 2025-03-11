@@ -23,7 +23,7 @@ export default Cards
 const CardsContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   gap: 2.5vw;
   width: 95.125vw;

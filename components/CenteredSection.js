@@ -10,9 +10,12 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 import Cards from '@/components/centeredSections/Cards';
 import Grid from '@/components/centeredSections/Grid';
 import Image from '@/components/globalComponents/Image';
+import Video from '@/components/globalComponents/Video';
 import Button from '@/components/globalComponents/Button';
 import Accordion from '@/components/centeredSections/Accordion';
 import Stats from '@/components/centeredSections/Stats';
+import Form from './Form';
+
 const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
@@ -42,14 +45,26 @@ const CenteredSection = ({ blok }) => {
         </ContentWrapper>
         {blok.component_type !== '' && (
           <AttachedComponent>
-            {blok.component_type === 'media' && blok?.media && (
-              <MediaWrapper {...storyblokEditable(blok.media)}>
-                <Image
-                  images={blok.media?.[0]?.media}
-                  borderRadius={blok.media?.[0]?.border_radius}
-                />
-              </MediaWrapper>
-            )}
+            {blok.component_type === 'media' &&
+              blok?.media[0].component === 'assets' && (
+                <MediaWrapper {...storyblokEditable(blok.media)}>
+                  <Image
+                    images={blok.media?.[0]?.media}
+                    borderradius={blok.media?.[0]?.border_radius}
+                  />
+                </MediaWrapper>
+              )}
+
+            {blok.component_type === 'media' &&
+              blok?.media[0].component === 'video_assets' && (
+                <MediaWrapper {...storyblokEditable(blok.media)}>
+                  <Video
+                    videos={blok.media?.[0]?.media}
+                    borderradius={blok.media?.[0]?.border_radius}
+                    thumbnails={blok.media?.[0]?.thumbnails}
+                  />
+                </MediaWrapper>
+              )}
 
             {blok.component_type === 'card' && blok.cards && (
               <Cards cardData={blok.cards} />
@@ -63,12 +78,14 @@ const CenteredSection = ({ blok }) => {
             {blok.component_type === 'accordion' && blok.accordion && (
               <Accordion accordionData={blok.accordion} />
             )}
+            {blok.component_type === 'form' && blok.form && (
+              <Form blok={blok.form[0]} />
+            )}
           </AttachedComponent>
         )}
         {blok.button_position === 'below' &&
           blok?.button_group?.map(($buttonData) => (
             <div
-              buttonPosition={blok.button_position}
               {...storyblokEditable($buttonData)}
               key={$buttonData.link_text}
             >

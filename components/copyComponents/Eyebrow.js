@@ -16,10 +16,13 @@ const StyledEyebrow = styled.div`
     font-weight: 700;
     font-size: 0.875vw;
     line-height: 1.125vw;
+    letter-spacing: 0.175vw;
+    text-transform: uppercase;
 
     ${media.fullWidth} {
     font-size: 14px;
     line-height: 18px;
+    letter-spacing: 3px;
   }
 
   ${media.tablet} {
