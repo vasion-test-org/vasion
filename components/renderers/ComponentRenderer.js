@@ -8,6 +8,7 @@ import media from "@/styles/media";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import LogoCube from "@/components/LogoCube";
 import { usePathname } from "next/navigation";
+import Button from "../globalComponents/Button";
 
 const ComponentRenderer = ({ blok }) => {
   if (!blok) return null;
@@ -72,6 +73,8 @@ const ComponentRenderer = ({ blok }) => {
       );
     case "logo_cube":
       return <LogoCube blok={blok} />;
+    case "global_link":
+      return <Button $buttonData={blok}/>
     default:
       return <BlockWrapper {...storyblokEditable(blok)}>Unknown Component</BlockWrapper>;
   }

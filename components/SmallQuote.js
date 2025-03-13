@@ -7,11 +7,12 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import media from 'styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Image from './globalComponents/Image';
+import ComponentRenderer from './renderers/ComponentRenderer';
 
 const SmallQuote = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-
+  const copycomponents = ['body_copy', 'header', 'eyebrow', 'long_form_text', 'copy_block'];
   console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
@@ -21,19 +22,25 @@ const SmallQuote = ({ blok }) => {
         {...storyblokEditable(blok)}
       >
         <SmallQuoteContainer>
+          <OrangeQuote src='/images/uiElements/Orange_Quote_Mark.webp'/>
           <ImageWrapper>
             <Image
-            {...storyblokEditable(blok)}
+              {...storyblokEditable(blok)}
               alt={blok?.quote_image[0]?.media[0]?.alt || 'Default Image'}
               images={blok?.quote_image[0]?.media}
             />
           </ImageWrapper>
           <SmallQuoteContent>
-            {blok.copy.map((copy) => (
-              <div {...storyblokEditable(copy)}>
-                <RichTextRenderer document={copy.copy} />
+            {blok.copy.map((item) => (
+              <div {...storyblokEditable(item)}>
+                {copycomponents.includes(item.component) ? (
+                  <RichTextRenderer document={item.copy} />
+                ) : (
+                  <ComponentRenderer blok={item}/>
+                )}
               </div>
-            ))}
+            ))
+            }
           </SmallQuoteContent>
         </SmallQuoteContainer>
       </Wrapper>
@@ -41,17 +48,50 @@ const SmallQuote = ({ blok }) => {
   );
 };
 
+const OrangeQuote = styled.img`
+position: absolute;
+  height: 3.75vw;
+  width: 3.75vw;
+  top: -1.9vw;
+  left: 2vw;
+
+  ${media.fullWidth} {
+    height: 60px;
+    width: 60px;
+    top: -30px;
+    left: 32px;
+  }
+  
+  ${media.tablet} {
+    height: 5.859vw;
+    width: 5.859vw;
+    top: -2.93vw;
+    left: 3.125vw;
+  }
+  
+  ${media.mobile} {
+    height: 12.5vw;
+    width: 12.5vw;
+    top: -6.25vw;
+    left: 6.667vw;
+  }
+`
 const ImageWrapper = styled.div`
   width: 6.688vw;
   height: 6.688vw;
 
   ${media.fullWidth} {
+    width: 107px;
+    height: 107px;
   }
 
   ${media.tablet} {
+    height: 10.449vw;
+    width: 10.449vw;
   }
 
   ${media.mobile} {
+    display: none;
   }
 `;
 const SmallQuoteContent = styled.div`
@@ -64,12 +104,15 @@ const SmallQuoteContent = styled.div`
   }
 
   ${media.tablet} {
+    gap: 2.344vw;
   }
 
   ${media.mobile} {
+    gap: 5vw;
   }
 `;
 const SmallQuoteContainer = styled.div`
+position: relative;
   display: flex;
   flex-direction: row;
   border-radius: 1.5vw;
@@ -87,10 +130,19 @@ const SmallQuoteContainer = styled.div`
   }
 
   ${media.tablet} {
+    width: 92.188vw;
+    padding: 3.125vw;
+    border-radius: 2.344vw;
+    gap: 2.344vw;
   }
 
   ${media.mobile} {
+    width: 89.167vw;
+    padding: 5.833vw;
+    border-radius: 5vw;
+    gap: unset;
   }
+  
 `;
 const Wrapper = styled.div`
   display: flex;
@@ -148,23 +200,23 @@ const Wrapper = styled.div`
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
         return props.spacing === 'default'
-          ? '5.859vw 0 0'
+          ? '3.906vw 0 0'
           : props.spacing
           ? `${props.spacing}px 0 0`
-          : '5.859vw 0 0';
+          : '3.906vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
-          ? '0 0 5.859vw'
+          ? '0 0 3.906vw'
           : props.spacing
           ? `0 0 ${props.spacing}px`
-          : '0 0 5.859vw';
+          : '0 0 3.906vw';
       }
       return props.spacing === 'default'
-        ? '5.859vw 0'
+        ? '3.906vw 0'
         : props.spacing
         ? `${props.spacing}px 0`
-        : '5.859vw 0';
+        : '3.906vw 0';
     }};
   }
 
