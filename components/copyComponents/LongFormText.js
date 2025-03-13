@@ -10,7 +10,7 @@ const LongFormText = ({ blok }) => {
 return (
 <LongFormTextContainer {...storyblokEditable(blok.copy)}>
 
-   <RichTextRenderer key={`copy-`} document={blok.copy}/>
+   <RichTextRenderer key={`copy-`} document={blok.copy} blok={blok}/>
 
  
 </LongFormTextContainer>

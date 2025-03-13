@@ -9,14 +9,18 @@ import Eyebrow from '@/components/copyComponents/Eyebrow';
 import useMedia from '@/functions/useMedia';
 import CTA from '@/components/CTA';
 
-const RichTextRenderer = ({ document, centered, responsiveTextStyles = [] }) => {
+const RichTextRenderer = ({ document, responsiveTextStyles = [] }) => {
   if (!document) return null;
   // console.log(document)
-  // Function to extract text from structured content
   const extractText = (contentArray) => {
     if (!Array.isArray(contentArray)) return '';
     return contentArray.map((node) => node.text || '').join(' ');
   };
+
+  const blokResolvers = {
+    cta: (props) => <CTA blok={...props} />,
+  };
+  
 
   const customMarkResolvers = {
     [MARK_STYLED]: (children, { class: className }) => {
@@ -50,6 +54,7 @@ const RichTextRenderer = ({ document, centered, responsiveTextStyles = [] }) => 
   return (
     <RichWrapper>
       {render(document, {
+        blokResolvers,
         markResolvers: customMarkResolvers,
         nodeResolvers: customNodeResolvers,
       })}

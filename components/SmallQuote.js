@@ -32,9 +32,10 @@ const SmallQuote = ({ blok }) => {
           </ImageWrapper>
           <SmallQuoteContent>
             {blok.copy.map((item, index) => (
+              // console.log(item)
               <div key={`item.component_${index}`} {...storyblokEditable(item)}>
                 {copycomponents.includes(item.component) ? (
-                  <RichTextRenderer document={item.copy} />
+                  <RichTextRenderer document={item.copy} blok={item}/>
                 ) : (
                   <ComponentRenderer blok={item}/>
                 )}
