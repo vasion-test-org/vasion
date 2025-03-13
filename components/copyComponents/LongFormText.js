@@ -24,16 +24,16 @@ justify-content: center;
 margin: 0 auto;
   width: 81.5vw;
 
-  div {
+  /* div {
     margin-bottom: 1.563vw;
   }
 
   h1, h2, h3, h4, h5 {
     margin-bottom: 1.563vw;
-  }
+  } */
 
   div:empty {
-    margin-bottom: unset;
+    margin-bottom: 1.563vw;
 }
 
 

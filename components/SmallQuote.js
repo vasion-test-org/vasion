@@ -13,7 +13,7 @@ const SmallQuote = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const copycomponents = ['body_copy', 'header', 'eyebrow', 'long_form_text', 'copy_block'];
-  console.log(blok);
+  // console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <Wrapper
@@ -23,13 +23,14 @@ const SmallQuote = ({ blok }) => {
       >
         <SmallQuoteContainer>
           <OrangeQuote src='/images/uiElements/Orange_Quote_Mark.webp'/>
+          {blok?.quote_image[0]?.media &&
           <ImageWrapper>
-            <Image
+             <Image
               {...storyblokEditable(blok)}
               alt={blok?.quote_image[0]?.media[0]?.alt || 'Default Image'}
               images={blok?.quote_image[0]?.media}
             />
-          </ImageWrapper>
+          </ImageWrapper>}
           <SmallQuoteContent>
             {blok.copy.map((item, index) => (
               // console.log(item)
