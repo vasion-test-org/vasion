@@ -98,8 +98,6 @@ const LogoContainer = styled.div`
   }
 `;
 
-const Header = styled(RichTextRenderer)``;
-
 const CardContainer = styled.div`
   display: flex;
   flex-direction: column;

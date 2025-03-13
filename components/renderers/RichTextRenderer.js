@@ -8,6 +8,8 @@ import BodyCopy from '@/components/copyComponents/BodyCopy';
 import Eyebrow from '@/components/copyComponents/Eyebrow';
 import useMedia from '@/functions/useMedia';
 import CTA from '@/components/CTA';
+import SmallQuote from '../SmallQuote';
+import LogoCube from '../LogoCube';
 
 const RichTextRenderer = ({ document, responsiveTextStyles = [] }) => {
   if (!document) return null;
@@ -19,6 +21,9 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [] }) => {
 
   const blokResolvers = {
     cta: (props) => <CTA blok={props} />,
+    small_quote: (props) => <SmallQuote blok={props}/>,
+    logo_cube: (props) => <LogoCube blok={props}/>,
+    
   };
   
 
