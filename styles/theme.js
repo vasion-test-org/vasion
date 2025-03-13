@@ -28,6 +28,10 @@ export const defaultTheme = {
     inputBg: "#584282",
     inputBorder: "#ffffff",
     buttonBg:  "#ff5100",
+  },
+  small_quote: {
+    textColor: "#1B1D21",
+    bg: "#F5F4F7",
   }
 };
 

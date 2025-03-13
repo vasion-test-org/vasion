@@ -1,5 +1,5 @@
 'use client'
-import { render, MARK_STYLED, NODE_HEADING, NODE_PARAGRAPH } from 'storyblok-rich-text-react-renderer';
+import { render, MARK_STYLED, NODE_HEADING, NODE_PARAGRAPH, NODE_BLK  } from 'storyblok-rich-text-react-renderer';
 import React from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
@@ -8,7 +8,7 @@ import BodyCopy from '@/components/copyComponents/BodyCopy';
 import Eyebrow from '@/components/copyComponents/Eyebrow';
 import useMedia from '@/functions/useMedia';
 import CTA from '@/components/CTA';
-
+import Button from '../globalComponents/Button';
 const RichTextRenderer = ({ document, centered, responsiveTextStyles = [] }) => {
   if (!document) return null;
 
@@ -22,6 +22,15 @@ const RichTextRenderer = ({ document, centered, responsiveTextStyles = [] }) => 
     [MARK_STYLED]: (children, { class: className }) => {
       return <BodyCopy className={className}>{children}</BodyCopy>;
     },
+  };
+
+  const getBlok = (document) => {
+    switch (document.component) {
+      case 'global_link':
+        return <Button/>;
+      default:
+        return document.component;
+    }
   };
 
   const customNodeResolvers = {
@@ -45,6 +54,18 @@ const RichTextRenderer = ({ document, centered, responsiveTextStyles = [] }) => 
 
       return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
     },
+    [NODE_BLK]: (node) => {
+      if (!node?.attrs?.id) return null; // Skip if no valid blok ID
+
+      switch (node.attrs.component) {
+        case 'global_link':
+          return <Button {...node.attrs} />;
+        case 'cta':
+          return <CTA {...node.attrs} />;
+        default:
+          return null; // Skip unknown bloks
+      }
+    }
   };
 
   return (
@@ -52,6 +73,7 @@ const RichTextRenderer = ({ document, centered, responsiveTextStyles = [] }) => 
       {render(document, {
         markResolvers: customMarkResolvers,
         nodeResolvers: customNodeResolvers,
+        blok: getBlok(document)
       })}
     </RichWrapper>
   );
