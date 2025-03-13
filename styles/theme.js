@@ -28,6 +28,10 @@ export const defaultTheme = {
     inputBg: "#584282",
     inputBorder: "#ffffff",
     buttonBg:  "#ff5100",
+  },
+  small_quote: {
+    textColor: "#1B1D21",
+    bg: "#F5F4F7",
   }
 };
 
@@ -86,7 +90,7 @@ export const buttonThemes = {
   },
   orange_link: {
     textColor: "#ff5100",
-    mainColor: "#ffffff",
+    mainColor: "unset",
     complimentaryColor: "#CC4800",
     textDecoration: "underline",
     borderRadius: 'unset',
@@ -97,7 +101,7 @@ export const buttonThemes = {
   },
   grey_link: {
     textColor: "#808085",
-    mainColor: "#ffffff",
+    mainColor: "unset",
     complimentaryColor: "#808085",
     textDecoration: "underline",
     borderRadius: 'unset',
@@ -108,7 +112,7 @@ export const buttonThemes = {
   },
   black_link: {
     textColor: "#1B1D21",
-    mainColor: "#ffffff",
+      mainColor: "unset",
     complimentaryColor: "#1B1D21",
     textDecoration: "underline",
     borderRadius: 'unset',
@@ -119,7 +123,7 @@ export const buttonThemes = {
   },
   white_link: {
     textColor: "#ffffff",
-    mainColor: "#ffffff",
+      mainColor: "unset",
     complimentaryColor: "#ffffff",
     textDecoration: "underline",
     borderRadius: 'unset',
