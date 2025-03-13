@@ -18,7 +18,7 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [] }) => {
   };
 
   const blokResolvers = {
-    cta: (props) => <CTA blok={...props} />,
+    cta: (props) => <CTA blok={props} />,
   };
   
 
