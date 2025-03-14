@@ -128,7 +128,7 @@ const Form = ({ blok }) => {
   useEffect(() => {
     if (!isLoaded) return;
 
-    window.MktoForms2.loadForm(
+    window?.MktoForms2?.loadForm(
       'https://info.printerlogic.com',
       '338-HTA-134',
       blok.form_id,

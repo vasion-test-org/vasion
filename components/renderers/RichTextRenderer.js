@@ -68,6 +68,8 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [] }) => {
 };
 
 const RichWrapper = styled.div`
+display: flex;
+flex-direction: column;
 
   ul {
     list-style: none;

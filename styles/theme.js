@@ -12,7 +12,7 @@ export const defaultTheme = {
   },
   side_by_side: {
     textColor: "#1B1D21",
-    bg: "#F5F4F7",
+    bg: "#ffffff",
   },
   cta: {
     textColor: "#ffffff",
