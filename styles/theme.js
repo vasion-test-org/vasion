@@ -10,6 +10,10 @@ export const defaultTheme = {
     textColor: "#ffffff",
     cardBg: "#3D2562",
   },
+  side_by_side: {
+    textColor: "#1B1D21",
+    bg: "#F5F4F7",
+  },
   cta: {
     textColor: "#ffffff",
     cardBg: "#3D2562",
@@ -36,6 +40,10 @@ export const defaultTheme = {
 };
 
 export const darkTheme = {
+  side_by_side: {
+    textColor: "#ffffff",
+    bg: "#3D2562",
+  },
   hero: {
     textColor: "#ffffff",
     bg: "linear-gradient(180deg, #583F99 0%, #3D2562 100%)",

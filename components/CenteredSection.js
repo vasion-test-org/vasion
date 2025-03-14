@@ -15,6 +15,7 @@ import Button from '@/components/globalComponents/Button';
 import Accordion from '@/components/centeredSections/Accordion';
 import Stats from '@/components/centeredSections/Stats';
 import Form from './Form';
+import Rotator from '@/components/centeredSections/Rotator'
 
 const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -77,6 +78,9 @@ const CenteredSection = ({ blok }) => {
             )}
             {blok.component_type === 'accordion' && blok.accordion && (
               <Accordion accordionData={blok.accordion} />
+            )}
+                {blok.component_type === 'rotator' && blok.rotator && (
+              <Rotator rotatorData={blok.rotator} />
             )}
             {blok.component_type === 'form' && blok.form && (
               <Form blok={blok.form[0]} />

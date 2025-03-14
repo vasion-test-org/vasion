@@ -9,6 +9,7 @@ import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import LogoCube from "@/components/LogoCube";
 import { usePathname } from "next/navigation";
 import Button from "../globalComponents/Button";
+import Form from "../Form";
 
 const ComponentRenderer = ({ blok }) => {
   if (!blok) return null;
@@ -73,6 +74,8 @@ const ComponentRenderer = ({ blok }) => {
       );
     case "logo_cube":
       return <LogoCube blok={blok} />;
+    case "form":
+      return <Form blok={blok}/>
     case "global_link":
       return <Button $buttonData={blok}/>
     default:

@@ -68,6 +68,7 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [] }) => {
 };
 
 const RichWrapper = styled.div`
+
   ul {
     list-style: none;
     margin-left: 0;

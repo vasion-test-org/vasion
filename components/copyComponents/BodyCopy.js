@@ -12,6 +12,7 @@ const BodyCopy = ({ className, children}) => {
 export default BodyCopy;
 
 const StyledBodyCopy = styled.div`
+  display: inline-block;
   font-family: 'Archivo';
   font-weight: 400;
 
