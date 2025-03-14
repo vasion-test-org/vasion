@@ -23,7 +23,9 @@ const Rotator = ({ rotatorData }) => {
       const tl = gsap.timeline({})
       tab.addEventListener('click', () => {
         tl.to('.rotator', {autoAlpha:0, filter: "blur(2px)",duration: 0.45,})
-          .to(`#rotator-${index}`, {autoAlpha:1, filter: "blur(0px)", duration: 0.25,})
+        .to(`.tabs`, {background: 'transparent', duration: .25})
+        .to(`#tab-${index}`, {background: 'linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%)'}, "<")
+          .to(`#rotator-${index}`, {autoAlpha:1, filter: "blur(0px)", duration: 0.25,}, "<")
       })
     })
   }, [])
@@ -32,18 +34,18 @@ const Rotator = ({ rotatorData }) => {
   const tabMap = rotatorData.map((tab, index) => 
     <Tab className='tabs' id={`tab-${index}`} key={`${tab.tab_icon.filename}-${index}`}>
       <TabIcon src={tab.tab_icon.filename}/>
-      <RichTextRenderer document={tab.tab[0].copy}/>
+      <RichTextRenderer key={`tab-richtext-${index}`} document={tab.tab[0].copy}/>
     </Tab>
   )
 
   const cardMap = rotatorData.map((card, index) => 
     <BackgroundImage id={`rotator-${index}`} className='rotator' key={`${card.component}-${index}`} backgroundImage={card.background_images}>
         <ContentContainer>
-          {card.copy.map(item => 
+          {card.copy.map((item, index) => 
             copycomponents.includes(item.component) ? (
-              <RichTextRenderer document={item.copy} blok={item}/>
+              <RichTextRenderer key={`card-richtext-${index}`} document={item.copy} blok={item}/>
             ) : (
-              <ComponentRenderer blok={item}/>
+              <ComponentRenderer key={`component-${index}`} blok={item}/>
             )
           )}
         </ContentContainer> 
@@ -155,17 +157,25 @@ const Tab = styled.div`
   display: flex;
   flex-direction: row;
   gap: 0.5vw;
+  padding: 0.25vw;
+  border-radius: 0.25vw;
 
   ${media.fullWidth} {
     gap: 8px;
+    padding: 4px;
+    border-radius: 4px;
   }
   
   ${media.tablet} {
     gap: 0.781vw;
+    padding: 0.391vw;
+    border-radius: 0.391vw;
   }
   
   ${media.mobile} {
     gap: 1.667vw;
+    padding: 0.833vw;
+    border-radius: 0.833vw;
   }
 `
 const Tabs = styled.div`

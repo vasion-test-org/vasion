@@ -17,7 +17,7 @@ const Hero = ({ blok }) => {
     customTheme = undefined;
   }
 
-  // console.log( blok);
+  console.log( blok);
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
       <HeroBGWrapper>
@@ -25,8 +25,9 @@ const Hero = ({ blok }) => {
           layout={blok.hero_layout}
           gap={blok.gap}
           spacing={blok.section_spacing}
+          centered={!blok?.hero_asset[0]}
         >
-          <ContentWrapper>
+          <ContentWrapper centered={!blok?.hero_asset[0]}>
             {blok.hero_copy.map((copy) => (
               <div {...storyblokEditable(copy)} key={copy.component}>
                 <RichTextRenderer
@@ -102,7 +103,7 @@ const ButtonRow = styled.div`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: left;
+  text-align: ${props => props.centered ? 'center' : 'left'};
   width: clamp(27.75vw, 100%, 54.75vw);
 
   h1,
@@ -136,6 +137,7 @@ const HeroWrapper = styled.div`
   flex-direction: ${(props) => `${props.layout || 'row'}`};
   align-items: center;
   justify-content: space-between;
+  justify-content: ${props => props.centered ? 'center' : 'unset'};
   color: ${(props) =>
     props.theme.customtheme?.text_color?.value || props.theme.hero.textColor};
   padding: ${(props) =>
