@@ -180,12 +180,13 @@ const MarketoForm = styled.form`
   flex-flow: row wrap;
   justify-content: center;
   width: 31.25vw !important;
-  gap: 1.25vw;
+  gap: 1.25vw 1.25vw;
   align-items: left;
   text-align: center;
 `;
 const FormHeader = styled.h4`
   ${text.h4};
+  gap: 1.25vw 1.25vw;
   margin-bottom: 2vw;
   align-self: center;
 
