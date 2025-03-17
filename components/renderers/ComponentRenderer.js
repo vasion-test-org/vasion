@@ -13,6 +13,7 @@ import Form from "../Form";
 
 const ComponentRenderer = ({ blok }) => {
   if (!blok) return null;
+  const copycomponents = ['body_copy', 'header', 'eyebrow', 'long_form_text', 'copy_block'];
   console.log(blok);
 
   const pathname = usePathname();
@@ -65,9 +66,13 @@ const ComponentRenderer = ({ blok }) => {
     case "copy_block":
       return (
         <CopyDiv>
-          {blok?.copy_block_sections?.map((copy, index) => (
-            <BlockWrapper key={index} {...storyblokEditable(copy)}>
-              <RichTextRenderer document={copy?.copy} />
+          {blok?.copy_block_sections?.map((item, index) => (
+            <BlockWrapper key={index} {...storyblokEditable(item)}>
+                  {copycomponents.includes(item.component) ? (
+                  <RichTextRenderer document={item.copy} blok={item}/>
+                ) : (
+                  <ComponentRenderer blok={item}/>
+                )}
             </BlockWrapper>
           ))}
         </CopyDiv>

@@ -23,7 +23,7 @@ const TwoColumnList = ({ blok }) => {
     </ColumnItem>
   ));
 
-  const column2 = blok.column_2.map((item) => (
+  const column2 = blok?.column_2?.map((item) => (
     <ColumnItem>
       {item.icon.filename && <ItemIcon src={item.icon.filename} />}
       <ColumnCopy>
@@ -33,6 +33,8 @@ const TwoColumnList = ({ blok }) => {
       </ColumnCopy>
     </ColumnItem>
   ));
+
+  console.log('column 2',column2)
   return (
     <Wrapper
       spacingOffset={blok.offset_spacing}
@@ -41,8 +43,8 @@ const TwoColumnList = ({ blok }) => {
     >
       <IntroContent>{introMap}</IntroContent>
       <Columns>
-        <Column>{column1}</Column>
-        <Column>{column2}</Column>
+        <Column doublecolumn={column2.length < 0}>{column1}</Column>
+        {column2.length > 0 && <Column>{column2}</Column>}
       </Columns>
     </Wrapper>
   );
@@ -107,39 +109,43 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.5vw;
-  width: 39.938vw;
+  width: ${props => props.doublecolumn ? '39.938vw' : '100%'};
 
   ${media.fullWidth} {
     gap: 40px;
-  width: 639px;
+    width: ${props => props.doublecolumn ? '639px' : '100%'};
   }
   
   ${media.tablet} {
     gap: 3.906vw;
-  width: 45.313vw;
+  width: ${props => props.doublecolumn ? '45.313vw' : '100%'};
   }
   
   ${media.mobile} {
     gap: 8.333vw;
-    width: 83.333vw;
+    width: ${props => props.doublecolumn ? '83.333vw' : '100%'};
   }
 `;
 const Columns = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1.625vw;
+  width: 81.5vw;
 
   ${media.fullWidth} {
     gap: 26px;
+    width: 1304px;
   }
   
   ${media.tablet} {
     gap: 1.563vw;
+    width: 92.188vw;
   }
   
   ${media.mobile} {
   flex-direction: column;
   gap: unset;
+  width: 89.167vw;
   }
 `;
 const IntroContent = styled.div`
