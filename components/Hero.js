@@ -50,7 +50,7 @@ const Hero = ({ blok }) => {
               ))}
             </ButtonRow>
           </ContentWrapper>
-          {blok?.hero_asset && (
+          {blok?.hero_asset[0] && (
             <ImageWrapper {...storyblokEditable(blok)}>
               <Image
                 images={blok.hero_asset}

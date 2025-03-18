@@ -2,7 +2,7 @@ import { StoryblokStory } from "@storyblok/react/rsc";
 import { notFound } from "next/navigation";
 import { getStoryblokApi } from "@/lib/storyblok";
 
-export const revalidate = 60; // Revalidate published pages every 60s
+export const revalidate = 60; 
 
 export default async function DynamicPage({ params }) {
   const { slug } = params;
@@ -11,15 +11,15 @@ export default async function DynamicPage({ params }) {
   const locale = isLocalized ? slugArray[0] : "en";
   const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");
 
-  // First, check if the story exists in published mode
+
   let story = await fetchData(storySlug, locale, "published");
 
-  // If not found, check the draft version
+
   if (!story) {
     story = await fetchData(storySlug, locale, "draft");
   }
 
-  // If still not found, return a 404 page
+
   if (!story) {
     return notFound();
   }

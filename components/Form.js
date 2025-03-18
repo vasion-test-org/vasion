@@ -9,8 +9,12 @@ import media from '@/styles/media';
 import getMedia from '@/functions/getMedia';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
+import { useThankYou } from "@/context/ThankYouContext";
+import { useRouter } from "next/navigation";
 
 const Form = ({ blok }) => {
+  const { thankYouCopy, updateThankYouCopy } = useThankYou();
+  const router = useRouter();
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const [isLoaded, setIsLoaded] = useState(false);
@@ -22,7 +26,13 @@ const Form = ({ blok }) => {
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
   const originRef = useRef('va');
-  // console.log(blok);
+
+  useEffect(() => {
+    if (blok?.thank_you_copy) {
+      updateThankYouCopy(blok.thank_you_copy);
+      console.log(thankYouCopy, blok?.thank_you_copy)
+    }
+  }, [thankYouCopy, blok?.thank_you_copy]);
 
   useEffect(() => {
     function getOriginDomain(url) {
@@ -136,9 +146,10 @@ const Form = ({ blok }) => {
         form.onSuccess(() => {
           if (blok.animated) {
             console.log('Thank You');
-          } else if (blok.redirectLink) {
-            console.log('Form submitted successfully');
-            document.location.href = blok.redirectLink;
+          } else if (blok.redirect_link) {
+            setThankYouData(blok.thank_you_copy);
+            console.log(thankYouData)
+            router.push(blok.redirect_link);
             return false;
           }
         });
@@ -164,7 +175,7 @@ const Form = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       <FormContainer>
-      {blok.header && <FormHeader>{blok.header}</FormHeader>}
+        {blok.header && <FormHeader>{blok.header}</FormHeader>}
         <MarketoForm
           className='marketoForm'
           // mode={props.mode}
@@ -191,17 +202,14 @@ const FormHeader = styled.h4`
   align-self: center;
 
   ${media.fullWidth} {
-  
   }
-  
+
   ${media.tablet} {
-  
   }
-  
+
   ${media.mobile} {
-  
   }
-`
+`;
 const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -219,45 +227,44 @@ const FormContainer = styled.div`
     display: none;
   }
   .mktoFormRow:has(> .mktoPlaceholder) {
-  display: none;
-}
-
-.mktoFormRow:has(a[href*="vasion.com/privacy-policy"]) span {
-  ${text.bodySm};
-  text-align: center;
-  color: white;
-
-  a {
-    color: ${colors.primaryOrange};
+    display: none;
   }
-}
 
-.mktoFormRow:has(> input[type="hidden"]) {
-  display: none;
-}
+  .mktoFormRow:has(a[href*='vasion.com/privacy-policy']) span {
+    ${text.bodySm};
+    text-align: center;
+    color: white;
 
-
-.mktoButtonRow {
-  width: 100%;
-}
-
-button {
-  ${text.bodyMdBold};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: ${colors.primaryOrange};
-  color: white;
-  width: 100%;
-  padding: 0.75vw 0;
-  border-radius: 2.375vw;
-
-  &:hover {
-    background: white;
-    color: ${colors.primaryOrange};
-    border: 1px solid ${colors.primaryOrange};
+    a {
+      color: ${colors.primaryOrange};
+    }
   }
-}
+
+  .mktoFormRow:has(> input[type='hidden']) {
+    display: none;
+  }
+
+  .mktoButtonRow {
+    width: 100%;
+  }
+
+  button {
+    ${text.bodyMdBold};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: ${colors.primaryOrange};
+    color: white;
+    width: 100%;
+    padding: 0.75vw 0;
+    border-radius: 2.375vw;
+
+    &:hover {
+      background: white;
+      color: ${colors.primaryOrange};
+      border: 1px solid ${colors.primaryOrange};
+    }
+  }
   label {
     display: none;
   }
@@ -295,15 +302,12 @@ button {
     }
 
     ${media.fullWidth} {
-    
     }
-    
+
     ${media.tablet} {
-    
     }
-    
+
     ${media.mobile} {
-    
     }
   }
 
@@ -312,12 +316,12 @@ button {
   }
 
   input:invalid {
-    border: 0.063vw solid #FFB4AB;
+    border: 0.063vw solid #ffb4ab;
   }
 
   .mktoErrorMsg {
     ${text.bodySm};
-    color: #FFB4AB;
+    color: #ffb4ab;
     margin-top: 0.5vw;
   }
 
@@ -334,29 +338,23 @@ button {
     option {
       ${text.bodyMd};
     }
-    
+
     ${media.fullWidth} {
-    
     }
-    
+
     ${media.tablet} {
-    
     }
-    
+
     ${media.mobile} {
-    
     }
   }
   ${media.fullWidth} {
-  
   }
-  
+
   ${media.tablet} {
-  
   }
-  
+
   ${media.mobile} {
-  
   }
 `;
 export default Form;

@@ -15,6 +15,7 @@ const StyledBodyCopy = styled.div`
   display: inline-block;
   font-family: 'Archivo';
   font-weight: 400;
+  white-space: pre-wrap;
 
   &.bold {
     font-weight: 600;
