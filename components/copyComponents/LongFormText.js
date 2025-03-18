@@ -21,20 +21,16 @@ const LongFormTextContainer = styled.div`
 display: flex;
 align-items: center;
 justify-content: center;
-margin: 0 auto;
+margin: 2.5vw auto;
   width: 81.5vw;
 
-  /* div {
-    margin-bottom: 1.563vw;
-  }
-
-  h1, h2, h3, h4, h5 {
-    margin-bottom: 1.563vw;
-  } */
+  /* div, h1, h2, h3, h4, h5 {
+  margin-bottom: 1.563vw;
+} 
 
   div:empty {
     margin-bottom: 1.563vw;
-}
+}  */
 
 
   ${media.fullWidth} {

@@ -43,7 +43,7 @@ const LogoCube = ({ blok }) => {
     <ThemeProvider theme={selectedTheme}>
       <CubeWrapper {...storyblokEditable(blok)}>
         <CardContainer>
-          <RichTextRenderer document={blok.header} blok={blok} />
+        {blok.header && <RichTextRenderer document={blok.header} blok={blok} />}
           <LogoContainer>{allLogos}</LogoContainer>
         </CardContainer>
       </CubeWrapper>
