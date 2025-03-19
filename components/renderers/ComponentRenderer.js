@@ -14,7 +14,7 @@ import Form from "../Form";
 const ComponentRenderer = ({ blok }) => {
   if (!blok) return null;
   const copycomponents = ['body_copy', 'header', 'eyebrow', 'long_form_text', 'copy_block'];
-  console.log(blok);
+  // console.log(blok);
 
   const pathname = usePathname();
   const isFrench = pathname.startsWith("/fr");

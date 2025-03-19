@@ -20,7 +20,7 @@ const ThankYou = () => {
         {thankYouCopy?.map((item, index) => (
              <div key={`item.component_${index}`}>
              {copycomponents.includes(item.component) ? (
-               <RichTextRenderer document={item.copy} blok={item}/>
+               <RichTextRenderer document={item.copy} blok={item} />
              ) : (
                <ComponentRenderer blok={item}/>
              )}
