@@ -24,6 +24,20 @@ justify-content: center;
 margin: 2.5vw auto;
   width: 81.5vw;
 
+    /* Apply spacing between direct text elements inside RichWrapper */
+    > *:not(.component-wrapper) {
+    margin-bottom: 1.875vw;
+  }
+
+  /* Prevent spacing inside components */
+  .component-wrapper * {
+    margin-bottom: 0 !important;
+  }
+
+  div:empty {
+    display: none;
+  }
+
   ${media.fullWidth} {
     width: 1304px;
     margin: 0 auto;

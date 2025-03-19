@@ -76,20 +76,6 @@ const RichWrapper = styled.div`
 display: flex;
 flex-direction: column;
 
-  /* Apply spacing between direct text elements inside RichWrapper */
-  > *:not(.component-wrapper) {
-    margin-bottom: 1.875vw;
-  }
-
-  /* Prevent spacing inside components */
-  .component-wrapper * {
-    margin-bottom: 0 !important;
-  }
-
-  div:empty {
-    display: none;
-  }
-
   ul {
     list-style: none;
     margin-left: 0;
