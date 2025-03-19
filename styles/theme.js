@@ -2,6 +2,11 @@ import { pxToVw } from "@/functions/functions";
 import colors from "./colors";
 
 export const defaultTheme = {
+  nav: {
+    textColor: "#1B1D21",
+    bg: "#F5F4F7",
+    tab_hover: '#ece9ef'
+  },
   hero: {
     textColor: "#1B1D21",
     bg: "#F5F4F7",
@@ -74,6 +79,17 @@ export const darkTheme = {
 };
 
 export const buttonThemes = {
+  nav: {
+    textColor: "#ffffff",
+    mainColor: "#ff5100",
+    complimentaryColor: "#ffffff",
+    textDecoration: "unset",
+    borderRadius: '28px',
+    padding: '8px 20px',
+    border: '#ff5100',
+    hoverBgColor: "#ffffff",
+    hoverTextColor: "#ff5100"
+  },
   primary: {
     textColor: "#ffffff",
     mainColor: "#ff5100",
