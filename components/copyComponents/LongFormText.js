@@ -24,15 +24,6 @@ justify-content: center;
 margin: 2.5vw auto;
   width: 81.5vw;
 
-  /* div, h1, h2, h3, h4, h5 {
-  margin-bottom: 1.563vw;
-} 
-
-  div:empty {
-    margin-bottom: 1.563vw;
-}  */
-
-
   ${media.fullWidth} {
     width: 1304px;
     margin: 0 auto;

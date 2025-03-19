@@ -36,6 +36,8 @@ const SideBySideWrapper = styled.div`
   text-align: left;
   background: ${(props) => props.theme.side_by_side.bg};
   color: ${(props) => props.theme.side_by_side.textColor};
+  border-radius: 1.5vw;
+  /* margin: 3.75vw 0; */
 
   padding: ${(props) => {
     if (props.spacingOffset === 'top') {

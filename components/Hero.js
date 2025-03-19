@@ -17,7 +17,7 @@ const Hero = ({ blok }) => {
     customTheme = undefined;
   }
 
-  console.log( blok);
+  // console.log( blok);
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
       <HeroBGWrapper>

@@ -10,21 +10,26 @@ import useMedia from '@/functions/useMedia';
 import CTA from '@/components/CTA';
 import SmallQuote from '../SmallQuote';
 import LogoCube from '../LogoCube';
-
-const RichTextRenderer = ({ document, responsiveTextStyles = [] }) => {
+import SideBySide from '../SideBySide';
+import CenteredSection from '../CenteredSection';
+import NumberBlock from '../NumberBlock';
+const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
   if (!document) return null;
-  // console.log(document)
+  console.log(blok)
   const extractText = (contentArray) => {
     if (!Array.isArray(contentArray)) return '';
     return contentArray.map((node) => node.text || '').join(' ');
   };
 
   const blokResolvers = {
-    cta: (props) => <CTA blok={props} />,
-    small_quote: (props) => <SmallQuote blok={props}/>,
-    logo_cube: (props) => <LogoCube blok={props}/>,
-    
+    cta: (props) => <div className="component-wrapper"><CTA blok={props} /></div>,
+    small_quote: (props) => <div className="component-wrapper"><SmallQuote blok={props} /></div>,
+    logo_cube: (props) => <div className="component-wrapper"><LogoCube blok={props} /></div>,
+    side_by_side: (props) => <div className="component-wrapper"><SideBySide blok={props} /></div>,
+    centered_section: (props) => <div className="component-wrapper"><CenteredSection blok={props} /></div>,
+    number_block: (props) => <div className="component-wrapper"><NumberBlock blok={props} /></div>,
   };
+  
   
 
   const customMarkResolvers = {
@@ -70,6 +75,20 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [] }) => {
 const RichWrapper = styled.div`
 display: flex;
 flex-direction: column;
+
+  /* Apply spacing between direct text elements inside RichWrapper */
+  > *:not(.component-wrapper) {
+    margin-bottom: 1.875vw;
+  }
+
+  /* Prevent spacing inside components */
+  .component-wrapper * {
+    margin-bottom: 0 !important;
+  }
+
+  div:empty {
+    display: none;
+  }
 
   ul {
     list-style: none;
