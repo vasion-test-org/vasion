@@ -14,7 +14,6 @@
   "dependencies": {
     "@storyblok/react": "^4.4.3",
     "@storyblok/richtext": "^3.0.2",
-    "@svgr/webpack": "^8.1.0",
     "autoprefixer": "10.4.20",
     "clone-deep": "^4.0.1",
     "gsap": "npm:@gsap/business@^3.12.7",
@@ -26,6 +25,7 @@
     "styled-components": "^6.1.15"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@types/node": "22.13.9",
     "@types/react": "19.0.10",
     "concurrently": "^9.1.2",

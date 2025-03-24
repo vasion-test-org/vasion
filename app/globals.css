@@ -1152,6 +1152,7 @@ img {
   margin-bottom: 0;
   max-width: unset;
 }
+
 svg:not(:root) {
   overflow: unset;
 }

@@ -3,53 +3,59 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  // env: {
-  //   STORYBLOK_ACCESS_TOKEN: process.env.NEXT_PUBLIC_STORYBLOK_API_KEY,
-  // },
-  reactStrictMode: true, // ✅ Enables strict mode for debugging
+  reactStrictMode: true,
   eslint: {
-    ignoreDuringBuilds: true, // ✅ Prevents build failures due to ESLint warnings
+    ignoreDuringBuilds: true,
   },
   webpack: (config) => {
-    config.resolve.fallback = { fs: false }; // ✅ Fixes server-side module issues in Webpack 5
+    // Find the existing rule that handles SVG imports
+    const fileLoaderRule = config.module.rules.find((rule) =>
+      rule.test?.test?.('.svg')
+    );
 
-    // ✅ Add SVGR support for SVG imports as React components
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: [
-        {
-          loader: "@svgr/webpack",
-          options: {
-            icon: true, // Allows auto-scaling for icons
-          },
-        },
-      ],
-    });
+    config.module.rules.push(
+      // Reapply the existing rule, but only for svg imports ending in ?url
+      {
+        ...fileLoaderRule,
+        test: /\.svg$/i,
+        resourceQuery: /url/, // *.svg?url
+      },
+      // Convert all other *.svg imports to React components
+      {
+        test: /\.svg$/i,
+        issuer: { and: [/\.[jt]sx?$/] },
+        resourceQuery: { not: [/url/] }, // exclude if *.svg?url
+        use: ['@svgr/webpack'],
+      }
+    );
+
+    // Modify the file loader rule to ignore *.svg, since we have it handled now.
+    fileLoaderRule.exclude = /\.svg$/i;
 
     return config;
   },
-
   async headers() {
     return [
       {
-        source: "/(.*)",
+        source: '/(.*)',
         headers: [
           {
-            key: "X-Frame-Options",
-            value: "ALLOWALL", // ✅ Allows embedding your site in an iframe
+            key: 'X-Frame-Options',
+            value: 'ALLOWALL',
           },
           {
-            key: "Content-Security-Policy",
-            value: "frame-ancestors 'self' https://app.storyblok.com https://editor.storyblok.com https://m.storyblok.com;", // ✅ Ensures all Storyblok domains can embed your site
+            key: 'Content-Security-Policy',
+            value:
+              "frame-ancestors 'self' https://app.storyblok.com https://editor.storyblok.com https://m.storyblok.com;",
           },
         ],
       },
       {
-        source: "/api/draft",
+        source: '/api/draft',
         headers: [
           {
-            key: "Cache-Control",
-            value: "no-store, max-age=0, must-revalidate",
+            key: 'Cache-Control',
+            value: 'no-store, max-age=0, must-revalidate',
           },
         ],
       },
