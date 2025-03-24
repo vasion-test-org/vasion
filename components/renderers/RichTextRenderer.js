@@ -81,6 +81,7 @@ flex-direction: column;
   ul {
     list-style: none;
     margin-left: 0;
+    
     li {
       position: relative;
       padding-left: 1.563vw;

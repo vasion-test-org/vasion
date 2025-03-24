@@ -66,18 +66,18 @@ const SourceWrapper = styled.div`
 `
 const ImageWrapper = styled.div`
   align-content: center;
-  width: 24vw;
+  min-width: 24vw;
 
 ${media.fullWidth} {
-  width: 384px;
+  min-width: 384px;
 }
 
 ${media.tablet} {
-  width: 32.813vw;
+  min-width: 32.813vw;
 }
 
 ${media.mobile} {
-  width: 89.167vw;
+  min-width: 89.167vw;
 }
 `;
 const TestimonialEyebrow = styled.p`
@@ -98,14 +98,13 @@ const TestimonialEyebrow = styled.p`
 `;
 const TestimonialContent = styled.div`
   text-align: left;
-  text-indent: -1vw;
+  max-width: 81.5vw;
 
   ${media.fullWidth} {
-    text-indent: -16px;
+    max-width: 1304px;
   }
   
   ${media.tablet} {
-    text-indent: -1.563vw;
     width: 45.703vw;
   }
   

@@ -75,11 +75,11 @@ const ImageWrapper = styled.div`
   }
   
   ${media.tablet} {
-  
+    max-width: 58.594vw;
   }
   
   ${media.mobile} {
-  
+   min-width: 100%;
   }
 `
 const ButtonRow = styled.div`
