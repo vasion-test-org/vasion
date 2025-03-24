@@ -9,6 +9,7 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 import { ScreenContext } from '@/components/Providers/Screen';
 import Button from '@/components/globalComponents/Button';
 import Image from '@/components/globalComponents/Image';
+import LogoCube from './LogoCube';
 const Hero = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
@@ -24,6 +25,7 @@ const Hero = ({ blok }) => {
         <HeroWrapper
           layout={blok.hero_layout}
           gap={blok.gap}
+          spacingOffset={blok.offset_spacing}
           spacing={blok.section_spacing}
           centered={!blok?.hero_asset[0]}
         >
@@ -59,6 +61,7 @@ const Hero = ({ blok }) => {
             </ImageWrapper>
           )}
         </HeroWrapper>
+        {blok.attached_logo_cube && <LogoCube blok={blok.logo_cube[0]}/>}
       </HeroBGWrapper>
     </ThemeProvider>
   );
@@ -82,6 +85,7 @@ const ImageWrapper = styled.div`
 const ButtonRow = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 0.75vw;
   margin-top: 2vw;
 
@@ -136,16 +140,31 @@ const HeroWrapper = styled.div`
   display: flex;
   flex-direction: ${(props) => `${props.layout || 'row'}`};
   align-items: center;
-  justify-content: space-between;
-  justify-content: ${props => props.centered ? 'center' : 'unset'};
+  justify-content: ${(props) => (props.centered ? 'center' : 'space-between')};
   color: ${(props) =>
     props.theme.customtheme?.text_color?.value || props.theme.hero.textColor};
-  padding: ${(props) =>
-    props.spacing === 'default'
+
+  padding: ${(props) => {
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '6vw 9.25vw 0'
+        : props.spacing
+        ? `calc(${props.spacing} / 1600 * 100vw) 9.25vw 0`
+        : '6vw 9.25vw 0';
+    }
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 9.25vw 6vw'
+        : props.spacing
+        ? `0 9.25vw calc(${props.spacing} / 1600 * 100vw)`
+        : '0 9.25vw 6vw';
+    }
+    return props.spacing === 'default'
       ? '6vw 9.25vw'
       : props.spacing
       ? `calc(${props.spacing} / 1600 * 100vw) 9.25vw`
-      : '6vw 9.25vw'};
+      : '6vw 9.25vw';
+  }};
 
   gap: ${(props) =>
     props.gap === 'default'
@@ -156,24 +175,54 @@ const HeroWrapper = styled.div`
 
   ${media.fullWidth} {
     max-width: 1600px;
-    padding: ${(props) =>
-      props.spacing === 'default'
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '96px 148px 0'
+          : props.spacing
+          ? `${props.spacing}px 148px 0`
+          : '96px 148px 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 148px 96px'
+          : props.spacing
+          ? `0 148px ${props.spacing}px`
+          : '0 148px 96px';
+      }
+      return props.spacing === 'default'
         ? '96px 148px'
         : props.spacing
         ? `${props.spacing}px 148px`
-        : '96px 148px'};
+        : '96px 148px';
+    }};
     gap: ${(props) =>
       props.gap === 'default' ? '60px' : props.gap ? `${props.gap}px` : '60px'};
   }
 
   ${media.tablet} {
     max-width: 100%;
-    padding: ${(props) =>
-      props.spacing === 'default'
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 3.906vw 0'
+          : props.spacing
+          ? `calc(${props.spacing} / 1024 * 100vw) 3.906vw 0`
+          : '5.859vw 3.906vw 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 3.906vw 5.859vw'
+          : props.spacing
+          ? `0 3.906vw calc(${props.spacing} / 1024 * 100vw)`
+          : '0 3.906vw 5.859vw';
+      }
+      return props.spacing === 'default'
         ? '5.859vw 3.906vw'
         : props.spacing
         ? `calc(${props.spacing} / 1024 * 100vw) 3.906vw`
-        : '5.859vw 3.906vw'};
+        : '5.859vw 3.906vw';
+    }};
     gap: ${(props) =>
       props.gap === 'default'
         ? '3.906vw'
@@ -185,12 +234,27 @@ const HeroWrapper = styled.div`
   ${media.mobile} {
     flex-direction: column-reverse;
     max-width: 100%;
-    padding: ${(props) =>
-      props.spacing === 'default'
-        ? '5.417vw'
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 5.417vw 0'
+          : props.spacing
+          ? `calc(${props.spacing} / 480 * 100vw) 5.417vw 0`
+          : '12.5vw 5.417vw 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 5.417vw 12.5vw'
+          : props.spacing
+          ? `0 5.417vw calc(${props.spacing} / 480 * 100vw)`
+          : '0 5.417vw 12.5vw';
+      }
+      return props.spacing === 'default'
+        ? '5.417vw 5.417vw'
         : props.spacing
         ? `calc(${props.spacing} / 480 * 100vw) 5.417vw`
-        : '5.417vw'};
+        : '5.417vw 5.417vw';
+    }};
     gap: ${(props) =>
       props.gap === 'default'
         ? '5.417vw'
@@ -200,8 +264,10 @@ const HeroWrapper = styled.div`
   }
 `;
 
+
 const HeroBGWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: ${(props) =>

@@ -13,14 +13,16 @@ import LogoCube from '../LogoCube';
 import SideBySide from '../SideBySide';
 import CenteredSection from '../CenteredSection';
 import NumberBlock from '../NumberBlock';
+
 const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
   if (!document) return null;
-  console.log(blok)
+  // console.log(blok)
   const extractText = (contentArray) => {
     if (!Array.isArray(contentArray)) return '';
     return contentArray.map((node) => node.text || '').join(' ');
   };
 
+  // console.log(document)
   const blokResolvers = {
     cta: (props) => <div className="component-wrapper"><CTA blok={props} /></div>,
     small_quote: (props) => <div className="component-wrapper"><SmallQuote blok={props} /></div>,

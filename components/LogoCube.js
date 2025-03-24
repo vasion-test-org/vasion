@@ -1,9 +1,9 @@
-'use client'
+'use client';
 import React, { useEffect } from 'react';
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
-import { storyblokEditable } from "@storyblok/react/rsc";
+import { storyblokEditable } from '@storyblok/react/rsc';
 import media from '@/styles/media';
 import { horizontalLoop } from '@/functions/horizontalLoop';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
@@ -11,7 +11,7 @@ import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 const LogoCube = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  // console.log(blok)
+  // console.log(blok);
   useEffect(() => {
     const logosArr = gsap.utils.toArray('.cubeLogos');
     horizontalLoop(logosArr, { deep: false, repeat: -1 });
@@ -41,10 +41,16 @@ const LogoCube = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <CubeWrapper {...storyblokEditable(blok)}>
-        <CardContainer>
-        {blok.header && <RichTextRenderer document={blok.header} blok={blok} />}
-          <LogoContainer>{allLogos}</LogoContainer>
+      <CubeWrapper
+        {...storyblokEditable(blok)}
+        spacingOffset={blok.offset_spacing}
+        spacing={blok.section_spacing}
+      >
+        <CardContainer transparent={blok.transparent_background}>
+          {blok.header && (
+            <RichTextRenderer document={blok.header} blok={blok} />
+          )}
+          <LogoContainer transparent={blok.transparent_background}>{allLogos}</LogoContainer>
         </CardContainer>
       </CubeWrapper>
     </ThemeProvider>
@@ -80,12 +86,15 @@ const Logo = styled.img`
 const LogoContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
   height: auto;
   overflow: hidden;
   gap: 1.25vw;
-  width: 77.222vw;
+  width: ${props => props.transparent ? '100%' : '77.222vw'};
 
   ${media.fullWidth} {
+    width: ${props => props.transparent ? '100%' : '1236px'};
     gap: 20px;
   }
 
@@ -103,29 +112,31 @@ const CardContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: ${(props) => props.theme.logoCube.cardBg};
+  background: ${(props) =>
+    props.transparent ? 'transparent' : props.theme.logoCube.cardBg};
   color: ${(props) => props.theme.logoCube.textColor};
   overflow: hidden;
-  width: 81.5vw;
+  width: ${props => props.transparent ? '100%' : '81.5vw'};
   border-radius: 1.5vw;
-  padding: 3.75vw 6vw;
+  padding:${props => props.transparent ? '3.75vw 0vw' : '3.75vw 6vw'};
   gap: 2.5vw;
 
   ${media.fullWidth} {
-    width: 1304px;
+    width: 1600px;
     border-radius: 24px;
-    padding: 60px 96px;
+    padding:${props => props.transparent ? '60px 0px' : '60px 96px'};
     gap: 40px;
   }
 
   ${media.tablet} {
     border-radius: 2.344vw;
-    padding: 3.906vw 3.906vw 5.859vw 3.906vw;
+    padding:${props => props.transparent ? '3.906vw 0vw 5.859vw 0vw' : '3.906vw 3.906vw 5.859vw 3.906vw'};
     gap: 1.953vw;
   }
 
   ${media.mobile} {
     border-radius: 5.607vw;
+    padding:${props => props.transparent ? '9.346vw 0vw 14.019vw 0vw' : '9.346vw 6.075vw 14.019vw 6.075vw'};
     padding: 9.346vw 6.075vw 14.019vw 6.075vw;
     gap: 7.477vw;
   }
@@ -138,19 +149,99 @@ const CubeWrapper = styled.div`
   justify-content: center;
   height: auto;
   width: 100%;
-  padding: 3.75vw 0;
+  padding: ${(props) => {
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
+        : props.spacing
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
+    }
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
+        : props.spacing
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
+    }
+    return props.spacing === 'default'
+      ? '3.75vw 0'
+      : props.spacing
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
+  }};
 
   ${media.fullWidth} {
     width: 100%;
-    padding: 60px 0;
+        padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
+      }
+      return props.spacing === 'default'
+        ? '60px 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '60px 0';
+    }};
   }
 
   ${media.tablet} {
-    padding: 5.859vw 0;
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '5.859vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 5.859vw';
+      }
+      return props.spacing === 'default'
+        ? '5.859vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '5.859vw 0';
+    }};
   }
 
   ${media.mobile} {
-    padding: 9.346vw 0;
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
+      }
+      return props.spacing === 'default'
+        ? '12.5vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
+    }};
   }
 `;
 
