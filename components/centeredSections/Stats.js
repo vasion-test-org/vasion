@@ -22,6 +22,8 @@ export default Stats
 const StatsContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
   width: 81.5vw;
   gap: 3.75vw;
 

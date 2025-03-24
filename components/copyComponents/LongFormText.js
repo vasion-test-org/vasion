@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React from 'react';
 
 import styled from 'styled-components';
@@ -7,31 +7,31 @@ import media from 'styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 const LongFormText = ({ blok }) => {
   // console.log(blok)
-return (
-<LongFormTextContainer {...storyblokEditable(blok.copy)}>
-
-   <RichTextRenderer key={`copy-`} document={blok.copy} blok={blok}/>
-
- 
-</LongFormTextContainer>
-)
-}
+  return (
+    <LongFormTextContainer {...storyblokEditable(blok.copy)}>
+      <RichTextRenderer key={`copy-`} document={blok.copy} blok={blok} />
+    </LongFormTextContainer>
+  );
+};
 
 const LongFormTextContainer = styled.div`
-display: flex;
-align-items: center;
-justify-content: center;
-margin: 2.5vw auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2.5vw auto;
   width: 81.5vw;
 
-    /* Apply spacing between direct text elements inside RichWrapper */
-    > *:not(.component-wrapper) {
-    margin-bottom: 1.875vw;
-  }
+  /* Go into RichWrapper and apply spacing to children except .component-wrapper */
+  & > div {
+    width: 100%;
 
-  /* Prevent spacing inside components */
-  .component-wrapper * {
-    margin-bottom: 0 !important;
+    > *:not(.component-wrapper) {
+      margin-bottom: 1.875vw;
+    }
+
+    .component-wrapper * {
+      margin-bottom: 0 !important;
+    }
   }
 
   div:empty {
@@ -42,13 +42,9 @@ margin: 2.5vw auto;
     width: 1304px;
     margin: 0 auto;
   }
-  
-  ${media.tablet} {
-  
-  }
-  
-  ${media.mobile} {
-  
-  }
-`
-export default LongFormText
+
+  ${media.tablet} {}
+
+  ${media.mobile} {}
+`;
+export default LongFormText;
