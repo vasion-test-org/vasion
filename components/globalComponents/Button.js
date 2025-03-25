@@ -57,6 +57,8 @@ const NextLink = styled(Link)`
 
 const ButtonWrapper = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: ${(props) => props.layout || 'row'};
   gap: 1.5vw;
   ${(props) =>

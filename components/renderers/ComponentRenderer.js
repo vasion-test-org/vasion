@@ -96,11 +96,11 @@ const ImageWrapper = styled.div`
   }
   
   ${media.tablet} {
-  
+    
   }
   
   ${media.mobile} {
-  
+    min-width: 100%;
   }
 `
 const SectionWrapper = styled.section`

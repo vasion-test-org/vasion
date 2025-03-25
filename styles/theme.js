@@ -78,6 +78,13 @@ export const darkTheme = {
   }
 };
 
+export const lightTheme = {
+  cta: {
+    textColor: "#1B1D21",
+    cardBg: "#F5F4F7",
+  },
+}
+
 export const buttonThemes = {
   nav: {
     textColor: "#ffffff",
