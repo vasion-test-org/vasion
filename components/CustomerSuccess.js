@@ -1,15 +1,18 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
-import StyledLink from "components/StyledLink";
-import GoToActive from "images/GoToActive.webp";
-import ArrowButtonStat from "images/arrowButtonStat.webp";
-import HoveredArrow from "images/HoveredArrow.webp";
-import styled from "styled-components";
-import text from "styles/text";
-import media from "styles/media";
-import colors from "styles/colors";
+import styled, { ThemeProvider } from "styled-components";
+import GoToActive from "@/public/images/uiElements/GoToActive.webp";
+import ArrowButtonStat from "@/public/images/uiElements/arrowButtonStat.webp";
+import HoveredArrow from "@/public/images/uiElements/HoveredArrow.webp";
+import Button from "./globalComponents/Button";
+import RichTextRenderer from "@/components/renderers/RichTextRenderer";
+import media from "@/styles/media";
+import colors from "@/styles/colors";
+import text from "@/styles/text";
 import gsap from "gsap";
 
-const FeaturedTestimonials = ({ content }) => {
+const FeaturedTestimonials = ({ bloks }) => {
+  console.log(bloks);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [hoveredBlockIndex, setHoveredBlockIndex] = useState(null);
@@ -67,9 +70,9 @@ const FeaturedTestimonials = ({ content }) => {
     return () => {
       timelineRef.current?.kill();
     };
-  }, [content]);
+  }, [bloks]);
 
-  const featured = content?.featured?.map((item, index) => (
+  const featured = bloks?.testimonials?.map((item, index) => (
     <FeaturedItem
       key={index}
       href={item?.linkUrl}
@@ -81,16 +84,17 @@ const FeaturedTestimonials = ({ content }) => {
         <Tag>{item?.imageTag}</Tag>
         <LogoImage src={item?.image.sourceUrl} alt={item?.image?.altText} />
       </ImageContainer>
-      <ContentDiv>
+      <BlocksDiv>
         <TitleAndBody>
           <Headline dangerouslySetInnerHTML={{ __html: item?.headline }} />
           <Body>{item?.body}</Body>
         </TitleAndBody>
-        <AttributionDiv>
-          <Name>{item?.name}</Name>
-          <Company>{item?.company}</Company>
-        </AttributionDiv>
-      </ContentDiv>
+        <RichTextRenderer document={bloks.bodyCopy} />
+
+        {/* <Name>{item?.name}</Name> */}
+        {/* <Company>{item?.company}</Company> */}
+        {/* </AttributionDiv> */}
+      </BlocksDiv>
       <GoTo className="goto-arrow" src={GoToActive} alt={"Arrow To Link"} />
     </FeaturedItem>
   ));
@@ -110,14 +114,18 @@ const FeaturedTestimonials = ({ content }) => {
       </StatAndBodyDiv>
       <LogoGoTo>
         <LogoStat src={item?.logo?.sourceUrl} alt={"company-logo"} />
-        <ArrowButton
-          src={hoveredBlockIndex === index ? HoveredArrow : ArrowButtonStat}
-          alt={"go-to-arrow-prompt"}
-        />
+        {/* <ArrowButton */}
+        {/*   src={hoveredBlockIndex === index ? HoveredArrow : ArrowButtonStat} */}
+        {/*   alt={"go-to-arrow-prompt"} */}
+        {/* /> */}
+        {
+          //BUBBA ---------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+          <Button />
+        }
       </LogoGoTo>
     </BlockItem>
   );
-  const progressBars = content?.featured?.map((_, index) => (
+  const progressBars = bloks?.testimonials?.map((_, index) => (
     <ProgressBar key={index} $isActive={currentIndex === index}>
       <ProgressValue
         className="pro-bar"
@@ -127,23 +135,28 @@ const FeaturedTestimonials = ({ content }) => {
   ));
 
   return (
-    <Wrapper $bgcolor={content?.backgroundColor}>
+    <Wrapper $bgcolor={bloks?.backgroundColor}>
       <HeaderContainer>
-        <Eyebrow>{bloj?.eyebrow}</Eyebrow>
-        <Header>{content?.header}</Header>
+        <Eyebrow>{bloks?.eyebrow}</Eyebrow>
+        <Header>{bloks?.header}</Header>
         <LinkWrapper>
-          <StyledLink size={"medium"} href={content?.linkUrl}>
-            {content?.linkText}
-          </StyledLink>
+          {/* <StyledLink size={"medium"} href={bloks?.linkUrl}> */}
+          {/*   {bloks?.linkText} */}
+          {/* </StyledLink> */}
+          {/*//============================BUUUUUBBBAAAAAAAAAAA===============================*/}
+          <Button
+            key={$buttonData?.link_text}
+            $buttonData={$buttonData?.link_url}
+          />
         </LinkWrapper>
       </HeaderContainer>
       <TestimonialsContainer>
-        <Featured $bgcolor={content?.featured[0]?.backgroundColor}>
+        <Featured $bgcolor={bloks?.testimonials[0]?.backgroundColor}>
           <ProgressBarsContainer>{progressBars}</ProgressBarsContainer>
           {featured}
         </Featured>
         <Blocks>
-          {content?.blocks?.map((item, index) => renderBlock(item, index))}
+          {bloks?.blocks?.map((item, index) => renderBlock(item, index))}
         </Blocks>
       </TestimonialsContainer>
     </Wrapper>
@@ -156,7 +169,7 @@ const ProgressBarsContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
-  width: max-content;
+  width: max-bloks;
   justify-self: flex-end;
   gap: 0.125vw;
   padding: 1.25vw;
@@ -243,7 +256,7 @@ const LogoStat = styled.img`
 
 const LogoGoTo = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-bloks: space-between;
   align-items: center;
 `;
 
@@ -281,11 +294,11 @@ const StatTag = styled.div`
   ${text.tagBold};
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-bloks: center;
   text-align: center;
   background-color: ${colors.purpleTag};
   color: ${colors.primaryPurple};
-  width: fit-content;
+  width: fit-bloks;
   padding: 0.25vw 0.5vw;
   border-radius: 1.5vw;
   margin-bottom: 0.5vw;
@@ -313,7 +326,7 @@ const StatTag = styled.div`
 const BlockItem = styled.a`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-bloks: space-between;
   background-color: ${(props) =>
     props?.$bgcolor ? `${colors?.[props.$bgcolor]}` : `unset`};
   &:hover {
@@ -459,11 +472,11 @@ const Tag = styled.div`
   ${text.tagBold};
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-bloks: center;
   text-align: center;
   background-color: ${colors.purpleTag};
   color: ${colors.primaryPurple};
-  width: fit-content;
+  width: fit-bloks;
   padding: 0.25vw 0.5vw;
   top: 11px;
   left: 8px;
@@ -514,10 +527,10 @@ const ImageContainer = styled.div`
   }
 `;
 
-const ContentDiv = styled.div`
+const BlocksDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-bloks: center;
   width: 58.25vw;
   gap: 1.25vw;
 
@@ -674,7 +687,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-bloks: center;
   background-color: ${(props) =>
     props?.$bgcolor ? `${colors?.[props.$bgcolor]}` : `${colors.white}`};
   width: 100%;
