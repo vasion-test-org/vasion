@@ -1,5 +1,6 @@
 'use client';
-import React from 'react';
+import React, {useEffect} from 'react';
+import gsap from 'gsap';
 import { usePathname } from 'next/navigation';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
@@ -10,13 +11,15 @@ import Button from './Button';
 import text from '@/styles/text';
 import colors from '@/styles/colors';
 import Icons from '@/components/renderers/Icons';
+import ScrollTrigger from 'gsap/ScrollTrigger'
 
+gsap.registerPlugin(ScrollTrigger);
 const Nav = ({ blok }) => {
   const path = usePathname();
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
-  console.log(blok);
+  // console.log(blok);
 
   let currentNavItems = blok.english_nav_items;
 
@@ -26,12 +29,12 @@ const Nav = ({ blok }) => {
     currentNavItems = blok.french_nav_items;
   }
 
-  console.log(currentNavItems[0].tab_columns[0].nav_items[0]);
+  // console.log(currentNavItems[0].tab_columns[0].nav_items[0]);
 
   const mappedNav = currentNavItems.map((item, index) => (
     <KeyDiv key={`item.tab_name-${index}`}>
-      <Tab>{item.tab_name}</Tab>
-      <Dropdown>
+      <Tab className='tabs'>{item.tab_name}</Tab>
+      <Dropdown className='dropdowns' id={`dropdown-${index}`}>
         {item.tab_columns.map((column, index) => (
           <Column key={`column.column_header-${index}`}>
             <ColumnHeader>{column.column_header}</ColumnHeader>
@@ -39,7 +42,7 @@ const Nav = ({ blok }) => {
               console.log("Item Icon String:", item.icon);
               console.log("Icons Object:", Icons);
               console.log("Resolved Component:", Icons[item.icon]); 
-              const IconComponent = Icons[item.icon] || null;
+              let IconComponent = Icons[item.icon] || null;
 
               return (
                 <NavItem key={`item.item_copy-${index}`} card={item.card} card_size={item.card_size}>
@@ -60,10 +63,43 @@ const Nav = ({ blok }) => {
       </Dropdown>
     </KeyDiv>
   ));
+  
+  useEffect(() => {
+  
+    ScrollTrigger.create({
+      trigger: '.mainNavWrapper',
+      start: 'top top',
+      end: () => `${document.body.scrollHeight - window.innerHeight}px`,
+      pin: true,
+      pinSpacing: false,
+      // markers: true,
+    });
+  
+  }, []);
+  
 
+  
+  useEffect(() => {
+    gsap.set('.dropdowns', {autoAlpha: 0})
+
+    const allTabs = gsap.utils.toArray('.tabs')
+
+    const tl = gsap.timeline({})
+
+    const openDropdown = (index) => {
+      console.log(index)
+      tl.set(`.dropdowns`, {autoAlpha: 0})
+      .to(`#dropdown-${index}`, {autoAlpha: 1, duration: .35})
+    }
+
+    allTabs.forEach((tab, index) => {
+      tab.addEventListener('mouseenter', () => openDropdown(index))
+    })
+  }, [])
+  
   return (
     <ThemeProvider theme={selectedTheme}>
-      <MainNavWrapper>
+      <MainNavWrapper className='mainNavWrapper'>
         <MainInner>
           <MainContent>
             <VasionLogo src='/images/logos/vasion-logo-purple.webp' />
@@ -121,7 +157,7 @@ const NavItem = styled.div`
   &:hover {
     path{
 
-      fill: ${(props) => (props.card ? colors.lightPurplestory : colors.primaryOrange)};
+      fill: ${(props) => (props.card ? colors.lightPurple : colors.primaryOrange)};
 
     }
   }
@@ -137,8 +173,8 @@ const Column = styled.div`
 `;
 const Dropdown = styled.div`
   position: absolute;
-  border: 0.063vw solid red;
-  top: 10vw;
+  background: ${colors.white};
+  top: 2.7vw;
   left: 0vw;
   display: flex;
   flex-direction: row;
@@ -153,8 +189,13 @@ const Dropdown = styled.div`
     border-right: 1px solid ${colors.txtSubtle};
   }
 
+  ${Column}:not(:first-child) {
+    padding: 0 2vw;
+  }
+
   ${Column}:last-child {
     padding-left: 2vw;
+    padding-right: unset;
   }
 `;
 const Tab = styled.div`
@@ -205,5 +246,7 @@ const MainNavWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  background: ${colors.white};
+  /* border: 1px solid red; */
 `;
 export default Nav;

@@ -5,6 +5,7 @@ import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
 import FormTracking from '@/components/FormTracking';
 import Script from 'next/script';
 import './globals.css';
+import ScrollSmootherWrapper from '@/components/ScollSmoothWraper';
 
 export const metadata = {
   title: 'Vasion',
@@ -50,7 +51,9 @@ export default function RootLayout({ children }) {
             <body>
               <ThankYouProvider>
                 <FormTracking />
+                <ScrollSmootherWrapper>
                 {children}
+                </ScrollSmootherWrapper>
               </ThankYouProvider>
             </body>
           </html>
