@@ -2,12 +2,13 @@
 
 import { createContext, useContext } from "react";
 import { ThemeProvider } from "styled-components";
-import { defaultTheme, darkTheme, buttonThemes } from "@/styles/theme"; 
+import { defaultTheme, darkTheme, buttonThemes, lightTheme } from "@/styles/theme"; 
 
 const themes = {
   default: defaultTheme,
   dark: darkTheme,
   button: buttonThemes,
+  light: lightTheme,
 };
 
 const ThemeContext = createContext(themes.default); 

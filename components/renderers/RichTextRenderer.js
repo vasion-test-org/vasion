@@ -21,12 +21,13 @@ import NumberBlock from "../NumberBlock";
 
 const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
   if (!document) return null;
-  console.log(blok);
+  // console.log(blok)
   const extractText = (contentArray) => {
     if (!Array.isArray(contentArray)) return "";
     return contentArray.map((node) => node.text || "").join(" ");
   };
 
+  // console.log(document)
   const blokResolvers = {
     cta: (props) => (
       <div className="component-wrapper">
@@ -118,6 +119,7 @@ const RichWrapper = styled.div`
   ul {
     list-style: none;
     margin-left: 0;
+
     li {
       position: relative;
       padding-left: 1.563vw;

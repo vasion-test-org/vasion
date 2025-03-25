@@ -16,7 +16,7 @@ import Accordion from '@/components/centeredSections/Accordion';
 import Stats from '@/components/centeredSections/Stats';
 import Form from './Form';
 import Rotator from '@/components/centeredSections/Rotator'
-
+import StackedCards from '@/components/centeredSections/StackedCards'
 const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
@@ -84,6 +84,9 @@ const CenteredSection = ({ blok }) => {
             )}
             {blok.component_type === 'form' && blok.form && (
               <Form blok={blok.form[0]} />
+            )}
+             {blok.component_type === 'stacked_cards' && blok.stacked_cards && (
+              <StackedCards blok={blok.stacked_cards} />
             )}
           </AttachedComponent>
         )}
