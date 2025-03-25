@@ -2,6 +2,9 @@ import { pxToVw } from "@/functions/functions";
 import colors from "./colors";
 
 export const defaultTheme = {
+  customer_success: {
+    bg: '#F5F4F7',
+  },
   nav: {
     textColor: "#1B1D21",
     bg: "#F5F4F7",
@@ -55,7 +58,7 @@ export const darkTheme = {
   },
   logoCube: {
     textColor: "#ffffff",
-    cardBg: "#3D2562",
+    cardBg: "#190C30",
   },
   cta: {
     textColor: "#ffffff",
@@ -82,6 +85,10 @@ export const lightTheme = {
   cta: {
     textColor: "#1B1D21",
     cardBg: "#F5F4F7",
+  },
+  logoCube: {
+    textColor: "#1B1D21",
+    cardBg: "#ffffff",
   },
 }
 
