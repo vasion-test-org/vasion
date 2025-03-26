@@ -4,15 +4,17 @@ import styled, { ThemeProvider } from "styled-components";
 import GoToActive from "@/public/images/uiElements/GoToActive.webp";
 import ArrowButtonStat from "@/public/images/uiElements/arrowButtonStat.webp";
 import HoveredArrow from "@/public/images/uiElements/HoveredArrow.webp";
+import { storyblokEditable } from "@storyblok/react/rsc";
 import Button from "./globalComponents/Button";
+
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import media from "@/styles/media";
 import colors from "@/styles/colors";
 import text from "@/styles/text";
 import gsap from "gsap";
 
-const FeaturedTestimonials = ({ bloks }) => {
-  console.log(bloks);
+const FeaturedTestimonials = ({ blok }) => {
+  console.log(blok);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [hoveredBlockIndex, setHoveredBlockIndex] = useState(null);
@@ -70,9 +72,9 @@ const FeaturedTestimonials = ({ bloks }) => {
     return () => {
       timelineRef.current?.kill();
     };
-  }, [bloks]);
+  }, [blok]);
 
-  const featured = bloks?.testimonials?.map((item, index) => (
+  const featured = blok?.testimonials?.map((item, index) => (
     <FeaturedItem
       key={index}
       href={item?.linkUrl}
@@ -82,14 +84,14 @@ const FeaturedTestimonials = ({ bloks }) => {
     >
       <ImageContainer>
         <Tag>{item?.imageTag}</Tag>
-        <LogoImage src={item?.image.sourceUrl} alt={item?.image?.altText} />
+        <LogoImage src={item?.link.url} alt={item?.image?.alt} />
       </ImageContainer>
       <BlocksDiv>
         <TitleAndBody>
           <Headline dangerouslySetInnerHTML={{ __html: item?.headline }} />
           <Body>{item?.body}</Body>
         </TitleAndBody>
-        <RichTextRenderer document={bloks.bodyCopy} />
+        <RichTextRenderer document={blok.bodyCopy} />
 
         {/* <Name>{item?.name}</Name> */}
         {/* <Company>{item?.company}</Company> */}
@@ -108,12 +110,13 @@ const FeaturedTestimonials = ({ bloks }) => {
       onMouseLeave={() => setHoveredBlockIndex(null)}
     >
       <StatTag>{item?.tag}</StatTag>
+
       <StatAndBodyDiv>
-        <Stat dangerouslySetInnerHTML={{ __html: item?.stat }} />
-        <BlockBody>{item?.body}</BlockBody>
+        <Stat> {item?.stat}</Stat>
+        <RichTextRenderer document={item?.body_copy} />
       </StatAndBodyDiv>
       <LogoGoTo>
-        <LogoStat src={item?.logo?.sourceUrl} alt={"company-logo"} />
+        <LogoStat src={item?.logo?.filename} alt={"company-logo"} />
         {/* <ArrowButton */}
         {/*   src={hoveredBlockIndex === index ? HoveredArrow : ArrowButtonStat} */}
         {/*   alt={"go-to-arrow-prompt"} */}
@@ -125,7 +128,7 @@ const FeaturedTestimonials = ({ bloks }) => {
       </LogoGoTo>
     </BlockItem>
   );
-  const progressBars = bloks?.testimonials?.map((_, index) => (
+  const progressBars = blok?.testimonials?.map((_, index) => (
     <ProgressBar key={index} $isActive={currentIndex === index}>
       <ProgressValue
         className="pro-bar"
@@ -135,41 +138,44 @@ const FeaturedTestimonials = ({ bloks }) => {
   ));
 
   return (
-    <Wrapper $bgcolor={bloks?.backgroundColor}>
+    <Wrapper $bgcolor={blok?.backgroundColor}>
       <HeaderContainer>
-        <Eyebrow>{bloks?.eyebrow}</Eyebrow>
-        <Header>{bloks?.header}</Header>
+        <RichTextRenderer document={blok?.eyebrow} />
+        <RichTextRenderer document={blok?.header} />
         <LinkWrapper>
-          {/* <StyledLink size={"medium"} href={bloks?.linkUrl}> */}
-          {/*   {bloks?.linkText} */}
+          {/* <StyledLink size={"medium"} href={blok?.linkUrl}> */}
+          {/*   {blok?.linkText} */}
           {/* </StyledLink> */}
           {/*//============================BUUUUUBBBAAAAAAAAAAA===============================*/}
-          <Button
-            key={$buttonData?.link_text}
-            $buttonData={$buttonData?.link_url}
-          />
+          {blok?.button_group?.map(($buttonData) => (
+            <div
+              {...storyblokEditable($buttonData)}
+              key={$buttonData?.link_text}
+            >
+              <Button key={$buttonData?.link_text} $buttonData={$buttonData} />
+            </div>
+          ))}
         </LinkWrapper>
       </HeaderContainer>
       <TestimonialsContainer>
-        <Featured $bgcolor={bloks?.testimonials[0]?.backgroundColor}>
+        <Featured $bgcolor={blok?.testimonials[0]?.backgroundColor}>
           <ProgressBarsContainer>{progressBars}</ProgressBarsContainer>
           {featured}
         </Featured>
         <Blocks>
-          {bloks?.blocks?.map((item, index) => renderBlock(item, index))}
+          {blok?.blocks?.map((item, index) => renderBlock(item, index))}
         </Blocks>
       </TestimonialsContainer>
     </Wrapper>
   );
 };
-
 export default FeaturedTestimonials;
 
 const ProgressBarsContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
-  width: max-bloks;
+  width: max-content;
   justify-self: flex-end;
   gap: 0.125vw;
   padding: 1.25vw;
@@ -256,7 +262,7 @@ const LogoStat = styled.img`
 
 const LogoGoTo = styled.div`
   display: flex;
-  justify-bloks: space-between;
+  justify-content: space-between;
   align-items: center;
 `;
 
@@ -294,11 +300,11 @@ const StatTag = styled.div`
   ${text.tagBold};
   display: flex;
   align-items: center;
-  justify-bloks: center;
+  justify-content: center;
   text-align: center;
   background-color: ${colors.purpleTag};
   color: ${colors.primaryPurple};
-  width: fit-bloks;
+  width: fit-content;
   padding: 0.25vw 0.5vw;
   border-radius: 1.5vw;
   margin-bottom: 0.5vw;
@@ -326,7 +332,7 @@ const StatTag = styled.div`
 const BlockItem = styled.a`
   display: flex;
   flex-direction: column;
-  justify-bloks: space-between;
+  justify-content: space-between;
   background-color: ${(props) =>
     props?.$bgcolor ? `${colors?.[props.$bgcolor]}` : `unset`};
   &:hover {
@@ -472,11 +478,11 @@ const Tag = styled.div`
   ${text.tagBold};
   display: flex;
   align-items: center;
-  justify-bloks: center;
+  justify-content: center;
   text-align: center;
   background-color: ${colors.purpleTag};
   color: ${colors.primaryPurple};
-  width: fit-bloks;
+  width: fit-content;
   padding: 0.25vw 0.5vw;
   top: 11px;
   left: 8px;
@@ -530,7 +536,7 @@ const ImageContainer = styled.div`
 const BlocksDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-bloks: center;
+  justify-content: center;
   width: 58.25vw;
   gap: 1.25vw;
 
@@ -687,7 +693,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-bloks: center;
+  justify-content: center;
   background-color: ${(props) =>
     props?.$bgcolor ? `${colors?.[props.$bgcolor]}` : `${colors.white}`};
   width: 100%;
