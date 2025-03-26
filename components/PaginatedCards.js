@@ -30,7 +30,7 @@ const PaginatedCards = ({ blok }) => {
       >
         {chunk.map((card, index) => {
           if (blok.card_type === 'default') {
-            return <Card key={`card-${i + index}`} content={card} />;
+            return <Card key={`card-${i + index}`} paginated content={card} />;
           } else if (blok.card_type === 'event') {
             return (
               <EventCard
@@ -46,7 +46,7 @@ const PaginatedCards = ({ blok }) => {
   }
 
   const mappedPages = mappedCards.map((page, index) => (
-    <PageNumberBlock className='pageNumberBlocks' id={`block-${index}`}>
+    <PageNumberBlock className='pageNumberBlocks' key={`block-${index}`} id={`block-${index}`}>
       {index + 1}
     </PageNumberBlock>
   ));
@@ -106,7 +106,10 @@ const PaginatedCards = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <Wrapper>
+      <Wrapper
+          spacingOffset={blok.offset_spacing}
+          spacing={blok.section_spacing}
+      >
         {blok.card_type === 'event' && (
           <EventHeaderContainer>
             <EventHeaders>Events</EventHeaders>
@@ -192,5 +195,98 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
+
+  padding: ${(props) => {
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
+        : props.spacing
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
+    }
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
+        : props.spacing
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
+    }
+    return props.spacing === 'default'
+      ? '3.75vw 0'
+      : props.spacing
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
+  }};
+  ${media.fullWidth} {
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
+      }
+      return props.spacing === 'default'
+        ? '60px 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '60px 0';
+    }};
+  }
+
+  ${media.tablet} {
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '5.859vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 5.859vw';
+      }
+      return props.spacing === 'default'
+        ? '5.859vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '5.859vw 0';
+    }};
+  }
+
+  ${media.mobile} {
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
+      }
+      return props.spacing === 'default'
+        ? '12.5vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
+    }};
+  }
 `;
 export default PaginatedCards;
