@@ -18,7 +18,7 @@ const Hero = ({ blok }) => {
     customTheme = undefined;
   }
 
-  // console.log( blok);
+  console.log( blok.socials);
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
       <HeroBGWrapper>
@@ -29,7 +29,7 @@ const Hero = ({ blok }) => {
           spacing={blok.section_spacing}
           centered={!blok?.hero_asset[0]}
         >
-          <ContentWrapper centered={!blok?.hero_asset[0]}>
+          <ContentWrapper socials={blok.socials} centered={!blok?.hero_asset[0] && !blok.socials}>
             {blok.hero_copy.map((copy) => (
               <div {...storyblokEditable(copy)} key={copy.component}>
                 <RichTextRenderer
@@ -60,12 +60,104 @@ const Hero = ({ blok }) => {
               />
             </ImageWrapper>
           )}
+       {blok?.socials && (
+            <SocialCTA>
+              <SocialLogoContainer>
+                <SocialLink href={"https://www.facebook.com/VasionSoftware"}>
+                  <SocailLogo
+                    loading="lazy"
+                    src='/images/icons/Facebook.webp'
+                    alt="facebook-logo"
+                  />
+                </SocialLink>
+                <SocialLink
+                  href={"https://www.linkedin.com/company/printerlogic/"}
+                >
+                  <SocailLogo
+                    loading="lazy"
+                    src='/images/icons/LinkedIn.webp'
+                    alt="linkedin-logo"
+                  />
+                </SocialLink>
+                <SocialLink href={"https://x.com/VasionSoftware"}>
+                  <SocailLogo loading="lazy" src='/images/icons/Twitter.webp'alt="twitter-logo" />
+                </SocialLink>
+              </SocialLogoContainer>
+              {/* {content?.link && (
+                <GlobalButton
+                  href={content?.link ? content?.link : "/demo"}
+                  fill={`${colors.primaryOrange}`}
+                >
+                  {content?.linkText ? content?.linkText : "Schedule a Demo"}
+                </GlobalButton>
+              )} */}
+            </SocialCTA>
+          )}
         </HeroWrapper>
         {blok.attached_logo_cube && <LogoCube blok={blok.logo_cube[0]}/>}
       </HeroBGWrapper>
     </ThemeProvider>
   );
 };
+
+const SocailLogo = styled.img`
+  width: 2.222vw;
+  height: 2.222vw;
+  ${media.fullWidth} {
+    width: 32px;
+    height: 32px;
+  }
+
+  ${media.tablet} {
+    width: 3.125vw;
+    height: 3.125vw;
+  }
+
+  ${media.mobile} {
+    width: 6.667vw;
+    height: 6.667vw;
+  }
+`;
+const SocialLink = styled.a`
+  text-decoration: none;
+`;
+const SocialLogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.972vw;
+  ${media.fullWidth} {
+    gap: 14px;
+  }
+
+  ${media.tablet} {
+    gap: 1.367vw;
+  }
+
+  ${media.mobile} {
+    gap: 2.917vw;
+  }
+`;
+const SocialCTA = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.389vw;
+
+  ${media.fullWidth} {
+    gap: 20px;
+  }
+
+  ${media.tablet} {
+    gap: 1.953vw;
+  }
+
+  ${media.mobile} {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 4.167vw;
+    margin-left: 5.333vw;
+  }
+`;
 
 const ImageWrapper = styled.div`
   max-width: 37.5vw;
@@ -108,7 +200,7 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   text-align: ${props => props.centered ? 'center' : 'left'};
-  width: clamp(27.75vw, 100%, 54.75vw);
+  width: ${props => props.socials ? 'clamp(27.75vw, 100%, 26.5vw)' : 'clamp(27.75vw, 100%, 54.75vw)'};
 
   h1,
   h2,
@@ -124,7 +216,7 @@ const ContentWrapper = styled.div`
   }
 
   ${media.fullWidth} {
-    width: clamp(444px, 100%, 876px);
+    width: ${props => props.socials ? 'clamp(444px, 100%, 424px)' : 'clamp(444px, 100%, 876px)'};
   }
 
   ${media.tablet} {

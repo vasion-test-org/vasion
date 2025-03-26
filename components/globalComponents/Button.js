@@ -62,9 +62,9 @@ const ButtonWrapper = styled.div`
   flex-direction: ${(props) => props.layout || 'row'};
   gap: 1.5vw;
   ${(props) =>
-    props.size === 'Small'
+    props.size === 'small'
       ? text.bodySm
-      : props.size === 'Large'
+      : props.size === 'large'
       ? text.bodyLg
       : text.bodyMd};
   width: max-content;
