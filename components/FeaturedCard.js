@@ -3,7 +3,7 @@ import media from "styles/media";
 import text from "styles/text";
 import colors from "styles/colors";
 import styled from "styled-components";
-import { ReactComponent as ArrowLinkSVG } from "images/linkArrow.svg";
+// import { ReactComponent as ArrowLinkSVG } from "images/linkArrow.svg";
 
 // import Pill from "components/Pill";
 
@@ -40,7 +40,7 @@ const FeaturedCard = ({ featuredCard }) => {
           target="_blank"
         >
           {featuredCard?.linkText}
-          <ArrowLink />
+          {/* <ArrowLink /> */}
         </LargeLink>
       </Content>
     </Wrapper>
@@ -146,32 +146,32 @@ const EventImageWrapper = styled.div`
     height: 40.417vw;
   }
 `;
-const ArrowLink = styled(ArrowLinkSVG)`
-  width: 0.556vw;
-  height: 0.556vw;
-  margin-left: 0.556vw;
-  transition: transform 0.3s ease-in-out;
-  ${media.fullWidth} {
-    width: 8px;
-    height: 8px;
-    margin-left: 8px;
-  }
+// const ArrowLink = styled(ArrowLinkSVG)`
+//   width: 0.556vw;
+//   height: 0.556vw;
+//   margin-left: 0.556vw;
+//   transition: transform 0.3s ease-in-out;
+//   ${media.fullWidth} {
+//     width: 8px;
+//     height: 8px;
+//     margin-left: 8px;
+//   }
 
-  ${media.tablet} {
-    width: 0.781vw;
-    height: 0.781vw;
-    margin-left: 0.781vw;
-  }
+//   ${media.tablet} {
+//     width: 0.781vw;
+//     height: 0.781vw;
+//     margin-left: 0.781vw;
+//   }
 
-  ${media.mobile} {
-    width: 1.869vw;
-    height: 1.869vw;
-    margin-left: 1.869vw;
-  }
-  path {
-    fill: ${(props) => (props.color ? props.color : colors.primaryOrange)};
-  }
-`;
+//   ${media.mobile} {
+//     width: 1.869vw;
+//     height: 1.869vw;
+//     margin-left: 1.869vw;
+//   }
+//   path {
+//     fill: ${(props) => (props.color ? props.color : colors.primaryOrange)};
+//   }
+// `;
 
 const LargeLink = styled.a`
   position: relative;
