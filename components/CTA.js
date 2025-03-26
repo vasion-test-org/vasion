@@ -22,7 +22,7 @@ const CTA = ({ blok }) => {
     blok?.image?.[2] || blok?.image?.[0]
   );
 
-  // console.log(blok);
+  console.log(blok.section_spacing);
   return (
     <ThemeProvider theme={selectedTheme}>
       <PillContainer
@@ -65,12 +65,15 @@ const ContentWrapper = styled.div`
   text-align: ${(props) =>
     ['pill', 'image'].includes(props.$ctastyle) ? 'left' : 'center'};
   gap: 1vw;
+  max-width: 75vw;
 
   ${media.fullWidth} {
     gap: 16px;
+    max-width: 1200px;
   }
 
   ${media.tablet} {
+    max-width: 78.125vw;
     gap: 1.563vw;
   }
 

@@ -8,12 +8,14 @@ import media from '@/styles/media';
 // import colors from 'styles/colors';
 // import text from 'styles/text';
 
-const Card = ({ content }) => {
+const Card = ({ content, paginated }) => {
   // console.log('card-content', content);
   return (
-    <CardWrapper>
+    <CardWrapper paginated={paginated}>
       {content.Image && (
-        <Image imageAlt={content.Image.alt} filename={content.Image.filename} />
+        <ImageWrapper>
+          <Image imageAlt={content.Image.alt} filename={content.Image.filename} />
+        </ImageWrapper>
       )}
       <ContentWrapper>
         {content.content.map((copy, index) => (
@@ -26,7 +28,6 @@ const Card = ({ content }) => {
          <Button $buttonData={content.Button[0]} />
        </ButtonWrapper>
        }
-        
       </ContentWrapper>
     </CardWrapper>
   );
@@ -34,6 +35,10 @@ const Card = ({ content }) => {
 
 export default Card;
 
+const ImageWrapper = styled.div`
+/* overflow: hidden;
+  border-radius: 0.375vw; */
+`
 const ButtonWrapper = styled.div`
   margin-top: auto;
 `
@@ -41,22 +46,22 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 0vw 1vw 1vw 1vw;
+  padding: 0vw 0.5vw 0.5vw 0.5vw;
   gap: 1vw;
 
   ${media.fullWidth} {
-    padding: 0px 16px 16px 16px;
+    padding: 0px 8px 8px 8px;
     gap: 16px;
   }
 
   ${media.tablet} {
-    padding: 0vw 1.563vw 1.563vw 1.563vw;
+    padding: 0vw 0.781vw 0.781vw 0.781vw;
     gap: 1.563vw;
   }
 
   ${media.mobile} {
-    padding: 0px 16px 16px 16px;
-    gap: 16px;
+    padding: 0vw 1.667vw 1.667vw 1.667vw;
+    gap: 3.333vw;
   }
 `;
 
@@ -65,7 +70,9 @@ const CardWrapper = styled.div`
   flex-direction: column;
   overflow: hidden;
   text-align: left;
+  height: ${props => props.paginated ? 'min-content' : 'auto'};
   width: clamp(21.875vw, 100%, 25.5vw);
+  padding: 0.5vw;
   gap: 1vw;
   border-radius: 1vw;
   box-shadow: 0vw 0vw 0.063vw 0vw rgba(25, 29, 30, 0.04),

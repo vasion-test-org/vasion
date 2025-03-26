@@ -3,10 +3,9 @@ import React from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
 
-const Eyebrow = ({ className, children }) => {
+const Eyebrow = ({ className, children, blok }) => {
   return <StyledEyebrow className={className}>{children}</StyledEyebrow>;
 };
-
 export default Eyebrow;
 
 const StyledEyebrow = styled.div`
