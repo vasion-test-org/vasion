@@ -1,20 +1,16 @@
-"use client";
+'use client'
 import React, { useState, useEffect } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-
+import styled from "styled-components";
+import media from "styles/media";
+import colors from "styles/colors";
+import text from "styles/text";
+import ReactPlayer from "react-player/youtube";
 import useMedia from "@/functions/useMedia";
-import Video from "@/components/globalComponents/Video";
+import RichTextRenderer from "../renderers/RichTextRenderer";
+import Video from "./Video";
+
 const CardModal = ({ data, setShowModal }) => {
-  // console.log("cardModalData: ", data);
-  const [closeButton, setCloseButton] = useState(
-    "/images/uiElements/closeButton.webp",
-  );
+  const [closeButton, setCloseButton] = useState("/images/uiElements/closeButton.webp");
   const videoWidth = useMedia("1440px", "89.6vw", "89vw", "87.85vw");
   const videoHeight = useMedia("900px", "51.25vw", "51vw", "49.299vw");
 
@@ -30,54 +26,54 @@ const CardModal = ({ data, setShowModal }) => {
     };
   }, []);
 
+  console.log('data:', data)
   return (
     <Wrapper onClick={handleClose}>
-      <Modal $isvideo={data.videoUrl}>
+      <Modal $isvideo={data?.asset[0].media[0].filename.includes('youtube')}>
         <CloseBtn
-          src={closeButton}
-          onMouseEnter={() =>
-            setCloseButton("/images/uiElements/closeButtonHover")
-          }
-          onMouseLeave={() => setCloseButton("/images/uiElements/closeButton")}
+          src="/images/uiElements/closeButton.webp"
+          onMouseEnter={() => setCloseButton("images/uiElement/CloseBtnHover.webp")}
+          onMouseLeave={() => setCloseButton("/images/uiElements/closeButton.webp")}
           onClick={handleClose}
         />
-        {!data?.videoUrl && (
+        {!data?.asset[0].media[0].filename.includes('youtube') && (
           <FeaturedContent>
             <Title $mobile>
               <NameAndStar>
-                {data.name}
-                <Sparkle
-                  src={"/images/uiElements/VasionStarNewsroom.webp"}
-                  alt="vasion-sparkle"
-                />
+              <RichTextRenderer document={data.person[0].copy}/>
+                <Sparkle src="/images/uiElements/VasionStarNewsroom.webp" alt="vasion-sparkle" />
               </NameAndStar>
-              <Position>{data?.position}</Position>
+              <RichTextRenderer document={data.position[0].copy}/>
             </Title>
             <FeaturePhoto
-              src={data?.backgroundImage?.sourceUrl}
-              alt={data.name}
+              src={data?.asset[0].media[0].filename}
+              // alt={data.name}
             />
             <TitleAndBioDiv>
               <Title>
                 <NameAndStar>
-                  {data.name}
-                  <Sparkle
-                    src={"/images/uiElements/VasionStarNewsroom.webp"}
-                    alt="vasion-sparkle"
-                  />
+                <RichTextRenderer document={data.person[0].copy}/>
+                  <Sparkle src="/images/uiElements/VasionStarNewsroom.webp" alt="vasion-sparkle" />
                 </NameAndStar>
-                <Position>{data?.position}</Position>
+                <RichTextRenderer document={data.position[0].copy}/>
               </Title>
-              <About>
-                {data?.about && <RichTextRenderer document={data.about} />}
-              </About>
+              <RichTextRenderer document={data?.bio[0].copy}/>
             </TitleAndBioDiv>
           </FeaturedContent>
         )}
-        {data?.videoUrl && (
+        {data?.asset[0].media[0].filename.includes('youtube') && (
           <VideoContainer>
-            <Video
-              url={data.videoUrl}
+             
+             
+                  <Video
+                    videos={data?.asset[0].media[0]}
+                    // borderradius={blok.media?.[0]?.border_radius}
+                    thumbnails={data?.asset[0].media[0].thumbnails}
+                  />
+         
+              
+            <ReactPlayer
+              url={data?.asset[0].media[0].filename}
               controls={true}
               playing={true}
               volume={1}
