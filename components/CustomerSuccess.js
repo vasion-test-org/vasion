@@ -1,9 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import styled, { ThemeProvider } from "styled-components";
-import GoToActive from "@/public/images/uiElements/GoToActive.webp";
-import ArrowButtonStat from "@/public/images/uiElements/arrowButtonStat.webp";
-import HoveredArrow from "@/public/images/uiElements/HoveredArrow.webp";
+import { useAvailableThemes } from "@/context/ThemeContext";
 import { storyblokEditable } from "@storyblok/react/rsc";
 import Button from "./globalComponents/Button";
 
@@ -15,6 +13,8 @@ import gsap from "gsap";
 
 const FeaturedTestimonials = ({ blok }) => {
   console.log(blok);
+  const themes = useAvailableThemes();
+  const selectedTheme = themes[blok.theme] || themes.default;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [hoveredBlockIndex, setHoveredBlockIndex] = useState(null);
@@ -83,13 +83,14 @@ const FeaturedTestimonials = ({ blok }) => {
       onMouseLeave={handleMouseLeave}
     >
       <ImageContainer>
-        <Tag>{item?.imageTag}</Tag>
-        <LogoImage src={item?.link.url} alt={item?.image?.alt} />
+        <Tag>
+          <RichTextRenderer document={item?.tag} />
+        </Tag>
+        <LogoImage src={item?.asset.filename} alt={item?.image?.alt} />
       </ImageContainer>
       <BlocksDiv>
         <TitleAndBody>
-          <Headline dangerouslySetInnerHTML={{ __html: item?.headline }} />
-          <Body>{item?.body}</Body>
+          <RichTextRenderer document={item.copy_sections[0].copy} />
         </TitleAndBody>
         <RichTextRenderer document={blok.bodyCopy} />
 
@@ -97,35 +98,39 @@ const FeaturedTestimonials = ({ blok }) => {
         {/* <Company>{item?.company}</Company> */}
         {/* </AttributionDiv> */}
       </BlocksDiv>
-      <GoTo className="goto-arrow" src={GoToActive} alt={"Arrow To Link"} />
+      <GoTo
+        className="goto-arrow"
+        src={"/images/uiElements/GoToActive.webp"}
+        alt={"Arrow To Link"}
+      />
     </FeaturedItem>
   ));
 
   const renderBlock = (item, index) => (
     <BlockItem
       key={index}
-      $bgcolor={item?.backgroundColor}
-      href={item?.linkUrl}
+      href={item?.link.url}
       onMouseEnter={() => setHoveredBlockIndex(index)}
       onMouseLeave={() => setHoveredBlockIndex(null)}
     >
-      <StatTag>{item?.tag}</StatTag>
-
+      <StatTag>
+        <RichTextRenderer document={item?.tag} />
+      </StatTag>
       <StatAndBodyDiv>
         <Stat> {item?.stat}</Stat>
         <RichTextRenderer document={item?.body_copy} />
       </StatAndBodyDiv>
-      <LogoGoTo>
-        <LogoStat src={item?.logo?.filename} alt={"company-logo"} />
-        {/* <ArrowButton */}
-        {/*   src={hoveredBlockIndex === index ? HoveredArrow : ArrowButtonStat} */}
-        {/*   alt={"go-to-arrow-prompt"} */}
-        {/* /> */}
-        {
-          //BUBBA ---------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-          <Button />
-        }
-      </LogoGoTo>
+      <StatBlokBottomContainer>
+        <LogoStat src={item?.company_logo.filename} alt={"company-logo"} />
+        <ArrowButton
+          src={
+            hoveredBlockIndex === index
+              ? "/images/uiElements/HoveredArrow.webp"
+              : "/images/uiElements/arrowButtonStat.webp"
+          }
+          alt={"go-to-arrow-prompt"}
+        />
+      </StatBlokBottomContainer>
     </BlockItem>
   );
   const progressBars = blok?.testimonials?.map((_, index) => (
@@ -138,35 +143,35 @@ const FeaturedTestimonials = ({ blok }) => {
   ));
 
   return (
-    <Wrapper $bgcolor={blok?.backgroundColor}>
-      <HeaderContainer>
-        <RichTextRenderer document={blok?.eyebrow} />
-        <RichTextRenderer document={blok?.header} />
-        <LinkWrapper>
-          {/* <StyledLink size={"medium"} href={blok?.linkUrl}> */}
-          {/*   {blok?.linkText} */}
-          {/* </StyledLink> */}
-          {/*//============================BUUUUUBBBAAAAAAAAAAA===============================*/}
-          {blok?.button_group?.map(($buttonData) => (
-            <div
-              {...storyblokEditable($buttonData)}
-              key={$buttonData?.link_text}
-            >
-              <Button key={$buttonData?.link_text} $buttonData={$buttonData} />
-            </div>
-          ))}
-        </LinkWrapper>
-      </HeaderContainer>
-      <TestimonialsContainer>
-        <Featured $bgcolor={blok?.testimonials[0]?.backgroundColor}>
-          <ProgressBarsContainer>{progressBars}</ProgressBarsContainer>
-          {featured}
-        </Featured>
-        <Blocks>
-          {blok?.blocks?.map((item, index) => renderBlock(item, index))}
-        </Blocks>
-      </TestimonialsContainer>
-    </Wrapper>
+    <ThemeProvider theme={selectedTheme}>
+      <Wrapper>
+        <HeaderContainer>
+          <RichTextRenderer document={blok.eyebrow} />
+          <RichTextRenderer document={blok.header} />
+          <LinkWrapper>
+            {/* <StyledLink size={"medium"} href={blok?.linkUrl}> */}
+            {/*   {blok?.linkText} */}
+            {/* </StyledLink> */}
+            {/*//============================BUUUUUBBBAAAAAAAAAAA===============================*/}
+            {/* <Button */}
+            {/*   key={$buttonData?.link_text} */}
+            {/*   $buttonData={$buttonData?.link_url} */}
+            {/* /> */}
+          </LinkWrapper>
+        </HeaderContainer>
+        <TestimonialsContainer>
+          <Featured theme={selectedTheme}>
+            <ProgressBarsContainer>{progressBars}</ProgressBarsContainer>
+            {featured}
+          </Featured>
+          {/*LETS UPDATE THIS MAPPED BLOCK STATS @bubba @tanner*/}
+          <Blocks>
+            {blok?.stat_blocks?.map((item, index) => renderBlock(item, index))}
+          </Blocks>
+          {/*LETS UPDATE THIS MAPPED BLOCK STATS @bubba @tanner*/}
+        </TestimonialsContainer>
+      </Wrapper>
+    </ThemeProvider>
   );
 };
 export default FeaturedTestimonials;
@@ -260,13 +265,13 @@ const LogoStat = styled.img`
   }
 `;
 
-const LogoGoTo = styled.div`
+const StatBlokBottomContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
-const BlockBody = styled.p`
+const BodyCopy = styled.p`
   ${text.bodyMd};
   ${media.mobile} {
     ${text.bodySm};
@@ -333,8 +338,7 @@ const BlockItem = styled.a`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: ${(props) =>
-    props?.$bgcolor ? `${colors?.[props.$bgcolor]}` : `unset`};
+  background: ${(props) => props.theme.customer_success.stat_block_bg};
   &:hover {
     background-color: ${colors?.purpleTag};
   }
@@ -598,8 +602,7 @@ const Featured = styled.div`
   position: relative;
   width: 81.5vw;
   height: 16.5vw;
-  background-color: ${(props) =>
-    props?.$bgcolor ? `${colors[props?.$bgcolor]}` : `unset`};
+  background: ${(props) => props.theme.customer_success.stat_block_bg};
   border-radius: 0.5vw;
   ${media.fullWidth} {
     width: 1304px;
@@ -694,8 +697,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: ${(props) =>
-    props?.$bgcolor ? `${colors?.[props.$bgcolor]}` : `${colors.white}`};
+  background: ${(props) => props.theme.customer_success.bg};
   width: 100%;
   gap: 2.5vw;
   padding: 6vw 0vw;
