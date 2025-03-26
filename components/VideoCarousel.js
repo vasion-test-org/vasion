@@ -20,7 +20,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 gsap.registerPlugin(ScrollToPlugin);
 
 const VideoCarousel = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const videoWidth = useMedia('100%', '100%', '100%', '83.645vw');

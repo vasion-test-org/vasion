@@ -7,7 +7,7 @@ import Button from '@/components/globalComponents/Button';
 import RichTextRenderer from '../renderers/RichTextRenderer';
 
 const EventCard = ({ content, even }) => {
-  console.log(even);
+  // console.log(even);
   return (
     <Wrapper even={even}>
       <EventInfoContainer>
