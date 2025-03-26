@@ -5,7 +5,11 @@ export const defaultTheme = {
   nav: {
     textColor: "#1B1D21",
     bg: "#F5F4F7",
-    tab_hover: '#ece9ef'
+    tab_hover: "#ece9ef",
+  },
+  customer_success: {
+    bg: "#F5F4F7",
+    stat_block_bg: "#ECE9EF",
   },
   hero: {
     textColor: "#1B1D21",
@@ -36,12 +40,12 @@ export const defaultTheme = {
     formBg: "#ffffff",
     inputBg: "#584282",
     inputBorder: "#ffffff",
-    buttonBg:  "#ff5100",
+    buttonBg: "#ff5100",
   },
   small_quote: {
     textColor: "#1B1D21",
     bg: "#F5F4F7",
-  }
+  },
 };
 
 export const darkTheme = {
@@ -75,7 +79,7 @@ export const darkTheme = {
     inputBg: "#584282",
     inputBorder: "rgba(255, 255, 255, 0.30)",
     placeHolderColor: "rgba(255, 255, 255, 0.60)",
-  }
+  },
 };
 
 export const lightTheme = {
@@ -83,7 +87,7 @@ export const lightTheme = {
     textColor: "#1B1D21",
     cardBg: "#F5F4F7",
   },
-}
+};
 
 export const buttonThemes = {
   nav: {
@@ -91,77 +95,76 @@ export const buttonThemes = {
     mainColor: "#ff5100",
     complimentaryColor: "#ffffff",
     textDecoration: "unset",
-    borderRadius: '28px',
-    padding: '8px 20px',
-    border: '#ff5100',
+    borderRadius: "28px",
+    padding: "8px 20px",
+    border: "#ff5100",
     hoverBgColor: "#ffffff",
-    hoverTextColor: "#ff5100"
+    hoverTextColor: "#ff5100",
   },
   primary: {
     textColor: "#ffffff",
     mainColor: "#ff5100",
     complimentaryColor: "#ffffff",
     textDecoration: "unset",
-    borderRadius: '28px',
-    padding: '12px 16px',
-    border: '#ff5100',
+    borderRadius: "28px",
+    padding: "12px 16px",
+    border: "#ff5100",
     hoverBgColor: "#ffffff",
-    hoverTextColor: "#ff5100"
+    hoverTextColor: "#ff5100",
   },
   secondary: {
     textColor: "#ff5100",
     mainColor: "#ffffff",
     complimentaryColor: "#ff5100",
     textDecoration: "unset",
-    borderRadius: '28px',
-    padding: '12px 16px',
-    border: '#ff5100',
+    borderRadius: "28px",
+    padding: "12px 16px",
+    border: "#ff5100",
     hoverBgColor: "#ff5100",
-    hoverTextColor: "#ffffff"
+    hoverTextColor: "#ffffff",
   },
   orange_link: {
     textColor: "#ff5100",
     mainColor: "unset",
     complimentaryColor: "#CC4800",
     textDecoration: "underline",
-    borderRadius: 'unset',
-    padding: '0',
-    border: 'unset',
-    hoverBgColor: 'unset',
-     hoverTextColor: "#CC4800"
+    borderRadius: "unset",
+    padding: "0",
+    border: "unset",
+    hoverBgColor: "unset",
+    hoverTextColor: "#CC4800",
   },
   grey_link: {
     textColor: "#808085",
     mainColor: "unset",
     complimentaryColor: "#808085",
     textDecoration: "underline",
-    borderRadius: 'unset',
-    padding: '0',
-    border: 'unset',
-    hoverBgColor: 'unset',
-     hoverTextColor: "#808085"
+    borderRadius: "unset",
+    padding: "0",
+    border: "unset",
+    hoverBgColor: "unset",
+    hoverTextColor: "#808085",
   },
   black_link: {
     textColor: "#1B1D21",
-      mainColor: "unset",
+    mainColor: "unset",
     complimentaryColor: "#1B1D21",
     textDecoration: "underline",
-    borderRadius: 'unset',
-    padding: '0',
-    border: 'unset',
-    hoverBgColor: 'unset',
-     hoverTextColor: "#1B1D21"
+    borderRadius: "unset",
+    padding: "0",
+    border: "unset",
+    hoverBgColor: "unset",
+    hoverTextColor: "#1B1D21",
   },
   white_link: {
     textColor: "#ffffff",
-      mainColor: "unset",
+    mainColor: "unset",
     complimentaryColor: "#ffffff",
     textDecoration: "underline",
-    borderRadius: 'unset',
-    padding: '0',
-    border: 'unset',
-    hoverBgColor: 'unset',
-     hoverTextColor: "#ffffff"
+    borderRadius: "unset",
+    padding: "0",
+    border: "unset",
+    hoverBgColor: "unset",
+    hoverTextColor: "#ffffff",
   },
 };
-

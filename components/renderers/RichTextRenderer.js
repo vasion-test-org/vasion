@@ -1,38 +1,65 @@
-'use client'
-import { render, MARK_STYLED, NODE_HEADING, NODE_PARAGRAPH } from 'storyblok-rich-text-react-renderer';
-import React from 'react';
-import styled from 'styled-components';
-import media from '@/styles/media';
-import Header from '@/components/copyComponents/Header';
-import BodyCopy from '@/components/copyComponents/BodyCopy';
-import Eyebrow from '@/components/copyComponents/Eyebrow';
-import useMedia from '@/functions/useMedia';
-import CTA from '@/components/CTA';
-import SmallQuote from '../SmallQuote';
-import LogoCube from '../LogoCube';
-import SideBySide from '../SideBySide';
-import CenteredSection from '../CenteredSection';
-import NumberBlock from '../NumberBlock';
+"use client";
+import {
+  render,
+  MARK_STYLED,
+  NODE_HEADING,
+  NODE_PARAGRAPH,
+} from "storyblok-rich-text-react-renderer";
+import React from "react";
+import styled from "styled-components";
+import media from "@/styles/media";
+import Header from "@/components/copyComponents/Header";
+import BodyCopy from "@/components/copyComponents/BodyCopy";
+import Eyebrow from "@/components/copyComponents/Eyebrow";
+import useMedia from "@/functions/useMedia";
+import CTA from "@/components/CTA";
+import SmallQuote from "../SmallQuote";
+import LogoCube from "../LogoCube";
+import SideBySide from "../SideBySide";
+import CenteredSection from "../CenteredSection";
+import NumberBlock from "../NumberBlock";
 
 const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
   if (!document) return null;
   // console.log(blok)
   const extractText = (contentArray) => {
-    if (!Array.isArray(contentArray)) return '';
-    return contentArray.map((node) => node.text || '').join(' ');
+    if (!Array.isArray(contentArray)) return "";
+    return contentArray.map((node) => node.text || "").join(" ");
   };
 
   // console.log(document)
   const blokResolvers = {
-    cta: (props) => <div className="component-wrapper"><CTA blok={props} /></div>,
-    small_quote: (props) => <div className="component-wrapper"><SmallQuote blok={props} /></div>,
-    logo_cube: (props) => <div className="component-wrapper"><LogoCube blok={props} /></div>,
-    side_by_side: (props) => <div className="component-wrapper"><SideBySide blok={props} /></div>,
-    centered_section: (props) => <div className="component-wrapper"><CenteredSection blok={props} /></div>,
-    number_block: (props) => <div className="component-wrapper"><NumberBlock blok={props} /></div>,
+    cta: (props) => (
+      <div className="component-wrapper">
+        <CTA blok={props} />
+      </div>
+    ),
+    small_quote: (props) => (
+      <div className="component-wrapper">
+        <SmallQuote blok={props} />
+      </div>
+    ),
+    logo_cube: (props) => (
+      <div className="component-wrapper">
+        <LogoCube blok={props} />
+      </div>
+    ),
+    side_by_side: (props) => (
+      <div className="component-wrapper">
+        <SideBySide blok={props} />
+      </div>
+    ),
+    centered_section: (props) => (
+      <div className="component-wrapper">
+        <CenteredSection blok={props} />
+      </div>
+    ),
+    number_block: (props) => (
+      <div className="component-wrapper">
+        <NumberBlock blok={props} />
+      </div>
+    ),
   };
-  
-  
 
   const customMarkResolvers = {
     [MARK_STYLED]: (children, { class: className }) => {
@@ -44,20 +71,31 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
     [NODE_HEADING]: (children, node) => {
       const level = node?.level || 1; // Get the actual heading level
       const headingText = extractText(node.content) || children;
-  
+
       // Apply useMedia inside the node resolver
       const tabletStyle = responsiveTextStyles[0] || `h${level}`;
       const mobileStyle = responsiveTextStyles[1] || tabletStyle;
-      const selectedHeaderStyle = useMedia(`h${level}`, `h${level}`, tabletStyle, mobileStyle);
-  // console.log(node, "headerStyle");
+      const selectedHeaderStyle = useMedia(
+        `h${level}`,
+        `h${level}`,
+        tabletStyle,
+        mobileStyle,
+      );
+      // console.log(node, "headerStyle");
       return <Header as={selectedHeaderStyle}>{headingText}</Header>;
     },
 
     [NODE_PARAGRAPH]: (children, node) => {
       const className =
-        node?.content?.[0]?.marks?.find((mark) => mark.type === 'styled')?.attrs?.class || '';
+        node?.content?.[0]?.marks?.find((mark) => mark.type === "styled")?.attrs
+          ?.class || "";
 
-      const selectedClassName = useMedia(className, className, responsiveTextStyles[0], responsiveTextStyles[1]);
+      const selectedClassName = useMedia(
+        className,
+        className,
+        responsiveTextStyles[0],
+        responsiveTextStyles[1],
+      );
 
       return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
     },
@@ -75,13 +113,13 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
 };
 
 const RichWrapper = styled.div`
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
   ul {
     list-style: none;
     margin-left: 0;
-    
+
     li {
       position: relative;
       padding-left: 1.563vw;
@@ -100,9 +138,9 @@ flex-direction: column;
       }
     }
     li::before {
-      content: '';
+      content: "";
       position: absolute;
-      background-image: url('/images/icons/orange-check-icon.webp');
+      background-image: url("/images/icons/orange-check-icon.webp");
       background-size: contain;
       background-repeat: no-repeat;
       left: 0;
