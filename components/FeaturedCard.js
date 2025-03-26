@@ -3,8 +3,6 @@ import media from "styles/media";
 import text from "styles/text";
 import colors from "styles/colors";
 import styled from "styled-components";
-import calendarClock from "images/calendarClock.webp";
-import locationOn from "images/locationOn.webp";
 import { ReactComponent as ArrowLinkSVG } from "images/linkArrow.svg";
 
 // import Pill from "components/Pill";
@@ -27,11 +25,11 @@ const FeaturedCard = ({ featuredCard }) => {
         </HeaderAndTag>
         <DateAndTime>
           <IconAndText>
-            <Icon src={locationOn} alt={"Nav Pin"} />
+            <Icon src='/images/locationOn.webp' alt={"Nav Pin"} />
             <TextContent>{featuredCard?.location}</TextContent>
           </IconAndText>
           <IconAndText>
-            <Icon src={calendarClock} alt={"Calendar"} />
+            <Icon src='/images/calendarClock.webp' alt={"Calendar"} />
             <TextContent>{featuredCard?.date}</TextContent>
           </IconAndText>
         </DateAndTime>
