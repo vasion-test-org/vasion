@@ -15,17 +15,61 @@ const ModalCards = ({ blok }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [isActive, setIsActive] = useState(null);
-
   const handleModal = (item) => {
-    console.log(item);
-    console.log(item);
-    if (!item.about && !item?.videoUrl) {
-      return;
+    const isVideoContent = hasVideo(item);
+    const modalData = {
+      name:
+        item.person && item.person[0] ? (
+          <RichTextRenderer document={item.person[0].copy} />
+        ) : (
+          ""
+        ),
+
+      position: item.position[0] ? (
+        <RichTextRenderer document={item.position[0].copy} />
+      ) : (
+        ""
+      ),
+      about: item.bio[0] ? item.bio[0].copy : null,
+      backgroundImage: {
+        sourceUrl: getImageSource(item, isVideoContent),
+      },
+
+      videoUrl:
+        isVideoContent && item.asset[0].media && item.asset[0].media[0]
+          ? item.asset[0].media[0].filename
+          : null,
+    };
+
+    if (modalData.about || modalData.videoUrl) {
+      setModalData(modalData);
+      setShowModal(true);
     }
-    setShowModal(true);
-    setModalData(item);
-    console.log("MODAL DATA--->", modalData);
   };
+
+  const getImageSource = (item, isVideo) => {
+    if (isVideo && item.asset[0].thumbnails && item.asset[0].thumbnails[0]) {
+      return item.asset[0].thumbnails[0].filename;
+    } else if (
+      item.asset &&
+      item.asset[0] &&
+      item.asset[0].media &&
+      item.asset[0].media[0]
+    ) {
+      return item.asset[0].media[0].filename;
+    }
+    return "";
+  };
+  // const handleModal = (item) => {
+  //   console.log(item);
+  //   console.log(item);
+  //   if (!item.about && !item?.videoUrl) {
+  //     return;
+  //   }
+  //   setShowModal(true);
+  //   setModalData(item);
+  //   console.log("MODAL DATA--->", modalData);
+  // };
   const hasVideo = (item) => {
     if (item && item.asset && item.asset[0]) {
       return item.asset[0].component === "video_assets";

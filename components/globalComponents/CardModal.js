@@ -68,7 +68,9 @@ const CardModal = ({ data, setShowModal }) => {
                 </NameAndStar>
                 <Position>{data?.position}</Position>
               </Title>
-              <About dangerouslySetInnerHTML={{ __html: data?.about }} />
+              <About>
+                {data?.about && <RichTextRenderer document={data.about} />}
+              </About>
             </TitleAndBioDiv>
           </FeaturedContent>
         )}
