@@ -93,10 +93,6 @@ const FeaturedTestimonials = ({ blok }) => {
           <RichTextRenderer document={item.copy_sections[0].copy} />
         </TitleAndBody>
         <RichTextRenderer document={blok.bodyCopy} />
-
-        {/* <Name>{item?.name}</Name> */}
-        {/* <Company>{item?.company}</Company> */}
-        {/* </AttributionDiv> */}
       </BlocksDiv>
       <GoTo
         className="goto-arrow"
@@ -149,14 +145,7 @@ const FeaturedTestimonials = ({ blok }) => {
           <RichTextRenderer document={blok.eyebrow} />
           <RichTextRenderer document={blok.header} />
           <LinkWrapper>
-            {/* <StyledLink size={"medium"} href={blok?.linkUrl}> */}
-            {/*   {blok?.linkText} */}
-            {/* </StyledLink> */}
-            {/*//============================BUUUUUBBBAAAAAAAAAAA===============================*/}
-            {/* <Button */}
-            {/*   key={$buttonData?.link_text} */}
-            {/*   $buttonData={$buttonData?.link_url} */}
-            {/* /> */}
+            <Button $buttonData={blok.link[0]} />
           </LinkWrapper>
         </HeaderContainer>
         <TestimonialsContainer>
