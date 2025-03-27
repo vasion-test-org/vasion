@@ -1,71 +1,50 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import gsap from "gsap";
-
-import CardModal from "./globalComponents/CardModal";
+'use client'
+import React, { useState } from "react";
+import styled from "styled-components";
+import media from "styles/media";
+import colors from "styles/colors";
+import text from "styles/text";
+import CardModal from "@/components/globalComponents/CardModal";
+import RichTextRenderer from "./renderers/RichTextRenderer";
 
 const ModalCards = ({ blok }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [isActive, setIsActive] = useState(null);
-
+// console.log(blok)
   const handleModal = (item) => {
     console.log(item);
-    console.log(item);
-    if (!item.about && !item?.videoUrl) {
+    if (!item.bio && !item?.asset[0].media[0].filename.includes('youtube')) {
       return;
     }
+
     setShowModal(true);
     setModalData(item);
-    console.log("MODAL DATA--->", modalData);
   };
-  const hasVideo = (item) => {
-    if (item && item.asset && item.asset[0]) {
-      return item.asset[0].component === "video_assets";
-    }
-    return false;
-  };
-  const allCards = blok.cards.map((item, index) => {
-    const isVideoContent = hasVideo(item);
-    let sourceUrl = "";
-    if (isVideoContent) {
-      sourceUrl = item.asset[0].thumbnails[0].filename;
-    } else {
-      sourceUrl = item.asset[0].media[0].filename;
-    }
 
+  const allCards = blok?.cards.map((item, index) => {
+    let image = null
+    if (item?.asset[0].media[0].filename.includes('youtube')) {
+      image = item?.asset[0].thumbnails[0].filename
+    } else {
+      image = item?.asset[0].media[0].filename
+    }
     return (
       <ProfileCard
-        $isvideo={isVideoContent}
-        key={index}
-        $bg={sourceUrl}
-        $isHover={item?.bio[0].copy}
+        $isvideo={item?.asset[0].media[0].filename.includes('youtube')}
+        key={`modal-card-${index}`}
+        $bg={image}
+        // $isHover={item?.bio}
         onClick={() => handleModal(item)}
         onMouseEnter={() => setIsActive(index)}
         onMouseLeave={() => setIsActive(false)}
-        {...storyblokEditable(item)}
       >
         <Title>
-          <Name>
-            <RichTextRenderer document={item.person[0].copy} />
-          </Name>
-          <Position>
-            <RichTextRenderer document={item.position[0].copy} />
-          </Position>
+          <RichTextRenderer document={item.person[0].copy}/>
+          <RichTextRenderer document={item.position[0].copy}/>
         </Title>
-        {!isVideoContent && (
-          <GoToBtn
-            $active={index === isActive}
-            src={"/images/uiElements/GoToActive"}
-            alt={"go-to-btn"}
-          />
+        {!item?.asset[0].media[0].filename.includes('youtube') && (
+          <GoToBtn $active={index === isActive} src="/images/uiElements/GoTo.webp" alt={"go-to-btn"} />
         )}
       </ProfileCard>
     );
@@ -73,14 +52,11 @@ const ModalCards = ({ blok }) => {
 
   return (
     <Wrapper>
-      <Header>
-        {blok.header && <RichTextRenderer document={blok.header} />}
-      </Header>
+      <RichTextRenderer document={blok.header}/>
       <CardsOuterWrapper>
-        {blok.cards && <CardsWrapper>{allCards}</CardsWrapper>}
+        <CardsWrapper>{allCards}</CardsWrapper>
       </CardsOuterWrapper>
       {showModal && <CardModal data={modalData} setShowModal={setShowModal} />}
-      {/* <CardModal data={modalData} setShowModal={setShowModal} /> */}
     </Wrapper>
   );
 };
@@ -108,11 +84,10 @@ const GoToBtn = styled.img`
   }
 `;
 
-const Position = styled.div`
+const Position = styled.p`
   ${text.bodyMd}
 `;
 const Name = styled.h4`
-  color: white;
   ${text.h4};
 `;
 const Title = styled.div`
@@ -147,7 +122,7 @@ const ProfileCard = styled.div`
   background-repeat: no-repeat;
 
   &:hover {
-    background-image: ${(props) =>
+    /* background-image: ${(props) =>
       props.$isHover
         ? `linear-gradient(
           180deg,
@@ -155,8 +130,8 @@ const ProfileCard = styled.div`
           rgba(88, 63, 153, 0.5) 100%
         )${props.$bg ? `, url(${props.$bg})` : ""}`
         : props.$bg
-          ? `url(${props.$bg})`
-          : "none"};
+        ? `url(${props.$bg})`
+        : "none"}; */
   }
   background-size: 100%;
   width: ${(props) => (props?.$isvideo ? "26.125vw" : "19.25vw")};
