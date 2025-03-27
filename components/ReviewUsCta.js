@@ -9,7 +9,6 @@ import { storyblokEditable } from "@storyblok/react/rsc";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 
 const ReviewUsCta = ({ blok }) => {
-  console.log(blok);
   const backgrounds = {
     reg: blok?.background_image[0].filename,
     tablet: blok.background_image[1].filename,
@@ -158,7 +157,7 @@ const CtaContainer = styled.div`
   }
 `;
 
-const Body = styled.p`
+const Body = styled.div`
   ${text.bodyLg};
 `;
 
