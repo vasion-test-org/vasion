@@ -36,8 +36,8 @@ const Card = ({ content, paginated }) => {
 export default Card;
 
 const ImageWrapper = styled.div`
-/* overflow: hidden;
-  border-radius: 0.375vw; */
+overflow: hidden;
+  border-radius: 0.375vw;
 `
 const ButtonWrapper = styled.div`
   margin-top: auto;

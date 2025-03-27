@@ -14,7 +14,7 @@ const ModalCards = ({ blok }) => {
 // console.log(blok)
   const handleModal = (item) => {
     console.log(item);
-    if (!item.bio && !item?.asset[0].media[0].filename.includes('youtube')) {
+    if (!item.bio && !hasYouTube) {
       return;
     }
 
@@ -23,15 +23,17 @@ const ModalCards = ({ blok }) => {
   };
 
   const allCards = blok?.cards.map((item, index) => {
+    const hasYouTube = /youtube|youtu\.be/.test(item?.asset[0].media[0].filename);
+
     let image = null
-    if (item?.asset[0].media[0].filename.includes('youtube')) {
+    if (hasYouTube) {
       image = item?.asset[0].thumbnails[0].filename
     } else {
       image = item?.asset[0].media[0].filename
     }
     return (
       <ProfileCard
-        $isvideo={item?.asset[0].media[0].filename.includes('youtube')}
+        $isvideo={hasYouTube}
         key={`modal-card-${index}`}
         $bg={image}
         // $isHover={item?.bio}
@@ -40,10 +42,10 @@ const ModalCards = ({ blok }) => {
         onMouseLeave={() => setIsActive(false)}
       >
         <Title>
-          <RichTextRenderer document={item.person[0].copy}/>
-          <RichTextRenderer document={item.position[0].copy}/>
+         {item?.person[0]?.copy && <RichTextRenderer document={item.person[0].copy}/>}
+         {item?.position[0]?.copy && <RichTextRenderer document={item.position[0].copy}/>}
         </Title>
-        {!item?.asset[0].media[0].filename.includes('youtube') && (
+        {!hasYouTube && (
           <GoToBtn $active={index === isActive} src="/images/uiElements/GoTo.webp" alt={"go-to-btn"} />
         )}
       </ProfileCard>

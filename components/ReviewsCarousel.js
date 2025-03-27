@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
-import React, { useEffect } from "react";
-import gsap from "gsap";
-import styled from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import { horizontalLoop } from "functions/horizontalLoop";
-import { Draggable } from "gsap/Draggable";
-import { InertiaPlugin } from "gsap/InertiaPlugin";
-import text from "styles/text";
-import RichTextRenderer from "./renderers/RichTextRenderer";
+import React, { useEffect } from 'react';
+import gsap from 'gsap';
+import styled from 'styled-components';
+import media from 'styles/media';
+import colors from 'styles/colors';
+import { horizontalLoop } from 'functions/horizontalLoop';
+import { Draggable } from 'gsap/Draggable';
+import { InertiaPlugin } from 'gsap/InertiaPlugin';
+import text from 'styles/text';
+import RichTextRenderer from './renderers/RichTextRenderer';
 
 gsap.registerPlugin(Draggable, InertiaPlugin);
 
 const ReviewsCarousel = ({ blok }) => {
-  console.log(blok)
+  console.log(blok);
   const redditReviews = blok?.reviews;
   const statsList = blok?.stats;
 
@@ -24,24 +24,24 @@ const ReviewsCarousel = ({ blok }) => {
   const dragReviews = clonedReviews.map((rev, index) => (
     <ReviewItem
       href={rev.link[0].link_url}
-      target={"_blank"}
-      rel={"noopener noreferrer"}
+      target={'_blank'}
+      rel={'noopener noreferrer'}
       key={index}
-      className="reviewItems"
+      className='reviewItems'
     >
-      {<Stars src="/images/HomepageStars.webp" alt={"Five Star Rating"} />}
-      <RichTextRenderer document={rev?.body_copy }/>
+      {<Stars src='/images/HomepageStars.webp' alt={'Five Star Rating'} />}
+      <RichTextRenderer document={rev?.body_copy} />
       <RedditTextContainer>
         <RedditText> {rev.link[0].link_text}</RedditText>
-        <RedditOpener src="/images/RedditNewTab.webp" alt={"compose-new-tab"} />
+        <RedditOpener src='/images/RedditNewTab.webp' alt={'compose-new-tab'} />
       </RedditTextContainer>
     </ReviewItem>
   ));
   const dragStats = clonedStats.map((statItem, index) => {
     return (
-      <StatDiv key={index} className={"statsDraggable"}>
+      <StatDiv key={index} className={'statsDraggable'}>
         <StyledStat>{statItem?.stat}</StyledStat>
-        <RichTextRenderer document={statItem.copy[0].copy}/>
+        <RichTextRenderer document={statItem.copy[0].copy} />
       </StatDiv>
     );
   });
@@ -62,10 +62,10 @@ const ReviewsCarousel = ({ blok }) => {
   }, []);
 
   return (
-    <Wrapper id="reddit-reviews">
+    <Wrapper id='reddit-reviews'>
       <HeaderContainer>
-        <RichTextRenderer document={blok?.header}/>
-        <RichTextRenderer document={blok?.subheader}/>
+        <RichTextRenderer document={blok?.header} />
+        <RichTextRenderer document={blok?.subheader} />
       </HeaderContainer>
       <VisibleContainer>
         <BlurLeft />
@@ -76,12 +76,17 @@ const ReviewsCarousel = ({ blok }) => {
       <ByTheNumbers>
         <BlurStatLeft />
         <BlurStatRight />
-        <RichTextRenderer document={blok?.bottom_section_header}/>
+        <BottomHeaderWrapper>
+          <RichTextRenderer document={blok?.bottom_section_header} />
+        </BottomHeaderWrapper>
         <VisibleStatsContainer>
           {dragStats}
-          <DecorativeStroke className="decorative-stroke">
+          <DecorativeStroke className='decorative-stroke'>
             <LineDecoration />
-            <VasionStar src="/images/DraggableWhiteVasionStar.webp" alt={"vasion-star-logo"} />
+            <VasionStar
+              src='/images/DraggableWhiteVasionStar.webp'
+              alt={'vasion-star-logo'}
+            />
           </DecorativeStroke>
         </VisibleStatsContainer>
       </ByTheNumbers>
@@ -316,12 +321,12 @@ const VisibleStatsContainer = styled.div`
     padding: 4.167vw;
   }
 `;
-const SectionHeader = styled.h3`
-  ${text.h3};
+const BottomHeaderWrapper = styled.div`
   display: flex;
   align-self: start;
   z-index: 25;
   padding: 0vw 13.625vw;
+
   ${media.fullWidth} {
     padding: 0px 218px;
   }
@@ -586,9 +591,11 @@ const HeaderContainer = styled.div`
   flex-direction: column;
   gap: 1vw;
   margin-bottom: 1.25vw;
+  width: 67.75vw;
   align-items: center;
   text-align: center;
   ${media.fullWidth} {
+    width: 1084px;
     gap: 16px;
     margin-bottom: 20px;
   }
@@ -601,6 +608,7 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
   overflow: hidden;
   width: 100%;
   color: ${colors?.white};
