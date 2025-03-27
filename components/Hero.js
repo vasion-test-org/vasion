@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
@@ -18,7 +18,7 @@ const Hero = ({ blok }) => {
     customTheme = undefined;
   }
 
-  console.log( blok.socials);
+  console.log(blok.socials);
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
       <HeroBGWrapper>
@@ -29,7 +29,10 @@ const Hero = ({ blok }) => {
           spacing={blok.section_spacing}
           centered={!blok?.hero_asset[0]}
         >
-          <ContentWrapper socials={blok.socials} centered={!blok?.hero_asset[0] && !blok.socials}>
+          <ContentWrapper
+            socials={blok.socials}
+            centered={!blok?.hero_asset[0] && !blok.socials}
+          >
             {blok.hero_copy.map((copy) => (
               <div {...storyblokEditable(copy)} key={copy.component}>
                 <RichTextRenderer
@@ -38,19 +41,21 @@ const Hero = ({ blok }) => {
                 />
               </div>
             ))}
-            <ButtonRow>
-              {blok?.button_group?.map(($buttonData) => (
-                <div
-                  {...storyblokEditable($buttonData)}
-                  key={$buttonData?.link_text}
-                >
-                  <Button
+            {!blok?.socials && (
+              <ButtonRow>
+                {blok?.button_group?.map(($buttonData) => (
+                  <div
+                    {...storyblokEditable($buttonData)}
                     key={$buttonData?.link_text}
-                    $buttonData={$buttonData}
-                  />
-                </div>
-              ))}
-            </ButtonRow>
+                  >
+                    <Button
+                      key={$buttonData?.link_text}
+                      $buttonData={$buttonData}
+                    />
+                  </div>
+                ))}
+              </ButtonRow>
+            )}
           </ContentWrapper>
           {blok?.hero_asset[0] && (
             <ImageWrapper {...storyblokEditable(blok)}>
@@ -60,41 +65,50 @@ const Hero = ({ blok }) => {
               />
             </ImageWrapper>
           )}
-       {blok?.socials && (
+          {blok?.socials && (
             <SocialCTA>
               <SocialLogoContainer>
-                <SocialLink href={"https://www.facebook.com/VasionSoftware"}>
+                <SocialLink href={'https://www.facebook.com/VasionSoftware'}>
                   <SocailLogo
-                    loading="lazy"
+                    loading='lazy'
                     src='/images/icons/Facebook.webp'
-                    alt="facebook-logo"
+                    alt='facebook-logo'
                   />
                 </SocialLink>
                 <SocialLink
-                  href={"https://www.linkedin.com/company/printerlogic/"}
+                  href={'https://www.linkedin.com/company/printerlogic/'}
                 >
                   <SocailLogo
-                    loading="lazy"
+                    loading='lazy'
                     src='/images/icons/LinkedIn.webp'
-                    alt="linkedin-logo"
+                    alt='linkedin-logo'
                   />
                 </SocialLink>
-                <SocialLink href={"https://x.com/VasionSoftware"}>
-                  <SocailLogo loading="lazy" src='/images/icons/Twitter.webp'alt="twitter-logo" />
+                <SocialLink href={'https://x.com/VasionSoftware'}>
+                  <SocailLogo
+                    loading='lazy'
+                    src='/images/icons/Twitter.webp'
+                    alt='twitter-logo'
+                  />
                 </SocialLink>
               </SocialLogoContainer>
-              {/* {content?.link && (
-                <GlobalButton
-                  href={content?.link ? content?.link : "/demo"}
-                  fill={`${colors.primaryOrange}`}
-                >
-                  {content?.linkText ? content?.linkText : "Schedule a Demo"}
-                </GlobalButton>
-              )} */}
+              <ButtonRow socials>
+                {blok?.button_group?.map(($buttonData) => (
+                  <div
+                    {...storyblokEditable($buttonData)}
+                    key={$buttonData?.link_text}
+                  >
+                    <Button
+                      key={$buttonData?.link_text}
+                      $buttonData={$buttonData}
+                    />
+                  </div>
+                ))}
+              </ButtonRow>
             </SocialCTA>
           )}
         </HeroWrapper>
-        {blok.attached_logo_cube && <LogoCube blok={blok.logo_cube[0]}/>}
+        {blok.attached_logo_cube && <LogoCube blok={blok.logo_cube[0]} />}
       </HeroBGWrapper>
     </ThemeProvider>
   );
@@ -165,42 +179,45 @@ const ImageWrapper = styled.div`
   ${media.fullWidth} {
     max-width: 600px;
   }
-  
+
   ${media.tablet} {
     max-width: 58.594vw;
   }
-  
+
   ${media.mobile} {
-   min-width: 100%;
+    min-width: 100%;
   }
-`
+`;
 const ButtonRow = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 0.75vw;
-  margin-top: 2vw;
+  margin-top: ${props => props.socials ? 'unset' : '2vw'};
 
   ${media.fullWidth} {
     gap: 12px;
-    margin-top: 32px;
+    margin-top: ${props => props.socials ? 'unset' : '32px'};
   }
 
   ${media.tablet} {
     gap: 1.172vw;
-    margin-top: 3.125vw;
+    margin-top: ${props => props.socials ? 'unset' : '3.125vw'};
   }
 
   ${media.mobile} {
     gap: 2.5vw;
-    margin-top: 6.667vw;
+    margin-top: ${props => props.socials ? 'unset' : '6.667vw'};
   }
 `;
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: ${props => props.centered ? 'center' : 'left'};
-  width: ${props => props.socials ? 'clamp(27.75vw, 100%, 26.5vw)' : 'clamp(27.75vw, 100%, 54.75vw)'};
+  text-align: ${(props) => (props.centered ? 'center' : 'left')};
+  width: ${(props) =>
+    props.socials
+      ? 'clamp(27.75vw, 100%, 26.5vw)'
+      : 'clamp(27.75vw, 100%, 54.75vw)'};
 
   h1,
   h2,
@@ -216,7 +233,10 @@ const ContentWrapper = styled.div`
   }
 
   ${media.fullWidth} {
-    width: ${props => props.socials ? 'clamp(444px, 100%, 424px)' : 'clamp(444px, 100%, 876px)'};
+    width: ${(props) =>
+      props.socials
+        ? 'clamp(444px, 100%, 424px)'
+        : 'clamp(444px, 100%, 876px)'};
   }
 
   ${media.tablet} {
@@ -355,7 +375,6 @@ const HeroWrapper = styled.div`
         : '5.417vw'};
   }
 `;
-
 
 const HeroBGWrapper = styled.div`
   display: flex;

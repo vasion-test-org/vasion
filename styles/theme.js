@@ -70,7 +70,7 @@ export const darkTheme = {
   },
   centered: {
     textColor: "#ffffff",
-    background: "#1B1D21",
+    bg: "#3D2562",
   },
   testimonial: {
     textColor: "#ffffff",
