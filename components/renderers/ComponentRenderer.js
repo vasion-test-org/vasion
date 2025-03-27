@@ -10,7 +10,7 @@ import LogoCube from "@/components/LogoCube";
 import { usePathname } from "next/navigation";
 import Button from "../globalComponents/Button";
 import Form from "../Form";
-
+import ContactCard from "../globalComponents/ContactCard";
 const ComponentRenderer = ({ blok }) => {
   if (!blok) return null;
   const copycomponents = ['body_copy', 'header', 'eyebrow', 'long_form_text', 'copy_block'];
@@ -19,9 +19,8 @@ const ComponentRenderer = ({ blok }) => {
   const pathname = usePathname();
   const isFrench = pathname.startsWith("/fr");
   const isGerman = pathname.startsWith("/de");
-  const isEnglish = !isFrench && !isGerman; // Defaults to English if no locale is found
-
-  // Handle `personalized_page` and extract `personalized_section`
+  const isEnglish = !isFrench && !isGerman; 
+  
   if (blok.component === "personalized_page" && Array.isArray(blok.personalized_section)) {
     return (
       <SectionWrapper {...storyblokEditable(blok)}>
@@ -32,7 +31,7 @@ const ComponentRenderer = ({ blok }) => {
     );
   }
 
-  // Handle `personalized_section` based on URL locale instead of `blok.preview`
+
   if (blok.component === "personalized_section") {
     let contentBlocks = [];
 
@@ -55,7 +54,6 @@ const ComponentRenderer = ({ blok }) => {
     );
   }
 
-  // Handle individual components
   switch (blok.component) {
     case "assets":
       return (
@@ -83,6 +81,8 @@ const ComponentRenderer = ({ blok }) => {
       return <Form blok={blok}/>
     case "global_link":
       return <Button $buttonData={blok}/>
+    case "contact_card": 
+    return <ContactCard blok={blok}/>
     default:
       return <BlockWrapper {...storyblokEditable(blok)}>Unknown Component</BlockWrapper>;
   }

@@ -1,67 +1,59 @@
+'use client'
 import React from "react";
 import media from "styles/media";
 import text from "styles/text";
 import colors from "styles/colors";
 import styled from "styled-components";
+import RichTextRenderer from "./renderers/RichTextRenderer";
+import Image from "./globalComponents/Image";
+import Button from "./globalComponents/Button";
 // import { ReactComponent as ArrowLinkSVG } from "images/linkArrow.svg";
 
 // import Pill from "components/Pill";
 
-const FeaturedCard = ({ featuredCard }) => {
+const FeaturedCard = ({ blok }) => {
+  console.log(blok)
   return (
     <Wrapper>
-      <EventImageWrapper
-        desktopSrc={featuredCard?.image?.sourceUrl}
-        mobileSrc={featuredCard?.mobileImage?.sourceUrl}
-        alt={featuredCard?.altText}
-      />
+      <CardWrapper>
+      <ImageWrapper>
+        <Image
+                    images={blok.event_image[0].media}
+                 
+                  />
+      </ImageWrapper>
       <Content>
         <HeaderAndTag>
           {/* <Pill
             backgroundColor={featuredCard?.tagBackground}
             htmlContent={featuredCard?.tag}
           /> */}
-          <Header>{featuredCard?.header}</Header>
+          <RichTextRenderer document={blok?.header}/>
         </HeaderAndTag>
         <DateAndTime>
           <IconAndText>
             <Icon src='/images/locationOn.webp' alt={"Nav Pin"} />
-            <TextContent>{featuredCard?.location}</TextContent>
+            <RichTextRenderer document={blok?.location}/>
           </IconAndText>
           <IconAndText>
             <Icon src='/images/calendarClock.webp' alt={"Calendar"} />
-            <TextContent>{featuredCard?.date}</TextContent>
+            <RichTextRenderer document={blok?.date}/>
           </IconAndText>
         </DateAndTime>
-        <TextContent>{featuredCard?.body}</TextContent>
-        <LargeLink
-          href={featuredCard?.linkUrl}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          {featuredCard?.linkText}
-          {/* <ArrowLink /> */}
-        </LargeLink>
+        <RichTextRenderer document={blok?.body_copy}/>
+        <Button $buttonData={blok.button[0]}/>
       </Content>
+      </CardWrapper>
     </Wrapper>
   );
 };
 export default FeaturedCard;
-const TextContent = styled.p`
-  ${text.bodyMd};
-  color: ${colors?.txtSubtle};
-  max-width: 48.25vw;
-
-  ${media.fullWidth} {
-    max-width: 772px;
-  }
-  ${media.tablet} {
-    max-width: 40.234vw;
-  }
-  ${media.mobile} {
-    max-width: 86.458vw;
-  }
-`;
+const ImageWrapper = styled.div`
+  /* overflow: hidden; */
+  /* width: 28.75vw;
+  height: 19.125vw; */
+  border-radius: 0.375vw;
+`
 
 const IconAndText = styled.div`
   display: flex;
@@ -92,9 +84,7 @@ const DateAndTime = styled.div`
     gap: 1.667vw;
   }
 `;
-const Header = styled.h4`
-  ${text.h4};
-`;
+
 const HeaderAndTag = styled.div`
   display: flex;
   flex-direction: column;
@@ -125,104 +115,6 @@ const Content = styled.div`
     gap: 3.333vw;
   }
 `;
-const EventImageWrapper = styled.div`
-  background-image: url(${(props) => props.desktopSrc});
-  background-size: cover;
-  background-position: center;
-  width: 28.75vw;
-  height: 19.125vw;
-
-  ${media.fullWidth} {
-    width: 460px;
-    height: 306px;
-  }
-  ${media.tablet} {
-    width: 44.922vw;
-    height: 29.883vw;
-  }
-  ${media.mobile} {
-    background-image: url(${(props) => props.mobileSrc});
-    width: 86.458vw;
-    height: 40.417vw;
-  }
-`;
-// const ArrowLink = styled(ArrowLinkSVG)`
-//   width: 0.556vw;
-//   height: 0.556vw;
-//   margin-left: 0.556vw;
-//   transition: transform 0.3s ease-in-out;
-//   ${media.fullWidth} {
-//     width: 8px;
-//     height: 8px;
-//     margin-left: 8px;
-//   }
-
-//   ${media.tablet} {
-//     width: 0.781vw;
-//     height: 0.781vw;
-//     margin-left: 0.781vw;
-//   }
-
-//   ${media.mobile} {
-//     width: 1.869vw;
-//     height: 1.869vw;
-//     margin-left: 1.869vw;
-//   }
-//   path {
-//     fill: ${(props) => (props.color ? props.color : colors.primaryOrange)};
-//   }
-// `;
-
-const LargeLink = styled.a`
-  position: relative;
-  ${text.bodyMd}
-  text-decoration: none;
-  width: fit-content;
-  color: ${colors?.primaryOrange};
-  border-color: ${colors?.primaryOrange};
-  border: 0.063vw solid #ff5100;
-  padding: 0.75vw 1vw;
-  border-radius: 1.75vw;
-  transition: background .2s ease;
-  margin-top: 2vw;
-
-${media.fullWidth}{
-  border: 1px solid #ff5100;
-  padding: 12px 16px;
-  border-radius: 28px;
-  transition: background .2s ease;
-  margin-top: 32px;
-}
-${media.tablet}{
-  border: 0.098vw solid #ff5100;
-  padding: 1.172vw 1.563vw;
-  border-radius: 2.734vw;
-  transition: background .2s ease;
-  margin-top: 3.125vw;
-}
-${media.mobile}{
-  border: 0.208vw solid #ff5100;
-  padding: 2.5vw 3.333vw;
-  border-radius: 5.833vw;
-  transition: background .2s ease;
-  margin-top: 6.667vw;
-}
-  ${media.hover} {
-    &&:hover {
-    background: ${colors?.primaryOrange};
-    color:${colors?.white};
-    ${ArrowLink} {
-      path{
-      fill: ${colors?.white};
-    }
-    transform: translateX(5px);
-    transition: transform 750ms ease-in-out;
-  }
-  ${ArrowLink} {
-    transition: transform 750ms ease;
-  }
-}
-`;
 
 const Icon = styled.img`
   width: 1.25vw;
@@ -242,16 +134,18 @@ const Icon = styled.img`
   }
 `;
 
-const Wrapper = styled.div`
-  display: flex;
+const CardWrapper = styled.div`
+   display: flex;
   align-items: center;
   justify-content: center;
   gap: 2vw;
   margin-top: 2.5vw;
+  width: 81.5vw;
 
   ${media.fullWidth} {
     gap: 32px;
     margin-top: 40px;
+    width: 1304px;
   }
   ${media.tablet} {
     gap: 3.125vw;
@@ -262,4 +156,9 @@ const Wrapper = styled.div`
     margin-top: 8.333vw;
     flex-direction: column;
   }
+`
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
