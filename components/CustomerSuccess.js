@@ -91,8 +91,9 @@ const FeaturedTestimonials = ({ blok }) => {
       <BlocksDiv>
         <TitleAndBody>
           <RichTextRenderer document={item.copy_sections[0].copy} />
+          <RichTextRenderer document={item.copy_sections[1].copy} />
         </TitleAndBody>
-        <RichTextRenderer document={blok.bodyCopy} />
+        <RichTextRenderer document={item.copy_sections[2].copy} />
       </BlocksDiv>
       <GoTo
         className="goto-arrow"

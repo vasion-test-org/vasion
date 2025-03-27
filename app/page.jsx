@@ -9,10 +9,6 @@ export default async function Home() {
   // Fetch Storyblok content based on draft mode status
   const initialStory = await fetchData("home", isEnabled);
 
-  if (!initialStory) {
-    return <h1>Homepage Not Found</h1>;
-  }
-
   // Enable real-time editing in Storyblok Visual Editor
   const story = useStoryblokState(initialStory);
 

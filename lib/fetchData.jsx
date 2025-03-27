@@ -1,5 +1,5 @@
 // lib/fetchData.js
-import { getStoryblokApi } from "@storyblok/react/rsc";
+import { getStoryblokApi } from "@/lib/storyblok";
 
 export async function fetchData(slug, isPreview) {
   const storyblokApi = getStoryblokApi();

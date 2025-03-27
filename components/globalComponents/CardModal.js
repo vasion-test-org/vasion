@@ -1,18 +1,20 @@
-'use client'
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import text from "styles/text";
-import ReactPlayer from "react-player/youtube";
-import useMedia from "@/functions/useMedia";
-import RichTextRenderer from "../renderers/RichTextRenderer";
-import Video from "./Video";
+'use client';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import media from 'styles/media';
+import colors from 'styles/colors';
+import text from 'styles/text';
+import ReactPlayer from 'react-player/youtube';
+import useMedia from '@/functions/useMedia';
+import RichTextRenderer from '../renderers/RichTextRenderer';
+import Video from './Video';
 
 const CardModal = ({ data, setShowModal }) => {
-  const [closeButton, setCloseButton] = useState("/images/uiElements/closeButton.webp");
-  const videoWidth = useMedia("1440px", "89.6vw", "89vw", "87.85vw");
-  const videoHeight = useMedia("900px", "51.25vw", "51vw", "49.299vw");
+  const [closeButton, setCloseButton] = useState(
+    '/images/uiElements/closeButton.webp'
+  );
+  const videoWidth = useMedia('1440px', '89.6vw', '89vw', '87.85vw');
+  const videoHeight = useMedia('900px', '51.25vw', '51vw', '49.299vw');
 
   const handleClose = (e) => {
     if (e.target === e.currentTarget) {
@@ -20,30 +22,41 @@ const CardModal = ({ data, setShowModal }) => {
     }
   };
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = 'auto';
     };
   }, []);
 
-  console.log('data:', data)
+  const hasYouTube = /youtube|youtu\.be/.test(data?.asset[0].media[0].filename);
   return (
     <Wrapper onClick={handleClose}>
-      <Modal $isvideo={data?.asset[0].media[0].filename.includes('youtube')}>
+      <Modal $isvideo={hasYouTube}>
         <CloseBtn
-          src="/images/uiElements/closeButton.webp"
-          onMouseEnter={() => setCloseButton("images/uiElement/CloseBtnHover.webp")}
-          onMouseLeave={() => setCloseButton("/images/uiElements/closeButton.webp")}
+          src='/images/uiElements/closeButton.webp'
+          onMouseEnter={() =>
+            setCloseButton('images/uiElement/CloseBtnHover.webp')
+          }
+          onMouseLeave={() =>
+            setCloseButton('/images/uiElements/closeButton.webp')
+          }
           onClick={handleClose}
         />
-        {!data?.asset[0].media[0].filename.includes('youtube') && (
+        {!hasYouTube && (
           <FeaturedContent>
             <Title $mobile>
               <NameAndStar>
-              <RichTextRenderer document={data.person[0].copy}/>
-                <Sparkle src="/images/uiElements/VasionStarNewsroom.webp" alt="vasion-sparkle" />
+                {data?.person[0]?.copy && (
+                  <RichTextRenderer document={data.person[0].copy} />
+                )}
+                <Sparkle
+                  src='/images/uiElements/VasionStarNewsroom.webp'
+                  alt='vasion-sparkle'
+                />
               </NameAndStar>
-              <RichTextRenderer document={data.position[0].copy}/>
+              {data?.position[0]?.copy && (
+                <RichTextRenderer document={data.position[0].copy} />
+              )}
             </Title>
             <FeaturePhoto
               src={data?.asset[0].media[0].filename}
@@ -52,26 +65,32 @@ const CardModal = ({ data, setShowModal }) => {
             <TitleAndBioDiv>
               <Title>
                 <NameAndStar>
-                <RichTextRenderer document={data.person[0].copy}/>
-                  <Sparkle src="/images/uiElements/VasionStarNewsroom.webp" alt="vasion-sparkle" />
+                  {data?.person[0]?.copy && (
+                    <RichTextRenderer document={data.person[0].copy} />
+                  )}
+                  <Sparkle
+                    src='/images/uiElements/VasionStarNewsroom.webp'
+                    alt='vasion-sparkle'
+                  />
                 </NameAndStar>
-                <RichTextRenderer document={data.position[0].copy}/>
+                {data?.position[0]?.copy && (
+                  <RichTextRenderer document={data.position[0].copy} />
+                )}
               </Title>
-              <RichTextRenderer document={data?.bio[0].copy}/>
+              {data?.bio[0]?.copy && (
+                <RichTextRenderer document={data.bio[0].copy} />
+              )}
             </TitleAndBioDiv>
           </FeaturedContent>
         )}
-        {data?.asset[0].media[0].filename.includes('youtube') && (
+        {hasYouTube && (
           <VideoContainer>
-             
-             
-                  <Video
-                    videos={data?.asset[0].media[0]}
-                    // borderradius={blok.media?.[0]?.border_radius}
-                    thumbnails={data?.asset[0].media[0].thumbnails}
-                  />
-         
-              
+            <Video
+              videos={data?.asset[0].media[0]}
+              // borderradius={blok.media?.[0]?.border_radius}
+              thumbnails={data?.asset[0].media[0].thumbnails}
+            />
+
             <ReactPlayer
               url={data?.asset[0].media[0].filename}
               controls={true}
@@ -188,7 +207,7 @@ const NameAndStar = styled.div`
 `;
 
 const Title = styled.div`
-  display: ${(props) => (props?.$mobile ? "none" : "flex")};
+  display: ${(props) => (props?.$mobile ? 'none' : 'flex')};
   flex-direction: column;
   gap: 0.25vw;
   ${media.fullWidth} {
@@ -200,7 +219,7 @@ const Title = styled.div`
   }
 
   ${media.mobile} {
-    display: ${(props) => (props?.$mobile ? "flex" : "none")};
+    display: ${(props) => (props?.$mobile ? 'flex' : 'none')};
     gap: 0.833vw;
   }
 `;
@@ -357,14 +376,14 @@ const Modal = styled.div`
   flex-direction: column;
   overflow: hidden;
   width: 92.5vw;
-  height: ${(props) => (props?.$isvideo ? "58.125vw" : " 41.25vw ")};
+  height: ${(props) => (props?.$isvideo ? '58.125vw' : ' 41.25vw ')};
   background-color: ${colors.white};
   border-radius: 1.75vw;
   padding: ${(props) =>
-    props?.$isvideo ? "2.3vw 0vw 1.3vw 1.3vw" : "2.5vw 0.313vw 3.75vw 2.5vw"};
+    props?.$isvideo ? '2.3vw 0vw 1.3vw 1.3vw' : '2.5vw 0.313vw 3.75vw 2.5vw'};
   ${media.fullWidth} {
     border-radius: 28px;
-    height: ${(props) => (props?.$isvideo ? "788px" : " 600px ")};
+    height: ${(props) => (props?.$isvideo ? '788px' : ' 600px ')};
     padding: 40px 0px 20px 20px;
     width: 1480px;
   }
@@ -373,18 +392,18 @@ const Modal = styled.div`
     border-radius: 2.734vw;
     padding: ${(props) =>
       props?.$isvideo
-        ? " 1.4vw 0vw 1.4vw 1.4vw"
-        : "0vw 0.391vw 5.762vw 3.809vw"};
-    height: ${(props) => (props?.$isvideo ? "unset" : "66.797vw")};
+        ? ' 1.4vw 0vw 1.4vw 1.4vw'
+        : '0vw 0.391vw 5.762vw 3.809vw'};
+    height: ${(props) => (props?.$isvideo ? 'unset' : '66.797vw')};
     width: 92.188vw;
   }
 
   ${media.mobile} {
-    width: ${(props) => (props?.$isvideo ? "95.167vw" : "89.167vw")};
-    height: ${(props) => (props?.$isvideo ? "33vh" : "89vh")};
+    width: ${(props) => (props?.$isvideo ? '95.167vw' : '89.167vw')};
+    height: ${(props) => (props?.$isvideo ? '33vh' : '89vh')};
     border-radius: 5.417vw;
     padding: ${(props) =>
-      props?.$isvideo ? "9vw 2vw 2vw 2vw" : "5vw 0.5vw 5vw 5vw"};
+      props?.$isvideo ? '9vw 2vw 2vw 2vw' : '5vw 0.5vw 5vw 5vw'};
     align-items: center;
     justify-content: center;
   }
