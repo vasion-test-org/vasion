@@ -6,7 +6,6 @@ import text from "@/styles/text";
 import RichTextRenderer from "./renderers/RichTextRenderer";
 import Form from "./Form";
 const MasonryGrid = ({ blok }) => {
-  console.log(blok);
   const [pairs, setPairs] = useState([]);
   const imageData = pairs?.map((item, index) => {
     return (
