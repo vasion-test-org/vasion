@@ -200,6 +200,7 @@ const ContentWrapper = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-self: center;
   background-image: ${(props) => props.$bg && `url(${props.$bg?.reg})`};
   background-size: cover;
   background-repeat: no-repeat;
