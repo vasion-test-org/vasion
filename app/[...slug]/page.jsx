@@ -11,7 +11,7 @@ export default async function DynamicPage({ params }) {
   const locale = isLocalized ? slugArray[0] : "en";
   const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");
 
-
+console.log(params)
   let story = await fetchData(storySlug, locale, "published");
 
 

@@ -16,7 +16,8 @@ const Image = ({ images, borderradius, filename }) => {
 
 const ImageWrapper = styled.img`
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: fill;
   /* max-width: inherit;  */
   border-radius: ${(props) => `${props.borderradius || 0}px`};
 

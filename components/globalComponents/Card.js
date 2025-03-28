@@ -38,6 +38,7 @@ export default Card;
 const ImageWrapper = styled.div`
 overflow: hidden;
   border-radius: 0.375vw;
+  min-height: 14.125vw;
 `
 const ButtonWrapper = styled.div`
   margin-top: auto;
