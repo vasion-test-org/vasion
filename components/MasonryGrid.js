@@ -149,15 +149,16 @@ const Body = styled.div`
   }
 `;
 
-const Header = styled.h2`
-  align-self: ${(props) => (props?.$center ? "center" : "flex-start")};
-  padding-left: ${(props) => (props?.$center ? "unset" : "100px")};
+const Header = styled.div`
+  align-self: center;
+
   ${media.mobile} {
     align-self: center;
   }
 `;
 
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -165,7 +166,6 @@ const Wrapper = styled.div`
   text-align: center;
   gap: 1.5vw;
   padding: 5.556vw 0;
-
   ${media.fullWidth} {
     gap: 24px;
     padding: 80px 0;
