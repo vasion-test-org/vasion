@@ -4,19 +4,19 @@ import styled, { ThemeProvider } from "styled-components";
 import colors from "@/styles/colors";
 import text from "@/styles/text";
 import media from "@/styles/media";
-import { useRouter } from "next/navigation";
+import { storyblokEditable } from "@storyblok/react/rsc";
+import Link from "next/link";
 
 const IntegrationBloks = ({ types, isMobile }) => {
-  const router = useRouter();
   const imageList = (icons) => {
     return icons?.map((icon, index) => (
-      <Logo key={index} src={icon?.filename} alt={icon?.alt || ""} />
+      <Logo
+        {...storyblokEditable(icon?.filename)}
+        key={index}
+        src={icon?.filename}
+        alt={icon?.alt || ""}
+      />
     ));
-  };
-  const handleNavigation = (url) => {
-    if (url) {
-      router.push(url);
-    }
   };
   const typeList = types?.map((item, index) => {
     let titleContent;
@@ -26,14 +26,12 @@ const IntegrationBloks = ({ types, isMobile }) => {
       titleContent = item?.title;
     }
     return (
-      <IntegrationItem
-        key={index}
-        $columns={index}
-        onClick={() => handleNavigation(item?.link_url)}
-      >
-        <Title>{titleContent}</Title>
-        <ImagesContainer>{imageList(item?.icons)}</ImagesContainer>
-      </IntegrationItem>
+      <Link href={item?.link_url.url}>
+        <IntegrationItem key={index} $columns={index}>
+          <Title>{titleContent}</Title>
+          <ImagesContainer>{imageList(item?.icons)}</ImagesContainer>
+        </IntegrationItem>
+      </Link>
     );
   });
 
