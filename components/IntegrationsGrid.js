@@ -51,7 +51,6 @@ const IntegrationsGrid = ({ blok }) => {
   const handleViewMore = () => {
     setIsOpen(true);
   };
-
   return (
     <Wrapper className="integration-wrapper" ref={wrapperRef}>
       <Intro>
