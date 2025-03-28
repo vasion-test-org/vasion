@@ -5,7 +5,6 @@ import media from "@/styles/media";
 import text from "@/styles/text";
 import RichTextRenderer from "./renderers/RichTextRenderer";
 import Form from "./Form";
-import { storyblokEditable } from "@storyblok/react/rsc";
 const MasonryGrid = ({ blok }) => {
   console.log(blok);
   const [pairs, setPairs] = useState([]);
