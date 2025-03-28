@@ -26,8 +26,8 @@ const IntegrationBloks = ({ types, isMobile }) => {
       titleContent = item?.title;
     }
     return (
-      <Link href={item?.link_url.url}>
-        <IntegrationItem key={index} $columns={index}>
+      <Link href={item?.link_url.url} key={index}>
+        <IntegrationItem $columns={index}>
           <Title>{titleContent}</Title>
           <ImagesContainer>{imageList(item?.icons)}</ImagesContainer>
         </IntegrationItem>
