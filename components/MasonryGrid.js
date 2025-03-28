@@ -1,55 +1,53 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import media from "styles/media";
-import text from "styles/text";
-import LightBoxBtn from "./LightboxBtn";
-
-const MasonryGrid = ({ content }) => {
+import styled, { ThemeProvider } from "styled-components";
+import media from "@/styles/media";
+import text from "@/styles/text";
+import RichTextRenderer from "./renderers/RichTextRenderer";
+import Form from "./Form";
+import { storyblokEditable } from "@storyblok/react/rsc";
+const MasonryGrid = ({ blok }) => {
+  console.log(blok);
   const [pairs, setPairs] = useState([]);
   const imageData = pairs?.map((item, index) => {
     return (
       <Column key={index}>
         <Image
-          src={item?.image1?.sourceUrl}
-          alt={item?.image1?.altText}
+          src={item?.image1?.filename}
+          alt={item?.image1?.alt}
           $item={index}
         />
-        <Image src={item?.image2?.sourceUrl} alt={item?.image2?.altText} />
+        <Image src={item?.image2?.filename} alt={item?.image2?.alt} />
       </Column>
     );
   });
 
   useEffect(() => {
-    if (content?.gallery.length) {
+    if (blok?.gallery.length) {
       const tempPairs = [];
-      for (let i = 0; i < content?.gallery?.length; i += 2) {
+      for (let i = 0; i < blok?.gallery?.length; i += 2) {
         let createPair = {
-          image1: content?.gallery[i],
-          image2: content?.gallery[i + 1] || null,
+          image1: blok?.gallery[i],
+          image2: blok?.gallery[i + 1] || null,
         };
         tempPairs.push(createPair);
       }
       setPairs(tempPairs);
     }
-  }, []);
+  }, [blok.gallery]);
 
   return (
     <Wrapper>
-      <Header $center={content?.centeredHeader} $small={content?.smallHeader}>
-        {content?.header}
+      <Header $center={blok.centered_header}>
+        <RichTextRenderer document={blok.header} />
       </Header>
-      {content?.body && (
-        <Body dangerouslySetInnerHTML={{ __html: content?.body }} />
+      {blok?.body_copy && (
+        <Body>
+          <RichTextRenderer document={blok.body_copy} />
+        </Body>
       )}
       <Gallery $isOdd={pairs.length % 2 !== 0}>{imageData}</Gallery>
-      {content?.lightboxText && content?.formId && (
-        <LightBoxBtn
-          formId={content.formId}
-          ty={content?.thankYouPage}
-          lightboxText={content.lightboxText}
-        />
-      )}
+      {/* {blok?.form && <Form blok={blok.form[0]} />} */}
     </Wrapper>
   );
 };
@@ -132,7 +130,7 @@ const Gallery = styled.div`
   }
 `;
 
-const Body = styled.p`
+const Body = styled.div`
   ${text.bodyMd}
   width: 63.333vw;
   padding-bottom: 1.375vw;
@@ -153,8 +151,8 @@ const Body = styled.p`
 `;
 
 const Header = styled.h2`
-  ${(props) => (props?.$small ? `${text.h3}` : `${text.h2}`)};
   align-self: ${(props) => (props?.$center ? "center" : "flex-start")};
+  padding-left: ${(props) => (props?.$center ? "unset" : "100px")};
   ${media.mobile} {
     align-self: center;
   }
