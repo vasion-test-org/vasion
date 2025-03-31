@@ -10,7 +10,6 @@ import CarouselArrow from "@/assets/svg/CarouselArrow.svg";
 import { horizontalLoop } from "@/functions/horizontalLoop";
 
 const ImageCarousel = ({ blok }) => {
-  console.log(blok);
   const Images = blok.carousel_assets[0].images.map((image, index) => (
     <CarouselImage
       key={image.filename}
