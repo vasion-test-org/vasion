@@ -35,6 +35,8 @@ const MobileNav = ({ blok }) => {
       <TabDropdown>
         {item.tab_columns.map((column, colIndex) => (
           <NavItemsDiv key={`column-${colIndex}`}>
+             <ColumnHeader>{column.column_header}</ColumnHeader>
+             <NavItemsContainer>
             {column.nav_items.map((item, itemIndex) => {
               const formattedIconString = item.icon.replace(/\s+/g, '');
               const IconComponent = Icons[formattedIconString] || null;
@@ -71,6 +73,7 @@ const MobileNav = ({ blok }) => {
                 </NavItem>
               );
             })}
+            </NavItemsContainer>
           </NavItemsDiv>
         ))}
       </TabDropdown>
@@ -97,8 +100,8 @@ const ImageWrapper = styled.div`
   ${media.mobile} {
     border-radius: 0.417vw;
     min-height: ${(props) =>
-      props.card_size === 'large' ? '17.188vw' : '7.617vw'};
-    min-width: ${(props) => (props.card_size === 'large' ? '100%' : '8.496vw')};
+      props.card_size === 'large' ? '17.083vw' : '7.617vw'};
+    max-width: ${(props) => (props.card_size === 'large' ? '32.292vw' : '8.496vw')};
   }
 `;
 const KeyDiv = styled.div``;
@@ -139,8 +142,7 @@ const NavItem = styled.div`
   ${media.mobile} {
     cursor: pointer;
     display: flex;
-    flex-direction: ${(props) =>
-      props.card_size === 'large' ? 'column' : 'row'};
+    flex-direction: row;
     align-items: ${(props) =>
       props.card_size === 'large' ? 'start' : 'center'};
     background: ${(props) =>
@@ -149,17 +151,18 @@ const NavItem = styled.div`
       props.card_size === 'small'
         ? '3.333vw'
         : props.card_size === 'medium'
+        ? '3.333vw' : props.card_size === 'large'
         ? '3.333vw'
-        : '3.333vw'};
+        : '0.833vw'};
 
     width: ${(props) =>
       props.card_size === 'small'
-        ? '96.667vw'
+        ? '100%'
         : props.card_size === 'medium'
         ? '93.333vw'
         : props.card_size === 'large'
         ? '93.333vw'
-        : 'auto'};
+        : '50%'};
 
     padding: ${(props) =>
       props.card_size === 'small'
@@ -167,22 +170,71 @@ const NavItem = styled.div`
         : props.card_size === 'medium'
         ? '0.833vw 5vw 0.833vw 0.833vw'
         : props.card_size === 'large'
-        ? 'unset'
+        ? '1.667vw 3.333vw 1.667vw 1.667vw'
         : '1.667vw 3.333vw 1.667vw 1.667vw'};
     border-radius: 0.391vw;
-    height: ${(props) => (props.card_size === 'large' ? '20.417vw' : 'auto')};
+    height: ${(props) => (props.card_size === 'large' ? '20.417vw' : props.card_size === 'medium'
+        ? '18.75vw': 'auto')};
   }
+  &:hover {
+      background: ${colors.lightPurpleGrey};
+      box-shadow: ${(props) =>
+      props.card
+        ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
+        : 'unset'};
+      path {
+          fill: ${(props) =>
+            props.card ? colors.lightPurple : colors.primaryOrange};
+        }
+  
+      g {
+        path {
+          fill: ${(props) =>
+            props.card ? colors.white : colors.primaryOrange};
+        }
+      }
+  
+      ${Link} {
+        color: ${colors.primaryOrange};
+      }
+    }
 `;
-const NavItemsDiv = styled.div``;
-const TabDropdown = styled.div`
+
+const ColumnHeader = styled.p`
+  ${text.bodySm};
+  color: ${colors.txtSubtle};
+`;
+
+const NavItemsContainer = styled.div`
+${media.mobile} {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  row-gap: 3.333vw;
+}
+`
+const NavItemsDiv = styled.div`
+${media.mobile} {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
+  width: 96.667vw;
+}
+`;
+const TabDropdown = styled.div`
+${media.mobile} {
+  display: flex;
+  flex-direction: column;
+  padding: 1.667vw 1.667vw 5vw 1.667vw;
+  gap: 3.333vw;
+}
 `;
 const TabHeader = styled.div`
   ${media.mobile} {
     padding: 3.542vw 3.333vw;
     height: 10.833vw;
-    margin-bottom: 3.333vw;
+    /* margin-bottom: 3.333vw; */
     width: 100%;
     background: rgba(61, 37, 98, 0.05);
   }
