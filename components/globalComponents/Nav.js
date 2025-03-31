@@ -80,6 +80,10 @@ const Nav = ({ blok }) => {
     </KeyDiv>
   ));
 
+  const mobileMappedNav = currentNavItems.map((item, index) => {
+
+  })
+
   useEffect(() => {
     ScrollTrigger.create({
       trigger: '.mainNavWrapper',
@@ -306,7 +310,7 @@ ${media.tablet} {
 
   width: ${(props) =>
     props.card_size === 'small'
-      ? '280px'
+      ? '27.344vw'
       : props.card_size === 'medium'
       ? '30.566vw'
       : props.card_size === 'large'
