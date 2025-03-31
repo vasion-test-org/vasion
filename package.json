@@ -19,6 +19,7 @@
     "clone-deep": "^4.0.1",
     "gsap": "npm:@gsap/business@^3.12.7",
     "next": "^15.2.1",
+    "next-sitemap": "^4.2.3",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-player": "^2.16.0",

@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { usePathname } from 'next/navigation';
 import styled, { ThemeProvider } from 'styled-components';
@@ -19,20 +19,20 @@ const MobileNav = ({ blok }) => {
   const path = usePathname();
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-
+  const dropdownIndex = useRef(null)
   let currentNavItems = blok.english_nav_items;
-
+  const isOpen = useRef(false);
+  
   if (path.startsWith('/de')) {
     currentNavItems = blok.german_nav_items;
   } else if (path.startsWith('/fr')) {
     currentNavItems = blok.french_nav_items;
   }
 
-  console.log(currentNavItems);
   const mappedNav = currentNavItems.map((item, index) => (
     <Tab key={`tab-${index}`}>
-      <TabHeader>{item.tab_name}</TabHeader>
-      <TabDropdown>
+      <TabHeader className='tabHeader'>{item.tab_name}</TabHeader>
+      <TabDropdown className='tabDropdowns' id={`tabHeader-${index}`}>
         {item.tab_columns.map((column, colIndex) => (
           <NavItemsDiv key={`column-${colIndex}`}>
              <ColumnHeader>{column.column_header}</ColumnHeader>
@@ -80,9 +80,62 @@ const MobileNav = ({ blok }) => {
     </Tab>
   ));
   
+  useEffect(() => {
+    ScrollTrigger.create({
+      trigger: '.mainNavWrapper',
+      start: 'top top',
+      end: () => `${document.body.scrollHeight - window.innerHeight}px`,
+      pin: true,
+      pinSpacing: false,
+      // markers: true,
+    });
+  }, []);
+
+  useEffect(() => {
+    gsap.set('.tabDropdowns', { height: 0, display: 'none' });
+
+    const allTabs = gsap.utils.toArray('.tabHeader');
+    let tl = gsap.timeline({ paused: true });
+
+    const openDropdown = (index) => {
+      tl.clear();
+
+      // Case 1: Clicking the same tab that's already open
+      if (dropdownIndex.current === index && isOpen.current) {
+        tl.to(`#tabHeader-${index}`, { height: 0 })
+          .set(`#tabHeader-${index}`, { display: 'none' });
+        isOpen.current = false;
+        dropdownIndex.current = null;
+        tl.play();
+        return;
+      }
+
+      // Case 2: Clicking a new tab
+      dropdownIndex.current = index;
+      isOpen.current = true;
+
+      tl.to('.tabDropdowns', { height: 0 })
+        .set('.tabDropdowns', { display: 'none' }, ">-0.15")
+        .set(`#tabHeader-${index}`, { display: 'flex' })
+        .to(`#tabHeader-${index}`, { height: 'auto' });
+
+      tl.play();
+    };
+
+    allTabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => openDropdown(index));
+    });
+
+    return () => {
+      allTabs.forEach((tab, index) => {
+        tab.removeEventListener('click', () => openDropdown(index));
+      });
+    };
+  }, []);
+  
 
   return (
-    <MainWrapper>
+    <MainWrapper className='mainNavWrapper'>
       <VasionLogo src='/images/logos/vasion-logo-purple.webp' />
       <Hamburger></Hamburger>
       <Dropdown>{mappedNav}</Dropdown>
@@ -101,7 +154,8 @@ const ImageWrapper = styled.div`
     border-radius: 0.417vw;
     min-height: ${(props) =>
       props.card_size === 'large' ? '17.083vw' : '7.617vw'};
-    max-width: ${(props) => (props.card_size === 'large' ? '32.292vw' : '8.496vw')};
+    min-width: ${(props) => (props.card_size === 'large' ? '32.292vw' : '8.496vw')};
+    max-width: ${(props) => (props.card_size === 'large' ? '32.292vw' : 'unset')};;
   }
 `;
 const KeyDiv = styled.div``;
@@ -201,6 +255,9 @@ const NavItem = styled.div`
 `;
 
 const ColumnHeader = styled.p`
+${media.mobile} {
+  margin-bottom: 3.333vw;
+}
   ${text.bodySm};
   color: ${colors.txtSubtle};
 `;
@@ -237,32 +294,38 @@ const TabHeader = styled.div`
     /* margin-bottom: 3.333vw; */
     width: 100%;
     background: rgba(61, 37, 98, 0.05);
+
   }
 `;
 const Tab = styled.div`
   display: flex;
   flex-direction: column;
   background: ${colors.white};
+  
+  ${TabHeader}:not(:last-child) {
+      border-bottom: 1px solid ${colors.ghostGrey};
+    }
 `;
 const Dropdown = styled.div`
   ${media.mobile} {
     position: absolute;
     display: flex;
     flex-direction: column;
-    height: auto;
+    height: 100vh;
     width: 100%;
     top: 12.708vw;
-    border: 1px solid red;
+    /* border: 1px solid red; */
+    overflow: scroll;
   }
 `;
 const Hamburger = styled.div`
   ${media.mobile} {
     width: 4.167vw;
     height: 2.292vw;
-    border: 1px solid red;
+    /* border: 1px solid red; */
   }
 `;
-const VasionLogo = styled.div`
+const VasionLogo = styled.img`
   ${media.mobile} {
     width: 20.833vw;
     height: 2.917vw;
@@ -278,7 +341,7 @@ const MainWrapper = styled.div`
     justify-content: space-between;
     background: ${colors.white};
     height: 12.821vw;
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
   }
 `;
 export default MobileNav;

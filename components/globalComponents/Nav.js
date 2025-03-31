@@ -80,10 +80,6 @@ const Nav = ({ blok }) => {
     </KeyDiv>
   ));
 
-  const mobileMappedNav = currentNavItems.map((item, index) => {
-
-  })
-
   useEffect(() => {
     ScrollTrigger.create({
       trigger: '.mainNavWrapper',
