@@ -8,45 +8,47 @@ import text from "@/styles/text";
 const G2Banner = () => {
   return (
     <Background>
-      <Heading>The #1 Print Management Software on G2</Heading>
-      <FlexContainer>
-        <SpotLightImage
-          loading="lazy"
-          alt="spotlight Image"
-          src="/images/G2/23/summer/SpotlightBadge.webp"
-        />
-        <BadgeContainer>
-          <SupportingBadge
+      <Wrapper>
+        <Heading>The #1 Print Management Software on G2</Heading>
+        <FlexContainer>
+          <SpotLightImage
             loading="lazy"
-            alt="highest"
-            src="/images/G2/23/summer/BestRelationship.webp"
+            alt="spotlight Image"
+            src="/images/G2/23/summer/SpotlightBadge.webp"
           />
-          <SupportingBadge
-            alt="results"
-            src="/images/G2/23/summer/BestResults.webp"
-          />
-          <SupportingBadge
-            loading="lazy"
-            alt="momentum"
-            src="/images/G2/23/summer/BestSupport.webp"
-          />
-          <SupportingBadge
-            loading="lazy"
-            alt="implement"
-            src="/images/G2/23/summer/BestUsability.webp"
-          />
-          <SupportingBadge
-            loading="lazy"
-            alt="usability"
-            src="/images/G2/23/summer/MomentumLeader.webp"
-          />
-          <SupportingBadge
-            loading="lazy"
-            alt="relationship"
-            src="/images/G2/23/summer/MostImplementable.webp"
-          />
-        </BadgeContainer>
-      </FlexContainer>
+          <BadgeContainer>
+            <SupportingBadge
+              loading="lazy"
+              alt="highest"
+              src="/images/G2/23/summer/BestRelationship.webp"
+            />
+            <SupportingBadge
+              alt="results"
+              src="/images/G2/23/summer/BestResults.webp"
+            />
+            <SupportingBadge
+              loading="lazy"
+              alt="momentum"
+              src="/images/G2/23/summer/BestSupport.webp"
+            />
+            <SupportingBadge
+              loading="lazy"
+              alt="implement"
+              src="/images/G2/23/summer/BestUsability.webp"
+            />
+            <SupportingBadge
+              loading="lazy"
+              alt="usability"
+              src="/images/G2/23/summer/MomentumLeader.webp"
+            />
+            <SupportingBadge
+              loading="lazy"
+              alt="relationship"
+              src="/images/G2/23/summer/MostImplementable.webp"
+            />
+          </BadgeContainer>
+        </FlexContainer>
+      </Wrapper>
     </Background>
   );
 };
@@ -151,4 +153,13 @@ const SupportingBadge = styled.img`
   ${media.mobile} {
     width: 23.131vw;
   }
+`;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-self: center;
+  jusify-self: center;
+  align-items: center;
+  justify-content: center;
 `;
