@@ -145,16 +145,16 @@ function JobList() {
   } else {
     content = (
       <Results>
-        {filteredJobs.map((job) => {
+        {filteredJobs.map((job, index) => {
           return (
-            <JobItem key={job.url}>
+            <JobItem key={job + index}>
               <ColumnContainer>
                 <HeadingLink
                   href={job.url}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <JobTitle key={job.id}>{job.title}</JobTitle>
+                  <JobTitle key={job.id + index}>{job.title}</JobTitle>
                 </HeadingLink>
                 <p>{calculateDaysAgo(job.created_at)}</p>
               </ColumnContainer>

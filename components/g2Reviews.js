@@ -2,7 +2,7 @@
 import React from "react";
 import styled, { ThemeProvider } from "styled-components";
 import media from "@/styles/media";
-
+import Button from "@/components/globalComponents/Button";
 const G2Reviews = () => {
   return (
     <Wrapper>
@@ -29,12 +29,18 @@ const G2Reviews = () => {
         <Image loading="lazy" src="/images/zero-trust/review-3.png" alt="" />
         <Image loading="lazy" src="/images/zero-trust/review-4.png" alt="" />
       </PullQuoteContainer>
-      <Link
-        href="https://www.g2.com/products/printerlogic/reviews#reviews"
-        target="_blank"
-      >
-        Read Our Reviews →
-      </Link>
+      <Button
+        $buttonData={{
+          theme: "primary",
+          link_url: {
+            url: "https://www.g2.com/products/printerlogic/reviews#reviews",
+            target: "_blank",
+          },
+          link_text: "Read Our Reviews →",
+          layout: "row",
+          link_size: "medium",
+        }}
+      />
     </Wrapper>
   );
 };
@@ -169,4 +175,9 @@ const Image = styled.img`
     width: 90vw;
   }
 `;
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
