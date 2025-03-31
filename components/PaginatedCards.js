@@ -17,7 +17,7 @@ const PaginatedCards = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const currentIndex = useRef(0);
-  console.log(blok);
+  // console.log(blok);
   const mappedCards = [];
 
   for (let i = 0; i < blok.cards.length; i += 6) {

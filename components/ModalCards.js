@@ -13,7 +13,7 @@ const ModalCards = ({ blok }) => {
   const [isActive, setIsActive] = useState(null);
 // console.log(blok)
   const handleModal = (item) => {
-    console.log(item);
+    // console.log(item);
     if (!item.bio && !hasYouTube) {
       return;
     }

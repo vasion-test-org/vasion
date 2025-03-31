@@ -10,7 +10,7 @@ import media from '@/styles/media';
 
 const GridItem = ({ content, alignment }) => {
   // console.log(content.content[0].Content)
-  console.log(content)
+  // console.log(content)
   return (
     <GridItemWrapper alignment={alignment}>
       {content.icon && (

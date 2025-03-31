@@ -6,7 +6,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import media from 'styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 const TwoColumnList = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
 
   const introMap = blok.intro_content.map((item) => (
     <RichTextRenderer document={item.copy} />
@@ -34,7 +34,7 @@ const TwoColumnList = ({ blok }) => {
     </ColumnItem>
   ));
 
-  console.log('column 2',column2)
+  // console.log('column 2',column2)
   return (
     <Wrapper
       spacingOffset={blok.offset_spacing}

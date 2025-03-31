@@ -14,7 +14,7 @@ import RichTextRenderer from './renderers/RichTextRenderer';
 gsap.registerPlugin(Draggable, InertiaPlugin);
 
 const ReviewsCarousel = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   const redditReviews = blok?.reviews;
   const statsList = blok?.stats;
 

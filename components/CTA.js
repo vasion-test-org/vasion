@@ -22,7 +22,7 @@ const CTA = ({ blok }) => {
     blok?.image?.[2] || blok?.image?.[0]
   );
 
-  console.log(blok.section_spacing);
+  // console.log(blok.section_spacing);
   return (
     <ThemeProvider theme={selectedTheme}>
       <PillContainer
