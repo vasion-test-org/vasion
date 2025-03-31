@@ -8,7 +8,7 @@ import text from '@/styles/text';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 const NumberBlock = ({ blok }) => {
-  console.log(blok)
+  // console.log(blok)
 return (
 <NumberBlockContainer>
  <NumberBlockDiv bg={blok.block_color.value} color={blok.text_color.value}>{blok.number}</NumberBlockDiv>

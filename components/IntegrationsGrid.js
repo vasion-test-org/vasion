@@ -9,7 +9,7 @@ import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import IntegrationBloks from "@/components/globalComponents/IntegrationBloks";
 
 const IntegrationsGrid = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   const [isOpen, setIsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
