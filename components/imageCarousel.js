@@ -5,15 +5,18 @@ import styled from "styled-components";
 import media from "@/styles/media";
 import colors from "@/styles/colors";
 import text from "@/styles/text";
-import { horizontalLoop } from "utils/horizontalLoop";
+import CarouselArrow from "@/assets/svg/CarouselArrow.svg";
 
-const ImageCarousel = ({ content }) => {
-  const Images = content.images.map((image, index) => (
+import { horizontalLoop } from "@/functions/horizontalLoop";
+
+const ImageCarousel = ({ blok }) => {
+  console.log(blok);
+  const Images = blok.carousel_assets[0].images.map((image, index) => (
     <CarouselImage
-      key={image.sourceUrl}
-      className="carouselImages"
+      key={image.filename}
+      className={"carouselImages"}
       id={`img-${index}`}
-      src={image.sourceUrl}
+      src={image.filename}
     />
   ));
 
@@ -46,20 +49,20 @@ const ImageCarousel = ({ content }) => {
 
   return (
     <Wrapper>
-      <Header>{content.headline}</Header>
+      <Header>{blok.header}</Header>
       <Carousel>
         <LeftArrow id="leftArrow" />
         <CarouselImageContainer>
           <Slides>{Images}</Slides>
         </CarouselImageContainer>
-        <RightArrow src={"/images/uiElements/CarouselArrow"} id="rightArrow" />
+        <RightArrow id="rightArrow" />
       </Carousel>
     </Wrapper>
   );
 };
 export default ImageCarousel;
 
-const RightArrow = styled.img`
+const RightArrow = styled(CarouselArrow)`
   position: relative;
   z-index: 2;
   rotate: 180deg;
@@ -82,7 +85,7 @@ const RightArrow = styled.img`
     height: 5.841vw;
   }
 `;
-const LeftArrow = styled(Arrow)`
+const LeftArrow = styled(CarouselArrow)`
   position: relative;
   z-index: 2;
   width: 2.083vw;
