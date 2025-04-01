@@ -7,7 +7,7 @@ export async function GET() {
   const urls = data.stories.map((story) => {
     return `
       <url>
-        <loc>https://vasion-ten.vercel.app/${story.full_slug}</loc>
+        <loc>https://vasion-ten.vercel.app/${story.full_slug}/</loc>
         <lastmod>${new Date(story.published_at).toISOString()}</lastmod>
       </url>
     `;

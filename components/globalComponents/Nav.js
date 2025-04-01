@@ -405,7 +405,7 @@ const Dropdown = styled.div`
 
   ${Column}:not(:last-child) {
     padding-right: 2vw;
-    border-right: 1px solid ${colors.ghostGrey};
+    border-right: 1px solid ${colors.grey50};
 
     ${media.fullWidth} {
       padding-right: 32px;

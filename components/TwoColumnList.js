@@ -14,7 +14,7 @@ const TwoColumnList = ({ blok }) => {
 
   const column1 = blok.column_1.map((item) => (
     <ColumnItem>
-      {item.icon.filename && <ItemIcon src={item.icon.filename} />}
+      {item.icon.filename && <ItemIcon small_icons={blok.small_icons} src={item.icon.filename} />}
       <ColumnCopy>
         {item.copy.map((item) => (
           <RichTextRenderer document={item.copy} />
@@ -25,7 +25,7 @@ const TwoColumnList = ({ blok }) => {
 
   const column2 = blok?.column_2?.map((item) => (
     <ColumnItem>
-      {item.icon.filename && <ItemIcon src={item.icon.filename} />}
+      {item.icon.filename && <ItemIcon small_icons={blok.small_icons} src={item.icon.filename} />}
       <ColumnCopy>
         {item.copy.map((item) => (
           <RichTextRenderer document={item.copy} />
@@ -41,7 +41,7 @@ const TwoColumnList = ({ blok }) => {
       spacing={blok.section_spacing}
       {...storyblokEditable(blok)}
     >
-      <IntroContent>{introMap}</IntroContent>
+      <IntroContent alignment={blok.alignment}>{introMap}</IntroContent>
       <Columns>
         <Column doublecolumn={column2.length < 0}>{column1}</Column>
         {column2.length > 0 && <Column>{column2}</Column>}
@@ -69,22 +69,22 @@ const ColumnCopy = styled.div`
   }
 `;
 const ItemIcon = styled.img`
-  width: 3vw;
-  height: 3vw;
+  width: ${props => props.small_icons ? '1.25vw' : '3vw'};
+  height: ${props => props.small_icons ? '1.25vw' : '3vw'};
 
   ${media.fullWidth} {
-    width: 48px;
-  height: 48px;
+    width: ${props => props.small_icons ? '20px' : '48px'};
+    height: ${props => props.small_icons ? '20px' : '48px'};
   }
   
   ${media.tablet} {
-    width: 4.688vw;
-    height: 4.688vw;
+    width: ${props => props.small_icons ? '1.953vw' : '4.688vw'};
+    height: ${props => props.small_icons ? '1.953vw' : '4.688vw'};
   }
   
   ${media.mobile} {
-    width: 10vw;
-    height: 10vw;
+    width: ${props => props.small_icons ? '4.167vw' : '10vw'};
+    height: ${props => props.small_icons ? '4.167vw' : '10vw'};
   }
 `;
 const ColumnItem = styled.div`
@@ -154,6 +154,7 @@ const IntroContent = styled.div`
   gap: 0.75vw;
   margin-bottom: 2.5vw;
   width: 81.5vw;
+  text-align: ${props => props.alignment ? props.alignment : 'left'};
 
   ${media.fullWidth} {
     gap: 12px;
