@@ -41,8 +41,8 @@ export const defaultTheme = {
   form: {
     textColor: "#1B1D21",
     formBg: "#ffffff",
-    inputBg: "#584282",
-    inputBorder: "#ffffff",
+    inputBg: "#ffffff",
+    inputBorder: "#A8ABAE",
     buttonBg: "#ff5100",
   },
   small_quote: {
