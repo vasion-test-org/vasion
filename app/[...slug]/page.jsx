@@ -11,7 +11,7 @@ export default async function DynamicPage({ params }) {
   const locale = isLocalized ? slugArray[0] : "en";
   const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");
 
-// console.log(params)
+console.log(params)
   let story = await fetchData(storySlug, locale, "published");
 
 
@@ -42,14 +42,14 @@ async function fetchData(slug, locale, version) {
   try {
     const { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
     if (!data.story) {
-      // console.error(`[❌ Server] Story not found for slug: ${slug} and locale: ${locale}`);
+      console.error(`[❌ Server] Story not found for slug: ${slug} and locale: ${locale}`);
       return null;
     }
 
-    // console.log(`[✅ Success] Story fetched: ${data.story.full_slug} (${locale}) [${version}]`);
+    console.log(`[✅ Success] Story fetched: ${data.story.full_slug} (${locale}) [${version}]`);
     return data.story;
   } catch (error) {
-    // console.error(`[❌ Server] Error fetching story: ${error.message}`);
+    console.error(`[❌ Server] Error fetching story: ${error.message}`);
     return null;
   }
 }
