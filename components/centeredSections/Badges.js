@@ -11,7 +11,7 @@ import RichTextRenderer from "../renderers/RichTextRenderer";
 const G2Badges = ({ badges }) => {
   function splitBadges(badges, n) {
     let badgesGroup = [];
-    for (var i = 0, j = 0; i < badges.length; i++) {
+    for (var i = 0, j = 0; i < badges?.length; i++) {
       if (i >= n && i % n === 0) j++;
       badgesGroup[j] = badgesGroup[j] || [];
       badgesGroup[j].push(badges[i]);
@@ -19,7 +19,7 @@ const G2Badges = ({ badges }) => {
     return badgesGroup;
   }
 
-  const badgesArrays = splitBadges(badges.badge_cards, 3);
+  const badgesArrays = splitBadges(badges?.badge_cards, 3);
   const allBadges = badgesArrays.map((badge, index) => (
     <BadgesInnerDiv key={index} className="badgeGroup">
       {badge.map((badge, badge_index) => (

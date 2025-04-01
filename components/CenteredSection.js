@@ -94,9 +94,9 @@ const CenteredSection = ({ blok }) => {
               <StackedCards blok={blok.stacked_cards} />
             )}
             {blok.component_type === 'badges' && blok.badges && mobile ? (
-              <BadgesMobile badges={blok.badges[0]} />
+              <BadgesMobile badges={blok?.badges?.[0]} />
             ) : (
-              <Badges badges={blok.badges[0]} />
+              <Badges badges={blok?.badges?.[0]} />
             )}
           </AttachedComponent>
         )}
