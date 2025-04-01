@@ -1,71 +1,26 @@
 "use client";
 import React, { useEffect } from "react";
 import styled from "styled-components";
-// import { NeatGradient } from "@firecms/neat";
+import { useRouter } from "next/router";
 import VasionStarSVG from "@/assets/svg/VasionStarBig.svg";
 import VasionSmall from "@/assets/svg/SmallVasion.svg";
 import colors from "@/styles/colors";
 import media from "@/styles/media";
 import text from "@/styles/text";
 import gsap from "gsap";
-import GlobalButton from "components/buttons/GlobalButton";
+import Button from "@/components/globalComponents/Button";
 import Facebook from "@/assets/svg/footer/Facebook.svg";
 import Twitter from "@/assets/svg/footer/Twitter.svg";
 import LinkedIn from "@/assets/svg/footer/LinkedIn.svg";
-// import { navigate } from "gatsby";
-import { useRouter } from "next/router";
 
-const Footer = () => {
-  const config = {
-    colors: [
-      {
-        color: "#E3533B",
-        enabled: true,
-      },
-      {
-        color: "#201435",
-        enabled: true,
-      },
-      {
-        color: "#002027",
-        enabled: true,
-      },
-      {
-        color: "#8C5ED8",
-        enabled: true,
-      },
-      {
-        color: "#f5e1e5",
-        enabled: false,
-      },
-    ],
-    speed: 7,
-    horizontalPressure: 3,
-    verticalPressure: 5,
-    waveFrequencyX: 10,
-    waveFrequencyY: 10,
-    waveAmplitude: 0,
-    shadows: 0,
-    highlights: 1,
-    colorBrightness: 1.1,
-    colorSaturation: 5,
-    wireframe: false,
-    colorBlending: 8,
-    backgroundColor: "#201435",
-    backgroundAlpha: 1,
-    grainScale: 2,
-    grainSparsity: 0,
-    grainIntensity: 0.1,
-    grainSpeed: 1,
-    resolution: 1.05,
-  };
+const Footer = ({ blok }) => {
+  console.log(blok);
 
   useEffect(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: ".footer",
         start: "50% 50%",
-        // markers: true,
       },
     });
 
@@ -80,176 +35,33 @@ const Footer = () => {
     const canvas = document.getElementById("gradientCanvas");
 
     if (canvas) {
-      const neat = new NeatGradient({
-        ref: canvas,
-        ...config,
-      });
     }
   }, []);
+  const allLinksColumns =
+    blok?.footer_columns?.map((column) => (
+      <LinkColumn key={column._uid}>
+        <LinkColumnHeader>
+          {column.column_header?.content?.[0]?.content?.[0]?.text || ""}
+        </LinkColumnHeader>
+        {column.links?.map((link) => {
+          // Use the URL directly from Storyblok
+          const url = link.link?.url || link.link?.cached_url || "";
+          const isExternal =
+            url.startsWith("http://") || url.startsWith("https://");
 
-  const links = [
-    {
-      columnHeader: "Platform",
-      links: [
-        {
-          linkName: "Overview",
-          link: "/vasion-overview/",
-        },
-        {
-          linkName: "Capture",
-          link: "/capture",
-        },
-        {
-          linkName: "Workflow",
-          link: "/workflow",
-        },
-        {
-          linkName: "Signature",
-          link: "/signature",
-        },
-        {
-          linkName: "Print",
-          link: "/print",
-        },
-        {
-          linkName: "Content Management",
-          link: "/content-management",
-        },
-        {
-          linkName: "Beta Program",
-          link: "/beta-flight-program/",
-        },
-        // {
-        //   linkName: 'Storage',
-        //   link: '/'
-        // },
-        // {
-        //   linkName: 'Reports',
-        //   link: '/'
-        // },
-        // {
-        //   linkName: 'Templates',
-        //   link: '/'
-        // },
-        // {
-        //   linkName: 'Admin',
-        //   link: '/'
-        // },
-      ],
-    },
-    {
-      columnHeader: "Company",
-      links: [
-        {
-          linkName: "About Us",
-          link: "/about-us/",
-        },
-        {
-          linkName: "Visit Us",
-          link: "/vasion-executive-briefing-center",
-        },
-        {
-          linkName: "Careers",
-          link: "/careers",
-        },
-        {
-          linkName: "Giving",
-          link: "/vasion-gives-back/",
-        },
-        {
-          linkName: "Our Customers",
-          link: "https://printerlogic.com/customers/",
-        },
-        {
-          linkName: "Newsroom",
-          link: "/newsroom",
-        },
-        // {
-        //   linkName: 'Pricing',
-        //   link: '/'
-        // },
-        {
-          linkName: "Review Us",
-          link: "/review-us/",
-        },
-        {
-          linkName: "Contact Us",
-          link: "/contact-us",
-        },
-      ],
-    },
-    {
-      columnHeader: "Partners",
-      links: [
-        {
-          linkName: "Become a Partner",
-          link: "https://partners.vasion.com/prm/English/s/applicant?_gl=1*17bd9ww*_gcl_au*MzY3MTY3NjY5LjE3MjUzODgwMDg.*_ga*MjQzMzgxOTYyLjE2ODczNTg1NTQ.*_ga_407WZSYMN0*MTcyOTI5ODAwNC4yNTAuMS4xNzI5Mjk5OTA2LjAuMC4w",
-        },
-        {
-          linkName: "Partner Overview",
-          link: "/partner-overview/",
-        },
-        {
-          linkName: "Ecosystem Partners",
-          link: "/ecosystem-partners/",
-        },
-        {
-          linkName: "MSP Partners",
-          link: "/msp-partner/",
-        },
-        {
-          linkName: "Sales Partners",
-          link: "/sales-partners/",
-        },
-      ],
-    },
-    {
-      columnHeader: "Resources",
-      links: [
-        {
-          linkName: "Blog",
-          link: "/blog",
-        },
-        {
-          linkName: "Resource Library",
-          link: "/resources",
-        },
-        {
-          linkName: "Tech Support",
-          link: "/technical-support",
-        },
-        {
-          linkName: "Supported Printers",
-          link: "https://printerlogic.com/cpa/",
-        },
-        {
-          linkName: "Knowledge Base",
-          link: "https://kb.printerlogic.com/s/",
-        },
-      ],
-    },
-  ];
-
-  const allLinksColumns = links.map((column) => (
-    <LinkColumn key={column.columnHeader}>
-      <LinkColumnHeader>{column.columnHeader}</LinkColumnHeader>
-      {column.links.map((link) => {
-        const isExternal =
-          link.link.startsWith("http://") || link.link.startsWith("https://");
-
-        return (
-          <Link
-            key={link.linkName}
-            href={link.link}
-            target={isExternal ? "_blank" : "_self"}
-            rel={isExternal ? "noopener noreferrer" : undefined}
-          >
-            {link.linkName}
-          </Link>
-        );
-      })}
-    </LinkColumn>
-  ));
+          return (
+            <LinkName
+              key={link._uid}
+              href={url}
+              target={link.link?.target || (isExternal ? "_blank" : "_self")}
+              rel={isExternal ? "noopener noreferrer" : undefined}
+            >
+              {link.link_name}
+            </LinkName>
+          );
+        })}
+      </LinkColumn>
+    )) || [];
 
   const handleNavigate = (link) => {
     const router = useRouter();
@@ -258,9 +70,9 @@ const Footer = () => {
       window.open(link, "_blank");
     } else {
       router.push(link);
-      // navigate(link);
     }
   };
+
   return (
     <Wrapper className="footer">
       <MainFooterContainer>
@@ -270,13 +82,6 @@ const Footer = () => {
           <VasionStar />
         </LogoContainer>
         <AllLinksContainer>{allLinksColumns}</AllLinksContainer>
-        {/* <GradientBlend />
-        <GradientWrapper>
-          <canvas
-            id="gradientCanvas"
-            style={{ width: "100%", height: "100%" }}
-          ></canvas>
-        </GradientWrapper> */}
       </MainFooterContainer>
       <ButtonContainer>
         <SocialsContainer>
@@ -306,9 +111,15 @@ const Footer = () => {
             <LinkedIn />
           </SocialIcon>
         </SocialsContainer>
-        <GlobalButton demo fill>
-          SCHEDULE A DEMO
-        </GlobalButton>
+        <Button
+          $buttonData={{
+            theme: "primary",
+            link_text: "SCHEDULE A DEMO",
+            link_url: { url: "/demo" },
+            link_size: "medium",
+            layout: "row",
+          }}
+        />
       </ButtonContainer>
       <LegalDiv>
         <LegalLinks>
@@ -329,7 +140,7 @@ const Footer = () => {
         © 2024 PrinterLogic. All Rights Reserved
       </LegalDiv>
       <VasionFooter
-        src={"@/images/uiElements/VasionFooterPNG.png"}
+        src={"/images/uiElements/VasionFooterPNG.png"}
         id="vasion-footer-svg"
       />
     </Wrapper>
@@ -408,62 +219,6 @@ const VasionFooter = styled.img`
   ${media.mobile} {
     bottom: 12.421vw;
     height: 21.262vw;
-  }
-`;
-const GradientBlend = styled.div`
-  position: absolute;
-  width: 100%;
-  z-index: 2;
-  background: linear-gradient(
-    180.5deg,
-    #201435 10.81%,
-    rgba(32, 20, 53, 0.93) 25.34%,
-    rgba(32, 20, 53, 0.85) 38.55%,
-    rgba(32, 20, 53, 0.77) 47.61%,
-    rgba(32, 20, 53, 0.55) 66.31%,
-    rgba(32, 20, 53, 0.33) 78.97%,
-    rgba(32, 20, 53, 0.13) 90.51%,
-    rgba(255, 255, 255, 0) 98.31%
-  );
-  top: 47vw;
-  height: 27.778vw;
-
-  ${media.fullWidth} {
-    top: 677px;
-    height: 400px;
-  }
-
-  ${media.tablet} {
-    top: 64.648vw;
-    height: 39.063vw;
-  }
-
-  ${media.mobile} {
-    left: 0;
-    top: 276.673vw;
-    height: 52.458vw;
-  }
-`;
-const GradientWrapper = styled.div`
-  position: absolute;
-  width: 100%;
-  top: 47vw;
-  height: 44.278vw;
-
-  ${media.fullWidth} {
-    top: 677px;
-    height: 638px;
-  }
-
-  ${media.tablet} {
-    top: 66.074vw;
-    height: 62.305vw;
-  }
-
-  ${media.mobile} {
-    left: 0;
-    top: 279.757vw;
-    height: 149.065vw;
   }
 `;
 const SocialIcon = styled.div`
@@ -545,12 +300,12 @@ const ButtonContainer = styled.div`
     border-bottom: 0.234vw solid ${colors.grey700};
   }
 `;
-const Link = styled.a`
+const LinkName = styled.a`
   ${text.bodyMd};
   color: ${colors.white};
   cursor: pointer;
   text-decoration: none;
-
+  text-wrap: nowrap;
   &:hover {
     color: ${colors.primaryOrange};
   }
