@@ -8,14 +8,14 @@ export async function GET(request) {
 
   const PREVIEW_SECRET = process.env.NEXT_PUBLIC_STORYBLOK_PREVIEW_SECRET;
   if (!PREVIEW_SECRET || secret !== PREVIEW_SECRET) {
-    // console.error(`[❌ Error] Invalid preview token. Received: ${secret}`);
+    console.error(`[❌ Error] Invalid preview token. Received: ${secret}`);
     return NextResponse.json({ message: 'Invalid preview token' }, { status: 401 });
   }
 
   draftMode().enable();
 
   const redirectUrl = new URL(`/${slug}`, request.nextUrl.origin).toString();
-  // console.log(`[✅ Success] Draft mode enabled. Redirecting to: ${redirectUrl}`);
+  console.log(`[✅ Success] Draft mode enabled. Redirecting to: ${redirectUrl}`);
 
   return NextResponse.redirect(redirectUrl);
 }
