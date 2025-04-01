@@ -13,6 +13,7 @@ import { useThankYou } from "@/context/ThankYouContext";
 import { useRouter } from "next/navigation";
 
 const Form = ({ blok }) => {
+  console.log(blok)
   const { thankYouCopy, updateThankYouCopy } = useThankYou();
   const router = useRouter();
   const themes = useAvailableThemes();
@@ -232,7 +233,7 @@ const FormContainer = styled.div`
   .mktoFormRow:has(a[href*="vasion.com/privacy-policy"]) span {
     ${text.bodySm};
     text-align: center;
-    color: white;
+    color: ${(props) => props.theme.form.textColor};
 
     a {
       color: ${colors.primaryOrange};

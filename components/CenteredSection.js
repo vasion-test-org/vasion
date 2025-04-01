@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useContext } from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
 import media from '@/styles/media';
@@ -15,12 +15,17 @@ import Button from '@/components/globalComponents/Button';
 import Accordion from '@/components/centeredSections/Accordion';
 import Stats from '@/components/centeredSections/Stats';
 import Form from './Form';
-import Rotator from '@/components/centeredSections/Rotator'
-import StackedCards from '@/components/centeredSections/StackedCards'
+import Rotator from '@/components/centeredSections/Rotator';
+import StackedCards from '@/components/centeredSections/StackedCards';
+import Badges from '@/components/centeredSections/Badges';
+import BadgesMobile from '@/components/centeredSections/BadgesMobile';
+import { ScreenContext } from '@/components/providers/Screen';
+
 const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  // console.log(blok);
+  const { mobile } = useContext(ScreenContext);
+  console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper
@@ -79,14 +84,19 @@ const CenteredSection = ({ blok }) => {
             {blok.component_type === 'accordion' && blok.accordion && (
               <Accordion accordionData={blok.accordion} />
             )}
-                {blok.component_type === 'rotator' && blok.rotator && (
+            {blok.component_type === 'rotator' && blok.rotator && (
               <Rotator rotatorData={blok.rotator} />
             )}
             {blok.component_type === 'form' && blok.form && (
               <Form blok={blok.form[0]} />
             )}
-             {blok.component_type === 'stacked_cards' && blok.stacked_cards && (
+            {blok.component_type === 'stacked_cards' && blok.stacked_cards && (
               <StackedCards blok={blok.stacked_cards} />
+            )}
+            {blok.component_type === 'badges' && blok.badges && mobile ? (
+              <BadgesMobile badges={blok?.badges?.[0]} />
+            ) : (
+              <Badges badges={blok?.badges?.[0]} />
             )}
           </AttachedComponent>
         )}

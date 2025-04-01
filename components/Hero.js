@@ -6,7 +6,7 @@ import media from '@/styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 import { useAvailableThemes } from '@/context/ThemeContext';
-import { ScreenContext } from '@/components/Providers/Screen';
+import { ScreenContext } from '@/components/providers/Screen';
 import Button from '@/components/globalComponents/Button';
 import Image from '@/components/globalComponents/Image';
 import LogoCube from './LogoCube';
@@ -193,21 +193,21 @@ const ButtonRow = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 0.75vw;
-  margin-top: ${props => props.socials ? 'unset' : '2vw'};
+  margin-top: ${(props) => (props.socials ? 'unset' : '2vw')};
 
   ${media.fullWidth} {
     gap: 12px;
-    margin-top: ${props => props.socials ? 'unset' : '32px'};
+    margin-top: ${(props) => (props.socials ? 'unset' : '32px')};
   }
 
   ${media.tablet} {
     gap: 1.172vw;
-    margin-top: ${props => props.socials ? 'unset' : '3.125vw'};
+    margin-top: ${(props) => (props.socials ? 'unset' : '3.125vw')};
   }
 
   ${media.mobile} {
     gap: 2.5vw;
-    margin-top: ${props => props.socials ? 'unset' : '6.667vw'};
+    margin-top: ${(props) => (props.socials ? 'unset' : '6.667vw')};
   }
 `;
 const ContentWrapper = styled.div`
