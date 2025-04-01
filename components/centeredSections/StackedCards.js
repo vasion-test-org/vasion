@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState, useEffect, useMemo } from 'react';
 import { useRive } from '@rive-app/react-canvas';
-import { ScreenContext } from '../Providers/Screen';
+import { ScreenContext } from '../providers/Screen';
 import gsap from 'gsap';
 import styled from 'styled-components';
 import media from '@/styles/media';
@@ -11,7 +11,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import RichTextRenderer from '../renderers/RichTextRenderer';
 import Button from '@/components/globalComponents/Button';
 import { storyblokEditable } from '@storyblok/react/rsc';
-
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -188,11 +187,11 @@ const ButtonRow = styled.div`
   align-items: center;
   width: max-content;
   gap: 1.667vw;
-  margin-top: ${props => props.isLastCard ? '2.5vw' : '1.125vw'};
+  margin-top: ${(props) => (props.isLastCard ? '2.5vw' : '1.125vw')};
 
   ${media.fullWidth} {
     gap: 24px;
-    margin-top: ${props => props.isLastCard ? '40px' : '18px'};
+    margin-top: ${(props) => (props.isLastCard ? '40px' : '18px')};
   }
 
   ${media.tablet} {
@@ -252,7 +251,7 @@ const CardContainer = styled.div`
     width: ${(props) => (props?.$last ? '1304px' : '427px')};
     padding: ${(props) => (props?.$last ? '43px 60px' : '20px')};
     border-radius: 12px;
-    gap: 12px; 
+    gap: 12px;
   }
 
   ${media.tablet} {
