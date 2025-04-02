@@ -42,7 +42,9 @@ const OverviewStats = ({ blok }) => {
   const calloutList = blok?.overview_callout_list?.map((item) => {
     return (
       <CalloutItem key={item._uid}>
-        <Icon src={item?.icon?.filename} alt={item?.icon?.alt} />
+        {item?.icon.filename && (
+          <Icon src={item?.icon?.filename} alt={item?.icon?.alt} />
+        )}
         <CalloutBody>
           <RichTextRenderer document={item?.body_copy} />
         </CalloutBody>
