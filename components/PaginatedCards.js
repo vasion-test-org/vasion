@@ -13,13 +13,14 @@ import { horizontalLoop } from '@/functions/horizontalLoop';
 import SideArrow from '@/assets/svg/side-arrow.svg';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
+import ResourceCard from './globalComponents/ResourceCard';
 const PaginatedCards = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const currentIndex = useRef(0);
-  // console.log(blok);
+  console.log(blok);
   const mappedCards = [];
-
+// console.log(blok.cards)
   for (let i = 0; i < blok.cards.length; i += 6) {
     const chunk = blok.cards.slice(i, i + 6);
     mappedCards.push(
@@ -36,6 +37,15 @@ const PaginatedCards = ({ blok }) => {
               <EventCard
                 key={`card-${i + index}`}
                 even={index % 2 === 1}
+                content={card}
+              />
+            );
+          } else if (blok.card_type === 'resource') {
+            return (
+              <ResourceCard
+                key={`card-${i + index}`}
+                paginated
+                index={index}
                 content={card}
               />
             );

@@ -23,10 +23,8 @@ export async function generateMetadata({ params }) {
   const title = content.metadata?.title || "Default Title";
   const description = content.metadata?.description || "Default Description";
 
-  // Define the base path for your site
-  const basePath = 'https://www.vasion.com';
+  const basePath = 'https://vasion-ten.vercel.app';
 
-  // Define the available locales and their corresponding paths
   const locales = ['en', 'fr', 'de'];
   const alternateLinks = locales.reduce((acc, loc) => {
     const path = loc === 'en' ? `/${story.full_slug}` : `/${loc}/${story.full_slug}`;

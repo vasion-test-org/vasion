@@ -12,7 +12,7 @@ import { getStoryblokApi } from "@/lib/storyblok";
 import { Metadata } from 'next';
 
 export const metadata = {
-  metadataBase: new URL('https://www.vasion.com'),
+  metadataBase: new URL('https://vasion-ten.vercel.app'),
   title: {
     template: '%s | Vasion',
     default: 'Vasion',
