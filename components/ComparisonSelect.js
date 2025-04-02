@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import text from "styles/text";
-import useMedia from "utils/useMedia";
+import media from "@/styles/media";
+import colors from "@/styles/colors";
+import text from "@/styles/text";
+import useMedia from "@/functions/useMedia";
 import ReactPlayer from "react-player";
 import gsap from "gsap";
 
@@ -155,6 +155,7 @@ const ComparisonSelect = ({ blok }) => {
       object2Ref.current?.removeEventListener("mouseleave", handleMouseLeave2);
     };
   }, [activeTl]);
+  console.log(blok);
   return (
     <Wrapper className="wrapper-div" $bg={blok?.background}>
       {blok?.header && <Header>{blok?.header}</Header>}
@@ -197,9 +198,9 @@ const ComparisonSelect = ({ blok }) => {
         </Comparison>
       }
       <ReactPlayer
-        url={blok?.videoUrl}
+        url={blok?.video_url?.url}
         controls={true}
-        light={blok?.videoThumbnail?.sourceUrl}
+        light={blok?.video_thumbnail?.filename}
         playing={true}
         volume={1}
         muted={false}
