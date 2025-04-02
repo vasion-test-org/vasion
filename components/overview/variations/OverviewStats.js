@@ -3,11 +3,11 @@ import styled from "styled-components";
 import media from "styles/media";
 import colors from "styles/colors";
 import text from "styles/text";
-import close from "images/closeVector.webp";
-import open from "images/OpenBtn.webp";
 import gsap from "gsap";
+import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 
-const OverviewStats = ({ content }) => {
+const OverviewStats = ({ blok }) => {
+  console.log("stats-blok", blok);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleMobileClick = () => {
@@ -28,29 +28,39 @@ const OverviewStats = ({ content }) => {
     }
   };
 
-  const statlist = content?.statList?.map((item) => {
+  const statlist = blok?.stat_list?.map((item) => {
     return (
-      <StatItem key={item}>
+      <StatItem key={item._uid}>
         <StatHeadline>{item?.headline}</StatHeadline>
-        <StatBody dangerouslySetInnerHTML={{ __html: item?.bodyCopy }} />
+        <StatBody>
+          <RichTextRenderer document={item?.body_copy} />
+        </StatBody>
       </StatItem>
     );
   });
-  const calloutList = content?.calloutList?.map((item) => {
+
+  const calloutList = blok?.overview_callout_list?.map((item) => {
     return (
-      <CalloutItem key={item}>
-        <Icon src={item?.icon?.sourceUrl} alt={item?.icon?.altText} />
-        <CalloutBody dangerouslySetInnerHTML={{ __html: item?.bodyCopy }} />
+      <CalloutItem key={item._uid}>
+        <Icon src={item?.icon?.filename} alt={item?.icon?.alt} />
+        <CalloutBody>
+          <RichTextRenderer document={item?.body_copy} />
+        </CalloutBody>
       </CalloutItem>
     );
   });
+
   return (
     <Wrapper $isopen={isOpen}>
       <ContentWrapper $isopen={isOpen}>
         <HeaderDiv>
-          <Headline>{content?.header}</Headline>
+          <Headline>{blok?.headline}</Headline>
           <ExpandCollapseIcon
-            src={isOpen ? close : open}
+            src={
+              isOpen
+                ? "/images/uiElements/closeVector.webp"
+                : "/images/uiElements/OpenBtn"
+            }
             alt={isOpen ? "close-btn" : "open-btn"}
             $isopen={isOpen}
             className={"stats-overview-close"}
@@ -59,16 +69,16 @@ const OverviewStats = ({ content }) => {
         </HeaderDiv>
 
         <StatItemsContainer className="stats-overview-visibility">
-          {statlist}{" "}
+          {statlist}
         </StatItemsContainer>
       </ContentWrapper>
-      {calloutList.length > 0 && (
+      {calloutList && calloutList.length > 0 && (
         <CalloutWrapper className="stats-overview-visibility" $isopen={isOpen}>
           <ImageHeadline
-            src={content?.logoHeadline?.sourceUrl}
-            alt={content?.logoHeadline?.altText}
+            src={blok?.callout_logo_header?.filename}
+            alt={blok?.callout_logo_header?.alt}
           />
-          {<CalloutListContainer>{calloutList} </CalloutListContainer>}
+          {<CalloutListContainer>{calloutList}</CalloutListContainer>}
         </CalloutWrapper>
       )}
     </Wrapper>
@@ -77,7 +87,7 @@ const OverviewStats = ({ content }) => {
 
 export default OverviewStats;
 
-const CalloutBody = styled.p`
+const CalloutBody = styled.div`
   ${text.bodySm};
 `;
 const Icon = styled.img`
@@ -138,7 +148,9 @@ const ImageHeadline = styled.img`
   }
 `;
 const CalloutWrapper = styled.div`
+  position: relative;
   display: flex;
+
   flex-direction: column;
   background-color: ${colors.lightPurpleGrey};
   width: 16.458vw;
@@ -168,7 +180,7 @@ const CalloutWrapper = styled.div`
     height: 0;
   }
 `;
-const StatBody = styled.p`
+const StatBody = styled.div`
   ${text.bodySm};
 
   ${media.mobile} {
@@ -230,7 +242,7 @@ const StatItemsContainer = styled.div`
 `;
 const Headline = styled.h4`
   ${text.h4};
-
+  text-wrap: nowrap;
   ${media.mobile} {
     ${text.eyebrow};
     color: ${colors.lightPurple};
@@ -253,7 +265,7 @@ const HeaderDiv = styled.div`
   align-items: center;
   justify-self: center;
   overflow: visible;
-
+  text-wrap: nowrap;
   ${media.mobile} {
     width: 109%;
     padding: 9.346vw 4.673vw 4.673vw 4.673vw;
@@ -301,6 +313,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  justify-self: center;
   gap: 23px;
   width: 79.444vw;
   ${media.fullWidth} {

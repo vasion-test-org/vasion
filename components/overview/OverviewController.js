@@ -1,26 +1,37 @@
+"use client";
 import React from "react";
-import styled from "styled-components";
 import SmallQuote from "../SmallQuote";
 import OverviewStats from "./variations/OverviewStats";
-import Combined from "./variations/OverviewCombined";
+import OverviewCombined from "./variations/OverviewCombined";
 
 const OverviewController = ({ blok }) => {
+  console.log("Block Content", blok);
   const component = blok.component_type;
 
   switch (component) {
     case "small_quote":
-      return <SmallQuote content={content?.overviewQuote} />;
-    case "overview_stats":
-      return <OverviewStats content={content?.overviewStats} />;
-    case "overview_combined":
+      return <SmallQuote blok={blok?.small_quote[0]} />;
+
+    case "stats":
+      const statsData = blok?.stats?.length > 0 ? blok.stats[0] : null;
+      return <OverviewStats blok={statsData} />;
+
+    case "combined":
+      const quoteData =
+        blok?.small_quote?.length > 0 ? blok.small_quote[0] : null;
+      const combinedStatsData = blok?.stats?.length > 0 ? blok.stats[0] : null;
+
       return (
-        <Combined
-          content={{
-            quote: content?.overviewQuote,
-            stats: content?.overviewStats,
+        <OverviewCombined
+          blok={{
+            quote: quoteData,
+            stats: combinedStatsData,
           }}
         />
       );
+
+    default:
+      return null;
   }
 };
 

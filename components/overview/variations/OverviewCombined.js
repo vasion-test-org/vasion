@@ -1,67 +1,106 @@
+"use client";
 import React from "react";
 import styled from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import text from "styles/text";
-import quoteMarks from "images/Parenthesis.svg";
-import StyledLink from "../../StyledLink";
+import media from "@/styles/media";
+import colors from "@/styles/colors";
+import text from "@/styles/text";
+import Button from "components/globalComponents/Button";
+import RichTextRenderer from "@/components/renderers/RichTextRenderer";
+import Parenthesis from "@/assets/svg/Parenthesis.svg";
 
-const Combined = ({ content }) => {
-  const statlist = content?.stats?.statList?.map((item) => {
+const Combined = ({ blok }) => {
+  console.log("Combined", blok);
+  const statlist = blok?.stats?.stat_list?.map((item) => {
     return (
-      <StatItem key={item}>
+      <StatItem key={item._uid}>
         <StatHeadline>{item?.headline}</StatHeadline>
-        <StatBody dangerouslySetInnerHTML={{ __html: item?.bodyCopy }} />
+        <StatBody>
+          <RichTextRenderer document={item?.body_copy} />
+        </StatBody>
       </StatItem>
     );
   });
 
   return (
     <Wrapper>
-      <Quotation src={quoteMarks} alt={"styled-quotation"} />
+      <Quotation />
       <ContentDiv>
-        <QuoteContent>
-          {content?.quote?.headshot?.sourceUrl && (
+        <QuoteBlock>
+          {blok?.quote?.quote_image?.[0]?.filename && (
             <QuoteImageStart
-              src={content?.quote?.headshot?.sourceUrl}
-              alt={content?.headshot?.altText}
+              src={blok?.quote?.quote_image?.[0]?.filename}
+              alt={blok?.quote?.quote_image?.[0]?.alt}
             />
           )}
           <QuoteCopy>
-            <Header>{content?.quote?.header}</Header>
-            {content?.quote?.bodyCopy && (
-              <BodyCopy
-                dangerouslySetInnerHTML={{ __html: content?.quote?.bodyCopy }}
-              />
+            {blok?.quote?.copy?.find((item) => item.component === "header")
+              ?.copy?.content && (
+              <Header>
+                <RichTextRenderer
+                  document={
+                    blok?.quote?.copy?.find(
+                      (item) => item.component === "header",
+                    )?.copy
+                  }
+                />
+              </Header>
             )}
-            <Attribution>-{content?.quote?.attribution}</Attribution>
+
+            {blok?.quote?.copy?.find((item) => item.component === "body_copy")
+              ?.copy?.content && (
+              <BodyCopy>
+                <RichTextRenderer
+                  document={
+                    blok?.quote?.copy?.find(
+                      (item) => item.component === "body_copy",
+                    )?.copy
+                  }
+                />
+              </BodyCopy>
+            )}
+            {blok.quote?.copy && blok.quote?.copy.length >= 2 && (
+              <Attribution>
+                -
+                <RichTextRenderer
+                  document={
+                    blok.quote.copy.length === 3
+                      ? blok?.quote.copy[2].copy
+                      : blok.quote?.copy[1].copy
+                  }
+                />
+              </Attribution>
+            )}
           </QuoteCopy>
-          {content?.quote?.image && (
+          {blok?.quote?.image?.filename && (
             <QuoteSideImg
-              src={content?.quote?.image?.sourceUrl}
-              alt={content?.quote?.image?.altText}
+              src={blok?.quote?.image?.filename}
+              alt={blok?.quote?.image?.alt}
             />
           )}
-        </QuoteContent>
+        </QuoteBlock>
 
         <Divider />
 
-        <StatContent>
+        <StatBlock>
           <HeaderDiv>
-            <Headline>{content?.stats?.header}</Headline>
+            <Headline>{blok?.stats?.headline}</Headline>
           </HeaderDiv>
-          {content?.imageHeadline && !content?.stats?.header && (
+          {blok?.stats?.stat_logo_header?.filename && (
             <ImageHeadline
-              src={content?.stats?.logoHeadline?.sourceUrl}
-              alt={content?.stats?.logoHeadline?.altText}
+              src={blok?.stats?.stat_logo_header?.filename}
+              alt={blok?.stats?.stat_logo_header?.alt}
             />
           )}
           <StatItemsContainer>{statlist}</StatItemsContainer>
-        </StatContent>
-        {content?.stats?.linkText && (
-          <StyledLink href={content?.stats?.linkUrl}>
-            {content?.stats?.linkText}
-          </StyledLink>
+        </StatBlock>
+        {blok?.stats?.link_text && (
+          <Button
+            $buttonData={{
+              link_url: { url: blok?.stats?.link_url },
+              link_text: blok?.stats?.link_text,
+              link_size: "medium",
+            }}
+          />
         )}
       </ContentDiv>
     </Wrapper>
@@ -92,7 +131,7 @@ const ImageHeadline = styled.img`
   }
 `;
 
-const StatBody = styled.p`
+const StatBody = styled.div`
   ${text.bodySm};
 
   ${media.mobile} {
@@ -167,7 +206,7 @@ const HeaderDiv = styled.div`
   align-items: center;
   justify-self: center;
 `;
-const StatContent = styled.div`
+const StatBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -215,7 +254,7 @@ const Divider = styled.div`
   }
 `;
 
-//Qute Component
+//Quote Component
 const QuoteSideImg = styled.img`
   width: 22.222vw;
   height: 7.222vw;
@@ -235,11 +274,12 @@ const QuoteSideImg = styled.img`
     height: 24.299vw;
   }
 `;
-const Attribution = styled.p`
+const Attribution = styled.div`
+  display: flex;
   ${text.bodyMd};
 `;
 
-const BodyCopy = styled.p`
+const BodyCopy = styled.div`
   ${text.bodyLg};
 
   ${media.mobile} {
@@ -247,7 +287,7 @@ const BodyCopy = styled.p`
   }
 `;
 
-const Header = styled.h4`
+const Header = styled.div`
   ${text.h4};
 `;
 
@@ -288,7 +328,7 @@ const QuoteImageStart = styled.img`
   }
 `;
 
-const Quotation = styled.img`
+const Quotation = styled(Parenthesis)`
   position: absolute;
   top: -1.989vw;
   left: 2.083vw;
@@ -316,7 +356,7 @@ const Quotation = styled.img`
     height: 12.5vw;
   }
 `;
-const QuoteContent = styled.div`
+const QuoteBlock = styled.div`
   display: flex;
   gap: 1.5vw;
   ${media.fullWidth} {
@@ -369,6 +409,18 @@ const ContentDiv = styled.div`
 const Wrapper = styled.div`
   position: relative;
   display: flex;
+  justify-self: center;
   flex-direction: column;
+  margin: 4%;
   z-index: 1;
+
+  ${media.fullWidth} {
+    margin: 3%;
+  }
+  ${media.tablet} {
+    margin: 6%;
+  }
+  ${media.mobile} {
+    margin: 13%;
+  }
 `;
