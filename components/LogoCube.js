@@ -58,7 +58,6 @@ const LogoCube = ({ blok }) => {
   );
 };
 
-// Styled Components
 const LogosDiv = styled.div`
   width: auto;
   height: auto;
