@@ -40,8 +40,8 @@ const G2Badges = ({ badges }) => {
     </BadgesInnerDiv>
   ));
 
-  const progressBars = badgesArrays.map((group) => (
-    <ProgressBar>
+  const progressBars = badgesArrays.map((_, index) => (
+    <ProgressBar key={index}>
       <ProgressValue className="pro-bar" />
     </ProgressBar>
   ));

@@ -334,12 +334,13 @@ const VasionLogo = styled.img`
 const MainWrapper = styled.div`
   ${media.mobile} {
     position: relative;
-    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     background: ${colors.white};
+    width: 100%;
+    z-index: 10;
     height: 12.821vw;
     /* border: 1px solid blue; */
   }

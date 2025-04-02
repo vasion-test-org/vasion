@@ -1,23 +1,14 @@
-import { fetchData } from '@/lib/fetchData';
-import {useStoryblokState } from '@storyblok/react';  // Update import
-import { draftMode } from 'next/headers';
-import { StoryblokStory } from '@storyblok/react/rsc';
+import ClientStory from "@/components/ClientStory";
+import { fetchData } from "@/lib/fetchData";
+import { draftMode } from "next/headers";
 
 export default async function Home() {
-  const { isEnabled } = draftMode(); // Check if draft mode is enabled
-
-  // Fetch Storyblok content based on draft mode status
+  const { isEnabled } = draftMode();
   const initialStory = await fetchData("home", isEnabled);
 
-  // Enable real-time editing in Storyblok Visual Editor
-  const story = useStoryblokState(initialStory);
+  if (!initialStory) {
+    return <div>404 – Story not found</div>;
+  }
 
-  return (
-    <div>
-      <StoryblokStory story={story} />
-    </div>
-  );
+  return <ClientStory initialStory={initialStory} />;
 }
-
-// Ensure the page is dynamically rendered when draft mode is enabled
-export const dynamic = "force-dynamic";

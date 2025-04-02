@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { usePathname } from 'next/navigation';
 import styled, { ThemeProvider } from 'styled-components';
@@ -13,14 +13,12 @@ import colors from '@/styles/colors';
 import Icons from '@/components/renderers/Icons';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from './Image';
-
+import { getStoryblokApi } from '@storyblok/react/rsc';
 gsap.registerPlugin(ScrollTrigger);
 const Nav = ({ blok }) => {
   const path = usePathname();
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-
-  // console.log(blok);
 
   let currentNavItems = blok.english_nav_items;
 
@@ -40,40 +38,71 @@ const Nav = ({ blok }) => {
           <Column key={`column.column_header-${index}`}>
             <ColumnHeader>{column.column_header}</ColumnHeader>
             {column.nav_items.map((item, index) => {
-              const formattedIconString = item.icon.replace(/\s+/g, '');
+  const formattedIconString = item.icon.replace(/\s+/g, '');
+  const IconComponent = Icons[formattedIconString] || null;
 
-              let IconComponent = Icons[formattedIconString] || null;
-              console.log(item);
-              return (
-                <NavItem
-                  key={`item-${item._uid}`}
-                  card={item.card}
-                  card_size={item.card_size}
-                >
-                  {item.card && item.card_size && item.card_size !== 'small' && (
-                    <ImageWrapper card_size={item.card_size}>
-                      <Image images={item?.card_image?.[0].media} />
-                    </ImageWrapper>
-                  )}
-                  {IconComponent && (
-                    <NavIconWrapper card={item.card} card_size={item.card_size}>
-                      {IconComponent ? <IconComponent /> : null}
-                    </NavIconWrapper>
-                  )}
-                  <NavCopy>
-                    <NavItemCopy card_size={item.card_size}>
-                      <RichTextRenderer document={item.item_copy} />
-                    </NavItemCopy>
-                    {item.card_size === 'medium' && 
-                        <Link href='/'>Learn More</Link>
-                    }
-                    {item.sub_copy && item.card && (
-                      <NavItemSubCopy>{item.sub_copy}</NavItemSubCopy>
-                    )}
-                  </NavCopy>
-                </NavItem>
-              );
-            })}
+  const rawUrl = item.item_link?.cached_url || '#';
+  const isExternal = rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
+  const normalizedUrl = isExternal
+    ? rawUrl
+    : rawUrl.startsWith('/')
+      ? rawUrl
+      : `/${rawUrl}`;
+
+  const handleClick = () => {
+    if (normalizedUrl === '#') return;
+    if (isExternal) {
+      window.open(normalizedUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      window.location.href = normalizedUrl;
+    }
+  };
+
+  return (
+    <NavItem
+      key={`item-${item._uid}`}
+      card={item.card}
+      card_size={item.card_size}
+      onClick={handleClick}
+      role="link"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === 'Enter' && handleClick()}
+    >
+      {item.card && item.card_size && item.card_size !== 'small' && (
+        <ImageWrapper card_size={item.card_size}>
+          <Image images={item?.card_image?.[0].media} />
+        </ImageWrapper>
+      )}
+      {IconComponent && (
+        <NavIconWrapper card={item.card} card_size={item.card_size}>
+          <IconComponent />
+        </NavIconWrapper>
+      )}
+      <NavCopy>
+        <NavItemCopy card_size={item.card_size}>
+          <RichTextRenderer document={item.item_copy} />
+        </NavItemCopy>
+
+        {/* Optional: visible link inside */}
+        {item.card_size === 'medium' && (
+          <Link
+            href={normalizedUrl}
+            target={isExternal ? '_blank' : '_self'}
+            rel={isExternal ? 'noopener noreferrer' : undefined}
+            onClick={(e) => e.stopPropagation()} // prevent bubbling to NavItem
+          >
+            Learn More
+          </Link>
+        )}
+
+        {item.sub_copy && item.card && (
+          <NavItemSubCopy>{item.sub_copy}</NavItemSubCopy>
+        )}
+      </NavCopy>
+    </NavItem>
+  );
+})}
+
           </Column>
         ))}
       </Dropdown>
@@ -81,35 +110,93 @@ const Nav = ({ blok }) => {
   ));
 
   useEffect(() => {
+    const footer = document.querySelector('.footer'); 
+    if (!footer) return;
+  
+    const footerOffset = footer.offsetTop + footer.offsetHeight;
+  
     ScrollTrigger.create({
       trigger: '.mainNavWrapper',
       start: 'top top',
-      end: () => `${document.body.scrollHeight - window.innerHeight}px`,
+      end: `${footerOffset}px`,
       pin: true,
       pinSpacing: false,
       // markers: true,
     });
   }, []);
+  
 
   useEffect(() => {
     gsap.set('.dropdowns', { autoAlpha: 0 });
-
+  
     const allTabs = gsap.utils.toArray('.tabs');
-
-    const tl = gsap.timeline({});
-
+    const allDropdowns = gsap.utils.toArray('.dropdowns');
+    const navWrapper = document.querySelector('.mainNavWrapper');
+  
+    let isAnimating = false;
+    let queuedIndex = null;
+  
+    const closeDropdown = () => {
+      isAnimating = true;
+      return gsap.to('.dropdowns', {
+        autoAlpha: 0,
+        duration: 0.35,
+        onComplete: () => {
+          isAnimating = false;
+  
+    
+          if (queuedIndex !== null) {
+            const indexToOpen = queuedIndex;
+            queuedIndex = null;
+            openDropdown(indexToOpen); 
+          }
+        },
+      });
+    };
+  
     const openDropdown = (index) => {
-      console.log(index);
-      tl.set(`.dropdowns`, { autoAlpha: 0 }).to(`#dropdown-${index}`, {
+      if (isAnimating) {
+        queuedIndex = index;
+        return;
+      }
+  
+      gsap.to(`#dropdown-${index}`, {
         autoAlpha: 1,
         duration: 0.35,
       });
     };
-
+  
     allTabs.forEach((tab, index) => {
-      tab.addEventListener('mouseenter', () => openDropdown(index));
+      tab.addEventListener('mouseenter', () => {
+        closeDropdown().then(() => {
+        });
+        queuedIndex = index;
+      });
     });
+  
+    allDropdowns.forEach((dropdown) => {
+      dropdown.addEventListener('mouseleave', closeDropdown);
+    });
+  
+    if (navWrapper) {
+      navWrapper.addEventListener('mouseleave', closeDropdown);
+    }
+  
+    return () => {
+      allTabs.forEach((tab, index) => {
+        tab.removeEventListener('mouseenter', () => openDropdown(index));
+      });
+      allDropdowns.forEach((dropdown) => {
+        dropdown.removeEventListener('mouseleave', closeDropdown);
+      });
+      if (navWrapper) {
+        navWrapper.removeEventListener('mouseleave', closeDropdown);
+      }
+    };
   }, []);
+  
+  
+  
 
   return (
     <ThemeProvider theme={selectedTheme}>
@@ -568,6 +655,7 @@ const MainNavWrapper = styled.div`
   justify-content: center;
   background: ${colors.white};
   height: 3.875vw;
+  z-index: 10;
 
   ${media.fullWidth} {
     height: 62px;
