@@ -18,6 +18,7 @@ import LogoCube from "../LogoCube";
 import SideBySide from "../SideBySide";
 import CenteredSection from "../CenteredSection";
 import NumberBlock from "../NumberBlock";
+import colors from "@/styles/colors";
 
 const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
   if (!document) return null;
@@ -115,6 +116,25 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
 const RichWrapper = styled.div`
   display: flex;
   flex-direction: column;
+ a {
+  color: ${colors.primaryOrange};
+ }
+  img {
+    max-width: 56.25vw
+
+    ${media.fullWidth} {
+      max-width: 900px
+    }
+    
+    ${media.tablet} {
+      max-width: 58.594vw
+    }
+    
+    ${media.mobile} {
+      max-width: 82vw
+    }
+  }
+
   &.eyebrow {
     font-weight: 700;
     font-size: 0.875vw;

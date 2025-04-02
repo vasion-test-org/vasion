@@ -32,6 +32,7 @@ const CTA = ({ blok }) => {
         <CtaWrapper
           $bgimg={bgimg?.filename}
           $ctastyle={blok.cta_style}
+          $fullwidth={blok.fullwidth}
           {...storyblokEditable(blok)}
         >
           <ContentWrapper $ctastyle={blok.cta_style}>
@@ -103,13 +104,19 @@ const CtaWrapper = styled.div`
       ? '6vw 9.25vw'
       : '6vw 0'};
   width: ${(props) =>
-    props.$ctastyle === 'pill'
+    props.$ctastyle === 'image' && props.$fullwidth
+      ? '100%'
+      : props.$ctastyle === 'pill'
       ? '81.5vw'
       : props.$ctastyle === 'image'
       ? '88vw'
       : '100%'};
+  min-height: ${(props) =>
+    props.$ctastyle === 'image' && props.$fullwidth ? '34.722vw' : 'auto'};
   border-radius: ${(props) =>
-    props.$ctastyle === 'pill' || props.$ctastyle === 'image'
+    props.$ctastyle === 'image' && props.$fullwidth
+      ? '0'
+      : props.$ctastyle === 'pill' || props.$ctastyle === 'image'
       ? '1.5vw'
       : 'unset'};
   text-align: ${(props) =>
@@ -127,22 +134,35 @@ const CtaWrapper = styled.div`
         ? '96px 60px 148px 900px'
         : '96px 0'};
     width: ${(props) =>
-      props.$ctastyle === 'pill'
+      props.$ctastyle === 'image' && props.$fullwidth
+        ? '100%'
+        : props.$ctastyle === 'pill'
         ? '1304px'
         : props.$ctastyle === 'image'
         ? '1408px'
         : '100%'};
+    min-height: ${(props) =>
+      props.$ctastyle === 'image' && props.$fullwidth ? '34.722vw' : 'auto'};
     border-radius: ${(props) =>
-      props.$ctastyle === 'pill' || props.$ctastyle === 'image'
+      props.$ctastyle === 'image' && props.$fullwidth
+        ? '0'
+        : props.$ctastyle === 'pill' || props.$ctastyle === 'image'
         ? '24px'
         : 'unset'};
   }
 
   ${media.tablet} {
     gap: 5.859vw;
-    width: 92.188vw;
+    width: ${(props) =>
+      props.$ctastyle === 'image' && props.$fullwidth
+        ? '100%'
+        : '92.188vw'};
+    min-height: ${(props) =>
+      props.$ctastyle === 'image' && props.$fullwidth ? '34.722vw' : 'auto'};
     border-radius: ${(props) =>
-      props.$ctastyle === 'pill' || props.$ctastyle === 'image'
+      props.$ctastyle === 'image' && props.$fullwidth
+        ? '0'
+        : props.$ctastyle === 'pill' || props.$ctastyle === 'image'
         ? '2.344vw'
         : 'unset'};
     padding: ${(props) =>
@@ -157,19 +177,28 @@ const CtaWrapper = styled.div`
     flex-direction: column;
     text-align: center;
     gap: 3.333vw;
+    width: ${(props) =>
+      props.$ctastyle === 'image' && props.$fullwidth
+        ? '100%'
+        : '89.167vw'};
+    min-height: ${(props) =>
+      props.$ctastyle === 'image' && props.$fullwidth ? '34.722vw' : 'auto'};
+    border-radius: ${(props) =>
+      props.$ctastyle === 'image' && props.$fullwidth
+        ? '0'
+        : props.$ctastyle === 'pill' || props.$ctastyle === 'image'
+        ? '5vw'
+        : 'unset'};
     padding: ${(props) =>
       props.$ctastyle === 'pill'
         ? '8.333vw 5vw'
         : props.$ctastyle === 'image'
         ? '8.333vw 4.167vw 30.833vw 39.167vw'
         : '8.333vw 5vw'};
-    width: 89.167vw;
-    border-radius: ${(props) =>
-      props.$ctastyle === 'pill' || props.$ctastyle === 'image'
-        ? '5vw'
-        : 'unset'};
   }
 `;
+
+
 
 const PillContainer = styled.div`
   display: flex;

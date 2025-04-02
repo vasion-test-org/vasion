@@ -5,13 +5,16 @@ import Image from '@/components/globalComponents/Image';
 import Button from '@/components/globalComponents/Button';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import media from '@/styles/media';
+import { getClick } from '@/functions/navigation';
 // import colors from 'styles/colors';
 // import text from 'styles/text';
 
 const Card = ({ content, paginated }) => {
-  // console.log('card-content', content);
+  // console.log(content.Button[0]?.link_url.cached_url)
+  const handleClick = getClick(content.Button[0]?.link_url.cached_url);
+
   return (
-    <CardWrapper paginated={paginated}>
+    <CardWrapper paginated={paginated} onClick={handleClick}>
       {content.Image && (
         <ImageWrapper>
           <Image imageAlt={content.Image.alt} filename={content.Image.filename} />
@@ -67,6 +70,7 @@ const ContentWrapper = styled.div`
 `;
 
 const CardWrapper = styled.div`
+cursor: pointer;
   display: flex;
   flex-direction: column;
   overflow: hidden;

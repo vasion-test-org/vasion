@@ -1,37 +1,39 @@
-import React, { useEffect, useContext, useRef } from 'react';
+import React, { useEffect, useContext, useRef } from "react";
 
-import gsap from 'gsap';
-import styled from 'styled-components';
-import media from 'styles/media';
-import colors from 'styles/colors';
-import text from 'styles/text';
-import { ScreenContext } from '@/components/providers/Screen';
+import gsap from "gsap";
+import styled from "styled-components";
+import media from "styles/media";
+import colors from "styles/colors";
+import text from "styles/text";
+import { ScreenContext } from "@/components/providers/Screen";
 
-import { horizontalLoop } from '@/functions/horizontalLoop';
-import RichTextRenderer from '../renderers/RichTextRenderer';
+import { horizontalLoop } from "@/functions/horizontalLoop";
+import RichTextRenderer from "../renderers/RichTextRenderer";
 
 const G2BadgesMobile = ({ badges }) => {
   const { mobile } = useContext(ScreenContext);
   const countRef = useRef(1);
-console.log(badges.badge_cards)
   const allBadges = badges.badge_cards.map((badges, index) => (
-    <BadgeDiv className='badges'>
-      <BadgeImage src={badges.badge_image.filename} alt={badges?.badge_image?.alt} />
+    <BadgeDiv className="badges">
+      <BadgeImage
+        src={badges.badge_image.filename}
+        alt={badges?.badge_image?.alt}
+      />
       <BadgeContent>
         <BadgeTitle>{badges.badge_name}</BadgeTitle>
-        <RichTextRenderer document={badges.body_copy}/>
+        <RichTextRenderer document={badges.body_copy} />
       </BadgeContent>
     </BadgeDiv>
   ));
 
   useEffect(() => {
-    const badges = gsap.utils.toArray('.badges');
-    const badgeCounter = document.querySelector('#badgeCounter');
+    const badges = gsap.utils.toArray(".badges");
+    const badgeCounter = document.querySelector("#badgeCounter");
 
     const loop = horizontalLoop(badges, { paused: true });
 
     function NextLoop() {
-      loop.next({ duration: 2, ease: 'slow' });
+      loop.next({ duration: 2, ease: "slow" });
 
       if (countRef.current >= badges.length) {
         countRef.current = 1;
@@ -55,10 +57,10 @@ console.log(badges.badge_cards)
       },
     });
 
-    progressTL.to('.pro-bar', {
+    progressTL.to(".pro-bar", {
       delay: 0.75,
       stagger: 7,
-      width: '100%',
+      width: "100%",
       repeat: -1,
     });
 
@@ -78,12 +80,12 @@ console.log(badges.badge_cards)
       <BadgesDiv>{allBadges}</BadgesDiv>
       <ProgessBarsDiv>
         <ProgressBar>
-          <ProgressValue className='pro-bar' />
+          <ProgressValue className="pro-bar" />
         </ProgressBar>
       </ProgessBarsDiv>
       {mobile && (
         <BadgeCounterDiv>
-          <BadgeCounter id='badgeCounter'>{countRef.current}</BadgeCounter>/
+          <BadgeCounter id="badgeCounter">{countRef.current}</BadgeCounter>/
           {badges.length}
         </BadgeCounterDiv>
       )}

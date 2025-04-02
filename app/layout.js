@@ -7,13 +7,20 @@ import Script from 'next/script';
 import './globals.css';
 import ScrollSmootherWrapper from '@/components/ScollSmoothWraper';
 import Providers from '@/components/providers';
+import Config from '@/components/Config';
+import { getStoryblokApi } from "@/lib/storyblok";
 
 export const metadata = {
   title: 'Vasion',
   description: 'Vasion site',
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const storyblokApi = getStoryblokApi();
+  const { data } = await storyblokApi.get('cdn/stories/config', {
+    version: 'draft', 
+  });
+  const configData = data ? data.story.content : null;
   return (
     <html lang='en'>
       <head>
@@ -53,7 +60,11 @@ export default function RootLayout({ children }) {
               <Providers>
                 <ThankYouProvider>
                   <FormTracking />
-                  <ScrollSmootherWrapper>{children}</ScrollSmootherWrapper>
+                  <ScrollSmootherWrapper>
+                    <Config blok={configData}>
+                    {children}
+                    </Config>
+                    </ScrollSmootherWrapper>
                 </ThankYouProvider>
               </Providers>
             </StyledComponentsRegistry>

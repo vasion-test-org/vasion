@@ -20,6 +20,7 @@ const SideBySide = ({ blok }) => {
         spacing={blok.section_spacing}
         {...storyblokEditable(blok)}
         gap={blok.gap}
+        asset_form={blok.asset_form}
       >
         <ComponentRenderer blok={blok.left_side_component[0]} />
         <ComponentRenderer blok={blok.right_side_component[0]} />
@@ -37,7 +38,22 @@ const SideBySideWrapper = styled.div`
   background: ${(props) => props.theme.side_by_side.bg};
   color: ${(props) => props.theme.side_by_side.textColor};
   border-radius: 1.5vw;
-  /* margin: 3.75vw 0; */
+  
+  > * {
+    margin-top: ${props => props.asset_form ? '-6vw' : 'unset'};
+
+    ${media.fullWidth} {
+      margin-top: ${props => props.asset_form ? '-96px' : 'unset'};
+    }
+    
+    ${media.tablet} {
+      margin-top: ${props => props.asset_form ? '-9.375vw' : 'unset'};
+    }
+    
+    ${media.mobile} {
+      margin-top: ${props => props.asset_form ? 'unset' : 'unset'};
+    }
+  }
 
   padding: ${(props) => {
     if (props.spacingOffset === 'top') {
