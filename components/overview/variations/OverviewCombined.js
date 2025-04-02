@@ -7,12 +7,12 @@ import text from "@/styles/text";
 import Button from "components/globalComponents/Button";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import Parenthesis from "@/assets/svg/Parenthesis.svg";
-
+import { storyblokEditable } from "@storyblok/react/rsc";
 const Combined = ({ blok }) => {
   console.log("Combined", blok);
   const statlist = blok?.stats?.stat_list?.map((item) => {
     return (
-      <StatItem key={item._uid}>
+      <StatItem {...storyblokEditable(item)} key={item._uid}>
         <StatHeadline>{item?.headline}</StatHeadline>
         <StatBody>
           <RichTextRenderer document={item?.body_copy} />
@@ -22,7 +22,11 @@ const Combined = ({ blok }) => {
   });
 
   return (
-    <Wrapper>
+    <Wrapper
+      spacingOffset={blok.offset_spacing}
+      spacing={blok.section_spacing}
+      {...storyblokEditable(blok)}
+    >
       <Quotation />
       <ContentDiv>
         <QuoteBlock>

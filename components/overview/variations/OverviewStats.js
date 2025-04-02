@@ -5,7 +5,7 @@ import colors from "styles/colors";
 import text from "styles/text";
 import gsap from "gsap";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-
+import { storyblokEditable } from "@storyblok/react/rsc";
 const OverviewStats = ({ blok }) => {
   console.log("stats-blok", blok);
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +30,7 @@ const OverviewStats = ({ blok }) => {
 
   const statlist = blok?.stat_list?.map((item) => {
     return (
-      <StatItem key={item._uid}>
+      <StatItem key={item._uid} {...storyblokEditable(item)}>
         <StatHeadline>{item?.headline}</StatHeadline>
         <StatBody>
           <RichTextRenderer document={item?.body_copy} />
@@ -41,9 +41,13 @@ const OverviewStats = ({ blok }) => {
 
   const calloutList = blok?.overview_callout_list?.map((item) => {
     return (
-      <CalloutItem key={item._uid}>
+      <CalloutItem {...storyblokEditable(item)} key={item._uid}>
         {item?.icon.filename && (
-          <Icon src={item?.icon?.filename} alt={item?.icon?.alt} />
+          <Icon
+            {...storyblokEditable(item?.icon?.filename)}
+            src={item?.icon?.filename}
+            alt={item?.icon?.alt}
+          />
         )}
         <CalloutBody>
           <RichTextRenderer document={item?.body_copy} />
@@ -53,7 +57,12 @@ const OverviewStats = ({ blok }) => {
   });
 
   return (
-    <Wrapper $isopen={isOpen}>
+    <Wrapper
+      spacingOffset={blok.offset_spacing}
+      spacing={blok.section_spacing}
+      {...storyblokEditable(blok)}
+      $isopen={isOpen}
+    >
       <ContentWrapper $isopen={isOpen}>
         <HeaderDiv>
           <Headline>{blok?.headline}</Headline>
