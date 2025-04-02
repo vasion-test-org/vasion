@@ -66,18 +66,18 @@ const SourceWrapper = styled.div`
 `
 const ImageWrapper = styled.div`
   align-content: center;
-  min-width: 24vw;
+  width: 24vw;
 
 ${media.fullWidth} {
-  min-width: 384px;
+  width: 384px;
 }
 
 ${media.tablet} {
-  min-width: 32.813vw;
+  width: 32.813vw;
 }
 
 ${media.mobile} {
-  min-width: 89.167vw;
+  width: 89.167vw;
 }
 `;
 const TestimonialEyebrow = styled.p`

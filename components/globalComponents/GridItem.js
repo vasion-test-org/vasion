@@ -40,16 +40,16 @@ const GridItemWrapper = styled.div`
   height: auto;
   align-items: ${(props) => props.alignment || 'unset'};
   text-align: ${(props) => props.alignment || 'left'};
-  width: clamp(18.5vw, 100%, 25.5vw);
+  width: 18.5vw;
   gap: 1vw;
 
   ${media.fullWidth} {
-    width: clamp(296px, 100%, 408px);
+    width: 296px;
     gap: 16px;
   }
 
   ${media.tablet} {
-    width: clamp(21.582vw, 100%, 29.395vw);
+    width: 21.582vw;
     gap: 1.563vw;
   }
 

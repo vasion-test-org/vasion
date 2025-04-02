@@ -17,7 +17,7 @@ const TestimonialCarousel = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
-  // console.log(blok.testimonials);
+  console.log(blok.testimonials);
   const mappedTestimonials = blok.testimonials.map((testimonial) => (
     <TestimonialWrapper className='testimonials'>
       <Testimonial className='testimonials' blok={testimonial} />
@@ -26,7 +26,7 @@ const TestimonialCarousel = ({ blok }) => {
 
   useEffect(() => {
     const testimonialsArr = gsap.utils.toArray('.testimonials');
-    const testimonialLoop = horizontalLoop(testimonialsArr, { paused: true });
+    const testimonialLoop = horizontalLoop(testimonialsArr, {centered: true, paused: true });
 
     document
       .querySelector('.next')
