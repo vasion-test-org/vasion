@@ -116,16 +116,25 @@ export async function generateStaticParams() {
   const params = [];
 
   for (const story of data.stories) {
-    const slug = story.slug.split("/");
+    const slug = story.slug;
 
-    params.push({ slug, locale: "en" });
+    // ✅ Skip 'home' slug (handled by app/page.js)
+    if (slug === "home") continue;
 
+    const splitSlug = slug.split("/");
+
+    params.push({ slug: splitSlug, locale: "en" });
+
+    // Handle translations (and also skip translated 'home' pages)
     if (story.translated_slugs) {
       for (const translation of story.translated_slugs) {
-        params.push({ slug: translation.path.split("/"), locale: translation.lang });
+        if (translation.path === "home") continue; // ✅ Skip localized /home too
+        const translatedSlug = translation.path.split("/");
+        params.push({ slug: translatedSlug, locale: translation.lang });
       }
     }
   }
 
   return params;
 }
+
