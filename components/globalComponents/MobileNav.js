@@ -82,7 +82,7 @@ const MobileNav = ({ blok }) => {
   
   useEffect(() => {
     ScrollTrigger.create({
-      trigger: '.mainNavWrapper',
+      trigger: '.mobileNav',
       start: 'top top',
       end: () => `${document.body.scrollHeight - window.innerHeight}px`,
       pin: true,
@@ -135,7 +135,7 @@ const MobileNav = ({ blok }) => {
   
 
   return (
-    <MainWrapper className='mainNavWrapper'>
+    <MainWrapper className='mainNavWrapper mobileNav'>
       <VasionLogo src='/images/logos/vasion-logo-purple.webp' />
       <Hamburger></Hamburger>
       <Dropdown>{mappedNav}</Dropdown>

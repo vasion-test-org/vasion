@@ -1,23 +1,44 @@
-'use client'
-import React from 'react';
-
-import styled from 'styled-components';
-
-import { storyblokEditable } from '@storyblok/react/rsc';
-import media from 'styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import NavSwitcher from './globalComponents/NavSwitcher';
+'use client';
+import React, { useContext } from 'react';
 import Footer from './globalComponents/Footer';
+import { ScreenContext } from './providers';
+import Nav from './globalComponents/Nav';
+import MobileNav from './globalComponents/MobileNav';
+import styled from 'styled-components';
+import media from '@/styles/media';
+import useMedia from '@/functions/useMedia';
 const Config = ({ blok, children }) => {
+  const { mobile } = useContext(ScreenContext);
+  
+  return (
+    <>
+      <NavWrapper >
+        <Nav blok={blok.nav[0]} />
+      </NavWrapper>
 
-console.log(blok)
+      <MobileNavWrapper >
+        <MobileNav blok={blok.nav[0]} />
+      </MobileNavWrapper>
 
-return (
-<>
-  <NavSwitcher blok={blok.nav[0]}/>
-    {children}
-  <Footer blok={blok.footer[0]} />
-</>
-)
+      {children}
+
+      <Footer blok={blok.footer[0]} />
+    </>
+  );
+};
+
+const NavWrapper = styled.div`
+display: block;
+${media.mobile} {
+  display: none;
 }
-export default Config
+`;
+
+const MobileNavWrapper = styled.div`
+display: none;
+  ${media.mobile} {
+    display: block;
+  }
+`;
+
+export default Config;

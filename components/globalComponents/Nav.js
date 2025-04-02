@@ -17,7 +17,6 @@ import Image from './Image';
 
 gsap.registerPlugin(ScrollTrigger);
 const Nav = ({ blok }) => {
-
   const path = usePathname();
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
@@ -125,7 +124,7 @@ const Nav = ({ blok }) => {
     const footerOffset = footer.offsetTop + footer.offsetHeight;
   
     ScrollTrigger.create({
-      trigger: '.mainNavWrapper',
+      trigger: '.desktopNav',
       start: 'top top',
       end: `${footerOffset}px`,
       pin: true,
@@ -206,7 +205,7 @@ const Nav = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <MainNavWrapper className='mainNavWrapper'>
+      <MainNavWrapper className='mainNavWrapper desktopNav'>
         <MainInner>
           <MainContent>
             <VasionLogo src='/images/logos/vasion-logo-purple.webp' />
