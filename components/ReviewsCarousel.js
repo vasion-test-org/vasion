@@ -462,7 +462,7 @@ const BlurLeft = styled.div`
   transform: rotate(90deg);
   background: linear-gradient(0deg, #190c31 0.12%, rgba(25, 12, 49, 0) 99.89%);
 
-  z-index: 10;
+  z-index: 9;
   position: absolute;
   left: -41.056vw;
   top: 2.361vw;
@@ -498,7 +498,7 @@ const BlurLeft = styled.div`
 const BlurRight = styled.div`
   position: absolute;
   transform: rotate(-90deg);
-  z-index: 10;
+  z-index: 9;
   background: linear-gradient(1deg, #190c31 0.9%, rgba(25, 12, 49, 0) 99.16%);
   right: -41.056vw;
   bottom: 5.764vw;
