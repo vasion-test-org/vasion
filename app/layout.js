@@ -8,7 +8,7 @@ import './globals.css';
 import ScrollSmootherWrapper from '@/components/ScollSmoothWraper';
 import Providers from '@/components/providers';
 import Config from '@/components/Config';
-import { getStoryblokApi } from '@storyblok/react/rsc';
+import { getStoryblokApi } from "@/lib/storyblok";
 
 export const metadata = {
   title: 'Vasion',
