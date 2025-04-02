@@ -19,18 +19,18 @@ export async function generateMetadata() {
   const locale = 'en';
   const story = await fetchStory("home", locale);
 
-  if (!story) {
-    return {
-      title: "Home - Page Not Found",
-      description: "The homepage could not be found.",
-    };
-  }
+  // if (!story) {
+  //   return {
+  //     title: "Home - Page Not Found",
+  //     description: "The homepage could not be found.",
+  //   };
+  // }
 
   const { content } = story;
   const title = content.metadata?.title || "Default Homepage Title";
   const description = content.metadata?.description || "Default homepage description.";
 
-  const basePath = 'https://www.vasion.com';
+  const basePath = 'https://vasion-ten.vercel.app';
   const locales = ['en', 'fr', 'de'];
   const alternateLinks = locales.reduce((acc, loc) => {
     const path = loc === 'en' ? `/` : `/${loc}/`;
