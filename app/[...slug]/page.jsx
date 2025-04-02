@@ -12,12 +12,12 @@ export async function generateMetadata({ params }) {
 
   const story = await fetchStory(storySlug, locale);
 
-  // if (!story) {
-  //   return {
-  //     title: "Page Not Found",
-  //     description: "The requested page could not be found.",
-  //   };
-  // }
+  if (!story) {
+    return {
+      title: "Page Not Found",
+      description: "The requested page could not be found.",
+    };
+  }
 
   const { content } = story;
   const title = content.metadata?.title || "Default Title";
