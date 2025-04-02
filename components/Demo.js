@@ -28,7 +28,7 @@ const Demo = ({blok}) => {
   const prevIndex = useRef(0);
   const demoExperienceRef = useRef("");
 
-  console.log(blok)
+  // console.log(blok)
 
 
   useEffect(() => {
@@ -324,7 +324,7 @@ const Demo = ({blok}) => {
     const formattedIconString = option.icon.replace(/\s+/g, '');
 
     let IconComponent = Icons[formattedIconString] || null;
-    console.log(option);
+    // console.log(option);
     return (
       <OptionDiv
         className="options preformContent"

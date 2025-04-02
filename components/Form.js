@@ -13,7 +13,7 @@ import { useThankYou } from "@/context/ThankYouContext";
 import { useRouter } from "next/navigation";
 
 const Form = ({ blok }) => {
-  console.log(blok)
+  // console.log(blok)
   const { thankYouCopy, updateThankYouCopy } = useThankYou();
   const router = useRouter();
   const themes = useAvailableThemes();
@@ -31,7 +31,7 @@ const Form = ({ blok }) => {
   useEffect(() => {
     if (blok?.thank_you_copy) {
       updateThankYouCopy(blok.thank_you_copy);
-      console.log(thankYouCopy, blok?.thank_you_copy);
+      // console.log(thankYouCopy, blok?.thank_you_copy);
     }
   }, [thankYouCopy, blok?.thank_you_copy]);
 
@@ -190,10 +190,10 @@ const MarketoForm = styled.form`
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  width: 31.25vw !important;
-  gap: 1.25vw 1.25vw;
   align-items: left;
   text-align: center;
+  width: 31.25vw !important;
+  gap: 1.25vw 1.25vw;
 `;
 const FormHeader = styled.h4`
   ${text.h4};

@@ -1,9 +1,64 @@
 import { StoryblokStory } from "@storyblok/react/rsc";
 import { notFound } from "next/navigation";
 import { getStoryblokApi } from "@/lib/storyblok";
+import { Metadata } from 'next';
 
 export const revalidate = 60; 
+export async function generateMetadata({ params }) {
+  const slugArray = params.slug || [];
+  const isLocalized = ["fr", "de"].includes(slugArray[0]);
+  const locale = isLocalized ? slugArray[0] : "en";
+  const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");
 
+  const story = await fetchStory(storySlug, locale);
+
+  if (!story) {
+    return {
+      title: "Page Not Found",
+      description: "The requested page could not be found.",
+    };
+  }
+
+  const { content } = story;
+  const title = content.metadata?.title || "Default Title";
+  const description = content.metadata?.description || "Default Description";
+
+  // Define the base path for your site
+  const basePath = 'https://www.vasion.com';
+
+  // Define the available locales and their corresponding paths
+  const locales = ['en', 'fr', 'de'];
+  const alternateLinks = locales.reduce((acc, loc) => {
+    const path = loc === 'en' ? `/${story.full_slug}` : `/${loc}/${story.full_slug}`;
+    acc[loc] = `${basePath}${path}`;
+    return acc;
+  }, {});
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: alternateLinks[locale],
+      languages: alternateLinks,
+    },
+  };
+}
+
+async function fetchStory(slug, locale) {
+  const storyblokApi = getStoryblokApi();
+  const sbParams = {
+    version: "draft",
+    language: locale,
+  };
+
+  try {
+    const { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
+    return data.story;
+  } catch (error) {
+    console.error(`Error fetching story: ${error.message}`);
+    return null;
+  }
+}
 export default async function DynamicPage({ params }) {
   const { slug } = params;
   const slugArray = slug || [];
