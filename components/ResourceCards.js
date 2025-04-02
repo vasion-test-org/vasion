@@ -13,20 +13,20 @@ const ResourceCards = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
-  useEffect(() => {
-    const fetchResources = async () => {
-      const storyblokApi = getStoryblokApi();
-      const { data } = await storyblokApi.get('cdn/stories', {
-        version: 'draft', // or 'published'
-        starts_with: 'resources/',
-        is_startpage: false,
-      });
-      setResources(data.stories);
-      console.log(data.stories)
-    };
+  // useEffect(() => {
+  //   const fetchResources = async () => {
+  //     const storyblokApi = getStoryblokApi();
+  //     const { data } = await storyblokApi.get('cdn/stories', {
+  //       version: 'draft', // or 'published'
+  //       starts_with: 'resources/',
+  //       is_startpage: false,
+  //     });
+  //     setResources(data.stories);
+  //     console.log(data.stories)
+  //   };
 
-    fetchResources();
-  }, []);
+  //   fetchResources();
+  // }, []);
 
   return (
     <ThemeProvider theme={selectedTheme}>

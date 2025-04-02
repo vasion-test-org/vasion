@@ -18,7 +18,7 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   const storyblokApi = getStoryblokApi();
   const { data } = await storyblokApi.get('cdn/stories/config', {
-    version: 'draft', // or 'published' based on your needs
+    version: 'draft', 
   });
   const configData = data ? data.story.content : null;
   return (

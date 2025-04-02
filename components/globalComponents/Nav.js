@@ -13,7 +13,7 @@ import colors from '@/styles/colors';
 import Icons from '@/components/renderers/Icons';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from './Image';
-import { getStoryblokApi } from '@storyblok/react/rsc';
+
 gsap.registerPlugin(ScrollTrigger);
 const Nav = ({ blok }) => {
   const path = usePathname();
