@@ -1,25 +1,28 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import media from "@/styles/media";
+import media from "styles/media";
 import colors from "@/styles/colors";
-import text from "@/styles/text";
+import text from "styles/text";
 import CardModal from "@/components/globalComponents/CardModal";
 import RichTextRenderer from "./renderers/RichTextRenderer";
 
 const ModalCards = ({ blok }) => {
+  const wrapperRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [isActive, setIsActive] = useState(null);
   // console.log(blok)
   const handleModal = (item) => {
-    // console.log(item);
-    if (!item.bio && !hasYouTube) {
-      return;
-    }
+    // Check if there's either bio content or any asset
+    const hasBio = item.bio && item.bio.length > 0;
+    const hasAsset = item.asset && item.asset.length > 0;
 
-    setShowModal(true);
-    setModalData(item);
+    // Open modal if there's bio content or an asset
+    if (hasBio || hasAsset) {
+      setShowModal(true);
+      setModalData(item);
+    }
   };
 
   const allCards = blok?.cards.map((item, index) => {
@@ -63,14 +66,20 @@ const ModalCards = ({ blok }) => {
   });
 
   return (
-    <Wrapper>
+    <Wrapper ref={wrapperRef}>
       <Header>
         <RichTextRenderer document={blok.header} />
       </Header>
       <CardsOuterWrapper>
         <CardsWrapper>{allCards}</CardsWrapper>
       </CardsOuterWrapper>
-      {showModal && <CardModal data={modalData} setShowModal={setShowModal} />}
+      {showModal && (
+        <CardModal
+          data={modalData}
+          setShowModal={setShowModal}
+          parentRef={wrapperRef}
+        />
+      )}
     </Wrapper>
   );
 };
