@@ -26,6 +26,8 @@ const OverviewController = ({ blok }) => {
           blok={{
             quote: quoteData,
             stats: combinedStatsData,
+            spacing_offset: blok.spacing_offset,
+            section_spacing: blok.section_spacing,
           }}
         />
       );
