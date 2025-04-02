@@ -34,7 +34,7 @@ import Tune from '@/assets/svg/tune.svg';
 import TwoPaperBlock from '@/assets/svg/two_paper_block.svg';
 import Volunteer from '@/assets/svg/volunteer_activism.svg';
 import WorkflowBlock from '@/assets/svg/workflow_block.svg';
-
+import Rocket from '@/assets/svg/rocket_launch.svg';
 const Icons = {
   film_block: FilmBlock,
   vasion_star: VasionStar,
@@ -72,6 +72,7 @@ const Icons = {
   two_paper_block: TwoPaperBlock,
   volunteer_activism: Volunteer,
   workflow_block: WorkflowBlock,
+  rocket_launch: Rocket,
 };
 
 export default Icons;

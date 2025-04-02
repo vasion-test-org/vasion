@@ -144,7 +144,7 @@ const Footer = ({ blok }) => {
       </LegalDiv>
       <VasionFooter
         src={"/images/uiElements/VasionFooterPNG.png"}
-        id="vasion-footer-svg"
+        id="vasionfootersvg"
       />
     </Wrapper>
   );
