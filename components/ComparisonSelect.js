@@ -7,8 +7,10 @@ import text from "@/styles/text";
 import useMedia from "@/functions/useMedia";
 import ReactPlayer from "react-player";
 import gsap from "gsap";
+import RichTextRenderer from "./renderers/RichTextRenderer";
 
 const ComparisonSelect = ({ blok }) => {
+  console.log(blok);
   const [hoveredOption, setHoveredOption] = useState(null);
   const [activeTl, setActiveTl] = useState(null);
 
@@ -155,9 +157,14 @@ const ComparisonSelect = ({ blok }) => {
       object2Ref.current?.removeEventListener("mouseleave", handleMouseLeave2);
     };
   }, [activeTl]);
-  console.log(blok);
+
+  const background = {
+    desktop: blok?.backgrounds?.[0]?.filename,
+    tablet: blok?.backgrounds?.[1]?.filename,
+    mobile: blok?.backgrounds?.[2]?.filename,
+  };
   return (
-    <Wrapper className="wrapper-div" $bg={blok?.background}>
+    <Wrapper className="wrapper-div" $bg={background}>
       {blok?.header && <Header>{blok?.header}</Header>}
       {
         <Comparison>
@@ -171,14 +178,18 @@ const ComparisonSelect = ({ blok }) => {
             <OptionImages
               src={
                 hoveredOption === "option-1"
-                  ? blok?.optionOne?.hoverImage?.sourceUrl
-                  : blok?.optionOne?.image?.sourceUrl
+                  ? blok?.comparison_options[0].image.filename
+                  : blok?.comparison_options[0].hover_image.filename
               }
-              alt={blok?.optionOne?.image?.altText}
+              alt={blok?.comparison_options[0]?.image?.alt}
             />
-            <Body dangerouslySetInnerHTML={{ __html: blok?.optionOne?.body }} />
+            <Body>
+              <RichTextRenderer
+                document={blok?.comparison_options[0].body_copy}
+              />
+            </Body>
           </Option>
-          <ComparisonText>{blok?.comparisonText}</ComparisonText>
+          <ComparisonText>{blok?.comparison_text}</ComparisonText>
           <Option
             ref={object2Ref}
             className={"option-2"}
@@ -188,12 +199,16 @@ const ComparisonSelect = ({ blok }) => {
             <OptionImages
               src={
                 hoveredOption === "option-2"
-                  ? blok?.optionTwo?.hoverImage?.sourceUrl
-                  : blok?.optionTwo?.image?.sourceUrl
+                  ? blok?.comparison_options[1].image.filename
+                  : blok?.comparison_options[1].hover_image.filename
               }
               alt={blok?.optionTwo?.image?.altText}
             />
-            <Body dangerouslySetInnerHTML={{ __html: blok?.optionTwo?.body }} />
+            <Body>
+              <RichTextRenderer
+                document={blok?.comparison_options[1].body_copy}
+              />
+            </Body>
           </Option>
         </Comparison>
       }
@@ -208,7 +223,10 @@ const ComparisonSelect = ({ blok }) => {
         width={videoWidth}
         height={videoHeight}
       />
-      <BottomCopy dangerouslySetInnerHTML={{ __html: blok?.bottomText }} />
+
+      <BottomCopy>
+        <RichTextRenderer document={blok.bottom_text} />
+      </BottomCopy>
     </Wrapper>
   );
 };
@@ -329,7 +347,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   color: ${colors.white};
-  background: url(${(props) => props?.$bg?.desktop?.sourceUrl || "unset"});
+  background: url(${(props) => props?.$bg.desktop || "unset"});
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -349,7 +367,7 @@ const Wrapper = styled.div`
   ${media.tablet} {
     padding: 9.375vw 0vw;
     gap: 5.859vw;
-    background: url(${(props) => props?.$bg?.tablet?.sourceUrl || "unset"});
+    background: url(${(props) => props?.$bg?.tablet || "unset"});
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -358,7 +376,7 @@ const Wrapper = styled.div`
   ${media.mobile} {
     padding: 20vw 0vw;
     gap: 12.5vw;
-    background: url(${(props) => props?.$bg?.mobile?.sourceUrl || "unset"});
+    background: url(${(props) => props?.$bg?.mobile || "unset"});
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
