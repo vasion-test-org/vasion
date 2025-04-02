@@ -1,23 +1,65 @@
-import { fetchData } from '@/lib/fetchData';
-import {useStoryblokState } from '@storyblok/react';  // Update import
 import { draftMode } from 'next/headers';
-import { StoryblokStory } from '@storyblok/react/rsc';
+import { getStoryblokApi } from "@/lib/storyblok";
+import StoryRenderer from '@/components/renderers/StoryRenderer';
 
 export default async function Home() {
-  const { isEnabled } = draftMode(); // Check if draft mode is enabled
-
-  // Fetch Storyblok content based on draft mode status
-  const initialStory = await fetchData("home", isEnabled);
-
-  // Enable real-time editing in Storyblok Visual Editor
-  const story = useStoryblokState(initialStory);
+  const { isEnabled } = draftMode();
+  const story = await fetchStory("home", isEnabled);
 
   return (
     <div>
-      <StoryblokStory story={story} />
+      <StoryRenderer story={story} />
     </div>
   );
 }
 
-// Ensure the page is dynamically rendered when draft mode is enabled
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata() {
+  const locale = 'en';
+  const story = await fetchStory("home", locale);
+
+  if (!story) {
+    return {
+      title: "Home - Page Not Found",
+      description: "The homepage could not be found.",
+    };
+  }
+
+  const { content } = story;
+  const title = content.metadata?.title || "Default Homepage Title";
+  const description = content.metadata?.description || "Default homepage description.";
+
+  const basePath = 'https://www.vasion.com';
+  const locales = ['en', 'fr', 'de'];
+  const alternateLinks = locales.reduce((acc, loc) => {
+    const path = loc === 'en' ? `/` : `/${loc}/`;
+    acc[loc] = `${basePath}${path}`;
+    return acc;
+  }, {});
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: alternateLinks["en"],
+      languages: alternateLinks,
+    },
+  };
+}
+
+async function fetchStory(slug, locale) {
+  const storyblokApi = getStoryblokApi();
+  const sbParams = {
+    version: "draft",
+    language: locale,
+  };
+
+  try {
+    const { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
+    return data.story;
+  } catch (error) {
+    console.error(`Error fetching home story: ${error.message}`);
+    return null;
+  }
+}
