@@ -9,9 +9,14 @@ import ScrollSmootherWrapper from '@/components/ScollSmoothWraper';
 import Providers from '@/components/providers';
 import Config from '@/components/Config';
 import { getStoryblokApi } from "@/lib/storyblok";
+import { Metadata } from 'next';
 
 export const metadata = {
-  title: 'Vasion',
+  metadataBase: new URL('https://vasion-ten.vercel.app'),
+  title: {
+    template: '%s | Vasion',
+    default: 'Vasion',
+  },
   description: 'Vasion site',
 };
 

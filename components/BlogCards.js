@@ -9,29 +9,29 @@ import media from '@/styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import PaginatedCards from './PaginatedCards';
 
-const ResourceCards = ({ blok }) => {
-  const [resources, setResources] = useState([]);
+const BlogCards = ({ blok }) => {
+  const [blogs, setBlogs] = useState([]);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
   useEffect(() => {
-    const fetchAllResources = async () => {
+    const fetchAllBlogs = async () => {
       const storyblokApi = getStoryblokApi();
       const perPage = 100;
       let page = 1;
-      let allResources = [];
+      let allBlogs = [];
       let keepFetching = true;
   
       while (keepFetching) {
         const { data } = await storyblokApi.get('cdn/stories', {
           version: 'draft',
-          starts_with: 'resources/',
+          starts_with: 'blog/',
           is_startpage: false,
           per_page: perPage,
           page,
         });
   
-        allResources = [...allResources, ...data.stories];
+        allBlogs = [...allBlogs, ...data.stories];
   
         // If we received fewer than perPage, we’re on the last page
         if (data.stories.length < perPage) {
@@ -41,26 +41,26 @@ const ResourceCards = ({ blok }) => {
         }
       }
   
-      setResources(allResources);
-      // console.log('Fetched ALL resources:', allResources.length);
+      setBlogs(allBlogs);
+      // console.log('Fetched ALL blogs:', allBlogs.length);
     };
   
-    fetchAllResources();
+    fetchAllBlogs();
   }, []);
   
 
   return (
     <ThemeProvider theme={selectedTheme}>
       <Container {...storyblokEditable(blok)}>
-        {resources.length > 0 && (
-          <PaginatedCards blok={{ ...blok, cards: resources, card_type: 'resource' }} />
+        {blogs.length > 0 && (
+          <PaginatedCards blok={{ ...blok, cards: blogs, card_type: 'resource' }} />
         )}
       </Container>
     </ThemeProvider>
   );
 };
 
-export default ResourceCards;
+export default BlogCards;
 
 const Container = styled.div`
   display: flex;
