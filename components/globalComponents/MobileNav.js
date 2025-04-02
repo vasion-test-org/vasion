@@ -23,11 +23,11 @@ const MobileNav = ({ blok }) => {
   let currentNavItems = blok.english_nav_items;
   const isOpen = useRef(false);
   
-  if (path.startsWith('/de')) {
-    currentNavItems = blok.german_nav_items;
-  } else if (path.startsWith('/fr')) {
-    currentNavItems = blok.french_nav_items;
-  }
+  // if (path.startsWith('/de')) {
+  //   currentNavItems = blok.german_nav_items;
+  // } else if (path.startsWith('/fr')) {
+  //   currentNavItems = blok.french_nav_items;
+  // }
 
   const mappedNav = currentNavItems.map((item, index) => (
     <Tab key={`tab-${index}`}>
@@ -93,14 +93,44 @@ const MobileNav = ({ blok }) => {
 
   useEffect(() => {
     gsap.set('.tabDropdowns', { height: 0, display: 'none' });
-
+    gsap.set('.mobileDropdown', { height: 0, display: 'none' }); 
+  
     const allTabs = gsap.utils.toArray('.tabHeader');
+    const hamburger = document.querySelector('.hamburger');
+  
     let tl = gsap.timeline({ paused: true });
-
+    let mobileOpen = false; // <- track open state
+  
+    const toggleMobileDropdown = () => {
+      const dropdown = document.querySelector('.mobileDropdown');
+      if (!dropdown) return;
+  
+      if (mobileOpen) {
+        gsap.to(dropdown, {
+          height: 0,
+          duration: 0.4,
+          ease: 'power2.inOut',
+          onComplete: () => gsap.set(dropdown, { display: 'none' }),
+        });
+      } else {
+        gsap.set(dropdown, { display: 'flex' });
+        gsap.to(dropdown, {
+          height: '100vh',
+          duration: 0.4,
+          ease: 'power2.inOut',
+        });
+      }
+  
+      mobileOpen = !mobileOpen;
+    };
+  
+    if (hamburger) {
+      hamburger.addEventListener('click', toggleMobileDropdown);
+    }
+  
     const openDropdown = (index) => {
       tl.clear();
-
-      // Case 1: Clicking the same tab that's already open
+  
       if (dropdownIndex.current === index && isOpen.current) {
         tl.to(`#tabHeader-${index}`, { height: 0 })
           .set(`#tabHeader-${index}`, { display: 'none' });
@@ -109,36 +139,40 @@ const MobileNav = ({ blok }) => {
         tl.play();
         return;
       }
-
-      // Case 2: Clicking a new tab
+  
       dropdownIndex.current = index;
       isOpen.current = true;
-
+  
       tl.to('.tabDropdowns', { height: 0 })
         .set('.tabDropdowns', { display: 'none' }, ">-0.15")
         .set(`#tabHeader-${index}`, { display: 'flex' })
         .to(`#tabHeader-${index}`, { height: 'auto' });
-
+  
       tl.play();
     };
-
+  
     allTabs.forEach((tab, index) => {
       tab.addEventListener('click', () => openDropdown(index));
     });
-
+  
     return () => {
       allTabs.forEach((tab, index) => {
         tab.removeEventListener('click', () => openDropdown(index));
       });
+  
+      if (hamburger) {
+        hamburger.removeEventListener('click', toggleMobileDropdown);
+      }
     };
   }, []);
+  
   
 
   return (
     <MainWrapper className='mainNavWrapper mobileNav'>
       <VasionLogo src='/images/logos/vasion-logo-purple.webp' />
-      <Hamburger></Hamburger>
-      <Dropdown>{mappedNav}</Dropdown>
+      <Hamburger className='hamburger'> Ham </Hamburger>
+      <Dropdown className='mobileDropdown'>{mappedNav}</Dropdown>
     </MainWrapper>
   );
 };
@@ -285,6 +319,7 @@ ${media.mobile} {
   flex-direction: column;
   padding: 1.667vw 1.667vw 5vw 1.667vw;
   gap: 3.333vw;
+  overflow: hidden;
 }
 `;
 const TabHeader = styled.div`
@@ -314,8 +349,17 @@ const Dropdown = styled.div`
     height: 100vh;
     width: 100%;
     top: 12.708vw;
+    left: 0;
     /* border: 1px solid red; */
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+
+  /* WebKit (Chrome, Safari) */
+  &::-webkit-scrollbar {
+    display: none;
+  }
   }
 `;
 const Hamburger = styled.div`
@@ -338,10 +382,13 @@ const MainWrapper = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    
     background: ${colors.white};
     width: 100%;
+    max-width: 100%;
     z-index: 10;
     height: 12.821vw;
+    padding: 0 3.333vw;
     /* border: 1px solid blue; */
   }
 `;
