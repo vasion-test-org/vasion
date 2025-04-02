@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import styled from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import text from "styles/text";
+import media from "@/styles/media";
+import colors from "@/styles/colors";
+import text from "@/styles/text";
 import CardModal from "@/components/globalComponents/CardModal";
 import RichTextRenderer from "./renderers/RichTextRenderer";
 
