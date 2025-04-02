@@ -430,14 +430,14 @@ const Wrapper = styled.div`
   height: 100vh;
   z-index: 100000;
   inset: 0;
-  top: 231vh;
+  top: 204vh;
   background: rgba(27, 29, 33, 0.5);
   backdrop-filter: blur(calc(var(--Blur-40, 40px) / 2));
   ${media.fullWidth} {
     top: 206vh;
   }
   ${media.tablet} {
-    top: 202vh;
+    top: 192vh;
   }
   ${media.mobile} {
     height: 100vh;
