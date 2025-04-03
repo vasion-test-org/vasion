@@ -41,9 +41,12 @@ export const defaultTheme = {
   form: {
     textColor: "#1B1D21",
     formBg: "#ffffff",
-    inputBg: "#ffffff",
+    inputBg: "#F5F4F7",
     inputBorder: "#A8ABAE",
     buttonBg: "#ff5100",
+    placeHolderColor: "#808085",
+    selectPlaceHolderColor: "#1B1D21",
+    errorColor: '#BA1A1A'
   },
   small_quote: {
     textColor: "#1B1D21",
@@ -82,6 +85,8 @@ export const darkTheme = {
     inputBg: "#584282",
     inputBorder: "rgba(255, 255, 255, 0.30)",
     placeHolderColor: "rgba(255, 255, 255, 0.60)",
+    selectPlaceHolderColor: "#FFFFFF",
+    errorColor: '#ffb4ab'
   },
 };
 

@@ -23,13 +23,12 @@ const Nav = ({ blok }) => {
   
   let navItems = blok.english_nav_items;
 
-  // if (path && path.startsWith('/de')) {
-  //   navItems = blok.german_nav_items;
-  // } else if (path && path.startsWith('/fr')) {
-  //   navItems = blok.french_nav_items;
-  // }
+  if (path && path.startsWith('/de')) {
+    navItems = blok.german_nav_items;
+  } else if (path && path.startsWith('/fr')) {
+    navItems = blok.french_nav_items;
+  }
   
-
   console.log('current:',navItems);
 
   const mappedNav = navItems.map((item, index) => (
