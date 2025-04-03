@@ -317,7 +317,7 @@ const Demo = ({blok}) => {
   }, []);
 
   const mappedBadges = blok.badges.map(badge =>
-    <Badge src={badge.filename}/>
+    <Badge key={badge.filename} src={badge.filename}/>
   )
 
   const mappedOptions = blok.cards.map((option, index) => {
