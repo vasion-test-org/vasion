@@ -16,11 +16,78 @@ const StyledBodyCopy = styled.div`
   font-family: 'Archivo';
   font-weight: 400;
   white-space: pre-wrap;
-
+  b {
+  display: inline-block;
+  white-space: pre-wrap;
+}
   &.bold {
     font-weight: 600;
   }
+  &.eyebrow {
+    font-weight: 700;
+    font-size: 0.875vw;
+    line-height: 1.125vw;
+    letter-spacing: 0.175vw;
+    text-transform: uppercase;
 
+    ${media.fullWidth} {
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 3px;
+  }
+
+  ${media.tablet} {
+    font-size: 1.367vw;
+    line-height: 1.758vw;
+  }
+
+  ${media.mobile} {
+    font-size: 2.804vw;
+    line-height: 4.206vw;
+  }
+  }
+
+  &.tag {
+    font-weight: 600;
+    font-size: 0.625vw;
+    line-height: 0.75vw;
+
+    ${media.fullWidth} {
+      font-size: 10px;
+      line-height: 12px;
+  }
+
+  ${media.tablet} {
+    font-size: 0.977vw;
+    line-height: 1.172vw;
+  }
+
+  ${media.mobile} {
+    font-size: 2.336vw;
+    line-height: 2.804vw;
+  }
+  }
+
+  &.tagLight {
+    font-weight: 400;
+    font-size: 0.625vw;
+      line-height: 0.75vw;
+
+    ${media.fullWidth} {
+      font-size: 10px;
+      line-height: 12px;
+  }
+
+  ${media.tablet} {
+    font-size: 0.977vw;
+    line-height: 1.172vw;
+  }
+
+  ${media.mobile} {
+    font-size: 2.336vw;
+    line-height: 2.804vw;
+  }
+  }
   &.bodySm {
     font-size: 0.875vw;
     line-height: 1.125vw;
