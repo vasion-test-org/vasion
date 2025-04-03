@@ -5,7 +5,7 @@ import OverviewStats from "./variations/OverviewStats";
 import OverviewCombined from "./variations/OverviewCombined";
 
 const OverviewController = ({ blok }) => {
-  console.log("Block Content", blok);
+  // console.log("Block Content", blok);
   const component = blok.component_type;
 
   switch (component) {

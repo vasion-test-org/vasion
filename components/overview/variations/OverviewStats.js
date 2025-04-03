@@ -7,7 +7,6 @@ import gsap from "gsap";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import { storyblokEditable } from "@storyblok/react/rsc";
 const OverviewStats = ({ blok }) => {
-  console.log("stats-blok", blok);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleMobileClick = () => {

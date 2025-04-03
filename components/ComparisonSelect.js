@@ -10,7 +10,6 @@ import gsap from "gsap";
 import RichTextRenderer from "./renderers/RichTextRenderer";
 
 const ComparisonSelect = ({ blok }) => {
-  console.log(blok);
   const [hoveredOption, setHoveredOption] = useState(null);
   const [activeTl, setActiveTl] = useState(null);
 
