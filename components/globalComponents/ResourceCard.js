@@ -13,7 +13,7 @@ import text from '@/styles/text';
 const ResourceCard = ({ content, paginated, index }) => {
   const oddImages = ["/images/RandomResource1.webp", "/images/RandomResource2.webp", "/images/RandomResource3.webp"];
   const evenImages = ["/images/RandomResource4.webp", "/images/RandomResource5.webp", "/images/RandomResource6.webp"];
-console.log(content)
+// console.log(content)
   // Choose image group based on index
   const imagePool = index % 2 === 0 ? evenImages : oddImages;
   const randomImage = imagePool[Math.floor(Math.random() * imagePool.length)];

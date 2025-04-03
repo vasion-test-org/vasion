@@ -18,7 +18,7 @@ const Video = ({ videos, borderradius, filename, thumbnails }) => {
         videos?.[2]?.filename || videos?.[0]?.filename
       );
 
-  console.log('videoSrc:', videoSrc); // Debugging video source
+  // console.log('videoSrc:', videoSrc); 
 
   if (!videoSrc) return null;
 

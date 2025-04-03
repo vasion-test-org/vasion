@@ -41,7 +41,7 @@ const MobileNav = ({ blok }) => {
               const formattedIconString = item.icon.replace(/\s+/g, '');
               const IconComponent = Icons[formattedIconString] || null;
   
-              console.log(item);
+              // console.log(item);
   
               return (
                 <NavItem

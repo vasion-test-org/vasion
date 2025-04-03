@@ -19,7 +19,7 @@ const StackedCards = ({ blok }) => {
   const stackedCardsRef = useRef(null);
   const riveInstancesRef = useRef([]);
   const [active, setActive] = useState(0);
-  console.log(blok);
+  // console.log(blok);
   useEffect(() => {
     riveInstancesRef.current = Array(3).fill(null);
 

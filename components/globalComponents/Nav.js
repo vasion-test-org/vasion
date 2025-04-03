@@ -29,7 +29,7 @@ const Nav = ({ blok }) => {
     navItems = blok.french_nav_items;
   }
   
-  console.log('current:',navItems);
+  // console.log('current:',navItems);
 
   const mappedNav = navItems.map((item, index) => (
     <KeyDiv key={`item.tab_name-${index}`}>
