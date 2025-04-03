@@ -1,35 +1,40 @@
-'use client'
-import React, { useState } from "react";
+"use client";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import media from "styles/media";
-import colors from "styles/colors";
+import colors from "@/styles/colors";
 import text from "styles/text";
 import CardModal from "@/components/globalComponents/CardModal";
 import RichTextRenderer from "./renderers/RichTextRenderer";
 
 const ModalCards = ({ blok }) => {
+  const wrapperRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [isActive, setIsActive] = useState(null);
-// console.log(blok)
+  // console.log(blok)
   const handleModal = (item) => {
-    // console.log(item);
-    if (!item.bio && !hasYouTube) {
-      return;
-    }
+    // Check if there's either bio content or any asset
+    const hasBio = item.bio && item.bio.length > 0;
+    const hasAsset = item.asset && item.asset.length > 0;
 
-    setShowModal(true);
-    setModalData(item);
+    // Open modal if there's bio content or an asset
+    if (hasBio || hasAsset) {
+      setShowModal(true);
+      setModalData(item);
+    }
   };
 
   const allCards = blok?.cards.map((item, index) => {
-    const hasYouTube = /youtube|youtu\.be/.test(item?.asset[0].media[0].filename);
+    const hasYouTube = /youtube|youtu\.be/.test(
+      item?.asset[0].media[0].filename,
+    );
 
-    let image = null
+    let image = null;
     if (hasYouTube) {
-      image = item?.asset[0].thumbnails[0].filename
+      image = item?.asset[0].thumbnails[0].filename;
     } else {
-      image = item?.asset[0].media[0].filename
+      image = item?.asset[0].media[0].filename;
     }
     return (
       <ProfileCard
@@ -42,23 +47,39 @@ const ModalCards = ({ blok }) => {
         onMouseLeave={() => setIsActive(false)}
       >
         <Title>
-         {item?.person[0]?.copy && <RichTextRenderer document={item.person[0].copy}/>}
-         {item?.position[0]?.copy && <RichTextRenderer document={item.position[0].copy}/>}
+          {item?.person[0]?.copy && (
+            <RichTextRenderer document={item.person[0].copy} />
+          )}
+          {item?.position[0]?.copy && (
+            <RichTextRenderer document={item.position[0].copy} />
+          )}
         </Title>
         {!hasYouTube && (
-          <GoToBtn $active={index === isActive} src="/images/uiElements/GoTo.webp" alt={"go-to-btn"} />
+          <GoToBtn
+            $active={index === isActive}
+            src="/images/uiElements/GoTo.webp"
+            alt={"go-to-btn"}
+          />
         )}
       </ProfileCard>
     );
   });
 
   return (
-    <Wrapper>
-      <RichTextRenderer document={blok.header}/>
+    <Wrapper ref={wrapperRef}>
+      <Header>
+        <RichTextRenderer document={blok.header} />
+      </Header>
       <CardsOuterWrapper>
         <CardsWrapper>{allCards}</CardsWrapper>
       </CardsOuterWrapper>
-      {showModal && <CardModal data={modalData} setShowModal={setShowModal} />}
+      {showModal && (
+        <CardModal
+          data={modalData}
+          setShowModal={setShowModal}
+          parentRef={wrapperRef}
+        />
+      )}
     </Wrapper>
   );
 };
@@ -132,8 +153,8 @@ const ProfileCard = styled.div`
           rgba(88, 63, 153, 0.5) 100%
         )${props.$bg ? `, url(${props.$bg})` : ""}`
         : props.$bg
-        ? `url(${props.$bg})`
-        : "none"}; */
+          ? `url(${props.$bg})`
+          : "none"}; */
   }
   background-size: 100%;
   width: ${(props) => (props?.$isvideo ? "26.125vw" : "19.25vw")};
@@ -199,7 +220,7 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-
+  justify-self: center;
   width: 81.5vw;
   gap: 2vw;
   ${media.fullWidth} {

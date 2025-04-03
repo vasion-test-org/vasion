@@ -1,18 +1,24 @@
-'use client';
-import React from 'react';
+"use client";
+import React from "react";
 
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import media from 'styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import Image from './globalComponents/Image';
-import ComponentRenderer from './renderers/ComponentRenderer';
+import styled, { ThemeProvider } from "styled-components";
+import { useAvailableThemes } from "@/context/ThemeContext";
+import { storyblokEditable } from "@storyblok/react/rsc";
+import media from "styles/media";
+import RichTextRenderer from "@/components/renderers/RichTextRenderer";
+import Image from "./globalComponents/Image";
+import ComponentRenderer from "./renderers/ComponentRenderer";
 
 const SmallQuote = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  const copycomponents = ['body_copy', 'header', 'eyebrow', 'long_form_text', 'copy_block'];
+  const copycomponents = [
+    "body_copy",
+    "header",
+    "eyebrow",
+    "long_form_text",
+    "copy_block",
+  ];
   // console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
@@ -22,27 +28,27 @@ const SmallQuote = ({ blok }) => {
         {...storyblokEditable(blok)}
       >
         <SmallQuoteContainer>
-          <OrangeQuote src='/images/uiElements/Orange_Quote_Mark.webp'/>
-          {blok?.quote_image[0]?.media &&
-          <ImageWrapper>
-             <Image
-              {...storyblokEditable(blok)}
-              alt={blok?.quote_image[0]?.media[0]?.alt || 'Default Image'}
-              images={blok?.quote_image[0]?.media}
-            />
-          </ImageWrapper>}
+          <OrangeQuote src="/images/uiElements/Orange_Quote_Mark.webp" />
+          {blok?.quote_image[0]?.media && (
+            <ImageWrapper>
+              <Image
+                {...storyblokEditable(blok)}
+                alt={blok?.quote_image[0]?.media[0]?.alt || "Default Image"}
+                images={blok?.quote_image[0]?.media}
+              />
+            </ImageWrapper>
+          )}
           <SmallQuoteContent>
             {blok.copy.map((item, index) => (
               // console.log(item)
               <div key={`item.component_${index}`} {...storyblokEditable(item)}>
                 {copycomponents.includes(item.component) ? (
-                  <RichTextRenderer document={item.copy} blok={item}/>
+                  <RichTextRenderer document={item.copy} blok={item} />
                 ) : (
-                  <ComponentRenderer blok={item}/>
+                  <ComponentRenderer blok={item} />
                 )}
               </div>
-            ))
-            }
+            ))}
           </SmallQuoteContent>
         </SmallQuoteContainer>
       </Wrapper>
@@ -51,7 +57,7 @@ const SmallQuote = ({ blok }) => {
 };
 
 const OrangeQuote = styled.img`
-position: absolute;
+  position: absolute;
   height: 3.75vw;
   width: 3.75vw;
   top: -1.9vw;
@@ -63,21 +69,21 @@ position: absolute;
     top: -30px;
     left: 32px;
   }
-  
+
   ${media.tablet} {
     height: 5.859vw;
     width: 5.859vw;
     top: -2.93vw;
     left: 3.125vw;
   }
-  
+
   ${media.mobile} {
     height: 12.5vw;
     width: 12.5vw;
     top: -6.25vw;
     left: 6.667vw;
   }
-`
+`;
 const ImageWrapper = styled.div`
   width: 6.688vw;
   height: 6.688vw;
@@ -114,7 +120,7 @@ const SmallQuoteContent = styled.div`
   }
 `;
 const SmallQuoteContainer = styled.div`
-position: relative;
+  position: relative;
   display: flex;
   flex-direction: row;
   border-radius: 1.5vw;
@@ -144,7 +150,6 @@ position: relative;
     border-radius: 5vw;
     gap: unset;
   }
-  
 `;
 const Wrapper = styled.div`
   display: flex;
@@ -153,96 +158,96 @@ const Wrapper = styled.div`
   justify-content: center;
   width: 100%;
   padding: ${(props) => {
-    if (props.spacingOffset === 'top') {
-      return props.spacing === 'default'
-        ? '3.75vw 0 0'
+    if (props.spacingOffset === "top") {
+      return props.spacing === "default"
+        ? "3.75vw 0 0"
         : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '3.75vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : "3.75vw 0 0";
     }
-    if (props.spacingOffset === 'bottom') {
-      return props.spacing === 'default'
-        ? '0 0 3.75vw'
+    if (props.spacingOffset === "bottom") {
+      return props.spacing === "default"
+        ? "0 0 3.75vw"
         : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 3.75vw';
+          ? `0 0 ${props.spacing}px`
+          : "0 0 3.75vw";
     }
-    return props.spacing === 'default'
-      ? '3.75vw 0'
+    return props.spacing === "default"
+      ? "3.75vw 0"
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0';
+        ? `${props.spacing}px 0`
+        : "3.75vw 0";
   }};
 
   ${media.fullWidth} {
     padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '60px 0 0'
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "60px 0 0"
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+            ? `${props.spacing}px 0 0`
+            : "60px 0 0";
       }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 60px'
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 0 60px"
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+            ? `0 0 ${props.spacing}px`
+            : "0 0 60px";
       }
-      return props.spacing === 'default'
-        ? '60px 0'
+      return props.spacing === "default"
+        ? "60px 0"
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+          ? `${props.spacing}px 0`
+          : "60px 0";
     }};
   }
 
   ${media.tablet} {
     padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '3.906vw 0 0'
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "3.906vw 0 0"
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '3.906vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : "3.906vw 0 0";
       }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 3.906vw'
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 0 3.906vw"
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 3.906vw';
+            ? `0 0 ${props.spacing}px`
+            : "0 0 3.906vw";
       }
-      return props.spacing === 'default'
-        ? '3.906vw 0'
+      return props.spacing === "default"
+        ? "3.906vw 0"
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '3.906vw 0';
+          ? `${props.spacing}px 0`
+          : "3.906vw 0";
     }};
   }
 
   ${media.mobile} {
     padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '12.5vw 0 0'
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "12.5vw 0 0"
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '12.5vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : "12.5vw 0 0";
       }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 12.5vw'
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 0 12.5vw"
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 12.5vw';
+            ? `0 0 ${props.spacing}px`
+            : "0 0 12.5vw";
       }
-      return props.spacing === 'default'
-        ? '12.5vw 0'
+      return props.spacing === "default"
+        ? "12.5vw 0"
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0';
+          ? `${props.spacing}px 0`
+          : "12.5vw 0";
     }};
   }
 `;

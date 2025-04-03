@@ -1,20 +1,20 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import media from 'styles/media';
-import colors from 'styles/colors';
-import text from 'styles/text';
-import ReactPlayer from 'react-player/youtube';
-import useMedia from '@/functions/useMedia';
-import RichTextRenderer from '../renderers/RichTextRenderer';
-import Video from './Video';
+"use client";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import media from "styles/media";
+import colors from "styles/colors";
+import text from "styles/text";
+import ReactPlayer from "react-player/youtube";
+import useMedia from "@/functions/useMedia";
+import RichTextRenderer from "../renderers/RichTextRenderer";
+import Video from "./Video";
 
-const CardModal = ({ data, setShowModal }) => {
+const CardModal = ({ data, setShowModal, parentRef }) => {
   const [closeButton, setCloseButton] = useState(
-    '/images/uiElements/closeButton.webp'
+    "/images/uiElements/closeButton.webp",
   );
-  const videoWidth = useMedia('1440px', '89.6vw', '89vw', '87.85vw');
-  const videoHeight = useMedia('900px', '51.25vw', '51vw', '49.299vw');
+  const videoWidth = useMedia("1440px", "89.6vw", "89vw", "87.85vw");
+  const videoHeight = useMedia("900px", "51.25vw", "51vw", "49.299vw");
 
   const handleClose = (e) => {
     if (e.target === e.currentTarget) {
@@ -22,27 +22,39 @@ const CardModal = ({ data, setShowModal }) => {
     }
   };
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, []);
+    document.body.style.overflow = "hidden";
 
-  const hasYouTube = /youtube|youtu\.be/.test(data?.asset[0].media[0].filename);
+    if (parentRef && parentRef.current) {
+      const rect = parentRef.current.getBoundingClientRect();
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+
+      const scrollPosition = rect.top + scrollTop - window.innerHeight / 4;
+
+      window.scrollTo({
+        top: scrollPosition,
+        behavior: "smooth",
+      });
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [parentRef]);
   return (
-    <Wrapper onClick={handleClose}>
-      <Modal $isvideo={hasYouTube}>
+    <Wrapper className="modal-wrapper" onClick={handleClose}>
+      <Modal $isvideo={data?.asset[0].media[0].filename}>
         <CloseBtn
-          src='/images/uiElements/closeButton.webp'
+          src="/images/uiElements/closeButton.webp"
           onMouseEnter={() =>
-            setCloseButton('images/uiElement/CloseBtnHover.webp')
+            setCloseButton("images/uiElement/CloseBtnHover.webp")
           }
           onMouseLeave={() =>
-            setCloseButton('/images/uiElements/closeButton.webp')
+            setCloseButton("/images/uiElements/closeButton.webp")
           }
           onClick={handleClose}
         />
-        {!hasYouTube && (
+        {!data?.asset[0].media[0].filename && (
           <FeaturedContent>
             <Title $mobile>
               <NameAndStar>
@@ -50,8 +62,8 @@ const CardModal = ({ data, setShowModal }) => {
                   <RichTextRenderer document={data.person[0].copy} />
                 )}
                 <Sparkle
-                  src='/images/uiElements/VasionStarNewsroom.webp'
-                  alt='vasion-sparkle'
+                  src="/images/uiElements/VasionStarNewsroom.webp"
+                  alt="vasion-sparkle"
                 />
               </NameAndStar>
               {data?.position[0]?.copy && (
@@ -69,8 +81,8 @@ const CardModal = ({ data, setShowModal }) => {
                     <RichTextRenderer document={data.person[0].copy} />
                   )}
                   <Sparkle
-                    src='/images/uiElements/VasionStarNewsroom.webp'
-                    alt='vasion-sparkle'
+                    src="/images/uiElements/VasionStarNewsroom.webp"
+                    alt="vasion-sparkle"
                   />
                 </NameAndStar>
                 {data?.position[0]?.copy && (
@@ -83,7 +95,7 @@ const CardModal = ({ data, setShowModal }) => {
             </TitleAndBioDiv>
           </FeaturedContent>
         )}
-        {hasYouTube && (
+        {data?.asset[0].media[0].filename && (
           <VideoContainer>
             <Video
               videos={data?.asset[0].media[0]}
@@ -207,7 +219,7 @@ const NameAndStar = styled.div`
 `;
 
 const Title = styled.div`
-  display: ${(props) => (props?.$mobile ? 'none' : 'flex')};
+  display: ${(props) => (props?.$mobile ? "none" : "flex")};
   flex-direction: column;
   gap: 0.25vw;
   ${media.fullWidth} {
@@ -219,7 +231,7 @@ const Title = styled.div`
   }
 
   ${media.mobile} {
-    display: ${(props) => (props?.$mobile ? 'flex' : 'none')};
+    display: ${(props) => (props?.$mobile ? "flex" : "none")};
     gap: 0.833vw;
   }
 `;
@@ -376,14 +388,14 @@ const Modal = styled.div`
   flex-direction: column;
   overflow: hidden;
   width: 92.5vw;
-  height: ${(props) => (props?.$isvideo ? '58.125vw' : ' 41.25vw ')};
+  height: ${(props) => (props?.$isvideo ? "58.125vw" : " 41.25vw ")};
   background-color: ${colors.white};
   border-radius: 1.75vw;
   padding: ${(props) =>
-    props?.$isvideo ? '2.3vw 0vw 1.3vw 1.3vw' : '2.5vw 0.313vw 3.75vw 2.5vw'};
+    props?.$isvideo ? "2.3vw 0vw 1.3vw 1.3vw" : "2.5vw 0.313vw 3.75vw 2.5vw"};
   ${media.fullWidth} {
     border-radius: 28px;
-    height: ${(props) => (props?.$isvideo ? '788px' : ' 600px ')};
+    height: ${(props) => (props?.$isvideo ? "788px" : " 600px ")};
     padding: 40px 0px 20px 20px;
     width: 1480px;
   }
@@ -392,23 +404,23 @@ const Modal = styled.div`
     border-radius: 2.734vw;
     padding: ${(props) =>
       props?.$isvideo
-        ? ' 1.4vw 0vw 1.4vw 1.4vw'
-        : '0vw 0.391vw 5.762vw 3.809vw'};
-    height: ${(props) => (props?.$isvideo ? 'unset' : '66.797vw')};
+        ? " 1.4vw 0vw 1.4vw 1.4vw"
+        : "0vw 0.391vw 5.762vw 3.809vw"};
+    height: ${(props) => (props?.$isvideo ? "unset" : "66.797vw")};
     width: 92.188vw;
   }
 
   ${media.mobile} {
-    width: ${(props) => (props?.$isvideo ? '95.167vw' : '89.167vw')};
-    height: ${(props) => (props?.$isvideo ? '33vh' : '89vh')};
+    width: ${(props) => (props?.$isvideo ? "95.167vw" : "89.167vw")};
+    height: ${(props) => (props?.$isvideo ? "33vh" : "89vh")};
     border-radius: 5.417vw;
     padding: ${(props) =>
-      props?.$isvideo ? '9vw 2vw 2vw 2vw' : '5vw 0.5vw 5vw 5vw'};
+      props?.$isvideo ? "9vw 2vw 2vw 2vw" : "5vw 0.5vw 5vw 5vw"};
     align-items: center;
     justify-content: center;
+    z-index: 23;
   }
 `;
-
 const Wrapper = styled.div`
   position: fixed;
   display: flex;
@@ -417,13 +429,37 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
   z-index: 100000;
-  top: 0;
-  left: 0;
+  inset: 0;
+  top: 228vh;
   background: rgba(27, 29, 33, 0.5);
   backdrop-filter: blur(calc(var(--Blur-40, 40px) / 2));
-  z-index: 100000;
+  ${media.fullWidth} {
+    top: 206vh;
+  }
+  ${media.tablet} {
+    // top: 192vh;
+    top: 0vw;
+  }
   ${media.mobile} {
     height: 100vh;
-    top: 8.333vw;
+    width: 65%;
+    top: 27vh;
+    left: 0px;
   }
 `;
+// const Wrapper = styled.div`
+//   position: fixed;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   width: 100%;
+//   z-index: 100000;
+//   inset: 0;
+//   top: -2010px;
+//   background: rgba(27, 29, 33, 0.5);
+//   backdrop-filter: blur(calc(var(--Blur-40, 40px) / 2));
+//   ${media.mobile} {
+//     height: 100vh;
+//     inset: 0;
+//   }
+// `;

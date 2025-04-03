@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React from 'react';
-import ReactPlayer from 'react-player';
-import styled from 'styled-components';
-import media from '@/styles/media';
-import useMedia from '@/functions/useMedia';
+import React from "react";
+import ReactPlayer from "react-player";
+import styled from "styled-components";
+import media from "@/styles/media";
+import useMedia from "@/functions/useMedia";
 
 const Video = ({ videos, borderradius, filename, thumbnails }) => {
-  console.log('thumbnails', thumbnails);
+  console.log("thumbnails", thumbnails);
 
   let videoSrc = filename
     ? filename
@@ -15,22 +15,22 @@ const Video = ({ videos, borderradius, filename, thumbnails }) => {
         videos?.[0]?.filename,
         videos?.[0]?.filename,
         videos?.[1]?.filename || videos?.[0]?.filename,
-        videos?.[2]?.filename || videos?.[0]?.filename
+        videos?.[2]?.filename || videos?.[0]?.filename,
       );
 
-  console.log('videoSrc:', videoSrc); // Debugging video source
+  // console.log('videoSrc:', videoSrc); // Debugging video source
 
   if (!videoSrc) return null;
 
   return (
     <VideoWrapper borderradius={borderradius}>
-      <ReactPlayer 
-        url={videoSrc} 
-        controls 
-        width="100%" 
+      <ReactPlayer
+        url={videoSrc}
+        controls
+        width="100%"
         height="100%"
-        playing={false} 
-        light={thumbnails[0]?.filename} 
+        playing={false}
+        light={thumbnails[0]?.filename}
       />
     </VideoWrapper>
   );
