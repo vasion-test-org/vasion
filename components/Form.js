@@ -73,20 +73,20 @@ const Form = ({ blok }) => {
 
   useEffect(() => {
     const demoTl = gsap.timeline({ paused: true });
-    // gsap.set(".bookit-content-container", { display: "none", opacity: 0 });
+    gsap.set(".bookit-content-container", { display: "none", opacity: 0 });
 
-    // if (blok.animated) {
-    //   demoTl
-    //     .to(".preformContent", { opacity: contentVisibility })
-    //     .to(".marketoForm", { opacity: 0 }, "<")
-    //     .to("#formPos", { xPercent: formPosition, duration: 1.25 })
-    //     .to("#formContainer", { width: formWidth, height: formHeight, duration: 1.25 }, "<")
-    //     .to(".lines", { width: lineWidth, duration: 1.25 }, "<")
-    //     .from(".second", { duration: 1.25, background: "unset" }, "<")
-    //     .to(".marketoForm", { display: "none" }, "<")
-    //     .set(".bookit-content-container", { display: "block" })
-    //     .to(".bookit-content-container", { opacity: 1 });
-    // }
+    if (blok.animated) {
+      demoTl
+        .to(".preformContent", { opacity: contentVisibility })
+        .to(".marketoForm", { opacity: 0 }, "<")
+        .to("#formPos", { xPercent: formPosition, duration: 1.25 })
+        .to("#formContainer", { width: formWidth, height: formHeight, duration: 1.25 }, "<")
+        .to(".lines", { width: lineWidth, duration: 1.25 }, "<")
+        .from(".second", { duration: 1.25, background: "unset" }, "<")
+        .to(".marketoForm", { display: "none" }, "<")
+        .set(".bookit-content-container", { display: "block" })
+        .to(".bookit-content-container", { opacity: 1 });
+    }
 
     const script = document.createElement("script");
     script.src = "https://cdn.leandata.com/js-snippet/ld-book-v2.js";
@@ -147,7 +147,7 @@ const Form = ({ blok }) => {
           if (blok.animated) {
             console.log("Thank You");
           } else if (blok.redirect_link) {
-            setThankYouData(blok.thank_you_copy);
+            updateThankYouCopy(blok.thank_you_copy);
             console.log(thankYouData);
             router.push(blok.redirect_link);
             return false;
@@ -178,7 +178,6 @@ const Form = ({ blok }) => {
         {blok.header && <FormHeader>{blok.header}</FormHeader>}
         <MarketoForm
           className="marketoForm"
-          // mode={props.mode}
           id={`mktoForm_${blok.form_id}`}
         ></MarketoForm>
       </FormContainer>
@@ -189,25 +188,47 @@ const Form = ({ blok }) => {
 const MarketoForm = styled.form`
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
-  align-items: left;
+  /* justify-content: center; */
+  align-items: start;
   text-align: center;
   width: 31.25vw !important;
   gap: 1.25vw 1.25vw;
+
+  ${media.fullWidth} {
+    width: 500px !important;
+  gap: 20px 20px;
+  }
+  
+  ${media.tablet} {
+    width: 39.063vw !important;
+    gap: 1.953vw 1.953vw;
+  }
+  
+  ${media.mobile} {
+    width: 75.833vw !important;
+    gap: 4.167vw 4.167vw;
+    padding: unset !important;
+  }
 `;
 const FormHeader = styled.h4`
   ${text.h4};
+  align-self: center;
   gap: 1.25vw 1.25vw;
   margin-bottom: 2vw;
-  align-self: center;
 
   ${media.fullWidth} {
+    gap: 20px 20px;
+    margin-bottom: 32px;
   }
 
   ${media.tablet} {
+    gap: 1.953vw 1.953vw;
+    margin-bottom: 3.125vw;
   }
 
   ${media.mobile} {
+    gap: 4.167vw 4.167vw;
+    margin-bottom: 6.667vw;
   }
 `;
 const FormContainer = styled.div`
@@ -219,8 +240,38 @@ const FormContainer = styled.div`
   padding: 2vw;
   width: 35.25vw;
 
+  ${media.fullWidth} {
+    border-radius: 32px;
+  padding: 32px;
+  width: 564px;
+  }
+  
+  ${media.tablet} {
+    border-radius: 3.125vw;
+  padding: 3.125vw;
+  width: 45.313vw;
+  }
+  
+  ${media.mobile} {
+    border-radius: 6.667vw;
+  padding: 6.667vw;
+  width: 89.167vw;
+  }
+
   .mktoFieldDescriptor {
     max-height: 3.375vw !important;
+
+    ${media.fullWidth} {
+      max-height: 54px !important;
+    }
+    
+    ${media.tablet} {
+      max-height: 5.273vw !important;
+    }
+    
+    ${media.mobile} {
+      max-height: 11.25vw !important;
+    }
   }
 
   .mktoCaptchaDisclaimer {
@@ -247,7 +298,9 @@ const FormContainer = styled.div`
   .mktoButtonRow {
     width: 100%;
   }
-
+.mktoOffset, .mktoGutter {
+  width: unset !important;
+}
   button {
     ${text.bodyMdBold};
     display: flex;
@@ -259,6 +312,21 @@ const FormContainer = styled.div`
     padding: 0.75vw 0;
     border-radius: 2.375vw;
 
+    ${media.fullWidth} {
+      padding: 12px 0;
+    border-radius: 38px;
+    }
+    
+    ${media.tablet} {
+      padding: 1.172vw 0;
+      border-radius: 3.711vw;
+    }
+    
+    ${media.mobile} {
+      padding: 2.5vw 0;
+      border-radius: 7.917vw;
+      max-width: 75.833vw !important;
+    }
     &:hover {
       background: white;
       color: ${colors.primaryOrange};
@@ -270,44 +338,61 @@ const FormContainer = styled.div`
   }
   input {
     ${text.bodyMd};
-    padding: 1vw;
-    border-radius: 0.25vw;
-    height: 3.375vw;
     border: 1px solid ${(props) => props.theme.form.inputBorder};
     background: ${(props) => props.theme.form.inputBg};
     color: ${(props) => props.theme.form.placeHolderColor};
-
-    &#FirstName {
-      width: 15vw !important;
-    }
-
-    &#LastName {
-      width: 15vw !important;
-    }
-
-    &#Email {
-      width: 31.25vw !important;
-    }
-
-    &#Phone {
-      width: 31.25vw !important;
-    }
-
-    &#Company {
-      width: 31.25vw !important;
-    }
-
-    &#How_did_you_hear_about_us__c {
-      width: 31.25vw !important;
-    }
+    padding: 1vw !important;
+    border-radius: 0.25vw;
+    height: 3.375vw;
 
     ${media.fullWidth} {
+      padding: 16px !important;
+    border-radius: 4px;
+    height: 54px;
     }
-
+    
     ${media.tablet} {
+      padding: 1.563vw !important;
+    border-radius: 0.391vw;
+    height: 5.273vw;
+    }
+    
+    ${media.mobile} {
+      padding: 3.333vw !important;
+    border-radius: 0.833vw;
+    min-height: 11.25vw;
     }
 
-    ${media.mobile} {
+    &#FirstName, &#LastName {
+      width: 15vw !important;
+
+      ${media.fullWidth} {
+        width: 240px !important;
+      }
+      
+      ${media.tablet} {
+        width: 18.555vw !important;
+      }
+      
+      ${media.mobile} {
+        width: 35.833vw !important;
+      }
+    }
+
+    &#Email, &#Phone, &#Company,  &#How_did_you_hear_about_us__c  {
+      width: 31.25vw !important;
+
+      ${media.fullWidth} {
+        width: 500px !important;
+      }
+      
+      ${media.tablet} {
+        width: 39.063vw !important;
+      }
+      
+      ${media.mobile} {
+        width: 75.833vw !important;
+      }
     }
   }
 
@@ -316,25 +401,57 @@ const FormContainer = styled.div`
   }
 
   input:invalid {
-    border: 0.063vw solid #ffb4ab;
+    border: 0.063vw solid ${(props) => props.theme.form.errorColor};;
   }
 
   .mktoErrorMsg {
     ${text.bodySm};
-    color: #ffb4ab;
+    color:  ${(props) => props.theme.form.errorColor};
     margin-top: 0.5vw;
+
+    ${media.fullWidth} {
+      margin-top: 8px;
+    }
+    
+    ${media.tablet} {
+      margin-top: 0.781vw;
+    }
+    
+    ${media.mobile} {
+      margin-top: 1.667vw;
+    }
   }
 
   select {
     ${text.bodyMd};
+    border: 1px solid ${(props) => props.theme.form.inputBorder};
+    background: ${(props) => props.theme.form.inputBg};
+    color: ${(props) => props.theme.form.selectPlaceHolderColor} !important;
     width: 31.25vw !important;
     padding: 1vw;
     border-radius: 0.25vw;
     height: 3.375vw;
-    border: 1px solid ${(props) => props.theme.form.inputBorder};
-    background: ${(props) => props.theme.form.inputBg};
-    color: ${(props) => props.theme.form.placeHolderColor};
 
+    ${media.fullWidth} {
+      width: 500px !important;
+    padding: 16px;
+    border-radius: 4px;
+    height: 54px;
+    }
+    
+    ${media.tablet} {
+      width: 39.063vw !important;
+    padding: 1.563vw;
+    border-radius: 0.391vw;
+    height: 5.273vw;
+    }
+    
+    ${media.mobile} {
+      width: 75.833vw !important;
+    padding: 3.333vw;
+    border-radius: 0.833vw;
+    min-height: 11.25vw;
+    }
     option {
       ${text.bodyMd};
     }
