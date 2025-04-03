@@ -1,19 +1,19 @@
-import React from 'react';
-import media from '@/styles/media';
-import text from '@/styles/text';
-import colors from '@/styles/colors';
-import styled from 'styled-components';
-import Button from '@/components/globalComponents/Button';
-import RichTextRenderer from '../renderers/RichTextRenderer';
+import React from "react";
+import media from "@/styles/media";
+import text from "@/styles/text";
+import colors from "@/styles/colors";
+import styled from "styled-components";
+import Button from "@/components/globalComponents/Button";
+import RichTextRenderer from "../renderers/RichTextRenderer";
+import { storyblokEditable } from "@storyblok/react/rsc";
 
 const EventCard = ({ content, even }) => {
-  // console.log(even);
   return (
-    <Wrapper even={even}>
+    <Wrapper {...storyblokEditable(content)} even={even}>
       <EventInfoContainer>
         <EventImage src={content.icon.filename} />
         <EventContent>
-          <HeaderContainer>
+          <HeaderContainer {...storyblokEditable(content.header)}>
             <RichTextRenderer document={content.header} />
           </HeaderContainer>
           <RichTextRenderer document={content.event_summary} />
@@ -22,17 +22,15 @@ const EventCard = ({ content, even }) => {
       <DetailsContainer>
         <Details>
           <DetailDiv>
-            <DetailIcon src='/images/locationOn.webp' />
-            <RichTextRenderer document={content.location}/>
+            <DetailIcon src="/images/locationOn.webp" />
+            <RichTextRenderer document={content.location} />
           </DetailDiv>
           <DetailDiv>
-            <DetailIcon src='/images/calendarClock.webp' />
-            <RichTextRenderer document={content.date}/>
+            <DetailIcon src="/images/calendarClock.webp" />
+            <RichTextRenderer document={content.date} />
           </DetailDiv>
         </Details>
-        {content.link[0] &&
-         <Button $buttonData={content.link[0]} />
-       }
+        {content.link[0] && <Button $buttonData={content.link[0]} />}
       </DetailsContainer>
     </Wrapper>
   );
@@ -75,6 +73,7 @@ const EventImage = styled.img`
 `;
 const EventInfoContainer = styled.div`
   display: flex;
+  align-items: center;
   flex-direction: row;
   gap: 1vw;
 `;
@@ -85,6 +84,7 @@ const Wrapper = styled.div`
   padding: 2vw 1.5vw;
   width: 100%;
   gap: 16.25vw;
-  background: ${(props) => (props.even ? colors.lightPurpleGrey : colors.white)};
+  background: ${(props) =>
+    props.even ? colors.lightPurpleGrey : colors.white};
 `;
 export default EventCard;

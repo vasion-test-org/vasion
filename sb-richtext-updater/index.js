@@ -15,10 +15,10 @@ const richTextClasses = {
   "Body Medium Bold": "bodyMd bold",
   "Body Large": "bodyLg",
   "Body Large Bold": "bodyLg bold",
-  "Body XL" : "bodyXl",
+  "Body XL": "bodyXl",
   "Body XL Bold": "bodyXl bold",
-  "Eyebrow": "eyebrow",
-  "Tag": "tag",
+  Eyebrow: "eyebrow",
+  Tag: "tag",
   "Tag Bold": "tag bold",
   "Tag Light": "tagLight",
 };
@@ -33,21 +33,28 @@ const applyRichTextClasses = async () => {
       for (const key of Object.keys(component.schema)) {
         const field = component.schema[key];
         if (field.type === "richtext") {
-          field.style_options = Object.entries(richTextClasses).map(([name, value]) => ({
-            name,
-            value
-          }));
+          field.style_options = Object.entries(richTextClasses).map(
+            ([name, value]) => ({
+              name,
+              value,
+            }),
+          );
           updates = true;
         }
       }
 
       if (updates) {
-        await Storyblok.put(`spaces/${spaceId}/components/${component.id}`, { component });
+        await Storyblok.put(`spaces/${spaceId}/components/${component.id}`, {
+          component,
+        });
         console.log(`✅ Updated component: ${component.name}`);
       }
     }
   } catch (err) {
-    console.error("❌ Error applying rich text classes:", err.response?.statusText || err.message);
+    console.error(
+      "❌ Error applying rich text classes:",
+      err.response?.statusText || err.message,
+    );
   }
 };
 
