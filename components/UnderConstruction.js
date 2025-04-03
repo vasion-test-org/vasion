@@ -21,6 +21,7 @@ const UnderConstruction = ({ blok }) => {
   );
 };
 export default UnderConstruction;
+
 const ButtonWrapper = styled.div`
   position: relative;
   display: flex;
@@ -28,6 +29,7 @@ const ButtonWrapper = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
 const CopyWrapper = styled.div`
   display: flex;
   flex-direction: column;
