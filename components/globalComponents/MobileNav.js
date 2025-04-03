@@ -23,11 +23,11 @@ const MobileNav = ({ blok }) => {
   let currentNavItems = blok.english_nav_items;
   const isOpen = useRef(false);
   
-  // if (path.startsWith('/de')) {
-  //   currentNavItems = blok.german_nav_items;
-  // } else if (path.startsWith('/fr')) {
-  //   currentNavItems = blok.french_nav_items;
-  // }
+  if (path.startsWith('/de')) {
+    currentNavItems = blok.german_nav_items;
+  } else if (path.startsWith('/fr')) {
+    currentNavItems = blok.french_nav_items;
+  }
 
   const mappedNav = currentNavItems.map((item, index) => (
     <Tab key={`tab-${index}`}>

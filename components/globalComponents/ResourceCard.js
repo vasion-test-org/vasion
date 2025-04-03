@@ -6,15 +6,9 @@ import Button from '@/components/globalComponents/Button';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import media from '@/styles/media';
 import { getClick } from '@/functions/navigation';
-// import colors from 'styles/colors';
-// import text from 'styles/text';
-// import RandomResource1 from "images/RandomResource1.webp";
-// import RandomResource2 from "images/RandomResource2.webp";
-// import RandomResource3 from "images/RandomResource3.webp";
-// import RandomResource4 from "images/RandomResource4.webp";
-// import RandomResource5 from "images/RandomResource5.webp";
-// import RandomResource6 from "images/RandomResource6.webp";
+import colors from '@/styles/colors';
 import text from '@/styles/text';
+
 
 const ResourceCard = ({ content, paginated, index }) => {
   const oddImages = ["/images/RandomResource1.webp", "/images/RandomResource2.webp", "/images/RandomResource3.webp"];
@@ -24,10 +18,8 @@ console.log(content)
   const imagePool = index % 2 === 0 ? evenImages : oddImages;
   const randomImage = imagePool[Math.floor(Math.random() * imagePool.length)];
 
-  // const handleClick = getClick(content.Button[0]?.link_url.cached_url);
-
   return (
-    <CardWrapper paginated={paginated} >
+    <CardWrapper paginated={paginated}>
       <ImageWrapper>
         <Image
           imageAlt={content.Image?.alt || 'Random Resource Image'}
@@ -43,6 +35,7 @@ console.log(content)
             <Button $buttonData={content.Button[0]} />
           </ButtonWrapper>
         )} */}
+        <Link href={`/${content.full_slug}`}>Read Now</Link>
       </ContentWrapper>
     </CardWrapper>
   );
@@ -51,8 +44,14 @@ console.log(content)
 
 export default ResourceCard;
 
+const Link = styled.a`
+  ${text.bodySm};
+  color: ${colors.primaryOrange};
+`
 const Eyebrow = styled.div`
-  ${text.eyebrow}
+  ${text.tagBold};
+  text-transform: uppercase;
+  color: ${colors.lightPurple};
 `
 const Header = styled.div`
   ${text.h5};
