@@ -185,13 +185,104 @@ const Wrapper = styled.div`
   justify-content: flex-start;
   gap: 1.25vw;
   overflow: hidden;
+
+  padding: ${(props) => {
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
+        : props.spacing
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
+    }
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
+        : props.spacing
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
+    }
+    return props.spacing === 'default'
+      ? '3.75vw 0'
+      : props.spacing
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
+  }};
+
   ${media.fullWidth} {
     gap: 20px;
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
+      }
+      return props.spacing === 'default'
+        ? '60px 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '60px 0';
+    }};
   }
+
   ${media.tablet} {
     gap: 1.953vw;
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '5.859vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 5.859vw';
+      }
+      return props.spacing === 'default'
+        ? '5.859vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '5.859vw 0';
+    }};
+    gap: 1.563vw;
   }
+
   ${media.mobile} {
     gap: 4.167vw;
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
+      }
+      return props.spacing === 'default'
+        ? '12.5vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
+    }};
+    gap: 3.333vw;
   }
+
 `;
