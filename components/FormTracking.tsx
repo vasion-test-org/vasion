@@ -61,30 +61,6 @@ function FormTrackingComponent() {
 
   return (
     <>
-      {/* Marketo Form Script */}
-      <Script
-        id="marketo-form"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              var didInit = false;
-              function initMunchkin() {
-                if (!didInit) {
-                  didInit = true;
-                  Munchkin.init('338-HTA-134');
-                }
-              }
-              var s = document.createElement('script');
-              s.type = 'text/javascript';
-              s.async = true;
-              s.src = '//munchkin.marketo.net/munchkin.js';
-              s.onload = initMunchkin;
-              document.getElementsByTagName('head')[0].appendChild(s);
-            })();
-          `,
-        }}
-      />
     </>
   );
 }

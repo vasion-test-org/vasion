@@ -231,7 +231,8 @@ const BlurStatLeft = styled.div`
   left: -3.292vw;
   top: 2.847vw;
   background: linear-gradient(0deg, #190c31 0.24%, rgba(25, 12, 49, 0) 99.76%);
-  z-index: 10;
+  z-index: 9; 
+
   ${media.fullWidth} {
     left: -146px;
     bottom: 145px;
@@ -249,7 +250,6 @@ const BlurStatLeft = styled.div`
   }
 
   ${media.mobile} {
-    z-index: 10;
     top: unset;
     width: 63.958vw;
     height: 37.792vw;
@@ -270,7 +270,7 @@ const BlurStatRight = styled.div`
   transform: rotate(-90deg);
   right: -1.069vw;
   top: 1.472vw;
-  z-index: 10;
+  z-index: 9;
   background: linear-gradient(0deg, #190c31 0.12%, rgba(25, 12, 49, 0) 99.89%);
 
   ${media.fullWidth} {
@@ -324,7 +324,7 @@ const VisibleStatsContainer = styled.div`
 const BottomHeaderWrapper = styled.div`
   display: flex;
   align-self: start;
-  z-index: 25;
+  z-index: 9;
   padding: 0vw 13.625vw;
 
   ${media.fullWidth} {

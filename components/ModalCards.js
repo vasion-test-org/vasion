@@ -14,11 +14,10 @@ const ModalCards = ({ blok }) => {
   const [isActive, setIsActive] = useState(null);
   // console.log(blok)
   const handleModal = (item) => {
-    // Check if there's either bio content or any asset
+
     const hasBio = item.bio && item.bio.length > 0;
     const hasAsset = item.asset && item.asset.length > 0;
 
-    // Open modal if there's bio content or an asset
     if (hasBio || hasAsset) {
       setShowModal(true);
       setModalData(item);
@@ -77,7 +76,6 @@ const ModalCards = ({ blok }) => {
         <CardModal
           data={modalData}
           setShowModal={setShowModal}
-          parentRef={wrapperRef}
         />
       )}
     </Wrapper>
