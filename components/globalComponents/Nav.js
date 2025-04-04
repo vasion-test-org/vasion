@@ -81,7 +81,6 @@ const Nav = ({ blok }) => {
                   onClick={handleClick}
                   role='link'
                   tabIndex={0}
-                  onKeyDown={(e) => e.key === 'Enter' && handleClick()}
                 >
                   {item.card &&
                     item.card_size &&

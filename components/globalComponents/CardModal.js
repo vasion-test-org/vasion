@@ -23,24 +23,11 @@ const CardModal = ({ data, setShowModal, parentRef }) => {
   };
   useEffect(() => {
     document.body.style.overflow = "hidden";
-
-    if (parentRef && parentRef.current) {
-      const rect = parentRef.current.getBoundingClientRect();
-      const scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
-
-      const scrollPosition = rect.top + scrollTop - window.innerHeight / 4;
-
-      window.scrollTo({
-        top: scrollPosition,
-        behavior: "smooth",
-      });
-    }
-
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [parentRef]);
+  }, []);
+
   return (
     <Wrapper className="modal-wrapper" onClick={handleClose}>
       <Modal $isvideo={data?.asset[0].media[0].filename}>
@@ -426,40 +413,16 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   z-index: 100000;
-  inset: 0;
-  top: 228vh;
+  top: 0;
+  left: 0;
   background: rgba(27, 29, 33, 0.5);
   backdrop-filter: blur(calc(var(--Blur-40, 40px) / 2));
-  ${media.fullWidth} {
-    top: 206vh;
-  }
-  ${media.tablet} {
-    // top: 192vh;
-    top: 0vw;
-  }
+
   ${media.mobile} {
     height: 100vh;
-    width: 65%;
-    top: 27vh;
-    left: 0px;
+    top: 0;
   }
-`;
-// const Wrapper = styled.div`
-//   position: fixed;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   width: 100%;
-//   z-index: 100000;
-//   inset: 0;
-//   top: -2010px;
-//   background: rgba(27, 29, 33, 0.5);
-//   backdrop-filter: blur(calc(var(--Blur-40, 40px) / 2));
-//   ${media.mobile} {
-//     height: 100vh;
-//     inset: 0;
-//   }
-// `;
+`
