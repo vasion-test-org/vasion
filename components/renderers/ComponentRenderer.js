@@ -71,23 +71,23 @@ const ComponentRenderer = ({ blok, extra_copy }) => {
     case "assets":
       return (
         <AssetContainer>
-        <ImageWrapper {...storyblokEditable(blok)}>
-          <Image images={blok.media} borderradius={blok.border_radius} />
-        </ImageWrapper>
-          {extra_copy && 
+          <ImageWrapper {...storyblokEditable(blok)}>
+            <Image images={blok.media} borderradius={blok.border_radius} />
+          </ImageWrapper>
+          {extra_copy && (
             <>
-            {extra_copy?.copy_block_sections?.map((item, index) => (
-              <BlockWrapper key={index} {...storyblokEditable(item)}>
-                    {copycomponents.includes(item.component) ? (
-                    <RichTextRenderer document={item.copy} blok={item}/>
+              {extra_copy?.copy_block_sections?.map((item, index) => (
+                <BlockWrapper key={index} {...storyblokEditable(item)}>
+                  {copycomponents.includes(item.component) ? (
+                    <RichTextRenderer document={item.copy} blok={item} />
                   ) : (
-                    <ComponentRenderer blok={item}/>
+                    <ComponentRenderer blok={item} />
                   )}
-              </BlockWrapper>
-            ))}
-          </>
-          }
-          </AssetContainer>
+                </BlockWrapper>
+              ))}
+            </>
+          )}
+        </AssetContainer>
       );
     case "copy_block":
       return (
@@ -134,17 +134,17 @@ const AssetContainer = styled.div`
     width: 512px;
     gap: 20px;
   }
-  
+
   ${media.tablet} {
     width: 44.531vw;
     gap: 1.953vw;
   }
-  
+
   ${media.mobile} {
     min-width: 100%;
     gap: 4.167vw;
   }
-`
+`;
 const ImageWrapper = styled.div`
   width: 32vw;
 
