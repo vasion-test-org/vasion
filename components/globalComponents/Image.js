@@ -7,11 +7,24 @@ import useMedia from "@/functions/useMedia";
 
 const Image = ({ images, borderradius, filename }) => {
   // console.log('images',images)
-  let imageSrc = filename ? filename : useMedia(images?.[0]?.filename, images?.[0]?.filename, images?.[1]?.filename || images?.[0]?.filename, images?.[2]?.filename || images?.[0]?.filename)
+  let imageSrc = filename
+    ? filename
+    : useMedia(
+        images?.[0]?.filename,
+        images?.[0]?.filename,
+        images?.[1]?.filename || images?.[0]?.filename,
+        images?.[2]?.filename || images?.[0]?.filename,
+      );
 
   if (!imageSrc) return null;
 
-  return <ImageWrapper alt={imageSrc.imageAlt} src={imageSrc} borderradius={borderradius} />;
+  return (
+    <ImageWrapper
+      alt={imageSrc.imageAlt}
+      src={imageSrc}
+      borderradius={borderradius}
+    />
+  );
 };
 
 const ImageWrapper = styled.img`
@@ -27,13 +40,10 @@ const ImageWrapper = styled.img`
   }
 
   ${media.tablet} {
-    
   }
-  
+
   ${media.mobile} {
-  
   }
 `;
 
 export default Image;
-

@@ -22,11 +22,17 @@ const OverviewController = ({ blok }) => {
         blok?.small_quote?.length > 0 ? blok.small_quote[0] : null;
       const combinedStatsData = blok?.stats?.length > 0 ? blok.stats[0] : null;
 
+      const link = {
+        link_text: blok.link_text,
+        link_url: blok.link_url,
+      };
       return (
         <OverviewCombined
+          {...storyblokEditable(quoteData)}
           blok={{
             quote: quoteData,
             stats: combinedStatsData,
+            link: link,
             spacing_offset: blok.spacing_offset,
             section_spacing: blok.section_spacing,
           }}
