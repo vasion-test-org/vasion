@@ -20,12 +20,12 @@ import StackedCards from '@/components/centeredSections/StackedCards';
 import Badges from '@/components/centeredSections/Badges';
 import BadgesMobile from '@/components/centeredSections/BadgesMobile';
 import { ScreenContext } from '@/components/providers/Screen';
-
+import LogosGallery from '@/components/centeredSections/LogosGallery';
 const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { mobile } = useContext(ScreenContext);
-  // console.log(blok);
+  console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper
@@ -89,6 +89,9 @@ const CenteredSection = ({ blok }) => {
             )}
             {blok.component_type === 'form' && blok.form && (
               <Form blok={blok.form[0]} />
+            )}
+             {blok.component_type === 'logo_gallery' && blok.logo_gallery && (
+              <LogosGallery logoData={blok.logo_gallery} />
             )}
             {blok.component_type === 'stacked_cards' && blok.stacked_cards && (
               <StackedCards blok={blok.stacked_cards} />
