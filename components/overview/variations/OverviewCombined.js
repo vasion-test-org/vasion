@@ -103,7 +103,7 @@ const Combined = ({ blok }) => {
               theme: "orange_link",
               link_url: { url: blok.link.link_url },
               link_text: blok?.link.link_text,
-              link_size: "medium",
+              link_size: "small",
             }}
           />
         )}
