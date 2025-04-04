@@ -9,6 +9,7 @@ import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import Parenthesis from "@/assets/svg/Parenthesis.svg";
 import { storyblokEditable } from "@storyblok/react/rsc";
 const Combined = ({ blok }) => {
+  console.log("Combined->", blok);
   const statlist = blok?.stats?.stat_list?.map((item) => {
     return (
       <StatItem {...storyblokEditable(item)} key={item._uid}>
@@ -29,16 +30,16 @@ const Combined = ({ blok }) => {
       <ContentDiv {...storyblokEditable(blok)}>
         <Quotation />
         <QuoteBlock>
-          {blok?.quote?.quote_image?.[0]?.filename && (
-            <QuoteImageStart
-              src={blok?.quote?.quote_image?.[0]?.filename}
-              alt={blok?.quote?.quote_image?.[0]?.alt}
-            />
-          )}
-          <QuoteCopy {...storyblokEditable(blok.quote.copy)}>
+          {/* {blok?.quote?.quote_image?.[0]?.media[0]?.filename && ( */}
+          {/*   <QuoteImageStart */}
+          {/*     src={blok?.quote?.quote_image[0].media[0].filename} */}
+          {/*     alt={blok?.quote?.quote_image[0]?.media[0].alt} */}
+          {/*   /> */}
+          {/* )} */}
+          <QuoteCopy>
             {blok?.quote?.copy?.find((item) => item.component === "header")
               ?.copy?.content && (
-              <Header>
+              <Header {...storyblokEditable(blok.quote.copy)}>
                 <RichTextRenderer
                   document={
                     blok?.quote?.copy?.find(
@@ -51,7 +52,7 @@ const Combined = ({ blok }) => {
 
             {blok?.quote?.copy?.find((item) => item.component === "body_copy")
               ?.copy?.content && (
-              <BodyCopy>
+              <BodyCopy {...storyblokEditable(blok.quote.copy[0 || 1])}>
                 <RichTextRenderer
                   document={
                     blok?.quote?.copy?.find(
@@ -74,10 +75,10 @@ const Combined = ({ blok }) => {
               </Attribution>
             )}
           </QuoteCopy>
-          {blok?.quote?.image?.filename && (
+          {blok?.quote?.quote_image[0]?.media[0]?.filename && (
             <QuoteSideImg
-              src={blok?.quote?.image?.filename}
-              alt={blok?.quote?.image?.alt}
+              src={blok?.quote?.quote_image[0]?.media[0].filename}
+              alt={blok?.quote?.quote_image[0]?.media[0].alt}
             />
           )}
         </QuoteBlock>
@@ -96,12 +97,13 @@ const Combined = ({ blok }) => {
           )}
           <StatItemsContainer>{statlist}</StatItemsContainer>
         </StatBlock>
-        {blok?.stats?.link_text && (
+        {blok?.link?.link_text && (
           <Button
             $buttonData={{
-              link_url: { url: blok?.stats?.link_url },
-              link_text: blok?.stats?.link_text,
-              link_size: "medium",
+              theme: "orange_link",
+              link_url: { url: blok.link.link_url },
+              link_text: blok?.link.link_text,
+              link_size: "small",
             }}
           />
         )}
