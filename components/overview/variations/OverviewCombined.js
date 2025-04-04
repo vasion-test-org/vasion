@@ -30,10 +30,10 @@ const Combined = ({ blok }) => {
       <ContentDiv {...storyblokEditable(blok)}>
         <Quotation />
         <QuoteBlock>
-          {/* {blok?.quote?.quote_image?.[0]?.filename && ( */}
+          {/* {blok?.quote?.quote_image?.[0]?.media[0]?.filename && ( */}
           {/*   <QuoteImageStart */}
-          {/*     src={blok?.quote?.quote_image?.[0]?.filename} */}
-          {/*     alt={blok?.quote?.quote_image?.[0]?.alt} */}
+          {/*     src={blok?.quote?.quote_image[0].media[0].filename} */}
+          {/*     alt={blok?.quote?.quote_image[0]?.media[0].alt} */}
           {/*   /> */}
           {/* )} */}
           <QuoteCopy>
