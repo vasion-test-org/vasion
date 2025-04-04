@@ -9,7 +9,7 @@ import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import Image from "./globalComponents/Image";
 import ComponentRenderer from "./renderers/ComponentRenderer";
 
-const SmallQuote = ({ blok }) => {
+const SmallQuote = ({ blok, short }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const copycomponents = [
@@ -23,11 +23,12 @@ const SmallQuote = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       <Wrapper
+        $short={short}
         spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
         {...storyblokEditable(blok)}
       >
-        <SmallQuoteContainer>
+        <SmallQuoteContainer $short={short}>
           <OrangeQuote src="/images/uiElements/Orange_Quote_Mark.webp" />
           {blok?.quote_image[0]?.media && (
             <ImageWrapper>
@@ -126,19 +127,20 @@ const SmallQuoteContainer = styled.div`
   border-radius: 1.5vw;
   gap: 1.5vw;
   width: 81.5vw;
+  width: ${(props) => (props?.$short ? "30vw" : "81.5vw")};
   padding: 2vw;
   background: ${(props) => props.theme.small_quote.bg};
   color: ${(props) => props.theme.small_quote.textColor};
 
   ${media.fullWidth} {
-    width: 1304px;
+    width: ${(props) => (props?.$short ? "480px" : "1304px")};
     padding: 32px;
     border-radius: 24px;
     gap: 24px;
   }
 
   ${media.tablet} {
-    width: 92.188vw;
+    width: ${(props) => (props?.$short ? "35.5vw" : "92.188vw")};
     padding: 3.125vw;
     border-radius: 2.344vw;
     gap: 2.344vw;
@@ -156,7 +158,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: ${(props) => (props?.$short ? "35%" : "100%")};
   padding: ${(props) => {
     if (props.spacingOffset === "top") {
       return props.spacing === "default"
@@ -180,6 +182,7 @@ const Wrapper = styled.div`
   }};
 
   ${media.fullWidth} {
+    width: ${(props) => (props?.$short ? "20%" : "100%")};
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
         return props.spacing === "default"
@@ -204,6 +207,7 @@ const Wrapper = styled.div`
   }
 
   ${media.tablet} {
+    width: ${(props) => (props?.$short ? "45%" : "100%")};
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
         return props.spacing === "default"
@@ -228,6 +232,7 @@ const Wrapper = styled.div`
   }
 
   ${media.mobile} {
+    width: 100%;
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
         return props.spacing === "default"
