@@ -31,7 +31,7 @@ const Hero = ({ blok }) => {
         >
           <ContentWrapper
             socials={blok.socials}
-            centered={!blok?.hero_asset[0] && !blok.socials && blok.centered_image}
+            centered={!blok?.hero_asset[0] && !blok.socials}
             centered_image={blok.centered_image}
           >
             {blok?.hero_asset[0] && blok.centered_image && (
@@ -201,6 +201,7 @@ const ButtonRow = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: min-content;
   gap: 0.75vw;
   margin-top: ${(props) => (props.socials ? 'unset' : '2vw')};
 
@@ -224,8 +225,10 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   text-align: ${(props) =>
   props.centered_image ? 'center' : props.centered ? 'center' : 'left'};
+
   align-items: ${(props) =>
-  props.centered_image ? 'center' : props.centered ? 'center' : 'left'};
+  props.centered_image ? 'center' : props.centered ? 'center' : 'start'};
+
   width: ${(props) =>
     props.socials
       ? 'clamp(27.75vw, 100%, 26.5vw)'

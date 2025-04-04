@@ -110,7 +110,7 @@ const ContentContainer = styled.div`
   }
 `;
 const BackgroundImage = styled.div`
-  position: absoluter
+  position: absolute;
   padding: 3.25vw;
   top: 0;
   left: 0;
