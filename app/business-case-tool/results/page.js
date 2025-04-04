@@ -2,7 +2,7 @@
 'use client';
 
 import React, { Suspense } from 'react';
-import ClientBCTResults from '@/components/BusinessCaseTool/ClientBCTResults';
+import ClientBCTResults from '@/components/BusinessCaseTool/ClientBTCResults';
 
 const BCTResultsPage = () => {
   return (
