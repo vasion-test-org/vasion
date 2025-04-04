@@ -46,7 +46,7 @@ const TwoColumnList = ({ blok }) => {
       {...storyblokEditable(blok)}
     >
       <IntroContent alignment={blok.alignment}>{introMap}</IntroContent>
-      <Columns>
+      <Columns comparison={blok.comparison}>
         <Column doublecolumn={column2.length < 0}>{column1}</Column>
         {column2.length > 0 && <Column>{column2}</Column>}
       </Columns>
@@ -134,22 +134,22 @@ const Columns = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1.625vw;
-  width: 81.5vw;
+  width: ${props => props.comparison ? 'max-content' : '81.5vw'};
 
   ${media.fullWidth} {
     gap: 26px;
-    width: 1304px;
+    width: ${props => props.comparison ? 'max-content' : '1304px'};
   }
 
   ${media.tablet} {
     gap: 1.563vw;
-    width: 92.188vw;
+    width: ${props => props.comparison ? 'max-content' : '92.188vw'};
   }
 
   ${media.mobile} {
     flex-direction: column;
     gap: unset;
-    width: 89.167vw;
+    width: ${props => props.comparison ? 'max-content' : '89.167vw'};
   }
 `;
 const IntroContent = styled.div`

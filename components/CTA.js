@@ -156,6 +156,8 @@ const CtaWrapper = styled.div`
     width: ${(props) =>
       props.$ctastyle === 'image' && props.$fullwidth
         ? '100%'
+        : props.$ctastyle === 'centered'
+        ? '100%'
         : '92.188vw'};
     min-height: ${(props) =>
       props.$ctastyle === 'image' && props.$fullwidth ? '34.722vw' : 'auto'};
@@ -180,6 +182,8 @@ const CtaWrapper = styled.div`
     width: ${(props) =>
       props.$ctastyle === 'image' && props.$fullwidth
         ? '100%'
+        : props.$ctastyle === 'centered'
+        ? '100%'
         : '89.167vw'};
     min-height: ${(props) =>
       props.$ctastyle === 'image' && props.$fullwidth ? '34.722vw' : 'auto'};
@@ -197,8 +201,6 @@ const CtaWrapper = styled.div`
         : '8.333vw 5vw'};
   }
 `;
-
-
 
 const PillContainer = styled.div`
   display: flex;

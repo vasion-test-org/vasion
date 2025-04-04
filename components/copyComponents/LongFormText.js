@@ -27,6 +27,18 @@ const LongFormTextContainer = styled.div`
 
     > *:not(.component-wrapper) {
       margin-bottom: 1.875vw;
+
+      ${media.fullWidth} {
+        margin-bottom: 30px;
+      }
+
+      ${media.tablet} {
+        margin-bottom: 2.93vw;
+      }
+
+      ${media.mobile} {
+        margin-bottom: 6.25vw;
+      }
     }
 
     .component-wrapper * {
@@ -40,11 +52,15 @@ const LongFormTextContainer = styled.div`
 
   ${media.fullWidth} {
     width: 1304px;
-    margin: 0 auto;
+    margin: 40px auto;
   }
 
-  ${media.tablet} {}
+  ${media.tablet} {
+    margin: 3.906vw auto;
+  }
 
-  ${media.mobile} {}
+  ${media.mobile} {
+    margin: 8.333vw auto;
+  }
 `;
 export default LongFormText;

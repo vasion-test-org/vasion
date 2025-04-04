@@ -26,12 +26,12 @@ const Testimonial = ({ blok }) => {
                 <RichTextRenderer document={copy.copy} />
               </div>
             ))}
-            {blok.quote_source_info && (
+            {blok?.quote_source_info && (
               <SourceWrapper
                 {...storyblokEditable(blok.quote_source_info)}
                 key={blok.quote_source_info.component}
               >
-                <RichTextRenderer document={blok.quote_source_info[0].copy} />
+                <RichTextRenderer document={blok?.quote_source_info[0]?.copy} />
               </SourceWrapper>
             )}
           </TestimonialContent>

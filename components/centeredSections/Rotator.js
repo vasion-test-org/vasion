@@ -10,7 +10,7 @@ import ComponentRenderer from '../renderers/ComponentRenderer';
 import gsap from 'gsap';
 
 const Rotator = ({ rotatorData }) => {
-  console.log(rotatorData)
+  // console.log(rotatorData)
   const copycomponents = ['body_copy', 'header', 'eyebrow', 'long_form_text', 'copy_block'];
 
   useEffect(() => {

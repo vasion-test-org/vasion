@@ -9,7 +9,7 @@ import RichTextRenderer from '../renderers/RichTextRenderer';
 import Image from '@/components/globalComponents/Image';
 const ContactCard = ({ blok }) => {
   const [active, setActive] = useState(false);
-  console.log(blok.headshot[0].media);
+  // console.log(blok.headshot[0].media);
   return (
     <CardWrapper
       onMouseEnter={() => setActive(true)}
