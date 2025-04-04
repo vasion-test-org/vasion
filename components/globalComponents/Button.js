@@ -6,7 +6,7 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 import text from '@/styles/text';
 
 const Button = ({ $buttonData }) => {
-  console.log($buttonData)
+  // console.log($buttonData)
   const themes = useAvailableThemes();
   const selectedTheme =
     themes.button?.[$buttonData?.theme] || themes.button.primary;
@@ -85,7 +85,9 @@ const ButtonWrapper = styled.div`
     props.size === 'small'
       ? text.bodySm
       : props.size === 'large'
-      ? text.bodyLg
+      ? text.bodyLg :
+      props.size === 'tiny'
+      ? text.tagLight
       : text.bodyMd};
   width: max-content;
 `;
