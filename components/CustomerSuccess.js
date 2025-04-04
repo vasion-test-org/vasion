@@ -146,7 +146,7 @@ const FeaturedTestimonials = ({ blok }) => {
           <RichTextRenderer document={blok.eyebrow} />
           <RichTextRenderer document={blok.header} />
           <LinkWrapper>
-            <Button $buttonData={blok.link[0]} />
+            {blok.link[0] && <Button $buttonData={blok.link[0]} />}
           </LinkWrapper>
         </HeaderContainer>
         <TestimonialsContainer>

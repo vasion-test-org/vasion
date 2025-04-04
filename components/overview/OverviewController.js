@@ -3,6 +3,7 @@ import React from "react";
 import SmallQuote from "../SmallQuote";
 import OverviewStats from "./variations/OverviewStats";
 import OverviewCombined from "./variations/OverviewCombined";
+import { storyblokEditable } from "@storyblok/react";
 
 const OverviewController = ({ blok }) => {
   // console.log("Block Content", blok);

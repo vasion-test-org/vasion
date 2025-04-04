@@ -13,7 +13,7 @@ import colors from "@/styles/colors";
 import Icons from "@/components/renderers/Icons";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Image from "./Image";
-
+import LinkArrow  from "assets/svg/LinkArrow.svg";
 gsap.registerPlugin(ScrollTrigger);
 const MobileNav = ({ blok }) => {
   const path = usePathname();
@@ -104,6 +104,14 @@ const MobileNav = ({ blok }) => {
     let tl = gsap.timeline({ paused: true });
     let mobileOpen = false; // <- track open state
 
+    const hamburgerTl = gsap
+    .timeline({ paused: true, reversed: true })
+    .set("#mainDrop", { padding: "4.673vw 0" })
+    .to("#mainDrop", { height: "auto", duration: 0.5 })
+    .to("#slice-0", { top: "1.95vw", rotate: 45 }, "<")
+    .to("#slice-1", { opacity: 0 }, "<")
+    .to("#slice-2", { top: "-1.075vw", rotate: -45 }, "<");
+    
     const toggleMobileDropdown = () => {
       const dropdown = document.querySelector(".mobileDropdown");
       if (!dropdown) return;
@@ -125,6 +133,14 @@ const MobileNav = ({ blok }) => {
       }
 
       mobileOpen = !mobileOpen;
+
+
+ 
+      if (hamburgerTl.reversed()) {
+        hamburgerTl.play();
+      } else {
+        hamburgerTl.reverse();
+      }
     };
 
     if (hamburger) {
@@ -171,14 +187,92 @@ const MobileNav = ({ blok }) => {
   }, []);
 
   return (
+    <>
+    <TopNav>
+    <Banner>
+      <BannerMessage>
+        The Wait is Over, New Features are LIVE! Check it out!
+      </BannerMessage>
+      <BannerLink onClick={() => handleNavigate("/whats-new")}>
+        Learn More <BannerArrow />
+      </BannerLink>
+    </Banner>
+  </TopNav>
     <MainWrapper className="mainNavWrapper mobileNav">
       <VasionLogo src="/images/logos/vasion-logo-purple.webp" />
-      <Hamburger className="hamburger"> Ham </Hamburger>
+      <HamburgerContainer className="hamburger">
+          <HamSlice id="slice-0" />
+          <ShortHamSlice id="slice-1" />
+          <HamSlice id="slice-2" />
+        </HamburgerContainer>
       <Dropdown className="mobileDropdown">{mappedNav}</Dropdown>
     </MainWrapper>
+    </>
   );
 };
 
+const BannerArrow = styled(LinkArrow)`
+  ${media.mobile} {
+    width: 1.869vw;
+    height: 1.869vw;
+    margin-left: 0.935vw;
+  }
+`;
+const BannerLink = styled.div`
+  ${media.mobile} {
+    margin-left: 2.336vw;
+  }
+  &:hover {
+    ${BannerArrow} {
+      transition-duration: 500ms;
+
+      ${media.mobile} {
+        margin-left: 1.869vw;
+      }
+    }
+  }
+`;
+const BannerMessage = styled.p``;
+const Banner = styled.div`
+  ${media.mobile} {
+    display: flex;
+    flex-direction: row;
+    ${text.tagLight};
+    color: ${colors.white};
+  }
+`;
+const TopNav = styled.div`
+  ${media.mobile} {
+    background-image: url("images/TopBar_M.png");
+    background-color: ${colors.darkPurple};
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0vw 3.738vw;
+    height: 7.607vw;
+  }
+`;
+const HamSlice = styled.div`
+  position: relative;
+  width: 100%;
+  height: 0.5vw;
+  border-radius: 1.168vw;
+  background-color: ${colors.primaryPurple};
+`;
+const ShortHamSlice = styled(HamSlice)`
+  width: 80%;
+`;
+
+const HamburgerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1vw;
+  width: 4.673vw;
+  height: auto;
+`;
 const Link = styled.a`
   ${text.tag};
   color: ${colors.txtSubtle};
@@ -332,6 +426,7 @@ const TabDropdown = styled.div`
 `;
 const TabHeader = styled.div`
   ${media.mobile} {
+    ${text.bodySm};
     padding: 3.542vw 3.333vw;
     height: 10.833vw;
     /* margin-bottom: 3.333vw; */
@@ -360,22 +455,14 @@ const Dropdown = styled.div`
     /* border: 1px solid red; */
     overflow-y: scroll;
     overflow-x: hidden;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-
-    /* WebKit (Chrome, Safari) */
+    scrollbar-width: none;
+    -ms-overflow-style: none; 
     &::-webkit-scrollbar {
       display: none;
     }
   }
 `;
-const Hamburger = styled.div`
-  ${media.mobile} {
-    width: 4.167vw;
-    height: 2.292vw;
-    /* border: 1px solid red; */
-  }
-`;
+
 const VasionLogo = styled.img`
   ${media.mobile} {
     width: 20.833vw;

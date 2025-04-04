@@ -17,14 +17,14 @@ const Rotator = ({ rotatorData }) => {
     gsap.set('.rotator', {autoAlpha:0})
     gsap.set('#rotator-1', {autoAlpha:1})
 
-    const tabs = gsap.utils.toArray('.tabs')
+    const tabs = gsap.utils.toArray('.rotator-tabs')
 
     tabs.forEach((tab, index) => {
       const tl = gsap.timeline({})
       tab.addEventListener('click', () => {
         tl.to('.rotator', {autoAlpha:0, filter: "blur(2px)",duration: 0.45,})
-        .to(`.tabs`, {background: 'transparent', duration: .25})
-        .to(`#tab-${index}`, {background: 'linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%)'}, "<")
+        .to(`.rotator-tabs`, {background: 'transparent', duration: .25})
+        .to(`#rotator-tab-${index}`, {background: 'linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%)'}, "<")
           .to(`#rotator-${index}`, {autoAlpha:1, filter: "blur(0px)", duration: 0.25,}, "<")
       })
     })
@@ -32,7 +32,7 @@ const Rotator = ({ rotatorData }) => {
   
 
   const tabMap = rotatorData.map((tab, index) => 
-    <Tab className='tabs' id={`tab-${index}`} key={`${tab.tab_icon.filename}-${index}`}>
+    <Tab className='rotator-tabs' id={`rotator-tab-${index}`} key={`${tab.tab_icon.filename}-${index}`}>
       <TabIcon src={tab.tab_icon.filename}/>
       <RichTextRenderer key={`tab-richtext-${index}`} document={tab.tab[0].copy}/>
     </Tab>
@@ -92,6 +92,8 @@ const BackgroundImage = styled.div`
   width: 100%;
   height: 100%;
   background: ${props => `url(${props.backgroundImage?.[0].filename})`};
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 
   ${media.fullWidth} {
     background: ${props => `url(${props.backgroundImage?.[0].filename})`};

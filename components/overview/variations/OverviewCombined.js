@@ -26,7 +26,7 @@ const Combined = ({ blok }) => {
       spacing={blok.section_spacing}
       {...storyblokEditable(blok)}
     >
-      <ContentDiv>
+      <ContentDiv {...storyblokEditable(blok)}>
         <Quotation />
         <QuoteBlock>
           {blok?.quote?.quote_image?.[0]?.filename && (
@@ -35,7 +35,7 @@ const Combined = ({ blok }) => {
               alt={blok?.quote?.quote_image?.[0]?.alt}
             />
           )}
-          <QuoteCopy>
+          <QuoteCopy {...storyblokEditable(blok.quote.copy)}>
             {blok?.quote?.copy?.find((item) => item.component === "header")
               ?.copy?.content && (
               <Header>

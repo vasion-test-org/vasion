@@ -1,59 +1,73 @@
-"use client";
-import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { usePathname } from "next/navigation";
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import media from "styles/media";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import Button from "./Button";
-import text from "@/styles/text";
-import colors from "@/styles/colors";
-import Icons from "@/components/renderers/Icons";
-import ScrollTrigger from "gsap/ScrollTrigger";
-import Image from "./Image";
+'use client';
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { useRouter, usePathname } from 'next/navigation';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import media from 'styles/media';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import Button from './Button';
+import text from '@/styles/text';
+import colors from '@/styles/colors';
+import Icons from '@/components/renderers/Icons';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+import Image from './Image';
+import LinkArrow from 'assets/svg/LinkArrow.svg';
+import LanguageGlobe from 'assets/svg/languageglobe.svg';
 
 gsap.registerPlugin(ScrollTrigger);
 const Nav = ({ blok }) => {
+  const router = useRouter();
   const path = usePathname();
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
   let navItems = blok.english_nav_items;
 
-  if (path && path.startsWith("/de")) {
+  if (path && path.startsWith('/de')) {
     navItems = blok.german_nav_items;
-  } else if (path && path.startsWith("/fr")) {
+  } else if (path && path.startsWith('/fr')) {
     navItems = blok.french_nav_items;
   }
+  const slugParts = path.split('/').filter(Boolean);
+  const currentLocale = ['de', 'fr'].includes(slugParts[0])
+    ? slugParts[0]
+    : null;
+  const nonHomeSlug = currentLocale
+    ? slugParts.slice(1).join('/')
+    : slugParts.join('/');
 
-  console.log("current:", navItems);
+  const handleNavigate = (locale) => {
+    const basePath = locale === 'en' ? '' : `/${locale}`;
+    const path = nonHomeSlug ? `${basePath}/${nonHomeSlug}` : basePath || '/';
+    router.push(path);
+  };
 
   const mappedNav = navItems.map((item, index) => (
     <KeyDiv key={`item.tab_name-${index}`}>
-      <Tab className="tabs">{item.tab_name}</Tab>
-      <Dropdown className="dropdowns" id={`dropdown-${index}`}>
+      <Tab className='tabs'>{item.tab_name}</Tab>
+      <Dropdown className='dropdowns' id={`dropdown-${index}`}>
         {item.tab_columns.map((column, index) => (
           <Column key={`column.column_header-${index}`}>
             <ColumnHeader>{column.column_header}</ColumnHeader>
             {column.nav_items.map((item, index) => {
-              const formattedIconString = item.icon.replace(/\s+/g, "");
+              const formattedIconString = item.icon.replace(/\s+/g, '');
               const IconComponent = Icons[formattedIconString] || null;
 
-              const rawUrl = item.item_link?.cached_url || "#";
+              const rawUrl = item.item_link?.cached_url || '#';
               const isExternal =
-                rawUrl.startsWith("http://") || rawUrl.startsWith("https://");
+                rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
               const normalizedUrl = isExternal
                 ? rawUrl
-                : rawUrl.startsWith("/")
-                  ? rawUrl
-                  : `/${rawUrl}`;
+                : rawUrl.startsWith('/')
+                ? rawUrl
+                : `/${rawUrl}`;
 
               const handleClick = () => {
-                if (normalizedUrl === "#") return;
+                if (normalizedUrl === '#') return;
                 if (isExternal) {
-                  window.open(normalizedUrl, "_blank", "noopener,noreferrer");
+                  window.open(normalizedUrl, '_blank', 'noopener,noreferrer');
                 } else {
                   window.location.href = normalizedUrl;
                 }
@@ -65,13 +79,13 @@ const Nav = ({ blok }) => {
                   card={item.card}
                   card_size={item.card_size}
                   onClick={handleClick}
-                  role="link"
+                  role='link'
                   tabIndex={0}
-                  onKeyDown={(e) => e.key === "Enter" && handleClick()}
+                  onKeyDown={(e) => e.key === 'Enter' && handleClick()}
                 >
                   {item.card &&
                     item.card_size &&
-                    item.card_size !== "small" && (
+                    item.card_size !== 'small' && (
                       <ImageWrapper card_size={item.card_size}>
                         <Image images={item?.card_image?.[0].media} />
                       </ImageWrapper>
@@ -85,19 +99,16 @@ const Nav = ({ blok }) => {
                     <NavItemCopy card_size={item.card_size}>
                       <RichTextRenderer document={item.item_copy} />
                     </NavItemCopy>
-
-                    {/* Optional: visible link inside */}
-                    {item.card_size === "medium" && (
+                    {item.card_size === 'medium' && (
                       <Link
                         href={normalizedUrl}
-                        target={isExternal ? "_blank" : "_self"}
-                        rel={isExternal ? "noopener noreferrer" : undefined}
-                        onClick={(e) => e.stopPropagation()} // prevent bubbling to NavItem
+                        target={isExternal ? '_blank' : '_self'}
+                        rel={isExternal ? 'noopener noreferrer' : undefined}
+                        onClick={(e) => e.stopPropagation()}
                       >
                         Learn More
                       </Link>
                     )}
-
                     {item.sub_copy && item.card && (
                       <NavItemSubCopy>{item.sub_copy}</NavItemSubCopy>
                     )}
@@ -116,14 +127,14 @@ const Nav = ({ blok }) => {
   useEffect(() => {
     if (!navReady) return;
 
-    const footer = document.querySelector(".footer");
+    const footer = document.querySelector('.footer');
     if (!footer) return;
 
     const footerOffset = footer.offsetTop + footer.offsetHeight;
 
     ScrollTrigger.create({
-      trigger: ".desktopNav",
-      start: "top top",
+      trigger: '.desktopNav',
+      start: 'top top',
       end: `${footerOffset}px`,
       pin: true,
       pinSpacing: false,
@@ -134,18 +145,18 @@ const Nav = ({ blok }) => {
   useEffect(() => {
     if (!navReady) return;
 
-    gsap.set(".dropdowns", { autoAlpha: 0 });
+    gsap.set('.dropdowns', { autoAlpha: 0 });
 
-    const allTabs = gsap.utils.toArray(".tabs");
-    const allDropdowns = gsap.utils.toArray(".dropdowns");
-    const navWrapper = document.querySelector(".mainNavWrapper");
+    const allTabs = gsap.utils.toArray('.tabs');
+    const allDropdowns = gsap.utils.toArray('.dropdowns');
+    const navWrapper = document.querySelector('.mainNavWrapper');
 
     let isAnimating = false;
     let queuedIndex = null;
 
     const closeDropdown = () => {
       isAnimating = true;
-      return gsap.to(".dropdowns", {
+      return gsap.to('.dropdowns', {
         autoAlpha: 0,
         duration: 0.35,
         onComplete: () => {
@@ -173,55 +184,276 @@ const Nav = ({ blok }) => {
     };
 
     allTabs.forEach((tab, index) => {
-      tab.addEventListener("mouseenter", () => {
+      tab.addEventListener('mouseenter', () => {
         closeDropdown().then(() => {});
         queuedIndex = index;
       });
     });
 
     allDropdowns.forEach((dropdown) => {
-      dropdown.addEventListener("mouseleave", closeDropdown);
+      dropdown.addEventListener('mouseleave', closeDropdown);
     });
 
     if (navWrapper) {
-      navWrapper.addEventListener("mouseleave", closeDropdown);
+      navWrapper.addEventListener('mouseleave', closeDropdown);
     }
 
     return () => {
       allTabs.forEach((tab, index) => {
-        tab.removeEventListener("mouseenter", () => openDropdown(index));
+        tab.removeEventListener('mouseenter', () => openDropdown(index));
       });
       allDropdowns.forEach((dropdown) => {
-        dropdown.removeEventListener("mouseleave", closeDropdown);
+        dropdown.removeEventListener('mouseleave', closeDropdown);
       });
       if (navWrapper) {
-        navWrapper.removeEventListener("mouseleave", closeDropdown);
+        navWrapper.removeEventListener('mouseleave', closeDropdown);
       }
     };
   }, [navReady]);
 
+  useEffect(() => {
+    const handleGlobeHover = () => {
+      gsap.to('#languageItemsContainer', { width: '100%' });
+    };
+
+    const handleGlobeExit = () => {
+      gsap.to('#languageItemsContainer', { width: '0%' });
+    };
+
+    document
+      .querySelector('#globe')
+      .addEventListener('mouseenter', handleGlobeHover);
+    document
+      .querySelector('#languageSelector')
+      .addEventListener('mouseleave', handleGlobeExit);
+  }, []);
   return (
     <ThemeProvider theme={selectedTheme}>
-      <MainNavWrapper className="mainNavWrapper desktopNav">
-        <MainInner>
-          <MainContent>
-            <VasionLogo src="/images/logos/vasion-logo-purple.webp" />
-            <Tabs>{mappedNav}</Tabs>
-          </MainContent>
-          {blok?.button?.map(($buttonData) => (
-            <div
-              {...storyblokEditable($buttonData)}
-              key={$buttonData?.link_text}
-            >
-              <Button key={$buttonData?.link_text} $buttonData={$buttonData} />
-            </div>
-          ))}
-        </MainInner>
-      </MainNavWrapper>
+      <>
+        <TopNav>
+          <TopElementsContainer>
+            <Banner>
+              <BannerMessage>
+                The Wait is Over, New Features are LIVE! Output automation, web
+                print, mobile scanning and more.
+              </BannerMessage>
+              <BannerLink onClick={() => navigate('/whats-new')}>
+                Learn More <BannerArrow />
+              </BannerLink>
+            </Banner>
+            <LanguageSelector id='languageSelector'>
+              <LanguageItems id='languageItemsContainer'>
+                <LanguageItem onClick={() => handleNavigate('en')}>
+                  English
+                </LanguageItem>
+                <LanguageItem onClick={() => handleNavigate('fr')}>
+                  French
+                </LanguageItem>
+                <LanguageItem onClick={() => handleNavigate('de')}>
+                  German
+                </LanguageItem>
+              </LanguageItems>
+              <LanguageIcon id='globe' />
+            </LanguageSelector>
+          </TopElementsContainer>
+        </TopNav>
+        <MainNavWrapper className='mainNavWrapper desktopNav'>
+          <MainInner>
+            <MainContent>
+              <VasionLogo src='/images/logos/vasion-logo-purple.webp' />
+              <Tabs>{mappedNav}</Tabs>
+            </MainContent>
+            {blok?.button?.map(($buttonData) => (
+              <div
+                {...storyblokEditable($buttonData)}
+                key={$buttonData?.link_text}
+              >
+                <Button
+                  key={$buttonData?.link_text}
+                  $buttonData={$buttonData}
+                />
+              </div>
+            ))}
+          </MainInner>
+        </MainNavWrapper>
+      </>
     </ThemeProvider>
   );
 };
 
+const TopElementsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  max-width: unset;
+  justify-content: space-between;
+  width: 81.5vw;
+
+  ${media.fullWidth} {
+    width: 1304px;
+  }
+
+  ${media.tablet} {
+    max-width: unset;
+  }
+`;
+const LanguageIcon = styled(LanguageGlobe)`
+  width: 1.667vw;
+  height: 1.667vw;
+  margin-left: 0.694vw;
+
+  ${media.fullWidth} {
+    width: 24px;
+    height: 24px;
+    margin-left: 10px;
+  }
+
+  ${media.tablet} {
+    width: 2.344vw;
+    height: 2.344vw;
+    margin-left: 0.977vw;
+  }
+
+  ${media.mobile} {
+  }
+`;
+const LanguageItem = styled.div`
+  border-radius: 0.139vw;
+  padding: 0.208vw;
+
+  ${media.fullWidth} {
+    border-radius: 2px;
+    padding: 3px;
+  }
+
+  ${media.tablet} {
+    border-radius: 0.195vw;
+    padding: 0.293vw;
+  }
+
+  ${media.mobile} {
+  }
+
+  &:hover {
+    background-color: ${colors.primaryOrange};
+    color: ${colors.white};
+  }
+`;
+const LanguageItems = styled.div`
+  ${text.bodySm};
+  color: ${colors.txtSubtle};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+  width: 0%;
+  gap: 1.042vw;
+
+  ${media.fullWidth} {
+    gap: 15px;
+  }
+
+  ${media.tablet} {
+    gap: 1.465vw;
+  }
+
+  ${media.mobile} {
+  }
+`;
+const LanguageSelector = styled.div`
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+`;
+const BannerArrow = styled(LinkArrow)`
+  width: 0.556vw;
+  height: 0.556vw;
+  margin-left: 0.278vw;
+
+  ${media.fullWidth} {
+    width: 8px;
+    height: 8px;
+    margin-left: 4px;
+  }
+
+  ${media.tablet} {
+    width: 0.781vw;
+    height: 0.781vw;
+    margin-left: 0.391vw;
+  }
+
+  ${media.mobile} {
+  }
+`;
+const BannerLink = styled.div`
+  cursor: pointer;
+
+  &:hover {
+    ${BannerArrow} {
+      transition-duration: 500ms;
+      margin-left: 0.556vw;
+
+      ${media.fullWidth} {
+        margin-left: 8px;
+      }
+
+      ${media.tablet} {
+        margin-left: 0.781vw;
+      }
+
+      ${media.mobile} {
+      }
+    }
+  }
+`;
+const BannerMessage = styled.p``;
+const Banner = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  ${text.bodySm};
+  color: ${colors.white};
+  gap: 2.222vw;
+
+  ${media.fullWidth} {
+    gap: 32px;
+  }
+
+  ${media.tablet} {
+    gap: 3.125vw;
+  }
+
+  ${media.mobile} {
+  }
+`;
+
+const TopNav = styled.nav`
+  background-image: url('images/TopBar.png');
+  background-color: ${colors.darkPurple};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0vw 8.278vw;
+  height: 2.778vw;
+
+  ${media.fullWidth} {
+    background-image: unset;
+    background-color: ${colors.darkPurple};
+    padding: 0px 148px;
+    height: 40px;
+  }
+
+  ${media.tablet} {
+    padding: 0vw 1.563vw;
+    height: 3.906vw;
+  }
+
+  ${media.mobile} {
+  }
+`;
 const Link = styled.a`
   ${text.tag};
   color: ${colors.txtSubtle};
@@ -229,18 +461,18 @@ const Link = styled.a`
 const ImageWrapper = styled.div`
   overflow: hidden;
   border-radius: 0.125vw;
-  min-height: ${(props) => (props.card_size === "large" ? "11vw" : "4.875vw")};
-  min-width: ${(props) => (props.card_size === "large" ? "100%" : "5.438vw")};
+  min-height: ${(props) => (props.card_size === 'large' ? '11vw' : '4.875vw')};
+  min-width: ${(props) => (props.card_size === 'large' ? '100%' : '5.438vw')};
 
   ${media.fullWidth} {
-    min-height: ${(props) => (props.card_size === "large" ? "176px" : "78px")};
-    min-width: ${(props) => (props.card_size === "large" ? "100%" : "87px")};
+    min-height: ${(props) => (props.card_size === 'large' ? '176px' : '78px')};
+    min-width: ${(props) => (props.card_size === 'large' ? '100%' : '87px')};
   }
 
   ${media.tablet} {
     min-height: ${(props) =>
-      props.card_size === "large" ? "17.188vw" : "7.617vw"};
-    min-width: ${(props) => (props.card_size === "large" ? "100%" : "8.496vw")};
+      props.card_size === 'large' ? '17.188vw' : '7.617vw'};
+    min-width: ${(props) => (props.card_size === 'large' ? '100%' : '8.496vw')};
   }
 
   ${media.mobile} {
@@ -252,15 +484,15 @@ const NavItemSubCopy = styled.div`
   color: ${colors.txtSubtle};
 `;
 const NavItemCopy = styled.div`
-  margin-left: ${(props) => (props.card_size === "large" ? "1vw" : "unset")};
+  margin-left: ${(props) => (props.card_size === 'large' ? '1vw' : 'unset')};
 
   ${media.fullWidth} {
-    margin-left: ${(props) => (props.card_size === "large" ? "16px" : "unset")};
+    margin-left: ${(props) => (props.card_size === 'large' ? '16px' : 'unset')};
   }
 
   ${media.tablet} {
     margin-left: ${(props) =>
-      props.card_size === "large" ? "1.563vw" : "unset"};
+      props.card_size === 'large' ? '1.563vw' : 'unset'};
   }
 
   ${media.mobile} {
@@ -285,26 +517,26 @@ const NavCopy = styled.div`
 const NavIconWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-self: ${(props) => (props.card ? "start" : "unset")};
-  width: ${(props) => (props.card && props.card_size ? "3.375vw" : "1.25vw")};
-  height: ${(props) => (props.card && props.card_size ? "unset" : "1.25vw")};
+  align-self: ${(props) => (props.card ? 'start' : 'unset')};
+  width: ${(props) => (props.card && props.card_size ? '3.375vw' : '1.25vw')};
+  height: ${(props) => (props.card && props.card_size ? 'unset' : '1.25vw')};
 
   ${media.fullWidth} {
-    width: ${(props) => (props.card && props.card_size ? "54px" : "20px")};
-    height: ${(props) => (props.card && props.card_size ? "unset" : "20px")};
+    width: ${(props) => (props.card && props.card_size ? '54px' : '20px')};
+    height: ${(props) => (props.card && props.card_size ? 'unset' : '20px')};
   }
 
   ${media.tablet} {
     width: ${(props) =>
-      props.card && props.card_size ? "5.273vw" : "1.953vw"};
-    height: ${(props) => (props.card && props.card_size ? "unset" : "1.953vw")};
+      props.card && props.card_size ? '5.273vw' : '1.953vw'};
+    height: ${(props) => (props.card && props.card_size ? 'unset' : '1.953vw')};
   }
 
   ${media.mobile} {
   }
 
   svg {
-    align-self: ${(props) => (props.card ? "start" : "unset")};
+    align-self: ${(props) => (props.card ? 'start' : 'unset')};
     width: 100%;
     height: 100%;
   }
@@ -313,97 +545,97 @@ const NavItem = styled.div`
   cursor: pointer;
   display: flex;
   flex-direction: ${(props) =>
-    props.card_size === "large" ? "column" : "row"};
-  align-items: ${(props) => (props.card_size === "large" ? "start" : "center")};
+    props.card_size === 'large' ? 'column' : 'row'};
+  align-items: ${(props) => (props.card_size === 'large' ? 'start' : 'center')};
   background: ${(props) =>
-    props.card_size === "medium" ? colors.lightPurpleGrey : "unset"};
+    props.card_size === 'medium' ? colors.lightPurpleGrey : 'unset'};
   gap: ${(props) =>
-    props.card_size === "small"
-      ? "1.25vw"
-      : props.card_size === "medium"
-        ? "0.875vw"
-        : "0.625vw"};
+    props.card_size === 'small'
+      ? '1.25vw'
+      : props.card_size === 'medium'
+      ? '0.875vw'
+      : '0.625vw'};
 
   width: ${(props) =>
-    props.card_size === "small"
-      ? "17.5vw"
-      : props.card_size === "medium"
-        ? "19.563vw"
-        : props.card_size === "large"
-          ? "19.563vw"
-          : "auto"};
+    props.card_size === 'small'
+      ? '17.5vw'
+      : props.card_size === 'medium'
+      ? '19.563vw'
+      : props.card_size === 'large'
+      ? '19.563vw'
+      : 'auto'};
 
   padding: ${(props) =>
-    props.card_size === "small"
-      ? "0.75vw"
-      : props.card_size === "medium"
-        ? "0.25vw 0.75vw 0.25vw 0.25vw"
-        : props.card_size === "large"
-          ? "unset"
-          : "0.25vw 0.75vw"};
+    props.card_size === 'small'
+      ? '0.75vw'
+      : props.card_size === 'medium'
+      ? '0.25vw 0.75vw 0.25vw 0.25vw'
+      : props.card_size === 'large'
+      ? 'unset'
+      : '0.25vw 0.75vw'};
   border-radius: 0.25vw;
-  height: ${(props) => (props.card_size === "large" ? "13.875vw" : "auto")};
+  height: ${(props) => (props.card_size === 'large' ? '13.875vw' : 'auto')};
   box-shadow: ${(props) =>
-    props.card_size === "large"
-      ? "0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)"
-      : "unset"};
+    props.card_size === 'large'
+      ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
+      : 'unset'};
 
   ${media.fullWidth} {
     gap: ${(props) =>
-      props.card_size === "small"
-        ? "20px"
-        : props.card_size === "medium"
-          ? "14px"
-          : "10px"};
+      props.card_size === 'small'
+        ? '20px'
+        : props.card_size === 'medium'
+        ? '14px'
+        : '10px'};
 
     width: ${(props) =>
-      props.card_size === "small"
-        ? "280px"
-        : props.card_size === "medium"
-          ? "313px"
-          : props.card_size === "large"
-            ? "313px"
-            : "auto"};
+      props.card_size === 'small'
+        ? '280px'
+        : props.card_size === 'medium'
+        ? '313px'
+        : props.card_size === 'large'
+        ? '313px'
+        : 'auto'};
 
     padding: ${(props) =>
-      props.card_size === "small"
-        ? "12px"
-        : props.card_size === "medium"
-          ? "4px 12px 4px 4px"
-          : props.card_size === "large"
-            ? "unset"
-            : "4px 12px"};
+      props.card_size === 'small'
+        ? '12px'
+        : props.card_size === 'medium'
+        ? '4px 12px 4px 4px'
+        : props.card_size === 'large'
+        ? 'unset'
+        : '4px 12px'};
     border-radius: 4px;
-    height: ${(props) => (props.card_size === "large" ? "222px" : "auto")};
+    height: ${(props) => (props.card_size === 'large' ? '222px' : 'auto')};
   }
 
   ${media.tablet} {
     gap: ${(props) =>
-      props.card_size === "small"
-        ? "1.953vw"
-        : props.card_size === "medium"
-          ? "1.367vw"
-          : "0.977vw"};
+      props.card_size === 'small'
+        ? '1.953vw'
+        : props.card_size === 'medium'
+        ? '1.367vw'
+        : '0.977vw'};
 
     width: ${(props) =>
-      props.card_size === "small"
-        ? "27.344vw"
-        : props.card_size === "medium"
-          ? "30.566vw"
-          : props.card_size === "large"
-            ? "30.566vw"
-            : "auto"};
+      props.card_size === 'small'
+        ? '27.344vw'
+        : props.card_size === 'medium'
+        ? '30.566vw'
+        : props.card_size === 'large'
+        ? '30.566vw'
+        : 'auto'};
 
     padding: ${(props) =>
-      props.card_size === "small"
-        ? "1.172vw"
-        : props.card_size === "medium"
-          ? "0.391vw 1.172vw 0.391vw 0.391vw"
-          : props.card_size === "large"
-            ? "unset"
-            : "0.391vw 1.172vw"};
+      props.card_size === 'small'
+        ? '1.172vw'
+        : props.card_size === 'medium'
+        ? '0.391vw 1.172vw 0.391vw 0.391vw'
+        : props.card_size === 'large'
+        ? 'unset'
+        : '0.391vw 1.172vw'};
     border-radius: 0.391vw;
-    height: ${(props) => (props.card_size === "large" ? "21.68vw" : "auto")};
+    height: ${(props) => (props.card_size === 'large' ? '21.68vw' : 'auto')};
   }
 
   ${media.mobile} {
@@ -412,8 +644,8 @@ const NavItem = styled.div`
     background: ${colors.lightPurpleGrey};
     box-shadow: ${(props) =>
       props.card
-        ? "0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)"
-        : "unset"};
+        ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
+        : 'unset'};
     path {
       fill: ${(props) =>
         props.card ? colors.lightPurple : colors.primaryOrange};
