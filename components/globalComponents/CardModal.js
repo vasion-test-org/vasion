@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import styled from "styled-components";
 import media from "styles/media";
 import colors from "styles/colors";
@@ -9,89 +10,71 @@ import useMedia from "@/functions/useMedia";
 import RichTextRenderer from "../renderers/RichTextRenderer";
 import Video from "./Video";
 
-const CardModal = ({ data, setShowModal, parentRef }) => {
-  const [closeButton, setCloseButton] = useState(
-    "/images/uiElements/closeButton.webp",
-  );
+const CardModal = ({ data, setShowModal }) => {
+  const [closeButton, setCloseButton] = useState("/images/uiElements/closeButton.webp");
+
   const videoWidth = useMedia("1440px", "89.6vw", "89vw", "87.85vw");
   const videoHeight = useMedia("900px", "51.25vw", "51vw", "49.299vw");
+
+  const videoSrc = data?.asset?.[0]?.media?.[0]?.filename;
 
   const handleClose = (e) => {
     if (e.target === e.currentTarget) {
       setShowModal(false);
     }
   };
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
+
+    // Optional: pause ScrollSmoother during modal open
+    const smoother = typeof window !== "undefined" ? window.ScrollSmoother?.get() : null;
+    smoother?.paused(true);
+
     return () => {
       document.body.style.overflow = "auto";
+      smoother?.paused(false);
     };
   }, []);
 
-  return (
-    <Wrapper className="modal-wrapper" onClick={handleClose}>
-      <Modal $isvideo={data?.asset[0].media[0].filename}>
+  if (typeof window === "undefined") return null;
+
+  return createPortal(
+    <Wrapper onClick={handleClose}>
+      <Modal $isvideo={!!videoSrc}>
         <CloseBtn
-          src="/images/uiElements/closeButton.webp"
-          onMouseEnter={() =>
-            setCloseButton("images/uiElement/CloseBtnHover.webp")
-          }
-          onMouseLeave={() =>
-            setCloseButton("/images/uiElements/closeButton.webp")
-          }
+          src={closeButton}
+          onMouseEnter={() => setCloseButton("/images/uiElement/CloseBtnHover.webp")}
+          onMouseLeave={() => setCloseButton("/images/uiElements/closeButton.webp")}
           onClick={handleClose}
         />
-        {!data?.asset[0].media[0].filename && (
+        {!videoSrc && (
           <FeaturedContent>
             <Title $mobile>
               <NameAndStar>
-                {data?.person[0]?.copy && (
-                  <RichTextRenderer document={data.person[0].copy} />
-                )}
-                <Sparkle
-                  src="/images/uiElements/VasionStarNewsroom.webp"
-                  alt="vasion-sparkle"
-                />
+                {data?.person?.[0]?.copy && <RichTextRenderer document={data.person[0].copy} />}
+                <Sparkle src="/images/uiElements/VasionStarNewsroom.webp" alt="vasion-sparkle" />
               </NameAndStar>
-              {data?.position[0]?.copy && (
-                <RichTextRenderer document={data.position[0].copy} />
-              )}
+              {data?.position?.[0]?.copy && <RichTextRenderer document={data.position[0].copy} />}
             </Title>
-            <FeaturePhoto
-              src={data?.asset[0].media[0].filename}
-              // alt={data.name}
-            />
+            <FeaturePhoto src={data?.asset?.[0]?.media?.[0]?.filename} />
             <TitleAndBioDiv>
               <Title>
                 <NameAndStar>
-                  {data?.person[0]?.copy && (
-                    <RichTextRenderer document={data.person[0].copy} />
-                  )}
-                  <Sparkle
-                    src="/images/uiElements/VasionStarNewsroom.webp"
-                    alt="vasion-sparkle"
-                  />
+                  {data?.person?.[0]?.copy && <RichTextRenderer document={data.person[0].copy} />}
+                  <Sparkle src="/images/uiElements/VasionStarNewsroom.webp" alt="vasion-sparkle" />
                 </NameAndStar>
-                {data?.position[0]?.copy && (
-                  <RichTextRenderer document={data.position[0].copy} />
-                )}
+                {data?.position?.[0]?.copy && <RichTextRenderer document={data.position[0].copy} />}
               </Title>
-              {data?.bio[0]?.copy && (
-                <RichTextRenderer document={data.bio[0].copy} />
-              )}
+              {data?.bio?.[0]?.copy && <RichTextRenderer document={data.bio[0].copy} />}
             </TitleAndBioDiv>
           </FeaturedContent>
         )}
-        {data?.asset[0].media[0].filename && (
+        {videoSrc && (
           <VideoContainer>
-            <Video
-              videos={data?.asset[0].media[0]}
-              // borderradius={blok.media?.[0]?.border_radius}
-              thumbnails={data?.asset[0].media[0].thumbnails}
-            />
-
+            <Video videos={data.asset[0].media[0]} thumbnails={data.asset[0].media[0].thumbnails} />
             <ReactPlayer
-              url={data?.asset[0].media[0].filename}
+              url={videoSrc}
               controls={true}
               playing={true}
               volume={1}
@@ -103,7 +86,8 @@ const CardModal = ({ data, setShowModal, parentRef }) => {
           </VideoContainer>
         )}
       </Modal>
-    </Wrapper>
+    </Wrapper>,
+    document.body
   );
 };
 
