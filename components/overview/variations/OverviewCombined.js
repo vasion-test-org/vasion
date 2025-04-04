@@ -75,7 +75,7 @@ const Combined = ({ blok }) => {
               </Attribution>
             )}
           </QuoteCopy>
-          {blok?.quote?.quote_image[0]?.media[0].filename && (
+          {blok?.quote?.quote_image[0]?.media[0]?.filename && (
             <QuoteSideImg
               src={blok?.quote?.quote_image[0]?.media[0].filename}
               alt={blok?.quote?.quote_image[0]?.media[0].alt}
