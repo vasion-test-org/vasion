@@ -19,6 +19,7 @@ import SideBySide from "../SideBySide";
 import CenteredSection from "../CenteredSection";
 import NumberBlock from "../NumberBlock";
 import colors from "@/styles/colors";
+import text from "@/styles/text";
 
 const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
   if (!document) return null;
@@ -116,6 +117,19 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
 const RichWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 0.625vw;
+
+  ${media.fullWidth} {
+    gap: 10px;
+  }
+  
+  ${media.tablet} {
+    gap: 0.977vw;
+  }
+  
+  ${media.mobile} {
+    gap: 4.167vw;
+  }
  a {
   color: ${colors.primaryOrange};
  }
@@ -200,7 +214,102 @@ const RichWrapper = styled.div`
     line-height: 2.804vw;
   }
   }
+  ol {
+    position: relative;
+    list-style: none;
+    counter-reset: list-number;
+    margin-left: 3.472vw;
+    margin-top: 2.5vw;
+    margin-bottom: 2.5vw;
 
+    ${media.fullWidth} {
+      margin-left: 50px;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    ${media.tablet} {
+      margin-left: 4.883vw;
+      margin-top: 3.906vw;
+      margin-bottom: 3.906vw;
+    }
+
+    ${media.mobile} {
+      margin-left: 11.682vw;
+      margin-top: 9.346vw;
+      margin-bottom: 9.346vw;
+    }
+    li:last-child {
+      margin-bottom: 0;
+    }
+    li {
+      min-height: 2.5vw;
+      margin-bottom: 1.667vw;
+
+      ${media.fullWidth} {
+        min-height: 36px;
+        margin-bottom: 24px;
+      }
+
+      ${media.tablet} {
+        min-height: 3.516vw;
+        margin-bottom: 2.344vw;
+      }
+
+      ${media.mobile} {
+        min-height: 8.411vw;
+        margin-bottom: 5.607vw;
+      }
+    }
+
+    li::before {
+      ${text.bodyMdBold}
+      position: absolute;
+      left: -4vw;
+      content: counter(list-number);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: ${colors.primaryOrange};
+      margin-right: 0.694vw;
+      width: 1.667vw;
+      height: 1.667vw;
+      font-size: 1.25vw;
+      border: 0.2vw solid ${colors.primaryOrange};
+
+      ${media.fullWidth} {
+        left: -58px;
+        margin-right: 10px;
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+        border: 3px solid ${colors.primaryOrange};
+      }
+
+      ${media.tablet} {
+        left: -5vw;
+        margin-right: 0.977vw;
+        width: 3.516vw;
+        height: 3.516vw;
+        font-size: 1.758vw;
+        border: 0.293vw solid ${colors.primaryOrange};
+      }
+
+      ${media.mobile} {
+        left: -11vw;
+        margin-right: 2.336vw;
+        width: 8.411vw;
+        height: 8.411vw;
+        font-size: 4.206vw;
+        border: 0.701vw solid ${colors.primaryOrange};
+      }
+    }
+
+    li {
+      counter-increment: list-number;
+    }
+  }
   ul {
     list-style: none;
     margin-left: 0;

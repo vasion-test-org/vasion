@@ -96,7 +96,7 @@ const ImageWrapper = styled.div`
   }
   
   ${media.tablet} {
-    
+    width: 44.531vw;
   }
   
   ${media.mobile} {

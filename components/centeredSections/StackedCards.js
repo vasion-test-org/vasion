@@ -1,31 +1,59 @@
-import React, { useContext, useRef, useState, useEffect, useMemo } from "react";
-import { useRive } from "@rive-app/react-canvas";
-import { ScreenContext } from "../providers/Screen";
-import gsap from "gsap";
-import styled from "styled-components";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import getMedia from "@/functions/getMedia";
-import ScrollTrigger from "gsap/ScrollTrigger";
-import RichTextRenderer from "../renderers/RichTextRenderer";
-import Button from "@/components/globalComponents/Button";
-import { storyblokEditable } from "@storyblok/react/rsc";
+'use client';
+import React, { useContext, useRef, useState, useEffect, useMemo } from 'react';
+import { useRive } from '@rive-app/react-canvas';
+import { ScreenContext } from '../providers/Screen';
+import gsap from 'gsap';
+import styled from 'styled-components';
+import media from '@/styles/media';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import getMedia from '@/functions/getMedia';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+import RichTextRenderer from '../renderers/RichTextRenderer';
+import Button from '@/components/globalComponents/Button';
+import { storyblokEditable } from '@storyblok/react/rsc';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const RiveAnimation = ({ src, index, isActive, tablet, mobile, onRiveInit }) => {
+  const shouldAutoplay = tablet || mobile || index === 0;
+
+  const { rive, RiveComponent } = useRive({
+    src,
+    autoplay: shouldAutoplay,
+  });
+
+  useEffect(() => {
+    if (rive) {
+      onRiveInit(rive, index);
+      shouldAutoplay ? rive.play() : rive.pause();
+    }
+    return () => rive?.pause();
+  }, [rive]);
+
+  useEffect(() => {
+    if (rive) {
+      isActive ? rive.play() : rive.pause();
+    }
+  }, [isActive]);
+
+  return (
+    <RiveContainer>
+      <RiveComponent />
+    </RiveContainer>
+  );
+};
 
 const StackedCards = ({ blok }) => {
   const { mobile, tablet } = useContext(ScreenContext);
   const stackedCardsRef = useRef(null);
   const riveInstancesRef = useRef([]);
   const [active, setActive] = useState(0);
+
   useEffect(() => {
     riveInstancesRef.current = Array(3).fill(null);
-
     return () => {
-      riveInstancesRef.current.forEach((rive) => {
-        if (rive) rive.pause();
-      });
+      riveInstancesRef.current.forEach((rive) => rive?.pause());
     };
   }, []);
 
@@ -50,55 +78,7 @@ const StackedCards = ({ blok }) => {
   return (
     <Wrapper ref={stackedCardsRef}>
       {blok.map((card, index) => {
-        const RiveAnimation = ({
-          index,
-          isActive,
-          tablet,
-          mobile,
-          onRiveInit,
-        }) => {
-          const shouldAutoplay = tablet || mobile || index === 0;
-
-          const { rive, RiveComponent } = useRive({
-            src: card.main_asset[0].filename,
-            autoplay: shouldAutoplay,
-          });
-
-          useEffect(() => {
-            if (rive) {
-              onRiveInit(rive, index);
-
-              if (shouldAutoplay) {
-                rive.play();
-              } else {
-                rive.pause();
-              }
-            }
-
-            return () => {
-              if (rive) rive.pause();
-            };
-          }, [rive, index, shouldAutoplay, onRiveInit]);
-
-          useEffect(() => {
-            if (rive) {
-              if (isActive) {
-                rive.play();
-              } else {
-                rive.pause();
-              }
-            }
-          }, [isActive, rive, index]);
-
-          return (
-            <RiveContainer>
-              <RiveComponent />
-            </RiveContainer>
-          );
-        };
-
         const isLastCard = index === blok.length - 1;
-
         const cardImage = getMedia(
           card?.background_image[0]?.filename,
           card?.background_image[0]?.filename,
@@ -109,7 +89,7 @@ const StackedCards = ({ blok }) => {
         return (
           <CardContainer
             className="stackedCards"
-            key={index}
+            key={card._uid || index}
             $active={active}
             index={index}
             $bgimg={cardImage}
@@ -119,7 +99,6 @@ const StackedCards = ({ blok }) => {
           >
             <Content $last={isLastCard}>
               {card?.eyebrow && <RichTextRenderer document={card.eyebrow} />}
-
               <RichTextRenderer document={card.header} />
               <RichTextRenderer document={card.body_copy} />
             </Content>
@@ -130,16 +109,15 @@ const StackedCards = ({ blok }) => {
                   {...storyblokEditable($buttonData)}
                   key={$buttonData?.link_text}
                 >
-                  <Button
-                    key={$buttonData?.link_text}
-                    $buttonData={$buttonData}
-                  />
+                  <Button $buttonData={$buttonData} />
                 </div>
               ))}
             </ButtonRow>
 
             {index < 3 && (
               <RiveAnimation
+                key={`rive-${index}`}
+                src={card.main_asset[0].filename}
                 index={index}
                 isActive={active === index}
                 tablet={tablet}
@@ -186,11 +164,11 @@ const ButtonRow = styled.div`
   align-items: center;
   width: max-content;
   gap: 1.667vw;
-  margin-top: ${(props) => (props.isLastCard ? "2.5vw" : "1.125vw")};
+  margin-top: ${(props) => (props.isLastCard ? '2.5vw' : '1.125vw')};
 
   ${media.fullWidth} {
     gap: 24px;
-    margin-top: ${(props) => (props.isLastCard ? "40px" : "18px")};
+    margin-top: ${(props) => (props.isLastCard ? '40px' : '18px')};
   }
 
   ${media.tablet} {
@@ -207,20 +185,23 @@ const Content = styled.div`
   flex-direction: column;
   word-wrap: nowrap;
   hyphens: none;
-  width: ${(props) => (props?.$last ? "33.25vw" : "fit-content")};
-  gap: ${(props) => (props?.$last ? "0.75vw" : "0.5vw")};
+  width: ${(props) => (props?.$last ? '33.25vw' : 'fit-content')};
+  gap: ${(props) => (props?.$last ? '0.75vw' : '0.5vw')};
+
   ${media.fullWidth} {
-    width: ${(props) => (props?.$last ? "532px" : "fit-content")};
-    gap: ${(props) => (props?.$last ? "12px" : "8px")};
+    width: ${(props) => (props?.$last ? '532px' : 'fit-content')};
+    gap: ${(props) => (props?.$last ? '12px' : '8px')};
   }
+
   ${media.tablet} {
-    width: ${(props) => (props?.$last ? "38.281vw" : "fit-content")};
-    height: ${(props) => (props?.$last ? "unset" : "17.16vw")};
-    gap: ${(props) => (props?.$last ? "1.172vw" : "0.781vw")};
+    width: ${(props) => (props?.$last ? '38.281vw' : 'fit-content')};
+    height: ${(props) => (props?.$last ? 'unset' : '17.16vw')};
+    gap: ${(props) => (props?.$last ? '1.172vw' : '0.781vw')};
   }
+
   ${media.mobile} {
-    width: ${(props) => (props?.$last ? "78.333vw" : "fit-content")};
-    gap: ${(props) => (props?.$last ? "2.5vw" : "1.667vw")};
+    width: ${(props) => (props?.$last ? '78.333vw' : 'fit-content')};
+    gap: ${(props) => (props?.$last ? '2.5vw' : '1.667vw')};
   }
 `;
 
@@ -228,36 +209,36 @@ const CardContainer = styled.div`
   display: flex;
   opacity: ${(props) =>
     props?.$last
-      ? "1"
+      ? '1'
       : props.index < 3
-        ? props.$active === props.index
-          ? "1"
-          : "0.5"
-        : "1"};
+      ? props.$active === props.index
+        ? '1'
+        : '0.5'
+      : '1'};
   transition: opacity 0.3s ease-out;
   flex-direction: column;
   background: ${(props) => `url(${props.$bgimg})`};
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  height: ${(props) => (props?.$last ? "fit-content" : "37.5vw")};
-  width: ${(props) => (props?.$last ? "81.5vw" : "26.688vw")};
-  padding: ${(props) => (props?.$last ? "2.688vw 3.75vw" : "1.25vw")};
+  height: ${(props) => (props?.$last ? 'fit-content' : '37.5vw')};
+  width: ${(props) => (props?.$last ? '81.5vw' : '26.688vw')};
+  padding: ${(props) => (props?.$last ? '2.688vw 3.75vw' : '1.25vw')};
   border-radius: 0.833vw;
   gap: 0.75vw;
 
   ${media.fullWidth} {
-    height: ${(props) => (props?.$last ? "fit-content" : "600px")};
-    width: ${(props) => (props?.$last ? "1304px" : "427px")};
-    padding: ${(props) => (props?.$last ? "43px 60px" : "20px")};
+    height: ${(props) => (props?.$last ? 'fit-content' : '600px')};
+    width: ${(props) => (props?.$last ? '1304px' : '427px')};
+    padding: ${(props) => (props?.$last ? '43px 60px' : '20px')};
     border-radius: 12px;
     gap: 12px;
   }
 
   ${media.tablet} {
     opacity: 1;
-    width: ${(props) => (props?.$last ? "92.188vw" : "29.102vw")};
-    padding: ${(props) => (props?.$last ? "3.906vw" : "1.953vw")};
-    height: ${(props) => (props?.$last ? "fit-content" : "45.953vw")};
+    width: ${(props) => (props?.$last ? '92.188vw' : '29.102vw')};
+    padding: ${(props) => (props?.$last ? '3.906vw' : '1.953vw')};
+    height: ${(props) => (props?.$last ? 'fit-content' : '45.953vw')};
     border-radius: 1.172vw;
   }
 
@@ -268,8 +249,8 @@ const CardContainer = styled.div`
     flex-direction: column;
     border-radius: 2.804vw;
     width: 89.167vw;
-    height: ${(props) => (props?.$last ? "171.042vw" : "fit-content")};
-    padding: ${(props) => (props?.$last ? "5.417vw 8.333vw" : "4.167vw")};
+    height: ${(props) => (props?.$last ? '171.042vw' : 'fit-content')};
+    padding: ${(props) => (props?.$last ? '5.417vw 8.333vw' : '4.167vw')};
   }
 `;
 

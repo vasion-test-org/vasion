@@ -18,7 +18,7 @@ const Hero = ({ blok }) => {
     customTheme = undefined;
   }
 
-  // console.log(blok.socials);
+  // console.log(blok.centered_image);
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
       <HeroBGWrapper>
@@ -31,8 +31,17 @@ const Hero = ({ blok }) => {
         >
           <ContentWrapper
             socials={blok.socials}
-            centered={!blok?.hero_asset[0] && !blok.socials}
+            centered={!blok?.hero_asset[0] && !blok.socials && blok.centered_image}
+            centered_image={blok.centered_image}
           >
+            {blok?.hero_asset[0] && blok.centered_image && (
+              <ImageWrapper {...storyblokEditable(blok)}>
+                <Image
+                  images={blok.hero_asset}
+                  // borderRadius={blok.hero_asset?.[0]?.border_radius}
+                />
+              </ImageWrapper>
+            )}
             {blok.hero_copy.map((copy) => (
               <div {...storyblokEditable(copy)} key={copy.component}>
                 <RichTextRenderer
@@ -57,7 +66,7 @@ const Hero = ({ blok }) => {
               </ButtonRow>
             )}
           </ContentWrapper>
-          {blok?.hero_asset[0] && (
+          {blok?.hero_asset[0] && !blok.centered_image && (
             <ImageWrapper {...storyblokEditable(blok)}>
               <Image
                 images={blok.hero_asset}
@@ -213,7 +222,10 @@ const ButtonRow = styled.div`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: ${(props) => (props.centered ? 'center' : 'left')};
+  text-align: ${(props) =>
+  props.centered_image ? 'center' : props.centered ? 'center' : 'left'};
+  align-items: ${(props) =>
+  props.centered_image ? 'center' : props.centered ? 'center' : 'left'};
   width: ${(props) =>
     props.socials
       ? 'clamp(27.75vw, 100%, 26.5vw)'
