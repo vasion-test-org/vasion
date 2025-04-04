@@ -12,6 +12,7 @@ import ComponentRenderer from './renderers/ComponentRenderer';
 const SideBySide = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
+  // console.log(blok.left_extra_copy?.[0]);
   return (
     <ThemeProvider theme={selectedTheme}>
       <SideBySideWrapper
@@ -22,8 +23,8 @@ const SideBySide = ({ blok }) => {
         gap={blok.gap}
         asset_form={blok.asset_form}
       >
-        <ComponentRenderer blok={blok.left_side_component[0]} />
-        <ComponentRenderer blok={blok.right_side_component[0]} />
+        <ComponentRenderer extra_copy={blok.left_extra_copy?.[0]} blok={blok.left_side_component[0]} />
+        <ComponentRenderer extra_copy={blok.right_extra_copy?.[0]} blok={blok.right_side_component[0]} />
       </SideBySideWrapper>
     </ThemeProvider>
   );
