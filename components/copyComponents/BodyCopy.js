@@ -16,6 +16,23 @@ const StyledBodyCopy = styled.div`
   font-family: 'Archivo';
   font-weight: 400;
   white-space: pre-wrap;
+  
+  img {
+    max-width: 56.25vw;
+
+    ${media.fullWidth} {
+      max-width: 900px;
+    }
+    
+    ${media.tablet} {
+      max-width: 58.594vw;
+    }
+    
+    ${media.mobile} {
+      max-width: 82vw;
+    }
+  }
+
   b {
   display: inline-block;
   white-space: pre-wrap;

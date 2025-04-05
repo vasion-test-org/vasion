@@ -6,7 +6,7 @@ import media from "styles/media";
 // import text from "styles/text";
 
 const LogosGallery = ({ logoData }) => {
-  console.log(logoData)
+  // console.log(logoData)
   
   const allLogos = logoData.map((logo) => {
     if (logo?.logoLink !== null) {

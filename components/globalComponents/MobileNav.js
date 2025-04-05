@@ -23,7 +23,7 @@ const MobileNav = ({ blok }) => {
   const dropdownIndex = useRef(null);
   let currentNavItems = blok.english_nav_items;
   const isOpen = useRef(false);
-  console.log(blok);
+  // console.log(blok);
   if (path.startsWith('/de')) {
     currentNavItems = blok.german_nav_items;
   } else if (path.startsWith('/fr')) {

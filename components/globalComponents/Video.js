@@ -7,7 +7,7 @@ import media from "@/styles/media";
 import useMedia from "@/functions/useMedia";
 
 const Video = ({ videos, borderradius, filename, thumbnails }) => {
-  console.log("thumbnails", thumbnails);
+  // console.log("thumbnails", thumbnails);
 
   let videoSrc = filename
     ? filename

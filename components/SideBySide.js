@@ -10,7 +10,7 @@ import media, { mobile, desktop, tablet } from "@/styles/media";
 import ComponentRenderer from "./renderers/ComponentRenderer";
 
 const SideBySide = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   // console.log(blok.left_extra_copy?.[0]);

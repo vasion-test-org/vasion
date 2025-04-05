@@ -15,7 +15,7 @@ const ClientBCTResults = () => {
     const parsed = rawData ? JSON.parse(decodeURIComponent(rawData)) : {};
     contactFormData = parsed.contactFormData;
     savingsFormData = parsed.savingsFormData;
-    console.log(parsed);
+    // console.log(parsed);
   } catch (e) {
     console.error('Failed to parse data', e);
   }

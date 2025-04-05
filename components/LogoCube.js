@@ -46,9 +46,9 @@ const LogoCube = ({ blok }) => {
         spacing={blok.section_spacing}
       >
         <CardContainer transparent={blok.transparent_background}>
-          {blok.header && (
+          {blok.header && 
             <RichTextRenderer document={blok.header} blok={blok} />
-          )}
+          }
           <LogoContainer transparent={blok.transparent_background}>
             {allLogos}
           </LogoContainer>
