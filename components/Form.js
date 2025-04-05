@@ -80,7 +80,11 @@ const Form = ({ blok }) => {
         .to(".preformContent", { opacity: contentVisibility })
         .to(".marketoForm", { opacity: 0 }, "<")
         .to("#formPos", { xPercent: formPosition, duration: 1.25 })
-        .to("#formContainer", { width: formWidth, height: formHeight, duration: 1.25 }, "<")
+        .to(
+          "#formContainer",
+          { width: formWidth, height: formHeight, duration: 1.25 },
+          "<",
+        )
         .to(".lines", { width: lineWidth, duration: 1.25 }, "<")
         .from(".second", { duration: 1.25, background: "unset" }, "<")
         .to(".marketoForm", { display: "none" }, "<")
@@ -196,14 +200,14 @@ const MarketoForm = styled.form`
 
   ${media.fullWidth} {
     width: 500px !important;
-  gap: 20px 20px;
+    gap: 20px 20px;
   }
-  
+
   ${media.tablet} {
     width: 39.063vw !important;
     gap: 1.953vw 1.953vw;
   }
-  
+
   ${media.mobile} {
     width: 75.833vw !important;
     gap: 4.167vw 4.167vw;
@@ -239,31 +243,35 @@ const FormContainer = styled.div`
   border-radius: 2vw;
   padding: 2vw;
   width: 35.25vw;
-  box-shadow: 0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04), 0vw 0.25vw 0.5vw 0vw rgba(25, 29, 30, 0.16);
-
+  box-shadow:
+    0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
+    0vw 0.25vw 0.5vw 0vw rgba(25, 29, 30, 0.16);
 
   ${media.fullWidth} {
     border-radius: 32px;
-  padding: 32px;
-  width: 564px;
-  box-shadow: 0px 0px 2px 0px rgba(25, 29, 30, 0.04), 0px 4px 8px 0px rgba(25, 29, 30, 0.16);
-
+    padding: 32px;
+    width: 564px;
+    box-shadow:
+      0px 0px 2px 0px rgba(25, 29, 30, 0.04),
+      0px 4px 8px 0px rgba(25, 29, 30, 0.16);
   }
-  
+
   ${media.tablet} {
     border-radius: 3.125vw;
-  padding: 3.125vw;
-  width: 45.313vw;
-  box-shadow: 0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04), 0vw 0.391vw 0.781vw 0vw rgba(25, 29, 30, 0.16);
-
+    padding: 3.125vw;
+    width: 45.313vw;
+    box-shadow:
+      0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
+      0vw 0.391vw 0.781vw 0vw rgba(25, 29, 30, 0.16);
   }
-  
+
   ${media.mobile} {
     border-radius: 6.667vw;
-  padding: 6.667vw;
-  width: 89.167vw;
-  box-shadow: 0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04), 0vw 0.833vw 1.667vw 0vw rgba(25, 29, 30, 0.16);
-
+    padding: 6.667vw;
+    width: 89.167vw;
+    box-shadow:
+      0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
+      0vw 0.833vw 1.667vw 0vw rgba(25, 29, 30, 0.16);
   }
 
   .mktoFieldDescriptor {
@@ -272,11 +280,11 @@ const FormContainer = styled.div`
     ${media.fullWidth} {
       max-height: 54px !important;
     }
-    
+
     ${media.tablet} {
       max-height: 5.273vw !important;
     }
-    
+
     ${media.mobile} {
       max-height: 11.25vw !important;
     }
@@ -306,9 +314,10 @@ const FormContainer = styled.div`
   .mktoButtonRow {
     width: 100%;
   }
-.mktoOffset, .mktoGutter {
-  width: unset !important;
-}
+  .mktoOffset,
+  .mktoGutter {
+    width: unset !important;
+  }
   button {
     ${text.bodyMdBold};
     display: flex;
@@ -322,14 +331,14 @@ const FormContainer = styled.div`
 
     ${media.fullWidth} {
       padding: 12px 0;
-    border-radius: 38px;
+      border-radius: 38px;
     }
-    
+
     ${media.tablet} {
       padding: 1.172vw 0;
       border-radius: 3.711vw;
     }
-    
+
     ${media.mobile} {
       padding: 2.5vw 0;
       border-radius: 7.917vw;
@@ -355,49 +364,53 @@ const FormContainer = styled.div`
 
     ${media.fullWidth} {
       padding: 16px !important;
-    border-radius: 4px;
-    height: 54px;
-    }
-    
-    ${media.tablet} {
-      padding: 1.563vw !important;
-    border-radius: 0.391vw;
-    height: 5.273vw;
-    }
-    
-    ${media.mobile} {
-      padding: 3.333vw !important;
-    border-radius: 0.833vw;
-    min-height: 11.25vw;
+      border-radius: 4px;
+      height: 54px;
     }
 
-    &#FirstName, &#LastName {
+    ${media.tablet} {
+      padding: 1.563vw !important;
+      border-radius: 0.391vw;
+      height: 5.273vw;
+    }
+
+    ${media.mobile} {
+      padding: 3.333vw !important;
+      border-radius: 0.833vw;
+      min-height: 11.25vw;
+    }
+
+    &#FirstName,
+    &#LastName {
       width: 15vw !important;
 
       ${media.fullWidth} {
         width: 240px !important;
       }
-      
+
       ${media.tablet} {
         width: 18.555vw !important;
       }
-      
+
       ${media.mobile} {
         width: 35.833vw !important;
       }
     }
 
-    &#Email, &#Phone, &#Company,  &#How_did_you_hear_about_us__c  {
+    &#Email,
+    &#Phone,
+    &#Company,
+    &#How_did_you_hear_about_us__c {
       width: 31.25vw !important;
 
       ${media.fullWidth} {
         width: 500px !important;
       }
-      
+
       ${media.tablet} {
         width: 39.063vw !important;
       }
-      
+
       ${media.mobile} {
         width: 75.833vw !important;
       }
@@ -409,22 +422,22 @@ const FormContainer = styled.div`
   }
 
   input:invalid {
-    border: 0.063vw solid ${(props) => props.theme.form.errorColor};;
+    border: 0.063vw solid ${(props) => props.theme.form.errorColor};
   }
 
   .mktoErrorMsg {
     ${text.bodySm};
-    color:  ${(props) => props.theme.form.errorColor};
+    color: ${(props) => props.theme.form.errorColor};
     margin-top: 0.5vw;
 
     ${media.fullWidth} {
       margin-top: 8px;
     }
-    
+
     ${media.tablet} {
       margin-top: 0.781vw;
     }
-    
+
     ${media.mobile} {
       margin-top: 1.667vw;
     }
@@ -442,23 +455,23 @@ const FormContainer = styled.div`
 
     ${media.fullWidth} {
       width: 500px !important;
-    padding: 16px;
-    border-radius: 4px;
-    height: 54px;
+      padding: 16px;
+      border-radius: 4px;
+      height: 54px;
     }
-    
+
     ${media.tablet} {
       width: 39.063vw !important;
-    padding: 1.563vw;
-    border-radius: 0.391vw;
-    height: 5.273vw;
+      padding: 1.563vw;
+      border-radius: 0.391vw;
+      height: 5.273vw;
     }
-    
+
     ${media.mobile} {
       width: 75.833vw !important;
-    padding: 3.333vw;
-    border-radius: 0.833vw;
-    min-height: 11.25vw;
+      padding: 3.333vw;
+      border-radius: 0.833vw;
+      min-height: 11.25vw;
     }
     option {
       ${text.bodyMd};

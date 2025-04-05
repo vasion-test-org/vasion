@@ -131,11 +131,15 @@ const BackgroundImage = styled.div`
   ${media.tablet} {
     padding: 4.492vw;
     background: ${(props) => `url(${props.backgroundImage?.[1].filename})`};
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
   }
 
   ${media.mobile} {
     padding: 7.083vw;
     background: ${(props) => `url(${props.backgroundImage?.[2].filename})`};
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
   }
 `;
 const CardBackground = styled.div`
