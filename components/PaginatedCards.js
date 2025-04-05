@@ -145,13 +145,38 @@ const PageNumberBlock = styled.div`
   justify-content: center;
   width: 2.5vw;
   height: 1.625vw;
-  /* border-right: 1px solid ${colors.txtSubtle}; */
   border-radius: 0.25vw;
+
+  ${media.fullWidth} {
+    width: 40px;
+  height: 26px;
+  border-radius: 4px;
+  }
+  
+  ${media.tablet} {
+  
+  }
+  
+  ${media.mobile} {
+  
+  }
 `;
 
 const PageNavigation = styled.div`
   padding: 0.75vw 1vw;
-  /* border-right: 1px solid ${colors.txtSubtle}; */
+
+  ${media.fullWidth} {
+    padding: 12px 16px;
+  }
+  
+  ${media.tablet} {
+  
+  }
+  
+  ${media.mobile} {
+  
+  }
+
 `;
 const PaginationDiv = styled.div`
   ${text.bodySm};
@@ -162,6 +187,19 @@ const PaginationDiv = styled.div`
   border: 1px solid ${colors.grey100};
   border-radius: 0.75vw;
   margin-top: 2vw;
+
+  ${media.fullWidth} {
+    border-radius: 12px;
+  margin-top: 32px;
+  }
+  
+  ${media.tablet} {
+  
+  }
+  
+  ${media.mobile} {
+  
+  }
 
   :last-child {
     border-right: none;
@@ -181,10 +219,24 @@ const CardChunk = styled.div`
 const CardsContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 0.625vw;
   overflow: hidden;
+  gap: 0.625vw;
   width: 81.5vw;
   padding: 0.313vw;
+
+  ${media.fullWidth} {
+    gap: 10px;
+  width: 1304px;
+  padding: 5px;
+  }
+  
+  ${media.tablet} {
+  
+  }
+  
+  ${media.mobile} {
+  
+  }
 `;
 
 const EventHeaders = styled.div`
@@ -198,6 +250,21 @@ const EventHeaderContainer = styled.div`
   padding: 1.5vw 1vw;
   border-radius: 1vw 1vw 0 0;
   gap: 37.938vw;
+
+  ${media.fullWidth} {
+    width: 1304px;
+  padding: 24px 16px;
+  border-radius: 16px 16px 0 0;
+  gap: 607px;
+  }
+  
+  ${media.tablet} {
+  
+  }
+  
+  ${media.mobile} {
+  
+  }
 `;
 const Wrapper = styled.div`
   display: flex;

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useEffect } from 'react';
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
@@ -9,6 +9,7 @@ import { horizontalLoop } from '@/functions/horizontalLoop';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Image from '@/components/globalComponents/Image';
 import text from '@/styles/text';
+import Button from './globalComponents/Button';
 
 const Testimonial = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -32,6 +33,17 @@ const Testimonial = ({ blok }) => {
                 key={blok.quote_source_info.component}
               >
                 <RichTextRenderer document={blok?.quote_source_info[0]?.copy} />
+                {blok?.link?.map(($buttonData) => (
+                  <ButtonWrapper
+                    {...storyblokEditable($buttonData)}
+                    key={$buttonData?.link_text}
+                  >
+                    <Button
+                      key={$buttonData?.link_text}
+                      $buttonData={$buttonData}
+                    />
+                  </ButtonWrapper>
+                ))}
               </SourceWrapper>
             )}
           </TestimonialContent>
@@ -49,36 +61,55 @@ const Testimonial = ({ blok }) => {
   );
 };
 
+const ButtonWrapper = styled.div`
+  margin-top: 1.25vw;
+ ${media.fullWidth} {
+  margin-top: 20px;
+ }
+ 
+ ${media.tablet} {
+  margin-top: 1.953vw;
+ }
+ 
+ ${media.mobile} {
+  margin-top: 4.167vw;
+ }
+`
 const SourceWrapper = styled.div`
   margin-top: 3.75vw;
 
   ${media.fullWidth} {
     margin-top: 60px;
   }
-  
+
   ${media.tablet} {
     margin-top: 5.859vw;
   }
-  
+
   ${media.mobile} {
-  
   }
-`
+`;
 const ImageWrapper = styled.div`
   align-content: center;
-  width: 24vw;
+  min-width: 24vw;
+  max-width: 24vw;
+  overflow: hidden;
+  border-radius: 1.25vw;
 
-${media.fullWidth} {
-  width: 384px;
-}
+  ${media.fullWidth} {
+    min-width: 384px;
+    max-width: 384px;
+  }
 
-${media.tablet} {
-  width: 32.813vw;
-}
+  ${media.tablet} {
+    min-width: 32.813vw;
+    max-width: 32.813vw;
+  }
 
-${media.mobile} {
-  width: 89.167vw;
-}
+  ${media.mobile} {
+    min-width: 89.167vw;
+    max-width: 89.167vw;
+  }
 `;
 const TestimonialEyebrow = styled.p`
   margin-bottom: 2vw;
@@ -87,13 +118,12 @@ const TestimonialEyebrow = styled.p`
   ${media.fullWidth} {
     margin-bottom: 32px;
   }
-  
+
   ${media.tablet} {
     margin-bottom: 3.125vw;
   }
-  
+
   ${media.mobile} {
-  
   }
 `;
 const TestimonialContent = styled.div`
@@ -103,11 +133,11 @@ const TestimonialContent = styled.div`
   ${media.fullWidth} {
     max-width: 1304px;
   }
-  
+
   ${media.tablet} {
     width: 45.703vw;
   }
-  
+
   ${media.mobile} {
     width: 89.167vw;
   }
@@ -124,24 +154,24 @@ const TestimonialCard = styled.div`
 
   ${media.fullWidth} {
     border-radius: 24px;
-  width: 1304px;
-  gap: 60px;
-  padding: 60px;
+    width: 1304px;
+    gap: 60px;
+    padding: 60px;
   }
-  
+
   ${media.tablet} {
     border-radius: 2.344vw;
-  width: 92.188vw;
-  gap: 5.859vw;
-  padding: 3.906vw;
+    width: 92.188vw;
+    gap: 5.859vw;
+    padding: 3.906vw;
   }
-  
+
   ${media.mobile} {
     flex-direction: column;
     border-radius: unset;
-  width: 100%;
-  gap: 8.333vw;
-  padding: 6.667vw 5.417vw;
+    width: 100%;
+    gap: 8.333vw;
+    padding: 6.667vw 5.417vw;
   }
 `;
 const TestimonialWrapper = styled.div`
@@ -156,31 +186,31 @@ const TestimonialWrapper = styled.div`
       ? `calc(${props.spacing} / 1600 * 100vw) 0vw`
       : '3.75vw 0vw'};
 
-      ${media.fullWidth} {
-        padding: ${(props) =>
-    props.spacing === 'default'
-      ? '60px 0px'
-      : props.spacing
-      ? `calc(${props.spacing} / 1600 * 1600px) 0px`
-      : '60px 0px'};
-      }
-      
-      ${media.tablet} {
-        padding: ${(props) =>
-    props.spacing === 'default'
-      ? '3.906vw 0vw'
-      : props.spacing
-      ? `calc(${props.spacing} / 1024 * 100vw) 0vw`
-      : '3.906vw 0vw'};
-      }
-      
-      ${media.mobile} {
-        padding: ${(props) =>
-    props.spacing === 'default'
-      ? '3.906vw 0vw 0vw 0vw'
-      : props.spacing
-      ? `calc(${props.spacing} / 428 * 100vw) 0vw`
-      : '3.906vw 0vw 0vw 0vw'};
-      }
+  ${media.fullWidth} {
+    padding: ${(props) =>
+      props.spacing === 'default'
+        ? '60px 0px'
+        : props.spacing
+        ? `calc(${props.spacing} / 1600 * 1600px) 0px`
+        : '60px 0px'};
+  }
+
+  ${media.tablet} {
+    padding: ${(props) =>
+      props.spacing === 'default'
+        ? '3.906vw 0vw'
+        : props.spacing
+        ? `calc(${props.spacing} / 1024 * 100vw) 0vw`
+        : '3.906vw 0vw'};
+  }
+
+  ${media.mobile} {
+    padding: ${(props) =>
+      props.spacing === 'default'
+        ? '3.906vw 0vw 0vw 0vw'
+        : props.spacing
+        ? `calc(${props.spacing} / 428 * 100vw) 0vw`
+        : '3.906vw 0vw 0vw 0vw'};
+  }
 `;
 export default Testimonial;

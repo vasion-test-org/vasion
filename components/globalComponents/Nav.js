@@ -144,7 +144,7 @@ const Nav = ({ blok }) => {
   useEffect(() => {
     if (!navReady) return;
 
-    gsap.set('.dropdowns', { autoAlpha: 0 });
+    gsap.set('.dropdowns', { autoAlpha: 0, display: 'flex' });
 
     const allTabs = gsap.utils.toArray('.tabs');
     const allDropdowns = gsap.utils.toArray('.dropdowns');
@@ -232,13 +232,18 @@ const Nav = ({ blok }) => {
         <TopNav>
           <TopElementsContainer>
             <Banner>
-              <BannerMessage>
-                The Wait is Over, New Features are LIVE! Output automation, web
-                print, mobile scanning and more.
-              </BannerMessage>
-              <BannerLink onClick={() => navigate('/whats-new')}>
-                Learn More <BannerArrow />
-              </BannerLink>
+              <BannerMessage>{blok.banner}</BannerMessage>
+              {blok?.banner_link?.map(($buttonData) => (
+                <div
+                  {...storyblokEditable($buttonData)}
+                  key={$buttonData?.link_text}
+                >
+                  <Button
+                    key={$buttonData?.link_text}
+                    $buttonData={$buttonData}
+                  />
+                </div>
+              ))}
             </Banner>
             <LanguageSelector id='languageSelector'>
               <LanguageItems id='languageItemsContainer'>
@@ -408,10 +413,10 @@ const BannerLink = styled.div`
 `;
 const BannerMessage = styled.p``;
 const Banner = styled.div`
+  ${text.bodySm};
   display: flex;
   flex-direction: row;
   align-items: center;
-  ${text.bodySm};
   color: ${colors.white};
   gap: 2.222vw;
 
@@ -685,7 +690,7 @@ const Column = styled.div`
 const Dropdown = styled.div`
   position: absolute;
   background: ${colors.white};
-  display: flex;
+  display: none;
   flex-direction: row;
   width: max-content;
   height: auto;
