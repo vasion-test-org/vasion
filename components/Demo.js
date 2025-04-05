@@ -37,7 +37,7 @@ const Demo = ({ blok }) => {
     "overview_controller",
     "small_quote",
   ];
-  console.log(blok);
+  // console.log(blok);
 
   useEffect(() => {
     const tl = gsap.timeline({});

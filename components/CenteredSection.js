@@ -25,7 +25,7 @@ const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { mobile } = useContext(ScreenContext);
-  console.log(blok);
+  // console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper
@@ -34,11 +34,12 @@ const CenteredSection = ({ blok }) => {
         {...storyblokEditable(blok)}
       >
         <ContentWrapper>
-          {blok.centered_copy.map((copy) => (
+         {blok.centered_copy && blok.centered_copy.map((copy) => (
             <div {...storyblokEditable(copy)} key={copy.component}>
               <RichTextRenderer document={copy?.copy} />
             </div>
-          ))}
+          ))
+        }
           {blok.button_position === 'above' &&
             blok?.button_group?.map(($buttonData) => (
               <div
@@ -48,6 +49,7 @@ const CenteredSection = ({ blok }) => {
                 <Button key={$buttonData.link_text} $buttonData={$buttonData} />
               </div>
             ))}
+          
         </ContentWrapper>
         {blok.component_type !== '' && (
           <AttachedComponent>
