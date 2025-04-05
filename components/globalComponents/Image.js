@@ -6,7 +6,7 @@ import media from "@/styles/media";
 import useMedia from "@/functions/useMedia";
 
 const Image = ({ images, borderradius, filename }) => {
-  // console.log('images',images)
+  console.log(borderradius)
   let imageSrc = filename
     ? filename
     : useMedia(
@@ -34,7 +34,7 @@ const ImageWrapper = styled.img`
   display: block;
   /* max-width: inherit;  */
   border-radius: ${(props) => `${props.borderradius || 0}px`};
-
+  
   ${media.fullWidth} {
     border-radius: ${(props) => `${props.borderradius || 0}px`};
   }

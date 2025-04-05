@@ -9,7 +9,7 @@ import { getClick } from "@/functions/navigation";
 // import colors from 'styles/colors';
 // import text from 'styles/text';
 
-const Card = ({ content, paginated }) => {
+const Card = ({ content, paginated, borderradius }) => {
   // console.log(content.Button[0]?.link_url.cached_url)
   const handleClick = getClick(content.Button[0]?.link_url.cached_url);
 
@@ -24,6 +24,7 @@ const Card = ({ content, paginated }) => {
           <Image
             imageAlt={content.Image.alt}
             filename={content.Image.filename}
+            borderradius={borderradius || content.image_border}
           />
         </ImageWrapper>
       )}
@@ -48,8 +49,8 @@ export default Card;
 const ImageWrapper = styled.div`
   /* overflow: hidden;
   border-radius: 0.375vw; */
-  /* min-height: 14.125vw; */
 `;
+
 const ButtonWrapper = styled.div`
   margin-top: auto;
 `;

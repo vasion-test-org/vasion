@@ -31,7 +31,7 @@ const PaginatedCards = ({ blok }) => {
       >
         {chunk.map((card, index) => {
           if (blok.card_type === 'default') {
-            return <Card key={`card-${i + index}`} paginated content={card} />;
+            return <Card key={`card-${i + index}`} borderradius='6' paginated content={card} />;
           } else if (blok.card_type === 'event') {
             return (
               <EventCard
@@ -47,6 +47,7 @@ const PaginatedCards = ({ blok }) => {
                 paginated
                 index={index}
                 content={card}
+                borderradius='6'
               />
             );
           }
