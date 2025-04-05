@@ -40,9 +40,11 @@ const ImageWrapper = styled.img`
   }
 
   ${media.tablet} {
+    border-radius: ${(props) => `${props.borderradius || 0}px`};
   }
 
   ${media.mobile} {
+    border-radius: ${(props) => `${props.borderradius || 0}px`};
   }
 `;
 
