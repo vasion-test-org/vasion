@@ -359,7 +359,7 @@ const HeroWrapper = styled.div`
       props.gap === "default"
         ? "3.906vw"
         : props.gap
-          ? `${props.gap}px`
+          ?  `calc(${props.gap}/ 1024 * 100vw) `
           : "3.906vw"};
   }
 
@@ -391,7 +391,7 @@ const HeroWrapper = styled.div`
       props.gap === "default"
         ? "5.417vw"
         : props.gap
-          ? `${props.gap}px`
+          ? `calc(${props.gap}/ 480 * 100vw) `
           : "5.417vw"};
   }
 `;

@@ -86,8 +86,8 @@ const Logo = styled.img`
 const LogoContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center;
+  align-items: center; */
   height: auto;
   overflow: hidden;
   gap: 1.25vw;

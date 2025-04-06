@@ -15,7 +15,8 @@ export function horizontalLoop(items, config) {
                     lastIndex = i;
                     onChange(items[i], i);
                 }
-            }, paused: config.paused, defaults: { ease: "none" }, onReverseComplete: () => tl.totalTime(tl.rawTime() + tl.duration() * 100)
+            }, paused: config.paused, defaults: { ease: "none" }, 
+            onReverseComplete: () => tl.totalTime(tl.rawTime() + tl.duration() * 100)
         }),
         length = items.length,
         startX = items[0].offsetLeft,
