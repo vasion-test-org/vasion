@@ -13,13 +13,15 @@ export async function GET() {
   const urls = allStories
     .filter((story) => !story.is_folder) // Exclude folders
     .map((story) => {
+      const slug = story.full_slug.replace(/\/$/, ""); 
       return `
         <url>
-          <loc>https://vasion-ten.vercel.app/${story.full_slug}/</loc>
+          <loc>https://vasion-ten.vercel.app/${slug}/</loc>
           <lastmod>${new Date(story.published_at).toISOString()}</lastmod>
         </url>
       `;
     });
+    
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
