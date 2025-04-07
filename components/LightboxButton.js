@@ -1,23 +1,22 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import styled from "styled-components";
 import colors from "@/styles/colors";
 import media from "@/styles/media";
 import Form from "./Form";
 
 const LightboxBtn = ({ blok }) => {
-  console.log("LightBox", blok);
   const [isOpen, setIsOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
-  const handleOpen = () => {
-    setIsOpen(true);
-  };
-
+  const handleOpen = () => setIsOpen(true);
   const handleClose = (e) => {
     if (e.target === e.currentTarget) {
       setIsOpen(false);
     }
   };
+
   const formBlok = {
     form_id: blok.form_id,
     thank_you_copy: blok.thank_you,
@@ -26,20 +25,41 @@ const LightboxBtn = ({ blok }) => {
     header: blok.form_header || null,
     animated: blok.animated || false,
   };
+
+  useEffect(() => {
+    setIsClient(true); // for portal mount safety
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    document.body.style.overflow = "hidden";
+    const smoother = window.ScrollSmoother?.get();
+    smoother?.paused(true);
+
+    return () => {
+      document.body.style.overflow = "auto";
+      smoother?.paused(false);
+    };
+  }, [isOpen]);
+
   return (
     <LightboxContainer>
       <PrimaryCta onClick={handleOpen}>{blok.lightbox_text}</PrimaryCta>
-      {isOpen && (
-        <Overlay onClick={(e) => handleClose(e)}>
-          <FormContent>
-            <CloseBtn onClick={handleClose}>ⓧ</CloseBtn>
-            <Form blok={formBlok} />
-          </FormContent>
-        </Overlay>
-      )}
+      {isOpen && isClient &&
+        createPortal(
+          <Overlay onClick={handleClose}>
+            <FormContent>
+              <CloseBtn onClick={handleClose}>ⓧ</CloseBtn>
+              <Form blok={formBlok} />
+            </FormContent>
+          </Overlay>,
+          document.body
+        )}
     </LightboxContainer>
   );
 };
+
 
 const PrimaryCta = styled.button`
   background-color: ${colors.primaryOrange};

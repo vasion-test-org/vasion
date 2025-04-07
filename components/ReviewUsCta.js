@@ -1,12 +1,12 @@
-"use client";
-import React from "react";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
+'use client';
+import React from 'react';
+import media from '@/styles/media';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 const ReviewUsCta = ({ blok }) => {
   const backgrounds = {
@@ -31,17 +31,22 @@ const ReviewUsCta = ({ blok }) => {
   });
 
   return (
-    <Wrapper $full={!blok?.header && !block?.body_copy} $bg={backgrounds}>
-      <ContentWrapper>
-        <Header>
-          <RichTextRenderer document={blok.header} />
-        </Header>
-        <Body>
-          <RichTextRenderer document={blok.body_copy} />
-        </Body>
-      </ContentWrapper>
-      {blok?.button_blocks && <CtaContainer>{ctaButtons}</CtaContainer>}
-    </Wrapper>
+    <SectionWrapper
+      spacingOffset={blok.offset_spacing}
+      spacing={blok.section_spacing}
+    >
+      <Wrapper $full={!blok?.header && !blok?.body_copy} $bg={backgrounds}>
+        <ContentWrapper>
+          <Header>
+            <RichTextRenderer document={blok.header} />
+          </Header>
+          <Body>
+            <RichTextRenderer document={blok.body_copy} />
+          </Body>
+        </ContentWrapper>
+        {blok?.button_blocks && <CtaContainer>{ctaButtons}</CtaContainer>}
+      </Wrapper>
+    </SectionWrapper>
   );
 };
 
@@ -204,9 +209,9 @@ const Wrapper = styled.div`
   background-image: ${(props) => props.$bg && `url(${props.$bg?.reg})`};
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: ${(props) => (props?.$full ? "center" : "unset")};
+  background-position: ${(props) => (props?.$full ? 'center' : 'unset')};
   width: 80vw;
-  height: ${(props) => (props?.$full ? "34.938vw" : "unset")};
+  height: ${(props) => (props?.$full ? '34.938vw' : 'unset')};
   padding: 3.75vw;
   border-radius: 1.75vw;
   gap: 1vw;
@@ -215,7 +220,7 @@ const Wrapper = styled.div`
     padding: 60px;
     border-radius: 28px;
     gap: 16px;
-    height: ${(props) => (props?.$full ? "559px" : "unset")};
+    height: ${(props) => (props?.$full ? '559px' : 'unset')};
   }
 
   ${media.tablet} {
@@ -223,7 +228,7 @@ const Wrapper = styled.div`
     padding: 5.859vw;
     border-radius: 2.734vw;
     gap: 1.563vw;
-    height: ${(props) => (props?.$full ? "39.551vw" : "unset")};
+    height: ${(props) => (props?.$full ? '39.551vw' : 'unset')};
   }
 
   ${media.mobile} {
@@ -232,6 +237,102 @@ const Wrapper = styled.div`
     padding: 8.333vw 6.667vw;
     border-radius: 5.833vw;
     gap: 3.333vw;
-    height: ${(props) => (props?.$full ? "38.125vw" : "unset")};
+    height: ${(props) => (props?.$full ? '38.125vw' : 'unset')};
+  }
+`;
+
+const SectionWrapper = styled.div`
+  padding: ${(props) => {
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
+        : props.spacing
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
+    }
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
+        : props.spacing
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
+    }
+    return props.spacing === 'default'
+      ? '3.75vw 0'
+      : props.spacing
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
+  }};
+
+  ${media.fullWidth} {
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
+      }
+      return props.spacing === 'default'
+        ? '60px 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '60px 0';
+    }};
+  }
+
+  ${media.tablet} {
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '5.859vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 5.859vw';
+      }
+      return props.spacing === 'default'
+        ? '5.859vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '5.859vw 0';
+    }};
+  }
+
+  ${media.mobile} {
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
+      }
+      return props.spacing === 'default'
+        ? '12.5vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
+    }};
   }
 `;

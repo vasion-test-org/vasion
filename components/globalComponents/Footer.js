@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import VasionStarSVG from "@/assets/svg/VasionStarBig.svg";
 import VasionSmall from "@/assets/svg/SmallVasion.svg";
 import colors from "@/styles/colors";
@@ -14,6 +14,7 @@ import Twitter from "@/assets/svg/footer/Twitter.svg";
 import LinkedIn from "@/assets/svg/footer/LinkedIn.svg";
 
 const Footer = ({ blok }) => {
+  const router = useRouter()
   useEffect(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -35,6 +36,7 @@ const Footer = ({ blok }) => {
     if (canvas) {
     }
   }, []);
+  
   const allLinksColumns =
   blok?.footer_columns?.map((column) => (
       <LinkColumn key={column._uid}>
@@ -67,7 +69,6 @@ const Footer = ({ blok }) => {
     )) || [];
 
   const handleNavigate = (link) => {
-    const router = useRouter();
     const isExternalLink = link.startsWith("http") || link.startsWith("https");
     if (isExternalLink) {
       window.open(link, "_blank");

@@ -191,6 +191,7 @@ const CenteredWrapper = styled.div`
   span {
     color: ${(props) => props.theme.centered.textColor};
   }
+  
   background: ${(props) => props.theme.centered.bg};
   padding: ${(props) => {
     if (props.spacingOffset === 'top') {
