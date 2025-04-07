@@ -107,10 +107,11 @@ const Buttons = styled.div`
     gap: 4.167vw;
   }
 `;
-const TestimonialWrapper = styled.div``;
+const TestimonialWrapper = styled.div`
+
+`;
 const Testimonials = styled.div`
   display: flex;
-  justify-content: center;
   overflow: hidden;
   width: 81.5vw;
 

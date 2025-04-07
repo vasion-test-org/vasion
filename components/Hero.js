@@ -12,7 +12,7 @@ import Image from "@/components/globalComponents/Image";
 import LogoCube from "./LogoCube";
 import LightboxBtn from "@/components/LightboxButton";
 const Hero = ({ blok }) => {
-  console.log("HERO", blok);
+  // console.log("HERO", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   let customTheme = blok.custom_theme?.[0] || {};
@@ -359,7 +359,7 @@ const HeroWrapper = styled.div`
       props.gap === "default"
         ? "3.906vw"
         : props.gap
-          ? `${props.gap}px`
+          ?  `calc(${props.gap}/ 1024 * 100vw) `
           : "3.906vw"};
   }
 
@@ -391,7 +391,7 @@ const HeroWrapper = styled.div`
       props.gap === "default"
         ? "5.417vw"
         : props.gap
-          ? `${props.gap}px`
+          ? `calc(${props.gap}/ 480 * 100vw) `
           : "5.417vw"};
   }
 `;

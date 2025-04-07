@@ -1,14 +1,16 @@
 import { StoryblokStory } from "@storyblok/react/rsc";
 import { notFound } from "next/navigation";
 import { getStoryblokApi } from "@/lib/storyblok";
-import { Metadata } from 'next';
 
-export const revalidate = 60; 
+export const revalidate = 60;
+
 export async function generateMetadata({ params }) {
   const slugArray = params.slug || [];
   const isLocalized = ["fr", "de"].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : "en";
-  const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");
+  const storySlug = isLocalized
+    ? slugArray.length === 1 ? "home" : slugArray.slice(1).join("/")
+    : slugArray.join("/");
 
   const story = await fetchStory(storySlug, locale);
 
@@ -24,7 +26,6 @@ export async function generateMetadata({ params }) {
   const description = content.metadata?.description || "Default Description";
 
   const basePath = 'https://vasion-ten.vercel.app';
-
   const locales = ['en', 'fr', 'de'];
   const alternateLinks = locales.reduce((acc, loc) => {
     const path = loc === 'en' ? `/${story.full_slug}` : `/${loc}/${story.full_slug}`;
@@ -57,21 +58,20 @@ async function fetchStory(slug, locale) {
     return null;
   }
 }
+
 export default async function DynamicPage({ params }) {
-  const { slug } = params;
-  const slugArray = slug || [];
+  const slugArray = params.slug || [];
   const isLocalized = ["fr", "de"].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : "en";
-  const storySlug = isLocalized ? slugArray.slice(1).join("/") : slugArray.join("/");
+  const storySlug = isLocalized
+    ? slugArray.length === 1 ? "home" : slugArray.slice(1).join("/")
+    : slugArray.join("/");
 
-console.log(params)
   let story = await fetchData(storySlug, locale, "published");
-
 
   if (!story) {
     story = await fetchData(storySlug, locale, "draft");
   }
-
 
   if (!story) {
     return notFound();
@@ -115,24 +115,16 @@ export async function generateStaticParams() {
 
   for (const story of data.stories) {
     const slug = story.slug;
-
-    // ✅ Skip 'home' slug (handled by app/page.js)
-    if (slug === "home") continue;
-
-    const splitSlug = slug.split("/");
-
+    const splitSlug = slug === "home" ? [] : slug.split("/");
     params.push({ slug: splitSlug, locale: "en" });
 
-    // Handle translations (and also skip translated 'home' pages)
     if (story.translated_slugs) {
       for (const translation of story.translated_slugs) {
-        if (translation.path === "home") continue; // ✅ Skip localized /home too
-        const translatedSlug = translation.path.split("/");
-        params.push({ slug: translatedSlug, locale: translation.lang });
+        const translatedSlug = translation.path === "" ? [] : translation.path.split("/");
+        params.push({ slug: [translation.lang, ...translatedSlug], locale: translation.lang });
       }
     }
   }
 
   return params;
 }
-

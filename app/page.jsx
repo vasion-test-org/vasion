@@ -16,9 +16,9 @@ export default async function Home() {
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
-  const locale = 'en';
-  const story = await fetchStory("home", locale);
-
+  // const locale = 'en';
+  const story = await fetchStory("home");
+// console.log(story)
   // if (!story) {
   //   return {
   //     title: "Home - Page Not Found",

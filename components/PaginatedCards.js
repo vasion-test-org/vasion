@@ -1,7 +1,6 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
@@ -14,13 +13,17 @@ import SideArrow from '@/assets/svg/side-arrow.svg';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
 import ResourceCard from './globalComponents/ResourceCard';
+
 const PaginatedCards = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
+
   const currentIndex = useRef(0);
-  // console.log(blok);
+  const cardsLoop = useRef(null);
+  const [currentPage, setCurrentPage] = useState(0);
+
   const mappedCards = [];
-// console.log(blok.cards)
+
   for (let i = 0; i < blok.cards.length; i += 6) {
     const chunk = blok.cards.slice(i, i + 6);
     mappedCards.push(
@@ -31,7 +34,14 @@ const PaginatedCards = ({ blok }) => {
       >
         {chunk.map((card, index) => {
           if (blok.card_type === 'default') {
-            return <Card key={`card-${i + index}`} borderradius='6' paginated content={card} />;
+            return (
+              <Card
+                key={`card-${i + index}`}
+                borderradius='6'
+                paginated
+                content={card}
+              />
+            );
           } else if (blok.card_type === 'event') {
             return (
               <EventCard
@@ -56,71 +66,105 @@ const PaginatedCards = ({ blok }) => {
     );
   }
 
-  const mappedPages = mappedCards.map((page, index) => (
-    <PageNumberBlock className='pageNumberBlocks' key={`block-${index}`} id={`block-${index}`}>
-      {index + 1}
-    </PageNumberBlock>
-  ));
+  const goToPage = (index) => {
+    if (!cardsLoop.current) return;
+    cardsLoop.current.toIndex(index, {
+      duration: 0.4,
+      ease: 'power1.inOut',
+    });
+    currentIndex.current = index;
+    setCurrentPage(index);
+  };
 
+  const getPaginatedNumbers = () => {
+    const totalPages = mappedCards.length;
+    const maxPagesToShow = 5;
+    const pageList = [];
+
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 0; i < totalPages; i++) {
+        pageList.push(i);
+      }
+    } else {
+      const left = Math.max(0, currentPage - 1);
+      const right = Math.min(totalPages - 1, currentPage + 1);
+
+      if (currentPage > 1) {
+        pageList.push(0);
+        if (currentPage > 2) pageList.push('left-ellipsis');
+      }
+
+      for (let i = left; i <= right; i++) {
+        pageList.push(i);
+      }
+
+      if (currentPage < totalPages - 2) {
+        if (currentPage < totalPages - 3) pageList.push('right-ellipsis');
+        pageList.push(totalPages - 1);
+      }
+    }
+
+    return pageList;
+  };
+
+  const mappedPages = getPaginatedNumbers().map((page, i) => {
+    if (page === 'left-ellipsis' || page === 'right-ellipsis') {
+      return <Ellipsis key={`ellipsis-${i}`}>...</Ellipsis>;
+    }
+
+    return (
+      <PageNumberBlock
+        className='pageNumberBlocks'
+        key={`block-${page}`}
+        id={`block-${page}`}
+        onClick={() => goToPage(page)}
+        style={{
+          backgroundColor: currentPage === page ? colors.grey100 : 'unset',
+        }}
+      >
+        {page + 1}
+      </PageNumberBlock>
+    );
+  });
 
   useEffect(() => {
     const cardChunks = gsap.utils.toArray('.cardChunks');
     const totalItems = cardChunks.length;
 
-    const cardsLoop = horizontalLoop(cardChunks, {
+    cardsLoop.current = horizontalLoop(cardChunks, {
       paused: true,
       center: true,
     });
 
-    const pageNavTl = gsap.timeline({});
+    const nextBtn = document.querySelector('.next');
+    const prevBtn = document.querySelector('.prev');
 
-    document.querySelector('.next').addEventListener('click', () => {
-      cardsLoop.next({ duration: 0.4, ease: 'power1.inOut' });
-      currentIndex.current = (currentIndex.current + 1) % totalItems;
-      pageNavTl
-        .to('.pageNumberBlocks', { backgroundColor: 'unset' })
-        .to(`#block-${currentIndex.current}`, { backgroundColor: colors.grey100 });
-    });
+    const handleNext = () => {
+      const newIndex = (currentIndex.current + 1) % totalItems;
+      cardsLoop.current.next({ duration: 0.4, ease: 'power1.inOut' });
+      currentIndex.current = newIndex;
+      setCurrentPage(newIndex);
+    };
 
-    document.querySelector('.prev').addEventListener('click', () => {
-      cardsLoop.previous({ duration: 0.4, ease: 'power1.inOut' });
-      currentIndex.current = (currentIndex.current - 1 + totalItems) % totalItems;
-      pageNavTl
-        .to('.pageNumberBlocks', { backgroundColor: 'unset' })
-        .to(`#block-${currentIndex.current}`, { backgroundColor: colors.grey100 });
-    });
+    const handlePrev = () => {
+      const newIndex = (currentIndex.current - 1 + totalItems) % totalItems;
+      cardsLoop.current.previous({ duration: 0.4, ease: 'power1.inOut' });
+      currentIndex.current = newIndex;
+      setCurrentPage(newIndex);
+    };
 
-    const pageNumberBlocks = gsap.utils.toArray('.pageNumberBlocks');
-    const pageBlocksTl = gsap.timeline({});
-
-    pageNumberBlocks.forEach((block, index) => {
-      block.addEventListener('click', () => {
-        cardsLoop.toIndex(index, {
-          duration: 0.4,
-          ease: 'power1.inOut',
-        });
-        currentIndex.current = index;
-        pageBlocksTl
-          .to('.pageNumberBlocks', { backgroundColor: 'unset' })
-          .to(`#block-${index}`, { backgroundColor: colors.grey100 });
-      });
-    });
+    nextBtn.addEventListener('click', handleNext);
+    prevBtn.addEventListener('click', handlePrev);
 
     return () => {
-      document.querySelector('.next').removeEventListener('click', this);
-      document.querySelector('.prev').removeEventListener('click', this);
-      pageNumberBlocks.forEach((block) => {
-        block.removeEventListener('click', this);
-      });
+      nextBtn.removeEventListener('click', handleNext);
+      prevBtn.removeEventListener('click', handlePrev);
     };
   }, []);
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <Wrapper
-          spacingOffset={blok.offset_spacing}
-          spacing={blok.section_spacing}
-      >
+      <Wrapper spacingOffset={blok.offset_spacing} spacing={blok.section_spacing}>
         {blok.card_type === 'event' && (
           <EventHeaderContainer>
             <EventHeaders>Events</EventHeaders>
@@ -147,41 +191,64 @@ const PageNumberBlock = styled.div`
   width: 2.5vw;
   height: 1.625vw;
   border-radius: 0.25vw;
+  cursor: pointer;
 
   ${media.fullWidth} {
     width: 40px;
-  height: 26px;
-  border-radius: 4px;
+    height: 26px;
+    border-radius: 4px;
   }
-  
+
   ${media.tablet} {
-  
+    width: 3.906vw;
+    height: 2.539vw;
+    border-radius: 0.391vw;
   }
   
   ${media.mobile} {
+    width: 8.333vw;
+    height: 5.417vw;
+    border-radius: 0.833vw;
+  }
+`;
+
+const Ellipsis = styled.div`
+  padding: 0 0.5vw;
+  color: ${colors.grey300};
+  user-select: none;
+
+  ${media.fullWidth} {
+    padding: 0 8px;
+  }
   
+  ${media.tablet} {
+     padding: 0 0.781vw;
+  }
+  
+  ${media.mobile} {
+     padding: 0 1.667vw;
   }
 `;
 
 const PageNavigation = styled.div`
   padding: 0.75vw 1vw;
+  cursor: pointer;
 
   ${media.fullWidth} {
     padding: 12px 16px;
   }
-  
+
   ${media.tablet} {
-  
+    padding: 1.172vw 1.563vw;
   }
   
   ${media.mobile} {
-  
+    padding: 2.5vw 3.333vw;
   }
-
 `;
+
 const PaginationDiv = styled.div`
   ${text.bodySm};
-  cursor: pointer;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -191,15 +258,17 @@ const PaginationDiv = styled.div`
 
   ${media.fullWidth} {
     border-radius: 12px;
-  margin-top: 32px;
+    margin-top: 32px;
   }
   
   ${media.tablet} {
-  
+    border-radius: 1.172vw;
+    margin-top: 3.125vw;
   }
   
   ${media.mobile} {
-  
+    border-radius: 2.5vw;
+    margin-top: 6.667vw;
   }
 
   :last-child {
@@ -227,22 +296,27 @@ const CardsContainer = styled.div`
 
   ${media.fullWidth} {
     gap: 10px;
-  width: 1304px;
-  padding: 5px;
+    width: 1304px;
+    padding: 5px;
   }
-  
+
   ${media.tablet} {
-  
+    gap: 0.977vw;
+    width: 92.188vw;
+    padding: 0.488vw;
   }
   
   ${media.mobile} {
-  
+    gap: 2.083vw;
+    width: 89.167vw;
+    padding: 1.042vw;
   }
 `;
 
 const EventHeaders = styled.div`
   ${text.bodySmBold};
 `;
+
 const EventHeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -254,19 +328,26 @@ const EventHeaderContainer = styled.div`
 
   ${media.fullWidth} {
     width: 1304px;
-  padding: 24px 16px;
-  border-radius: 16px 16px 0 0;
-  gap: 607px;
+    padding: 24px 16px;
+    border-radius: 16px 16px 0 0;
+    gap: 607px;
   }
-  
+
   ${media.tablet} {
-  
+    width: 92.188vw;
+    padding: 2.344vw 1.563vw;
+    border-radius: 1.563vw 1.563vw 0 0;
+    gap: 59.277vw;
   }
   
   ${media.mobile} {
-  
+    width: 89.167vw;
+    padding: 5vw 3.333vw;
+    border-radius: 3.333vw 3.333vw 0 0;
+    gap: 126.458vw;
   }
 `;
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -295,6 +376,7 @@ const Wrapper = styled.div`
       ? `${props.spacing}px 0`
       : '3.75vw 0';
   }};
+
   ${media.fullWidth} {
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
@@ -318,7 +400,6 @@ const Wrapper = styled.div`
         : '60px 0';
     }};
   }
-
   ${media.tablet} {
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
@@ -341,6 +422,7 @@ const Wrapper = styled.div`
         ? `${props.spacing}px 0`
         : '5.859vw 0';
     }};
+
   }
 
   ${media.mobile} {
@@ -367,4 +449,5 @@ const Wrapper = styled.div`
     }};
   }
 `;
+
 export default PaginatedCards;
