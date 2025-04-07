@@ -6,7 +6,7 @@ import media from "@/styles/media";
 import useMedia from "@/functions/useMedia";
 
 const Image = ({ images, borderradius, filename }) => {
-  // console.log('images',images)
+  console.log(borderradius)
   let imageSrc = filename
     ? filename
     : useMedia(
@@ -30,19 +30,21 @@ const Image = ({ images, borderradius, filename }) => {
 const ImageWrapper = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   /* max-width: inherit;  */
   border-radius: ${(props) => `${props.borderradius || 0}px`};
-
+  
   ${media.fullWidth} {
     border-radius: ${(props) => `${props.borderradius || 0}px`};
   }
 
   ${media.tablet} {
+    border-radius: ${(props) => `${props.borderradius || 0}px`};
   }
 
   ${media.mobile} {
+    border-radius: ${(props) => `${props.borderradius || 0}px`};
   }
 `;
 

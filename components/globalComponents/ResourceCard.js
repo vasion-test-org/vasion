@@ -9,7 +9,7 @@ import { getClick } from "@/functions/navigation";
 import colors from "@/styles/colors";
 import text from "@/styles/text";
 
-const ResourceCard = ({ content, paginated, index }) => {
+const ResourceCard = ({ content, paginated, index, borderradius }) => {
   const oddImages = [
     "/images/RandomResource1.webp",
     "/images/RandomResource2.webp",
@@ -30,6 +30,7 @@ const ResourceCard = ({ content, paginated, index }) => {
         <Image
           imageAlt={content.Image?.alt || "Random Resource Image"}
           filename={randomImage}
+          borderradius={borderradius || content.image_border}
         />
       </ImageWrapper>
 

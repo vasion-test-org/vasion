@@ -14,6 +14,7 @@ import Icons from '@/components/renderers/Icons';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
+
 gsap.registerPlugin(ScrollTrigger);
 const MobileNav = ({ blok }) => {
   const path = usePathname();
@@ -22,7 +23,7 @@ const MobileNav = ({ blok }) => {
   const dropdownIndex = useRef(null);
   let currentNavItems = blok.english_nav_items;
   const isOpen = useRef(false);
-
+  // console.log(blok);
   if (path.startsWith('/de')) {
     currentNavItems = blok.german_nav_items;
   } else if (path.startsWith('/fr')) {
@@ -220,11 +221,18 @@ const MobileNav = ({ blok }) => {
     <>
       <TopNav>
         <Banner>
-          <BannerMessage>
-            The Wait is Over, New Features are LIVE! Check it out!
-          </BannerMessage>
-          <BannerLink onClick={() => handleNavigate('/whats-new')}>
-            Learn More <BannerArrow />
+          <BannerMessage>{blok.banner}</BannerMessage>
+          <BannerLink>
+          {blok?.banner_link?.map(($buttonData) => (
+            <div
+              {...storyblokEditable($buttonData)}
+              key={$buttonData?.link_text}
+            >
+              <Button key={$buttonData?.link_text} $buttonData={$buttonData} />
+            </div>
+          ))}
+
+
           </BannerLink>
         </Banner>
       </TopNav>
@@ -251,15 +259,6 @@ const BannerArrow = styled(LinkArrow)`
 const BannerLink = styled.div`
   ${media.mobile} {
     margin-left: 2.336vw;
-  }
-  &:hover {
-    ${BannerArrow} {
-      transition-duration: 500ms;
-
-      ${media.mobile} {
-        margin-left: 1.869vw;
-      }
-    }
   }
 `;
 const BannerMessage = styled.p``;
@@ -476,7 +475,7 @@ const Tab = styled.div`
 const Dropdown = styled.div`
   ${media.mobile} {
     position: absolute;
-    display: flex;
+    display: none;
     flex-direction: column;
     height: 100vh;
     width: 100%;
