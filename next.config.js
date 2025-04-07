@@ -588,6 +588,16 @@ const nextConfig = {
         destination: "/",
         permanent: true,
       },
+      {
+        source: "/de/home/",
+        destination: "/de",
+        permanent: true,
+      },
+      {
+        source: "/fr/home/",
+        destination: "/fr",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
