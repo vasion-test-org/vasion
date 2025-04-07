@@ -62,8 +62,10 @@ const ReviewsCarousel = ({ blok }) => {
   }, []);
 
   return (
+    <SpacingWrapper>
     <Wrapper id='reddit-reviews'>
-      <HeaderContainer>
+      <HeaderContainer  spacingOffset={blok.offset_spacing}
+        spacing={blok.section_spacing}>
         <RichTextRenderer document={blok?.header} />
         <RichTextRenderer document={blok?.subheader} />
       </HeaderContainer>
@@ -91,6 +93,7 @@ const ReviewsCarousel = ({ blok }) => {
         </VisibleStatsContainer>
       </ByTheNumbers>
     </Wrapper>
+    </SpacingWrapper>
   );
 };
 
@@ -626,3 +629,100 @@ const Wrapper = styled.div`
     padding-top: 8.333vw;
   }
 `;
+
+const SpacingWrapper = styled.div`
+   padding: ${(props) => {
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
+        : props.spacing
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
+    }
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
+        : props.spacing
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
+    }
+    return props.spacing === 'default'
+      ? '3.75vw 0'
+      : props.spacing
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
+  }};
+
+  ${media.fullWidth} {
+    gap: 16px;
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
+      }
+      return props.spacing === 'default'
+        ? '60px 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '60px 0';
+    }};
+  }
+
+  ${media.tablet} {
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '5.859vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 5.859vw';
+      }
+      return props.spacing === 'default'
+        ? '5.859vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '5.859vw 0';
+    }};
+  }
+
+  ${media.mobile} {
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
+      }
+      return props.spacing === 'default'
+        ? '12.5vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
+    }};
+  }
+`

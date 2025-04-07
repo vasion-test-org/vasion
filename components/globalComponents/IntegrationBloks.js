@@ -210,5 +210,6 @@ const TypeContainer = styled.div`
     gap: 0.833vw;
     width: 100%;
     max-width: 100%;
+    
   }
 `;
