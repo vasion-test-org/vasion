@@ -1,14 +1,32 @@
 import { getStoryblokApi } from "@/lib/storyblok";
-export const dynamic = 'force-dynamic';
+
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
 export async function GET() {
   const storyblokApi = getStoryblokApi();
-  const { data } = await storyblokApi.get("cdn/stories", { version: "draft" });
 
-  const urls = data.stories.map((story) => {
+  let allStories = [];
+  let page = 1;
+  let total = 0;
+  const perPage = 100;
+
+  do {
+    const { data } = await storyblokApi.get("cdn/stories", {
+      version: "published",
+      per_page: perPage,
+      page,
+    });
+
+    allStories = [...allStories, ...data.stories];
+    total = data.total;
+    page++;
+  } while (allStories.length < total);
+
+  const urls = allStories.map((story) => {
     return `
       <url>
-        <loc>https://vasion-ten.vercel.app/${story.full_slug}/</loc>
+        <loc>https://vasion-ten.vercel.app/${story.full_slug}</loc>
         <lastmod>${new Date(story.published_at).toISOString()}</lastmod>
       </url>
     `;
