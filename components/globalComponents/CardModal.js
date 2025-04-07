@@ -27,7 +27,6 @@ const CardModal = ({ data, setShowModal }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
 
-    // Optional: pause ScrollSmoother during modal open
     const smoother = typeof window !== "undefined" ? window.ScrollSmoother?.get() : null;
     smoother?.paused(true);
 

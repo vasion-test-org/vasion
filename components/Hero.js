@@ -12,7 +12,7 @@ import Image from "@/components/globalComponents/Image";
 import LogoCube from "./LogoCube";
 import LightboxBtn from "@/components/LightboxButton";
 const Hero = ({ blok }) => {
-  console.log("HERO", blok);
+  // console.log("HERO", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   let customTheme = blok.custom_theme?.[0] || {};

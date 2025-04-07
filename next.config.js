@@ -589,6 +589,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/home",
+        destination: "/",
+        permanent: true,
+      },
+      {
         source: "/de/home/",
         destination: "/de",
         permanent: true,
