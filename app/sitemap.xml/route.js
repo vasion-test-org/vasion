@@ -22,6 +22,7 @@ export async function GET() {
   return new Response(xml, {
     headers: {
       "Content-Type": "application/xml",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
     },
   });
 }
