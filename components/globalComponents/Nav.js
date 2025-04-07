@@ -73,7 +73,6 @@ const Nav = ({ blok }) => {
                   key={`item-${navItem._uid}`}
                 >
                   <NavItem
-                    as="a"
                     card={navItem.card}
                     card_size={navItem.card_size}
                     role="link"
