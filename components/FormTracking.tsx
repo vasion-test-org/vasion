@@ -41,22 +41,24 @@ function FormTrackingComponent() {
       const parts = value.split(`; ${name}=`);
       return parts.length === 2 ? parts.pop()?.split(";").shift() : undefined;
     }
-
-    function checkSubdomain(url) {
-      const { hostname } = new URL(url);
-      const subdomainMap = {
-        "fr.vasion.com": "fr",
-        "www.vasion.com": "en",
-        "de.vasion.com": "de",
-      };
-
-      if (hostname in subdomainMap) {
-        setDomain(hostname);
-        setLanguage(subdomainMap[hostname]);
-      }
+// TODO: check the cookies and pathname
+    function checkPathLocale(url) {
+      const { pathname } = new URL(url);
+      
+      const pathLocale = pathname.split('/')[1]; 
+      console.log('pathname:', pathLocale);
+    
+      const supportedLocales = ['en', 'fr', 'de'];
+      const defaultLocale = 'en';
+    
+      const language = supportedLocales.includes(pathLocale) ? pathLocale : defaultLocale;
+    
+      setDomain("www.vasion.com"); 
+      setLanguage(language);
     }
-
-    checkSubdomain(window.location.href);
+    
+    checkPathLocale(window.location.href);
+    
   }, [isLoaded, searchParams]);
 
   return (
