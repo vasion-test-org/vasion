@@ -1,7 +1,8 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import gsap from 'gsap';
 import { useRouter, usePathname } from 'next/navigation';
+import NextLink from 'next/link';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
@@ -17,6 +18,7 @@ import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
 
 gsap.registerPlugin(ScrollTrigger);
+
 const Nav = ({ blok }) => {
   const router = useRouter();
   const path = usePathname();
@@ -25,94 +27,92 @@ const Nav = ({ blok }) => {
 
   let navItems = blok.english_nav_items;
 
-  if (path && path.startsWith('/de')) {
+  if (path?.startsWith('/de')) {
     navItems = blok.german_nav_items;
-  } else if (path && path.startsWith('/fr')) {
+  } else if (path?.startsWith('/fr')) {
     navItems = blok.french_nav_items;
   }
+
   const slugParts = path.split('/').filter(Boolean);
-  const currentLocale = ['de', 'fr'].includes(slugParts[0])
-    ? slugParts[0]
-    : null;
+  const currentLocale = ['de', 'fr'].includes(slugParts[0]) ? slugParts[0] : null;
   const nonHomeSlug = currentLocale
     ? slugParts.slice(1).join('/')
     : slugParts.join('/');
 
   const handleNavigate = (locale) => {
     const basePath = locale === 'en' ? '' : `/${locale}`;
-    const path = nonHomeSlug ? `${basePath}/${nonHomeSlug}` : basePath || '/';
-    router.push(path);
+    const newPath = nonHomeSlug ? `${basePath}/${nonHomeSlug}` : basePath || '/';
+    router.push(newPath);
   };
 
   const mappedNav = navItems.map((item, index) => (
     <KeyDiv key={`item.tab_name-${index}`}>
       <Tab className='tabs'>{item.tab_name}</Tab>
       <Dropdown className='dropdowns' id={`dropdown-${index}`}>
-        {item.tab_columns.map((column, index) => (
-          <Column key={`column.column_header-${index}`}>
+        {item.tab_columns.map((column, colIdx) => (
+          <Column key={`column.column_header-${colIdx}`}>
             <ColumnHeader>{column.column_header}</ColumnHeader>
-            {column.nav_items.map((item, index) => {
-              const formattedIconString = item.icon.replace(/\s+/g, '');
+            {column.nav_items.map((navItem, itemIdx) => {
+              const formattedIconString = navItem.icon.replace(/\s+/g, '');
               const IconComponent = Icons[formattedIconString] || null;
 
-              const rawUrl = item.item_link?.cached_url || '#';
+              const rawUrl = navItem.item_link?.cached_url || '#';
               const isExternal =
                 rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
-              const normalizedUrl = isExternal
+                const normalizedUrl = isExternal
                 ? rawUrl
-                : rawUrl.startsWith('/')
-                ? rawUrl
-                : `/${rawUrl}`;
-
-              const handleClick = () => {
-                if (normalizedUrl === '#') return;
-                if (isExternal) {
-                  window.open(normalizedUrl, '_blank', 'noopener,noreferrer');
-                } else {
-                  window.location.href = normalizedUrl;
-                }
-              };
+                : `/${currentLocale ?? ''}/${rawUrl}`.replace(/\/+/g, '/');
+              
 
               return (
-                <NavItem
-                  key={`item-${item._uid}`}
-                  card={item.card}
-                  card_size={item.card_size}
-                  onClick={handleClick}
-                  role='link'
-                  tabIndex={0}
+                <StyledNextLink
+                  href={isExternal ? normalizedUrl : normalizedUrl}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noopener noreferrer' : undefined}
+                  passHref
+                  key={`item-${navItem._uid}`}
                 >
-                  {item.card &&
-                    item.card_size &&
-                    item.card_size !== 'small' && (
-                      <ImageWrapper card_size={item.card_size}>
-                        <Image images={item?.card_image?.[0].media} />
-                      </ImageWrapper>
-                    )}
-                  {IconComponent && (
-                    <NavIconWrapper card={item.card} card_size={item.card_size}>
-                      <IconComponent />
-                    </NavIconWrapper>
-                  )}
-                  <NavCopy>
-                    <NavItemCopy card_size={item.card_size}>
-                      <RichTextRenderer document={item.item_copy} />
-                    </NavItemCopy>
-                    {item.card_size === 'medium' && (
-                      <Link
-                        href={normalizedUrl}
-                        target={isExternal ? '_blank' : '_self'}
-                        rel={isExternal ? 'noopener noreferrer' : undefined}
-                        onClick={(e) => e.stopPropagation()}
+                  <NavItem
+                    as="a"
+                    card={navItem.card}
+                    card_size={navItem.card_size}
+                    role="link"
+                    tabIndex={0}
+                  >
+                    {navItem.card &&
+                      navItem.card_size &&
+                      navItem.card_size !== 'small' && (
+                        <ImageWrapper card_size={navItem.card_size}>
+                          <Image images={navItem?.card_image?.[0].media} />
+                        </ImageWrapper>
+                      )}
+                    {IconComponent && (
+                      <NavIconWrapper
+                        card={navItem.card}
+                        card_size={navItem.card_size}
                       >
-                        Learn More
-                      </Link>
+                        <IconComponent />
+                      </NavIconWrapper>
                     )}
-                    {item.sub_copy && item.card && (
-                      <NavItemSubCopy>{item.sub_copy}</NavItemSubCopy>
-                    )}
-                  </NavCopy>
-                </NavItem>
+                    <NavCopy>
+                      <NavItemCopy card_size={navItem.card_size}>
+                        <RichTextRenderer document={navItem.item_copy} />
+                      </NavItemCopy>
+                      {navItem.card_size === 'medium' && (
+                        <StyledAnchor
+                          onClick={(e) => e.stopPropagation()}
+                          target={isExternal ? '_blank' : undefined}
+                          rel={isExternal ? 'noopener noreferrer' : undefined}
+                        >
+                          Learn More
+                        </StyledAnchor>
+                      )}
+                      {navItem.sub_copy && navItem.card && (
+                        <NavItemSubCopy>{navItem.sub_copy}</NavItemSubCopy>
+                      )}
+                    </NavCopy>
+                  </NavItem>
+                </StyledNextLink>
               );
             })}
           </Column>
@@ -137,7 +137,6 @@ const Nav = ({ blok }) => {
       end: `${footerOffset}px`,
       pin: true,
       pinSpacing: false,
-      // markers: true,
     });
   }, [navReady]);
 
@@ -160,7 +159,6 @@ const Nav = ({ blok }) => {
         duration: 0.35,
         onComplete: () => {
           isAnimating = false;
-
           if (queuedIndex !== null) {
             const indexToOpen = queuedIndex;
             queuedIndex = null;
@@ -175,7 +173,6 @@ const Nav = ({ blok }) => {
         queuedIndex = index;
         return;
       }
-
       gsap.to(`#dropdown-${index}`, {
         autoAlpha: 1,
         duration: 0.35,
@@ -219,13 +216,18 @@ const Nav = ({ blok }) => {
       gsap.to('#languageItemsContainer', { width: '0%' });
     };
 
-    document
-      .querySelector('#globe')
-      .addEventListener('mouseenter', handleGlobeHover);
-    document
-      .querySelector('#languageSelector')
-      .addEventListener('mouseleave', handleGlobeExit);
+    const globe = document.querySelector('#globe');
+    const langSelector = document.querySelector('#languageSelector');
+
+    globe?.addEventListener('mouseenter', handleGlobeHover);
+    langSelector?.addEventListener('mouseleave', handleGlobeExit);
+
+    return () => {
+      globe?.removeEventListener('mouseenter', handleGlobeHover);
+      langSelector?.removeEventListener('mouseleave', handleGlobeExit);
+    };
   }, []);
+
   return (
     <ThemeProvider theme={selectedTheme}>
       <>
@@ -238,10 +240,7 @@ const Nav = ({ blok }) => {
                   {...storyblokEditable($buttonData)}
                   key={$buttonData?.link_text}
                 >
-                  <Button
-                    key={$buttonData?.link_text}
-                    $buttonData={$buttonData}
-                  />
+                  <Button $buttonData={$buttonData} />
                 </div>
               ))}
             </Banner>
@@ -272,10 +271,7 @@ const Nav = ({ blok }) => {
                 {...storyblokEditable($buttonData)}
                 key={$buttonData?.link_text}
               >
-                <Button
-                  key={$buttonData?.link_text}
-                  $buttonData={$buttonData}
-                />
+                <Button $buttonData={$buttonData} />
               </div>
             ))}
           </MainInner>
@@ -284,6 +280,21 @@ const Nav = ({ blok }) => {
     </ThemeProvider>
   );
 };
+
+const StyledNextLink = styled(NextLink)`
+   ${text.tag};
+   color: ${colors.txtSubtle};
+`
+const StyledAnchor = styled.span`
+  ${text.tag};
+  color: ${colors.primaryOrange};
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    color: ${colors.primaryOrange};
+  }
+`;
 
 const TopElementsContainer = styled.div`
   display: flex;
