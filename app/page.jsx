@@ -51,7 +51,7 @@ export async function generateMetadata() {
 async function fetchStory(slug, locale) {
   const storyblokApi = getStoryblokApi();
   const sbParams = {
-    version: "published",
+    version: "draft",
     language: locale,
   };
 

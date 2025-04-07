@@ -2,7 +2,7 @@ import { getStoryblokApi } from "@/lib/storyblok";
 
 export async function GET() {
   const storyblokApi = getStoryblokApi();
-  const { data } = await storyblokApi.get("cdn/stories", { version: "published" });
+  const { data } = await storyblokApi.get("cdn/stories", { version: "draft" });
 
   const urls = data.stories.map((story) => {
     return `
