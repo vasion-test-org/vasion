@@ -654,15 +654,6 @@ const nextConfig = {
           },
         ],
       },
-      {
-        source: '/sitemap.xml',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'no-cache, no-store, must-revalidate',
-          },
-        ],
-      },
     ];
   },
   
