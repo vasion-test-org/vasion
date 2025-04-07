@@ -112,8 +112,7 @@ const TestimonialWrapper = styled.div`
 `;
 const Testimonials = styled.div`
   display: flex;
-  justify-content: center;
-  /* overflow: hidden; */
+  overflow: hidden;
   width: 81.5vw;
 
   ${media.fullWidth} {
