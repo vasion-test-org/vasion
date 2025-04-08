@@ -85,9 +85,14 @@ const Nav = ({ blok }) => {
               const rawUrl = navItem.item_link?.cached_url || '#';
               const isExternal =
                 rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
-              const normalizedUrl = isExternal
-                ? rawUrl
-                : `/${currentLocale ?? ''}/${rawUrl}`.replace(/\/+/g, '/');
+                const supportedLocales = ['en', 'fr', 'de'];
+                const rawPathParts = rawUrl.split('/').filter(Boolean);
+                const alreadyHasLocale = supportedLocales.includes(rawPathParts[0]);
+                
+                const normalizedUrl = isExternal
+                  ? rawUrl
+                  : `/${alreadyHasLocale ? '' : currentLocale ?? ''}/${rawUrl}`.replace(/\/+/g, '/');
+                
 
               return (
                 <StyledNextLink
@@ -561,22 +566,22 @@ const NavIconWrapper = styled.div`
   flex-direction: column;
   align-self: ${(props) => (props.card ? 'start' : 'unset')};
   min-width: ${(props) =>
-    props.card && props.card_size ? '3.375vw' : '1.25vw'};
+    props.card && props.card_size ? '2.375vw' : '1.25vw'};
   max-width: ${(props) =>
-    props.card && props.card_size ? '3.375vw' : '1.25vw'};
+    props.card && props.card_size ? '2.375vw' : '1.25vw'};
   height: ${(props) => (props.card && props.card_size ? 'unset' : '1.25vw')};
 
   ${media.fullWidth} {
-    min-width: ${(props) => (props.card && props.card_size ? '54px' : '20px')};
-    max-width: ${(props) => (props.card && props.card_size ? '54px' : '20px')};
+    min-width: ${(props) => (props.card && props.card_size ? '38px' : '20px')};
+    max-width: ${(props) => (props.card && props.card_size ? '38px' : '20px')};
     height: ${(props) => (props.card && props.card_size ? 'unset' : '20px')};
   }
 
   ${media.tablet} {
     min-width: ${(props) =>
-      props.card && props.card_size ? '5.273vw' : '1.953vw'};
+      props.card && props.card_size ? '3.711vw' : '1.953vw'};
     max-width: ${(props) =>
-      props.card && props.card_size ? '5.273vw' : '1.953vw'};
+      props.card && props.card_size ? '3.711vw' : '1.953vw'};
     height: ${(props) => (props.card && props.card_size ? 'unset' : '1.953vw')};
   }
 

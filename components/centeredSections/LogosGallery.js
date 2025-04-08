@@ -9,14 +9,29 @@ const LogosGallery = ({ logoData }) => {
   // console.log(logoData)
   
   const allLogos = logoData.map((logo) => {
-    if (logo?.logoLink !== null) {
+    const rawUrl = logo?.link?.cached_url;
+    const isExternal = rawUrl?.startsWith('http://') || rawUrl?.startsWith('https://');
+    const href = isExternal ? rawUrl : `/${rawUrl}`.replace(/\/+/g, '/');
+  
+    if (rawUrl) {
       return (
-        <LogoLink key={logo?.link.cached_url} href={`/${logo?.link.cached_url}`}>
+        <LogoLink
+          key={rawUrl}
+          href={href}
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+        >
           <Logo alt={logo?.logo?.alt} src={logo?.logo?.filename} />
         </LogoLink>
       );
     } else {
-      return <Logo key={logo?.logo?.filename}  alt={logo?.logo?.alt}  src={logo?.logo?.filename} />;
+      return (
+        <Logo
+          key={logo?.logo?.filename}
+          alt={logo?.logo?.alt}
+          src={logo?.logo?.filename}
+        />
+      );
     }
   });
 
