@@ -282,7 +282,9 @@ const Nav = ({ blok }) => {
         <MainNavWrapper className='mainNavWrapper desktopNav'>
           <MainInner>
             <MainContent>
+              <a href='/'>
               <VasionLogo src='/images/logos/vasion-logo-purple.webp' />
+              </a>
               <Tabs>{mappedNav}</Tabs>
             </MainContent>
             {blok?.button?.map(($buttonData) => (
