@@ -387,13 +387,14 @@ const FormHeader = styled.h4`
   }
 `;
 const FormContainer = styled.div`
+position: relative;
   display: flex;
   flex-direction: column;
   background: ${(props) => props.theme.form.formBg};
   color: ${(props) => props.theme.form.textColor};
   border-radius: 2vw;
   padding: 2vw;
-  width: 35.25vw;
+  width: 39.167vw;
   box-shadow: 0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.25vw 0.5vw 0vw rgba(25, 29, 30, 0.16);
 

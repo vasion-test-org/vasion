@@ -266,6 +266,7 @@ const Wrapper = styled.div`
 
   ${media.fullWidth} {
     gap: 24px;
+    width: 1350px;
   }
 
   ${media.tablet} {

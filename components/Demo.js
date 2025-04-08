@@ -468,7 +468,9 @@ const ArrowDiv = styled.div`
     height: 4.673vw;
   }
 `;
-const FormPositionContainer = styled.div``;
+const FormPositionContainer = styled.div`
+  position: relative;
+`;
 
 const Badge = styled.img`
   width: 5.903vw;
