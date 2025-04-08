@@ -90,8 +90,12 @@ const FeaturedTestimonials = ({ blok }) => {
       </ImageContainer>
       <BlocksDiv>
         <TitleAndBody>
-          <RichTextRenderer document={item.copy_sections[0].copy} />
-          <RichTextRenderer document={item.copy_sections[1].copy} />
+          <Headline>
+            <RichTextRenderer document={item.copy_sections[0].copy} />
+          </Headline>
+          <Body>
+            <RichTextRenderer document={item.copy_sections[1].copy} />
+          </Body>
         </TitleAndBody>
         <RichTextRenderer document={item.copy_sections[2].copy} />
       </BlocksDiv>
@@ -429,7 +433,7 @@ const AttributionDiv = styled.div`
   }
 `;
 
-const Body = styled.p`
+const Body = styled.body`
   ${text.bodyLg};
 
   ${media.mobile} {
@@ -442,7 +446,7 @@ const Body = styled.p`
   }
 `;
 
-const Headline = styled.h5`
+const Headline = styled.div`
   ${text.h5};
   color: ${colors?.lightPurple};
 
@@ -606,7 +610,7 @@ const Featured = styled.div`
   }
   ${media.mobile} {
     width: 89.333vw;
-    height: 34.583vw;
+    height: 53.583vw;
     padding-top: 4.167vw;
     border-radius: 1.667vw;
   }

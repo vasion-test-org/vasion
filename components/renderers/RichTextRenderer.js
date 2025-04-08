@@ -18,6 +18,7 @@ import LogoCube from "../LogoCube";
 import SideBySide from "../SideBySide";
 import CenteredSection from "../CenteredSection";
 import NumberBlock from "../NumberBlock";
+import TwoColumnList from "@/components/TwoColumnList";
 import colors from "@/styles/colors";
 import text from "@/styles/text";
 
@@ -31,6 +32,11 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
 
   // console.log(document)
   const blokResolvers = {
+    two_column_list: (props) => (
+      <div className="component-wrapper">
+        <TwoColumnList blok={props} />
+      </div>
+    ),
     cta: (props) => (
       <div className="component-wrapper">
         <CTA blok={props} />
@@ -122,30 +128,28 @@ const RichWrapper = styled.div`
   ${media.fullWidth} {
     gap: 10px;
   }
-  
+
   ${media.tablet} {
     gap: 0.977vw;
   }
-  
+
   ${media.mobile} {
     gap: 4.167vw;
   }
- a {
-  color: ${colors.primaryOrange};
- }
+  a {
+    color: ${colors.primaryOrange};
+  }
   img {
-    max-width: 56.25vw
+    max-width: 56.25vw ${media.fullWidth} {
+      max-width: 900px;
+    }
 
-    ${media.fullWidth} {
-      max-width: 900px
-    }
-    
     ${media.tablet} {
-      max-width: 58.594vw
+      max-width: 58.594vw;
     }
-    
+
     ${media.mobile} {
-      max-width: 82vw
+      max-width: 82vw;
     }
   }
 
@@ -157,20 +161,20 @@ const RichWrapper = styled.div`
     text-transform: uppercase;
 
     ${media.fullWidth} {
-    font-size: 14px;
-    line-height: 18px;
-    letter-spacing: 3px;
-  }
+      font-size: 14px;
+      line-height: 18px;
+      letter-spacing: 3px;
+    }
 
-  ${media.tablet} {
-    font-size: 1.367vw;
-    line-height: 1.758vw;
-  }
+    ${media.tablet} {
+      font-size: 1.367vw;
+      line-height: 1.758vw;
+    }
 
-  ${media.mobile} {
-    font-size: 2.804vw;
-    line-height: 4.206vw;
-  }
+    ${media.mobile} {
+      font-size: 2.804vw;
+      line-height: 4.206vw;
+    }
   }
 
   &.tag {
@@ -181,38 +185,38 @@ const RichWrapper = styled.div`
     ${media.fullWidth} {
       font-size: 10px;
       line-height: 12px;
-  }
+    }
 
-  ${media.tablet} {
-    font-size: 0.977vw;
-    line-height: 1.172vw;
-  }
+    ${media.tablet} {
+      font-size: 0.977vw;
+      line-height: 1.172vw;
+    }
 
-  ${media.mobile} {
-    font-size: 2.336vw;
-    line-height: 2.804vw;
-  }
+    ${media.mobile} {
+      font-size: 2.336vw;
+      line-height: 2.804vw;
+    }
   }
 
   &.tagLight {
     font-weight: 400;
     font-size: 0.625vw;
-      line-height: 0.75vw;
+    line-height: 0.75vw;
 
     ${media.fullWidth} {
       font-size: 10px;
       line-height: 12px;
-  }
+    }
 
-  ${media.tablet} {
-    font-size: 0.977vw;
-    line-height: 1.172vw;
-  }
+    ${media.tablet} {
+      font-size: 0.977vw;
+      line-height: 1.172vw;
+    }
 
-  ${media.mobile} {
-    font-size: 2.336vw;
-    line-height: 2.804vw;
-  }
+    ${media.mobile} {
+      font-size: 2.336vw;
+      line-height: 2.804vw;
+    }
   }
   ol {
     position: relative;
