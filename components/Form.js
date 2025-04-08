@@ -392,7 +392,7 @@ position: relative;
   color: ${(props) => props.theme.form.textColor};
   border-radius: 2vw;
   padding: 2vw;
-  width: 39.167vw;
+  width: 35.25vw;
   box-shadow: 0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.25vw 0.5vw 0vw rgba(25, 29, 30, 0.16);
 
