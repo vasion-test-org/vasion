@@ -13,7 +13,7 @@ import { useThankYou } from '@/context/ThankYouContext';
 import { useRouter } from 'next/navigation';
 
 const Form = ({ blok }) => {
-  // console.log(blok)
+  // console.log(blok.redirect_link)
   const { thankYouCopy, updateThankYouCopy } = useThankYou();
   const router = useRouter();
   const themes = useAvailableThemes();
@@ -150,15 +150,15 @@ const Form = ({ blok }) => {
         form.onSuccess(() => {
           if (blok.animated) {
             console.log('Thank You');
-          } else if (blok.redirect_link) {
+          } else if (blok.redirect_link.cached_url) {
             updateThankYouCopy(blok?.thank_you_copy);
   
             const isExternal = (url) => /^https?:\/\//.test(url);
   
-            if (isExternal(blok.redirect_link)) {
-              window.location.href = blok.redirect_link;
+            if (isExternal(blok.redirect_link.cached_url)) {
+              window.location.href = blok.redirect_link.cached_url;
             } else {
-              router.push(blok.redirect_link);
+              router.push(blok.redirect_link.cached_url);
             }
   
             return false; 
