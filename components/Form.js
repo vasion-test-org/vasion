@@ -28,6 +28,7 @@ const Form = ({ blok }) => {
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
   const originRef = useRef('va');
+  const isExternal = (url) => /^https?:\/\//.test(url);
 
   useEffect(() => {
     if (blok?.thank_you_copy) {
@@ -151,9 +152,16 @@ const Form = ({ blok }) => {
             console.log('Thank You');
           } else if (blok.redirect_link) {
             updateThankYouCopy(blok.thank_you_copy);
-            console.log(thankYouData);
-            router.push(blok.redirect_link);
-            return false;
+  
+            const isExternal = (url) => /^https?:\/\//.test(url);
+  
+            if (isExternal(blok.redirect_link)) {
+              window.location.href = blok.redirect_link;
+            } else {
+              router.push(blok.redirect_link);
+            }
+  
+            return false; 
           }
         });
       }
