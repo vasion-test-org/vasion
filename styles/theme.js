@@ -10,6 +10,10 @@ export const defaultTheme = {
     bg: "#F5F4F7",
     tab_hover: "#ece9ef",
   },
+  bio: {
+    textColor: "#ffffff",
+    bg: "#3D2562",
+  },
   customer_success: {
     bg: "#F5F4F7",
     stat_block_bg: "#ECE9EF",

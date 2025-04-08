@@ -2,34 +2,46 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import text from '@/styles/text';
 import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
 import media from '@/styles/media';
 
 const Button = ({ $buttonData }) => {
-  // console.log($buttonData);
   const themes = useAvailableThemes();
+  const pathname = usePathname();
   const selectedTheme =
     themes.button?.[$buttonData?.theme] || themes.button.primary;
 
-  const href = $buttonData?.link_url?.email
+  const isEmail = $buttonData?.link_url?.email;
+  const rawHref = isEmail
     ? `mailto:${$buttonData?.link_url.email}`
     : $buttonData?.link_url?.cached_url || '#';
 
   const target = $buttonData?.link_url?.target;
   const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
 
+  const isExternal = rawHref.startsWith('http');
+  const alreadyLocalized = rawHref.startsWith('/de') || rawHref.startsWith('/fr') || rawHref.startsWith('/en');
+
+  const slugParts = pathname.split('/').filter(Boolean);
+  const currentLocale = ['de', 'fr'].includes(slugParts[0]) ? slugParts[0] : null;
+
+  const normalizedUrl = isEmail || isExternal || alreadyLocalized
+    ? rawHref
+    : `/${currentLocale ?? ''}/${rawHref}`.replace(/\/+/g, '/');
+
   return (
     <ButtonWrapper layout={$buttonData?.layout} size={$buttonData?.link_size}>
       <ThemeProvider theme={selectedTheme}>
         {target !== '_blank' ? (
-          <NextLink href={`/${href}`} passHref>
+          <NextLink href={normalizedUrl} passHref>
             <StyledSpan>{$buttonData?.link_text}</StyledSpan>
             {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
           </NextLink>
         ) : (
-          <StyledLink href={href} target={target} rel={rel}>
+          <StyledLink href={normalizedUrl} target={target} rel={rel}>
             {$buttonData?.link_text}
             {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
           </StyledLink>
@@ -41,11 +53,13 @@ const Button = ({ $buttonData }) => {
 
 export default Button;
 
+// Styled Components
 const NextLink = styled(Link)`
   display: flex;
   align-items: center;
   gap: 0.5vw;
 `;
+
 const StyledLinkArrow = styled(LinkArrowSVG)`
   width: 0.5vw;
   height: 0.5vw;
@@ -64,10 +78,12 @@ const StyledLinkArrow = styled(LinkArrowSVG)`
     width: 1.667vw;
     height: 1.667vw;
   }
+
   path {
     fill: ${(props) => props.theme.textColor};
   }
 `;
+
 const StyledSpan = styled.p`
   display: inline-flex;
   align-items: center;
@@ -87,6 +103,7 @@ const StyledSpan = styled.p`
     border: 1px solid ${(props) => props.theme.border};
   }
 `;
+
 const StyledLink = styled.a`
   display: inline-flex;
   align-items: center;
@@ -117,6 +134,7 @@ const ButtonWrapper = styled.div`
   justify-content: center;
   flex-direction: ${(props) => props.layout || 'row'};
   gap: 1.5vw;
+
   ${(props) =>
     props.size === 'small'
       ? text.bodySm
@@ -125,5 +143,6 @@ const ButtonWrapper = styled.div`
       : props.size === 'tiny'
       ? text.tagLight
       : text.bodyMd};
+
   width: max-content;
 `;
