@@ -520,6 +520,7 @@ const NavItemSubCopy = styled.div`
   color: ${colors.txtSubtle};
 `;
 const NavItemCopy = styled.div`
+ color: ${colors.grey800};
   margin-left: ${(props) => (props.card_size === 'large' ? '1vw' : 'unset')};
 
   ${media.fullWidth} {
@@ -640,7 +641,7 @@ const NavItem = styled.div`
         ? '4px 12px 4px 4px'
         : props.card_size === 'large'
         ? 'unset'
-        : '4px 12px'};
+        : '4px'};
     border-radius: 4px;
     height: ${(props) => (props.card_size === 'large' ? '222px' : 'auto')};
   }
@@ -677,9 +678,12 @@ const NavItem = styled.div`
   ${media.mobile} {
   }
   &:hover {
-    background: ${colors.lightPurpleGrey};
+    background: ${(props) =>
+      props.card_size === 'large' ? 'unset' : colors.lightPurpleGrey};
     box-shadow: ${(props) =>
-      props.card
+      props.card_size === 'large' 
+        ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)' :
+        props.card_size === 'medium' 
         ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
         : 'unset'};
     path {

@@ -64,6 +64,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/assets/how-to-convince-your-boss-you-need-printerlogic/",
+        destination: "/assets/how-to-convince-your-boss-you-need-vasion-print/",
+        permanent: true,
+      },
+      {
         source: "/product-detail-e-forms/",
         destination: "/eforms/",
         permanent: true,
