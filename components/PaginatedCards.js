@@ -1,18 +1,18 @@
-'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import media from 'styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import Card from './globalComponents/Card';
-import EventCard from './globalComponents/EventCard';
-import { horizontalLoop } from '@/functions/horizontalLoop';
-import SideArrow from '@/assets/svg/side-arrow.svg';
-import colors from '@/styles/colors';
-import text from '@/styles/text';
-import ResourceCard from './globalComponents/ResourceCard';
+"use client";
+import React, { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import styled, { ThemeProvider } from "styled-components";
+import { useAvailableThemes } from "@/context/ThemeContext";
+import { storyblokEditable } from "@storyblok/react/rsc";
+import media from "styles/media";
+import RichTextRenderer from "@/components/renderers/RichTextRenderer";
+import Card from "./globalComponents/Card";
+import EventCard from "./globalComponents/EventCard";
+import { horizontalLoop } from "@/functions/horizontalLoop";
+import SideArrow from "@/assets/svg/side-arrow.svg";
+import colors from "@/styles/colors";
+import text from "@/styles/text";
+import ResourceCard from "./globalComponents/ResourceCard";
 
 const PaginatedCards = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -30,19 +30,19 @@ const PaginatedCards = ({ blok }) => {
       <CardChunk
         key={`chunk-${i / 6}`}
         card_type={blok.card_type}
-        className='cardChunks'
+        className="cardChunks"
       >
         {chunk.map((card, index) => {
-          if (blok.card_type === 'default') {
+          if (blok.card_type === "default") {
             return (
               <Card
                 key={`card-${i + index}`}
-                borderradius='6'
+                borderradius="6"
                 paginated
                 content={card}
               />
             );
-          } else if (blok.card_type === 'event') {
+          } else if (blok.card_type === "event") {
             return (
               <EventCard
                 key={`card-${i + index}`}
@@ -50,19 +50,19 @@ const PaginatedCards = ({ blok }) => {
                 content={card}
               />
             );
-          } else if (blok.card_type === 'resource') {
+          } else if (blok.card_type === "resource") {
             return (
               <ResourceCard
                 key={`card-${i + index}`}
                 paginated
                 index={index}
                 content={card}
-                borderradius='6'
+                borderradius="6"
               />
             );
           }
         })}
-      </CardChunk>
+      </CardChunk>,
     );
   }
 
@@ -70,7 +70,7 @@ const PaginatedCards = ({ blok }) => {
     if (!cardsLoop.current) return;
     cardsLoop.current.toIndex(index, {
       duration: 0.4,
-      ease: 'power1.inOut',
+      ease: "power1.inOut",
     });
     currentIndex.current = index;
     setCurrentPage(index);
@@ -91,7 +91,7 @@ const PaginatedCards = ({ blok }) => {
 
       if (currentPage > 1) {
         pageList.push(0);
-        if (currentPage > 2) pageList.push('left-ellipsis');
+        if (currentPage > 2) pageList.push("left-ellipsis");
       }
 
       for (let i = left; i <= right; i++) {
@@ -99,7 +99,7 @@ const PaginatedCards = ({ blok }) => {
       }
 
       if (currentPage < totalPages - 2) {
-        if (currentPage < totalPages - 3) pageList.push('right-ellipsis');
+        if (currentPage < totalPages - 3) pageList.push("right-ellipsis");
         pageList.push(totalPages - 1);
       }
     }
@@ -108,18 +108,18 @@ const PaginatedCards = ({ blok }) => {
   };
 
   const mappedPages = getPaginatedNumbers().map((page, i) => {
-    if (page === 'left-ellipsis' || page === 'right-ellipsis') {
+    if (page === "left-ellipsis" || page === "right-ellipsis") {
       return <Ellipsis key={`ellipsis-${i}`}>...</Ellipsis>;
     }
 
     return (
       <PageNumberBlock
-        className='pageNumberBlocks'
+        className="pageNumberBlocks"
         key={`block-${page}`}
         id={`block-${page}`}
         onClick={() => goToPage(page)}
         style={{
-          backgroundColor: currentPage === page ? colors.grey100 : 'unset',
+          backgroundColor: currentPage === page ? colors.grey100 : "unset",
         }}
       >
         {page + 1}
@@ -128,7 +128,7 @@ const PaginatedCards = ({ blok }) => {
   });
 
   useEffect(() => {
-    const cardChunks = gsap.utils.toArray('.cardChunks');
+    const cardChunks = gsap.utils.toArray(".cardChunks");
     const totalItems = cardChunks.length;
 
     cardsLoop.current = horizontalLoop(cardChunks, {
@@ -136,36 +136,39 @@ const PaginatedCards = ({ blok }) => {
       center: true,
     });
 
-    const nextBtn = document.querySelector('.next');
-    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector(".next");
+    const prevBtn = document.querySelector(".prev");
 
     const handleNext = () => {
       const newIndex = (currentIndex.current + 1) % totalItems;
-      cardsLoop.current.next({ duration: 0.4, ease: 'power1.inOut' });
+      cardsLoop.current.next({ duration: 0.4, ease: "power1.inOut" });
       currentIndex.current = newIndex;
       setCurrentPage(newIndex);
     };
 
     const handlePrev = () => {
       const newIndex = (currentIndex.current - 1 + totalItems) % totalItems;
-      cardsLoop.current.previous({ duration: 0.4, ease: 'power1.inOut' });
+      cardsLoop.current.previous({ duration: 0.4, ease: "power1.inOut" });
       currentIndex.current = newIndex;
       setCurrentPage(newIndex);
     };
 
-    nextBtn.addEventListener('click', handleNext);
-    prevBtn.addEventListener('click', handlePrev);
+    nextBtn.addEventListener("click", handleNext);
+    prevBtn.addEventListener("click", handlePrev);
 
     return () => {
-      nextBtn.removeEventListener('click', handleNext);
-      prevBtn.removeEventListener('click', handlePrev);
+      nextBtn.removeEventListener("click", handleNext);
+      prevBtn.removeEventListener("click", handlePrev);
     };
   }, []);
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <Wrapper spacingOffset={blok.offset_spacing} spacing={blok.section_spacing}>
-        {blok.card_type === 'event' && (
+      <Wrapper
+        spacingOffset={blok.offset_spacing}
+        spacing={blok.section_spacing}
+      >
+        {blok.card_type === "event" && (
           <EventHeaderContainer>
             <EventHeaders>Events</EventHeaders>
             <EventHeaders>Details</EventHeaders>
@@ -175,9 +178,9 @@ const PaginatedCards = ({ blok }) => {
           {mappedCards}
         </CardsContainer>
         <PaginationDiv>
-          <PageNavigation className='prev'>Previous</PageNavigation>
+          <PageNavigation className="prev">Previous</PageNavigation>
           {mappedPages}
-          <PageNavigation className='next'>Next</PageNavigation>
+          <PageNavigation className="next">Next</PageNavigation>
         </PaginationDiv>
       </Wrapper>
     </ThemeProvider>
@@ -204,7 +207,7 @@ const PageNumberBlock = styled.div`
     height: 2.539vw;
     border-radius: 0.391vw;
   }
-  
+
   ${media.mobile} {
     width: 8.333vw;
     height: 5.417vw;
@@ -220,13 +223,13 @@ const Ellipsis = styled.div`
   ${media.fullWidth} {
     padding: 0 8px;
   }
-  
+
   ${media.tablet} {
-     padding: 0 0.781vw;
+    padding: 0 0.781vw;
   }
-  
+
   ${media.mobile} {
-     padding: 0 1.667vw;
+    padding: 0 1.667vw;
   }
 `;
 
@@ -241,7 +244,7 @@ const PageNavigation = styled.div`
   ${media.tablet} {
     padding: 1.172vw 1.563vw;
   }
-  
+
   ${media.mobile} {
     padding: 2.5vw 3.333vw;
   }
@@ -260,12 +263,12 @@ const PaginationDiv = styled.div`
     border-radius: 12px;
     margin-top: 32px;
   }
-  
+
   ${media.tablet} {
     border-radius: 1.172vw;
     margin-top: 3.125vw;
   }
-  
+
   ${media.mobile} {
     border-radius: 2.5vw;
     margin-top: 6.667vw;
@@ -280,10 +283,14 @@ const CardChunk = styled.div`
   position: relative;
   display: flex;
   flex-direction: ${(props) =>
-    props.card_type === 'event' ? 'column' : 'row'};
-  flex-wrap: ${(props) => (props.card_type === 'event' ? 'nowrap' : 'wrap')};
-  gap: ${(props) => (props.card_type === 'event' ? '0' : '1.25vw')};
+    props.card_type === "event" ? "column" : "row"};
+  flex-wrap: ${(props) => (props.card_type === "event" ? "nowrap" : "wrap")};
+  gap: ${(props) => (props.card_type === "event" ? "0" : "1.25vw")};
   min-width: 100%;
+
+  ${media.fullWidth} {
+    gap: 20px;
+  }
 `;
 
 const CardsContainer = styled.div`
@@ -305,7 +312,7 @@ const CardsContainer = styled.div`
     width: 92.188vw;
     padding: 0.488vw;
   }
-  
+
   ${media.mobile} {
     gap: 2.083vw;
     width: 89.167vw;
@@ -339,7 +346,7 @@ const EventHeaderContainer = styled.div`
     border-radius: 1.563vw 1.563vw 0 0;
     gap: 59.277vw;
   }
-  
+
   ${media.mobile} {
     width: 89.167vw;
     padding: 5vw 3.333vw;
@@ -356,96 +363,95 @@ const Wrapper = styled.div`
   width: 100%;
 
   padding: ${(props) => {
-    if (props.spacingOffset === 'top') {
-      return props.spacing === 'default'
-        ? '3.75vw 0 0'
+    if (props.spacingOffset === "top") {
+      return props.spacing === "default"
+        ? "3.75vw 0 0"
         : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '3.75vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : "3.75vw 0 0";
     }
-    if (props.spacingOffset === 'bottom') {
-      return props.spacing === 'default'
-        ? '0 0 3.75vw'
+    if (props.spacingOffset === "bottom") {
+      return props.spacing === "default"
+        ? "0 0 3.75vw"
         : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 3.75vw';
+          ? `0 0 ${props.spacing}px`
+          : "0 0 3.75vw";
     }
-    return props.spacing === 'default'
-      ? '3.75vw 0'
+    return props.spacing === "default"
+      ? "3.75vw 0"
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0';
+        ? `${props.spacing}px 0`
+        : "3.75vw 0";
   }};
 
   ${media.fullWidth} {
     padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '60px 0 0'
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "60px 0 0"
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+            ? `${props.spacing}px 0 0`
+            : "60px 0 0";
       }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 60px'
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 0 60px"
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+            ? `0 0 ${props.spacing}px`
+            : "0 0 60px";
       }
-      return props.spacing === 'default'
-        ? '60px 0'
+      return props.spacing === "default"
+        ? "60px 0"
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+          ? `${props.spacing}px 0`
+          : "60px 0";
     }};
   }
   ${media.tablet} {
     padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '5.859vw 0 0'
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "5.859vw 0 0"
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '5.859vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : "5.859vw 0 0";
       }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 5.859vw'
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 0 5.859vw"
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 5.859vw';
+            ? `0 0 ${props.spacing}px`
+            : "0 0 5.859vw";
       }
-      return props.spacing === 'default'
-        ? '5.859vw 0'
+      return props.spacing === "default"
+        ? "5.859vw 0"
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '5.859vw 0';
+          ? `${props.spacing}px 0`
+          : "5.859vw 0";
     }};
-
   }
 
   ${media.mobile} {
     padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '12.5vw 0 0'
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "12.5vw 0 0"
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '12.5vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : "12.5vw 0 0";
       }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 12.5vw'
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 0 12.5vw"
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 12.5vw';
+            ? `0 0 ${props.spacing}px`
+            : "0 0 12.5vw";
       }
-      return props.spacing === 'default'
-        ? '12.5vw 0'
+      return props.spacing === "default"
+        ? "12.5vw 0"
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0';
+          ? `${props.spacing}px 0`
+          : "12.5vw 0";
     }};
   }
 `;
