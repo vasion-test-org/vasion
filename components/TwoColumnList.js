@@ -8,31 +8,34 @@ import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 const TwoColumnList = ({ blok }) => {
   // console.log(blok);
 
-  const introMap = blok.intro_content.map((item) => (
+  const introMap = blok?.intro_content?.map((item) => (
     <RichTextRenderer document={item.copy} />
   ));
 
-  const column1 = blok.column_1.map((item) => (
-    <ColumnItem>
-      {item.icon.filename && (
+  const column1 = blok?.column_1?.map((item, index) => (
+    <ColumnItem key={`col1-item-${index}`}>
+      {item?.icon?.filename && (
         <ItemIcon small_icons={blok.small_icons} src={item.icon.filename} />
       )}
       <ColumnCopy>
-        {item.copy.map((item) => (
+        {item?.copy?.map((item) => (
           <RichTextRenderer document={item.copy} />
         ))}
       </ColumnCopy>
     </ColumnItem>
   ));
 
-  const column2 = blok?.column_2?.map((item) => (
-    <ColumnItem>
-      {item.icon.filename && (
-        <ItemIcon small_icons={blok.small_icons} src={item.icon.filename} />
+  const column2 = blok?.column_2?.map((item, index) => (
+    <ColumnItem key={`col2-item-${index}`}>
+      {item?.icon?.filename && (
+        <ItemIcon small_icons={blok?.small_icons} src={item?.icon?.filename} />
       )}
       <ColumnCopy>
-        {item.copy.map((item) => (
-          <RichTextRenderer document={item.copy} />
+        {item?.copy?.map((copyItem, copyIndex) => (
+          <RichTextRenderer
+            key={`col2-copy-${index}-${copyIndex}`}
+            document={copyItem.copy}
+          />
         ))}
       </ColumnCopy>
     </ColumnItem>
@@ -134,22 +137,22 @@ const Columns = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1.625vw;
-  width: ${props => props.comparison ? 'max-content' : '81.5vw'};
+  width: ${(props) => (props.comparison ? "max-content" : "81.5vw")};
 
   ${media.fullWidth} {
     gap: 26px;
-    width: ${props => props.comparison ? 'max-content' : '1304px'};
+    width: ${(props) => (props.comparison ? "max-content" : "1304px")};
   }
 
   ${media.tablet} {
     gap: 1.563vw;
-    width: ${props => props.comparison ? 'max-content' : '92.188vw'};
+    width: ${(props) => (props.comparison ? "max-content" : "92.188vw")};
   }
 
   ${media.mobile} {
     flex-direction: column;
     gap: unset;
-    width: ${props => props.comparison ? 'max-content' : '89.167vw'};
+    width: ${(props) => (props.comparison ? "max-content" : "89.167vw")};
   }
 `;
 const IntroContent = styled.div`

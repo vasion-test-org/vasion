@@ -231,7 +231,7 @@ const ComparisonSelect = ({ blok }) => {
 };
 
 export default ComparisonSelect;
-const BottomCopy = styled.p`
+const BottomCopy = styled.div`
   ${text.h2};
   text-align: center;
 
@@ -243,7 +243,7 @@ const BottomCopy = styled.p`
     ${text.h2};
   }
 `;
-const Body = styled.p`
+const Body = styled.div`
   ${text.bodyLg}
   ${media.fullWidth} {
   }
