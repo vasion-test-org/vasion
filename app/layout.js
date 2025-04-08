@@ -186,16 +186,6 @@ export default async function RootLayout({ children }) {
           }}
         />
 
-        {/* OneLink */}
-        <Script
-          id="onelink"
-          referrerPolicy="no-referrer-when-downgrade"
-          type="text/javascript"
-          src="https://www.onelink-edge.com/moxie.min.js"
-          data-oljs="P294B-E0B2-7E1B-A9D7"
-          strategy="afterInteractive"
-        />
-
         {/* Hotjar */}
         <Script
           id="hotjar"
