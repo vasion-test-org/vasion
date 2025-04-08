@@ -32,7 +32,7 @@ const Form = ({ blok }) => {
 
   useEffect(() => {
     if (blok?.thank_you_copy) {
-      updateThankYouCopy(blok.thank_you_copy);
+      updateThankYouCopy(blok?.thank_you_copy);
       // console.log(thankYouCopy, blok?.thank_you_copy);
     }
   }, [thankYouCopy, blok?.thank_you_copy]);
@@ -151,7 +151,7 @@ const Form = ({ blok }) => {
           if (blok.animated) {
             console.log('Thank You');
           } else if (blok.redirect_link) {
-            updateThankYouCopy(blok.thank_you_copy);
+            updateThankYouCopy(blok?.thank_you_copy);
   
             const isExternal = (url) => /^https?:\/\//.test(url);
   

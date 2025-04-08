@@ -16,9 +16,9 @@ const ThankYou = () => {
   ];
   const { thankYouCopy } = useThankYou();
 
-  useEffect(() => {
-    // console.log("Another Page - Thank You Copy:", thankYouCopy);
-  }, [thankYouCopy]);
+  // useEffect(() => {
+  //   // console.log("Another Page - Thank You Copy:", thankYouCopy);
+  // }, [thankYouCopy]);
 
   return (
     <Wrapper>
