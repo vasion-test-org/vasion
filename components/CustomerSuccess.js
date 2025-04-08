@@ -433,7 +433,7 @@ const AttributionDiv = styled.div`
   }
 `;
 
-const Body = styled.body`
+const Body = styled.p`
   ${text.bodyLg};
 
   ${media.mobile} {
