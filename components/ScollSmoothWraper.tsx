@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect } from 'react';
@@ -10,14 +9,16 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 export default function ScrollSmootherWrapper({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    const smoother = ScrollSmoother.create({
-      smooth: 1.2,
-      effects: true,
-    });
+    if (!ScrollTrigger.isTouch) {
+      const smoother = ScrollSmoother.create({
+        smooth: 1.2,
+        effects: true,
+      });
 
-    return () => {
-      smoother.kill();
-    };
+      return () => {
+        smoother.kill();
+      };
+    }
   }, []);
 
   return (
