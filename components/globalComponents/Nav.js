@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { useRouter, usePathname } from 'next/navigation';
 import NextLink from 'next/link';
@@ -22,16 +22,36 @@ gsap.registerPlugin(ScrollTrigger);
 const Nav = ({ blok }) => {
   const router = useRouter();
   const path = usePathname();
+
+  const [language, setLanguage] = useState('en');
+  const [navItems, setNavItems] = useState(blok.english_nav_items);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
+  const { locale } = useRouter();
 
-  let navItems = blok.english_nav_items;
+  useEffect(() => {
+    function checkPathLocale(url) {
+      const { pathname } = new URL(url, 'https://vasion.com'); 
+      const pathLocale = pathname.split('/')[1];
+      const supportedLocales = ['en', 'fr', 'de'];
+      const defaultLocale = 'en';
 
-  if (path?.startsWith('/de')) {
-    navItems = blok.german_nav_items;
-  } else if (path?.startsWith('/fr')) {
-    navItems = blok.french_nav_items;
-  }
+      const lang = supportedLocales.includes(pathLocale) ? pathLocale : defaultLocale;
+      setLanguage(lang);
+
+      if (lang === 'de') {
+        setNavItems(blok.german_nav_items);
+      } else if (lang === 'fr') {
+        setNavItems(blok.french_nav_items);
+      } else {
+        setNavItems(blok.english_nav_items);
+      }
+    }
+
+    if (path) {
+      checkPathLocale(path);
+    }
+  }, [path, blok]);
 
   const slugParts = path.split('/').filter(Boolean);
   const currentLocale = ['de', 'fr'].includes(slugParts[0]) ? slugParts[0] : null;

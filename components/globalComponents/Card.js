@@ -5,20 +5,33 @@ import Image from "@/components/globalComponents/Image";
 import Button from "@/components/globalComponents/Button";
 import { storyblokEditable } from "@storyblok/react/rsc";
 import media from "@/styles/media";
-import { getClick } from "@/functions/navigation";
-// import colors from 'styles/colors';
-// import text from 'styles/text';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Card = ({ content, paginated, borderradius }) => {
-  // console.log(content.Button[0]?.link_url.cached_url)
-  const handleClick = getClick(content.Button[0]?.link_url.cached_url);
+  const pathname = usePathname();
+  const buttonData = content.Button?.[0];
+  const isEmail = buttonData?.link_url?.email;
+  const rawHref = isEmail
+    ? `mailto:${buttonData?.link_url.email}`
+    : buttonData?.link_url?.cached_url || "#";
 
-  return (
-    <CardWrapper
-      {...storyblokEditable(content)}
-      paginated={paginated}
-      onClick={handleClick}
-    >
+  const target = buttonData?.link_url?.target;
+  const rel = target === "_blank" ? "noopener noreferrer" : undefined;
+
+  const isExternal = rawHref.startsWith("http");
+  const alreadyLocalized = rawHref.startsWith("/de") || rawHref.startsWith("/fr") || rawHref.startsWith("/en");
+
+  const slugParts = pathname.split("/").filter(Boolean);
+  const currentLocale = ["de", "fr"].includes(slugParts[0]) ? slugParts[0] : null;
+
+  const normalizedUrl =
+    isEmail || isExternal || alreadyLocalized
+      ? rawHref
+      : `/${currentLocale ?? ""}/${rawHref}`.replace(/\/+/g, "/");
+
+  const WrapperContent = (
+    <>
       {content.Image && (
         <ImageWrapper>
           <Image
@@ -34,12 +47,30 @@ const Card = ({ content, paginated, borderradius }) => {
             <RichTextRenderer className={copy.component} document={copy.copy} />
           </div>
         ))}
-        {content.Button[0] && (
+        {buttonData && (
           <ButtonWrapper>
-            <Button $buttonData={content.Button[0]} />
+            <Button $buttonData={buttonData} />
           </ButtonWrapper>
         )}
       </ContentWrapper>
+    </>
+  );
+
+  return target !== "_blank" ? (
+    <Link href={normalizedUrl} passHref legacyBehavior>
+      <CardWrapper as="a" {...storyblokEditable(content)} paginated={paginated}>
+        {WrapperContent}
+      </CardWrapper>
+    </Link>
+  ) : (
+    <CardWrapper
+      href={normalizedUrl}
+      target={target}
+      rel={rel}
+      {...storyblokEditable(content)}
+      paginated={paginated}
+    >
+      {WrapperContent}
     </CardWrapper>
   );
 };
@@ -78,6 +109,8 @@ const ContentWrapper = styled.div`
 `;
 
 const CardWrapper = styled.div`
+  text-decoration: none;
+  color: inherit;
   cursor: pointer;
   display: flex;
   flex-direction: column;

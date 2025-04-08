@@ -20,10 +20,11 @@ const Form = ({ blok }) => {
   const selectedTheme = themes[blok.theme] || themes.default;
   const [isLoaded, setIsLoaded] = useState(false);
   const [stepDone, setStepDone] = useState(false);
-  const formWidth = getMedia('1096px', '76.111vw', '90.82vw', '87.85vw');
-  const formHeight = getMedia('733px', '50.875vw', '77.137vw', '288.084vw');
+  const formWidth = getMedia("1096px", "76.111vw", '90.82vw', '87.85vw');
+  const formHeight = getMedia("733px", "50.875vw", '77.137vw', '288.084vw');
   const lineWidth = getMedia('220px', '15.278vw', '19.531vw', '7.187vw');
-  const formPosition = getMedia(-28, -28, -27, 0);
+  const xFormPosition = getMedia(-28, -28, -27, 0);
+  // const yFormPosition = getMedia(-277, -277, -27, 0);
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
   const originRef = useRef('va');
@@ -80,11 +81,8 @@ const Form = ({ blok }) => {
       demoTl
         .to('.preformContent', { opacity: contentVisibility })
         .to('.marketoForm', { opacity: 0 }, '<')
-        .to('#formPos', { xPercent: formPosition, duration: 1.25 })
-        .to(
-          '#formContainer',
-          { width: formWidth, height: formHeight, duration: 1.25 },
-          '<'
+        .to('#formPos', { xPercent: xFormPosition,  duration: 1.25 })
+        .to('#formContainer',{ width: formWidth, height: formHeight, duration: 1.25 },'<'
         )
         .to('.lines', { width: lineWidth, duration: 1.25 }, '<')
         .from('.second', { duration: 1.25, background: 'unset' }, '<')
@@ -179,7 +177,7 @@ const Form = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <FormContainer>
+      <FormContainer id='formContainer'>
         {blok.header && <FormHeader>{blok.header}</FormHeader>}
         {blok.animated && (
           <>
@@ -387,13 +385,14 @@ const FormHeader = styled.h4`
   }
 `;
 const FormContainer = styled.div`
+position: relative;
   display: flex;
   flex-direction: column;
   background: ${(props) => props.theme.form.formBg};
   color: ${(props) => props.theme.form.textColor};
   border-radius: 2vw;
   padding: 2vw;
-  width: 35.25vw;
+  width: 39.167vw;
   box-shadow: 0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.25vw 0.5vw 0vw rgba(25, 29, 30, 0.16);
 
