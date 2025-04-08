@@ -28,7 +28,6 @@ const Form = ({ blok }) => {
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
   const originRef = useRef('va');
-  const isExternal = (url) => /^https?:\/\//.test(url);
 
   useEffect(() => {
     if (blok?.thank_you_copy) {
@@ -154,11 +153,21 @@ const Form = ({ blok }) => {
             updateThankYouCopy(blok?.thank_you_copy);
   
             const isExternal = (url) => /^https?:\/\//.test(url);
-  
-            if (isExternal(blok.redirect_link.cached_url)) {
-              window.location.href = blok.redirect_link.cached_url;
+
+            let redirectUrl =
+              typeof blok.redirect_link === "string"
+                ? blok.redirect_link
+                : blok.redirect_link?.cached_url || "/thank-you";
+            
+            // 👇 Ensure root-relative if internal
+            if (!isExternal(redirectUrl) && !redirectUrl.startsWith("/")) {
+              redirectUrl = "/" + redirectUrl;
+            }
+            
+            if (isExternal(redirectUrl)) {
+              window.location.href = redirectUrl;
             } else {
-              router.push(blok.redirect_link.cached_url);
+              router.push(redirectUrl);
             }
   
             return false; 
