@@ -619,6 +619,17 @@ const nextConfig = {
         destination: 'https://vasion.com/de/:path*',
         permanent: false,
       },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'fr.vasion.com',
+          },
+        ],
+        destination: 'https://vasion.com/fr/:path*',
+        permanent: false,
+      },
     ];
   },
   async rewrites() {
