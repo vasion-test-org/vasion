@@ -223,21 +223,24 @@ const MobileNav = ({ blok }) => {
         <Banner>
           <BannerMessage>{blok.banner}</BannerMessage>
           <BannerLink>
-          {blok?.banner_link?.map(($buttonData) => (
-            <div
-              {...storyblokEditable($buttonData)}
-              key={$buttonData?.link_text}
-            >
-              <Button key={$buttonData?.link_text} $buttonData={$buttonData} />
-            </div>
-          ))}
-
-
+            {blok?.banner_link?.map(($buttonData) => (
+              <div
+                {...storyblokEditable($buttonData)}
+                key={$buttonData?.link_text}
+              >
+                <Button
+                  key={$buttonData?.link_text}
+                  $buttonData={$buttonData}
+                />
+              </div>
+            ))}
           </BannerLink>
         </Banner>
       </TopNav>
       <MainWrapper className='mainNavWrapper mobileNav'>
-        <VasionLogo src='/images/logos/vasion-logo-purple.webp' />
+        <a href='/'>
+          <VasionLogo src='/images/logos/vasion-logo-purple.webp' />
+        </a>
         <HamburgerContainer className='hamburger'>
           <HamSlice id='slice-0' />
           <ShortHamSlice id='slice-1' />

@@ -46,7 +46,7 @@ function FormTrackingComponent() {
       const { pathname } = new URL(url);
       
       const pathLocale = pathname.split('/')[1]; 
-      console.log('pathname:', pathLocale);
+      // console.log('pathname:', pathLocale);
     
       const supportedLocales = ['en', 'fr', 'de'];
       const defaultLocale = 'en';

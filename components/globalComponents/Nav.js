@@ -808,18 +808,18 @@ const Tab = styled.div`
   align-items: center;
   justify-content: center;
   height: 1.625vw;
-  padding: 0.25vw 0.125vw;
+  padding: 0.125vw 0.25vw;
   border-radius: 0.25vw;
 
   ${media.fullWidth} {
     height: 26px;
-    padding: 4px 2px;
+    padding: 2px 4px;
     border-radius: 4px;
   }
 
   ${media.tablet} {
     height: 2.539vw;
-    padding: 0.391vw 0.195vw;
+    padding: 0.195vw 0.391vw;
     border-radius: 0.391vw;
   }
 
