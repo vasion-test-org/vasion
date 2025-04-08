@@ -11,7 +11,9 @@ import RichTextRenderer from "../renderers/RichTextRenderer";
 import Video from "./Video";
 
 const CardModal = ({ data, setShowModal }) => {
-  const [closeButton, setCloseButton] = useState("/images/uiElements/closeButton.webp");
+  const [closeButton, setCloseButton] = useState(
+    "/images/uiElements/closeButton.webp",
+  );
 
   const videoWidth = useMedia("1440px", "89.6vw", "89vw", "87.85vw");
   const videoHeight = useMedia("900px", "51.25vw", "51vw", "49.299vw");
@@ -27,7 +29,8 @@ const CardModal = ({ data, setShowModal }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
 
-    const smoother = typeof window !== "undefined" ? window.ScrollSmoother?.get() : null;
+    const smoother =
+      typeof window !== "undefined" ? window.ScrollSmoother?.get() : null;
     smoother?.paused(true);
 
     return () => {
@@ -43,35 +46,58 @@ const CardModal = ({ data, setShowModal }) => {
       <Modal $isvideo={!!videoSrc}>
         <CloseBtn
           src={closeButton}
-          onMouseEnter={() => setCloseButton("/images/uiElement/CloseBtnHover.webp")}
-          onMouseLeave={() => setCloseButton("/images/uiElements/closeButton.webp")}
+          onMouseEnter={() =>
+            setCloseButton("/images/uiElement/CloseBtnHover.webp")
+          }
+          onMouseLeave={() =>
+            setCloseButton("/images/uiElements/closeButton.webp")
+          }
           onClick={handleClose}
         />
         {!videoSrc && (
           <FeaturedContent>
             <Title $mobile>
               <NameAndStar>
-                {data?.person?.[0]?.copy && <RichTextRenderer document={data.person[0].copy} />}
-                <Sparkle src="/images/uiElements/VasionStarNewsroom.webp" alt="vasion-sparkle" />
+                {data?.person?.[0]?.copy && (
+                  <RichTextRenderer document={data.person[0].copy} />
+                )}
+                <Sparkle
+                  src="/images/uiElements/VasionStarNewsroom.webp"
+                  alt="vasion-sparkle"
+                />
               </NameAndStar>
-              {data?.position?.[0]?.copy && <RichTextRenderer document={data.position[0].copy} />}
+              {data?.position?.[0]?.copy && (
+                <RichTextRenderer document={data.position[0].copy} />
+              )}
             </Title>
             <FeaturePhoto src={data?.asset?.[0]?.media?.[0]?.filename} />
             <TitleAndBioDiv>
               <Title>
                 <NameAndStar>
-                  {data?.person?.[0]?.copy && <RichTextRenderer document={data.person[0].copy} />}
-                  <Sparkle src="/images/uiElements/VasionStarNewsroom.webp" alt="vasion-sparkle" />
+                  {data?.person?.[0]?.copy && (
+                    <RichTextRenderer document={data.person[0].copy} />
+                  )}
+                  <Sparkle
+                    src="/images/uiElements/VasionStarNewsroom.webp"
+                    alt="vasion-sparkle"
+                  />
                 </NameAndStar>
-                {data?.position?.[0]?.copy && <RichTextRenderer document={data.position[0].copy} />}
+                {data?.position?.[0]?.copy && (
+                  <RichTextRenderer document={data.position[0].copy} />
+                )}
               </Title>
-              {data?.bio?.[0]?.copy && <RichTextRenderer document={data.bio[0].copy} />}
+              {data?.bio?.[0]?.copy && (
+                <RichTextRenderer document={data.bio[0].copy} />
+              )}
             </TitleAndBioDiv>
           </FeaturedContent>
         )}
         {videoSrc && (
           <VideoContainer>
-            <Video videos={data.asset[0].media[0]} thumbnails={data.asset[0].media[0].thumbnails} />
+            <Video
+              videos={data.asset[0].media[0]}
+              thumbnails={data.asset[0].media[0].thumbnails}
+            />
             <ReactPlayer
               url={videoSrc}
               controls={true}
@@ -86,7 +112,7 @@ const CardModal = ({ data, setShowModal }) => {
         )}
       </Modal>
     </Wrapper>,
-    document.body
+    document.body,
   );
 };
 
@@ -408,4 +434,5 @@ const Wrapper = styled.div`
     height: 100vh;
     top: 0;
   }
-`
+`;
+

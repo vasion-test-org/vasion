@@ -9,7 +9,9 @@ export async function generateMetadata({ params }) {
   const isLocalized = ["fr", "de"].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : "en";
   const storySlug = isLocalized
-    ? slugArray.length === 1 ? "home" : slugArray.slice(1).join("/")
+    ? slugArray.length === 1
+      ? "home"
+      : slugArray.slice(1).join("/")
     : slugArray.join("/");
 
   const story = await fetchStory(storySlug, locale);
@@ -25,10 +27,11 @@ export async function generateMetadata({ params }) {
   const title = content.metadata?.title || "Default Title";
   const description = content.metadata?.description || "Default Description";
 
-  const basePath = 'https://vasion-ten.vercel.app';
-  const locales = ['en', 'fr', 'de'];
+  const basePath = "https://vasion.com";
+  const locales = ["en", "fr", "de"];
   const alternateLinks = locales.reduce((acc, loc) => {
-    const path = loc === 'en' ? `/${story.full_slug}` : `/${loc}/${story.full_slug}`;
+    const path =
+      loc === "en" ? `/${story.full_slug}` : `/${loc}/${story.full_slug}`;
     acc[loc] = `${basePath}${path}`;
     return acc;
   }, {});
@@ -64,7 +67,9 @@ export default async function DynamicPage({ params }) {
   const isLocalized = ["fr", "de"].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : "en";
   const storySlug = isLocalized
-    ? slugArray.length === 1 ? "home" : slugArray.slice(1).join("/")
+    ? slugArray.length === 1
+      ? "home"
+      : slugArray.slice(1).join("/")
     : slugArray.join("/");
 
   let story = await fetchData(storySlug, locale, "published");
@@ -95,11 +100,15 @@ async function fetchData(slug, locale, version) {
   try {
     const { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
     if (!data.story) {
-      console.error(`[❌ Server] Story not found for slug: ${slug} and locale: ${locale}`);
+      console.error(
+        `[❌ Server] Story not found for slug: ${slug} and locale: ${locale}`,
+      );
       return null;
     }
 
-    console.log(`[✅ Success] Story fetched: ${data.story.full_slug} (${locale}) [${version}]`);
+    console.log(
+      `[✅ Success] Story fetched: ${data.story.full_slug} (${locale}) [${version}]`,
+    );
     return data.story;
   } catch (error) {
     console.error(`[❌ Server] Error fetching story: ${error.message}`);
@@ -109,7 +118,9 @@ async function fetchData(slug, locale, version) {
 
 export async function generateStaticParams() {
   const storyblokApi = getStoryblokApi();
-  const { data } = await storyblokApi.get("cdn/stories/", { version: "published" });
+  const { data } = await storyblokApi.get("cdn/stories/", {
+    version: "published",
+  });
 
   const params = [];
 
@@ -120,8 +131,12 @@ export async function generateStaticParams() {
 
     if (story.translated_slugs) {
       for (const translation of story.translated_slugs) {
-        const translatedSlug = translation.path === "" ? [] : translation.path.split("/");
-        params.push({ slug: [translation.lang, ...translatedSlug], locale: translation.lang });
+        const translatedSlug =
+          translation.path === "" ? [] : translation.path.split("/");
+        params.push({
+          slug: [translation.lang, ...translatedSlug],
+          locale: translation.lang,
+        });
       }
     }
   }

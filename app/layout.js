@@ -1,38 +1,38 @@
-import StoryblokProvider from '@/components/StoryblokProvider';
-import { ThemeProviderWrapper } from '@/context/ThemeContext';
-import { ThankYouProvider } from '@/context/ThankYouContext';
-import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
-import FormTracking from '@/components/FormTracking';
-import Script from 'next/script';
-import './globals.css';
-import ScrollSmootherWrapper from '@/components/ScollSmoothWraper';
-import Providers from '@/components/providers';
-import Config from '@/components/Config';
-import { getStoryblokApi } from '@/lib/storyblok';
-import { Metadata } from 'next';
+import StoryblokProvider from "@/components/StoryblokProvider";
+import { ThemeProviderWrapper } from "@/context/ThemeContext";
+import { ThankYouProvider } from "@/context/ThankYouContext";
+import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
+import FormTracking from "@/components/FormTracking";
+import Script from "next/script";
+import "./globals.css";
+import ScrollSmootherWrapper from "@/components/ScollSmoothWraper";
+import Providers from "@/components/providers";
+import Config from "@/components/Config";
+import { getStoryblokApi } from "@/lib/storyblok";
+import { Metadata } from "next";
 
 export const metadata = {
-  metadataBase: new URL('https://vasion-ten.vercel.app'),
+  metadataBase: new URL("https://vasion.com"),
   title: {
-    template: '%s | Vasion',
-    default: 'Vasion',
+    template: "%s | Vasion",
+    default: "Vasion",
   },
-  description: 'Vasion site',
+  description: "Vasion site",
 };
 
 export default async function RootLayout({ children }) {
   const storyblokApi = getStoryblokApi();
-  const { data } = await storyblokApi.get('cdn/stories/config', {
-    version: 'draft',
+  const { data } = await storyblokApi.get("cdn/stories/config", {
+    version: "draft",
   });
   const configData = data ? data.story.content : null;
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
         {/* Marketo Munchkin */}
         <Script
-          id='marketo-munchkin'
-          strategy='afterInteractive'
+          id="marketo-munchkin"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
       (function() {
@@ -61,23 +61,23 @@ export default async function RootLayout({ children }) {
 
         {/* CookieYes */}
         <Script
-          id='cookieyes'
-          strategy='afterInteractive'
-          src='https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js'
+          id="cookieyes"
+          strategy="afterInteractive"
+          src="https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js"
         />
 
         {/* Marketo Forms2 */}
         <Script
-          id='marketo-forms'
-          strategy='afterInteractive'
+          id="marketo-forms"
+          strategy="afterInteractive"
           defer
-          src='https://info.printerlogic.com/js/forms2/js/forms2.min.js'
+          src="https://info.printerlogic.com/js/forms2/js/forms2.min.js"
         />
 
         {/* Intercom Settings */}
         <Script
-          id='intercom-settings'
-          strategy='afterInteractive'
+          id="intercom-settings"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
         window.intercomSettings = {
@@ -90,8 +90,8 @@ export default async function RootLayout({ children }) {
 
         {/* Intercom Script */}
         <Script
-          id='intercom-script'
-          strategy='afterInteractive'
+          id="intercom-script"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
         (function(){var w=window;var ic=w.Intercom;
@@ -118,8 +118,8 @@ export default async function RootLayout({ children }) {
 
         {/* VWO */}
         <Script
-          id='vwo'
-          strategy='afterInteractive'
+          id="vwo"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
         window._vwo_code || (function() {
@@ -173,7 +173,7 @@ export default async function RootLayout({ children }) {
 
         {/* Google Tag Manager */}
         <Script
-          id='gtm'
+          id="gtm"
           async
           dangerouslySetInnerHTML={{
             __html: `
@@ -188,17 +188,17 @@ export default async function RootLayout({ children }) {
 
         {/* OneLink */}
         <Script
-          id='onelink'
-          referrerPolicy='no-referrer-when-downgrade'
-          type='text/javascript'
-          src='https://www.onelink-edge.com/moxie.min.js'
-          data-oljs='P294B-E0B2-7E1B-A9D7'
-          strategy='afterInteractive'
+          id="onelink"
+          referrerPolicy="no-referrer-when-downgrade"
+          type="text/javascript"
+          src="https://www.onelink-edge.com/moxie.min.js"
+          data-oljs="P294B-E0B2-7E1B-A9D7"
+          strategy="afterInteractive"
         />
 
         {/* Hotjar */}
         <Script
-          id='hotjar'
+          id="hotjar"
           async
           dangerouslySetInnerHTML={{
             __html: `
