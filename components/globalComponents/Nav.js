@@ -31,12 +31,14 @@ const Nav = ({ blok }) => {
 
   useEffect(() => {
     function checkPathLocale(url) {
-      const { pathname } = new URL(url, 'https://vasion.com'); 
+      const { pathname } = new URL(url, 'https://vasion.com');
       const pathLocale = pathname.split('/')[1];
       const supportedLocales = ['en', 'fr', 'de'];
       const defaultLocale = 'en';
 
-      const lang = supportedLocales.includes(pathLocale) ? pathLocale : defaultLocale;
+      const lang = supportedLocales.includes(pathLocale)
+        ? pathLocale
+        : defaultLocale;
       setLanguage(lang);
 
       if (lang === 'de') {
@@ -54,14 +56,18 @@ const Nav = ({ blok }) => {
   }, [path, blok]);
 
   const slugParts = path.split('/').filter(Boolean);
-  const currentLocale = ['de', 'fr'].includes(slugParts[0]) ? slugParts[0] : null;
+  const currentLocale = ['de', 'fr'].includes(slugParts[0])
+    ? slugParts[0]
+    : null;
   const nonHomeSlug = currentLocale
     ? slugParts.slice(1).join('/')
     : slugParts.join('/');
 
   const handleNavigate = (locale) => {
     const basePath = locale === 'en' ? '' : `/${locale}`;
-    const newPath = nonHomeSlug ? `${basePath}/${nonHomeSlug}` : basePath || '/';
+    const newPath = nonHomeSlug
+      ? `${basePath}/${nonHomeSlug}`
+      : basePath || '/';
     router.push(newPath);
   };
 
@@ -79,10 +85,9 @@ const Nav = ({ blok }) => {
               const rawUrl = navItem.item_link?.cached_url || '#';
               const isExternal =
                 rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
-                const normalizedUrl = isExternal
+              const normalizedUrl = isExternal
                 ? rawUrl
                 : `/${currentLocale ?? ''}/${rawUrl}`.replace(/\/+/g, '/');
-              
 
               return (
                 <StyledNextLink
@@ -95,7 +100,7 @@ const Nav = ({ blok }) => {
                   <NavItem
                     card={navItem.card}
                     card_size={navItem.card_size}
-                    role="link"
+                    role='link'
                     tabIndex={0}
                   >
                     {navItem.card &&
@@ -283,7 +288,7 @@ const Nav = ({ blok }) => {
           <MainInner>
             <MainContent>
               <a href='/'>
-              <VasionLogo src='/images/logos/vasion-logo-purple.webp' />
+                <VasionLogo src='/images/logos/vasion-logo-purple.webp' />
               </a>
               <Tabs>{mappedNav}</Tabs>
             </MainContent>
@@ -303,9 +308,9 @@ const Nav = ({ blok }) => {
 };
 
 const StyledNextLink = styled(NextLink)`
-   ${text.tag};
-   color: ${colors.txtSubtle};
-`
+  ${text.tag};
+  color: ${colors.txtSubtle};
+`;
 const StyledAnchor = styled.span`
   ${text.tag};
   color: ${colors.primaryOrange};
@@ -520,6 +525,7 @@ const NavItemSubCopy = styled.div`
   color: ${colors.txtSubtle};
 `;
 const NavItemCopy = styled.div`
+  color: ${colors.grey800};
   margin-left: ${(props) => (props.card_size === 'large' ? '1vw' : 'unset')};
 
   ${media.fullWidth} {
@@ -554,16 +560,22 @@ const NavIconWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-self: ${(props) => (props.card ? 'start' : 'unset')};
-  width: ${(props) => (props.card && props.card_size ? '3.375vw' : '1.25vw')};
+  min-width: ${(props) =>
+    props.card && props.card_size ? '3.375vw' : '1.25vw'};
+  max-width: ${(props) =>
+    props.card && props.card_size ? '3.375vw' : '1.25vw'};
   height: ${(props) => (props.card && props.card_size ? 'unset' : '1.25vw')};
 
   ${media.fullWidth} {
-    width: ${(props) => (props.card && props.card_size ? '54px' : '20px')};
+    min-width: ${(props) => (props.card && props.card_size ? '54px' : '20px')};
+    max-width: ${(props) => (props.card && props.card_size ? '54px' : '20px')};
     height: ${(props) => (props.card && props.card_size ? 'unset' : '20px')};
   }
 
   ${media.tablet} {
-    width: ${(props) =>
+    min-width: ${(props) =>
+      props.card && props.card_size ? '5.273vw' : '1.953vw'};
+    max-width: ${(props) =>
       props.card && props.card_size ? '5.273vw' : '1.953vw'};
     height: ${(props) => (props.card && props.card_size ? 'unset' : '1.953vw')};
   }
@@ -640,7 +652,7 @@ const NavItem = styled.div`
         ? '4px 12px 4px 4px'
         : props.card_size === 'large'
         ? 'unset'
-        : '4px 12px'};
+        : '4px'};
     border-radius: 4px;
     height: ${(props) => (props.card_size === 'large' ? '222px' : 'auto')};
   }
@@ -677,9 +689,12 @@ const NavItem = styled.div`
   ${media.mobile} {
   }
   &:hover {
-    background: ${colors.lightPurpleGrey};
+    background: ${(props) =>
+      props.card_size === 'large' ? 'unset' : colors.lightPurpleGrey};
     box-shadow: ${(props) =>
-      props.card
+      props.card_size === 'large'
+        ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
+        : props.card_size === 'medium'
         ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
         : 'unset'};
     path {
@@ -804,18 +819,18 @@ const Tab = styled.div`
   align-items: center;
   justify-content: center;
   height: 1.625vw;
-  padding: 0.25vw 0.125vw;
+  padding: 0.125vw 0.25vw;
   border-radius: 0.25vw;
 
   ${media.fullWidth} {
     height: 26px;
-    padding: 4px 2px;
+    padding: 2px 4px;
     border-radius: 4px;
   }
 
   ${media.tablet} {
     height: 2.539vw;
-    padding: 0.391vw 0.195vw;
+    padding: 0.195vw 0.391vw;
     border-radius: 0.391vw;
   }
 
