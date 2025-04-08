@@ -275,7 +275,7 @@ const HeaderDiv = styled.div`
   align-items: center;
   justify-self: center;
   overflow: visible;
-  text-wrap: nowrap;
+  /* text-wrap: nowrap; */
   ${media.mobile} {
     width: 109%;
     padding: 9.346vw 4.673vw 4.673vw 4.673vw;
