@@ -98,14 +98,18 @@ const Combined = ({ blok }) => {
           <StatItemsContainer>{statlist}</StatItemsContainer>
         </StatBlock>
         {blok?.link?.link_text && (
-          <Button
-            $buttonData={{
-              theme: "orange_link",
-              link_url: { url: blok.link.link_url },
-              link_text: blok?.link.link_text,
-              link_size: "small",
-            }}
-          />
+          <StyledButton href={blok.link.link_url}>
+            {blok?.link?.link_text}
+          </StyledButton>
+          // <Button
+
+          //   $buttonData={{
+          //     theme: "orange_link",
+          //     link_url: { url: blok.link.link_url },
+          //     link_text: blok?.link.link_text,
+          //     link_size: "small",
+          //   }}
+          // />
         )}
       </ContentDiv>
     </Wrapper>
@@ -113,6 +117,16 @@ const Combined = ({ blok }) => {
 };
 
 export default Combined;
+
+const StyledButton = styled.a`
+  ${text.bodyMd};
+  text-decoration: none;
+  color: ${colors?.primaryOrange};
+  a:visited {
+    color: inherit;
+    text-decoration: none;
+  }
+`;
 
 const ImageHeadline = styled.img`
   width: 10.347vw;
@@ -199,7 +213,7 @@ const StatItemsContainer = styled.div`
   }
 `;
 const Headline = styled.h4`
-  ${text.bodyXlBold};
+  ${text.bodyXLBold};
 
   ${media.mobile} {
     ${text.bodyLgBold};
