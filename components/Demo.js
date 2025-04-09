@@ -334,7 +334,9 @@ const Demo = ({ blok }) => {
     let IconComponent = Icons[formattedIconString] || null;
     // console.log(option);
     return (
+      <div {...storyblokEditable(option)}>
       <OptionDiv
+      
         className='options preformContent'
         ref={(el) => (optionRefs.current[index] = el)}
         key={option.header}
@@ -358,9 +360,14 @@ const Demo = ({ blok }) => {
           ref={(el) => (contentRefs.current[index] = el)}
         >
           <OptionSubheader>{option.sub_header}</OptionSubheader>
+          <div {...storyblokEditable(option)}>
           <RichTextRenderer document={option.body_copy} />
+
+          </div>
         </OptionContentContainer>
       </OptionDiv>
+
+      </div>
     );
   });
 

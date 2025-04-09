@@ -10,6 +10,7 @@ import { Draggable } from 'gsap/Draggable';
 import { InertiaPlugin } from 'gsap/InertiaPlugin';
 import text from 'styles/text';
 import RichTextRenderer from './renderers/RichTextRenderer';
+import { storyblokEditable } from '@storyblok/react/rsc';
 
 gsap.registerPlugin(Draggable, InertiaPlugin);
 
@@ -30,9 +31,15 @@ const ReviewsCarousel = ({ blok }) => {
       className='reviewItems'
     >
       {<Stars src='/images/HomepageStars.webp' alt={'Five Star Rating'} />}
+      <div {...storyblokEditable(rev)}>
       <RichTextRenderer document={rev?.body_copy} />
+
+      </div>
       <RedditTextContainer>
+        <div {...storyblokEditable(rev.link[0].link_text)}>
         <RedditText> {rev.link[0].link_text}</RedditText>
+
+        </div>
         <RedditOpener src='/images/RedditNewTab.webp' alt={'compose-new-tab'} />
       </RedditTextContainer>
     </ReviewItem>
@@ -41,7 +48,11 @@ const ReviewsCarousel = ({ blok }) => {
     return (
       <StatDiv key={index} className={'statsDraggable'}>
         <StyledStat>{statItem?.stat}</StyledStat>
+        <div {...storyblokEditable(statItem)}>
+
         <RichTextRenderer document={statItem.copy[0].copy} />
+
+        </div>
       </StatDiv>
     );
   });
@@ -66,8 +77,14 @@ const ReviewsCarousel = ({ blok }) => {
     <Wrapper id='reddit-reviews'>
       <HeaderContainer  spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}>
+          <div {...storyblokEditable(blok)}>
         <RichTextRenderer document={blok?.header} />
+
+          </div>
+          <div {...storyblokEditable(blok)}>
         <RichTextRenderer document={blok?.subheader} />
+
+          </div>
       </HeaderContainer>
       <VisibleContainer>
         <BlurLeft />
@@ -79,7 +96,10 @@ const ReviewsCarousel = ({ blok }) => {
         <BlurStatLeft />
         <BlurStatRight />
         <BottomHeaderWrapper>
+          <div {...storyblokEditable(blok)}>
           <RichTextRenderer document={blok?.bottom_section_header} />
+
+          </div>
         </BottomHeaderWrapper>
         <VisibleStatsContainer>
           {dragStats}
