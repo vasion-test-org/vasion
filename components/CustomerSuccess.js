@@ -76,6 +76,7 @@ const FeaturedTestimonials = ({ blok }) => {
 
   const featured = blok?.testimonials?.map((item, index) => (
     <FeaturedItem
+    {...storyblokEditable(item)}
       key={index}
       href={item?.linkUrl}
       ref={(el) => (itemsRef.current[index] = el)}
@@ -83,17 +84,17 @@ const FeaturedTestimonials = ({ blok }) => {
       onMouseLeave={handleMouseLeave}
     >
       <ImageContainer>
-        <Tag>
+        <Tag {...storyblokEditable(item)}>
           <RichTextRenderer document={item?.tag} />
         </Tag>
         <LogoImage src={item?.asset.filename} alt={item?.image?.alt} />
       </ImageContainer>
       <BlocksDiv>
         <TitleAndBody>
-          <Headline>
+          <Headline {...storyblokEditable(item)}>
             <RichTextRenderer document={item.copy_sections[0].copy} />
           </Headline>
-          <Body>
+          <Body {...storyblokEditable(item)}>
             <RichTextRenderer document={item.copy_sections[1].copy} />
           </Body>
         </TitleAndBody>
@@ -119,7 +120,10 @@ const FeaturedTestimonials = ({ blok }) => {
       </StatTag>
       <StatAndBodyDiv>
         <Stat> {item?.stat}</Stat>
+        <div {...storyblokEditable(item)}>
         <RichTextRenderer document={item?.body_copy} />
+
+        </div>
       </StatAndBodyDiv>
       <StatBlokBottomContainer>
         <LogoStat src={item?.company_logo.filename} alt={"company-logo"} />

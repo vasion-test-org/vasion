@@ -95,6 +95,7 @@ const StackedCards = ({ blok }) => {
 
         return (
           <CardContainer
+            {...storyblokEditable(card)}
             className="stackedCards"
             key={card._uid || index}
             $active={active}
@@ -106,8 +107,14 @@ const StackedCards = ({ blok }) => {
           >
             <Content $last={isLastCard}>
               {card?.eyebrow && <RichTextRenderer document={card.eyebrow} />}
+              <div {...storyblokEditable(card.header)}>
               <RichTextRenderer document={card.header} />
+
+              </div>
+              <div {...storyblokEditable(card.body_copy)}>
               <RichTextRenderer document={card.body_copy} />
+
+              </div>
             </Content>
 
             <ButtonRow isLastCard={isLastCard}>

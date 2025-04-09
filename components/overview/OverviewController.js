@@ -28,7 +28,7 @@ const OverviewController = ({ blok }) => {
       };
       return (
         <OverviewCombined
-          {...storyblokEditable(quoteData)}
+          {...storyblokEditable(blok)}
           blok={{
             quote: quoteData,
             stats: combinedStatsData,
