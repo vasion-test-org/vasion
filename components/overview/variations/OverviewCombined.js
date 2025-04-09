@@ -7,12 +7,13 @@ import text from "@/styles/text";
 import Button from "components/globalComponents/Button";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import Parenthesis from "@/assets/svg/Parenthesis.svg";
+import Link from "next/link";
 import { storyblokEditable } from "@storyblok/react/rsc";
 const Combined = ({ blok }) => {
-  // console.log("Combined->", blok);
+  console.log("Combined->", blok);
   const statlist = blok?.stats?.stat_list?.map((item) => {
     return (
-      <StatItem {...storyblokEditable(item)} key={item._uid}>
+      <StatItem key={item._uid}>
         <StatHeadline>{item?.headline}</StatHeadline>
         <StatBody>
           <RichTextRenderer document={item?.body_copy} />
@@ -98,18 +99,14 @@ const Combined = ({ blok }) => {
           <StatItemsContainer>{statlist}</StatItemsContainer>
         </StatBlock>
         {blok?.link?.link_text && (
-          <StyledButton href={blok.link.link_url}>
-            {blok?.link?.link_text}
-          </StyledButton>
-          // <Button
-
-          //   $buttonData={{
-          //     theme: "orange_link",
-          //     link_url: { url: blok.link.link_url },
-          //     link_text: blok?.link.link_text,
-          //     link_size: "small",
-          //   }}
-          // />
+          <Button
+            $buttonData={{
+              theme: "orange_link",
+              link_url: { url: blok.link.link_url },
+              link_text: blok?.link.link_text,
+              link_size: "small",
+            }}
+          />
         )}
       </ContentDiv>
     </Wrapper>
@@ -117,16 +114,6 @@ const Combined = ({ blok }) => {
 };
 
 export default Combined;
-
-const StyledButton = styled.a`
-  ${text.bodyMd};
-  text-decoration: none;
-  color: ${colors?.primaryOrange};
-  a:visited {
-    color: inherit;
-    text-decoration: none;
-  }
-`;
 
 const ImageHeadline = styled.img`
   width: 10.347vw;
