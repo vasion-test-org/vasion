@@ -32,7 +32,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/[...slug]/page.jsx", "app/page.jsx", "app/api/draft/route.js", "components/ClientStory.js"  ],
+, "app/[...slug]/page.jsx", "app/page.jsx", "app/api/draft/route.js", "components/ClientStory.js", "Middleware.ts"  ],
   "exclude": [
     "node_modules"
   ]

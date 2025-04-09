@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -11,6 +11,9 @@ import media from '@/styles/media';
 const Button = ({ $buttonData }) => {
   const themes = useAvailableThemes();
   const pathname = usePathname();
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, [pathname]);
   const selectedTheme =
     themes.button?.[$buttonData?.theme] || themes.button.primary;
 
