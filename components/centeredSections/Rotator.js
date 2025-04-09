@@ -188,6 +188,7 @@ const TabIcon = styled.img`
   }
 `;
 const Tab = styled.div`
+  cursor: pointer;
   display: flex;
   flex-direction: row;
   gap: 0.5vw;
