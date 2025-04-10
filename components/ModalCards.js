@@ -8,6 +8,7 @@ import CardModal from "@/components/globalComponents/CardModal";
 import RichTextRenderer from "./renderers/RichTextRenderer";
 
 const ModalCards = ({ blok }) => {
+  console.log("ModalCards", blok);
   const wrapperRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState(null);
