@@ -21,7 +21,7 @@ const Testimonial = ({ blok }) => {
       <TestimonialWrapper layout={blok.layout} spacing={blok.section_spacing}>
         <TestimonialCard>
           <TestimonialContent>
-            <TestimonialEyebrow>Testimonial</TestimonialEyebrow>
+            <TestimonialEyebrow>{blok?.eyebrow || Testimonial}</TestimonialEyebrow>
             {blok.quote.map((copy) => (
               <div {...storyblokEditable(copy)} key={copy.component}>
                 <RichTextRenderer document={copy.copy} />

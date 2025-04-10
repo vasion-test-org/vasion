@@ -309,11 +309,6 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/logistics/",
-        destination: "/industries/logistics/",
-        permanent: true,
-      },
-      {
         source: "/launches/",
         destination: "/whats-new/",
         permanent: true,
