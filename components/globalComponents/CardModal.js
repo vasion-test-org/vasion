@@ -11,6 +11,7 @@ import RichTextRenderer from "../renderers/RichTextRenderer";
 import Video from "./Video";
 
 const CardModal = ({ data, setShowModal }) => {
+  console.log("CardModal", data);
   const [closeButton, setCloseButton] = useState(
     "/images/uiElements/closeButton.webp",
   );
@@ -54,7 +55,7 @@ const CardModal = ({ data, setShowModal }) => {
           }
           onClick={handleClose}
         />
-        {!videoSrc && (
+        {data?.person[0]?.copy && (
           <FeaturedContent>
             <Title $mobile>
               <NameAndStar>
@@ -92,7 +93,7 @@ const CardModal = ({ data, setShowModal }) => {
             </TitleAndBioDiv>
           </FeaturedContent>
         )}
-        {videoSrc && (
+        {!data?.position[0]?.copy && (
           <VideoContainer>
             <Video
               videos={data.asset[0].media[0]}
@@ -252,17 +253,17 @@ const TitleAndBioDiv = styled.div`
 const FeaturePhoto = styled.img`
   object-fit: cover;
   width: 21.375vw;
-  height: 28.5vw;
+  height: 21.375vw;
   border-radius: 1.5vw;
   ${media.fullWidth} {
     width: 342px;
-    height: 456px;
+    height: 342px;
     border-radius: 24px;
   }
 
   ${media.tablet} {
     width: 27.734vw;
-    height: 36.914vw;
+    height: 27.734vw;
     border-radius: 2.344vw;
   }
 
@@ -435,4 +436,3 @@ const Wrapper = styled.div`
     top: 0;
   }
 `;
-
