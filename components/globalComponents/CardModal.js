@@ -71,7 +71,11 @@ const CardModal = ({ data, setShowModal }) => {
                 <RichTextRenderer document={data.position[0].copy} />
               )}
             </Title>
-            <FeaturePhoto src={data?.asset?.[0]?.media?.[0]?.filename} />
+            <FeaturePhoto
+              height={342}
+              width={342}
+              src={data?.asset?.[0]?.media?.[0]?.filename}
+            />
             <TitleAndBioDiv>
               <Title>
                 <NameAndStar>
@@ -253,24 +257,24 @@ const TitleAndBioDiv = styled.div`
 const FeaturePhoto = styled.img`
   object-fit: cover;
   width: 21.375vw;
-  height: 21.375vw;
+  height: auto;
   border-radius: 1.5vw;
   ${media.fullWidth} {
     width: 342px;
-    height: 342px;
     border-radius: 24px;
   }
 
   ${media.tablet} {
     width: 27.734vw;
-    height: 27.734vw;
     border-radius: 2.344vw;
   }
 
   ${media.mobile} {
+    object-fit: contain;
     width: 79.167vw;
-    height: 105.417vw;
     border-radius: 5vw;
+    justify-self: center;
+    align-self: center;
   }
 `;
 const FeaturedContent = styled.div`
@@ -280,7 +284,7 @@ const FeaturedContent = styled.div`
   gap: 3.75vw;
   padding-top: 3.75vw;
   height: calc(100% - 1.25vw);
-  overflow-y: auto;
+  overflow-x: hidden;
   scroll-padding: 10px;
   &::-webkit-scrollbar {
     width: 0.375vw;
