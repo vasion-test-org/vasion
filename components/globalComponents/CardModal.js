@@ -48,7 +48,7 @@ const CardModal = ({ data, setShowModal }) => {
         <CloseBtn
           src={closeButton}
           onMouseEnter={() =>
-            setCloseButton("/images/uiElement/CloseBtnHover.webp")
+            setCloseButton("/images/uiElements/closeButtonActive.webp")
           }
           onMouseLeave={() =>
             setCloseButton("/images/uiElements/closeButton.webp")
@@ -274,7 +274,9 @@ const FeaturePhoto = styled.img`
   }
 `;
 const FeaturedContent = styled.div`
+  position: relative;
   display: flex;
+  width: 95%;
   gap: 3.75vw;
   padding-top: 3.75vw;
   height: calc(100% - 1.25vw);
