@@ -11,7 +11,7 @@ import RichTextRenderer from "../renderers/RichTextRenderer";
 import Video from "./Video";
 
 const CardModal = ({ data, setShowModal }) => {
-  console.log("CardModal", data);
+  // console.log("CardModal", data);
   const [closeButton, setCloseButton] = useState(
     "/images/uiElements/closeButton.webp",
   );
@@ -44,7 +44,7 @@ const CardModal = ({ data, setShowModal }) => {
 
   return createPortal(
     <Wrapper onClick={handleClose}>
-      <Modal $isvideo={!!videoSrc}>
+      <Modal $isvideo={!data?.person[0]?.copy}>
         <CloseBtn
           src={closeButton}
           onMouseEnter={() =>
