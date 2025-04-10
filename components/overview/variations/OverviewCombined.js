@@ -100,6 +100,7 @@ const Combined = ({ blok }) => {
         </StatBlock>
         {blok?.link?.link_text && (
           <Button
+          {...storyblokEditable(blok?.link)}
             $buttonData={{
               theme: "orange_link",
               link_url: { url: blok.link.link_url },

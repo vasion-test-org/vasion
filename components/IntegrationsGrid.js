@@ -7,6 +7,7 @@ import media from "@/styles/media";
 import gsap from "gsap";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import IntegrationBloks from "@/components/globalComponents/IntegrationBloks";
+import { storyblokEditable } from "@storyblok/react/rsc";
 
 const IntegrationsGrid = ({ blok }) => {
   // console.log(blok);
@@ -54,10 +55,10 @@ const IntegrationsGrid = ({ blok }) => {
   return (
     <Wrapper className="integration-wrapper" ref={wrapperRef}>
       <Intro>
-        <Header>
+        <Header {...storyblokEditable(blok)}>
           <RichTextRenderer document={blok.header} />
         </Header>
-        <Body>
+        <Body {...storyblokEditable(blok)}>
           <RichTextRenderer document={blok?.body_copy} />
         </Body>
       </Intro>
