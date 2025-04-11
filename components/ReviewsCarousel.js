@@ -1,61 +1,64 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
-import gsap from 'gsap';
-import styled from 'styled-components';
-import media from 'styles/media';
-import colors from 'styles/colors';
-import { horizontalLoop } from 'functions/horizontalLoop';
-import { Draggable } from 'gsap/Draggable';
-import { InertiaPlugin } from 'gsap/InertiaPlugin';
-import text from 'styles/text';
-import RichTextRenderer from './renderers/RichTextRenderer';
-import { storyblokEditable } from '@storyblok/react/rsc';
+import React, { useEffect } from "react";
+import gsap from "gsap";
+import styled from "styled-components";
+import media from "styles/media";
+import colors from "styles/colors";
+import { horizontalLoop } from "functions/horizontalLoop";
+import { Draggable } from "gsap/Draggable";
+import { InertiaPlugin } from "gsap/InertiaPlugin";
+import text from "styles/text";
+import RichTextRenderer from "./renderers/RichTextRenderer";
+import { storyblokEditable } from "@storyblok/react/rsc";
 
 gsap.registerPlugin(Draggable, InertiaPlugin);
 
 const ReviewsCarousel = ({ blok }) => {
-  // console.log(blok);
   const redditReviews = blok?.reviews;
   const statsList = blok?.stats;
 
+  const hasStats = statsList && statsList.length > 0;
+
   const clonedReviews = [...redditReviews, ...redditReviews, ...redditReviews];
-  const clonedStats = [...statsList, ...statsList, ...statsList];
+  const clonedStats = hasStats
+    ? [...statsList, ...statsList, ...statsList]
+    : [];
 
   const dragReviews = clonedReviews.map((rev, index) => (
     <ReviewItem
       href={rev.link[0].link_url}
-      target={'_blank'}
-      rel={'noopener noreferrer'}
+      target={"_blank"}
+      rel={"noopener noreferrer"}
       key={index}
-      className='reviewItems'
+      className="reviewItems"
     >
-      {<Stars src='/images/HomepageStars.webp' alt={'Five Star Rating'} />}
+      {<Stars src="/images/HomepageStars.webp" alt={"Five Star Rating"} />}
       <div {...storyblokEditable(rev)}>
-      <RichTextRenderer document={rev?.body_copy} />
-
+        <RichTextRenderer document={rev?.body_copy} />
       </div>
       <RedditTextContainer>
         <div {...storyblokEditable(rev.link[0].link_text)}>
-        <RedditText> {rev.link[0].link_text}</RedditText>
-
+          <RedditText> {rev.link[0].link_text}</RedditText>
         </div>
-        <RedditOpener src='/images/RedditNewTab.webp' alt={'compose-new-tab'} />
+        <RedditOpener src="/images/RedditNewTab.webp" alt={"compose-new-tab"} />
       </RedditTextContainer>
     </ReviewItem>
   ));
-  const dragStats = clonedStats.map((statItem, index) => {
-    return (
-      <StatDiv key={index} className={'statsDraggable'}>
-        <StyledStat>{statItem?.stat}</StyledStat>
-        <div {...storyblokEditable(statItem)}>
 
-        <RichTextRenderer document={statItem.copy[0].copy} />
+  const dragStats = hasStats
+    ? clonedStats.map((statItem, index) => {
+        return (
+          <StatDiv key={index} className={"statsDraggable"}>
+            <StyledStat>{statItem?.stat}</StyledStat>
+            <div {...storyblokEditable(statItem)}>
+              <RichTextRenderer document={statItem.copy[0].copy} />
+            </div>
+          </StatDiv>
+        );
+      })
+    : null;
 
-        </div>
-      </StatDiv>
-    );
-  });
   useEffect(() => {
     horizontalLoop(`.reviewItems`, {
       repeat: -1,
@@ -64,55 +67,60 @@ const ReviewsCarousel = ({ blok }) => {
       speed: 0.6,
       deep: true,
     });
-    horizontalLoop(`.statsDraggable`, {
-      repeat: -1,
-      paddingRight: 10,
-      // draggable: true,
-      speed: 0.3,
-    });
-  }, []);
+
+    if (hasStats) {
+      horizontalLoop(`.statsDraggable`, {
+        repeat: -1,
+        paddingRight: 10,
+        // draggable: true,
+        speed: 0.3,
+      });
+    }
+  }, [hasStats]);
 
   return (
     <SpacingWrapper>
-    <Wrapper id='reddit-reviews'>
-      <HeaderContainer  spacingOffset={blok.offset_spacing}
-        spacing={blok.section_spacing}>
+      <Wrapper id="reddit-reviews">
+        <HeaderContainer
+          spacingOffset={blok.offset_spacing}
+          spacing={blok.section_spacing}
+        >
           <div {...storyblokEditable(blok)}>
-        <RichTextRenderer document={blok?.header} />
-
+            <RichTextRenderer document={blok?.header} />
           </div>
           <div {...storyblokEditable(blok)}>
-        <RichTextRenderer document={blok?.subheader} />
-
+            <RichTextRenderer document={blok?.subheader} />
           </div>
-      </HeaderContainer>
-      <VisibleContainer>
-        <BlurLeft />
-        <BlurRight />
-        <MasonryBlocks>{dragReviews}</MasonryBlocks>
-      </VisibleContainer>
+        </HeaderContainer>
+        <VisibleContainer>
+          <BlurLeft />
+          <BlurRight />
+          <MasonryBlocks>{dragReviews}</MasonryBlocks>
+        </VisibleContainer>
 
-      <ByTheNumbers>
-        <BlurStatLeft />
-        <BlurStatRight />
-        <BottomHeaderWrapper>
-          <div {...storyblokEditable(blok)}>
-          <RichTextRenderer document={blok?.bottom_section_header} />
-
-          </div>
-        </BottomHeaderWrapper>
-        <VisibleStatsContainer>
-          {dragStats}
-          <DecorativeStroke className='decorative-stroke'>
-            <LineDecoration />
-            <VasionStar
-              src='/images/DraggableWhiteVasionStar.webp'
-              alt={'vasion-star-logo'}
-            />
-          </DecorativeStroke>
-        </VisibleStatsContainer>
-      </ByTheNumbers>
-    </Wrapper>
+        {/* Conditionally render the stats section */}
+        {hasStats && (
+          <ByTheNumbers>
+            <BlurStatLeft />
+            <BlurStatRight />
+            <BottomHeaderWrapper>
+              <div {...storyblokEditable(blok)}>
+                <RichTextRenderer document={blok?.bottom_section_header} />
+              </div>
+            </BottomHeaderWrapper>
+            <VisibleStatsContainer>
+              {dragStats}
+              <DecorativeStroke className="decorative-stroke">
+                <LineDecoration />
+                <VasionStar
+                  src="/images/DraggableWhiteVasionStar.webp"
+                  alt={"vasion-star-logo"}
+                />
+              </DecorativeStroke>
+            </VisibleStatsContainer>
+          </ByTheNumbers>
+        )}
+      </Wrapper>
     </SpacingWrapper>
   );
 };
@@ -254,7 +262,7 @@ const BlurStatLeft = styled.div`
   left: -3.292vw;
   top: 2.847vw;
   background: linear-gradient(0deg, #190c31 0.24%, rgba(25, 12, 49, 0) 99.76%);
-  z-index: 9; 
+  z-index: 9;
 
   ${media.fullWidth} {
     left: -146px;
@@ -651,98 +659,98 @@ const Wrapper = styled.div`
 `;
 
 const SpacingWrapper = styled.div`
-   padding: ${(props) => {
-    if (props.spacingOffset === 'top') {
-      return props.spacing === 'default'
-        ? '3.75vw 0 0'
+  padding: ${(props) => {
+    if (props.spacingOffset === "top") {
+      return props.spacing === "default"
+        ? "3.75vw 0 0"
         : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '3.75vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : "3.75vw 0 0";
     }
-    if (props.spacingOffset === 'bottom') {
-      return props.spacing === 'default'
-        ? '0 0 3.75vw'
+    if (props.spacingOffset === "bottom") {
+      return props.spacing === "default"
+        ? "0 0 3.75vw"
         : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 3.75vw';
+          ? `0 0 ${props.spacing}px`
+          : "0 0 3.75vw";
     }
-    return props.spacing === 'default'
-      ? '3.75vw 0'
+    return props.spacing === "default"
+      ? "3.75vw 0"
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0';
+        ? `${props.spacing}px 0`
+        : "3.75vw 0";
   }};
 
   ${media.fullWidth} {
     gap: 16px;
     padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '60px 0 0'
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "60px 0 0"
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+            ? `${props.spacing}px 0 0`
+            : "60px 0 0";
       }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 60px'
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 0 60px"
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+            ? `0 0 ${props.spacing}px`
+            : "0 0 60px";
       }
-      return props.spacing === 'default'
-        ? '60px 0'
+      return props.spacing === "default"
+        ? "60px 0"
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+          ? `${props.spacing}px 0`
+          : "60px 0";
     }};
   }
 
   ${media.tablet} {
     padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '5.859vw 0 0'
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "5.859vw 0 0"
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '5.859vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : "5.859vw 0 0";
       }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 5.859vw'
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 0 5.859vw"
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 5.859vw';
+            ? `0 0 ${props.spacing}px`
+            : "0 0 5.859vw";
       }
-      return props.spacing === 'default'
-        ? '5.859vw 0'
+      return props.spacing === "default"
+        ? "5.859vw 0"
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '5.859vw 0';
+          ? `${props.spacing}px 0`
+          : "5.859vw 0";
     }};
   }
 
   ${media.mobile} {
     padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '12.5vw 0 0'
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "12.5vw 0 0"
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '12.5vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : "12.5vw 0 0";
       }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 12.5vw'
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 0 12.5vw"
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 12.5vw';
+            ? `0 0 ${props.spacing}px`
+            : "0 0 12.5vw";
       }
-      return props.spacing === 'default'
-        ? '12.5vw 0'
+      return props.spacing === "default"
+        ? "12.5vw 0"
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0';
+          ? `${props.spacing}px 0`
+          : "12.5vw 0";
     }};
   }
-`
+`;
