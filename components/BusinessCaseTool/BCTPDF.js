@@ -58,7 +58,7 @@ const BCTPDF = ({ contactFormData, savingsFormData, currency }) => {
 
 const MailToLink = styled.a``;
 const PrintButton = styled.div`
-  ${text.bodySmBold}
+  ${text.bodySmBold};
   position: fixed;
   cursor: pointer;
   display: flex;
@@ -67,7 +67,7 @@ const PrintButton = styled.div`
   align-self: center;
   background-color: ${colors.primaryOrange};
   color: ${colors.white};
-  top: 3.472vw;
+  top: 8.472vw;
   right: 3.472vw;
   width: 7.944vw;
   height: 3.125vw;
