@@ -30,7 +30,7 @@ const defaultThankYouCopy = [
           content: [
             {
               type: "text",
-              text: "We appreciate your submission and will get back to you shortly.",
+              text: "Your download has been successful",
             },
           ],
         },
