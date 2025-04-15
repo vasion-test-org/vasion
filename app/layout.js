@@ -208,7 +208,9 @@ export default async function RootLayout({ children }) {
                 <ThankYouProvider>
                   <FormTracking />
                   <ScrollSmootherWrapper>
-                    <Config>{children}</Config>
+                    <Config>
+                      {children}
+                    </Config>
                   </ScrollSmootherWrapper>
                 </ThankYouProvider>
               </Providers>
