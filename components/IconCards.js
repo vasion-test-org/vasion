@@ -5,11 +5,12 @@ import media from "@/styles/media";
 import colors from "@/styles/colors";
 import text from "@/styles/text";
 import RichTextRenderer from "./renderers/RichTextRenderer";
+import { storyblokEditable } from "@storyblok/react";
 
 const IconCards = ({ blok }) => {
   const cards = blok?.map((card, index) => {
     return (
-      <Card key={card.title + index}>
+      <Card key={card.title + index} {...storyblokEditable(card)}>
         <NumberIntro>
           <Counter>{index + 1}</Counter>
           <Title>{card.title}</Title>
@@ -32,7 +33,7 @@ const IconCards = ({ blok }) => {
     );
   });
 
-  return <Wrapper>{cards}</Wrapper>;
+  return <Wrapper {...storyblokEditable(blok)}>{cards}</Wrapper>;
 };
 
 export default IconCards;

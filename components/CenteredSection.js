@@ -22,11 +22,12 @@ import Badges from "@/components/centeredSections/Badges";
 import BadgesMobile from "@/components/centeredSections/BadgesMobile";
 import { ScreenContext } from "@/components/providers/Screen";
 import LogosGallery from "@/components/centeredSections/LogosGallery";
+
 const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { mobile } = useContext(ScreenContext);
-  console.log(blok);
+  // console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper
