@@ -23,6 +23,7 @@ const SideBySide = ({ blok }) => {
         {...storyblokEditable(blok)}
         gap={blok.gap}
         asset_form={blok.asset_form}
+        extra_copy={blok.extra_copy}
       >
         <ComponentRenderer extra_copy={blok.left_extra_copy?.[0]} blok={blok.left_side_component[0]} />
         <ComponentRenderer extra_copy={blok.right_extra_copy?.[0]} blok={blok.right_side_component[0]} />
@@ -34,7 +35,7 @@ const SideBySide = ({ blok }) => {
 const SideBySideWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: ${props => props.extra_copy ? "start": "center"};
   justify-content: center;
   text-align: left;
   background: ${(props) => props.theme.side_by_side.bg};

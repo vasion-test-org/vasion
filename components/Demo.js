@@ -376,8 +376,7 @@ const Demo = ({ blok }) => {
       <Wrapper>
         <Content className='preformContent'>
           <Header>
-            Automate It With Vasion: Print, Output, Document, and Process
-            Management
+            {blok.header}
           </Header>
           <AllOptionsContainer>{mappedOptions}</AllOptionsContainer>
           {!mobile && <BadgesContainer>{mappedBadges}</BadgesContainer>}
@@ -403,8 +402,7 @@ const Demo = ({ blok }) => {
         )}
       </Wrapper>
       <ZoomLegalStatement>
-        * By submitting this form, I agree to receive messages. I may reply STOP
-        at any moment to opt out. Message and data rates may apply.
+        {blok.legal_text}
       </ZoomLegalStatement>
     </BackgroundWrapper>
   );

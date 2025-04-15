@@ -16,6 +16,7 @@
     "@storyblok/react": "^4.4.3",
     "@storyblok/richtext": "^3.0.2",
     "autoprefixer": "10.4.20",
+    "axios": "^1.8.4",
     "clone-deep": "^4.0.1",
     "gsap": "npm:@gsap/business@^3.12.7",
     "next": "^15.2.1",
