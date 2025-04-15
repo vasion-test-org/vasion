@@ -94,8 +94,8 @@ const Counter = styled.div`
     border: 0.391vw solid ${colors.primaryOrange};
   }
   ${media.mobile} {
-    width: 6.667vw;
-    height: 6.667vw;
+    width: 6.833vw;
+    height: 6.833vw;
     border: 0.833vw solid ${colors.primaryOrange};
   }
 `;
