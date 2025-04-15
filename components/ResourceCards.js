@@ -42,7 +42,7 @@ const ResourceCards = ({ blok }) => {
       }
   
       setResources(allResources);
-      // console.log('Fetched ALL resources:', allResources.length);
+      console.log('Fetched ALL resources:', allResources.length);
     };
   
     fetchAllResources();

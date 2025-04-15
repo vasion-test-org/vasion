@@ -1,9 +1,12 @@
-import React from 'react';
+'use client'
+import { useEffect, useState } from 'react';
+import gsap from 'gsap';
 
 import styled from 'styled-components';
 import media from 'styles/media';
 import colors from 'styles/colors';
 import text from 'styles/text';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 import CoverPage from 'components/BusinessCaseTool/PDFPages/CoverPage';
 import PDFIntro from './PDFPages/PDFIntro';
@@ -23,10 +26,21 @@ import PDFPage15 from './PDFPages/PDFPage15';
 import PDFPage16 from './PDFPages/PDFPage16';
 import PDFPage17 from './PDFPages/PDFPage17';
 
+gsap.registerPlugin(ScrollTrigger);
+
 const BCTPDF = ({ contactFormData, savingsFormData, currency }) => {
   const handlePrint = () => {
     window.print();
   };
+  // useEffect(() => {
+  //   ScrollTrigger.create({
+  //     trigger: '#pdfPrint',
+  //     start: 'top+=100 top',
+  //     pin: '#pdfPrint',
+  //     pinSpacing: false,
+  //   });
+    
+  // }, []);
 
   return (
     <Wrapper>
@@ -59,7 +73,7 @@ const BCTPDF = ({ contactFormData, savingsFormData, currency }) => {
 const MailToLink = styled.a``;
 const PrintButton = styled.div`
   ${text.bodySmBold};
-  position: fixed;
+  position: absolute;
   cursor: pointer;
   display: flex;
   align-items: center;
