@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useEffect, useState } from 'react';
 import gsap from 'gsap';
 
@@ -30,8 +30,21 @@ gsap.registerPlugin(ScrollTrigger);
 
 const BCTPDF = ({ contactFormData, savingsFormData, currency }) => {
   const handlePrint = () => {
-    window.print();
+    // Kill all ScrollTriggers and ScrollSmoother before print
+    if (ScrollTrigger) {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    }
+  
+    if (gsap.core.globals().ScrollSmoother?.get()) {
+      gsap.core.globals().ScrollSmoother.get().kill();
+    }
+  
+    // Wait a tick to let layout stabilize
+    setTimeout(() => {
+      window.print();
+    }, 100); // slight delay to make sure DOM updates
   };
+  
   // useEffect(() => {
   //   ScrollTrigger.create({
   //     trigger: '#pdfPrint',
@@ -39,7 +52,7 @@ const BCTPDF = ({ contactFormData, savingsFormData, currency }) => {
   //     pin: '#pdfPrint',
   //     pinSpacing: false,
   //   });
-    
+
   // }, []);
 
   return (
@@ -61,11 +74,9 @@ const BCTPDF = ({ contactFormData, savingsFormData, currency }) => {
       <PDFPage15 />
       <PDFPage16 />
       <PDFPage17 />
-      <MailToLink href={`mailto:${contactFormData?.clientEmail}`}>
-        <PrintButton id='pdfPrint' onClick={handlePrint}>
-          Download
-        </PrintButton>
-      </MailToLink>
+      <PrintButton as='button' onClick={handlePrint}>
+        Download
+      </PrintButton>
     </Wrapper>
   );
 };
@@ -73,7 +84,7 @@ const BCTPDF = ({ contactFormData, savingsFormData, currency }) => {
 const MailToLink = styled.a``;
 const PrintButton = styled.div`
   ${text.bodySmBold};
-  position: absolute;
+  position: fixed;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -81,7 +92,7 @@ const PrintButton = styled.div`
   align-self: center;
   background-color: ${colors.primaryOrange};
   color: ${colors.white};
-  top: 8.472vw;
+  top: 8.25vw;
   right: 3.472vw;
   width: 7.944vw;
   height: 3.125vw;
@@ -94,7 +105,7 @@ const PrintButton = styled.div`
   }
 
   ${media.fullWidth} {
-    top: 50px;
+    top: 132px;
     right: 50px;
     width: 100px;
     height: 45px;
