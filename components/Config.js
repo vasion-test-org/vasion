@@ -13,11 +13,10 @@ const Config = ({ blok, children }) => {
   const pathname = usePathname();
   const [configData, setConfigData] = useState(null);
 
-  // Extract locale from the pathname (e.g., "/de/about" -> "de")
   const getLocaleFromPath = () => {
     const parts = pathname?.split('/');
     const localeCandidate = parts[1];
-    const supportedLocales = ['en', 'de', 'fr']; // Add more if needed
+    const supportedLocales = ['en', 'de', 'fr'];
     return supportedLocales.includes(localeCandidate) ? localeCandidate : 'en';
   };
 
@@ -35,24 +34,32 @@ const Config = ({ blok, children }) => {
     fetchConfig();
   }, [pathname]);
 
-  if (!configData) return null; // or a loading spinner
-
   return (
     <>
-      <NavWrapper>
-        <Nav blok={configData.nav?.[0]} />
-      </NavWrapper>
+      {configData && (
+        <NavWrapper>
+          <Nav blok={configData.nav?.[0]} />
+        </NavWrapper>
+      )}
 
-      <MobileNavWrapper>
-        <MobileNav blok={configData.nav?.[0]} />
-      </MobileNavWrapper>
+      {configData && (
+        <MobileNavWrapper>
+          <MobileNav blok={configData.nav?.[0]} />
+        </MobileNavWrapper>
+      )}
 
-      {children}
+      <ChildrenVisibilityWrapper $visible={!!configData}>
+        {children}
+      </ChildrenVisibilityWrapper>
 
-      <Footer blok={configData.footer?.[0]} />
+      {configData && <Footer blok={configData.footer?.[0]} />}
     </>
   );
 };
+
+const ChildrenVisibilityWrapper = styled.div`
+  visibility: ${({ $visible }) => ($visible ? 'visible' : 'hidden')};
+`;
 
 const NavWrapper = styled.div`
   display: block;

@@ -9,7 +9,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 export default function ScrollSmootherWrapper({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname(); // ✅ safe here
+  const pathname = usePathname(); 
 
   useEffect(() => {
     if (!ScrollTrigger.isTouch) {
