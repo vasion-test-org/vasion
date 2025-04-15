@@ -23,7 +23,7 @@ const PaginatedCards = ({ blok }) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const mappedCards = [];
-
+  console.log(blok)
   for (let i = 0; i < blok.cards.length; i += 6) {
     const chunk = blok.cards.slice(i, i + 6);
     mappedCards.push(

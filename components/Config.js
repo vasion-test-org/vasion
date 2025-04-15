@@ -59,12 +59,20 @@ const NavWrapper = styled.div`
   ${media.mobile} {
     display: none;
   }
+
+  @media print {
+    display: none;
+  }
 `;
 
 const MobileNavWrapper = styled.div`
   display: none;
   ${media.mobile} {
     display: block;
+  }
+
+  @media print {
+    display: none;
   }
 `;
 
