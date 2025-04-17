@@ -25,7 +25,7 @@ const Config = ({ blok, children }) => {
       const locale = getLocaleFromPath();
       const storyblokApi = getStoryblokApi();
       const { data } = await storyblokApi.get('cdn/stories/config', {
-        version: 'draft',
+        version: 'published',
         language: locale,
       });
       setConfigData(data?.story?.content ?? null);

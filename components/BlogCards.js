@@ -24,7 +24,7 @@ const BlogCards = ({ blok }) => {
   
       while (keepFetching) {
         const { data } = await storyblokApi.get('cdn/stories', {
-          version: 'draft',
+          version: 'published',
           starts_with: 'blog/',
           is_startpage: false,
           per_page: perPage,
