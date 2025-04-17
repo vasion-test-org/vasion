@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React from "react";
 import media from "styles/media";
 import text from "styles/text";
@@ -8,7 +8,8 @@ import RichTextRenderer from "./renderers/RichTextRenderer";
 import Image from "./globalComponents/Image";
 import Button from "./globalComponents/Button";
 // import { ReactComponent as ArrowLinkSVG } from "images/linkArrow.svg";
-
+//pushing for preivew
+//
 // import Pill from "components/Pill";
 
 const FeaturedCard = ({ blok }) => {
@@ -16,33 +17,30 @@ const FeaturedCard = ({ blok }) => {
   return (
     <Wrapper>
       <CardWrapper>
-      <ImageWrapper>
-        <Image
-                    images={blok.event_image[0].media}
-                 
-                  />
-      </ImageWrapper>
-      <Content>
-        <HeaderAndTag>
-          {/* <Pill
+        <ImageWrapper>
+          <Image images={blok.event_image[0].media} />
+        </ImageWrapper>
+        <Content>
+          <HeaderAndTag>
+            {/* <Pill
             backgroundColor={featuredCard?.tagBackground}
             htmlContent={featuredCard?.tag}
           /> */}
-          <RichTextRenderer document={blok?.header}/>
-        </HeaderAndTag>
-        <DateAndTime>
-          <IconAndText>
-            <Icon src='/images/locationOn.webp' alt={"Nav Pin"} />
-            <RichTextRenderer document={blok?.location}/>
-          </IconAndText>
-          <IconAndText>
-            <Icon src='/images/calendarClock.webp' alt={"Calendar"} />
-            <RichTextRenderer document={blok?.date}/>
-          </IconAndText>
-        </DateAndTime>
-        <RichTextRenderer document={blok?.body_copy}/>
-        <Button $buttonData={blok.button[0]}/>
-      </Content>
+            <RichTextRenderer document={blok?.header} />
+          </HeaderAndTag>
+          <DateAndTime>
+            <IconAndText>
+              <Icon src="/images/locationOn.webp" alt={"Nav Pin"} />
+              <RichTextRenderer document={blok?.location} />
+            </IconAndText>
+            <IconAndText>
+              <Icon src="/images/calendarClock.webp" alt={"Calendar"} />
+              <RichTextRenderer document={blok?.date} />
+            </IconAndText>
+          </DateAndTime>
+          <RichTextRenderer document={blok?.body_copy} />
+          <Button $buttonData={blok.button[0]} />
+        </Content>
       </CardWrapper>
     </Wrapper>
   );
@@ -53,7 +51,7 @@ const ImageWrapper = styled.div`
   /* width: 28.75vw;
   height: 19.125vw; */
   border-radius: 0.375vw;
-`
+`;
 
 const IconAndText = styled.div`
   display: flex;
@@ -135,7 +133,7 @@ const Icon = styled.img`
 `;
 
 const CardWrapper = styled.div`
-   display: flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 2vw;
@@ -156,7 +154,7 @@ const CardWrapper = styled.div`
     margin-top: 8.333vw;
     flex-direction: column;
   }
-`
+`;
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
