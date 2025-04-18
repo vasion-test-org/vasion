@@ -5,6 +5,10 @@ export const defaultTheme = {
   customer_success: {
     bg: '#F5F4F7',
   },
+  customer_logos: {
+    card_bg: colors.lightPurpleGrey,
+    bg: colors.white
+  },
   nav: {
     textColor: "#1B1D21",
     bg: "#F5F4F7",
@@ -62,6 +66,10 @@ export const darkTheme = {
   side_by_side: {
     textColor: "#ffffff",
     bg: "#3D2562",
+  },
+  customer_logos: {
+    card_bg: colors.white,
+    bg: colors.lightPurpleGradient
   },
   hero: {
     textColor: "#ffffff",

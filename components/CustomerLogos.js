@@ -1,150 +1,165 @@
-'use client'
+'use client';
 
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef } from 'react';
 
-import gsap from "gsap"
-import styled from "styled-components"
+import gsap from 'gsap';
+import styled, { ThemeProvider } from "styled-components";
+import { useAvailableThemes } from "@/context/ThemeContext";
 
-import media from "@/styles/media"
-import colors from "@/styles/colors"
-import text from "@/styles/text"
-import TextPlugin from "gsap/TextPlugin"
-import getMedia from "@/functions/getMedia"
-import Button from "./globalComponents/Button"
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-gsap.registerPlugin(TextPlugin, ScrollTrigger)
+import media from '@/styles/media';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import TextPlugin from 'gsap/TextPlugin';
+import getMedia from '@/functions/getMedia';
+import Button from './globalComponents/Button';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { storyblokEditable } from '@storyblok/react/rsc';
+
+gsap.registerPlugin(TextPlugin, ScrollTrigger);
 
 const CustomerLogos = ({ blok }) => {
-  console.log(blok)
-  const categoryRef = useRef(`#${blok?.logos_category}`)
-  const logosRef = useRef(`.${blok?.logos_category}-logos`)
-  const mainCardRef = useRef(`.${blok?.logos_category}-mainContent`)
-  const cardsRef = useRef(`.${blok?.logos_category}-cards`)
-  const moreRef = useRef(`.${blok?.logos_category}-more`)
-  const remainingRef = useRef(`.${blok?.logos_category}-remaining`)
-  const primaryLogoCount = getMedia(9, 9, 6)
+  console.log(blok);
+  const themes = useAvailableThemes();
+  const selectedTheme = themes[blok.theme] || themes.default;
+  const categoryRef = useRef(`#${blok?.logos_category}`);
+  const logosRef = useRef(`.${blok?.logos_category}-logos`);
+  const mainCardRef = useRef(`.${blok?.logos_category}-mainContent`);
+  const cardsRef = useRef(`.${blok?.logos_category}-cards`);
+  const moreRef = useRef(`.${blok?.logos_category}-more`);
+  const remainingRef = useRef(`.${blok?.logos_category}-remaining`);
+  const primaryLogoCount = getMedia(9, 9, 6);
   // const remainingLogoCount = getMedia(9,9,6,0)
-  const primaryLogos = blok?.logos?.slice(0, primaryLogoCount)
-  const remainingLogos = blok?.logos?.slice(primaryLogoCount)
+  const primaryLogos = blok?.logos?.slice(0, primaryLogoCount);
+  const remainingLogos = blok?.logos?.slice(primaryLogoCount);
 
-  const allLogos = primaryLogos?.map(logo => (
+  const allLogos = primaryLogos?.map((logo) => (
     <Logo
-    key={logo.filename}
+      key={logo.filename}
       alt={logo?.alt}
-      loading="lazy"
+      loading='lazy'
       className={`${blok?.logos_category}-logos`}
       src={logo.filename}
     />
-  ))
+  ));
 
-  const logoOverflow = remainingLogos?.map(logo => (
-    <Logo 
-    key={logo.filename}
-      loading="lazy"
+  const logoOverflow = remainingLogos?.map((logo) => (
+    <Logo
+      key={logo.filename}
+      loading='lazy'
       className={`${blok?.logos_category}-logos`}
       src={logo.filename}
       alt={logo?.alt}
     />
-  ))
+  ));
 
   useEffect(() => {
     const logoTl = gsap.timeline({
       scrollTrigger: {
         trigger: categoryRef.current,
-        start: "top 40%",
-        end: "bottom bottom",
+        start: 'top 40%',
+        end: 'bottom bottom',
         markers: true,
       },
-    })
+    });
 
     logoTl
       .from(cardsRef.current, {
         y: 500,
         duration: 1.25,
         stagger: 0.1,
-        ease: "power4",
+        ease: 'power4',
       })
-      .from(mainCardRef.current, { autoAlpha: 0, duration: 2.25 }, ">-.75")
-      .from(logosRef.current, { autoAlpha: 0, duration: 1.75 }, "<")
+      .from(mainCardRef.current, { autoAlpha: 0, duration: 2.25 }, '>-.75')
+      .from(logosRef.current, { autoAlpha: 0, duration: 1.75 }, '<');
 
-    const moreTl = gsap.timeline({ paused: true })
+    const moreTl = gsap.timeline({ paused: true });
     moreTl
       .to(remainingRef.current, {
-        margin: "40, 0",
-        height: "auto",
+        margin: '40, 0',
+        height: 'auto',
         duration: 0.5,
       })
       .reversed(true)
-      .to(remainingRef.current, { autoAlpha: 1, duration: 0.5 }, ">-.25")
+      .to(remainingRef.current, { autoAlpha: 1, duration: 0.5 }, '>-.25')
       .reversed(true)
       .to(moreRef.current, {
         text: {
           value: `Collapse other ${blok?.logos_category} Clients`,
-          delimiter: "",
+          delimiter: '',
           speed: 20,
-          type: "diff",
+          type: 'diff',
         },
       })
-      .reversed(true)
+      .reversed(true);
 
     function expand() {
-      moreTl.reversed() ? moreTl.play() : moreTl.reverse()
+      moreTl.reversed() ? moreTl.play() : moreTl.reverse();
     }
 
-    moreRef.current.addEventListener("click", () => expand())
-  }, [])
+    moreRef.current.addEventListener('click', () => expand());
+  }, []);
 
   return (
-    <Wrapper id={blok?.logos_category}>
-      <CardsDiv mainSide={blok?.main_side}>
-        {/* <Link href={blok?.mainLink}> */}
+    <ThemeProvider theme={selectedTheme}>
+      <Wrapper
+        id={blok?.logos_category}
+        spacingOffset={blok.offset_spacing}
+        spacing={blok.section_spacing}
+      >
+        <CardsDiv main_side={blok?.main_side}>
+          {/* <Link href={blok?.main_link[0].link_url.url}> */}
           <MainCard
             className={`${blok?.logos_category}-cards`}
             // cardcolor={blok?.cardColor}
           >
             <MainLogo
-              loading="lazy"
+              loading='lazy'
               className={`${blok?.logos_category}-mainContent`}
-              src={blok?.mainLogo?.filename}
-              alt={blok?.mainLogo?.alt}
+              src={blok?.main_logo?.filename}
+              alt={blok?.main_logo?.alt}
             />
             <MainHeadline className={`${blok?.logos_category}-mainContent`}>
               {blok?.main_headline}
             </MainHeadline>
             <MainBody className={`${blok?.logos_category}-mainContent`}>
-              {blok?.main_body}
+              {blok?.main_copy}
             </MainBody>
-            {/* <StyledLink
-              color={colors.grey500}
-              className={`${blok?.logos_category}-mainContent`}
-              href={blok?.mainLink}
-            >
-              {blok?.mainLinkText}
-            </StyledLink> */}
+            {blok?.main_link?.map(($buttonData) => (
+              <div
+                {...storyblokEditable($buttonData)}
+                key={$buttonData?.link_text}
+              >
+                <Button
+                  key={$buttonData?.link_text}
+                  $buttonData={$buttonData}
+                />
+              </div>
+            ))}
           </MainCard>
-        {/* </Link> */}
-        <LogosCard
-          className={`${blok?.logos_category}-cards`}
+          {/* </Link> */}
+          <LogosCard
+            className={`${blok?.logos_category}-cards`}
+            cardcolor={blok?.cardColor}
+          >
+            <LogoCategoryDiv className={`${blok?.logos_category}-logos`}>
+              <LogosCategory>{blok?.logos_category}</LogosCategory>
+            </LogoCategoryDiv>
+            <LogosDiv>{allLogos}</LogosDiv>
+          </LogosCard>
+        </CardsDiv>
+        <RemainingLogos
+          className={`${blok?.logos_category}-remaining`}
           cardcolor={blok?.cardColor}
         >
-          <LogoCategoryDiv className={`${blok?.logos_category}-logos`}>
-            <LogosCategory>{blok?.logos_category}</LogosCategory>
-          </LogoCategoryDiv>
-          <LogosDiv>{allLogos}</LogosDiv>
-        </LogosCard>
-      </CardsDiv>
-      <RemainingLogos
-        className={`${blok?.logos_category}-remaining`}
-        cardcolor={blok?.cardColor}
-      >
-        {logoOverflow}
-      </RemainingLogos>
-      <SeeMoreDiv ref={moreRef} className={`${blok?.logos_category}-more`}>
-        See other {blok?.logos_category} Clients
-      </SeeMoreDiv>
-    </Wrapper>
-  )
-}
+          {logoOverflow}
+        </RemainingLogos>
+        <SeeMoreDiv ref={moreRef} className={`${blok?.logos_category}-more`}>
+          See other {blok?.logos_category} Clients
+        </SeeMoreDiv>
+      </Wrapper>
+    </ThemeProvider>
+  );
+};
 
 const Logo = styled.img`
   width: 13.333vw;
@@ -164,7 +179,7 @@ const Logo = styled.img`
     width: 43.86vw;
     height: 25.234vw;
   }
-`
+`;
 const LogosDiv = styled.div`
   display: flex;
   flex-flow: row wrap;
@@ -184,11 +199,11 @@ const LogosDiv = styled.div`
     justify-content: unset;
     column-gap: unset;
   }
-`
+`;
 const LogosCategory = styled.p`
   ${text.eyebrow};
   color: ${colors.grey400};
-`
+`;
 const LogoCategoryDiv = styled.div`
   display: flex;
   justify-content: center;
@@ -212,14 +227,13 @@ const LogoCategoryDiv = styled.div`
     padding-bottom: 2.336vw;
     border-bottom: 0.234vw solid ${colors.grey75};
   }
-`
+`;
 const LogosCard = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: ${props =>
-    props.cardcolor ? `#${props.cardcolor}` : "white"};
+  background: ${props => props.theme.customer_logos.card_bg};
   height: 100%;
   gap: 1.944vw;
   border-radius: 1.667vw;
@@ -243,11 +257,11 @@ const LogosCard = styled.div`
     border-radius: 5.607vw;
     padding: 5.607vw 0vw;
   }
-`
+`;
 const Link = styled.a`
   ${text.bodyMdBold};
   color: ${colors.grey500};
-`
+`;
 const MainBody = styled.p`
   ${text.bodyMd};
   margin-bottom: 4.444vw;
@@ -263,7 +277,7 @@ const MainBody = styled.p`
   ${media.mobile} {
     margin-bottom: 14.953vw;
   }
-`
+`;
 const MainHeadline = styled.h4`
   ${text.h4};
   margin-bottom: 1.667vw;
@@ -279,7 +293,7 @@ const MainHeadline = styled.h4`
   ${media.mobile} {
     margin-bottom: 5.607vw;
   }
-`
+`;
 const MainLogo = styled.img`
   width: 21.528vw;
   height: 7.917vw;
@@ -302,12 +316,11 @@ const MainLogo = styled.img`
     height: 26.636vw;
     margin-bottom: 9.346vw;
   }
-`
+`;
 const MainCard = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${props =>
-    props.cardcolor ? `#${props.cardcolor}` : "white"};
+  background: ${props => props.theme.customer_logos.card_bg};
   height: auto;
   width: 24.583vw;
   border-radius: 1.667vw;
@@ -330,14 +343,13 @@ const MainCard = styled.div`
     border-radius: 5.607vw;
     padding: 5.607vw 5.607vw 5.607vw 4.673vw;
   }
-`
+`;
 const RemainingLogos = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-flow: row wrap;
-  background-color: ${props =>
-    props.cardcolor ? `#${props.cardcolor}` : "white"};
+  background: ${props => props.theme.customer_logos.card_bg};
   height: 0;
   opacity: 0;
   overflow: hidden;
@@ -363,7 +375,7 @@ const RemainingLogos = styled.div`
   ${media.mobile} {
     display: none;
   }
-`
+`;
 const SeeMoreDiv = styled.div`
   ${text.eyebrow};
   color: ${colors.grey500};
@@ -387,11 +399,10 @@ const SeeMoreDiv = styled.div`
       color: ${colors.primaryOrange};
     }
   }
-`
+`;
 const CardsDiv = styled.div`
   display: flex;
-  flex-direction: ${props =>
-    props.main_side ? "row" : "row-reverse"};
+  flex-direction: ${(props) => (props.main_side ? 'row' : 'row-reverse')};
   justify-content: center;
   align-items: center;
   overflow: hidden;
@@ -409,7 +420,7 @@ const CardsDiv = styled.div`
     flex-direction: column;
     gap: 5.14vw;
   }
-`
+`;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -417,5 +428,100 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   overflow: hidden;
-`
-export default CustomerLogos
+  background: ${props => props.theme.customer_logos.bg};
+
+  padding: ${(props) => {
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
+        : props.spacing
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
+    }
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
+        : props.spacing
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
+    }
+    return props.spacing === 'default'
+      ? '3.75vw 0'
+      : props.spacing
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
+  }};
+
+  ${media.fullWidth} {
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
+      }
+      return props.spacing === 'default'
+        ? '60px 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '60px 0';
+    }};
+  }
+
+  ${media.tablet} {
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '5.859vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 5.859vw';
+      }
+      return props.spacing === 'default'
+        ? '5.859vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '5.859vw 0';
+    }};
+  }
+
+  ${media.mobile} {
+    padding: ${(props) => {
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
+          : props.spacing
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
+      }
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
+          : props.spacing
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
+      }
+      return props.spacing === 'default'
+        ? '12.5vw 0'
+        : props.spacing
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
+    }};
+  }
+`;
+export default CustomerLogos;

@@ -2,10 +2,10 @@
 import React, { useContext } from "react";
 import { storyblokEditable } from "@storyblok/react/rsc";
 import styled, { ThemeProvider } from "styled-components";
+import { useAvailableThemes } from "@/context/ThemeContext";
 import media from "@/styles/media";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 
-import { useAvailableThemes } from "@/context/ThemeContext";
 
 import Cards from "@/components/centeredSections/Cards";
 import IconCards from "@/components/IconCards";
