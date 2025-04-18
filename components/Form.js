@@ -358,7 +358,7 @@ const CalendarContainer = styled.div`
 const MarketoForm = styled.form`
   display: flex;
   flex-flow: row wrap;
-  /* justify-content: center; */
+  justify-content: center;
   align-items: start;
   text-align: center;
   width: 31.25vw !important;
@@ -481,6 +481,16 @@ position: relative;
   .mktoGutter {
     width: unset !important;
   }
+  .mktoCheckboxList {
+    width: unset !important;
+  }
+#LblemailOptIn {
+  color: ${(props) => props.theme.form.textColor};
+  display: flex;
+  gap: 0.125vw;
+
+}
+
   button {
     ${text.bodyMdBold};
     display: flex;

@@ -58,7 +58,7 @@ const CustomerLogos = ({ blok }) => {
         trigger: categoryRef.current,
         start: 'top 40%',
         end: 'bottom bottom',
-        markers: true,
+        // markers: true,
       },
     });
 
