@@ -1,7 +1,7 @@
 import { StoryblokStory } from "@storyblok/react/rsc";
 import { notFound } from "next/navigation";
 import { getStoryblokApi } from "@/lib/storyblok";
-
+import { headers } from 'next/headers';
 export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }) {
 async function fetchStory(slug, locale) {
   const storyblokApi = getStoryblokApi();
   const sbParams = {
-    version: "published",
+    version: "draft",
     language: locale,
   };
 
@@ -74,9 +74,15 @@ export default async function DynamicPage({ params }) {
 
   let story = await fetchData(storySlug, locale, "published");
 
-  if (!story) {
-    story = await fetchData(storySlug, locale, "draft");
-  }
+ 
+const host = headers().get('host');
+
+if (
+  !story &&
+  (host === 'localhost:3010' || host === 'vasion-ten.vercel.app')
+) {
+  story = await fetchData(storySlug, locale, 'draft');
+}
 
   if (!story) {
     return notFound();
@@ -119,7 +125,7 @@ async function fetchData(slug, locale, version) {
 export async function generateStaticParams() {
   const storyblokApi = getStoryblokApi();
   const { data } = await storyblokApi.get("cdn/stories/", {
-    version: "published",
+    version: "draft",
   });
 
   const params = [];
