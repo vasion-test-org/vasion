@@ -163,12 +163,14 @@ const Nav = ({ blok }) => {
     const footerOffset = footer.offsetTop + footer.offsetHeight;
 
     const deskTl = gsap.timeline({
-      trigger: '.desktopNav',
-      start: 'top top',
-      end: `${footerOffset}px`,
-      pin: true,
-      pinSpacing: false,
-      // scrub: true
+      scrollTrigger: {
+        trigger: '.desktopNav',
+        start: 'top top',
+        end: `${footerOffset}px`,
+        pin: true,
+        pinSpacing: false,
+        scrub: true
+      }
     })
 
     deskTl.to({}, { duration: 200, ease: "none" }).to('.anchorNav', {autoAlpha: 1})

@@ -120,13 +120,15 @@ const MobileNav = ({ blok }) => {
 
   useEffect(() => {
     const mobileTl = gsap.timeline({
-      trigger: '.mobileNav',
-      start: 'top top',
-      end: () => `${document.body.scrollHeight - window.innerHeight}px`,
-      pin: true,
-      pinSpacing: false,
-      // scrub: true
-      // markers: true,
+      scrollTrigger: {
+        trigger: '.mobileNav',
+        start: 'top top',
+        end: () => `${document.body.scrollHeight - window.innerHeight}px`,
+        pin: true,
+        pinSpacing: false,
+        scrub: true
+        // markers: true,
+      }
     });
 
     mobileTl.to({}, { duration: 200, ease: "none" }).to('.anchorNav', {autoAlpha: 1})
