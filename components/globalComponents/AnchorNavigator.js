@@ -28,7 +28,7 @@ const AnchorNavigator = ({ blok }) => {
         const smoother = getSmoother();
 
         if (smoother && anchor) {
-          smoother.scrollTo(anchor, true, 'top top+=100'); // adjust offset
+          smoother.scrollTo(anchor, true, 'top top+=100'); 
         }
       }}
     >
@@ -92,7 +92,7 @@ const AnchorNavWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* justify-content: center; */
+  justify-content: end;
   background: ${colors.purple100};
   margin: 0.5vw auto;
   width: 76.875vw;
