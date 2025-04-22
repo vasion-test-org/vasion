@@ -55,9 +55,9 @@ const AnchorNavigator = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <AnchorWrapper className='anchorNav'>
+      <AnchorWrapper >
       {anchorList.length > 0 && (
-        <AnchorNavWrapper>
+        <AnchorNavWrapper className='anchorNav'>
           <ButtonsDiv>{anchorMap}</ButtonsDiv>
         </AnchorNavWrapper>
       )}
