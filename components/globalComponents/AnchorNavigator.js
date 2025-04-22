@@ -37,21 +37,21 @@ const AnchorNavigator = ({ blok }) => {
     </AnchorButton>
   ));
 
-  useEffect(() => {
-    const footer = document.querySelector('.footer');
-    if (!footer) return;
+  // useEffect(() => {
+  //   const footer = document.querySelector('.footer');
+  //   if (!footer) return;
 
-    const footerOffset = footer.offsetTop + footer.offsetHeight;
+  //   const footerOffset = footer.offsetTop + footer.offsetHeight;
 
-    ScrollTrigger.create({
-      trigger: '.desktopNav',
-      start: 'top top',
-      end: `${footerOffset}px`,
-      pin: '.anchorNav',
-      pinSpacing: false,
-      markers: true
-    });
-  }, []);
+  //   ScrollTrigger.create({
+  //     trigger: '.desktopNav',
+  //     start: 'top top',
+  //     end: `${footerOffset}px`,
+  //     pin: '.anchorNav',
+  //     pinSpacing: false,
+  //     markers: true
+  //   });
+  // }, []);
 
   return (
     <ThemeProvider theme={selectedTheme}>
@@ -151,6 +151,7 @@ const AnchorWrapper = styled.div`
   justify-content: center;
   width: 100%;
   z-index: 10;
+  top: 2.75vw;
 `
 
 export default AnchorNavigator;
