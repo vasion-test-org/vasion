@@ -16,6 +16,7 @@ import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import AnchorNavigator from '@/components/globalComponents/AnchorNavigator'
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -306,6 +307,7 @@ const Nav = ({ blok }) => {
               </div>
             ))}
           </MainInner>
+<AnchorNavigator/>
         </MainNavWrapper>
       </>
     </ThemeProvider>
@@ -747,6 +749,7 @@ const Dropdown = styled.div`
   width: max-content;
   height: auto;
   overflow: hidden;
+  z-index: 11;
   top: 2.7vw;
   left: 0vw;
   padding: 1.25vw 1.5vw 1.5vw 1.5vw;
