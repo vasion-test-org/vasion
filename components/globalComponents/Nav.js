@@ -169,11 +169,12 @@ const Nav = ({ blok }) => {
         end: `${footerOffset}px`,
         pin: true,
         pinSpacing: false,
-        scrub: true
+        scrub: true,
+        markers: true
       }
     })
 
-    deskTl.to({}, { duration: 200, ease: "none" }).to('.anchorNav', {autoAlpha: 1})
+    deskTl.to({}, { duration: 200, ease: "none" }).to('.anchorNav', {opacity: 1})
     // ScrollTrigger.create({
     //   trigger: '.desktopNav',
     //   start: 'top top',

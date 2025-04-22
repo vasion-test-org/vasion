@@ -131,7 +131,7 @@ const MobileNav = ({ blok }) => {
       }
     });
 
-    mobileTl.to({}, { duration: 200, ease: "none" }).to('.anchorNav', {autoAlpha: 1})
+    mobileTl.to({}, { duration: 200, ease: "none" }).to('.anchorNav', {opacity: 1})
     
   }, []);
 
