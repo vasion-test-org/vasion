@@ -78,7 +78,7 @@ export default async function DynamicPage({ params }) {
 
   if (
     !story &&
-    (host === 'localhost:3010' || host === 'vasion-ten.vercel.app')
+    (host === 'localhost:3010' || host === 'vasion-ten.vercel.app' || host === 'vasion.vercel.app')
   ) {
     story = await fetchData(storySlug, locale, 'draft');
   }
