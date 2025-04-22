@@ -5,7 +5,7 @@ import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
 import FormTracking from "@/components/FormTracking";
 import Script from "next/script";
 import "./globals.css";
-import ScrollSmootherWrapper from "@/components/ScollSmoothWraper";
+import ScrollSmootherWrapper from "@/components/ScrollSmoothWrapper";
 import Providers from "@/components/providers";
 import Config from "@/components/Config";
 import { getStoryblokApi } from "@/lib/storyblok";

@@ -438,7 +438,7 @@ line-height: 40px;
   bodyMdBold: `
   font-family: 'Archivo';
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
 
     ${media.fullWidth} {
       font-size: 16px;

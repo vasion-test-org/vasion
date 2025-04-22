@@ -22,7 +22,7 @@ const colors = {
   purple500: "#6A2C6A",
   purple400: "#8B5B8B",
   purple300: "#AC8AAC",
-  purple200: "#CDB9CD",
+  purple200: "#CBBFF1",
   purple100: "#E6DFF8",
   purpleTag: "#E5DFF8",
   purpleGray50: "#ECE9EF",
