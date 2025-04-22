@@ -29,29 +29,13 @@ const AnchorNavigator = ({ blok }) => {
         const smoother = getSmoother();
 
         if (smoother && anchor) {
-          smoother.scrollTo(anchor, true, 'top top'); // adjust offset
+          smoother.scrollTo(anchor, true, 'top top'); 
         }
       }}
     >
       {anchor.innerText}
     </AnchorButton>
   ));
-
-  // useEffect(() => {
-  //   const footer = document.querySelector('.footer');
-  //   if (!footer) return;
-
-  //   const footerOffset = footer.offsetTop + footer.offsetHeight;
-
-  //   ScrollTrigger.create({
-  //     trigger: '.desktopNav',
-  //     start: 'top top',
-  //     end: `${footerOffset}px`,
-  //     pin: '.anchorNav',
-  //     pinSpacing: false,
-  //     markers: true
-  //   });
-  // }, []);
 
   return (
     <ThemeProvider theme={selectedTheme}>
@@ -84,11 +68,17 @@ const AnchorButton = styled.div`
   }
   
   ${media.tablet} {
-  
+    height: 2.93vw;
+  padding: 0.391vw 0.781vw;
+  border-radius: 0.391vw;
   }
   
   ${media.mobile} {
-  
+    height: 5.417vw;
+  padding: 0.833vw 1.667vw;
+  border-radius: 0.833vw; 
+  width: max-content;
+  min-width: max-content;
   }
 
   &:hover {
@@ -107,11 +97,12 @@ const ButtonsDiv = styled.div`
   }
   
   ${media.tablet} {
-  
+    gap: 0.781vw;
   }
   
   ${media.mobile} {
-  
+    gap: 1.667vw;
+    width: 100%;
   }
 `;
 const AnchorNavWrapper = styled.div`
@@ -136,11 +127,25 @@ const AnchorNavWrapper = styled.div`
   }
   
   ${media.tablet} {
-  
+    margin: 0.781vw auto;
+  width: 92.188vw;
+  height: 5.273vw;
+  border-radius: 0.781vw;
+  padding: 1.172vw 5.859vw;
   }
   
   ${media.mobile} {
-  
+    margin: 1.667vw auto;
+  width: 89.167vw;
+  height: 10.417vw;
+  border-radius: 1.667vw;
+  padding: 2.5vw 12.5vw;
+  overflow: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none; 
+  }
   }
 `;
 
@@ -152,6 +157,18 @@ const AnchorWrapper = styled.div`
   width: 100%;
   z-index: 10;
   top: 2.75vw;
+
+  ${media.fullWidth} {
+    top: 65px;
+  }
+  
+  ${media.tablet} {
+    top: 6.348vw;
+  }
+  
+  ${media.mobile} {
+    top: 13.542vw;
+  }
 `
 
 export default AnchorNavigator;
