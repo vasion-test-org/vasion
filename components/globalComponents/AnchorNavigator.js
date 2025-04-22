@@ -5,6 +5,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
+import media from '@/styles/media';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { getSmoother } from '@/components/ScrollSmoothWrapper';
@@ -76,6 +77,20 @@ const AnchorButton = styled.div`
   padding: 0.25vw 0.5vw;
   border-radius: 0.25vw;
 
+  ${media.fullWidth} {
+    height: 30px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  }
+  
+  ${media.tablet} {
+  
+  }
+  
+  ${media.mobile} {
+  
+  }
+
   &:hover {
     ${text.bodyMdBold};
     background: ${colors.purple200};
@@ -86,6 +101,18 @@ const ButtonsDiv = styled.div`
   display: flex;
   flex-direction: row;
   gap: 0.5vw;
+
+  ${media.fullWidth} {
+    gap: 8px;
+  }
+  
+  ${media.tablet} {
+  
+  }
+  
+  ${media.mobile} {
+  
+  }
 `;
 const AnchorNavWrapper = styled.div`
   position: relative;
@@ -99,6 +126,22 @@ const AnchorNavWrapper = styled.div`
   height: 3.375vw;
   border-radius: 0.5vw;
   padding: 0.75vw 3.75vw;
+
+  ${media.fullWidth} {
+    margin: 8px auto;
+  width: 1230px;
+  height: 54px;
+  border-radius: 8px;
+  padding: 12px 60px;
+  }
+  
+  ${media.tablet} {
+  
+  }
+  
+  ${media.mobile} {
+  
+  }
 `;
 
 const AnchorWrapper = styled.div`
