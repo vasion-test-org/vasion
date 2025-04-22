@@ -44,11 +44,11 @@ const AnchorNavigator = ({ blok }) => {
 
     ScrollTrigger.create({
       trigger: '.desktopNav',
-      start: '2% top',
+      start: 'top top',
       end: `${footerOffset}px`,
       pin: true,
       pinSpacing: false,
-      // markers: true
+      markers: true
     });
   }, []);
 
