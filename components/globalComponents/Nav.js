@@ -168,7 +168,7 @@ const Nav = ({ blok }) => {
       end: `${footerOffset}px`,
       pin: true,
       pinSpacing: false,
-      scrub: true
+      // scrub: true
     })
 
     deskTl.to({}, { duration: 200, ease: "none" }).to('.anchorNav', {autoAlpha: 1})

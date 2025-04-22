@@ -125,7 +125,7 @@ const MobileNav = ({ blok }) => {
       end: () => `${document.body.scrollHeight - window.innerHeight}px`,
       pin: true,
       pinSpacing: false,
-      scrub: true
+      // scrub: true
       // markers: true,
     });
 
