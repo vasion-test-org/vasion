@@ -47,7 +47,7 @@ const AnchorNavigator = ({ blok }) => {
       trigger: '.desktopNav',
       start: 'top top',
       end: `${footerOffset}px`,
-      pin: true,
+      pin: '.anchorNav',
       pinSpacing: false,
       markers: true
     });
@@ -55,7 +55,7 @@ const AnchorNavigator = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <AnchorWrapper>
+      <AnchorWrapper className='anchorNav'>
       {anchorList.length > 0 && (
         <AnchorNavWrapper>
           <ButtonsDiv>{anchorMap}</ButtonsDiv>
