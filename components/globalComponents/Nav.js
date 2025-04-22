@@ -12,10 +12,10 @@ import Button from './Button';
 import text from '@/styles/text';
 import colors from '@/styles/colors';
 import Icons from '@/components/renderers/Icons';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 

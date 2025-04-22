@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import media from '@/styles/media';
 import { usePathname } from 'next/navigation';
 import { getStoryblokApi } from '@/lib/storyblok';
+import AnchorNavigator from '@/components/globalComponents/AnchorNavigator'
 
 const Config = ({ blok, children }) => {
   const pathname = usePathname();
@@ -47,8 +48,9 @@ const Config = ({ blok, children }) => {
           <MobileNav blok={configData.nav?.[0]} />
         </MobileNavWrapper>
       )}
-
+      
       <ChildrenVisibilityWrapper $visible={!!configData}>
+        <AnchorNavigator/>
         {children}
       </ChildrenVisibilityWrapper>
 

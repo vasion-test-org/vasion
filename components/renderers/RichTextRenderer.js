@@ -24,7 +24,6 @@ import text from "@/styles/text";
 
 const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
   if (!document) return null;
-  // console.log(blok)
   const extractText = (contentArray) => {
     if (!Array.isArray(contentArray)) return "";
     return contentArray.map((node) => node.text || "").join(" ");
@@ -77,10 +76,9 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
 
   const customNodeResolvers = {
     [NODE_HEADING]: (children, node) => {
-      const level = node?.level || 1; // Get the actual heading level
+      const level = node?.level || 1; 
       const headingText = extractText(node.content) || children;
 
-      // Apply useMedia inside the node resolver
       const tabletStyle = responsiveTextStyles[0] || `h${level}`;
       const mobileStyle = responsiveTextStyles[1] || tabletStyle;
       const selectedHeaderStyle = useMedia(
@@ -89,7 +87,7 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
         tabletStyle,
         mobileStyle,
       );
-      // console.log(node, "headerStyle");
+
       return <Header as={selectedHeaderStyle}>{headingText}</Header>;
     },
 

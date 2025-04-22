@@ -8,26 +8,30 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
+let smootherInstance = null; // <-- add this at the top
+
+export const getSmoother = () => smootherInstance; // <-- export a getter
+
 export default function ScrollSmootherWrapper({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname(); 
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!ScrollTrigger.isTouch) {
-      const smoother = ScrollSmoother.create({
+      smootherInstance = ScrollSmoother.create({
         smooth: 1.2,
         effects: true,
         normalizeScroll: true,
         ignoreMobileResize: true,
       });
 
-
-      smoother.scrollTo(0, false);
+      smootherInstance.scrollTo(0, false);
 
       return () => {
-        smoother.kill();
+        smootherInstance?.kill();
+        smootherInstance = null;
       };
     }
-  }, [pathname]); 
+  }, [pathname]);
 
   return (
     <div id="smooth-wrapper">
