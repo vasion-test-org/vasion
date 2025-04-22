@@ -15,6 +15,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import AnchorNavigator from '@/components/globalComponents/AnchorNavigator'
+import getMedia from '@/functions/getMedia';
 
 gsap.registerPlugin(ScrollTrigger);
 const MobileNav = ({ blok }) => {
@@ -118,14 +119,18 @@ const MobileNav = ({ blok }) => {
   ));
 
   useEffect(() => {
-    ScrollTrigger.create({
+    const mobileTl = gsap.timeline({
       trigger: '.mobileNav',
       start: 'top top',
       end: () => `${document.body.scrollHeight - window.innerHeight}px`,
       pin: true,
       pinSpacing: false,
+      scrub: true
       // markers: true,
     });
+
+    mobileTl.to({}, { duration: 200, ease: "none" }).to('.anchorNav', {autoAlpha: 1})
+    
   }, []);
 
   useEffect(() => {

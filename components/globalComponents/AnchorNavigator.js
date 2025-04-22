@@ -157,6 +157,7 @@ const AnchorWrapper = styled.div`
   width: 100%;
   z-index: 10;
   top: 2.75vw;
+  opacity: 0;
 
   ${media.fullWidth} {
     top: 65px;

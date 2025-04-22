@@ -17,6 +17,7 @@ import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import AnchorNavigator from '@/components/globalComponents/AnchorNavigator'
+import getMedia from '@/functions/getMedia';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -161,13 +162,23 @@ const Nav = ({ blok }) => {
 
     const footerOffset = footer.offsetTop + footer.offsetHeight;
 
-    ScrollTrigger.create({
+    const deskTl = gsap.timeline({
       trigger: '.desktopNav',
       start: 'top top',
       end: `${footerOffset}px`,
       pin: true,
       pinSpacing: false,
-    });
+      scrub: true
+    })
+
+    deskTl.to({}, { duration: 200, ease: "none" }).to('.anchorNav', {autoAlpha: 1})
+    // ScrollTrigger.create({
+    //   trigger: '.desktopNav',
+    //   start: 'top top',
+    //   end: `${footerOffset}px`,
+    //   pin: true,
+    //   pinSpacing: false,
+    // });
   }, [navReady]);
 
   useEffect(() => {
