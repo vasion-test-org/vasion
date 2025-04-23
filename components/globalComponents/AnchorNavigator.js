@@ -39,9 +39,9 @@ const AnchorNavigator = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <AnchorWrapper >
+      <AnchorWrapper className='anchorNav'>
       {anchorList.length > 0 && (
-        <AnchorNavWrapper className='anchorNav'>
+        <AnchorNavWrapper>
           <ButtonsDiv>{anchorMap}</ButtonsDiv>
         </AnchorNavWrapper>
       )}
@@ -117,7 +117,6 @@ const AnchorNavWrapper = styled.div`
   height: 3.375vw;
   border-radius: 0.5vw;
   padding: 0.75vw 3.75vw;
-  opacity: 0;
 
   ${media.fullWidth} {
     margin: 8px auto;
@@ -158,6 +157,7 @@ const AnchorWrapper = styled.div`
   width: 100%;
   z-index: 10;
   top: 2.75vw;
+  opacity: 0;
 
   ${media.fullWidth} {
     top: 65px;
