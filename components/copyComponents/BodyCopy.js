@@ -3,7 +3,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 import media from '@/styles/media';
-// import colors from '@/styles/colors';
+import colors from '@/styles/colors';
 // import text from '@/styles/text';
 const BodyCopy = ({ className, children}) => {
   return <StyledBodyCopy className={className}>{children}</StyledBodyCopy>;
@@ -32,7 +32,12 @@ const StyledBodyCopy = styled.div`
       max-width: 82vw;
     }
   }
-
+  a {
+    span {
+      color: ${colors.primaryOrange};
+    }
+    color: ${colors.primaryOrange};
+  }
   b {
   display: inline-block;
   white-space: pre-wrap;
