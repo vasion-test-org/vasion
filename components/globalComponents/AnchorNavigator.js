@@ -36,7 +36,6 @@ const AnchorNavigator = ({ blok }) => {
             duration: 1,
             scrollTo: {
               y: anchor,
-              offsetY: 20, 
             },
             ease: 'power2.out',
           });
