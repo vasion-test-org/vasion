@@ -162,9 +162,6 @@ const Nav = ({ blok }) => {
     const footer = document.querySelector('.footer');
     if (!footer) return;
 
-    const anchorNav = document.querySelector('.anchorNav');
-    if (!anchorNav) return;
-
     const footerOffset = footer.offsetTop + footer.offsetHeight;
 
     const anchorTl = gsap.timeline({
@@ -251,7 +248,7 @@ const Nav = ({ blok }) => {
         navWrapper.removeEventListener('mouseleave', closeDropdown);
       }
     };
-  }, [navReady, anchorNav]);
+  }, [navReady]);
 
   useEffect(() => {
     const handleGlobeHover = () => {

@@ -118,9 +118,7 @@ const MobileNav = ({ blok }) => {
   ));
 
   useEffect(() => {
-    const anchorNav = document.querySelector('.anchorNav');
-    if (!anchorNav) return;
-
+    
     const mobileAnchorTl = gsap.timeline({
       scrollTrigger: {
         start: '+=125 top',
@@ -139,7 +137,7 @@ const MobileNav = ({ blok }) => {
       pinSpacing: false,
       // markers: true,
     });
-  }, [anchorNav]);
+  }, []);
 
   useEffect(() => {
     gsap.set('.tabDropdowns', { height: 0, display: 'none' });
