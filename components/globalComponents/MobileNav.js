@@ -128,7 +128,10 @@ const MobileNav = ({ blok }) => {
       },
     });
 
-    mobileAnchorTl.to('.anchorNav', { autoAlpha: 1});
+    mobileAnchorTl.fromTo('.anchorNav', 
+      { autoAlpha: 0 }, 
+      { autoAlpha: 1 }
+    );
 
     ScrollTrigger.create({
       trigger: '.mobileNav',
