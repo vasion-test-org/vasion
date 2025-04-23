@@ -29,28 +29,16 @@ const AnchorNavigator = ({ blok }) => {
     <AnchorButton
       key={i}
       onClick={() => {
-        if (!anchor) return;
-  
-        if (mobile) {
-          gsap.to(window, {
-            duration: 1,
-            scrollTo: {
-              y: anchor,
-            },
-            ease: 'power2.out',
-          });
-        } else {
-          const smoother = getSmoother();
-          if (smoother) {
-            smoother.scrollTo(anchor, true, 'top top');
-          }
+        const smoother = getSmoother();
+
+        if (smoother && anchor) {
+          smoother.scrollTo(anchor, true, 'top top'); 
         }
       }}
     >
       {anchor.innerText}
     </AnchorButton>
   ));
-  
 
   return (
     <ThemeProvider theme={selectedTheme}>
