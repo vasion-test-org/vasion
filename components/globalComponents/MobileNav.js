@@ -14,7 +14,7 @@ import Icons from '@/components/renderers/Icons';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
-import AnchorNavigator from '@/components/globalComponents/AnchorNavigator'
+import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 
 gsap.registerPlugin(ScrollTrigger);
 const MobileNav = ({ blok }) => {
@@ -118,6 +118,19 @@ const MobileNav = ({ blok }) => {
   ));
 
   useEffect(() => {
+    const anchorNav = document.querySelector('.anchorNav');
+    if (!anchorNav) return;
+
+    const mobileAnchorTl = gsap.timeline({
+      scrollTrigger: {
+        start: '+=125 top',
+        // markers: true,
+        scrub: true,
+      },
+    });
+
+    mobileAnchorTl.to('.anchorNav', { autoAlpha: 1 });
+
     ScrollTrigger.create({
       trigger: '.mobileNav',
       start: 'top top',
@@ -126,7 +139,7 @@ const MobileNav = ({ blok }) => {
       pinSpacing: false,
       // markers: true,
     });
-  }, []);
+  }, [anchorNav]);
 
   useEffect(() => {
     gsap.set('.tabDropdowns', { height: 0, display: 'none' });
@@ -248,7 +261,7 @@ const MobileNav = ({ blok }) => {
           <HamSlice id='slice-2' />
         </HamburgerContainer>
         <Dropdown className='mobileDropdown'>{mappedNav}</Dropdown>
-        <AnchorNavigator/>
+        <AnchorNavigator />
       </MainWrapper>
     </>
   );

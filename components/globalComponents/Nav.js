@@ -16,7 +16,7 @@ import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import AnchorNavigator from '@/components/globalComponents/AnchorNavigator'
+import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -86,14 +86,17 @@ const Nav = ({ blok }) => {
               const rawUrl = navItem.item_link?.cached_url || '#';
               const isExternal =
                 rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
-                const supportedLocales = ['en', 'fr', 'de'];
-                const rawPathParts = rawUrl.split('/').filter(Boolean);
-                const alreadyHasLocale = supportedLocales.includes(rawPathParts[0]);
-                
-                const normalizedUrl = isExternal
-                  ? rawUrl
-                  : `/${alreadyHasLocale ? '' : currentLocale ?? ''}/${rawUrl}`.replace(/\/+/g, '/');
-                
+              const supportedLocales = ['en', 'fr', 'de'];
+              const rawPathParts = rawUrl.split('/').filter(Boolean);
+              const alreadyHasLocale = supportedLocales.includes(
+                rawPathParts[0]
+              );
+
+              const normalizedUrl = isExternal
+                ? rawUrl
+                : `/${
+                    alreadyHasLocale ? '' : currentLocale ?? ''
+                  }/${rawUrl}`.replace(/\/+/g, '/');
 
               return (
                 <StyledNextLink
@@ -159,7 +162,20 @@ const Nav = ({ blok }) => {
     const footer = document.querySelector('.footer');
     if (!footer) return;
 
+    const anchorNav = document.querySelector('.anchorNav');
+    if (!anchorNav) return;
+
     const footerOffset = footer.offsetTop + footer.offsetHeight;
+
+    const anchorTl = gsap.timeline({
+      scrollTrigger: {
+        start: '+=125 top',
+        // markers: true,
+        scrub: true,
+      },
+    });
+
+    anchorTl.to('.anchorNav', { autoAlpha: 1 });
 
     ScrollTrigger.create({
       trigger: '.desktopNav',
@@ -235,7 +251,7 @@ const Nav = ({ blok }) => {
         navWrapper.removeEventListener('mouseleave', closeDropdown);
       }
     };
-  }, [navReady]);
+  }, [navReady, anchorNav]);
 
   useEffect(() => {
     const handleGlobeHover = () => {
@@ -307,7 +323,7 @@ const Nav = ({ blok }) => {
               </div>
             ))}
           </MainInner>
-<AnchorNavigator/>
+          <AnchorNavigator />
         </MainNavWrapper>
       </>
     </ThemeProvider>
