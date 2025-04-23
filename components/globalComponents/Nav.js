@@ -167,7 +167,7 @@ const Nav = ({ blok }) => {
     const anchorTl = gsap.timeline({
       scrollTrigger: {
         start: '+=125 top',
-        end: 'bottom bottom',
+        end: '+=200 top',
         // markers: true,
         scrub: true,
       },
