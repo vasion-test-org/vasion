@@ -159,25 +159,25 @@ const IntroContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75vw;
-  margin-bottom: 2.5vw;
+  /* margin-bottom: 2.5vw; */
   width: 81.5vw;
   text-align: ${(props) => (props.alignment ? props.alignment : "left")};
 
   ${media.fullWidth} {
     gap: 12px;
-    margin-bottom: 40px;
+    /* margin-bottom: 40px; */
     width: 1304px;
   }
 
   ${media.tablet} {
     gap: 12px;
-    margin-bottom: 40px;
+    /* margin-bottom: 40px; */
     width: 92.188vw;
   }
 
   ${media.mobile} {
     gap: 4.167vw;
-    margin-bottom: 8.333vw;
+    /* margin-bottom: 8.333vw; */
     width: 83.333vw;
   }
 `;
@@ -188,6 +188,7 @@ const Wrapper = styled.div`
   justify-self: center;
   align-items: center;
   justify-content: center;
+  gap:2.5vw;
 
   padding: ${(props) => {
     if (props.spacingOffset === "top") {
@@ -212,6 +213,7 @@ const Wrapper = styled.div`
   }};
 
   ${media.fullWidth} {
+    gap:40px;
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
         return props.spacing === "default"
@@ -236,6 +238,7 @@ const Wrapper = styled.div`
   }
 
   ${media.tablet} {
+      gap:3.906vw;
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
         return props.spacing === "default"
@@ -260,6 +263,7 @@ const Wrapper = styled.div`
   }
 
   ${media.mobile} {
+    gap: 8.333vw;
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
         return props.spacing === "default"

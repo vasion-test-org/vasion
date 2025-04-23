@@ -141,7 +141,7 @@ const Footer = ({ blok }) => {
           |
           <LegalLink onClick={() => handleNavigate("/legal/")}>Legal</LegalLink>
         </LegalLinks>
-        © 2024 PrinterLogic. All Rights Reserved
+        © 2025 PrinterLogic. All Rights Reserved
       </LegalDiv>
       <VasionFooter
         src={"/images/uiElements/VasionFooterPNG.png"}
