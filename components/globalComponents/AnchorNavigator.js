@@ -20,9 +20,27 @@ const AnchorNavigator = ({ blok }) => {
   const { mobile } = useContext(ScreenContext);
 
   useEffect(() => {
-    const allAnchors = Array.from(document.querySelectorAll('.anchor'));
-    setAnchorList(allAnchors);
+    const updateAnchors = () => {
+      const allAnchors = Array.from(document.querySelectorAll('.anchor'));
+      setAnchorList(allAnchors);
+    };
+  
+    updateAnchors(); 
+  
+    const observer = new MutationObserver(() => {
+      updateAnchors();
+    });
+  
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+  
+    return () => {
+      observer.disconnect();
+    };
   }, []);
+  
 
   // console.log(anchorList);
   const anchorMap = anchorList.map((anchor, i) => (
