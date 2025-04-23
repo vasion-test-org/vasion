@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext} from 'react';
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
@@ -9,12 +9,15 @@ import media from '@/styles/media';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { getSmoother } from '@/components/ScrollSmoothWrapper';
+import { ScreenContext } from "@/components/providers/Screen";
+
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const AnchorNavigator = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok?.theme] || themes.default;
   const [anchorList, setAnchorList] = useState([]);
+  const { mobile } = useContext(ScreenContext);
 
   useEffect(() => {
     const allAnchors = Array.from(document.querySelectorAll('.anchor'));
@@ -26,16 +29,29 @@ const AnchorNavigator = ({ blok }) => {
     <AnchorButton
       key={i}
       onClick={() => {
-        const smoother = getSmoother();
-
-        if (smoother && anchor) {
-          smoother.scrollTo(anchor, true, 'top top'); 
+        if (!anchor) return;
+  
+        if (mobile) {
+          gsap.to(window, {
+            duration: 1,
+            scrollTo: {
+              y: anchor,
+              offsetY: 20, 
+            },
+            ease: 'power2.out',
+          });
+        } else {
+          const smoother = getSmoother();
+          if (smoother) {
+            smoother.scrollTo(anchor, true, 'top top');
+          }
         }
       }}
     >
       {anchor.innerText}
     </AnchorButton>
   ));
+  
 
   return (
     <ThemeProvider theme={selectedTheme}>
