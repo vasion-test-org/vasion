@@ -21,7 +21,7 @@ const AnchorNavigator = ({ blok }) => {
     setAnchorList(allAnchors);
   }, []);
 
-  console.log(anchorList);
+  // console.log(anchorList);
   const anchorMap = anchorList.map((anchor, i) => (
     <AnchorButton
       key={i}

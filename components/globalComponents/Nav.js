@@ -16,8 +16,7 @@ import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import AnchorNavigator from '@/components/globalComponents/AnchorNavigator'
-import getMedia from '@/functions/getMedia';
+import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -87,14 +86,17 @@ const Nav = ({ blok }) => {
               const rawUrl = navItem.item_link?.cached_url || '#';
               const isExternal =
                 rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
-                const supportedLocales = ['en', 'fr', 'de'];
-                const rawPathParts = rawUrl.split('/').filter(Boolean);
-                const alreadyHasLocale = supportedLocales.includes(rawPathParts[0]);
-                
-                const normalizedUrl = isExternal
-                  ? rawUrl
-                  : `/${alreadyHasLocale ? '' : currentLocale ?? ''}/${rawUrl}`.replace(/\/+/g, '/');
-                
+              const supportedLocales = ['en', 'fr', 'de'];
+              const rawPathParts = rawUrl.split('/').filter(Boolean);
+              const alreadyHasLocale = supportedLocales.includes(
+                rawPathParts[0]
+              );
+
+              const normalizedUrl = isExternal
+                ? rawUrl
+                : `/${
+                    alreadyHasLocale ? '' : currentLocale ?? ''
+                  }/${rawUrl}`.replace(/\/+/g, '/');
 
               return (
                 <StyledNextLink
@@ -160,28 +162,28 @@ const Nav = ({ blok }) => {
     const footer = document.querySelector('.footer');
     if (!footer) return;
 
+    const anchorNav = document.querySelector('.anchorNav');
+    if (!anchorNav) return;
+
     const footerOffset = footer.offsetTop + footer.offsetHeight;
 
-    const deskTl = gsap.timeline({
+    const anchorTl = gsap.timeline({
       scrollTrigger: {
-        trigger: '.desktopNav',
-        start: 'top top',
-        end: `${footerOffset}px`,
-        pin: true,
-        pinSpacing: false,
+        start: '+=125 top',
+        // markers: true,
         scrub: true,
-        markers: true
-      }
-    })
+      },
+    });
 
-    deskTl.to({}, { duration: 200, ease: "none" }).to('.anchorNav', {opacity: 1})
-    // ScrollTrigger.create({
-    //   trigger: '.desktopNav',
-    //   start: 'top top',
-    //   end: `${footerOffset}px`,
-    //   pin: true,
-    //   pinSpacing: false,
-    // });
+    anchorTl.to('.anchorNav', { autoAlpha: 1 });
+
+    ScrollTrigger.create({
+      trigger: '.desktopNav',
+      start: 'top top',
+      end: `${footerOffset}px`,
+      pin: true,
+      pinSpacing: false,
+    });
   }, [navReady]);
 
   useEffect(() => {
@@ -249,7 +251,7 @@ const Nav = ({ blok }) => {
         navWrapper.removeEventListener('mouseleave', closeDropdown);
       }
     };
-  }, [navReady]);
+  }, [navReady, anchorNav]);
 
   useEffect(() => {
     const handleGlobeHover = () => {
@@ -321,7 +323,7 @@ const Nav = ({ blok }) => {
               </div>
             ))}
           </MainInner>
-<AnchorNavigator/>
+          <AnchorNavigator />
         </MainNavWrapper>
       </>
     </ThemeProvider>

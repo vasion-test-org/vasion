@@ -18,6 +18,7 @@ import getMedia from '@/functions/getMedia';
 import RichTextRenderer from './renderers/RichTextRenderer';
 import Icons from '@/components/renderers/Icons';
 import ComponentRenderer from './renderers/ComponentRenderer';
+import TestForm from './TestForm';
 
 const Demo = ({ blok }) => {
   const { mobile } = useContext(ScreenContext);
@@ -25,7 +26,7 @@ const Demo = ({ blok }) => {
   const arrowRefs = useRef([]);
   const contentRefs = useRef([]);
   const iconRefs = useRef([]);
-  const handlersRef = useRef([]); // Added this ref for event handlers
+  const handlersRef = useRef([]); 
   const prevIndex = useRef(0);
   const demoExperienceRef = useRef('');
   const copycomponents = [
@@ -385,6 +386,11 @@ const Demo = ({ blok }) => {
         {blok.demo_form[0].component === 'form' && (
           <FormPositionContainer id='formPos'>
             <Form blok={blok.demo_form[0]} />
+          </FormPositionContainer>
+        )}
+         {blok.demo_form[0].component === 'test_form' && (
+          <FormPositionContainer id='formPos'>
+            <TestForm blok={blok.demo_form[0]} />
           </FormPositionContainer>
         )}
         {blok.demo_form[0].component === 'demo_thank_you' && (
