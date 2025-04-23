@@ -172,7 +172,7 @@ const Nav = ({ blok }) => {
       },
     });
 
-    anchorTl.to('.anchorNav', { autoAlpha: 1 });
+    anchorTl.to('.anchorNav', { autoAlpha: 1, duration: 1 });
 
     ScrollTrigger.create({
       trigger: '.desktopNav',
