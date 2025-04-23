@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext} from 'react';
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
@@ -9,12 +9,15 @@ import media from '@/styles/media';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { getSmoother } from '@/components/ScrollSmoothWrapper';
+import { ScreenContext } from "@/components/providers/Screen";
+
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const AnchorNavigator = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok?.theme] || themes.default;
   const [anchorList, setAnchorList] = useState([]);
+  const { mobile } = useContext(ScreenContext);
 
   useEffect(() => {
     const allAnchors = Array.from(document.querySelectorAll('.anchor'));
@@ -39,9 +42,9 @@ const AnchorNavigator = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <AnchorWrapper >
+      <AnchorWrapper className='anchorNav'>
       {anchorList.length > 0 && (
-        <AnchorNavWrapper className='anchorNav'>
+        <AnchorNavWrapper>
           <ButtonsDiv>{anchorMap}</ButtonsDiv>
         </AnchorNavWrapper>
       )}
