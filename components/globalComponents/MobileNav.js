@@ -122,12 +122,13 @@ const MobileNav = ({ blok }) => {
     const mobileAnchorTl = gsap.timeline({
       scrollTrigger: {
         start: '+=125 top',
+        end: 'bottom bottom',
         // markers: true,
         scrub: true,
       },
     });
 
-    mobileAnchorTl.to('.anchorNav', { autoAlpha: 1, duration: 1 });
+    mobileAnchorTl.to('.anchorNav', { autoAlpha: 1});
 
     ScrollTrigger.create({
       trigger: '.mobileNav',
