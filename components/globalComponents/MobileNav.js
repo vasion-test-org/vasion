@@ -121,8 +121,8 @@ const MobileNav = ({ blok }) => {
     
     const mobileAnchorTl = gsap.timeline({
       scrollTrigger: {
-        start: '1% top',
-        end: '10% bottom',
+        start: '2% 1%',
+        end: '10% 90%',
         // markers: true,
         scrub: true,
       },
