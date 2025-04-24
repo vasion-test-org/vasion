@@ -149,9 +149,7 @@ const Form = ({ blok }) => {
         let submissionTimeout;
 
         form.onSubmit(() => {
-          // Start a timeout fallback in case success doesn't fire
           submissionTimeout = setTimeout(() => {
-            // Assume failure after 5 seconds
             console.error("Form submission timeout: assuming failure");
             alert("There was a problem submitting the form. Please refresh page and try again.");
           }, 5000);

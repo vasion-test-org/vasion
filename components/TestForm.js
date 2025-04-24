@@ -148,16 +148,28 @@ const TestForm = ({ blok }) => {
   }, []);
 
   useEffect(() => {
-    if (!isLoaded) return;
-
+    isLoaded &&
     window?.MktoForms2?.loadForm(
       'https://info.printerlogic.com',
       '338-HTA-134',
       blok.form_id,
       (form) => {
-        form.onSuccess(() => {
+        let submissionTimeout;
+
+        form.onSubmit(() => {
+          submissionTimeout = setTimeout(() => {
+            console.error("Form submission timeout: assuming failure");
+            alert("There was a problem submitting the form. Please refresh page and try again.");
+          }, 5000);
+        });
+
+        form.onSuccess(function (submittedValues) {
+          clearTimeout(submissionTimeout);
+
           if (blok.animated) {
+            LDBookItV2.saveFormData({ formData: submittedValues });
             console.log('Thank You');
+            console.log("Form submitted successfully:", submittedValues);
           } else if (blok.redirect_link.cached_url) {
             updateThankYouCopy(blok?.thank_you_copy);
   
