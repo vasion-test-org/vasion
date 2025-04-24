@@ -114,7 +114,6 @@ const TestForm = ({ blok }) => {
           console.log('lean data language:', languageRef.current); // Use the ref here
           formData['thank_you_language'] = languageRef.current;
           formData['origin_domain'] = originRef.current;
-          LDBookItV2.saveFormData({ formData: formData });
         },
         useIframe: blok.animated,
       };
