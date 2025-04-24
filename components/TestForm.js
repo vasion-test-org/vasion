@@ -157,6 +157,7 @@ const TestForm = ({ blok }) => {
       (form) => {
         form.onSuccess(() => {
           if (blok.animated) {
+            LDBookItV2.saveFormData({ formData: formData });
             console.log('Thank You');
           } else if (blok.redirect_link.cached_url) {
             updateThankYouCopy(blok?.thank_you_copy);
