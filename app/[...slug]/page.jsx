@@ -72,16 +72,7 @@ export default async function DynamicPage({ params }) {
       : slugArray.slice(1).join('/')
     : slugArray.join('/');
 
-  let story = await fetchData(storySlug, locale, 'published');
-
-  const host = headers().get('host');
-
-  if (
-    !story &&
-    (host === 'localhost:3010' || host === 'vasion-ten.vercel.app' || host === 'vasion.vercel.app')
-  ) {
-    story = await fetchData(storySlug, locale, 'draft');
-  }
+  const story = await fetchData(storySlug, locale);
 
   if (!story) {
     return notFound();
@@ -94,32 +85,37 @@ export default async function DynamicPage({ params }) {
   );
 }
 
-async function fetchData(slug, locale, version) {
+
+async function fetchData(slug, locale) {
   const storyblokApi = getStoryblokApi();
+  const host = headers().get('host');
+  const isPreview = host === 'localhost:3010' || host === 'vasion-ten.vercel.app' || host === 'vasion.vercel.app';
 
   const sbParams = {
-    version: version,
+    version: isPreview ? 'draft' : 'published',
     language: locale,
   };
 
   try {
     const { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
-    if (!data.story) {
-      console.error(
-        `[❌ Server] Story not found for slug: ${slug} and locale: ${locale}`
-      );
+    return data.story;
+  } catch (error) {
+    if (!isPreview) {
+      console.error(`[❌ Server] Error fetching published story: ${error.message}`);
       return null;
     }
 
-    console.log(
-      `[✅ Success] Story fetched: ${data.story.full_slug} (${locale}) [${version}]`
-    );
-    return data.story;
-  } catch (error) {
-    console.error(`[❌ Server] Error fetching story: ${error.message}`);
-    return null;
+    try {
+      sbParams.version = 'draft';
+      const { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
+      return data.story;
+    } catch (draftError) {
+      console.error(`[❌ Server] Error fetching draft story: ${draftError.message}`);
+      return null;
+    }
   }
 }
+
 
 export async function generateStaticParams() {
   const storyblokApi = getStoryblokApi();

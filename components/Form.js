@@ -51,7 +51,7 @@ const Form = ({ blok }) => {
       }
     }
   }, []);
-  // TODO: refactor this to work with our new structure
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const pathname = window.location.pathname;
@@ -139,19 +139,20 @@ const Form = ({ blok }) => {
   }, []);
 
   useEffect(() => {
-    if (!isLoaded) return;
-
+    // if (!isLoaded) return;
+    isLoaded &&
     window?.MktoForms2?.loadForm(
       'https://info.printerlogic.com',
       '338-HTA-134',
       blok.form_id,
       (form) => {
-        form.onSuccess(() => {
+        form.onSuccess(function (submittedValues) {
           if (blok.animated) {
             console.log('Thank You');
+            console.log("Form submitted successfully:", submittedValues);
           } else if (blok.redirect_link.cached_url) {
             updateThankYouCopy(blok?.thank_you_copy);
-  
+            console.log("Form submitted successfully:", submittedValues);
             const isExternal = (url) => /^https?:\/\//.test(url);
 
             let redirectUrl =
@@ -195,7 +196,7 @@ const Form = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       <FormContainer id='formContainer'>
-        {blok.header && <FormHeader>{blok.header}</FormHeader>}
+        {blok?.header && <FormHeader>{blok.header}</FormHeader>}
         {blok.animated && (
           <>
             <CalendarContainer className='bookit-content-container' />
