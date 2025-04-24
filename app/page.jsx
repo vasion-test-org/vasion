@@ -49,10 +49,15 @@ export async function generateMetadata() {
   };
 }
 
-async function fetchStory(slug, locale) {
+import { headers } from 'next/headers';
+
+async function fetchStory(slug, locale = 'en') {
   const storyblokApi = getStoryblokApi();
+  const host = headers().get('host');
+  const isPreview = host === 'localhost:3000' || host?.includes('vercel.app');
+
   const sbParams = {
-    version: "draft",
+    version: isPreview ? 'draft' : 'published',
     language: locale,
   };
 
@@ -60,7 +65,8 @@ async function fetchStory(slug, locale) {
     const { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
     return data.story;
   } catch (error) {
-    console.error(`Error fetching home story: ${error.message}`);
+    console.error(`Error fetching story: ${error.message}`);
     return null;
   }
 }
+
