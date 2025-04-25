@@ -102,7 +102,7 @@ const Form = ({ blok }) => {
       const initConfig = {
         calendarTimeoutLength: 900,
         beforeRouting: (formTarget, formData) => {
-          console.log('lean data language:', languageRef.current); // Use the ref here
+          console.log('lean data language:', languageRef.current); 
           formData['thank_you_language'] = languageRef.current;
           formData['origin_domain'] = originRef.current;
         },

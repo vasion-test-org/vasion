@@ -1,18 +1,18 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import media from "styles/media";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import Card from "./globalComponents/Card";
-import EventCard from "./globalComponents/EventCard";
-import { horizontalLoop } from "@/functions/horizontalLoop";
-import SideArrow from "@/assets/svg/side-arrow.svg";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import ResourceCard from "./globalComponents/ResourceCard";
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import media from 'styles/media';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import Card from './globalComponents/Card';
+import EventCard from './globalComponents/EventCard';
+import { horizontalLoop } from '@/functions/horizontalLoop';
+import SideArrow from '@/assets/svg/side-arrow.svg';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import ResourceCard from './globalComponents/ResourceCard';
 
 const PaginatedCards = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -21,28 +21,79 @@ const PaginatedCards = ({ blok }) => {
   const currentIndex = useRef(0);
   const cardsLoop = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [selectedFilter, setSelectedFilter] = useState(null);
+
+  // === Build dynamic filters based on card tags ===
+  const solutionsTags = ['print automation', 'serverless printing'];
+  const productTags = ['capture', 'workflow', 'signature'];
+  const contentTypeTags = ['white paper', 'customer stories', 'guide'];
+  const industryTags = ['healthcare'];
+  const foundTags = {
+    solutions: new Set(),
+    products: new Set(),
+    contentTypes: new Set(),
+    industryType: new Set(),
+  };
+
+  blok.cards.forEach((card) => {
+    if (!card.tag_list) return;
+    card.tag_list.forEach((tag) => {
+      const lowerTag = tag.toLowerCase();
+      if (solutionsTags.includes(lowerTag)) {
+        foundTags.solutions.add(lowerTag);
+      }
+      if (productTags.includes(lowerTag)) {
+        foundTags.products.add(lowerTag);
+      }
+      if (contentTypeTags.includes(lowerTag)) {
+        foundTags.contentTypes.add(lowerTag);
+      }
+      if (industryTags.includes(lowerTag)) {
+        foundTags.industryType.add(lowerTag);
+      }
+    });
+  });
+
+  const capitalizeFirstLetter = (str) => {
+    return str
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+  const countTagOccurrences = (tag) => {
+    return blok.cards.filter((card) =>
+      card.tag_list?.some((t) => t.toLowerCase() === tag.toLowerCase())
+    ).length;
+  };
+  
+  // === Filter cards based on selected filter ===
+  const filteredCards = selectedFilter
+  ? blok.cards.filter((card) =>
+      card.tag_list?.some((tag) => tag.toLowerCase() === selectedFilter.toLowerCase())
+    )
+  : blok.cards;
+
 
   const mappedCards = [];
-  console.log(blok)
-  for (let i = 0; i < blok.cards.length; i += 6) {
-    const chunk = blok.cards.slice(i, i + 6);
+  for (let i = 0; i < filteredCards.length; i += 6) {
+    const chunk = filteredCards.slice(i, i + 6);
     mappedCards.push(
       <CardChunk
         key={`chunk-${i / 6}`}
         card_type={blok.card_type}
-        className="cardChunks"
+        className='cardChunks'
       >
         {chunk.map((card, index) => {
-          if (blok.card_type === "default") {
+          if (blok.card_type === 'default') {
             return (
               <Card
                 key={`card-${i + index}`}
-                borderradius="6"
+                borderradius='6'
                 paginated
                 content={card}
               />
             );
-          } else if (blok.card_type === "event") {
+          } else if (blok.card_type === 'event') {
             return (
               <EventCard
                 key={`card-${i + index}`}
@@ -50,19 +101,19 @@ const PaginatedCards = ({ blok }) => {
                 content={card}
               />
             );
-          } else if (blok.card_type === "resource") {
+          } else if (blok.card_type === 'resource') {
             return (
               <ResourceCard
                 key={`card-${i + index}`}
                 paginated
                 index={index}
                 content={card}
-                borderradius="6"
+                borderradius='6'
               />
             );
           }
         })}
-      </CardChunk>,
+      </CardChunk>
     );
   }
 
@@ -70,7 +121,7 @@ const PaginatedCards = ({ blok }) => {
     if (!cardsLoop.current) return;
     cardsLoop.current.toIndex(index, {
       duration: 0.4,
-      ease: "power1.inOut",
+      ease: 'power1.inOut',
     });
     currentIndex.current = index;
     setCurrentPage(index);
@@ -91,7 +142,7 @@ const PaginatedCards = ({ blok }) => {
 
       if (currentPage > 1) {
         pageList.push(0);
-        if (currentPage > 2) pageList.push("left-ellipsis");
+        if (currentPage > 2) pageList.push('left-ellipsis');
       }
 
       for (let i = left; i <= right; i++) {
@@ -99,7 +150,7 @@ const PaginatedCards = ({ blok }) => {
       }
 
       if (currentPage < totalPages - 2) {
-        if (currentPage < totalPages - 3) pageList.push("right-ellipsis");
+        if (currentPage < totalPages - 3) pageList.push('right-ellipsis');
         pageList.push(totalPages - 1);
       }
     }
@@ -108,18 +159,18 @@ const PaginatedCards = ({ blok }) => {
   };
 
   const mappedPages = getPaginatedNumbers().map((page, i) => {
-    if (page === "left-ellipsis" || page === "right-ellipsis") {
+    if (page === 'left-ellipsis' || page === 'right-ellipsis') {
       return <Ellipsis key={`ellipsis-${i}`}>...</Ellipsis>;
     }
 
     return (
       <PageNumberBlock
-        className="pageNumberBlocks"
+        className='pageNumberBlocks'
         key={`block-${page}`}
         id={`block-${page}`}
         onClick={() => goToPage(page)}
         style={{
-          backgroundColor: currentPage === page ? colors.grey100 : "unset",
+          backgroundColor: currentPage === page ? colors.grey100 : 'unset',
         }}
       >
         {page + 1}
@@ -128,7 +179,7 @@ const PaginatedCards = ({ blok }) => {
   });
 
   useEffect(() => {
-    const cardChunks = gsap.utils.toArray(".cardChunks");
+    const cardChunks = gsap.utils.toArray('.cardChunks');
     const totalItems = cardChunks.length;
 
     cardsLoop.current = horizontalLoop(cardChunks, {
@@ -136,30 +187,82 @@ const PaginatedCards = ({ blok }) => {
       center: true,
     });
 
-    const nextBtn = document.querySelector(".next");
-    const prevBtn = document.querySelector(".prev");
+    const nextBtn = document.querySelector('.next');
+    const prevBtn = document.querySelector('.prev');
 
     const handleNext = () => {
       const newIndex = (currentIndex.current + 1) % totalItems;
-      cardsLoop.current.next({ duration: 0.4, ease: "power1.inOut" });
+      cardsLoop.current.next({ duration: 0.4, ease: 'power1.inOut' });
       currentIndex.current = newIndex;
       setCurrentPage(newIndex);
     };
 
     const handlePrev = () => {
       const newIndex = (currentIndex.current - 1 + totalItems) % totalItems;
-      cardsLoop.current.previous({ duration: 0.4, ease: "power1.inOut" });
+      cardsLoop.current.previous({ duration: 0.4, ease: 'power1.inOut' });
       currentIndex.current = newIndex;
       setCurrentPage(newIndex);
     };
 
-    nextBtn.addEventListener("click", handleNext);
-    prevBtn.addEventListener("click", handlePrev);
+    nextBtn.addEventListener('click', handleNext);
+    prevBtn.addEventListener('click', handlePrev);
 
     return () => {
-      nextBtn.removeEventListener("click", handleNext);
-      prevBtn.removeEventListener("click", handlePrev);
+      nextBtn.removeEventListener('click', handleNext);
+      prevBtn.removeEventListener('click', handlePrev);
     };
+  }, []);
+
+  // GSAP dropdown animations (keep yours)
+  useEffect(() => {
+    const manuDropDownTL = gsap
+      .timeline({ paused: true })
+      .set('#solutionsOptions', { display: 'flex' })
+      .to('#solutionsOptions', { height: 'auto', duration: 0.55 });
+
+    const platformDropDownTL = gsap
+      .timeline({ paused: true })
+      .set('#productOptions', { display: 'flex' })
+      .to('#productOptions', { height: 'auto', duration: 0.55 });
+
+    const featureDropDownTL = gsap
+      .timeline({ paused: true })
+      .set('#contentTypesOptions', { display: 'flex' })
+      .to('#contentTypesOptions', { height: 'auto', duration: 0.55 });
+
+    const handleManuDrop = () => {
+      manuDropDownTL.paused() || manuDropDownTL.reversed()
+        ? manuDropDownTL.play()
+        : manuDropDownTL.reverse();
+      platformDropDownTL.reverse();
+      featureDropDownTL.reverse();
+    };
+
+    const handlePlatformDrop = () => {
+      platformDropDownTL.paused() || platformDropDownTL.reversed()
+        ? platformDropDownTL.play()
+        : platformDropDownTL.reverse();
+      manuDropDownTL.reverse();
+      featureDropDownTL.reverse();
+    };
+
+    const handleFeatureDrop = () => {
+      featureDropDownTL.paused() || featureDropDownTL.reversed()
+        ? featureDropDownTL.play()
+        : featureDropDownTL.reverse();
+      manuDropDownTL.reverse();
+      platformDropDownTL.reverse();
+    };
+
+    document
+      .querySelector('#solutionsDrop')
+      ?.addEventListener('click', handleManuDrop);
+    document
+      .querySelector('#productDrop')
+      ?.addEventListener('click', handlePlatformDrop);
+    document
+      .querySelector('#contentTypesDrop')
+      ?.addEventListener('click', handleFeatureDrop);
   }, []);
 
   return (
@@ -168,25 +271,195 @@ const PaginatedCards = ({ blok }) => {
         spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
       >
-        {blok.card_type === "event" && (
+        <FiltersWrapper>
+          {foundTags.solutions.size > 0 && (
+            <StyledSelect id='solutionsDrop'>
+              Solutions
+              <OptionsContainer id='solutionsOptions'>
+                {[...foundTags.solutions].map((tag) => (
+                  <Option key={tag} onClick={() => setSelectedFilter(tag)}>
+                    <Circle src='/images/addCircle.webp' />{' '}
+                    {capitalizeFirstLetter(tag)}
+                    ({countTagOccurrences(tag)})
+                  </Option>
+                ))}
+              </OptionsContainer>
+            </StyledSelect>
+          )}
+
+          {foundTags.products.size > 0 && (
+            <StyledSelect id='productDrop'>
+              Product
+              <OptionsContainer id='productOptions'>
+                {[...foundTags.products].map((tag) => (
+                  <Option key={tag} onClick={() => setSelectedFilter(tag)}>
+                    <Circle src='/images/addCircle.webp' />{' '}
+                    {capitalizeFirstLetter(tag)}
+                    ({countTagOccurrences(tag)})
+                  </Option>
+                ))}
+              </OptionsContainer>
+            </StyledSelect>
+          )}
+
+          {foundTags.contentTypes.size > 0 && (
+            <StyledSelect id='contentTypesDrop'>
+              Content Types
+              <OptionsContainer id='contentTypesOptions'>
+                {[...foundTags.contentTypes].map((tag) => (
+                  <Option key={tag} onClick={() => setSelectedFilter(tag)}>
+                    <Circle src='/images/addCircle.webp' />{' '}
+                    {capitalizeFirstLetter(tag)}
+                    ({countTagOccurrences(tag)})
+                  </Option>
+                ))}
+              </OptionsContainer>
+            </StyledSelect>
+          )}
+
+          {foundTags.industryType.size > 0 && (
+            <StyledSelect id='industryTypesDrop'>
+              Industry Type
+              <OptionsContainer id='industryTypesOptions'>
+                {[...foundTags.industryType].map((tag) => (
+                  <Option key={tag} onClick={() => setSelectedFilter(tag)}>
+                    <Circle src='/images/addCircle.webp' />{' '}
+                    {capitalizeFirstLetter(tag)}
+                    ({countTagOccurrences(tag)})
+                  </Option>
+                ))}
+              </OptionsContainer>
+            </StyledSelect>
+          )}
+        </FiltersWrapper>
+
+        {blok.card_type === 'event' && (
           <EventHeaderContainer>
             <EventHeaders>Events</EventHeaders>
             <EventHeaders>Details</EventHeaders>
           </EventHeaderContainer>
         )}
+
         <CardsContainer card_type={blok.card_type}>
           {mappedCards}
         </CardsContainer>
+
         <PaginationDiv>
-          <PageNavigation className="prev">Previous</PageNavigation>
+          <PageNavigation className='prev'>Previous</PageNavigation>
           {mappedPages}
-          <PageNavigation className="next">Next</PageNavigation>
+          <PageNavigation className='next'>Next</PageNavigation>
         </PaginationDiv>
       </Wrapper>
     </ThemeProvider>
   );
 };
 
+const Circle = styled.img`
+  height: 0.75vw;
+  width: 0.75vw;
+`;
+const FiltersWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.5vw;
+`;
+const Option = styled.div`
+  ${text.bodyMd};
+  display: flex;
+  align-items: center;
+  width: auto;
+  height: 1.625vw;
+  padding: 0.25vw;
+  border: 1px solid ${colors.grey100};
+  border-radius: 0.375vw;
+  gap: 0.5vw;
+
+  ${media.fullWidth} {
+    height: 26px;
+    padding: 20px;
+  }
+
+  ${media.tablet} {
+    height: 5.859vw;
+    padding: 1.953vw;
+  }
+
+  ${media.mobile} {
+    height: 12.15vw;
+    padding: 4.673vw;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${colors.white};
+    color: ${colors.primaryOrange};
+  }
+`;
+const OptionsContainer = styled.div`
+  position: relative;
+  display: none;
+  flex-direction: column;
+  background: ${colors.white};
+  overflow: hidden;
+  width: max-content;
+  min-width: 100%;
+  z-index: 10;
+  height: 0;
+  border-radius: 0.375vw;
+  border: ${colors.grey100};
+  gap: 0.5vw;
+  /* top: 2vw;
+  left: 0vw; */
+
+  ${media.fullWidth} {
+    border-radius: 8px;
+    top: 58px;
+  }
+
+  ${media.tablet} {
+    border-radius: 0.781vw;
+    top: 5.664vw;
+  }
+
+  ${media.mobile} {
+    border-radius: 1.869vw;
+    top: 13.551vw;
+  }
+`;
+const StyledSelect = styled.div`
+  width: max-content;
+  /* height: 2.5vw; */
+  border-radius: 0.5vw;
+  ${text.bodyMd};
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: ${colors.white};
+  border: 1px solid ${colors.grey100};
+  height: auto;
+  /* min-width: 17.222vw; */
+
+  padding: 0.5vw 0.75vw;
+  /* gap: 2.778vw; */
+
+  ${media.fullWidth} {
+    padding: 8px 12px;
+    /* gap: 40px; */
+  }
+
+  ${media.tablet} {
+    padding: 2.344vw;
+    /* gap: 3.906vw; */
+  }
+
+  ${media.mobile} {
+    padding: 4.673vw;
+    /* gap: 4.673vw; */
+  }
+`;
 const PageNumberBlock = styled.div`
   display: flex;
   align-items: center;
@@ -283,9 +556,9 @@ const CardChunk = styled.div`
   position: relative;
   display: flex;
   flex-direction: ${(props) =>
-    props.card_type === "event" ? "column" : "row"};
-  flex-wrap: ${(props) => (props.card_type === "event" ? "nowrap" : "wrap")};
-  gap: ${(props) => (props.card_type === "event" ? "0" : "1.25vw")};
+    props.card_type === 'event' ? 'column' : 'row'};
+  flex-wrap: ${(props) => (props.card_type === 'event' ? 'nowrap' : 'wrap')};
+  gap: ${(props) => (props.card_type === 'event' ? '0' : '1.25vw')};
   min-width: 100%;
 
   ${media.fullWidth} {
@@ -363,95 +636,95 @@ const Wrapper = styled.div`
   width: 100%;
 
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
-          ? `${props.spacing}px 0 0`
-          : "3.75vw 0 0";
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : "0 0 3.75vw";
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
-        ? `${props.spacing}px 0`
-        : "3.75vw 0";
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "60px 0";
+        ? `${props.spacing}px 0`
+        : '60px 0';
     }};
   }
   ${media.tablet} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.859vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "5.859vw 0 0";
+          ? `${props.spacing}px 0 0`
+          : '5.859vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 5.859vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 5.859vw";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 5.859vw';
       }
-      return props.spacing === "default"
-        ? "5.859vw 0"
+      return props.spacing === 'default'
+        ? '5.859vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "5.859vw 0";
+        ? `${props.spacing}px 0`
+        : '5.859vw 0';
     }};
   }
 
   ${media.mobile} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "12.5vw 0 0";
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 12.5vw";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
       }
-      return props.spacing === "default"
-        ? "12.5vw 0"
+      return props.spacing === 'default'
+        ? '12.5vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "12.5vw 0";
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
     }};
   }
 `;
