@@ -21,7 +21,8 @@ const PaginatedCards = ({ blok }) => {
   const currentIndex = useRef(0);
   const cardsLoop = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
-  const [selectedFilter, setSelectedFilter] = useState(null);
+  const [selectedFilters, setSelectedFilters] = useState([]);
+
 
   // === Build dynamic filters based on card tags ===
   const solutionsTags = ['print automation', 'serverless printing'];
@@ -67,11 +68,14 @@ const PaginatedCards = ({ blok }) => {
   };
   
   // === Filter cards based on selected filter ===
-  const filteredCards = selectedFilter
+  const filteredCards = selectedFilters.length > 0
   ? blok.cards.filter((card) =>
-      card.tag_list?.some((tag) => tag.toLowerCase() === selectedFilter.toLowerCase())
+      selectedFilters.every((filter) =>
+        card.tag_list?.some((tag) => tag.toLowerCase() === filter.toLowerCase())
+      )
     )
   : blok.cards;
+
 
 
   const mappedCards = [];
@@ -230,6 +234,11 @@ const PaginatedCards = ({ blok }) => {
       .set('#contentTypesOptions', { display: 'flex' })
       .to('#contentTypesOptions', { height: 'auto', duration: 0.55 });
 
+      const industryDropDownTL = gsap
+      .timeline({ paused: true })
+      .set('#industryTypesOptions', { display: 'flex' })
+      .to('#industryTypesOptions', { height: 'auto', duration: 0.55 });
+
     const handleManuDrop = () => {
       manuDropDownTL.paused() || manuDropDownTL.reversed()
         ? manuDropDownTL.play()
@@ -254,6 +263,15 @@ const PaginatedCards = ({ blok }) => {
       platformDropDownTL.reverse();
     };
 
+    const handleIndustryDrop = () => {
+      industryDropDownTL.paused() || industryDropDownTL.reversed()
+        ? industryDropDownTL.play()
+        : industryDropDownTL.reverse();
+      manuDropDownTL.reverse();
+      platformDropDownTL.reverse();
+      featureDropDownTL.reverse();
+    };
+
     document
       .querySelector('#solutionsDrop')
       ?.addEventListener('click', handleManuDrop);
@@ -263,6 +281,9 @@ const PaginatedCards = ({ blok }) => {
     document
       .querySelector('#contentTypesDrop')
       ?.addEventListener('click', handleFeatureDrop);
+      document
+      .querySelector('#industryTypesDrop')
+      ?.addEventListener('click', handleIndustryDrop);
   }, []);
 
   return (
@@ -277,11 +298,20 @@ const PaginatedCards = ({ blok }) => {
               Solutions
               <OptionsContainer id='solutionsOptions'>
                 {[...foundTags.solutions].map((tag) => (
-                  <Option key={tag} onClick={() => setSelectedFilter(tag)}>
-                    <Circle src='/images/addCircle.webp' />{' '}
-                    {capitalizeFirstLetter(tag)}
-                    ({countTagOccurrences(tag)})
-                  </Option>
+                <Option
+                key={tag}
+                onClick={() => {
+                  if (selectedFilters.includes(tag)) {
+                    setSelectedFilters(selectedFilters.filter((f) => f !== tag));
+                  } else {
+                    setSelectedFilters([...selectedFilters, tag]);
+                  }
+                }}
+              >
+                <Circle src="/images/addCircle.webp" />{" "}
+                {capitalizeFirstLetter(tag)} ({countTagOccurrences(tag)})
+              </Option>
+              
                 ))}
               </OptionsContainer>
             </StyledSelect>
@@ -292,11 +322,20 @@ const PaginatedCards = ({ blok }) => {
               Product
               <OptionsContainer id='productOptions'>
                 {[...foundTags.products].map((tag) => (
-                  <Option key={tag} onClick={() => setSelectedFilter(tag)}>
-                    <Circle src='/images/addCircle.webp' />{' '}
-                    {capitalizeFirstLetter(tag)}
-                    ({countTagOccurrences(tag)})
-                  </Option>
+               <Option
+               key={tag}
+               onClick={() => {
+                 if (selectedFilters.includes(tag)) {
+                   setSelectedFilters(selectedFilters.filter((f) => f !== tag));
+                 } else {
+                   setSelectedFilters([...selectedFilters, tag]);
+                 }
+               }}
+             >
+               <Circle src="/images/addCircle.webp" />{" "}
+               {capitalizeFirstLetter(tag)} ({countTagOccurrences(tag)})
+             </Option>
+             
                 ))}
               </OptionsContainer>
             </StyledSelect>
@@ -307,11 +346,20 @@ const PaginatedCards = ({ blok }) => {
               Content Types
               <OptionsContainer id='contentTypesOptions'>
                 {[...foundTags.contentTypes].map((tag) => (
-                  <Option key={tag} onClick={() => setSelectedFilter(tag)}>
-                    <Circle src='/images/addCircle.webp' />{' '}
-                    {capitalizeFirstLetter(tag)}
-                    ({countTagOccurrences(tag)})
-                  </Option>
+                  <Option
+                  key={tag}
+                  onClick={() => {
+                    if (selectedFilters.includes(tag)) {
+                      setSelectedFilters(selectedFilters.filter((f) => f !== tag));
+                    } else {
+                      setSelectedFilters([...selectedFilters, tag]);
+                    }
+                  }}
+                >
+                  <Circle src="/images/addCircle.webp" />{" "}
+                  {capitalizeFirstLetter(tag)} ({countTagOccurrences(tag)})
+                </Option>
+                
                 ))}
               </OptionsContainer>
             </StyledSelect>
@@ -322,11 +370,20 @@ const PaginatedCards = ({ blok }) => {
               Industry Type
               <OptionsContainer id='industryTypesOptions'>
                 {[...foundTags.industryType].map((tag) => (
-                  <Option key={tag} onClick={() => setSelectedFilter(tag)}>
-                    <Circle src='/images/addCircle.webp' />{' '}
-                    {capitalizeFirstLetter(tag)}
-                    ({countTagOccurrences(tag)})
-                  </Option>
+                <Option
+                key={tag}
+                onClick={() => {
+                  if (selectedFilters.includes(tag)) {
+                    setSelectedFilters(selectedFilters.filter((f) => f !== tag));
+                  } else {
+                    setSelectedFilters([...selectedFilters, tag]);
+                  }
+                }}
+              >
+                <Circle src="/images/addCircle.webp" />{" "}
+                {capitalizeFirstLetter(tag)} ({countTagOccurrences(tag)})
+              </Option>
+              
                 ))}
               </OptionsContainer>
             </StyledSelect>
