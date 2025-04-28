@@ -27,7 +27,6 @@ const Form = ({ blok }) => {
   // const yFormPosition = getMedia(-277, -277, -27, 0);
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
-  const originRef = useRef('va');
 
   useEffect(() => {
     if (blok?.thank_you_copy) {
@@ -35,22 +34,6 @@ const Form = ({ blok }) => {
       // console.log(thankYouCopy, blok?.thank_you_copy);
     }
   }, [thankYouCopy, blok?.thank_you_copy]);
-
-  useEffect(() => {
-    function getOriginDomain(url) {
-      return url.split('.com')[0] + '.com';
-    }
-
-    if (typeof window !== 'undefined') {
-      const originDomain = getOriginDomain(window.location.hostname);
-
-      if (originDomain.includes('printerlogic')) {
-        originRef.current = 'pl';
-      } else if (originDomain.includes('vasion')) {
-        originRef.current = 'va';
-      }
-    }
-  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -102,9 +85,8 @@ const Form = ({ blok }) => {
       const initConfig = {
         calendarTimeoutLength: 900,
         beforeRouting: (formTarget, formData) => {
-          console.log('lean data language:', languageRef.current); // Use the ref here
+          console.log('lean data language:', languageRef.current); 
           formData['thank_you_language'] = languageRef.current;
-          formData['origin_domain'] = originRef.current;
         },
         defaultLanguage: languageRef.current,
         useIframe: blok.animated,
