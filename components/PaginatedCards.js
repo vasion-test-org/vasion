@@ -30,15 +30,13 @@ const PaginatedCards = ({ blok }) => {
   const industryTags = ['healthcare'];
   const newsTags = ['media mentions', 'videos']
 console.log(blok.cards)
-  // === Filter cards based on selected filter and search query ===
+
   const filteredCards = blok.cards.filter((card) => {
-    // Find the header content in the card's content array
     const headerContent = Array.isArray(card?.content) 
       ? card.content.find(item => item.component === 'header')
       : null;
     const cardTitle = headerContent?.copy?.content?.[0]?.content?.[0]?.text || '';
     
-    // Check both the nested title and the direct name property
     const matchesSearch = searchQuery === '' || 
       cardTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (card.name && card.name.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -51,7 +49,6 @@ console.log(blok.cards)
     return matchesSearch && matchesFilters;
   });
 
-  // === Build dynamic filters based on filtered cards ===
   const availableTags = {
     solutions: new Set(),
     products: new Set(),
@@ -82,7 +79,6 @@ console.log(blok.cards)
     });
   });
 
-  // Remove selected filters that are no longer available
   useEffect(() => {
     const allAvailableTags = new Set([
       ...availableTags.solutions,
@@ -222,7 +218,6 @@ console.log(blok.cards)
     const totalItems = cardChunks.length;
 
     if (totalItems === 0) {
-      // If there are no cards, reset the current page and return
       setCurrentPage(0);
       return;
     }
@@ -258,9 +253,7 @@ console.log(blok.cards)
     };
   }, [filteredCards]);
 
-  // GSAP dropdown animations
   useEffect(() => {
-    // Kill any existing animations
     if (cardsLoop.current) {
       cardsLoop.current.kill();
       cardsLoop.current = null;
@@ -383,7 +376,6 @@ console.log(blok.cards)
       ?.addEventListener('click', handleNewsTypeDrop);
 
     return () => {
-      // Clean up animations and event listeners
       if (cardsLoop.current) {
         cardsLoop.current.kill();
       }
