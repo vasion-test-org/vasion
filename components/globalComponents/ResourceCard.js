@@ -9,6 +9,8 @@ import { getClick } from '@/functions/navigation';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
 
+const contentTypeTags = ['white paper', 'customer stories', 'guide', 'FAQs', 'playbooks', 'ebooks'];
+
 const ResourceCard = ({ content, paginated, index, borderradius }) => {
   const oddImages = [
     '/images/RandomResource1.webp',
@@ -20,9 +22,13 @@ const ResourceCard = ({ content, paginated, index, borderradius }) => {
     '/images/RandomResource5.webp',
     '/images/RandomResource6.webp',
   ];
-  // Choose image group based on index
+
   const imagePool = index % 2 === 0 ? evenImages : oddImages;
   const randomImage = imagePool[Math.floor(Math.random() * imagePool.length)];
+
+  const contentTypeTag = content.tag_list?.find(tag => 
+    contentTypeTags.includes(tag.toLowerCase())
+  );
 
   return (
     <CardWrapper paginated={paginated}>
@@ -35,7 +41,7 @@ const ResourceCard = ({ content, paginated, index, borderradius }) => {
       </ImageWrapper>
 
       <ContentWrapper>
-        <Eyebrow>{content.tag_list[0]}</Eyebrow>
+        {contentTypeTag && <Eyebrow>{contentTypeTag}</Eyebrow>}
         <Header>{content.name}</Header>
         {/* {content.Button[0] && (
           <ButtonWrapper>

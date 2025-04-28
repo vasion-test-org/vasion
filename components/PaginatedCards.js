@@ -22,37 +22,76 @@ const PaginatedCards = ({ blok }) => {
   const cardsLoop = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // === Build dynamic filters based on card tags ===
-  const solutionsTags = ['print automation', 'serverless printing'];
-  const productTags = ['capture', 'workflow', 'signature'];
-  const contentTypeTags = ['white paper', 'customer stories', 'guide'];
+  const solutionsTags = ['print automation', 'serverless printing', 'digital transformation', 'security & compliance', 'output automation', 'cost management', 'process automation', 'paperless process', 'sustainability'];
+  const productTags = ['capture', 'workflow', 'signature', 'print', 'content management', 'storage', 'reporting', 'templates', 'admin', 'output automation', 'advanced security', 'cost management'];
+  const contentTypeTags = ['white paper', 'customer stories', 'guide', 'FAQs', 'playbooks', 'ebooks'];
   const industryTags = ['healthcare'];
-  const foundTags = {
+  const newsTags = ['media mentions', 'videos']
+
+  // === Filter cards based on selected filter and search query ===
+  const filteredCards = blok.cards.filter((card) => {
+    const matchesSearch = searchQuery === '' || 
+      card.name.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesFilters = selectedFilters.length === 0 || 
+      selectedFilters.every((filter) =>
+        card.tag_list?.some((tag) => tag.toLowerCase() === filter.toLowerCase())
+      );
+    
+    return matchesSearch && matchesFilters;
+  });
+
+  // === Build dynamic filters based on filtered cards ===
+  const availableTags = {
     solutions: new Set(),
     products: new Set(),
     contentTypes: new Set(),
     industryType: new Set(),
+    newsTypeTags: new Set(),
   };
 
-  blok.cards.forEach((card) => {
+  filteredCards.forEach((card) => {
     if (!card.tag_list) return;
     card.tag_list.forEach((tag) => {
       const lowerTag = tag.toLowerCase();
       if (solutionsTags.includes(lowerTag)) {
-        foundTags.solutions.add(lowerTag);
+        availableTags.solutions.add(lowerTag);
       }
       if (productTags.includes(lowerTag)) {
-        foundTags.products.add(lowerTag);
+        availableTags.products.add(lowerTag);
       }
       if (contentTypeTags.includes(lowerTag)) {
-        foundTags.contentTypes.add(lowerTag);
+        availableTags.contentTypes.add(lowerTag);
       }
       if (industryTags.includes(lowerTag)) {
-        foundTags.industryType.add(lowerTag);
+        availableTags.industryType.add(lowerTag);
+      }
+      if (newsTags.includes(lowerTag)) {
+        availableTags.newsTypeTags.add(lowerTag);
       }
     });
   });
+
+  // Remove selected filters that are no longer available
+  useEffect(() => {
+    const allAvailableTags = new Set([
+      ...availableTags.solutions,
+      ...availableTags.products,
+      ...availableTags.contentTypes,
+      ...availableTags.industryType,
+      ...availableTags.newsTypeTags
+    ]);
+
+    const newSelectedFilters = selectedFilters.filter(filter => 
+      allAvailableTags.has(filter.toLowerCase())
+    );
+
+    if (newSelectedFilters.length !== selectedFilters.length) {
+      setSelectedFilters(newSelectedFilters);
+    }
+  }, [filteredCards]);
 
   const capitalizeFirstLetter = (str) => {
     return str
@@ -66,17 +105,6 @@ const PaginatedCards = ({ blok }) => {
     ).length;
   };
   
-  // === Filter cards based on selected filter ===
-  const filteredCards = selectedFilters.length > 0
-  ? blok.cards.filter((card) =>
-      selectedFilters.every((filter) =>
-        card.tag_list?.some((tag) => tag.toLowerCase() === filter.toLowerCase())
-      )
-    )
-  : blok.cards;
-
-
-
   const mappedCards = [];
   for (let i = 0; i < filteredCards.length; i += 6) {
     const chunk = filteredCards.slice(i, i + 6);
@@ -131,7 +159,7 @@ const PaginatedCards = ({ blok }) => {
   };
 
   const getPaginatedNumbers = () => {
-    const totalPages = mappedCards.length;
+    const totalPages = Math.ceil(filteredCards.length / 6);
     const maxPagesToShow = 5;
     const pageList = [];
 
@@ -185,6 +213,12 @@ const PaginatedCards = ({ blok }) => {
     const cardChunks = gsap.utils.toArray('.cardChunks');
     const totalItems = cardChunks.length;
 
+    if (totalItems === 0) {
+      // If there are no cards, reset the current page and return
+      setCurrentPage(0);
+      return;
+    }
+
     cardsLoop.current = horizontalLoop(cardChunks, {
       paused: true,
       center: true,
@@ -214,61 +248,114 @@ const PaginatedCards = ({ blok }) => {
       nextBtn.removeEventListener('click', handleNext);
       prevBtn.removeEventListener('click', handlePrev);
     };
-  }, []);
+  }, [filteredCards]);
 
-  // GSAP dropdown animations (keep yours)
+  // GSAP dropdown animations
   useEffect(() => {
+    // Kill any existing animations
+    if (cardsLoop.current) {
+      cardsLoop.current.kill();
+      cardsLoop.current = null;
+    }
+
     const manuDropDownTL = gsap
       .timeline({ paused: true })
-      .set('#solutionsOptions', { display: 'flex' })
-      .to('#solutionsOptions', { height: 'auto', duration: 0.55 });
+      .set('#solutionsOptions', { display: 'flex', height: 0 })
+      .fromTo('#solutionsOptions', 
+        { height: 0 },
+        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+      );
 
     const platformDropDownTL = gsap
       .timeline({ paused: true })
-      .set('#productOptions', { display: 'flex' })
-      .to('#productOptions', { height: 'auto', duration: 0.55 });
+      .set('#productOptions', { display: 'flex', height: 0 })
+      .fromTo('#productOptions',
+        { height: 0 },
+        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+      );
 
     const featureDropDownTL = gsap
       .timeline({ paused: true })
-      .set('#contentTypesOptions', { display: 'flex' })
-      .to('#contentTypesOptions', { height: 'auto', duration: 0.55 });
+      .set('#contentTypesOptions', { display: 'flex', height: 0 })
+      .fromTo('#contentTypesOptions',
+        { height: 0 },
+        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+      );
 
-      const industryDropDownTL = gsap
+    const industryDropDownTL = gsap
       .timeline({ paused: true })
-      .set('#industryTypesOptions', { display: 'flex' })
-      .to('#industryTypesOptions', { height: 'auto', duration: 0.55 });
+      .set('#industryTypesOptions', { display: 'flex', height: 0 })
+      .fromTo('#industryTypesOptions',
+        { height: 0 },
+        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+      );
+
+    const newsTypeDropDownTL = gsap
+      .timeline({ paused: true })
+      .set('#newsTypeTagsOptions', { display: 'flex', height: 0 })
+      .fromTo('#newsTypeTagsOptions',
+        { height: 0 },
+        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+      );
 
     const handleManuDrop = () => {
-      manuDropDownTL.paused() || manuDropDownTL.reversed()
-        ? manuDropDownTL.play()
-        : manuDropDownTL.reverse();
-      platformDropDownTL.reverse();
-      featureDropDownTL.reverse();
+      if (manuDropDownTL.paused() || manuDropDownTL.reversed()) {
+        platformDropDownTL.reverse();
+        featureDropDownTL.reverse();
+        industryDropDownTL.reverse();
+        newsTypeDropDownTL.reverse();
+        manuDropDownTL.play();
+      } else {
+        manuDropDownTL.reverse();
+      }
     };
 
     const handlePlatformDrop = () => {
-      platformDropDownTL.paused() || platformDropDownTL.reversed()
-        ? platformDropDownTL.play()
-        : platformDropDownTL.reverse();
-      manuDropDownTL.reverse();
-      featureDropDownTL.reverse();
+      if (platformDropDownTL.paused() || platformDropDownTL.reversed()) {
+        manuDropDownTL.reverse();
+        featureDropDownTL.reverse();
+        industryDropDownTL.reverse();
+        newsTypeDropDownTL.reverse();
+        platformDropDownTL.play();
+      } else {
+        platformDropDownTL.reverse();
+      }
     };
 
     const handleFeatureDrop = () => {
-      featureDropDownTL.paused() || featureDropDownTL.reversed()
-        ? featureDropDownTL.play()
-        : featureDropDownTL.reverse();
-      manuDropDownTL.reverse();
-      platformDropDownTL.reverse();
+      if (featureDropDownTL.paused() || featureDropDownTL.reversed()) {
+        manuDropDownTL.reverse();
+        platformDropDownTL.reverse();
+        industryDropDownTL.reverse();
+        newsTypeDropDownTL.reverse();
+        featureDropDownTL.play();
+      } else {
+        featureDropDownTL.reverse();
+      }
     };
 
     const handleIndustryDrop = () => {
-      industryDropDownTL.paused() || industryDropDownTL.reversed()
-        ? industryDropDownTL.play()
-        : industryDropDownTL.reverse();
-      manuDropDownTL.reverse();
-      platformDropDownTL.reverse();
-      featureDropDownTL.reverse();
+      if (industryDropDownTL.paused() || industryDropDownTL.reversed()) {
+        manuDropDownTL.reverse();
+        platformDropDownTL.reverse();
+        featureDropDownTL.reverse();
+        newsTypeDropDownTL.reverse();
+        industryDropDownTL.play();
+      } else {
+        industryDropDownTL.reverse();
+      }
+    };
+
+    const handleNewsTypeDrop = () => {
+      if (newsTypeDropDownTL.paused() || newsTypeDropDownTL.reversed()) {
+        manuDropDownTL.reverse();
+        platformDropDownTL.reverse();
+        featureDropDownTL.reverse();
+        industryDropDownTL.reverse();
+        newsTypeDropDownTL.play();
+      } else {
+        newsTypeDropDownTL.reverse();
+      }
     };
 
     document
@@ -280,10 +367,35 @@ const PaginatedCards = ({ blok }) => {
     document
       .querySelector('#contentTypesDrop')
       ?.addEventListener('click', handleFeatureDrop);
-      document
+    document
       .querySelector('#industryTypesDrop')
       ?.addEventListener('click', handleIndustryDrop);
-  }, []);
+    document
+      .querySelector('#newsTypeTagsDrop')
+      ?.addEventListener('click', handleNewsTypeDrop);
+
+    return () => {
+      // Clean up animations and event listeners
+      if (cardsLoop.current) {
+        cardsLoop.current.kill();
+      }
+      document
+        .querySelector('#solutionsDrop')
+        ?.removeEventListener('click', handleManuDrop);
+      document
+        .querySelector('#productDrop')
+        ?.removeEventListener('click', handlePlatformDrop);
+      document
+        .querySelector('#contentTypesDrop')
+        ?.removeEventListener('click', handleFeatureDrop);
+      document
+        .querySelector('#industryTypesDrop')
+        ?.removeEventListener('click', handleIndustryDrop);
+      document
+        .querySelector('#newsTypeTagsDrop')
+        ?.removeEventListener('click', handleNewsTypeDrop);
+    };
+  }, [filteredCards]);
 
   return (
     <ThemeProvider theme={selectedTheme}>
@@ -293,105 +405,139 @@ const PaginatedCards = ({ blok }) => {
       >
         <FiltersWrapper>
           <Filters>
-          {foundTags.solutions.size > 0 && (
-            <StyledSelect id='solutionsDrop'>
-              Solutions
-              <OptionsContainer id='solutionsOptions'>
-                {[...foundTags.solutions].map((tag) => (
-                <Option
-                key={tag}
-                onClick={() => {
-                  if (selectedFilters.includes(tag)) {
-                    setSelectedFilters(selectedFilters.filter((f) => f !== tag));
-                  } else {
-                    setSelectedFilters([...selectedFilters, tag]);
-                  }
-                }}
-              >
-                <Circle src="/images/addCircle.webp" />{" "}
-                {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
-              </Option>
-              
-                ))}
-              </OptionsContainer>
-            </StyledSelect>
-          )}
+            {availableTags.solutions.size > 0 && (
+              <StyledSelect id='solutionsDrop'>
+                Solutions
+                <OptionsContainer id='solutionsOptions'>
+                  {[...availableTags.solutions].map((tag) => (
+                    <Option
+                      key={tag}
+                      $isSelected={selectedFilters.includes(tag)}
+                      onClick={() => {
+                        if (selectedFilters.includes(tag)) {
+                          setSelectedFilters(selectedFilters.filter((f) => f !== tag));
+                        } else {
+                          setSelectedFilters([...selectedFilters, tag]);
+                        }
+                      }}
+                    >
+                      <Circle src="/images/addCircle.webp" />{" "}
+                      {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
+                    </Option>
+                  ))}
+                </OptionsContainer>
+              </StyledSelect>
+            )}
 
-          {foundTags.products.size > 0 && (
-            <StyledSelect id='productDrop'>
-              Product
-              <OptionsContainer id='productOptions'>
-                {[...foundTags.products].map((tag) => (
-               <Option
-               key={tag}
-               onClick={() => {
-                 if (selectedFilters.includes(tag)) {
-                   setSelectedFilters(selectedFilters.filter((f) => f !== tag));
-                 } else {
-                   setSelectedFilters([...selectedFilters, tag]);
-                 }
-               }}
-             >
-               <Circle src="/images/addCircle.webp" />{" "}
-              {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
-             </Option>
-             
-                ))}
-              </OptionsContainer>
-            </StyledSelect>
-          )}
+            {availableTags.products.size > 0 && (
+              <StyledSelect id='productDrop'>
+                Product
+                <OptionsContainer id='productOptions'>
+                  {[...availableTags.products].map((tag) => (
+                    <Option
+                      key={tag}
+                      $isSelected={selectedFilters.includes(tag)}
+                      onClick={() => {
+                        if (selectedFilters.includes(tag)) {
+                          setSelectedFilters(selectedFilters.filter((f) => f !== tag));
+                        } else {
+                          setSelectedFilters([...selectedFilters, tag]);
+                        }
+                      }}
+                    >
+                      <Circle src="/images/addCircle.webp" />{" "}
+                      {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
+                    </Option>
+                  ))}
+                </OptionsContainer>
+              </StyledSelect>
+            )}
 
-          {foundTags.contentTypes.size > 0 && (
-            <StyledSelect id='contentTypesDrop'>
-              Content Types
-              <OptionsContainer id='contentTypesOptions'>
-                {[...foundTags.contentTypes].map((tag) => (
-                  <Option
-                  key={tag}
-                  onClick={() => {
-                    if (selectedFilters.includes(tag)) {
-                      setSelectedFilters(selectedFilters.filter((f) => f !== tag));
-                    } else {
-                      setSelectedFilters([...selectedFilters, tag]);
-                    }
-                  }}
-                >
-                  <Circle src="/images/addCircle.webp" />{" "}
-                  {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
-                </Option>
-                
-                ))}
-              </OptionsContainer>
-            </StyledSelect>
-          )}
+            {availableTags.contentTypes.size > 0 && (
+              <StyledSelect id='contentTypesDrop'>
+                Content Types
+                <OptionsContainer id='contentTypesOptions'>
+                  {[...availableTags.contentTypes].map((tag) => (
+                    <Option
+                      key={tag}
+                      $isSelected={selectedFilters.includes(tag)}
+                      onClick={() => {
+                        if (selectedFilters.includes(tag)) {
+                          setSelectedFilters(selectedFilters.filter((f) => f !== tag));
+                        } else {
+                          setSelectedFilters([...selectedFilters, tag]);
+                        }
+                      }}
+                    >
+                      <Circle src="/images/addCircle.webp" />{" "}
+                      {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
+                    </Option>
+                  ))}
+                </OptionsContainer>
+              </StyledSelect>
+            )}
 
-          {foundTags.industryType.size > 0 && (
-            <StyledSelect id='industryTypesDrop'>
-              Industry Type
-              <OptionsContainer id='industryTypesOptions'>
-                {[...foundTags.industryType].map((tag) => (
-                <Option
-                key={tag}
-                onClick={() => {
-                  if (selectedFilters.includes(tag)) {
-                    setSelectedFilters(selectedFilters.filter((f) => f !== tag));
-                  } else {
-                    setSelectedFilters([...selectedFilters, tag]);
-                  }
-                }}
-              >
-                <Circle src="/images/addCircle.webp" />{" "}
-                {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
-              </Option>
-              
-                ))}
-              </OptionsContainer>
-            </StyledSelect>
-          )}
+            {availableTags.industryType.size > 0 && (
+              <StyledSelect id='industryTypesDrop'>
+                Industry Type
+                <OptionsContainer id='industryTypesOptions'>
+                  {[...availableTags.industryType].map((tag) => (
+                    <Option
+                      key={tag}
+                      $isSelected={selectedFilters.includes(tag)}
+                      onClick={() => {
+                        if (selectedFilters.includes(tag)) {
+                          setSelectedFilters(selectedFilters.filter((f) => f !== tag));
+                        } else {
+                          setSelectedFilters([...selectedFilters, tag]);
+                        }
+                      }}
+                    >
+                      <Circle src="/images/addCircle.webp" />{" "}
+                      {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
+                    </Option>
+                  ))}
+                </OptionsContainer>
+              </StyledSelect>
+            )}
+
+            {availableTags.newsTypeTags.size > 0 && (
+              <StyledSelect id='newsTypeTagsDrop'>
+                News Type
+                <OptionsContainer id='newsTypeTagsOptions'>
+                  {[...availableTags.newsTypeTags].map((tag) => (
+                    <Option
+                      key={tag}
+                      $isSelected={selectedFilters.includes(tag)}
+                      onClick={() => {
+                        if (selectedFilters.includes(tag)) {
+                          setSelectedFilters(selectedFilters.filter((f) => f !== tag));
+                        } else {
+                          setSelectedFilters([...selectedFilters, tag]);
+                        }
+                      }}
+                    >
+                      <Circle src="/images/addCircle.webp" />{" "}
+                      {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
+                    </Option>
+                  ))}
+                </OptionsContainer>
+              </StyledSelect>
+            )}
           </Filters>
+          <SearchBar>
+            <SearchInput
+              type="text"
+              placeholder="Search by title..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <SearchIcon src="/images/search.svg" />
+          </SearchBar>
           <SelectedFilters>
             {selectedFilters.map((filter) => (
-              <SelectedFilterTag key={filter}>
+              <SelectedFilterTag key={filter} onClick={() => setSelectedFilters(selectedFilters.filter(f => f !== filter))}>
+                <Circle src="/images/minusCircle.webp" />{" "}
                 {capitalizeFirstLetter(filter)}
               </SelectedFilterTag>
             ))}
@@ -406,14 +552,22 @@ const PaginatedCards = ({ blok }) => {
         )}
 
         <CardsContainer card_type={blok.card_type}>
-          {mappedCards}
+          {filteredCards.length > 0 ? (
+            mappedCards
+          ) : (
+            <NoResults>
+              No results found. Try adjusting your search or filters.
+            </NoResults>
+          )}
         </CardsContainer>
 
-        <PaginationDiv>
-          <PageNavigation className='prev'>Previous</PageNavigation>
-          {mappedPages}
-          <PageNavigation className='next'>Next</PageNavigation>
-        </PaginationDiv>
+        {filteredCards.length > 0 && (
+          <PaginationDiv>
+            <PageNavigation className='prev'>Previous</PageNavigation>
+            {mappedPages}
+            <PageNavigation className='next'>Next</PageNavigation>
+          </PaginationDiv>
+        )}
       </Wrapper>
     </ThemeProvider>
   );
@@ -459,7 +613,7 @@ const SelectedFilters = styled.div`
 const Filters = styled.div`
   display: flex;
   flex-direction: row;
-    gap: 0.5vw;
+  gap: 0.5vw;
 `;
 const TagCounter = styled.div`
   ${text.tagBold};
@@ -475,15 +629,31 @@ const TagCounter = styled.div`
 const Circle = styled.img`
   height: 0.75vw;
   width: 0.75vw;
+  cursor: pointer;
+
+  ${media.fullWidth} {
+    height: 12px;
+    width: 12px;
+  }
+
+  ${media.tablet} {
+    height: 1.172vw;
+    width: 1.172vw;
+  }
+
+  ${media.mobile} {
+    height: 2.5vw;
+    width: 2.5vw;
+  }
 `;
 const FiltersWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: start;
-  // border: 1px solid red;
   width: 81.5vw;
   margin-bottom: 2vw;
   gap: 0.5vw;
+  position: relative;
 `;
 const Option = styled.div`
   ${text.bodySm};
@@ -492,9 +662,10 @@ const Option = styled.div`
   width: fit-content;
   height: 1.625vw;
   padding: 0.25vw;
-  border: 1px solid ${colors.grey100};
+  border: 1px solid ${props => props.$isSelected ? colors.lightPurple : colors.grey100};
   border-radius: 0.375vw;
   gap: 0.5vw;
+  color: ${props => props.$isSelected ? colors.lightPurple : colors.txtPrimary};
 
   ${media.fullWidth} {
     height: 26px;
@@ -513,8 +684,8 @@ const Option = styled.div`
 
   &:hover {
     cursor: pointer;
-    background-color: ${colors.white};
-    color: ${colors.primaryOrange};
+    background: ${colors.lightPurpleGrey};
+    border: 1px solid ${colors.lightPurple};
   }
 `;
 const OptionsContainer = styled.div`
@@ -557,19 +728,22 @@ ${text.bodySm};
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   justify-content: center;
   background: ${colors.white};
   border: 1px solid ${colors.grey100};
-  height: auto;
+  height: fit-content;
   /* min-width: 17.222vw; */
-
   padding: 0.5vw 0.75vw;
-  /* gap: 2.778vw; */
+  color: ${colors.txtSubtle};
+
+  &:hover {
+    border: 1px solid ${colors.lightPurple};
+  }
 
   ${media.fullWidth} {
+    gap: 8px;
     padding: 8px 12px;
-    /* gap: 40px; */
   }
 
   ${media.tablet} {
@@ -915,6 +1089,116 @@ const RemoveButton = styled.button`
 
   &:hover {
     color: ${colors.primaryOrange};
+  }
+`;
+
+const SearchBar = styled.div`
+  ${text.bodySm};
+  width: max-content;
+  border-radius: 0.5vw;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  background: ${colors.white};
+  border: 1px solid ${colors.grey100};
+  height: fit-content;
+  padding: 0.5vw 0.75vw;
+  color: ${colors.txtSubtle};
+
+  &:hover {
+    border: 1px solid ${colors.lightPurple};
+  }
+
+  ${media.fullWidth} {
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  ${media.tablet} {
+    padding: 2.344vw;
+  }
+
+  ${media.mobile} {
+    padding: 4.673vw;
+  }
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  ${text.bodySm};
+  color: ${colors.txtPrimary};
+  width: 15vw;
+
+  ${media.fullWidth} {
+    width: 240px;
+  }
+
+  ${media.tablet} {
+    width: 20vw;
+  }
+
+  ${media.mobile} {
+    width: 70vw;
+  }
+
+  &::placeholder {
+    color: ${colors.txtSubtle};
+  }
+`;
+
+const SearchIcon = styled.img`
+  height: 0.75vw;
+  width: 0.75vw;
+  position: absolute;
+  right: 0.75vw;
+  top: 50%;
+  transform: translateY(-50%);
+
+  ${media.fullWidth} {
+    height: 12px;
+    width: 12px;
+    right: 12px;
+  }
+
+  ${media.tablet} {
+    height: 1.172vw;
+    width: 1.172vw;
+    right: 1.172vw;
+  }
+
+  ${media.mobile} {
+    height: 2.5vw;
+    width: 2.5vw;
+    right: 2.5vw;
+  }
+`;
+
+const NoResults = styled.div`
+  ${text.h4};
+  color: ${colors.txtSubtle};
+  text-align: center;
+  width: 100%;
+  padding: 3vw 0;
+
+  ${media.fullWidth} {
+    padding: 48px 0;
+  }
+
+  ${media.tablet} {
+    padding: 4.688vw 0;
+  }
+
+  ${media.mobile} {
+    padding: 10vw 0;
   }
 `;
 
