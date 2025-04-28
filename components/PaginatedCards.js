@@ -23,7 +23,6 @@ const PaginatedCards = ({ blok }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedFilters, setSelectedFilters] = useState([]);
 
-
   // === Build dynamic filters based on card tags ===
   const solutionsTags = ['print automation', 'serverless printing'];
   const productTags = ['capture', 'workflow', 'signature'];
@@ -293,6 +292,7 @@ const PaginatedCards = ({ blok }) => {
         spacing={blok.section_spacing}
       >
         <FiltersWrapper>
+          <Filters>
           {foundTags.solutions.size > 0 && (
             <StyledSelect id='solutionsDrop'>
               Solutions
@@ -309,7 +309,7 @@ const PaginatedCards = ({ blok }) => {
                 }}
               >
                 <Circle src="/images/addCircle.webp" />{" "}
-                {capitalizeFirstLetter(tag)} ({countTagOccurrences(tag)})
+                {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
               </Option>
               
                 ))}
@@ -333,7 +333,7 @@ const PaginatedCards = ({ blok }) => {
                }}
              >
                <Circle src="/images/addCircle.webp" />{" "}
-               {capitalizeFirstLetter(tag)} ({countTagOccurrences(tag)})
+              {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
              </Option>
              
                 ))}
@@ -357,7 +357,7 @@ const PaginatedCards = ({ blok }) => {
                   }}
                 >
                   <Circle src="/images/addCircle.webp" />{" "}
-                  {capitalizeFirstLetter(tag)} ({countTagOccurrences(tag)})
+                  {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
                 </Option>
                 
                 ))}
@@ -381,13 +381,21 @@ const PaginatedCards = ({ blok }) => {
                 }}
               >
                 <Circle src="/images/addCircle.webp" />{" "}
-                {capitalizeFirstLetter(tag)} ({countTagOccurrences(tag)})
+                {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
               </Option>
               
                 ))}
               </OptionsContainer>
             </StyledSelect>
           )}
+          </Filters>
+          <SelectedFilters>
+            {selectedFilters.map((filter) => (
+              <SelectedFilterTag key={filter}>
+                {capitalizeFirstLetter(filter)}
+              </SelectedFilterTag>
+            ))}
+          </SelectedFilters>
         </FiltersWrapper>
 
         {blok.card_type === 'event' && (
@@ -411,20 +419,77 @@ const PaginatedCards = ({ blok }) => {
   );
 };
 
+const SelectedFilterTag = styled.div`
+cursor: pointer;
+  ${text.bodySm};
+  display: flex;
+  align-items: center;
+  width: auto;
+  height: 1.625vw;
+  padding: 0.25vw;
+  border: 2px solid ${colors.lightPurple};
+  color: ${colors.lightPurple};
+  border-radius: 0.375vw;
+  gap: 0.5vw;
+  background: ${colors.lightPurpleGrey};
+
+  ${media.fullWidth} {
+    height: 26px;
+    padding: 20px;
+  }
+
+  ${media.tablet} {
+    height: 5.859vw;
+    padding: 1.953vw;
+  }
+
+  ${media.mobile} {
+    height: 12.15vw;
+    padding: 4.673vw;
+  }
+`;
+
+const SelectedFilters = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.5vw;
+  flex-wrap: wrap;
+`;
+
+const Filters = styled.div`
+  display: flex;
+  flex-direction: row;
+    gap: 0.5vw;
+`;
+const TagCounter = styled.div`
+  ${text.tagBold};
+  color: ${colors.lightPurple};
+  background: ${colors.lightPurpleGrey};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25vw;
+  height: 1.25vw;
+  border-radius: 50%;
+`
 const Circle = styled.img`
   height: 0.75vw;
   width: 0.75vw;
 `;
 const FiltersWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: start;
+  // border: 1px solid red;
+  width: 81.5vw;
+  margin-bottom: 2vw;
   gap: 0.5vw;
 `;
 const Option = styled.div`
-  ${text.bodyMd};
+  ${text.bodySm};
   display: flex;
   align-items: center;
-  width: auto;
+  width: fit-content;
   height: 1.625vw;
   padding: 0.25vw;
   border: 1px solid ${colors.grey100};
@@ -484,10 +549,10 @@ const OptionsContainer = styled.div`
   }
 `;
 const StyledSelect = styled.div`
+${text.bodySm};
   width: max-content;
   /* height: 2.5vw; */
   border-radius: 0.5vw;
-  ${text.bodyMd};
   cursor: pointer;
   position: relative;
   display: flex;
@@ -783,6 +848,73 @@ const Wrapper = styled.div`
         ? `${props.spacing}px 0`
         : '12.5vw 0';
     }};
+  }
+`;
+
+const FilterTag = styled.div`
+  ${text.bodyMd};
+  display: flex;
+  align-items: center;
+  width: auto;
+  height: 1.625vw;
+  padding: 0.25vw;
+  border: 1px solid ${colors.grey100};
+  border-radius: 0.375vw;
+  gap: 0.5vw;
+  background: ${colors.white};
+
+  ${media.fullWidth} {
+    height: 26px;
+    padding: 20px;
+  }
+
+  ${media.tablet} {
+    height: 5.859vw;
+    padding: 1.953vw;
+  }
+
+  ${media.mobile} {
+    height: 12.15vw;
+    padding: 4.673vw;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${colors.white};
+    color: ${colors.primaryOrange};
+  }
+`;
+
+const RemoveButton = styled.button`
+  background: none;
+  border: none;
+  color: ${colors.grey300};
+  cursor: pointer;
+  font-size: 1.2em;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25vw;
+  height: 1.25vw;
+
+  ${media.fullWidth} {
+    width: 20px;
+    height: 20px;
+  }
+
+  ${media.tablet} {
+    width: 1.953vw;
+    height: 1.953vw;
+  }
+
+  ${media.mobile} {
+    width: 4.167vw;
+    height: 4.167vw;
+  }
+
+  &:hover {
+    color: ${colors.primaryOrange};
   }
 `;
 
