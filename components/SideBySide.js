@@ -10,7 +10,7 @@ import media, { mobile, desktop, tablet } from "@/styles/media";
 import ComponentRenderer from "./renderers/ComponentRenderer";
 
 const SideBySide = ({ blok }) => {
-  // console.log(blok);
+  console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   // console.log(blok.left_extra_copy?.[0]);
@@ -24,6 +24,7 @@ const SideBySide = ({ blok }) => {
         gap={blok.gap}
         asset_form={blok.asset_form}
         extra_copy={blok.extra_copy}
+        card={blok.card}
       >
         <ComponentRenderer extra_copy={blok.left_extra_copy?.[0]} blok={blok.left_side_component[0]} />
         <ComponentRenderer extra_copy={blok.right_extra_copy?.[0]} blok={blok.right_side_component[0]} />
@@ -40,7 +41,7 @@ const SideBySideWrapper = styled.div`
   text-align: left;
   background: ${(props) => props.theme.side_by_side.bg};
   color: ${(props) => props.theme.side_by_side.textColor};
-  border-radius: 1.5vw;
+  border-radius: ${(props) => props.card ? "1.5vw" : "unset"};
 
   > * {
     margin-top: ${(props) => (props.asset_form ? "-6vw" : "unset")};
