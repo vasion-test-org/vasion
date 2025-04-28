@@ -52,6 +52,7 @@ const RiveAnimation = ({
 };
 
 const StackedCards = ({ blok }) => {
+  console.log(blok);
   const { mobile, tablet } = useContext(ScreenContext);
   const stackedCardsRef = useRef(null);
   const riveInstancesRef = useRef([]);
@@ -100,7 +101,7 @@ const StackedCards = ({ blok }) => {
             key={card._uid || index}
             $active={active}
             index={index}
-            $bgimg={cardImage}
+            $bgimg={cardImage ? cardImage : card?.background_image[0].filename}
             $last={isLastCard}
             onMouseEnter={() => handleCardMouseEnter(index)}
             onMouseLeave={handleCardMouseLeave}
@@ -108,12 +109,10 @@ const StackedCards = ({ blok }) => {
             <Content $last={isLastCard}>
               {card?.eyebrow && <RichTextRenderer document={card.eyebrow} />}
               <div {...storyblokEditable(card.header)}>
-              <RichTextRenderer document={card.header} />
-
+                <RichTextRenderer document={card.header} />
               </div>
               <div {...storyblokEditable(card.body_copy)}>
-              <RichTextRenderer document={card.body_copy} />
-
+                <RichTextRenderer document={card.body_copy} />
               </div>
             </Content>
 
@@ -218,7 +217,6 @@ const Content = styled.div`
     gap: ${(props) => (props?.$last ? "2.5vw" : "1.667vw")};
   }
 `;
-
 const CardContainer = styled.div`
   display: flex;
   opacity: ${(props) =>
@@ -231,9 +229,10 @@ const CardContainer = styled.div`
         : "1"};
   transition: opacity 0.3s ease-out;
   flex-direction: column;
-  background: ${(props) => `url(${props.$bgimg})`};
+  background-image: url(${(props) => props.$bgimg});
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-size: cover;
+  background-position: center;
   height: ${(props) => (props?.$last ? "fit-content" : "37.5vw")};
   width: ${(props) => (props?.$last ? "81.5vw" : "26.688vw")};
   padding: ${(props) => (props?.$last ? "2.688vw 3.75vw" : "1.25vw")};
@@ -258,13 +257,10 @@ const CardContainer = styled.div`
 
   ${media.mobile} {
     opacity: 1;
-    background-position: center;
-    background-size: cover;
-    flex-direction: column;
-    border-radius: 2.804vw;
     width: 89.167vw;
     height: ${(props) => (props?.$last ? "171.042vw" : "fit-content")};
     padding: ${(props) => (props?.$last ? "5.417vw 8.333vw" : "4.167vw")};
+    border-radius: 2.804vw;
   }
 `;
 
