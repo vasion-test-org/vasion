@@ -29,11 +29,19 @@ const PaginatedCards = ({ blok }) => {
   const contentTypeTags = ['white paper', 'customer stories', 'guide', 'FAQs', 'playbooks', 'ebooks'];
   const industryTags = ['healthcare'];
   const newsTags = ['media mentions', 'videos']
-
+console.log(blok.cards)
   // === Filter cards based on selected filter and search query ===
   const filteredCards = blok.cards.filter((card) => {
+    // Find the header content in the card's content array
+    const headerContent = Array.isArray(card?.content) 
+      ? card.content.find(item => item.component === 'header')
+      : null;
+    const cardTitle = headerContent?.copy?.content?.[0]?.content?.[0]?.text || '';
+    
+    // Check both the nested title and the direct name property
     const matchesSearch = searchQuery === '' || 
-      card.name.toLowerCase().includes(searchQuery.toLowerCase());
+      cardTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (card.name && card.name.toLowerCase().includes(searchQuery.toLowerCase()));
     
     const matchesFilters = selectedFilters.length === 0 || 
       selectedFilters.every((filter) =>
