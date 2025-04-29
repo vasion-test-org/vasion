@@ -12,9 +12,11 @@ import Button from "@/components/globalComponents/Button";
 import Facebook from "@/assets/svg/footer/Facebook.svg";
 import Twitter from "@/assets/svg/footer/Twitter.svg";
 import LinkedIn from "@/assets/svg/footer/LinkedIn.svg";
+import { storyblokEditable } from "@storyblok/react/rsc";
 
 const Footer = ({ blok }) => {
-  const router = useRouter()
+  console.log(blok);
+  const router = useRouter();
   useEffect(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -36,33 +38,33 @@ const Footer = ({ blok }) => {
     if (canvas) {
     }
   }, []);
-  
+
   const allLinksColumns =
-  blok?.footer_columns?.map((column) => (
+    blok?.footer_columns?.map((column) => (
       <LinkColumn key={column._uid}>
         <LinkColumnHeader>
           {column.column_header?.content?.[0]?.content?.[0]?.text || ""}
         </LinkColumnHeader>
         {column.links?.map((link) => {
-         const url = link.link?.url || link.link?.cached_url || "";
-         const isExternal =
-           url.startsWith("http://") || url.startsWith("https://");
-         
-         const normalizedUrl = isExternal
-           ? url
-           : url.startsWith("/")
-             ? url
-             : `/${url}`;
-             
+          const url = link.link?.url || link.link?.cached_url || "";
+          const isExternal =
+            url.startsWith("http://") || url.startsWith("https://");
+
+          const normalizedUrl = isExternal
+            ? url
+            : url.startsWith("/")
+              ? url
+              : `/${url}`;
+
           return (
             <LinkName
-            key={link._uid}
-            href={normalizedUrl}
-            target={link.link?.target || (isExternal ? "_blank" : "_self")}
-            rel={isExternal ? "noopener noreferrer" : undefined}
-          >
-            {link.link_name}
-          </LinkName>
+              key={link._uid}
+              href={normalizedUrl}
+              target={link.link?.target || (isExternal ? "_blank" : "_self")}
+              rel={isExternal ? "noopener noreferrer" : undefined}
+            >
+              {link.link_name}
+            </LinkName>
           );
         })}
       </LinkColumn>
@@ -115,15 +117,11 @@ const Footer = ({ blok }) => {
             <LinkedIn />
           </SocialIcon>
         </SocialsContainer>
-        <Button
-          $buttonData={{
-            theme: "primary",
-            link_text: "SCHEDULE A DEMO",
-            link_url: { url: "/demo" },
-            link_size: "medium",
-            layout: "row",
-          }}
-        />
+        {blok?.cta_button?.map(($buttonData) => (
+          <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
+            <Button $buttonData={$buttonData} />
+          </div>
+        ))}
       </ButtonContainer>
       <LegalDiv>
         <LegalLinks>
