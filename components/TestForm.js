@@ -12,7 +12,7 @@ import text from '@/styles/text';
 import { useThankYou } from '@/context/ThankYouContext';
 import { useRouter } from 'next/navigation';
 
-const TestForm = ({ blok }) => {
+const Form = ({ blok }) => {
   // console.log(blok.redirect_link)
   const { thankYouCopy, updateThankYouCopy } = useThankYou();
   const router = useRouter();
@@ -27,8 +27,6 @@ const TestForm = ({ blok }) => {
   // const yFormPosition = getMedia(-277, -277, -27, 0);
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
-  const routingLang = useRef('Demo Request');
-  const originRef = useRef('va');
 
   useEffect(() => {
     if (blok?.thank_you_copy) {
@@ -38,40 +36,16 @@ const TestForm = ({ blok }) => {
   }, [thankYouCopy, blok?.thank_you_copy]);
 
   useEffect(() => {
-    function getOriginDomain(url) {
-      return url.split('.com')[0] + '.com';
-    }
-
-    if (typeof window !== 'undefined') {
-      const originDomain = getOriginDomain(window.location.hostname);
-
-      if (originDomain.includes('printerlogic')) {
-        originRef.current = 'pl';
-      } else if (originDomain.includes('vasion')) {
-        originRef.current = 'va';
-      }
-    }
-  }, []);
-  // TODO: refactor this to work with our new structure
-  useEffect(() => {
     if (typeof window !== 'undefined') {
       const pathname = window.location.pathname;
       const pathLocale = pathname.split('/')[1];
 
       if (['de', 'fr'].includes(pathLocale)) {
         languageRef.current = pathLocale;
-        if (pathLocale === 'de') {
-          routingLang.current = "Demo Request - DE"
-        } else if (pathLocale === 'fr') {
-          routingLang.current = "Demo Request - FR"
-        } else {
-          routingLang.current = 'Demo Request'
-        }
       } else {
         languageRef.current = 'en';
       }
     }
-    console.log(routingLang.current)
   }, []);
 
   useEffect(() => {
@@ -111,16 +85,16 @@ const TestForm = ({ blok }) => {
       const initConfig = {
         calendarTimeoutLength: 900,
         beforeRouting: (formTarget, formData) => {
-          console.log('lean data language:', languageRef.current); // Use the ref here
+          console.log('lean data language:', languageRef.current); 
           formData['thank_you_language'] = languageRef.current;
-          formData['origin_domain'] = originRef.current;
         },
+        defaultLanguage: languageRef.current,
         useIframe: blok.animated,
       };
 
       window.LDBookItV2.initialize(
         '00DE0000000bt64MAA',
-        routingLang.current,
+        'Demo Request',
         'LD_BookIt_Log_ID__c',
         initConfig
       );
@@ -148,6 +122,7 @@ const TestForm = ({ blok }) => {
   }, []);
 
   useEffect(() => {
+    // if (!isLoaded) return;
     isLoaded &&
     window?.MktoForms2?.loadForm(
       'https://info.printerlogic.com',
@@ -172,7 +147,7 @@ const TestForm = ({ blok }) => {
             console.log("Form submitted successfully:", submittedValues);
           } else if (blok.redirect_link.cached_url) {
             updateThankYouCopy(blok?.thank_you_copy);
-  
+            console.log("Form submitted successfully:", submittedValues);
             const isExternal = (url) => /^https?:\/\//.test(url);
 
             let redirectUrl =
@@ -216,7 +191,7 @@ const TestForm = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       <FormContainer id='formContainer'>
-        {blok.header && <FormHeader>{blok.header}</FormHeader>}
+        {blok?.header && <FormHeader>{blok.header}</FormHeader>}
         {blok.animated && (
           <>
             <CalendarContainer className='bookit-content-container' />
@@ -505,13 +480,22 @@ position: relative;
   .mktoCheckboxList {
     width: unset !important;
   }
+
 #LblemailOptIn {
+${text.bodySm};
+
   color: ${(props) => props.theme.form.textColor};
   display: flex;
   gap: 0.125vw;
 
 }
-
+.mktoFieldWrap:has(> #LblemailOptIn) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5vw;
+}
+  
   button {
     ${text.bodyMdBold};
     display: flex;
@@ -547,6 +531,41 @@ position: relative;
   label {
     display: none;
   }
+
+  .mktoHtmlText {
+    width: 100% !important;
+  }
+
+  textarea {
+  display: block;
+    ${text.bodyMd};
+    border: 1px solid ${(props) => props.theme.form.inputBorder};
+    background: ${(props) => props.theme.form.inputBg};
+    color: ${(props) => props.theme.form.placeHolderColor};
+    padding: 1vw !important;
+    border-radius: 0.25vw;
+    height: 8vw !important;
+    overflow: hidden;
+
+    &#Comments__c {
+       width: 31.25vw !important;
+
+      ${media.fullWidth} {
+        width: 500px !important;
+           height: 128px !important;
+      }
+
+      ${media.tablet} {
+        width: 39.063vw !important;
+        height: 12.5vw !important;
+      }
+
+      ${media.mobile} {
+      height: 26.667vw !important;
+        width: 75.833vw !important;
+      }
+    }
+   }
   input {
     ${text.bodyMd};
     border: 1px solid ${(props) => props.theme.form.inputBorder};
@@ -594,6 +613,7 @@ position: relative;
     &#Email,
     &#Phone,
     &#Company,
+    &#Title,
     &#How_did_you_hear_about_us__c {
       width: 31.25vw !important;
 
@@ -689,4 +709,4 @@ position: relative;
   ${media.mobile} {
   }
 `;
-export default TestForm;
+export default Form;
