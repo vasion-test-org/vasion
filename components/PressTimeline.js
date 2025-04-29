@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
@@ -77,8 +77,8 @@ const PressTimeline = ({ blok }) => {
       >
         <Date>{card.date}</Date>
         <Card>
-          <RichTextRenderer document={card.header}/>
-          <RichTextRenderer document={card.body_copy}/>
+          <RichTextRenderer document={card.header} />
+          <RichTextRenderer document={card.body_copy} />
           {/* <StyledLink href={card.link}>{card.linkText}</StyledLink> */}
         </Card>
       </TimelineCardContainer>
@@ -104,7 +104,10 @@ const PressTimeline = ({ blok }) => {
       <TimelineContainer>
         <TLGradient />
         <LineDiv>
-          <TimelineStar src='/images/uiElements/VasionStarNewsroom.webp' ref={starRef} />
+          <TimelineStar
+            src="/images/uiElements/VasionStarNewsroom.webp"
+            ref={starRef}
+          />
           <Line />
         </LineDiv>
         <Timeline ref={timelineRef}>
