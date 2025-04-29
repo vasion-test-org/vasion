@@ -12,7 +12,7 @@ import text from '@/styles/text';
 import { useThankYou } from '@/context/ThankYouContext';
 import { useRouter } from 'next/navigation';
 
-const Form = ({ blok }) => {
+const TestForm = ({ blok }) => {
   // console.log(blok.redirect_link)
   const { thankYouCopy, updateThankYouCopy } = useThankYou();
   const router = useRouter();
@@ -709,4 +709,4 @@ ${text.bodySm};
   ${media.mobile} {
   }
 `;
-export default Form;
+export default TestForm;
