@@ -27,7 +27,7 @@ const TestForm = ({ blok }) => {
   // const yFormPosition = getMedia(-277, -277, -27, 0);
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
-  const routingLang = useRef('Demo Request');
+  const routingLang = useRef('Demo Request - EN');
   const originRef = useRef('va');
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const TestForm = ({ blok }) => {
         } else if (pathLocale === 'fr') {
           routingLang.current = "Demo Request - FR"
         } else {
-          routingLang.current = 'Demo Request'
+          routingLang.current = 'Demo Request - EN'
         }
       } else {
         languageRef.current = 'en';
@@ -121,7 +121,7 @@ const TestForm = ({ blok }) => {
 
       window.LDBookItV2.initialize(
         '00DE0000000bt64MAA',
-        'Demo Request',
+        routingLang.current,
         'LD_BookIt_Log_ID__c',
         initConfig
       );
