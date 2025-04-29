@@ -115,12 +115,13 @@ const TestForm = ({ blok }) => {
           formData['thank_you_language'] = languageRef.current;
           formData['origin_domain'] = originRef.current;
         },
+        defaultLanguage: languageRef.current,
         useIframe: blok.animated,
       };
 
       window.LDBookItV2.initialize(
         '00DE0000000bt64MAA',
-        routingLang.current,
+        'Demo Request',
         'LD_BookIt_Log_ID__c',
         initConfig
       );
