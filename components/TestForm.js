@@ -121,7 +121,7 @@ const TestForm = ({ blok }) => {
 
       window.LDBookItV2.initialize(
         '00DE0000000bt64MAA',
-        routingLang.current,
+        'Demo Request',
         'LD_BookIt_Log_ID__c',
         initConfig
       );
