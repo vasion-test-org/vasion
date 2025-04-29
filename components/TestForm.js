@@ -115,6 +115,7 @@ const TestForm = ({ blok }) => {
           formData['thank_you_language'] = languageRef.current;
           formData['origin_domain'] = originRef.current;
         },
+        defaultLanguage: languageRef.current,
         useIframe: blok.animated,
       };
 
