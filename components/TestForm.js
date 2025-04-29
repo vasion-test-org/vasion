@@ -168,7 +168,7 @@ const TestForm = ({ blok }) => {
           clearTimeout(submissionTimeout);
 
           if (blok.animated) {
-            LDBookItV2.saveFormData({ formData: submittedValues });
+            LDBookItV2.saveFormData(submittedValues);
             console.log('Thank You');
             console.log("Form submitted successfully:", submittedValues);
           } else if (blok.redirect_link.cached_url) {
