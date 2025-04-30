@@ -532,7 +532,6 @@ console.log(blok.cards)
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <SearchIcon src="/images/search.svg" />
           </SearchBar>
           <SelectedFilters>
             {selectedFilters.map((filter) => (
@@ -1152,33 +1151,6 @@ const SearchInput = styled.input`
 
   &::placeholder {
     color: ${colors.txtSubtle};
-  }
-`;
-
-const SearchIcon = styled.img`
-  height: 0.75vw;
-  width: 0.75vw;
-  position: absolute;
-  right: 0.75vw;
-  top: 50%;
-  transform: translateY(-50%);
-
-  ${media.fullWidth} {
-    height: 12px;
-    width: 12px;
-    right: 12px;
-  }
-
-  ${media.tablet} {
-    height: 1.172vw;
-    width: 1.172vw;
-    right: 1.172vw;
-  }
-
-  ${media.mobile} {
-    height: 2.5vw;
-    width: 2.5vw;
-    right: 2.5vw;
   }
 `;
 
