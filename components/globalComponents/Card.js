@@ -9,7 +9,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const Card = ({ content, paginated, borderradius }) => {
-  console.log("CARD-CONTENT", content);
+  // console.log("CARD-CONTENT", content);
+  content?.has_hover && console.log("CAN HOVER: ", content?.has_hover);
   const pathname = usePathname();
   const buttonData = content.Button?.[0];
   const isEmail = buttonData?.link_url?.email;
@@ -68,7 +69,7 @@ const Card = ({ content, paginated, borderradius }) => {
         as="a"
         {...storyblokEditable(content)}
         paginated={paginated}
-        hashover={content?.has_hover}
+        $canhover={content?.has_hover}
       >
         {WrapperContent}
       </CardWrapper>
@@ -80,7 +81,7 @@ const Card = ({ content, paginated, borderradius }) => {
       rel={rel}
       {...storyblokEditable(content)}
       paginated={paginated}
-      canhover={content?.has_hover}
+      $canhover={content?.has_hover}
     >
       {WrapperContent}
     </CardWrapper>
