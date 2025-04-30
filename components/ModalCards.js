@@ -39,7 +39,6 @@ const ModalCards = ({ blok }) => {
         $isvideo={hasYouTube}
         key={`modal-card-${index}`}
         $bg={image}
-        // $isHover={item?.bio}
         onClick={() => handleModal(item)}
         onMouseEnter={() => setIsActive(index)}
         onMouseLeave={() => setIsActive(false)}
