@@ -1,18 +1,18 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import media from "styles/media";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import Card from "./globalComponents/Card";
-import EventCard from "./globalComponents/EventCard";
-import { horizontalLoop } from "@/functions/horizontalLoop";
-import SideArrow from "@/assets/svg/side-arrow.svg";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import ResourceCard from "./globalComponents/ResourceCard";
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import media from 'styles/media';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import Card from './globalComponents/Card';
+import EventCard from './globalComponents/EventCard';
+import { horizontalLoop } from '@/functions/horizontalLoop';
+import SideArrow from '@/assets/svg/side-arrow.svg';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import ResourceCard from './globalComponents/ResourceCard';
 
 const PaginatedCards = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -21,28 +21,41 @@ const PaginatedCards = ({ blok }) => {
   const currentIndex = useRef(0);
   const cardsLoop = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredCards = blok.cards.filter((card) => {
+    const headerContent = Array.isArray(card?.content) 
+      ? card.content.find(item => item.component === 'header')
+      : null;
+    const cardTitle = headerContent?.copy?.content?.[0]?.content?.[0]?.text || '';
+    
+    const matchesSearch = searchQuery === '' || 
+      cardTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (card.name && card.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    return matchesSearch;
+  });
 
   const mappedCards = [];
-  console.log(blok)
-  for (let i = 0; i < blok.cards.length; i += 6) {
-    const chunk = blok.cards.slice(i, i + 6);
+  for (let i = 0; i < filteredCards.length; i += 6) {
+    const chunk = filteredCards.slice(i, i + 6);
     mappedCards.push(
       <CardChunk
         key={`chunk-${i / 6}`}
         card_type={blok.card_type}
-        className="cardChunks"
+        className='cardChunks'
       >
         {chunk.map((card, index) => {
-          if (blok.card_type === "default") {
+          if (blok.card_type === 'default') {
             return (
               <Card
                 key={`card-${i + index}`}
-                borderradius="6"
+                borderradius='6'
                 paginated
                 content={card}
               />
             );
-          } else if (blok.card_type === "event") {
+          } else if (blok.card_type === 'event') {
             return (
               <EventCard
                 key={`card-${i + index}`}
@@ -50,19 +63,19 @@ const PaginatedCards = ({ blok }) => {
                 content={card}
               />
             );
-          } else if (blok.card_type === "resource") {
+          } else if (blok.card_type === 'resource') {
             return (
               <ResourceCard
                 key={`card-${i + index}`}
                 paginated
                 index={index}
                 content={card}
-                borderradius="6"
+                borderradius='6'
               />
             );
           }
         })}
-      </CardChunk>,
+      </CardChunk>
     );
   }
 
@@ -70,14 +83,14 @@ const PaginatedCards = ({ blok }) => {
     if (!cardsLoop.current) return;
     cardsLoop.current.toIndex(index, {
       duration: 0.4,
-      ease: "power1.inOut",
+      ease: 'power1.inOut',
     });
     currentIndex.current = index;
     setCurrentPage(index);
   };
 
   const getPaginatedNumbers = () => {
-    const totalPages = mappedCards.length;
+    const totalPages = Math.ceil(filteredCards.length / 6);
     const maxPagesToShow = 5;
     const pageList = [];
 
@@ -91,7 +104,7 @@ const PaginatedCards = ({ blok }) => {
 
       if (currentPage > 1) {
         pageList.push(0);
-        if (currentPage > 2) pageList.push("left-ellipsis");
+        if (currentPage > 2) pageList.push('left-ellipsis');
       }
 
       for (let i = left; i <= right; i++) {
@@ -99,7 +112,7 @@ const PaginatedCards = ({ blok }) => {
       }
 
       if (currentPage < totalPages - 2) {
-        if (currentPage < totalPages - 3) pageList.push("right-ellipsis");
+        if (currentPage < totalPages - 3) pageList.push('right-ellipsis');
         pageList.push(totalPages - 1);
       }
     }
@@ -108,18 +121,18 @@ const PaginatedCards = ({ blok }) => {
   };
 
   const mappedPages = getPaginatedNumbers().map((page, i) => {
-    if (page === "left-ellipsis" || page === "right-ellipsis") {
+    if (page === 'left-ellipsis' || page === 'right-ellipsis') {
       return <Ellipsis key={`ellipsis-${i}`}>...</Ellipsis>;
     }
 
     return (
       <PageNumberBlock
-        className="pageNumberBlocks"
+        className='pageNumberBlocks'
         key={`block-${page}`}
         id={`block-${page}`}
         onClick={() => goToPage(page)}
         style={{
-          backgroundColor: currentPage === page ? colors.grey100 : "unset",
+          backgroundColor: currentPage === page ? colors.grey100 : 'unset',
         }}
       >
         {page + 1}
@@ -128,39 +141,188 @@ const PaginatedCards = ({ blok }) => {
   });
 
   useEffect(() => {
-    const cardChunks = gsap.utils.toArray(".cardChunks");
+    const cardChunks = gsap.utils.toArray('.cardChunks');
     const totalItems = cardChunks.length;
+
+    if (totalItems === 0) {
+      setCurrentPage(0);
+      return;
+    }
 
     cardsLoop.current = horizontalLoop(cardChunks, {
       paused: true,
       center: true,
     });
 
-    const nextBtn = document.querySelector(".next");
-    const prevBtn = document.querySelector(".prev");
+    const nextBtn = document.querySelector('.next');
+    const prevBtn = document.querySelector('.prev');
 
     const handleNext = () => {
       const newIndex = (currentIndex.current + 1) % totalItems;
-      cardsLoop.current.next({ duration: 0.4, ease: "power1.inOut" });
+      cardsLoop.current.next({ duration: 0.4, ease: 'power1.inOut' });
       currentIndex.current = newIndex;
       setCurrentPage(newIndex);
     };
 
     const handlePrev = () => {
       const newIndex = (currentIndex.current - 1 + totalItems) % totalItems;
-      cardsLoop.current.previous({ duration: 0.4, ease: "power1.inOut" });
+      cardsLoop.current.previous({ duration: 0.4, ease: 'power1.inOut' });
       currentIndex.current = newIndex;
       setCurrentPage(newIndex);
     };
 
-    nextBtn.addEventListener("click", handleNext);
-    prevBtn.addEventListener("click", handlePrev);
+    nextBtn.addEventListener('click', handleNext);
+    prevBtn.addEventListener('click', handlePrev);
 
     return () => {
-      nextBtn.removeEventListener("click", handleNext);
-      prevBtn.removeEventListener("click", handlePrev);
+      nextBtn.removeEventListener('click', handleNext);
+      prevBtn.removeEventListener('click', handlePrev);
     };
-  }, []);
+  }, [filteredCards]);
+
+  useEffect(() => {
+    if (cardsLoop.current) {
+      cardsLoop.current.kill();
+      cardsLoop.current = null;
+    }
+
+    const manuDropDownTL = gsap
+      .timeline({ paused: true })
+      .set('#solutionsOptions', { display: 'flex', height: 0 })
+      .fromTo('#solutionsOptions', 
+        { height: 0 },
+        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+      );
+
+    const platformDropDownTL = gsap
+      .timeline({ paused: true })
+      .set('#productOptions', { display: 'flex', height: 0 })
+      .fromTo('#productOptions',
+        { height: 0 },
+        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+      );
+
+    const featureDropDownTL = gsap
+      .timeline({ paused: true })
+      .set('#contentTypesOptions', { display: 'flex', height: 0 })
+      .fromTo('#contentTypesOptions',
+        { height: 0 },
+        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+      );
+
+    const industryDropDownTL = gsap
+      .timeline({ paused: true })
+      .set('#industryTypesOptions', { display: 'flex', height: 0 })
+      .fromTo('#industryTypesOptions',
+        { height: 0 },
+        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+      );
+
+    const newsTypeDropDownTL = gsap
+      .timeline({ paused: true })
+      .set('#newsTypeTagsOptions', { display: 'flex', height: 0 })
+      .fromTo('#newsTypeTagsOptions',
+        { height: 0 },
+        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+      );
+
+    const handleManuDrop = () => {
+      if (manuDropDownTL.paused() || manuDropDownTL.reversed()) {
+        platformDropDownTL.reverse();
+        featureDropDownTL.reverse();
+        industryDropDownTL.reverse();
+        newsTypeDropDownTL.reverse();
+        manuDropDownTL.play();
+      } else {
+        manuDropDownTL.reverse();
+      }
+    };
+
+    const handlePlatformDrop = () => {
+      if (platformDropDownTL.paused() || platformDropDownTL.reversed()) {
+        manuDropDownTL.reverse();
+        featureDropDownTL.reverse();
+        industryDropDownTL.reverse();
+        newsTypeDropDownTL.reverse();
+        platformDropDownTL.play();
+      } else {
+        platformDropDownTL.reverse();
+      }
+    };
+
+    const handleFeatureDrop = () => {
+      if (featureDropDownTL.paused() || featureDropDownTL.reversed()) {
+        manuDropDownTL.reverse();
+        platformDropDownTL.reverse();
+        industryDropDownTL.reverse();
+        newsTypeDropDownTL.reverse();
+        featureDropDownTL.play();
+      } else {
+        featureDropDownTL.reverse();
+      }
+    };
+
+    const handleIndustryDrop = () => {
+      if (industryDropDownTL.paused() || industryDropDownTL.reversed()) {
+        manuDropDownTL.reverse();
+        platformDropDownTL.reverse();
+        featureDropDownTL.reverse();
+        newsTypeDropDownTL.reverse();
+        industryDropDownTL.play();
+      } else {
+        industryDropDownTL.reverse();
+      }
+    };
+
+    const handleNewsTypeDrop = () => {
+      if (newsTypeDropDownTL.paused() || newsTypeDropDownTL.reversed()) {
+        manuDropDownTL.reverse();
+        platformDropDownTL.reverse();
+        featureDropDownTL.reverse();
+        industryDropDownTL.reverse();
+        newsTypeDropDownTL.play();
+      } else {
+        newsTypeDropDownTL.reverse();
+      }
+    };
+
+    document
+      .querySelector('#solutionsDrop')
+      ?.addEventListener('click', handleManuDrop);
+    document
+      .querySelector('#productDrop')
+      ?.addEventListener('click', handlePlatformDrop);
+    document
+      .querySelector('#contentTypesDrop')
+      ?.addEventListener('click', handleFeatureDrop);
+    document
+      .querySelector('#industryTypesDrop')
+      ?.addEventListener('click', handleIndustryDrop);
+    document
+      .querySelector('#newsTypeTagsDrop')
+      ?.addEventListener('click', handleNewsTypeDrop);
+
+    return () => {
+      if (cardsLoop.current) {
+        cardsLoop.current.kill();
+      }
+      document
+        .querySelector('#solutionsDrop')
+        ?.removeEventListener('click', handleManuDrop);
+      document
+        .querySelector('#productDrop')
+        ?.removeEventListener('click', handlePlatformDrop);
+      document
+        .querySelector('#contentTypesDrop')
+        ?.removeEventListener('click', handleFeatureDrop);
+      document
+        .querySelector('#industryTypesDrop')
+        ?.removeEventListener('click', handleIndustryDrop);
+      document
+        .querySelector('#newsTypeTagsDrop')
+        ?.removeEventListener('click', handleNewsTypeDrop);
+    };
+  }, [filteredCards]);
 
   return (
     <ThemeProvider theme={selectedTheme}>
@@ -168,25 +330,258 @@ const PaginatedCards = ({ blok }) => {
         spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
       >
-        {blok.card_type === "event" && (
+        <FiltersWrapper>
+          <SearchBar>
+            <SearchInput
+              type="text"
+              placeholder="Search by title..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </SearchBar>
+        </FiltersWrapper>
+
+        {blok.card_type === 'event' && (
           <EventHeaderContainer>
             <EventHeaders>Events</EventHeaders>
             <EventHeaders>Details</EventHeaders>
           </EventHeaderContainer>
         )}
+
         <CardsContainer card_type={blok.card_type}>
-          {mappedCards}
+          {filteredCards.length > 0 ? (
+            mappedCards
+          ) : (
+            <NoResults>
+              No results found. Try adjusting your search or filters.
+            </NoResults>
+          )}
         </CardsContainer>
-        <PaginationDiv>
-          <PageNavigation className="prev">Previous</PageNavigation>
-          {mappedPages}
-          <PageNavigation className="next">Next</PageNavigation>
-        </PaginationDiv>
+
+        {filteredCards.length > 0 && (
+          <PaginationDiv>
+            <PageNavigation className='prev'>Previous</PageNavigation>
+            {mappedPages}
+            <PageNavigation className='next'>Next</PageNavigation>
+          </PaginationDiv>
+        )}
       </Wrapper>
     </ThemeProvider>
   );
 };
 
+const SelectedFilterTag = styled.div`
+cursor: pointer;
+  ${text.bodySm};
+  display: flex;
+  align-items: center;
+  width: auto;
+  height: 1.625vw;
+  padding: 0.25vw;
+  border: 2px solid ${colors.lightPurple};
+  color: ${colors.lightPurple};
+  border-radius: 0.375vw;
+  gap: 0.5vw;
+  background: ${colors.lightPurpleGrey};
+
+  ${media.fullWidth} {
+    height: 26px;
+    padding: 20px;
+  }
+
+  ${media.tablet} {
+    height: 5.859vw;
+    padding: 1.953vw;
+  }
+
+  ${media.mobile} {
+    height: 12.15vw;
+    padding: 4.673vw;
+  }
+`;
+
+const SelectedFilters = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.5vw;
+  flex-wrap: wrap;
+
+  ${media.fullWidth} {
+    gap: 8px;
+  }
+`;
+
+const Filters = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.5vw;
+
+  ${media.fullWidth} {
+    gap: 8px;
+  }
+`;
+const TagCounter = styled.div`
+  ${text.tagBold};
+  color: ${colors.lightPurple};
+  background: ${colors.lightPurpleGrey};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25vw;
+  height: 1.25vw;
+  border-radius: 50%;
+
+  ${media.fullWidth} {
+    width: 20px;
+    height: 20px;
+  }
+`
+const Circle = styled.img`
+  height: 0.75vw;
+  width: 0.75vw;
+  cursor: pointer;
+
+  ${media.fullWidth} {
+    height: 12px;
+    width: 12px;
+  }
+
+  ${media.tablet} {
+    height: 1.172vw;
+    width: 1.172vw;
+  }
+
+  ${media.mobile} {
+    height: 2.5vw;
+    width: 2.5vw;
+  }
+`;
+const FiltersWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 75.5vw;
+  margin-bottom: 2vw;
+  gap: 0.5vw;
+  position: relative;
+
+  ${media.fullWidth} {
+     width: 1208px;
+    margin-bottom: 32px;
+    gap: 8px;
+  }
+
+  ${media.tablet} {
+     width: 90.188vw;
+    margin-bottom: 6.125vw;
+  } 
+
+  ${media.mobile} {
+   width: 80.188vw;
+    margin-bottom: 14vw;
+  }
+`;
+const Option = styled.div`
+  ${text.bodySm};
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  height: 1.625vw;
+  padding: 0.25vw;
+  border: 1px solid ${props => props.$isSelected ? colors.lightPurple : colors.grey100};
+  border-radius: 0.375vw;
+  gap: 0.5vw;
+  color: ${props => props.$isSelected ? colors.lightPurple : colors.txtPrimary};
+
+  ${media.fullWidth} {
+    height: 26px;
+    padding: 20px;
+  }
+
+  ${media.tablet} {
+    height: 5.859vw;
+    padding: 1.953vw;
+  }
+
+  ${media.mobile} {
+    height: 12.15vw;
+    padding: 4.673vw;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background: ${colors.lightPurpleGrey};
+    border: 1px solid ${colors.lightPurple};
+  }
+`;
+const OptionsContainer = styled.div`
+  position: relative;
+  display: none;
+  flex-direction: column;
+  background: ${colors.white};
+  overflow: hidden;
+  width: max-content;
+  min-width: 100%;
+  z-index: 10;
+  height: 0;
+  border-radius: 0.375vw;
+  border: ${colors.grey100};
+  gap: 0.5vw;
+  /* top: 2vw;
+  left: 0vw; */
+
+  ${media.fullWidth} {
+    border-radius: 8px;
+    // top: 58px;
+  }
+
+  ${media.tablet} {
+    border-radius: 0.781vw;
+    // top: 5.664vw;
+  }
+
+  ${media.mobile} {
+    border-radius: 1.869vw;
+    // top: 13.551vw;
+  }
+`;
+const StyledSelect = styled.div`
+${text.bodySm};
+  width: max-content;
+  /* height: 2.5vw; */
+  border-radius: 0.5vw;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  background: ${colors.white};
+  border: 1px solid ${colors.grey100};
+  height: fit-content;
+  /* min-width: 17.222vw; */
+  padding: 0.5vw 0.75vw;
+  color: ${colors.txtSubtle};
+
+  &:hover {
+    border: 1px solid ${colors.lightPurple};
+  }
+
+  ${media.fullWidth} {
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  ${media.tablet} {
+    padding: 2.344vw;
+    /* gap: 3.906vw; */
+  }
+
+  ${media.mobile} {
+    padding: 4.673vw;
+    /* gap: 4.673vw; */
+  }
+`;
 const PageNumberBlock = styled.div`
   display: flex;
   align-items: center;
@@ -283,9 +678,9 @@ const CardChunk = styled.div`
   position: relative;
   display: flex;
   flex-direction: ${(props) =>
-    props.card_type === "event" ? "column" : "row"};
-  flex-wrap: ${(props) => (props.card_type === "event" ? "nowrap" : "wrap")};
-  gap: ${(props) => (props.card_type === "event" ? "0" : "1.25vw")};
+    props.card_type === 'event' ? 'column' : 'row'};
+  flex-wrap: ${(props) => (props.card_type === 'event' ? 'nowrap' : 'wrap')};
+  gap: ${(props) => (props.card_type === 'event' ? '0' : '1.25vw')};
   min-width: 100%;
 
   ${media.fullWidth} {
@@ -300,23 +695,27 @@ const CardsContainer = styled.div`
   gap: 0.625vw;
   width: 81.5vw;
   padding: 0.313vw;
+  margin-top: 1.25vw;
 
   ${media.fullWidth} {
     gap: 10px;
     width: 1304px;
     padding: 5px;
+    margin-top: 20px;
   }
 
   ${media.tablet} {
     gap: 0.977vw;
     width: 92.188vw;
     padding: 0.488vw;
+    margin-top: 1.953vw;
   }
 
   ${media.mobile} {
     gap: 2.083vw;
     width: 89.167vw;
     padding: 1.042vw;
+    margin-top: 4.167vw;
   }
 `;
 
@@ -363,96 +762,249 @@ const Wrapper = styled.div`
   width: 100%;
 
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
-          ? `${props.spacing}px 0 0`
-          : "3.75vw 0 0";
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : "0 0 3.75vw";
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
-        ? `${props.spacing}px 0`
-        : "3.75vw 0";
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "60px 0";
+        ? `${props.spacing}px 0`
+        : '60px 0';
     }};
   }
   ${media.tablet} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.859vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "5.859vw 0 0";
+          ? `${props.spacing}px 0 0`
+          : '5.859vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 5.859vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 5.859vw";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 5.859vw';
       }
-      return props.spacing === "default"
-        ? "5.859vw 0"
+      return props.spacing === 'default'
+        ? '5.859vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "5.859vw 0";
+        ? `${props.spacing}px 0`
+        : '5.859vw 0';
     }};
   }
 
   ${media.mobile} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "12.5vw 0 0";
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 12.5vw";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
       }
-      return props.spacing === "default"
-        ? "12.5vw 0"
+      return props.spacing === 'default'
+        ? '12.5vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "12.5vw 0";
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
     }};
+  }
+`;
+
+const FilterTag = styled.div`
+  ${text.bodyMd};
+  display: flex;
+  align-items: center;
+  width: auto;
+  height: 1.625vw;
+  padding: 0.25vw;
+  border: 1px solid ${colors.grey100};
+  border-radius: 0.375vw;
+  gap: 0.5vw;
+  background: ${colors.white};
+
+  ${media.fullWidth} {
+    height: 26px;
+    padding: 20px;
+  }
+
+  ${media.tablet} {
+    height: 5.859vw;
+    padding: 1.953vw;
+  }
+
+  ${media.mobile} {
+    height: 12.15vw;
+    padding: 4.673vw;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${colors.white};
+    color: ${colors.primaryOrange};
+  }
+`;
+
+const RemoveButton = styled.button`
+  background: none;
+  border: none;
+  color: ${colors.grey300};
+  cursor: pointer;
+  font-size: 1.2em;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25vw;
+  height: 1.25vw;
+
+  ${media.fullWidth} {
+    width: 20px;
+    height: 20px;
+  }
+
+  ${media.tablet} {
+    width: 1.953vw;
+    height: 1.953vw;
+  }
+
+  ${media.mobile} {
+    width: 4.167vw;
+    height: 4.167vw;
+  }
+
+  &:hover {
+    color: ${colors.primaryOrange};
+  }
+`;
+
+const SearchBar = styled.div`
+  ${text.bodySm};
+  width: max-content;
+  border-radius: 0.5vw;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  background: ${colors.white};
+  border: 1px solid ${colors.grey100};
+  height: fit-content;
+  padding: 0.5vw 0.75vw;
+  color: ${colors.txtSubtle};
+
+  &:hover {
+    border: 1px solid ${colors.lightPurple};
+  }
+
+  ${media.fullWidth} {
+    gap: 8px;
+    padding: 8px 12px;
+      border-radius: 8px;
+  }
+
+  ${media.tablet} {
+    padding: 2.344vw;
+          border-radius: 0.781vw;
+  }
+
+  ${media.mobile} {
+    padding: 4.673vw;
+          border-radius: 1.667vw;
+  }
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  ${text.bodySm};
+  color: ${colors.txtPrimary};
+  width: 15vw;
+
+  ${media.fullWidth} {
+    width: 240px;
+  }
+
+  ${media.tablet} {
+    width: 20vw;
+  }
+
+  ${media.mobile} {
+    width: 70vw;
+  }
+
+  &::placeholder {
+    color: ${colors.txtSubtle};
+  }
+`;
+
+const NoResults = styled.div`
+  ${text.h4};
+  color: ${colors.txtSubtle};
+  text-align: center;
+  width: 100%;
+  padding: 3vw 0;
+
+  ${media.fullWidth} {
+    padding: 48px 0;
+  }
+
+  ${media.tablet} {
+    padding: 4.688vw 0;
+  }
+
+  ${media.mobile} {
+    padding: 10vw 0;
   }
 `;
 

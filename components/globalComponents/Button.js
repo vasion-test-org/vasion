@@ -113,6 +113,7 @@ const StyledLink = styled.a`
   justify-content: center;
   text-decoration: none;
   width: auto;
+  gap: 0.5vw;
   padding: ${(props) => props.theme.padding};
   background: ${(props) => props.theme.mainColor};
   color: ${(props) => props.theme.textColor};
@@ -128,6 +129,18 @@ const StyledLink = styled.a`
   a:visited {
     color: inherit;
     text-decoration: none;
+  }
+
+  ${media.fullWidth} {
+    gap: 8px;
+  }
+  
+  ${media.tablet} {
+    gap: 0.781vw;
+  }
+  
+  ${media.mobile} {
+    gap: 1.667vw;
   }
 `;
 
