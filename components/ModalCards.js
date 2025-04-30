@@ -2,7 +2,6 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import media from "styles/media";
-import colors from "@/styles/colors";
 import text from "styles/text";
 import CardModal from "@/components/globalComponents/CardModal";
 import RichTextRenderer from "./renderers/RichTextRenderer";
@@ -40,7 +39,6 @@ const ModalCards = ({ blok }) => {
         $isvideo={hasYouTube}
         key={`modal-card-${index}`}
         $bg={image}
-        // $isHover={item?.bio}
         onClick={() => handleModal(item)}
         onMouseEnter={() => setIsActive(index)}
         onMouseLeave={() => setIsActive(false)}
@@ -53,13 +51,12 @@ const ModalCards = ({ blok }) => {
             <RichTextRenderer document={item.position[0].copy} />
           )}
         </Title>
-        {!hasYouTube && (
-          <GoToBtn
-            $active={index === isActive}
-            src="/images/uiElements/GoTo.webp"
-            alt={"go-to-btn"}
-          />
-        )}
+
+        <GoToBtn
+          $active={index === isActive}
+          src="/images/uiElements/GoTo.webp"
+          alt={"go-to-btn"}
+        />
       </ProfileCard>
     );
   });
