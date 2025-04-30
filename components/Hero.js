@@ -12,13 +12,8 @@ import Image from "@/components/globalComponents/Image";
 import LogoCube from "./LogoCube";
 import LightboxBtn from "@/components/LightboxButton";
 
-// import ReviewButton1 from "images/reviewButton.webp";
-// import ReviewButton2 from "images/reviewButton-1.webp";
-// import ReviewButton3 from "images/reviewButton-2.webp";
-// import ReviewButton4 from "images/ReviewButton-4.webp";
-
 const Hero = ({ blok }) => {
-  // console.log("HERO", blok);
+  console.log("HERO", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   let customTheme = blok.custom_theme?.[0] || {};
@@ -127,7 +122,7 @@ const Hero = ({ blok }) => {
               </ButtonRow>
             </SocialCTA>
           )}
-          {
+          {blok.review_buttons && (
             <ReviewButtons>
               <ReviewButton
                 src={"images/reviewButton.webp"}
@@ -157,7 +152,7 @@ const Hero = ({ blok }) => {
                 />
               </AnchorButton>
             </ReviewButtons>
-          }
+          )}
         </HeroWrapper>
         {blok.attached_logo_cube && <LogoCube blok={blok.logo_cube[0]} />}
       </HeroBGWrapper>

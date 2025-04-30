@@ -26,7 +26,7 @@ const ReviewsCarousel = ({ blok }) => {
     : [];
 
   const dragReviews = clonedReviews.map((rev, index) => {
-    console.log(rev);
+    // console.log(rev);
     return (
       <ReviewItem
         href={rev.link[0].link_url.url}
