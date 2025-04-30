@@ -30,6 +30,7 @@ const Hero = ({ blok }) => {
           spacingOffset={blok.offset_spacing}
           spacing={blok.section_spacing}
           centered={!blok?.hero_asset[0]}
+          socials={blok.socials}
         >
           <ContentWrapper
             socials={blok.socials}
@@ -183,7 +184,6 @@ const SocialCTA = styled.div`
     flex-direction: column-reverse;
     align-items: flex-start;
     gap: 4.167vw;
-    margin-left: 5.333vw;
   }
 `;
 
@@ -299,7 +299,9 @@ const HeroWrapper = styled.div`
   }};
 
   gap: ${(props) =>
-    props.gap === "default"
+    props.socials
+      ? "46vw"
+      : props.gap === "default"
       ? "3.75vw"
       : props.gap
         ? `calc(${props.gap} / 1600 * 100vw)`
@@ -329,7 +331,13 @@ const HeroWrapper = styled.div`
           : "96px 148px";
     }};
     gap: ${(props) =>
-      props.gap === "default" ? "60px" : props.gap ? `${props.gap}px` : "60px"};
+      props.socials
+        ? "736px"
+        : props.gap === "default"
+        ? "60px"
+        : props.gap
+          ? `${props.gap}px`
+          : "60px"};
   }
 
   ${media.tablet} {
@@ -356,7 +364,9 @@ const HeroWrapper = styled.div`
           : "5.859vw 3.906vw";
     }};
     gap: ${(props) =>
-      props.gap === "default"
+      props.socials
+        ? "45.996vw"
+        : props.gap === "default"
         ? "3.906vw"
         : props.gap
           ? `calc(${props.gap}/ 1024 * 100vw) `
@@ -364,7 +374,8 @@ const HeroWrapper = styled.div`
   }
 
   ${media.mobile} {
-    flex-direction: column-reverse;
+    flex-direction: ${(props) => (props.socials ? "column" : "column-reverse")};
+    align-items: ${(props) => (props.socials ? "flex-start" : "center")};
     max-width: 100%;
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
@@ -388,7 +399,9 @@ const HeroWrapper = styled.div`
           : "5.417vw 5.417vw";
     }};
     gap: ${(props) =>
-      props.gap === "default"
+      props.socials
+        ? "8.333vw"
+        : props.gap === "default"
         ? "5.417vw"
         : props.gap
           ? `calc(${props.gap}/ 480 * 100vw) `
