@@ -25,26 +25,32 @@ const ReviewsCarousel = ({ blok }) => {
     ? [...statsList, ...statsList, ...statsList]
     : [];
 
-  const dragReviews = clonedReviews.map((rev, index) => (
-    <ReviewItem
-      href={rev.link[0].link_url}
-      target={"_blank"}
-      rel={"noopener noreferrer"}
-      key={index}
-      className="reviewItems"
-    >
-      {<Stars src="/images/HomepageStars.webp" alt={"Five Star Rating"} />}
-      <div {...storyblokEditable(rev)}>
-        <RichTextRenderer document={rev?.body_copy} />
-      </div>
-      <RedditTextContainer>
-        <div {...storyblokEditable(rev.link[0].link_text)}>
-          <RedditText> {rev.link[0].link_text}</RedditText>
+  const dragReviews = clonedReviews.map((rev, index) => {
+    console.log(rev);
+    return (
+      <ReviewItem
+        href={rev.link[0].link_url.url}
+        target={"_blank"}
+        rel={"noopener noreferrer"}
+        key={index}
+        className="reviewItems"
+      >
+        {<Stars src="/images/HomepageStars.webp" alt={"Five Star Rating"} />}
+        <div {...storyblokEditable(rev)}>
+          <RichTextRenderer document={rev?.body_copy} />
         </div>
-        <RedditOpener src="/images/RedditNewTab.webp" alt={"compose-new-tab"} />
-      </RedditTextContainer>
-    </ReviewItem>
-  ));
+        <RedditTextContainer>
+          <div {...storyblokEditable(rev.link[0].link_text)}>
+            <RedditText> {rev.link[0].link_text}</RedditText>
+          </div>
+          <RedditOpener
+            src="/images/RedditNewTab.webp"
+            alt={"compose-new-tab"}
+          />
+        </RedditTextContainer>
+      </ReviewItem>
+    );
+  });
 
   const dragStats = hasStats
     ? clonedStats.map((statItem, index) => {

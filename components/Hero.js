@@ -11,6 +11,12 @@ import Button from "@/components/globalComponents/Button";
 import Image from "@/components/globalComponents/Image";
 import LogoCube from "./LogoCube";
 import LightboxBtn from "@/components/LightboxButton";
+
+// import ReviewButton1 from "images/reviewButton.webp";
+// import ReviewButton2 from "images/reviewButton-1.webp";
+// import ReviewButton3 from "images/reviewButton-2.webp";
+// import ReviewButton4 from "images/ReviewButton-4.webp";
+
 const Hero = ({ blok }) => {
   // console.log("HERO", blok);
   const themes = useAvailableThemes();
@@ -121,6 +127,37 @@ const Hero = ({ blok }) => {
               </ButtonRow>
             </SocialCTA>
           )}
+          {
+            <ReviewButtons>
+              <ReviewButton
+                src={"images/reviewButton.webp"}
+                alt={"review-us"}
+                width="164"
+                height="62"
+                onClick={() => navigate("/review-us")}
+              />
+              <ReviewButton
+                src={"images/reviewButton-1.webp"}
+                alt={"G2 Reviews"}
+                width="164"
+                height="62"
+                onClick={() => navigate("/review-us")}
+              />
+              <ReviewButton
+                src={"images/reviewButton-2.webp"}
+                alt={"Review Us"}
+                width="164"
+                height="62"
+                onClick={() => navigate("/review-us")}
+              />
+              <AnchorButton href="#reddit-reviews">
+                <ReviewButton
+                  src={"images/reviewButton-4.webp"}
+                  alt={"Reviews"}
+                />
+              </AnchorButton>
+            </ReviewButtons>
+          }
         </HeroWrapper>
         {blok.attached_logo_cube && <LogoCube blok={blok.logo_cube[0]} />}
       </HeroBGWrapper>
@@ -128,6 +165,61 @@ const Hero = ({ blok }) => {
   );
 };
 
+const AnchorButton = styled.a`
+  scroll-behavior: smooth !important;
+  cursor: pointer;
+  text-decoration: none;
+`;
+
+const ReviewButton = styled.img`
+  cursor: pointer;
+  width: 12.25vw;
+  min-height: 3vw;
+  transition: transform 0.2s;
+
+  ${media.fullWidth} {
+    width: 196px;
+    min-height: 48px;
+  }
+
+  ${media.tablet} {
+    width: 18.016vw;
+    min-height: 5.078vw;
+  }
+
+  ${media.mobile} {
+    width: 27.5vw;
+    height: 11vw;
+    object-fit: contain;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const ReviewButtons = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 26vw;
+  right: 10vw;
+
+  ${media.fullWidth} {
+    top: 416px;
+    right: 160px;
+  }
+
+  ${media.tablet} {
+    top: 40.84vw;
+    right: 2.191vw;
+  }
+
+  ${media.mobile} {
+    top: 64.84vw;
+    right: 8.191vw;
+  }
+`;
 const SocailLogo = styled.img`
   width: 2.222vw;
   height: 2.222vw;
