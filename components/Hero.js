@@ -359,7 +359,7 @@ const HeroWrapper = styled.div`
       props.gap === "default"
         ? "3.906vw"
         : props.gap
-          ?  `calc(${props.gap}/ 1024 * 100vw) `
+          ? `calc(${props.gap}/ 1024 * 100vw) `
           : "3.906vw"};
   }
 

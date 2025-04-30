@@ -100,7 +100,7 @@ const Combined = ({ blok }) => {
         </StatBlock>
         {blok?.link?.link_text && (
           <Button
-          {...storyblokEditable(blok?.link)}
+            {...storyblokEditable(blok?.link)}
             $buttonData={{
               theme: "orange_link",
               link_url: { url: blok.link.link_url },
@@ -264,21 +264,21 @@ const Divider = styled.div`
 //Quote Component
 const QuoteSideImg = styled.img`
   width: 22.222vw;
-  height: 7.222vw;
+  height: 6.222vw;
 
   ${media.fullWidth} {
     width: 320px;
-    height: 104px;
+    height: 99px;
   }
 
   ${media.tablet} {
-    width: 31.25vw;
+    width: 33.25vw;
     height: 10.156vw;
   }
 
   ${media.mobile} {
     width: 74.766vw;
-    height: 24.299vw;
+    height: 20.299vw;
   }
 `;
 const Attribution = styled.div`

@@ -27,7 +27,7 @@ const TestForm = ({ blok }) => {
   // const yFormPosition = getMedia(-277, -277, -27, 0);
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
-  const routingLang = useRef('Demo Request');
+  const routingLang = useRef('Demo Request - EN');
   const originRef = useRef('va');
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const TestForm = ({ blok }) => {
         } else if (pathLocale === 'fr') {
           routingLang.current = "Demo Request - FR"
         } else {
-          routingLang.current = 'Demo Request'
+          routingLang.current = 'Demo Request - EN'
         }
       } else {
         languageRef.current = 'en';
@@ -115,6 +115,7 @@ const TestForm = ({ blok }) => {
           formData['thank_you_language'] = languageRef.current;
           formData['origin_domain'] = originRef.current;
         },
+        defaultLanguage: languageRef.current,
         useIframe: blok.animated,
       };
 
@@ -167,7 +168,7 @@ const TestForm = ({ blok }) => {
           clearTimeout(submissionTimeout);
 
           if (blok.animated) {
-            LDBookItV2.saveFormData({ formData: submittedValues });
+            LDBookItV2.saveFormData(submittedValues);
             console.log('Thank You');
             console.log("Form submitted successfully:", submittedValues);
           } else if (blok.redirect_link.cached_url) {
