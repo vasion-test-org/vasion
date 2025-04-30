@@ -80,7 +80,7 @@ const Card = ({ content, paginated, borderradius }) => {
       rel={rel}
       {...storyblokEditable(content)}
       paginated={paginated}
-      hashover={content?.has_hover}
+      canhover={content?.has_hover}
     >
       {WrapperContent}
     </CardWrapper>
@@ -139,7 +139,7 @@ const CardWrapper = styled.div`
 
   &:hover {
     background: ${(props) =>
-      props.$hashover
+      props.$canhover
         ? "linear-gradient(180deg, #7E5FDD 0%, #583F99 100%)"
         : "unset"};
   }
