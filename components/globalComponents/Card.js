@@ -9,8 +9,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const Card = ({ content, paginated, borderradius }) => {
-  // console.log("CARD-CONTENT", content);
-  content?.has_hover && console.log("CAN HOVER: ", content?.has_hover);
   const pathname = usePathname();
   const buttonData = content.Button?.[0];
   const isEmail = buttonData?.link_url?.email;
