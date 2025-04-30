@@ -9,6 +9,7 @@ import media from "@/styles/media";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import PaginatedCards from "./PaginatedCards";
 
+
 const ResourceCards = ({ blok }) => {
   const [resources, setResources] = useState([]);
   const themes = useAvailableThemes();
@@ -65,6 +66,7 @@ export default ResourceCards;
 
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   gap: 16px;
 `;
