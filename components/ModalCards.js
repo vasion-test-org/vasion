@@ -53,13 +53,12 @@ const ModalCards = ({ blok }) => {
             <RichTextRenderer document={item.position[0].copy} />
           )}
         </Title>
-        {!hasYouTube && (
-          <GoToBtn
-            $active={index === isActive}
-            src="/images/uiElements/GoTo.webp"
-            alt={"go-to-btn"}
-          />
-        )}
+
+        <GoToBtn
+          $active={index === isActive}
+          src="/images/uiElements/GoTo.webp"
+          alt={"go-to-btn"}
+        />
       </ProfileCard>
     );
   });
