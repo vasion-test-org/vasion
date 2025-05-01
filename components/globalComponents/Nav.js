@@ -78,7 +78,9 @@ const Nav = ({ blok }) => {
       <Dropdown className="dropdowns" id={`dropdown-${index}`}>
         {item.tab_columns.map((column, colIdx) => (
           <Column key={`column.column_header-${colIdx}`}>
-            <ColumnHeader>{column.column_header}</ColumnHeader>
+            {column?.column_header && (
+              <ColumnHeader>{column.column_header}</ColumnHeader>
+            )}
             {column.nav_items.map((navItem, itemIdx) => {
               const formattedIconString = navItem.icon.replace(/\s+/g, "");
               const IconComponent = Icons[formattedIconString] || null;
