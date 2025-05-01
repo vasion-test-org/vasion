@@ -170,17 +170,17 @@ const AnchorButton = styled.a`
 const ReviewButton = styled.img`
   cursor: pointer;
   width: 12.25vw;
-  min-height: 3vw;
+  height: 4vw;
   transition: transform 0.2s;
 
   ${media.fullWidth} {
     width: 196px;
-    min-height: 48px;
+    height: 64px;
   }
 
   ${media.tablet} {
     width: 18.016vw;
-    min-height: 5.078vw;
+    height: 6.578vw;
   }
 
   ${media.mobile} {
@@ -198,21 +198,21 @@ const ReviewButtons = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  top: 26vw;
+  top: 20vw;
   right: 10vw;
 
   ${media.fullWidth} {
-    top: 416px;
-    right: 160px;
+    top: 320px;
+    right: 150px;
   }
 
   ${media.tablet} {
-    top: 40.84vw;
+    top: 30.84vw;
     right: 2.191vw;
   }
 
   ${media.mobile} {
-    top: 64.84vw;
+    top: 40.84vw;
     right: 8.191vw;
   }
 `;
@@ -356,6 +356,7 @@ const ContentWrapper = styled.div`
 `;
 
 const HeroWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: ${(props) => `${props.layout || "row"}`};
   align-items: center;
