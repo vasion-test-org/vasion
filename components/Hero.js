@@ -13,7 +13,7 @@ import LogoCube from "./LogoCube";
 import LightboxBtn from "@/components/LightboxButton";
 
 const Hero = ({ blok }) => {
-  // console.log("HERO", blok);
+  console.log("HERO", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   let customTheme = blok.custom_theme?.[0] || {};
@@ -148,7 +148,7 @@ const Hero = ({ blok }) => {
               />
               <AnchorButton href="#reddit-reviews">
                 <ReviewButton
-                  src={"images/reviewButton-4.webp"}
+                  src={"images/ReviewButton-4.webp"}
                   alt={"Reviews"}
                 />
               </AnchorButton>
@@ -389,10 +389,10 @@ const HeroWrapper = styled.div`
     props.socials
       ? "46vw"
       : props.gap === "default"
-      ? "3.75vw"
-      : props.gap
-        ? `calc(${props.gap} / 1600 * 100vw)`
-        : "3.75vw"};
+        ? "3.75vw"
+        : props.gap
+          ? `calc(${props.gap} / 1600 * 100vw)`
+          : "3.75vw"};
 
   ${media.fullWidth} {
     max-width: 1600px;
@@ -421,10 +421,10 @@ const HeroWrapper = styled.div`
       props.socials
         ? "736px"
         : props.gap === "default"
-        ? "60px"
-        : props.gap
-          ? `${props.gap}px`
-          : "60px"};
+          ? "60px"
+          : props.gap
+            ? `${props.gap}px`
+            : "60px"};
   }
 
   ${media.tablet} {
@@ -454,10 +454,10 @@ const HeroWrapper = styled.div`
       props.socials
         ? "45.996vw"
         : props.gap === "default"
-        ? "3.906vw"
-        : props.gap
-          ? `calc(${props.gap}/ 1024 * 100vw) `
-          : "3.906vw"};
+          ? "3.906vw"
+          : props.gap
+            ? `calc(${props.gap}/ 1024 * 100vw) `
+            : "3.906vw"};
   }
 
   ${media.mobile} {
@@ -489,10 +489,10 @@ const HeroWrapper = styled.div`
       props.socials
         ? "8.333vw"
         : props.gap === "default"
-        ? "5.417vw"
-        : props.gap
-          ? `calc(${props.gap}/ 480 * 100vw) `
-          : "5.417vw"};
+          ? "5.417vw"
+          : props.gap
+            ? `calc(${props.gap}/ 480 * 100vw) `
+            : "5.417vw"};
   }
 `;
 
