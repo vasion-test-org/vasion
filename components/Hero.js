@@ -13,7 +13,7 @@ import LogoCube from "./LogoCube";
 import LightboxBtn from "@/components/LightboxButton";
 
 const Hero = ({ blok }) => {
-  // console.log("HERO", blok);
+  console.log("HERO", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   let customTheme = blok.custom_theme?.[0] || {};
@@ -148,7 +148,7 @@ const Hero = ({ blok }) => {
               />
               <AnchorButton href="#reddit-reviews">
                 <ReviewButton
-                  src={"images/reviewButton-4.webp"}
+                  src={"images/ReviewButton-4.webp"}
                   alt={"Reviews"}
                 />
               </AnchorButton>
@@ -170,17 +170,17 @@ const AnchorButton = styled.a`
 const ReviewButton = styled.img`
   cursor: pointer;
   width: 12.25vw;
-  min-height: 3vw;
+  height: 4vw;
   transition: transform 0.2s;
 
   ${media.fullWidth} {
     width: 196px;
-    min-height: 48px;
+    height: 64px;
   }
 
   ${media.tablet} {
     width: 18.016vw;
-    min-height: 5.078vw;
+    height: 6.578vw;
   }
 
   ${media.mobile} {
@@ -198,21 +198,21 @@ const ReviewButtons = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  top: 26vw;
+  top: 20vw;
   right: 10vw;
 
   ${media.fullWidth} {
-    top: 416px;
-    right: 160px;
+    top: 320px;
+    right: 150px;
   }
 
   ${media.tablet} {
-    top: 40.84vw;
+    top: 30.84vw;
     right: 2.191vw;
   }
 
   ${media.mobile} {
-    top: 64.84vw;
+    top: 40.84vw;
     right: 8.191vw;
   }
 `;
@@ -356,6 +356,7 @@ const ContentWrapper = styled.div`
 `;
 
 const HeroWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: ${(props) => `${props.layout || "row"}`};
   align-items: center;
@@ -389,10 +390,10 @@ const HeroWrapper = styled.div`
     props.socials
       ? "46vw"
       : props.gap === "default"
-      ? "3.75vw"
-      : props.gap
-        ? `calc(${props.gap} / 1600 * 100vw)`
-        : "3.75vw"};
+        ? "3.75vw"
+        : props.gap
+          ? `calc(${props.gap} / 1600 * 100vw)`
+          : "3.75vw"};
 
   ${media.fullWidth} {
     max-width: 1600px;
@@ -421,10 +422,10 @@ const HeroWrapper = styled.div`
       props.socials
         ? "736px"
         : props.gap === "default"
-        ? "60px"
-        : props.gap
-          ? `${props.gap}px`
-          : "60px"};
+          ? "60px"
+          : props.gap
+            ? `${props.gap}px`
+            : "60px"};
   }
 
   ${media.tablet} {
@@ -454,10 +455,10 @@ const HeroWrapper = styled.div`
       props.socials
         ? "45.996vw"
         : props.gap === "default"
-        ? "3.906vw"
-        : props.gap
-          ? `calc(${props.gap}/ 1024 * 100vw) `
-          : "3.906vw"};
+          ? "3.906vw"
+          : props.gap
+            ? `calc(${props.gap}/ 1024 * 100vw) `
+            : "3.906vw"};
   }
 
   ${media.mobile} {
@@ -489,10 +490,10 @@ const HeroWrapper = styled.div`
       props.socials
         ? "8.333vw"
         : props.gap === "default"
-        ? "5.417vw"
-        : props.gap
-          ? `calc(${props.gap}/ 480 * 100vw) `
-          : "5.417vw"};
+          ? "5.417vw"
+          : props.gap
+            ? `calc(${props.gap}/ 480 * 100vw) `
+            : "5.417vw"};
   }
 `;
 
