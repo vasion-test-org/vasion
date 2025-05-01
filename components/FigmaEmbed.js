@@ -6,7 +6,7 @@ import colors from "@/styles/colors";
 import text from "@/styles/text";
 
 const FigmaEmbed = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   const handleNavigate = (link) => {
     window.open(link, "_blank");
   };

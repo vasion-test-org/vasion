@@ -20,10 +20,15 @@ const Card = ({ content, paginated, borderradius }) => {
   const rel = target === "_blank" ? "noopener noreferrer" : undefined;
 
   const isExternal = rawHref.startsWith("http");
-  const alreadyLocalized = rawHref.startsWith("/de") || rawHref.startsWith("/fr") || rawHref.startsWith("/en");
+  const alreadyLocalized =
+    rawHref.startsWith("/de") ||
+    rawHref.startsWith("/fr") ||
+    rawHref.startsWith("/en");
 
   const slugParts = pathname.split("/").filter(Boolean);
-  const currentLocale = ["de", "fr"].includes(slugParts[0]) ? slugParts[0] : null;
+  const currentLocale = ["de", "fr"].includes(slugParts[0])
+    ? slugParts[0]
+    : null;
 
   const normalizedUrl =
     isEmail || isExternal || alreadyLocalized
@@ -58,7 +63,12 @@ const Card = ({ content, paginated, borderradius }) => {
 
   return target !== "_blank" ? (
     <Link href={normalizedUrl} passHref legacyBehavior>
-      <CardWrapper as="a" {...storyblokEditable(content)} paginated={paginated}>
+      <CardWrapper
+        as="a"
+        {...storyblokEditable(content)}
+        paginated={paginated}
+        $canhover={content?.has_hover}
+      >
         {WrapperContent}
       </CardWrapper>
     </Link>
@@ -69,6 +79,7 @@ const Card = ({ content, paginated, borderradius }) => {
       rel={rel}
       {...storyblokEditable(content)}
       paginated={paginated}
+      $canhover={content?.has_hover}
     >
       {WrapperContent}
     </CardWrapper>
@@ -107,7 +118,6 @@ const ContentWrapper = styled.div`
     gap: 3.333vw;
   }
 `;
-
 const CardWrapper = styled.div`
   text-decoration: none;
   color: inherit;
@@ -124,6 +134,14 @@ const CardWrapper = styled.div`
   box-shadow:
     0vw 0vw 0.063vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.125vw 0.25vw 0vw rgba(25, 29, 30, 0.16);
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: ${(props) =>
+      props.$canhover
+        ? "linear-gradient(180deg, #7E5FDD 0%, #583F99 100%)"
+        : "unset"};
+  }
 
   ${media.fullWidth} {
     gap: 16px;

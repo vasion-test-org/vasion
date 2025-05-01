@@ -10,26 +10,28 @@ import { storyblokEditable } from "@storyblok/react";
 const IconCards = ({ blok }) => {
   const cards = blok?.map((card, index) => {
     return (
-      <Card key={card.title + index} {...storyblokEditable(card)}>
-        <NumberIntro>
-          <Counter>{index + 1}</Counter>
-          <Title>{card.title}</Title>
-        </NumberIntro>
-        <Icon
-          width={90}
-          height={90}
-          src={card?.icon?.filename}
-          alt={card?.icon?.alt}
-        />
-        <TextContainer>
-          <Headline>
-            <RichTextRenderer document={card?.headline} />
-          </Headline>
-          <BodyCopy>
-            <RichTextRenderer document={card?.body_copy} />
-          </BodyCopy>
-        </TextContainer>
-      </Card>
+      <div {...storyblokEditable(card)}>
+        <Card key={card.title + index}>
+          <NumberIntro>
+            <Counter>{index + 1}</Counter>
+            <Title>{card.title}</Title>
+          </NumberIntro>
+          <Icon
+            width={90}
+            height={90}
+            src={card?.icon?.filename}
+            alt={card?.icon?.alt}
+          />
+          <TextContainer>
+            <Headline>
+              <RichTextRenderer document={card?.headline} />
+            </Headline>
+            <BodyCopy>
+              <RichTextRenderer document={card?.body_copy} />
+            </BodyCopy>
+          </TextContainer>
+        </Card>
+      </div>
     );
   });
 

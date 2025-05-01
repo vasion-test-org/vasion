@@ -16,7 +16,7 @@ const ReviewUsCta = ({ blok }) => {
   };
 
   const ctaButtons = blok?.button_blocks?.map((item, index) => {
-    console.log(item);
+    // console.log(item);
     return (
       <CtaItem key={index} href={item?.link_url?.url}>
         <CtaLogo src={item?.logo_icon.filename} alt={item?.logo_icon.alt} />
