@@ -7,7 +7,7 @@ export async function GET() {
   const storyblokApi = getStoryblokApi();
 
   const allStories = await storyblokApi.getAll("cdn/stories", {
-    version: "draft",
+    version: "published",
   });
 
   const urls = allStories
