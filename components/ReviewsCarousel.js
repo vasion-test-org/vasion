@@ -639,6 +639,7 @@ const HeaderContainer = styled.div`
   ${media.tablet} {
   }
   ${media.mobile} {
+    width: 80vw;
   }
 `;
 const Wrapper = styled.div`
