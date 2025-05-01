@@ -30,11 +30,11 @@ const Image = ({ images, borderradius, filename }) => {
 const ImageWrapper = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
   /* max-width: inherit;  */
   border-radius: ${(props) => `${props.borderradius || 0}px`};
-  
+
   ${media.fullWidth} {
     border-radius: ${(props) => `${props.borderradius || 0}px`};
   }
