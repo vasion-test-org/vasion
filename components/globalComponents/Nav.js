@@ -17,6 +17,7 @@ import LinkArrow from "assets/svg/LinkArrow.svg";
 import LanguageGlobe from "assets/svg/languageglobe.svg";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import AnchorNavigator from "@/components/globalComponents/AnchorNavigator";
+import Tooltip from './Tooltip';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,6 +27,7 @@ const Nav = ({ blok }) => {
 
   const [language, setLanguage] = useState("en");
   const [navItems, setNavItems] = useState(blok.english_nav_items);
+  const [tooltipState, setTooltipState] = useState({ isVisible: false, message: '', position: { x: 0, y: 0 } });
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { locale } = useRouter();
@@ -64,11 +66,47 @@ const Nav = ({ blok }) => {
     ? slugParts.slice(1).join("/")
     : slugParts.join("/");
 
-  const handleNavigate = (locale) => {
+  const checkLanguageAvailability = async (locale, path) => {
+    try {
+      const response = await fetch(`/api/check-language?locale=${locale}&path=${path}`);
+      const data = await response.json();
+      return data.exists;
+    } catch (error) {
+      console.error('Error checking language availability:', error);
+      return false;
+    }
+  };
+
+  const handleNavigate = async (locale) => {
     const basePath = locale === "en" ? "" : `/${locale}`;
     const newPath = nonHomeSlug
       ? `${basePath}/${nonHomeSlug}`
       : basePath || "/";
+
+    const pathToCheck = nonHomeSlug || '/';
+    const isAvailable = await checkLanguageAvailability(locale, pathToCheck);
+
+    if (!isAvailable) {
+      const targetElement = document.querySelector(`[data-lang="${locale}"]`);
+      if (targetElement) {
+        const rect = targetElement.getBoundingClientRect();
+        setTooltipState({
+          isVisible: true,
+          message: `This page is not available in ${locale === 'fr' ? 'French' : 'German'} yet`,
+          position: {
+            x: rect.left,
+            y: rect.bottom + 10
+          }
+        });
+        
+        // Hide tooltip after 3 seconds
+        setTimeout(() => {
+          setTooltipState(prev => ({ ...prev, isVisible: false }));
+        }, 3000);
+      }
+      return;
+    }
+
     router.push(newPath);
   };
 
@@ -292,18 +330,35 @@ const Nav = ({ blok }) => {
             </Banner>
             <LanguageSelector id="languageSelector">
               <LanguageItems id="languageItemsContainer">
-                <LanguageItem onClick={() => handleNavigate("en")}>
+                <LanguageItem 
+                  data-lang="en"
+                  onClick={() => handleNavigate("en")}
+                >
                   English
                 </LanguageItem>
-                <LanguageItem onClick={() => handleNavigate("fr")}>
+                <LanguageItem 
+                  data-lang="fr"
+                  onClick={() => handleNavigate("fr")}
+                >
                   French
                 </LanguageItem>
-                <LanguageItem onClick={() => handleNavigate("de")}>
+                <LanguageItem 
+                  data-lang="de"
+                  onClick={() => handleNavigate("de")}
+                >
                   German
                 </LanguageItem>
               </LanguageItems>
               <LanguageIcon id="globe" />
             </LanguageSelector>
+            <Tooltip 
+              isVisible={tooltipState.isVisible}
+              message={tooltipState.message}
+              style={{
+                left: tooltipState.position.x,
+                top: tooltipState.position.y
+              }}
+            />
           </TopElementsContainer>
         </TopNav>
         <MainNavWrapper className="mainNavWrapper desktopNav">
