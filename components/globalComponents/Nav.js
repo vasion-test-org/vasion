@@ -17,7 +17,7 @@ import LinkArrow from "assets/svg/LinkArrow.svg";
 import LanguageGlobe from "assets/svg/languageglobe.svg";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import AnchorNavigator from "@/components/globalComponents/AnchorNavigator";
-import Tooltip from './Tooltip';
+import { getStoryblokApi } from "@storyblok/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,10 +27,11 @@ const Nav = ({ blok }) => {
 
   const [language, setLanguage] = useState("en");
   const [navItems, setNavItems] = useState(blok.english_nav_items);
-  const [tooltipState, setTooltipState] = useState({ isVisible: false, message: '', position: { x: 0, y: 0 } });
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { locale } = useRouter();
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipMessage, setTooltipMessage] = useState("");
 
   useEffect(() => {
     function checkPathLocale(url) {
@@ -66,48 +67,33 @@ const Nav = ({ blok }) => {
     ? slugParts.slice(1).join("/")
     : slugParts.join("/");
 
-  const checkLanguageAvailability = async (locale, path) => {
-    try {
-      const response = await fetch(`/api/check-language?locale=${locale}&path=${path}`);
-      const data = await response.json();
-      return data.exists;
-    } catch (error) {
-      console.error('Error checking language availability:', error);
-      return false;
-    }
-  };
-
   const handleNavigate = async (locale) => {
     const basePath = locale === "en" ? "" : `/${locale}`;
     const newPath = nonHomeSlug
       ? `${basePath}/${nonHomeSlug}`
       : basePath || "/";
 
-    const pathToCheck = nonHomeSlug || '/';
-    const isAvailable = await checkLanguageAvailability(locale, pathToCheck);
+    try {
+      const storyblokApi = getStoryblokApi();
+      const storySlug = nonHomeSlug || "home";
+      
+      const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
+        version: "published",
+        language: locale,
+      });
 
-    if (!isAvailable) {
-      const targetElement = document.querySelector(`[data-lang="${locale}"]`);
-      if (targetElement) {
-        const rect = targetElement.getBoundingClientRect();
-        setTooltipState({
-          isVisible: true,
-          message: `This page is not available in ${locale === 'fr' ? 'French' : 'German'} yet`,
-          position: {
-            x: rect.left,
-            y: rect.bottom + 10
-          }
-        });
-        
-        // Hide tooltip after 3 seconds
-        setTimeout(() => {
-          setTooltipState(prev => ({ ...prev, isVisible: false }));
-        }, 3000);
+      if (data?.story) {
+        router.push(newPath);
+      } else {
+        setTooltipMessage("This page does not exist in the selected language");
+        setShowTooltip(true);
+        setTimeout(() => setShowTooltip(false), 3000);
       }
-      return;
+    } catch (error) {
+      setTooltipMessage("This page does not exist in the selected language");
+      setShowTooltip(true);
+      setTimeout(() => setShowTooltip(false), 3000);
     }
-
-    router.push(newPath);
   };
 
   const mappedNav = navItems.map((item, index) => (
@@ -330,35 +316,19 @@ const Nav = ({ blok }) => {
             </Banner>
             <LanguageSelector id="languageSelector">
               <LanguageItems id="languageItemsContainer">
-                <LanguageItem 
-                  data-lang="en"
-                  onClick={() => handleNavigate("en")}
-                >
+                <LanguageItem onClick={() => handleNavigate("en")}>
                   English
                 </LanguageItem>
-                <LanguageItem 
-                  data-lang="fr"
-                  onClick={() => handleNavigate("fr")}
-                >
+                <LanguageItem onClick={() => handleNavigate("fr")}>
                   French
                 </LanguageItem>
-                <LanguageItem 
-                  data-lang="de"
-                  onClick={() => handleNavigate("de")}
-                >
+                <LanguageItem onClick={() => handleNavigate("de")}>
                   German
                 </LanguageItem>
               </LanguageItems>
               <LanguageIcon id="globe" />
+              {showTooltip && <Tooltip>{tooltipMessage}</Tooltip>}
             </LanguageSelector>
-            <Tooltip 
-              isVisible={tooltipState.isVisible}
-              message={tooltipState.message}
-              style={{
-                left: tooltipState.position.x,
-                top: tooltipState.position.y
-              }}
-            />
           </TopElementsContainer>
         </TopNav>
         <MainNavWrapper className="mainNavWrapper desktopNav">
@@ -1017,6 +987,29 @@ const MainNavWrapper = styled.div`
   }
 
   ${media.mobile} {
+  }
+`;
+const Tooltip = styled.div`
+  position: absolute;
+  background: ${colors.darkPurple};
+  color: ${colors.white};
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  z-index: 1000;
+  white-space: nowrap;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    right: 10px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent ${colors.darkPurple} transparent;
   }
 `;
 export default Nav;
