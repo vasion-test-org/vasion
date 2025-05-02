@@ -707,9 +707,13 @@ const NavItem = styled.div`
     height: ${(props) => (props.card_size === "large" ? "21.68vw" : "auto")};
   }
 
-  ${media.mobile} {
-  }
   &:hover {
+  border: ${(props) =>
+    props.card_size === "large"
+      ? "1px solid ${colors.textSubtle}"
+      : props.card_size === "medium"
+        ? "1px solid ${colors.txtSubtle}"
+        : "unset"};
     background: ${(props) =>
       props.card_size === "large" ? "unset" : colors.lightPurpleGrey};
     box-shadow: ${(props) =>

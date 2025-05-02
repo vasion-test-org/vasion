@@ -620,6 +620,11 @@ const StyledSelectHeader = styled.div`
     path {
       fill: ${colors.txtSubtle};
     }
+
+    ${media.mobile} {
+      width: 4.167vw;
+      height: 4.167vw;
+    }
   }
 
   ${media.fullWidth} {
@@ -648,16 +653,21 @@ cursor: pointer;
     height: 26px;
     padding: 4px;
       gap: 8px;
+       border-radius: 6px;
   }
 
   ${media.tablet} {
-    height: 5.859vw;
-    padding: 1.953vw;
+     height: 2.539vw;
+    padding: 0.391vw;
+    gap: 0.781vw;
+    border-radius: 0.586vw;
   }
 
   ${media.mobile} {
-    height: 12.15vw;
-    padding: 4.673vw;
+    height: 5.417vw;
+    padding: 1.5vw;
+    gap: 1.667vw;
+    border-radius: 1.25vw;
   }
 `;
 
@@ -733,10 +743,13 @@ const FiltersWrapper = styled.div`
   }
 
   ${media.tablet} {
+    width: 90.188vw;
     margin-bottom: 4.883vw;
+       gap: 0.781vw;
   }
 
   ${media.mobile} {
+  // flex-direction: column-reverse;
     margin-bottom: 10.417vw;
   }
 `;
@@ -755,16 +768,22 @@ const Option = styled.div`
   ${media.fullWidth} {
     height: 26px;
     padding: 4px;
+      gap: 8px;
+       border-radius: 6px;
   }
 
   ${media.tablet} {
-    height: 5.859vw;
-    padding: 1.953vw;
+   height: 2.539vw;
+   padding: 0.391vw;
+      gap: 0.781vw ;
+       border-radius: 0.586vw;
   }
 
   ${media.mobile} {
-    height: 12.15vw;
-    padding: 4.673vw;
+    height: 5.417vw;
+       padding: 1.5vw;
+    gap: 1.667vw;
+       border-radius: 1.25vw;
   }
 
   &:hover {
@@ -786,22 +805,20 @@ const OptionsContainer = styled.div`
   border-radius: 0.375vw;
   border: ${colors.grey100};
   gap: 0.5vw;
-  /* top: 2vw;
-  left: 0vw; */
 
   ${media.fullWidth} {
     border-radius: 8px;
-    // top: 58px;
+      gap: 8px;
   }
 
   ${media.tablet} {
     border-radius: 0.781vw;
-    // top: 5.664vw;
+      gap: 0.781vw;
   }
 
   ${media.mobile} {
     border-radius: 1.869vw;
-    // top: 13.551vw;
+      gap: 1.667vw;
   }
 `;
 const StyledSelect = styled.div`
@@ -846,11 +863,17 @@ const StyledSelect = styled.div`
   }
 
   ${media.tablet} {
-    padding: 2.344vw;
+     width: 20.508vw;
+    gap: 0.781vw;
+    padding: 0.781vw 1.172vw;
+      border-radius: 0.781vw;
   }
 
   ${media.mobile} {
-    padding: 4.673vw;
+      width: 43.75vw;
+    gap: 1.667vw;
+    padding: 1.667vw 2.5vw;
+      border-radius: 1.667vw;
   }
 `;
 const PageNumberBlock = styled.div`
@@ -1219,11 +1242,18 @@ const SearchBar = styled.div`
   }
 
   ${media.tablet} {
-    padding: 2.344vw;
+      width: 20.508vw;
+    gap: 0.781vw;
+    padding: 0.781vw 1.172vw;
+      border-radius: 0.781vw;
   }
 
   ${media.mobile} {
-    padding: 4.673vw;
+  position: relative;
+    width:100%;
+    gap: 1.667vw;
+    padding: 1.667vw 2.5vw;
+      border-radius: 1.667vw;
   }
 `;
 

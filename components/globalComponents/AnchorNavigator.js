@@ -177,7 +177,7 @@ const AnchorWrapper = styled.div`
   justify-content: center;
   width: 100%;
   z-index: 10;
-  top: 2.75vw;
+  top: 4.063vw;
   opacity: 0;
 
   ${media.fullWidth} {
