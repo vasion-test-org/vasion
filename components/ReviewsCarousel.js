@@ -213,7 +213,7 @@ const DecorativeStroke = styled.div`
   display: flex;
   align-items: center;
   align-self: center;
-  z-index: 10;
+  z-index: 9;
   right: 10.563vw;
   bottom: 3.75vw;
   gap: 0.25vw;
@@ -268,7 +268,7 @@ const BlurStatLeft = styled.div`
   left: -3.292vw;
   top: 2.847vw;
   background: linear-gradient(0deg, #190c31 0.24%, rgba(25, 12, 49, 0) 99.76%);
-  z-index: 9;
+  z-index: 8;
 
   ${media.fullWidth} {
     left: -146px;
@@ -307,7 +307,7 @@ const BlurStatRight = styled.div`
   transform: rotate(-90deg);
   right: -1.069vw;
   top: 1.472vw;
-  z-index: 9;
+  z-index: 8;
   background: linear-gradient(0deg, #190c31 0.12%, rgba(25, 12, 49, 0) 99.89%);
 
   ${media.fullWidth} {
@@ -361,7 +361,7 @@ const VisibleStatsContainer = styled.div`
 const BottomHeaderWrapper = styled.div`
   display: flex;
   align-self: start;
-  z-index: 9;
+  z-index: 8;
   padding: 0vw 13.625vw;
 
   ${media.fullWidth} {
@@ -499,7 +499,7 @@ const BlurLeft = styled.div`
   transform: rotate(90deg);
   background: linear-gradient(0deg, #190c31 0.12%, rgba(25, 12, 49, 0) 99.89%);
 
-  z-index: 9;
+  z-index: 8;
   position: absolute;
   left: -41.056vw;
   top: 2.361vw;
@@ -535,7 +535,7 @@ const BlurLeft = styled.div`
 const BlurRight = styled.div`
   position: absolute;
   transform: rotate(-90deg);
-  z-index: 9;
+  z-index: 8;
   background: linear-gradient(1deg, #190c31 0.9%, rgba(25, 12, 49, 0) 99.16%);
   right: -41.056vw;
   bottom: 5.764vw;
