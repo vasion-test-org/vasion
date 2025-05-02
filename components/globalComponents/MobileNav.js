@@ -42,7 +42,9 @@ const MobileNav = ({ blok }) => {
       <TabDropdown className="tabDropdowns" id={`tabHeader-${index}`}>
         {item.tab_columns.map((column, colIndex) => (
           <NavItemsDiv key={`column-${colIndex}`}>
-            <ColumnHeader>{column.column_header}</ColumnHeader>
+            {column?.column_header && (
+              <ColumnHeader>{column.column_header}</ColumnHeader>
+            )}
             <NavItemsContainer>
               {column.nav_items.map((item, itemIndex) => {
                 const formattedIconString = item.icon.replace(/\s+/g, "");
