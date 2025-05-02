@@ -17,18 +17,8 @@ import LinkArrow from "assets/svg/LinkArrow.svg";
 import LanguageGlobe from "assets/svg/languageglobe.svg";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import AnchorNavigator from "@/components/globalComponents/AnchorNavigator";
-import { storyblokInit, apiPlugin } from "@storyblok/react";
-import { getStoryblokApi } from "@/lib/storyblok";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const storyblokApi = storyblokInit({
-  accessToken: process.env.NEXT_PUBLIC_STORYBLOK_PREVIEW_TOKEN,
-  use: [apiPlugin],
-  apiOptions: {
-    region: "us",
-  },
-});
 
 const Nav = ({ blok }) => {
   const router = useRouter();
@@ -76,29 +66,18 @@ const Nav = ({ blok }) => {
     ? slugParts.slice(1).join("/")
     : slugParts.join("/");
 
-  const handleNavigate = async (locale) => {
+  const handleNavigate = (locale) => {
     const basePath = locale === "en" ? "" : `/${locale}`;
     const newPath = nonHomeSlug
       ? `${basePath}/${nonHomeSlug}`
       : basePath || "/";
 
-    try {
-      const storySlug = nonHomeSlug || "home";
-      
-      const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
-        version: "published",
-        language: locale,
-      });
-
-      console.log("data", data);
-      if (data?.story) {
-        router.push(newPath);
-      } else {
-        setTooltipMessage("This page does not exist in the selected language");
-        setShowTooltip(true);
-        setTimeout(() => setShowTooltip(false), 3000);
-      }
-    } catch (error) {
+    // If we're on a valid page (has content), allow navigation
+    // If we're on a non-existent page, show tooltip
+    if (blok) {
+      router.push(newPath);
+    } else {
+      console.log("path does not exist");
       setTooltipMessage("This page does not exist in the selected language");
       setShowTooltip(true);
       setTimeout(() => setShowTooltip(false), 3000);
