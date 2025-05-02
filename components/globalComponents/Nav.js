@@ -17,9 +17,18 @@ import LinkArrow from "assets/svg/LinkArrow.svg";
 import LanguageGlobe from "assets/svg/languageglobe.svg";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import AnchorNavigator from "@/components/globalComponents/AnchorNavigator";
-import { getStoryblokApi } from "@storyblok/react";
+import { storyblokInit, apiPlugin } from "@storyblok/react";
+import { getStoryblokApi } from "@/lib/storyblok";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const storyblokApi = storyblokInit({
+  accessToken: process.env.NEXT_PUBLIC_STORYBLOK_PREVIEW_TOKEN,
+  use: [apiPlugin],
+  apiOptions: {
+    region: "us",
+  },
+});
 
 const Nav = ({ blok }) => {
   const router = useRouter();
@@ -74,13 +83,13 @@ const Nav = ({ blok }) => {
       : basePath || "/";
 
     try {
-      const storyblokApi = getStoryblokApi();
       const storySlug = nonHomeSlug || "home";
       
       const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
         version: "published",
         language: locale,
       });
+
       console.log("data", data);
       if (data?.story) {
         router.push(newPath);
