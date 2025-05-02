@@ -1,20 +1,20 @@
-'use client';
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { usePathname } from 'next/navigation';
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import media from 'styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import Button from './Button';
-import text from '@/styles/text';
-import colors from '@/styles/colors';
-import Icons from '@/components/renderers/Icons';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-import Image from './Image';
-import LinkArrow from 'assets/svg/LinkArrow.svg';
-import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
+"use client";
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { usePathname } from "next/navigation";
+import styled, { ThemeProvider } from "styled-components";
+import { useAvailableThemes } from "@/context/ThemeContext";
+import { storyblokEditable } from "@storyblok/react/rsc";
+import media from "styles/media";
+import RichTextRenderer from "@/components/renderers/RichTextRenderer";
+import Button from "./Button";
+import text from "@/styles/text";
+import colors from "@/styles/colors";
+import Icons from "@/components/renderers/Icons";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import Image from "./Image";
+import LinkArrow from "assets/svg/LinkArrow.svg";
+import AnchorNavigator from "@/components/globalComponents/AnchorNavigator";
 
 gsap.registerPlugin(ScrollTrigger);
 const MobileNav = ({ blok }) => {
@@ -25,41 +25,43 @@ const MobileNav = ({ blok }) => {
   let currentNavItems = blok.english_nav_items;
   const isOpen = useRef(false);
   // console.log(blok);
-  if (path.startsWith('/de')) {
+  if (path.startsWith("/de")) {
     currentNavItems = blok.german_nav_items;
-  } else if (path.startsWith('/fr')) {
+  } else if (path.startsWith("/fr")) {
     currentNavItems = blok.french_nav_items;
   }
 
   const handleNavigate = (locale) => {
-    const basePath = locale === 'en' ? '' : `/${locale}`;
-    const path = nonHomeSlug ? `${basePath}/${nonHomeSlug}` : basePath || '/';
+    const basePath = locale === "en" ? "" : `/${locale}`;
+    const path = nonHomeSlug ? `${basePath}/${nonHomeSlug}` : basePath || "/";
     router.push(path);
   };
   const mappedNav = currentNavItems.map((item, index) => (
     <Tab key={`tab-${index}`}>
-      <TabHeader className='tabHeader'>{item.tab_name}</TabHeader>
-      <TabDropdown className='tabDropdowns' id={`tabHeader-${index}`}>
+      <TabHeader className="tabHeader">{item.tab_name}</TabHeader>
+      <TabDropdown className="tabDropdowns" id={`tabHeader-${index}`}>
         {item.tab_columns.map((column, colIndex) => (
           <NavItemsDiv key={`column-${colIndex}`}>
-            <ColumnHeader>{column.column_header}</ColumnHeader>
+            {column?.column_header && (
+              <ColumnHeader>{column.column_header}</ColumnHeader>
+            )}
             <NavItemsContainer>
               {column.nav_items.map((item, itemIndex) => {
-                const formattedIconString = item.icon.replace(/\s+/g, '');
+                const formattedIconString = item.icon.replace(/\s+/g, "");
                 const IconComponent = Icons[formattedIconString] || null;
-                const rawUrl = item.item_link?.cached_url || '#';
+                const rawUrl = item.item_link?.cached_url || "#";
                 const isExternal =
-                  rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
+                  rawUrl.startsWith("http://") || rawUrl.startsWith("https://");
                 const normalizedUrl = isExternal
                   ? rawUrl
-                  : rawUrl.startsWith('/')
-                  ? rawUrl
-                  : `/${rawUrl}`;
+                  : rawUrl.startsWith("/")
+                    ? rawUrl
+                    : `/${rawUrl}`;
 
                 const handleClick = () => {
-                  if (normalizedUrl === '#') return;
+                  if (normalizedUrl === "#") return;
                   if (isExternal) {
-                    window.open(normalizedUrl, '_blank', 'noopener,noreferrer');
+                    window.open(normalizedUrl, "_blank", "noopener,noreferrer");
                   } else {
                     window.location.href = normalizedUrl;
                   }
@@ -71,12 +73,12 @@ const MobileNav = ({ blok }) => {
                     card={item.card}
                     card_size={item.card_size}
                     onClick={handleClick}
-                    role='link'
+                    role="link"
                     tabIndex={0}
                   >
                     {item.card &&
                       item.card_size &&
-                      item.card_size !== 'small' && (
+                      item.card_size !== "small" && (
                         <ImageWrapper card_size={item.card_size}>
                           <Image images={item?.card_image?.[0].media} />
                         </ImageWrapper>
@@ -93,11 +95,11 @@ const MobileNav = ({ blok }) => {
                       <NavItemCopy card_size={item.card_size}>
                         <RichTextRenderer document={item.item_copy} />
                       </NavItemCopy>
-                      {item.card_size === 'medium' && (
+                      {item.card_size === "medium" && (
                         <Link
                           href={normalizedUrl}
-                          target={isExternal ? '_blank' : '_self'}
-                          rel={isExternal ? 'noopener noreferrer' : undefined}
+                          target={isExternal ? "_blank" : "_self"}
+                          rel={isExternal ? "noopener noreferrer" : undefined}
                           onClick={(e) => e.stopPropagation()}
                         >
                           Learn More
@@ -118,24 +120,20 @@ const MobileNav = ({ blok }) => {
   ));
 
   useEffect(() => {
-    
     const mobileAnchorTl = gsap.timeline({
       scrollTrigger: {
-        start: '2% 1%',
-        end: '10% 90%',
+        start: "2% 1%",
+        end: "10% 90%",
         // markers: true,
         scrub: true,
       },
     });
 
-    mobileAnchorTl.fromTo('.anchorNav', 
-      { autoAlpha: 0 }, 
-      { autoAlpha: 1 }
-    );
+    mobileAnchorTl.fromTo(".anchorNav", { autoAlpha: 0 }, { autoAlpha: 1 });
 
     ScrollTrigger.create({
-      trigger: '.mobileNav',
-      start: 'top top',
+      trigger: ".mobileNav",
+      start: "top top",
       end: () => `${document.body.scrollHeight - window.innerHeight}px`,
       pin: true,
       pinSpacing: false,
@@ -144,40 +142,40 @@ const MobileNav = ({ blok }) => {
   }, []);
 
   useEffect(() => {
-    gsap.set('.tabDropdowns', { height: 0, display: 'none' });
-    gsap.set('.mobileDropdown', { height: 0, display: 'none' });
+    gsap.set(".tabDropdowns", { height: 0, display: "none" });
+    gsap.set(".mobileDropdown", { height: 0, display: "none" });
 
-    const allTabs = gsap.utils.toArray('.tabHeader');
-    const hamburger = document.querySelector('.hamburger');
+    const allTabs = gsap.utils.toArray(".tabHeader");
+    const hamburger = document.querySelector(".hamburger");
 
     let tl = gsap.timeline({ paused: true });
     let mobileOpen = false; // <- track open state
 
     const hamburgerTl = gsap
       .timeline({ paused: true, reversed: true })
-      .set('#mainDrop', { padding: '4.673vw 0' })
-      .to('#mainDrop', { height: 'auto', duration: 0.5 })
-      .to('#slice-0', { top: '1.95vw', rotate: 45 }, '<')
-      .to('#slice-1', { opacity: 0 }, '<')
-      .to('#slice-2', { top: '-1.075vw', rotate: -45 }, '<');
+      .set("#mainDrop", { padding: "4.673vw 0" })
+      .to("#mainDrop", { height: "auto", duration: 0.5 })
+      .to("#slice-0", { top: "1.95vw", rotate: 45 }, "<")
+      .to("#slice-1", { opacity: 0 }, "<")
+      .to("#slice-2", { top: "-1.075vw", rotate: -45 }, "<");
 
     const toggleMobileDropdown = () => {
-      const dropdown = document.querySelector('.mobileDropdown');
+      const dropdown = document.querySelector(".mobileDropdown");
       if (!dropdown) return;
 
       if (mobileOpen) {
         gsap.to(dropdown, {
           height: 0,
           duration: 0.4,
-          ease: 'power2.inOut',
-          onComplete: () => gsap.set(dropdown, { display: 'none' }),
+          ease: "power2.inOut",
+          onComplete: () => gsap.set(dropdown, { display: "none" }),
         });
       } else {
-        gsap.set(dropdown, { display: 'flex' });
+        gsap.set(dropdown, { display: "flex" });
         gsap.to(dropdown, {
-          height: '100vh',
+          height: "100vh",
           duration: 0.4,
-          ease: 'power2.inOut',
+          ease: "power2.inOut",
         });
       }
 
@@ -191,7 +189,7 @@ const MobileNav = ({ blok }) => {
     };
 
     if (hamburger) {
-      hamburger.addEventListener('click', toggleMobileDropdown);
+      hamburger.addEventListener("click", toggleMobileDropdown);
     }
 
     const openDropdown = (index) => {
@@ -199,7 +197,7 @@ const MobileNav = ({ blok }) => {
 
       if (dropdownIndex.current === index && isOpen.current) {
         tl.to(`#tabHeader-${index}`, { height: 0 }).set(`#tabHeader-${index}`, {
-          display: 'none',
+          display: "none",
         });
         isOpen.current = false;
         dropdownIndex.current = null;
@@ -210,25 +208,25 @@ const MobileNav = ({ blok }) => {
       dropdownIndex.current = index;
       isOpen.current = true;
 
-      tl.to('.tabDropdowns', { height: 0 })
-        .set('.tabDropdowns', { display: 'none' }, '>-0.15')
-        .set(`#tabHeader-${index}`, { display: 'flex' })
-        .to(`#tabHeader-${index}`, { height: 'auto' });
+      tl.to(".tabDropdowns", { height: 0 })
+        .set(".tabDropdowns", { display: "none" }, ">-0.15")
+        .set(`#tabHeader-${index}`, { display: "flex" })
+        .to(`#tabHeader-${index}`, { height: "auto" });
 
       tl.play();
     };
 
     allTabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => openDropdown(index));
+      tab.addEventListener("click", () => openDropdown(index));
     });
 
     return () => {
       allTabs.forEach((tab, index) => {
-        tab.removeEventListener('click', () => openDropdown(index));
+        tab.removeEventListener("click", () => openDropdown(index));
       });
 
       if (hamburger) {
-        hamburger.removeEventListener('click', toggleMobileDropdown);
+        hamburger.removeEventListener("click", toggleMobileDropdown);
       }
     };
   }, []);
@@ -253,16 +251,16 @@ const MobileNav = ({ blok }) => {
           </BannerLink>
         </Banner>
       </TopNav>
-      <MainWrapper className='mainNavWrapper mobileNav'>
-        <a href='/'>
-          <VasionLogo src='/images/logos/vasion-logo-purple.webp' />
+      <MainWrapper className="mainNavWrapper mobileNav">
+        <a href="/">
+          <VasionLogo src="/images/logos/vasion-logo-purple.webp" />
         </a>
-        <HamburgerContainer className='hamburger'>
-          <HamSlice id='slice-0' />
-          <ShortHamSlice id='slice-1' />
-          <HamSlice id='slice-2' />
+        <HamburgerContainer className="hamburger">
+          <HamSlice id="slice-0" />
+          <ShortHamSlice id="slice-1" />
+          <HamSlice id="slice-2" />
         </HamburgerContainer>
-        <Dropdown className='mobileDropdown'>{mappedNav}</Dropdown>
+        <Dropdown className="mobileDropdown">{mappedNav}</Dropdown>
         <AnchorNavigator />
       </MainWrapper>
     </>
@@ -292,7 +290,7 @@ const Banner = styled.div`
 `;
 const TopNav = styled.div`
   ${media.mobile} {
-    background-image: url('images/TopBar_M.png');
+    background-image: url("images/TopBar_M.png");
     background-color: ${colors.darkPurple};
     display: flex;
     flex-direction: row;
@@ -332,11 +330,11 @@ const ImageWrapper = styled.div`
   ${media.mobile} {
     border-radius: 0.417vw;
     min-height: ${(props) =>
-      props.card_size === 'large' ? '17.083vw' : '7.617vw'};
+      props.card_size === "large" ? "17.083vw" : "7.617vw"};
     min-width: ${(props) =>
-      props.card_size === 'large' ? '32.292vw' : '8.496vw'};
+      props.card_size === "large" ? "32.292vw" : "8.496vw"};
     max-width: ${(props) =>
-      props.card_size === 'large' ? '32.292vw' : 'unset'};
+      props.card_size === "large" ? "32.292vw" : "unset"};
   }
 `;
 const KeyDiv = styled.div``;
@@ -347,7 +345,7 @@ const NavItemSubCopy = styled.div`
 const NavItemCopy = styled.div`
   ${media.mobile} {
     margin-left: ${(props) =>
-      props.card_size === 'large' ? '3.333vw' : 'unset'};
+      props.card_size === "large" ? "3.333vw" : "unset"};
   }
 `;
 const NavCopy = styled.div`
@@ -360,15 +358,15 @@ const NavCopy = styled.div`
 const NavIconWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-self: ${(props) => (props.card ? 'start' : 'unset')};
+  align-self: ${(props) => (props.card ? "start" : "unset")};
 
   ${media.mobile} {
-    width: ${(props) => (props.card && props.card_size ? '54px' : '20px')};
-    height: ${(props) => (props.card && props.card_size ? 'unset' : '20px')};
+    width: ${(props) => (props.card && props.card_size ? "54px" : "20px")};
+    height: ${(props) => (props.card && props.card_size ? "unset" : "20px")};
   }
 
   svg {
-    align-self: ${(props) => (props.card ? 'start' : 'unset')};
+    align-self: ${(props) => (props.card ? "start" : "unset")};
     width: 100%;
     height: 100%;
   }
@@ -379,49 +377,49 @@ const NavItem = styled.div`
     display: flex;
     flex-direction: row;
     align-items: ${(props) =>
-      props.card_size === 'large' ? 'start' : 'center'};
+      props.card_size === "large" ? "start" : "center"};
     background: ${(props) =>
-      props.card_size === 'medium' ? colors.lightPurpleGrey : 'unset'};
+      props.card_size === "medium" ? colors.lightPurpleGrey : "unset"};
     gap: ${(props) =>
-      props.card_size === 'small'
-        ? '3.333vw'
-        : props.card_size === 'medium'
-        ? '3.333vw'
-        : props.card_size === 'large'
-        ? '3.333vw'
-        : '0.833vw'};
+      props.card_size === "small"
+        ? "3.333vw"
+        : props.card_size === "medium"
+          ? "3.333vw"
+          : props.card_size === "large"
+            ? "3.333vw"
+            : "0.833vw"};
 
     width: ${(props) =>
-      props.card_size === 'small'
-        ? '100%'
-        : props.card_size === 'medium'
-        ? '93.333vw'
-        : props.card_size === 'large'
-        ? '93.333vw'
-        : '50%'};
+      props.card_size === "small"
+        ? "100%"
+        : props.card_size === "medium"
+          ? "93.333vw"
+          : props.card_size === "large"
+            ? "93.333vw"
+            : "50%"};
 
     padding: ${(props) =>
-      props.card_size === 'small'
-        ? '1.667vw 2.5vw'
-        : props.card_size === 'medium'
-        ? '0.833vw 5vw 0.833vw 0.833vw'
-        : props.card_size === 'large'
-        ? '1.667vw 3.333vw 1.667vw 1.667vw'
-        : '1.667vw 3.333vw 1.667vw 1.667vw'};
+      props.card_size === "small"
+        ? "1.667vw 2.5vw"
+        : props.card_size === "medium"
+          ? "0.833vw 5vw 0.833vw 0.833vw"
+          : props.card_size === "large"
+            ? "1.667vw 3.333vw 1.667vw 1.667vw"
+            : "1.667vw 3.333vw 1.667vw 1.667vw"};
     border-radius: 0.391vw;
     height: ${(props) =>
-      props.card_size === 'large'
-        ? '20.417vw'
-        : props.card_size === 'medium'
-        ? '18.75vw'
-        : 'auto'};
+      props.card_size === "large"
+        ? "20.417vw"
+        : props.card_size === "medium"
+          ? "18.75vw"
+          : "auto"};
   }
   &:hover {
     background: ${colors.lightPurpleGrey};
     box-shadow: ${(props) =>
       props.card
-        ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
-        : 'unset'};
+        ? "0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)"
+        : "unset"};
     path {
       fill: ${(props) =>
         props.card ? colors.lightPurple : colors.primaryOrange};

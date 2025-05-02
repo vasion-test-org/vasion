@@ -34,7 +34,7 @@ const ImageWrapper = styled.img`
   display: block;
   /* max-width: inherit;  */
   border-radius: ${(props) => `${props.borderradius || 0}px`};
-  
+
   ${media.fullWidth} {
     border-radius: ${(props) => `${props.borderradius || 0}px`};
   }
