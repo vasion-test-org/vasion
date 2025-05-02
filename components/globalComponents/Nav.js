@@ -66,18 +66,17 @@ const Nav = ({ blok }) => {
     ? slugParts.slice(1).join("/")
     : slugParts.join("/");
 
-  const handleNavigate = (locale) => {
+  const handleNavigate = async (locale) => {
     const basePath = locale === "en" ? "" : `/${locale}`;
     const newPath = nonHomeSlug
       ? `${basePath}/${nonHomeSlug}`
       : basePath || "/";
 
-    // If we're on a valid page (has content), allow navigation
-    // If we're on a non-existent page, show tooltip
-    if (blok) {
-      router.push(newPath);
-    } else {
-      console.log("path does not exist");
+    try {
+      // Try to prefetch the route - this will fail if the route doesn't exist
+      await router.prefetch(newPath);
+        router.push(newPath);
+    } catch (error) {
       setTooltipMessage("This page does not exist in the selected language");
       setShowTooltip(true);
       setTimeout(() => setShowTooltip(false), 3000);
