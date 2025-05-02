@@ -81,9 +81,9 @@ const Icons = {
   workflow: Workflow,
   rocket_launch: Rocket,
   plain_star: PlainStar,
-  aws_textract: AwsTextract,
-  aws_s3: AwsS3,
-  fingerprint: Fingerprint,
+  // aws_textract: AwsTextract,
+  // aws_s3: AwsS3,
+  // fingerprint: Fingerprint,
 };
 
 export default Icons;
