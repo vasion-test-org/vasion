@@ -9,9 +9,49 @@ import { getClick } from '@/functions/navigation';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
 
-const contentTypeTags = ['white paper', 'customer stories', 'guide', 'FAQs', 'playbooks', 'ebooks'];
+const resourceImages = {
+  topic: '/images/resources/Pillar-Piece.webp',
+  faq: '/images/resources/FAQ.webp',
+  caseStudy1: '/images/resources/Case-Study-Generic-1.webp',
+  caseStudy2: '/images/resources/Case-Study-Generic-2.webp',
+  caseStudy3: '/images/resources/Case-Study-Generic.webp',
+  whitePaper1: '/images/resources/White-Paper-1.webp',
+  whitePaper2: '/images/resources/White-Paper.webp',
+  whitePaperMedium: '/images/resources/White-Paper-Medium.webp',
+  video1: '/images/resources/Video-1.webp',
+  video2: '/images/resources/Video.webp',
+  solutionBrief: '/images/resources/Solution-Brief.webp',
+  playbook1: '/images/resources/Playbook-1.webp',
+  playbook2: '/images/resources/Playbook-2.webp',
+  playbook3: '/images/resources/Playbook.webp',
+  infographic1: '/images/resources/Infographic-1.webp',
+  infographic2: '/images/resources/Infographic.webp',
+  infographicMedium: '/images/resources/Infographic-Medium.webp',
+  guide1: '/images/resources/Guide-1.webp',
+  guide2: '/images/resources/Guide.webp'
+};
+
+const contentTypeTags = ['white paper', 'customer story', 'guide', 'faq', 'playbook', 'solution brief', 'video', 'topic', 'infographic'];
+
+const getRandomImageForType = (type) => {
+  const typeImages = {
+    'white paper': [resourceImages.whitePaper1, resourceImages.whitePaper2, resourceImages.whitePaperMedium],
+    'guide': [resourceImages.guide1, resourceImages.guide2],
+    'faq': [resourceImages.faq],
+    'playbook': [resourceImages.playbook1, resourceImages.playbook2, resourceImages.playbook3],
+    'solution brief': [resourceImages.solutionBrief],
+    'video': [resourceImages.video1, resourceImages.video2],
+    'topic': [resourceImages.topic],
+    'infographic': [resourceImages.infographic1, resourceImages.infographic2, resourceImages.infographicMedium],
+    'customer story': [resourceImages.caseStudy1, resourceImages.caseStudy2, resourceImages.caseStudy3]
+  };
+
+  const images = typeImages[type.toLowerCase()] || [];
+  return images[Math.floor(Math.random() * images.length)] || resourceImages.topic;
+};
 
 const ResourceCard = ({ content, paginated, index, borderradius }) => {
+  // console.log(content.content.page_thumbnail.filename)
   const oddImages = [
     '/images/RandomResource1.webp',
     '/images/RandomResource2.webp',
@@ -23,19 +63,20 @@ const ResourceCard = ({ content, paginated, index, borderradius }) => {
     '/images/RandomResource6.webp',
   ];
 
-  const imagePool = index % 2 === 0 ? evenImages : oddImages;
-  const randomImage = imagePool[Math.floor(Math.random() * imagePool.length)];
-
   const contentTypeTag = content.tag_list?.find(tag => 
     contentTypeTags.includes(tag.toLowerCase())
   );
+
+  const imageToUse = contentTypeTag 
+    ? getRandomImageForType(contentTypeTag)
+    : (index % 2 === 0 ? evenImages : oddImages)[Math.floor(Math.random() * 3)];
 
   return (
     <CardWrapper paginated={paginated}>
       <ImageWrapper>
         <Image
-          imageAlt={content.Image?.alt || 'Random Resource Image'}
-          filename={randomImage}
+          imageAlt={content.Image?.alt || 'Resource Image'}
+          filename={content?.content?.page_thumbnail?.filename || imageToUse}
           borderradius={borderradius || content.image_border}
         />
       </ImageWrapper>

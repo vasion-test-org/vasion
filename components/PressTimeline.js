@@ -8,6 +8,7 @@ import text from "styles/text";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import RichTextRenderer from "./renderers/RichTextRenderer";
+import { getSmoother } from "@/components/ScrollSmoothWrapper";
 
 const PressTimeline = ({ blok }) => {
   const [filteredCards, setFilteredCards] = useState([]);
@@ -44,9 +45,6 @@ const PressTimeline = ({ blok }) => {
     gsap.set(starElement, { y: 0 });
 
     gsap.killTweensOf(starElement);
-    if (gsap.getById("timeline-scroll")) {
-      gsap.getById("timeline-scroll").kill();
-    }
 
     gsap.to(starElement, {
       scrollTrigger: {

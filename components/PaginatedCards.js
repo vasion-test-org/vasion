@@ -13,6 +13,7 @@ import SideArrow from '@/assets/svg/side-arrow.svg';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
 import ResourceCard from './globalComponents/ResourceCard';
+import ChrevronDown from '@/assets/svg/selectDownChevron.svg';
 
 const PaginatedCards = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -22,12 +23,12 @@ const PaginatedCards = ({ blok }) => {
   const cardsLoop = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-
-  /* const solutionsTags = ['print automation', 'serverless printing', 'digital transformation', 'security & compliance', 'output automation', 'cost management', 'process automation', 'paperless process', 'sustainability'];
+  const [selectedFilters, setSelectedFilters] = useState([]);
+   const solutionsTags = ['print automation', 'serverless printing', 'digital transformation', 'security & compliance', 'output automation', 'cost management', 'process automation', 'paperless process', 'sustainability'];
   const productTags = ['capture', 'workflow', 'signature', 'print', 'content management', 'storage', 'reporting', 'templates', 'admin', 'output automation', 'advanced security', 'cost management'];
-  const contentTypeTags = ['white paper', 'customer stories', 'guide', 'FAQs', 'playbooks', 'ebooks'];
+  const contentTypeTags = ['white paper', 'customer story', 'guide', 'FAQ', 'playbook', 'solution brief', 'video', 'topic'];
   const industryTags = ['healthcare'];
-  const newsTags = ['media mentions', 'videos'] */
+  const newsTags = ['media mentions', 'videos'] 
 console.log(blok.cards)
 
   const filteredCards = blok.cards.filter((card) => {
@@ -40,15 +41,15 @@ console.log(blok.cards)
       cardTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (card.name && card.name.toLowerCase().includes(searchQuery.toLowerCase()));
     
-    /* const matchesFilters = selectedFilters.length === 0 || 
+    const matchesFilters = selectedFilters.length === 0 || 
       selectedFilters.every((filter) =>
         card.tag_list?.some((tag) => tag.toLowerCase() === filter.toLowerCase())
-      ); */
+      ); 
     
-    return matchesSearch; // && matchesFilters;
+    return matchesSearch && matchesFilters;
   });
 
-  /* const availableTags = {
+   const availableTags = {
     solutions: new Set(),
     products: new Set(),
     contentTypes: new Set(),
@@ -94,7 +95,7 @@ console.log(blok.cards)
     if (newSelectedFilters.length !== selectedFilters.length) {
       setSelectedFilters(newSelectedFilters);
     }
-  }, [filteredCards]); */
+  }, [filteredCards]); 
 
   const capitalizeFirstLetter = (str) => {
     return str
@@ -102,11 +103,11 @@ console.log(blok.cards)
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   };
-  /* const countTagOccurrences = (tag) => {
+   const countTagOccurrences = (tag) => {
     return blok.cards.filter((card) =>
       card.tag_list?.some((t) => t.toLowerCase() === tag.toLowerCase())
     ).length;
-  }; */
+  }; 
   
   const mappedCards = [];
   for (let i = 0; i < filteredCards.length; i += 6) {
@@ -213,47 +214,63 @@ console.log(blok.cards)
   });
 
   useEffect(() => {
+    // Clean up previous animation
+    if (cardsLoop.current) {
+      cardsLoop.current.kill();
+      cardsLoop.current = null;
+    }
+
+    // Reset state
+    currentIndex.current = 0;
+    setCurrentPage(0);
+
+    // Get new card chunks
     const cardChunks = gsap.utils.toArray(".cardChunks");
     const totalItems = cardChunks.length;
 
-    cardsLoop.current = horizontalLoop(cardChunks, {
-      paused: true,
-      center: true,
-    });
+    // Initialize new animation if we have cards
+    if (totalItems > 0) {
+      cardsLoop.current = horizontalLoop(cardChunks, {
+        paused: true,
+        center: true,
+      });
+    }
 
+    // Set up navigation handlers
     const nextBtn = document.querySelector(".next");
     const prevBtn = document.querySelector(".prev");
 
     const handleNext = () => {
-      const newIndex = (currentIndex.current + 1) % totalItems;
+      if (!cardsLoop.current || totalItems === 0) return;
       cardsLoop.current.next({ duration: 0.4, ease: "power1.inOut" });
-      currentIndex.current = newIndex;
-      setCurrentPage(newIndex);
+      currentIndex.current = (currentIndex.current + 1) % totalItems;
+      setCurrentPage(currentIndex.current);
     };
 
     const handlePrev = () => {
-      const newIndex = (currentIndex.current - 1 + totalItems) % totalItems;
+      if (!cardsLoop.current || totalItems === 0) return;
       cardsLoop.current.previous({ duration: 0.4, ease: "power1.inOut" });
-      currentIndex.current = newIndex;
-      setCurrentPage(newIndex);
+      currentIndex.current = (currentIndex.current - 1 + totalItems) % totalItems;
+      setCurrentPage(currentIndex.current);
     };
 
-    nextBtn.addEventListener("click", handleNext);
-    prevBtn.addEventListener("click", handlePrev);
+    // Add event listeners
+    if (nextBtn) nextBtn.addEventListener("click", handleNext);
+    if (prevBtn) prevBtn.addEventListener("click", handlePrev);
 
+    // Cleanup function
     return () => {
-      nextBtn.removeEventListener("click", handleNext);
-      prevBtn.removeEventListener("click", handlePrev);
+      if (cardsLoop.current) {
+        cardsLoop.current.kill();
+        cardsLoop.current = null;
+      }
+      if (nextBtn) nextBtn.removeEventListener("click", handleNext);
+      if (prevBtn) prevBtn.removeEventListener("click", handlePrev);
     };
-  }, []);
+  }, [filteredCards.length]); // Only depend on the length of filtered cards
 
   useEffect(() => {
-    // if (cardsLoop.current) {
-    //   cardsLoop.current.kill();
-    //   cardsLoop.current = null;
-    // }
-
-    /* const manuDropDownTL = gsap
+    const manuDropDownTL = gsap
       .timeline({ paused: true })
       .set('#solutionsOptions', { display: 'flex', height: 0 })
       .fromTo('#solutionsOptions', 
@@ -294,102 +311,122 @@ console.log(blok.cards)
       );
 
     const handleManuDrop = () => {
+      const solutionsDrop = document.querySelector('#solutionsDrop');
       if (manuDropDownTL.paused() || manuDropDownTL.reversed()) {
         platformDropDownTL.reverse();
         featureDropDownTL.reverse();
         industryDropDownTL.reverse();
         newsTypeDropDownTL.reverse();
         manuDropDownTL.play();
+        solutionsDrop?.classList.add('active');
       } else {
         manuDropDownTL.reverse();
+        solutionsDrop?.classList.remove('active');
       }
     };
 
     const handlePlatformDrop = () => {
+      const productDrop = document.querySelector('#productDrop');
       if (platformDropDownTL.paused() || platformDropDownTL.reversed()) {
         manuDropDownTL.reverse();
         featureDropDownTL.reverse();
         industryDropDownTL.reverse();
         newsTypeDropDownTL.reverse();
         platformDropDownTL.play();
+        productDrop?.classList.add('active');
       } else {
         platformDropDownTL.reverse();
+        productDrop?.classList.remove('active');
       }
     };
 
     const handleFeatureDrop = () => {
+      const contentTypesDrop = document.querySelector('#contentTypesDrop');
       if (featureDropDownTL.paused() || featureDropDownTL.reversed()) {
         manuDropDownTL.reverse();
         platformDropDownTL.reverse();
         industryDropDownTL.reverse();
         newsTypeDropDownTL.reverse();
         featureDropDownTL.play();
+        contentTypesDrop?.classList.add('active');
       } else {
         featureDropDownTL.reverse();
+        contentTypesDrop?.classList.remove('active');
       }
     };
 
     const handleIndustryDrop = () => {
+      const industryTypesDrop = document.querySelector('#industryTypesDrop');
       if (industryDropDownTL.paused() || industryDropDownTL.reversed()) {
         manuDropDownTL.reverse();
         platformDropDownTL.reverse();
         featureDropDownTL.reverse();
         newsTypeDropDownTL.reverse();
         industryDropDownTL.play();
+        industryTypesDrop?.classList.add('active');
       } else {
         industryDropDownTL.reverse();
+        industryTypesDrop?.classList.remove('active');
       }
     };
 
     const handleNewsTypeDrop = () => {
+      const newsTypeTagsDrop = document.querySelector('#newsTypeTagsDrop');
       if (newsTypeDropDownTL.paused() || newsTypeDropDownTL.reversed()) {
         manuDropDownTL.reverse();
         platformDropDownTL.reverse();
         featureDropDownTL.reverse();
         industryDropDownTL.reverse();
         newsTypeDropDownTL.play();
+        newsTypeTagsDrop?.classList.add('active');
       } else {
         newsTypeDropDownTL.reverse();
+        newsTypeTagsDrop?.classList.remove('active');
       }
     };
 
-    document
-      .querySelector('#solutionsDrop')
-      ?.addEventListener('click', handleManuDrop);
-    document
-      .querySelector('#productDrop')
-      ?.addEventListener('click', handlePlatformDrop);
-    document
-      .querySelector('#contentTypesDrop')
-      ?.addEventListener('click', handleFeatureDrop);
-    document
-      .querySelector('#industryTypesDrop')
-      ?.addEventListener('click', handleIndustryDrop);
-    document
-      .querySelector('#newsTypeTagsDrop')
-      ?.addEventListener('click', handleNewsTypeDrop);
+    // Add click event listeners
+    document.querySelector('#solutionsDrop')?.addEventListener('click', handleManuDrop);
+    document.querySelector('#productDrop')?.addEventListener('click', handlePlatformDrop);
+    document.querySelector('#contentTypesDrop')?.addEventListener('click', handleFeatureDrop);
+    document.querySelector('#industryTypesDrop')?.addEventListener('click', handleIndustryDrop);
+    document.querySelector('#newsTypeTagsDrop')?.addEventListener('click', handleNewsTypeDrop);
+
+    // Add click event listener to document to close dropdowns when clicking outside
+    const handleClickOutside = (event) => {
+      const dropdowns = [
+        '#solutionsDrop',
+        '#productDrop',
+        '#contentTypesDrop',
+        '#industryTypesDrop',
+        '#newsTypeTagsDrop'
+      ];
+      
+      if (!dropdowns.some(selector => event.target.closest(selector))) {
+        manuDropDownTL.reverse();
+        platformDropDownTL.reverse();
+        featureDropDownTL.reverse();
+        industryDropDownTL.reverse();
+        newsTypeDropDownTL.reverse();
+        
+        // Remove active class from all dropdowns
+        dropdowns.forEach(selector => {
+          document.querySelector(selector)?.classList.remove('active');
+        });
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
 
     return () => {
-      if (cardsLoop.current) {
-        cardsLoop.current.kill();
-      }
-      document
-        .querySelector('#solutionsDrop')
-        ?.removeEventListener('click', handleManuDrop);
-      document
-        .querySelector('#productDrop')
-        ?.removeEventListener('click', handlePlatformDrop);
-      document
-        .querySelector('#contentTypesDrop')
-        ?.removeEventListener('click', handleFeatureDrop);
-      document
-        .querySelector('#industryTypesDrop')
-        ?.removeEventListener('click', handleIndustryDrop);
-      document
-        .querySelector('#newsTypeTagsDrop')
-        ?.removeEventListener('click', handleNewsTypeDrop);
-    }; */
-  }, [filteredCards]);
+      document.querySelector('#solutionsDrop')?.removeEventListener('click', handleManuDrop);
+      document.querySelector('#productDrop')?.removeEventListener('click', handlePlatformDrop);
+      document.querySelector('#contentTypesDrop')?.removeEventListener('click', handleFeatureDrop);
+      document.querySelector('#industryTypesDrop')?.removeEventListener('click', handleIndustryDrop);
+      document.querySelector('#newsTypeTagsDrop')?.removeEventListener('click', handleNewsTypeDrop);
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   return (
     <ThemeProvider theme={selectedTheme}>
@@ -398,10 +435,10 @@ console.log(blok.cards)
         spacing={blok.section_spacing}
       >
         <FiltersWrapper>
-          {/* <Filters>
+          <Filters>
             {availableTags.solutions.size > 0 && (
               <StyledSelect id='solutionsDrop'>
-                Solutions
+                <StyledSelectHeader>Solutions <ChrevronDown className="chevron" /></StyledSelectHeader>
                 <OptionsContainer id='solutionsOptions'>
                   {[...availableTags.solutions].map((tag) => (
                     <Option
@@ -425,7 +462,7 @@ console.log(blok.cards)
 
             {availableTags.products.size > 0 && (
               <StyledSelect id='productDrop'>
-                Product
+                <StyledSelectHeader>Product<ChrevronDown className="chevron" /></StyledSelectHeader>
                 <OptionsContainer id='productOptions'>
                   {[...availableTags.products].map((tag) => (
                     <Option
@@ -449,7 +486,7 @@ console.log(blok.cards)
 
             {availableTags.contentTypes.size > 0 && (
               <StyledSelect id='contentTypesDrop'>
-                Content Types
+                <StyledSelectHeader>Content Types<ChrevronDown className="chevron" /></StyledSelectHeader>
                 <OptionsContainer id='contentTypesOptions'>
                   {[...availableTags.contentTypes].map((tag) => (
                     <Option
@@ -473,7 +510,7 @@ console.log(blok.cards)
 
             {availableTags.industryType.size > 0 && (
               <StyledSelect id='industryTypesDrop'>
-                Industry Type
+                <StyledSelectHeader>Industry Type <ChrevronDown className="chevron" /></StyledSelectHeader>
                 <OptionsContainer id='industryTypesOptions'>
                   {[...availableTags.industryType].map((tag) => (
                     <Option
@@ -497,7 +534,7 @@ console.log(blok.cards)
 
             {availableTags.newsTypeTags.size > 0 && (
               <StyledSelect id='newsTypeTagsDrop'>
-                News Type
+                <StyledSelectHeader>News Type <ChrevronDown className="chevron" /></StyledSelectHeader>
                 <OptionsContainer id='newsTypeTagsOptions'>
                   {[...availableTags.newsTypeTags].map((tag) => (
                     <Option
@@ -518,7 +555,7 @@ console.log(blok.cards)
                 </OptionsContainer>
               </StyledSelect>
             )}
-          </Filters> */}
+          </Filters>
          {blok.filters && <SearchBar>
             <SearchInput
               type="text"
@@ -528,14 +565,14 @@ console.log(blok.cards)
             />
           </SearchBar>
 }
-          {/* <SelectedFilters>
+          <SelectedFilters>
             {selectedFilters.map((filter) => (
               <SelectedFilterTag key={filter} onClick={() => setSelectedFilters(selectedFilters.filter(f => f !== filter))}>
                 <Circle src="/images/minusCircle.webp" />{" "}
-                {capitalizeFirstLetter(filter)}
+                {capitalizeFirstLetter(filter)} <TagCounter>{countTagOccurrences(filter)}</TagCounter>
               </SelectedFilterTag>
             ))}
-          </SelectedFilters> */}
+          </SelectedFilters>
         </FiltersWrapper>
 
         {blok.card_type === 'event' && (
@@ -567,6 +604,37 @@ console.log(blok.cards)
   );
 };
 
+const StyledSelectHeader = styled.div`
+  ${text.bodySm};
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  .chevron {
+    width: 1.25vw;
+    height: 1.25vw;
+    transform: rotate(-90deg);
+    transition: all 0.2s ease-in-out;
+    path {
+      fill: ${colors.txtSubtle};
+    }
+
+    ${media.mobile} {
+      width: 4.167vw;
+      height: 4.167vw;
+    }
+  }
+
+  ${media.fullWidth} {
+    .chevron {
+      width: 20px;
+      height: 20px;
+    }
+  }
+`;
+
 const SelectedFilterTag = styled.div`
 cursor: pointer;
   ${text.bodySm};
@@ -583,17 +651,23 @@ cursor: pointer;
 
   ${media.fullWidth} {
     height: 26px;
-    padding: 20px;
+    padding: 4px;
+      gap: 8px;
+       border-radius: 6px;
   }
 
   ${media.tablet} {
-    height: 5.859vw;
-    padding: 1.953vw;
+     height: 2.539vw;
+    padding: 0.391vw;
+    gap: 0.781vw;
+    border-radius: 0.586vw;
   }
 
   ${media.mobile} {
-    height: 12.15vw;
-    padding: 4.673vw;
+    height: 5.417vw;
+    padding: 1.5vw;
+    gap: 1.667vw;
+    border-radius: 1.25vw;
   }
 `;
 
@@ -669,10 +743,13 @@ const FiltersWrapper = styled.div`
   }
 
   ${media.tablet} {
+    width: 90.188vw;
     margin-bottom: 4.883vw;
+       gap: 0.781vw;
   }
 
   ${media.mobile} {
+  // flex-direction: column-reverse;
     margin-bottom: 10.417vw;
   }
 `;
@@ -690,17 +767,23 @@ const Option = styled.div`
 
   ${media.fullWidth} {
     height: 26px;
-    padding: 20px;
+    padding: 4px;
+      gap: 8px;
+       border-radius: 6px;
   }
 
   ${media.tablet} {
-    height: 5.859vw;
-    padding: 1.953vw;
+   height: 2.539vw;
+   padding: 0.391vw;
+      gap: 0.781vw ;
+       border-radius: 0.586vw;
   }
 
   ${media.mobile} {
-    height: 12.15vw;
-    padding: 4.673vw;
+    height: 5.417vw;
+       padding: 1.5vw;
+    gap: 1.667vw;
+       border-radius: 1.25vw;
   }
 
   &:hover {
@@ -722,28 +805,25 @@ const OptionsContainer = styled.div`
   border-radius: 0.375vw;
   border: ${colors.grey100};
   gap: 0.5vw;
-  /* top: 2vw;
-  left: 0vw; */
 
   ${media.fullWidth} {
     border-radius: 8px;
-    // top: 58px;
+      gap: 8px;
   }
 
   ${media.tablet} {
     border-radius: 0.781vw;
-    // top: 5.664vw;
+      gap: 0.781vw;
   }
 
   ${media.mobile} {
     border-radius: 1.869vw;
-    // top: 13.551vw;
+      gap: 1.667vw;
   }
 `;
 const StyledSelect = styled.div`
-${text.bodySm};
-  width: max-content;
-  /* height: 2.5vw; */
+  ${text.bodySm};
+  width: 13.125vw;
   border-radius: 0.5vw;
   cursor: pointer;
   position: relative;
@@ -754,27 +834,46 @@ ${text.bodySm};
   background: ${colors.white};
   border: 1px solid ${colors.grey100};
   height: fit-content;
-  /* min-width: 17.222vw; */
   padding: 0.5vw 0.75vw;
   color: ${colors.txtSubtle};
+  transition: all 0.2s ease-in-out;
 
   &:hover {
     border: 1px solid ${colors.lightPurple};
   }
 
+  &.active {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid ${colors.lightPurple};
+
+    ${StyledSelectHeader} {
+      .chevron {
+        transform: rotate(0deg);
+        path {
+          fill: ${colors.lightPurple};
+        }
+      }
+    }
+  }
+
   ${media.fullWidth} {
+    width: 210px;
     gap: 8px;
     padding: 8px 12px;
   }
 
   ${media.tablet} {
-    padding: 2.344vw;
-    /* gap: 3.906vw; */
+     width: 20.508vw;
+    gap: 0.781vw;
+    padding: 0.781vw 1.172vw;
+      border-radius: 0.781vw;
   }
 
   ${media.mobile} {
-    padding: 4.673vw;
-    /* gap: 4.673vw; */
+      width: 43.75vw;
+    gap: 1.667vw;
+    padding: 1.667vw 2.5vw;
+      border-radius: 1.667vw;
   }
 `;
 const PageNumberBlock = styled.div`
@@ -1115,7 +1214,7 @@ const RemoveButton = styled.button`
 
 const SearchBar = styled.div`
   ${text.bodySm};
-  width: max-content;
+  width: 13.125vw;
   border-radius: 0.5vw;
   cursor: pointer;
   position: absolute;
@@ -1137,16 +1236,24 @@ const SearchBar = styled.div`
   }
 
   ${media.fullWidth} {
+    width: 210px;
     gap: 8px;
     padding: 8px 12px;
   }
 
   ${media.tablet} {
-    padding: 2.344vw;
+      width: 20.508vw;
+    gap: 0.781vw;
+    padding: 0.781vw 1.172vw;
+      border-radius: 0.781vw;
   }
 
   ${media.mobile} {
-    padding: 4.673vw;
+  position: relative;
+    width:100%;
+    gap: 1.667vw;
+    padding: 1.667vw 2.5vw;
+      border-radius: 1.667vw;
   }
 `;
 
