@@ -17,7 +17,7 @@ import LinkArrow from "assets/svg/LinkArrow.svg";
 import LanguageGlobe from "assets/svg/languageglobe.svg";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import AnchorNavigator from "@/components/globalComponents/AnchorNavigator";
-import { getStoryblokApi } from "@/lib/storyblok";
+import { getStoryblokApi } from "@storyblok/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
