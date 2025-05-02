@@ -17,7 +17,7 @@ import LinkArrow from "assets/svg/LinkArrow.svg";
 import LanguageGlobe from "assets/svg/languageglobe.svg";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import AnchorNavigator from "@/components/globalComponents/AnchorNavigator";
-import { getStoryblokApi } from "@storyblok/react";
+import { getStoryblokApi } from "@/lib/storyblok";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -81,7 +81,7 @@ const Nav = ({ blok }) => {
         version: "published",
         language: locale,
       });
-
+      console.log("data", data);
       if (data?.story) {
         router.push(newPath);
       } else {
