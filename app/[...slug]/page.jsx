@@ -2,8 +2,6 @@ import { StoryblokStory } from '@storyblok/react/rsc';
 import { notFound } from 'next/navigation';
 import { getStoryblokApi } from '@/lib/storyblok';
 import { headers } from 'next/headers';
-import PageNotFoundModal from '../components/PageNotFoundModal';
-
 export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
@@ -77,7 +75,7 @@ export default async function DynamicPage({ params }) {
   const story = await fetchData(storySlug, locale);
 
   if (!story) {
-    return <PageNotFoundModal locale={locale} />;
+    return notFound();
   }
 
   return (
@@ -86,6 +84,7 @@ export default async function DynamicPage({ params }) {
     </div>
   );
 }
+
 
 async function fetchData(slug, locale) {
   const storyblokApi = getStoryblokApi();
@@ -116,6 +115,7 @@ async function fetchData(slug, locale) {
     }
   }
 }
+
 
 export async function generateStaticParams() {
   const storyblokApi = getStoryblokApi();
