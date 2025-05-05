@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import styled, { ThemeProvider } from "styled-components";
 import { useAvailableThemes } from "@/context/ThemeContext";
 import { storyblokEditable } from "@storyblok/react/rsc";
@@ -14,27 +14,73 @@ import Icons from "@/components/renderers/Icons";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Image from "./Image";
 import LinkArrow from "assets/svg/LinkArrow.svg";
+import LanguageGlobe from "assets/svg/languageglobe.svg";
 import AnchorNavigator from "@/components/globalComponents/AnchorNavigator";
+import { getStoryblokApi } from "@/lib/storyblok";
 
 gsap.registerPlugin(ScrollTrigger);
 const MobileNav = ({ blok }) => {
+  const router = useRouter();
   const path = usePathname();
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const dropdownIndex = useRef(null);
   let currentNavItems = blok.english_nav_items;
   const isOpen = useRef(false);
-  // console.log(blok);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipMessage, setTooltipMessage] = useState("");
+  const [activeLanguage, setActiveLanguage] = useState("en");
+
+  const slugParts = path.split("/").filter(Boolean);
+  const currentLocale = ["de", "fr"].includes(slugParts[0]) ? slugParts[0] : null;
+  const nonHomeSlug = currentLocale ? slugParts.slice(1).join("/") : slugParts.join("/");
+
+  useEffect(() => {
+    if (path.startsWith("/de")) {
+      setActiveLanguage("de");
+    } else if (path.startsWith("/fr")) {
+      setActiveLanguage("fr");
+    } else {
+      setActiveLanguage("en");
+    }
+  }, [path]);
+
   if (path.startsWith("/de")) {
     currentNavItems = blok.german_nav_items;
   } else if (path.startsWith("/fr")) {
     currentNavItems = blok.french_nav_items;
   }
 
-  const handleNavigate = (locale) => {
+  const handleNavigate = async (locale) => {
     const basePath = locale === "en" ? "" : `/${locale}`;
-    const path = nonHomeSlug ? `${basePath}/${nonHomeSlug}` : basePath || "/";
-    router.push(path);
+    const newPath = nonHomeSlug ? `${basePath}/${nonHomeSlug}` : basePath || "/";
+    
+    try {
+      const storyblokApi = getStoryblokApi();
+      const storySlug = nonHomeSlug || 'home';
+      
+      const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
+        version: 'published',
+        language: locale,
+      });
+
+      if (data.story) {
+        setActiveLanguage(locale);
+        router.push(newPath);
+      } else {
+        setTooltipMessage("This page is not yet available in the selected language");
+        setShowTooltip(true);
+        setTimeout(() => {
+          setShowTooltip(false);
+        }, 3000);
+      }
+    } catch (error) {
+      setTooltipMessage("This page is not yet available in the selected language");
+      setShowTooltip(true);
+      setTimeout(() => {
+        setShowTooltip(false);
+      }, 3000);
+    }
   };
   const mappedNav = currentNavItems.map((item, index) => (
     <Tab key={`tab-${index}`}>
@@ -262,6 +308,32 @@ const MobileNav = ({ blok }) => {
         </HamburgerContainer>
         <Dropdown className="mobileDropdown">{mappedNav}  
           <ButtonContainer>
+            <LanguageItems>
+              <LanguageItem 
+                onClick={() => handleNavigate("en")}
+                isActive={activeLanguage === "en"}
+              >
+                English
+              </LanguageItem>
+              <LanguageItem 
+                onClick={() => handleNavigate("fr")}
+                isActive={activeLanguage === "fr"}
+              >
+                French
+              </LanguageItem>
+              <LanguageItem 
+                onClick={() => handleNavigate("de")}
+                isActive={activeLanguage === "de"}
+              >
+                German
+              </LanguageItem>
+            </LanguageItems>
+            {/* <LanguageIcon /> */}
+            {showTooltip && (
+              <Tooltip>
+                {tooltipMessage}
+              </Tooltip>
+            )}
             {blok?.button?.map(($buttonData) => (
               <div
                 {...storyblokEditable($buttonData)}
@@ -270,8 +342,8 @@ const MobileNav = ({ blok }) => {
                 <Button $buttonData={$buttonData} stretch/>
               </div>
             ))}
-            </ButtonContainer>
-            </Dropdown>
+          </ButtonContainer>
+        </Dropdown>
         <AnchorNavigator />
       </MainWrapper>
     </>
@@ -281,12 +353,13 @@ const MobileNav = ({ blok }) => {
 const ButtonContainer = styled.div`
   ${media.mobile} {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     background: ${colors.white};
     width: 100%;
     padding: 4.167vw 3.333vw;
+    gap: 3.333vw;
   }
-`
+`;
 const BannerArrow = styled(LinkArrow)`
   ${media.mobile} {
     width: 1.869vw;
@@ -553,4 +626,62 @@ const MainWrapper = styled.div`
     /* border: 1px solid blue; */
   }
 `;
+
+const LanguageIcon = styled(LanguageGlobe)`
+  ${media.mobile} {
+    width: 4.673vw;
+    height: 4.673vw;
+  }
+`;
+
+const LanguageItem = styled.div`
+  ${media.mobile} {
+    ${text.bodySm};
+    color: ${props => props.isActive ? colors.primaryOrange : colors.txtSubtle};
+    padding: 1.667vw;
+    border-radius: 0.417vw;
+    cursor: pointer;
+
+    &:hover {
+      background-color: ${colors.primaryOrange};
+      color: ${colors.white};
+    }
+  }
+`;
+
+const LanguageItems = styled.div`
+  ${media.mobile} {
+    display: flex;
+    flex-direction: column;
+    gap: 1.667vw;
+  }
+`;
+
+const Tooltip = styled.div`
+  ${media.mobile} {
+    ${text.bodySm};
+    position: absolute;
+    background: ${colors.darkPurple};
+    color: ${colors.white};
+    padding: 2.083vw 3.125vw;
+    border-radius: 0.833vw;
+    top: calc(100% + 2.083vw);
+    left: 0;
+    z-index: 9999;
+    white-space: nowrap;
+    box-shadow: 0 0.417vw 0.833vw rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 2.083vw;
+      border-width: 1.042vw;
+      border-style: solid;
+      border-color: transparent transparent ${colors.darkPurple} transparent;
+    }
+  }
+`;
+
 export default MobileNav;

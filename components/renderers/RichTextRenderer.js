@@ -29,7 +29,7 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
     return contentArray.map((node) => node.text || "").join(" ");
   };
 
-  // console.log(document)
+  // console.log(responsiveTextStyles[1])
   const blokResolvers = {
     two_column_list: (props) => (
       <div className="component-wrapper">
@@ -70,6 +70,7 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
 
   const customMarkResolvers = {
     // [MARK_STYLED]: (children, { class: className }) => {
+    //   console.log('span class', className)
     //   return <BodyCopy className={className}>{children}</BodyCopy>;
     // },
   };
@@ -88,13 +89,12 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
         mobileStyle,
       );
 
-      return <Header as={selectedHeaderStyle}>{headingText}</Header>;
+      return <Header as={selectedHeaderStyle} className={selectedHeaderStyle}>{headingText}</Header>;
     },
 
-    [NODE_PARAGRAPH]: (children, node) => {
-      const className =
-        node?.content?.[0]?.marks?.find((mark) => mark.type === "styled")?.attrs
-          ?.class || "";
+    [NODE_PARAGRAPH]: (children) => {
+    
+      const className = children?.[0]?.props?.className
 
       const selectedClassName = useMedia(
         className,
@@ -102,7 +102,7 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
         responsiveTextStyles[0],
         responsiveTextStyles[1],
       );
-
+console.log('selectedClassName', selectedClassName)
       return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
     },
   };

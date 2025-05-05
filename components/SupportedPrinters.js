@@ -554,9 +554,9 @@ const ClearFilter = styled.button`
 
   ${media.mobile} {
     ${text.XSBold};
-    position: absolute;
-    top: 194vw;
-    left: 53vw;
+    // position: absolute;
+    // top: 194vw;
+    // left: 53vw;
     height: 9.346vw;
     padding: 2.336vw 4.673vw;
     border-radius: 4.673vw;

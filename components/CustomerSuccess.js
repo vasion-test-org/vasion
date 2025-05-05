@@ -75,6 +75,7 @@ const FeaturedTestimonials = ({ blok }) => {
   }, [blok]);
 
   const featured = blok?.testimonials?.map((item, index) => (
+    // console.log(item.copy_sections[0]),
     <FeaturedItem
     {...storyblokEditable(item)}
       key={index}
@@ -95,10 +96,10 @@ const FeaturedTestimonials = ({ blok }) => {
             <RichTextRenderer document={item.copy_sections[0].copy} />
           </Headline>
           <Body {...storyblokEditable(item)}>
-            <RichTextRenderer document={item.copy_sections[1].copy} />
+            <RichTextRenderer document={item.copy_sections[1].copy} responsiveTextStyles={item.copy_sections[1].responsive_text_styles} />
           </Body>
         </TitleAndBody>
-        <RichTextRenderer document={item.copy_sections[2].copy} />
+        <RichTextRenderer document={item.copy_sections[2].copy} responsiveTextStyles={item.copy_sections[2].responsive_text_styles}/>
       </BlocksDiv>
       <GoTo
         className="goto-arrow"
@@ -438,25 +439,16 @@ const AttributionDiv = styled.div`
 `;
 
 const Body = styled.p`
-  ${text.bodyLg};
-
   ${media.mobile} {
-    ${text.bodySm}
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    ${text.tag}
   }
 `;
 
 const Headline = styled.div`
-  ${text.h5};
-  color: ${colors?.lightPurple};
 
-  ${media.mobile} {
-    ${text.tagBold};
-  }
 `;
 
 const TitleAndBody = styled.div`
