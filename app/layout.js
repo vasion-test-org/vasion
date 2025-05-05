@@ -10,6 +10,7 @@ import Providers from "@/components/providers";
 import Config from "@/components/Config";
 import { getStoryblokApi } from "@/lib/storyblok";
 import { Metadata } from "next";
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
   metadataBase: new URL("https://vasion.com"),
@@ -210,6 +211,7 @@ export default async function RootLayout({ children }) {
                   <ScrollSmootherWrapper>
                     <Config>
                       {children}
+                      <Analytics />
                     </Config>
                   </ScrollSmootherWrapper>
                 </ThankYouProvider>
