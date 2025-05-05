@@ -9,16 +9,15 @@ import { useAvailableThemes } from "@/context/ThemeContext";
 import media from '@/styles/media';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
-import TextPlugin from 'gsap/TextPlugin';
 import getMedia from '@/functions/getMedia';
 import Button from './globalComponents/Button';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { storyblokEditable } from '@storyblok/react/rsc';
 
-gsap.registerPlugin(TextPlugin, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
 const CustomerLogos = ({ blok }) => {
-  // console.log(blok);
+  console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const categoryRef = useRef(`#${blok?.logos_category}`);
@@ -81,19 +80,13 @@ const CustomerLogos = ({ blok }) => {
       })
       .reversed(true)
       .to(remainingRef.current, { autoAlpha: 1, duration: 0.5 }, '>-.25')
-      .reversed(true)
-      .to(moreRef.current, {
-        text: {
-          value: `Collapse other ${blok?.logos_category} Clients`,
-          delimiter: '',
-          speed: 20,
-          type: 'diff',
-        },
-      })
       .reversed(true);
 
     function expand() {
       moreTl.reversed() ? moreTl.play() : moreTl.reverse();
+      moreRef.current.textContent = moreTl.reversed() 
+        ? `See other ${blok?.logos_category} Clients`
+        : `Collapse other ${blok?.logos_category} Clients`;
     }
 
     moreRef.current.addEventListener('click', () => expand());
