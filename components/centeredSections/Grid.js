@@ -7,7 +7,7 @@ import media from "@/styles/media";
 // import colors from 'styles/colors';
 // import text from 'styles/text';
 const Grid = ({ gridData, alignment }) => {
-  console.log(gridData);
+  // console.log(gridData);
   return (
     <GridContainer>
       {gridData.map((gridItem, index) => (

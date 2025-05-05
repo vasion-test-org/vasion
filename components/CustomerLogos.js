@@ -18,7 +18,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 gsap.registerPlugin(TextPlugin, ScrollTrigger);
 
 const CustomerLogos = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const categoryRef = useRef(`#${blok?.logos_category}`);

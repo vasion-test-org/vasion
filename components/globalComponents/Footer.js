@@ -15,7 +15,7 @@ import LinkedIn from "@/assets/svg/footer/LinkedIn.svg";
 import { storyblokEditable } from "@storyblok/react/rsc";
 
 const Footer = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   const router = useRouter();
   useEffect(() => {
     const tl = gsap.timeline({
