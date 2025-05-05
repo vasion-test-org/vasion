@@ -68,47 +68,47 @@ const Nav = ({ blok }) => {
     : slugParts.join("/");
 
   const handleNavigate = async (locale) => {
-    console.log('handleNavigate called with locale:', locale);
+    // console.log('handleNavigate called with locale:', locale);
     const basePath = locale === "en" ? "" : `/${locale}`;
     const newPath = nonHomeSlug
       ? `${basePath}/${nonHomeSlug}`
       : basePath || "/";
     
-    console.log('Attempting to navigate to:', newPath);
+    // console.log('Attempting to navigate to:', newPath);
 
     try {
       const storyblokApi = getStoryblokApi();
       const storySlug = nonHomeSlug || 'home';
       
-      console.log('Checking story:', storySlug, 'in language:', locale);
+      // console.log('Checking story:', storySlug, 'in language:', locale);
       const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
         version: 'published',
         language: locale,
       });
 
-      console.log('Storyblok response:', data);
+      // console.log('Storyblok response:', data);
 
       if (data.story) {
-        console.log('Story exists, navigating...');
+        // console.log('Story exists, navigating...');
         router.push(newPath);
       } else {
-        console.log('Story does not exist, showing tooltip');
+        // console.log('Story does not exist, showing tooltip');
         setTooltipMessage("This page is not yet available in the selected language");
         setShowTooltip(true);
-        console.log('Tooltip state updated:', { showTooltip: true, message: tooltipMessage });
+        // console.log('Tooltip state updated:', { showTooltip: true, message: tooltipMessage });
         setTimeout(() => {
           setShowTooltip(false);
-          console.log('Tooltip hidden after timeout');
+          // console.log('Tooltip hidden after timeout');
         }, 3000);
       }
     } catch (error) {
-      console.log('Error occurred:', error);
+      // console.log('Error occurred:', error);
       setTooltipMessage("This page is not yet available in the selected language");
       setShowTooltip(true);
-      console.log('Tooltip state updated after error:', { showTooltip: true, message: tooltipMessage });
+      // console.log('Tooltip state updated after error:', { showTooltip: true, message: tooltipMessage });
       setTimeout(() => {
         setShowTooltip(false);
-        console.log('Tooltip hidden after error timeout');
+        // console.log('Tooltip hidden after error timeout');
       }, 3000);
     }
   };
@@ -343,7 +343,7 @@ const Nav = ({ blok }) => {
                 </LanguageItem>
               </LanguageItems>
               <LanguageIcon id="globe" />
-              {console.log('Rendering tooltip state:', { showTooltip, tooltipMessage })}
+              {/* {console.log('Rendering tooltip state:', { showTooltip, tooltipMessage })} */}
               {showTooltip && (
                 <Tooltip>
                   {tooltipMessage}
