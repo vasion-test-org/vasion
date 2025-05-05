@@ -8,7 +8,7 @@ import text from '@/styles/text';
 import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
 import media from '@/styles/media';
 
-const Button = ({ $buttonData }) => {
+const Button = ({ $buttonData, stretch }) => {
   const themes = useAvailableThemes();
   const pathname = usePathname();
   // useEffect(() => {
@@ -40,7 +40,7 @@ const Button = ({ $buttonData }) => {
       <ThemeProvider theme={selectedTheme}>
         {target !== '_blank' ? (
           <NextLink href={normalizedUrl} passHref>
-            <StyledSpan>{$buttonData?.link_text}</StyledSpan>
+            <StyledSpan stretch={stretch}>{$buttonData?.link_text}</StyledSpan>
             {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
           </NextLink>
         ) : (
@@ -92,6 +92,7 @@ const StyledSpan = styled.p`
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  min-width: ${(props) => props.stretch ? '100%' : 'auto'};
   width: auto;
   gap: 0.5vw;
   padding: ${(props) => props.theme.padding};

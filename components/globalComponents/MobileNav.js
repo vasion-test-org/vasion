@@ -260,13 +260,33 @@ const MobileNav = ({ blok }) => {
           <ShortHamSlice id="slice-1" />
           <HamSlice id="slice-2" />
         </HamburgerContainer>
-        <Dropdown className="mobileDropdown">{mappedNav}</Dropdown>
+        <Dropdown className="mobileDropdown">{mappedNav}  
+          <ButtonContainer>
+            {blok?.button?.map(($buttonData) => (
+              <div
+                {...storyblokEditable($buttonData)}
+                key={$buttonData?.link_text}
+              >
+                <Button $buttonData={$buttonData} stretch/>
+              </div>
+            ))}
+            </ButtonContainer>
+            </Dropdown>
         <AnchorNavigator />
       </MainWrapper>
     </>
   );
 };
 
+const ButtonContainer = styled.div`
+  ${media.mobile} {
+    display: flex;
+    flex-direction: row;
+    background: ${colors.white};
+    width: 100%;
+    padding: 4.167vw 3.333vw;
+  }
+`
 const BannerArrow = styled(LinkArrow)`
   ${media.mobile} {
     width: 1.869vw;
