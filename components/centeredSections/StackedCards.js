@@ -52,7 +52,7 @@ const RiveAnimation = ({
 };
 
 const StackedCards = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   const { mobile, tablet } = useContext(ScreenContext);
   const stackedCardsRef = useRef(null);
   const riveInstancesRef = useRef([]);

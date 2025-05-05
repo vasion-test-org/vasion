@@ -29,7 +29,7 @@ const PaginatedCards = ({ blok }) => {
   const contentTypeTags = ['white paper', 'customer story', 'guide', 'FAQ', 'playbook', 'solution brief', 'video', 'topic'];
   const industryTags = ['healthcare'];
   const newsTags = ['media mentions', 'videos'] 
-console.log(blok.cards)
+// console.log(blok.cards)
 
   const filteredCards = blok.cards.filter((card) => {
     const headerContent = Array.isArray(card?.content) 
