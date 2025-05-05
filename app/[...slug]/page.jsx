@@ -30,8 +30,9 @@ export async function generateMetadata({ params }) {
   const basePath = 'https://vasion.com';
   const locales = ['en', 'fr', 'de'];
   const alternateLinks = locales.reduce((acc, loc) => {
-    const translatedSlug = story.translated_slugs?.find(t => t.lang === loc)?.path || story.full_slug;
-    const path = `/${translatedSlug}`;
+    const path = loc === 'en' 
+      ? `/${story.full_slug.replace(/^(fr|de)\//, '')}`
+      : `/${loc}/${story.full_slug.replace(/^(fr|de)\//, '')}`;
     acc[loc] = `${basePath}${path}`;
     return acc;
   }, {});
