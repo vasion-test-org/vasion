@@ -29,13 +29,23 @@ export async function generateMetadata({ params }) {
 
   const basePath = 'https://vasion.com';
   const locales = ['en', 'fr', 'de'];
-  const alternateLinks = locales.reduce((acc, loc) => {
-    const path = loc === 'en' 
-      ? `/${story.full_slug.replace(/^(fr|de)\//, '')}`
-      : `/${loc}/${story.full_slug.replace(/^(fr|de)\//, '')}`;
-    acc[loc] = `${basePath}${path}`;
-    return acc;
-  }, {});
+  const alternateLinks = {};
+
+  if (story.translated_slugs) {
+    for (const translation of story.translated_slugs) {
+      const loc = translation.lang;
+      const path =
+        loc === 'en'
+          ? `/${translation.path.replace(/^(fr|de)\//, '')}`
+          : `/${loc}/${translation.path.replace(/^(fr|de)\//, '')}`;
+      alternateLinks[loc] = `${basePath}${path}`;
+    }
+  }
+
+  // Always include the canonical (current) page
+  alternateLinks[locale] = `${basePath}${
+    story.full_slug.startsWith(locale) ? '' : `/${locale}`
+  }${story.full_slug.replace(/^(fr|de)\//, '')}`;
 
   return {
     title,
@@ -86,11 +96,13 @@ export default async function DynamicPage({ params }) {
   );
 }
 
-
 async function fetchData(slug, locale) {
   const storyblokApi = getStoryblokApi();
   const host = headers().get('host');
-  const isPreview = host === 'localhost:3010' || host === 'vasion-ten.vercel.app' || host === 'vasion.vercel.app';
+  const isPreview =
+    host === 'localhost:3010' ||
+    host === 'vasion-ten.vercel.app' ||
+    host === 'vasion.vercel.app';
 
   const sbParams = {
     version: isPreview ? 'draft' : 'published',
@@ -102,7 +114,9 @@ async function fetchData(slug, locale) {
     return data.story;
   } catch (error) {
     if (!isPreview) {
-      console.error(`[❌ Server] Error fetching published story: ${error.message}`);
+      console.error(
+        `[❌ Server] Error fetching published story: ${error.message}`
+      );
       return null;
     }
 
@@ -111,12 +125,13 @@ async function fetchData(slug, locale) {
       const { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
       return data.story;
     } catch (draftError) {
-      console.error(`[❌ Server] Error fetching draft story: ${draftError.message}`);
+      console.error(
+        `[❌ Server] Error fetching draft story: ${draftError.message}`
+      );
       return null;
     }
   }
 }
-
 
 export async function generateStaticParams() {
   const storyblokApi = getStoryblokApi();
