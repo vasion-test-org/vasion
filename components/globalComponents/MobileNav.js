@@ -55,43 +55,43 @@ const MobileNav = ({ blok }) => {
     currentNavItems = blok.french_nav_items;
   }
 
-  // const handleNavigate = async (locale) => {
-  //   const basePath = locale === 'en' ? '' : `/${locale}`;
-  //   const newPath = nonHomeSlug
-  //     ? `${basePath}/${nonHomeSlug}`
-  //     : basePath || '/';
+  const handleNavigate = async (locale) => {
+    const basePath = locale === 'en' ? '' : `/${locale}`;
+    const newPath = nonHomeSlug
+      ? `${basePath}/${nonHomeSlug}`
+      : basePath || '/';
 
-  //   try {
-  //     const storyblokApi = getStoryblokApi();
-  //     const storySlug = nonHomeSlug || 'home';
+    try {
+      const storyblokApi = getStoryblokApi();
+      const storySlug = nonHomeSlug || 'home';
 
-  //     const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
-  //       version: 'published',
-  //       language: locale,
-  //     });
+      const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
+        version: 'published',
+        language: locale,
+      });
 
-  //     if (data.story) {
-  //       setActiveLanguage(locale);
-  //       router.push(newPath);
-  //     } else {
-  //       setTooltipMessage(
-  //         'This page is not yet available in the selected language'
-  //       );
-  //       setShowTooltip(true);
-  //       setTimeout(() => {
-  //         setShowTooltip(false);
-  //       }, 3000);
-  //     }
-  //   } catch (error) {
-  //     setTooltipMessage(
-  //       'This page is not yet available in the selected language'
-  //     );
-  //     setShowTooltip(true);
-  //     setTimeout(() => {
-  //       setShowTooltip(false);
-  //     }, 3000);
-  //   }
-  // };
+      if (data.story) {
+        setActiveLanguage(locale);
+        router.push(newPath);
+      } else {
+        setTooltipMessage(
+          'This page is not yet available in the selected language'
+        );
+        setShowTooltip(true);
+        setTimeout(() => {
+          setShowTooltip(false);
+        }, 3000);
+      }
+    } catch (error) {
+      setTooltipMessage(
+        'This page is not yet available in the selected language'
+      );
+      setShowTooltip(true);
+      setTimeout(() => {
+        setShowTooltip(false);
+      }, 3000);
+    }
+  };
   const mappedNav = currentNavItems.map((item, index) => (
     <Tab key={`tab-${index}`}>
       <TabHeader className='tabHeader'>{item.tab_name}</TabHeader>
@@ -319,7 +319,7 @@ const MobileNav = ({ blok }) => {
         <Dropdown className='mobileDropdown'>
           {mappedNav}
           <ButtonContainer>
-            {/* <LanguageItems>
+            <LanguageItems>
               <LanguageItem
                 onClick={() => handleNavigate('en')}
                 isActive={activeLanguage === 'en'}
@@ -338,9 +338,9 @@ const MobileNav = ({ blok }) => {
               >
                 German
               </LanguageItem>
-            </LanguageItems> */}
+            </LanguageItems>
             {/* <LanguageIcon /> */}
-            {/* {showTooltip && <Tooltip>{tooltipMessage}</Tooltip>} */}
+            {showTooltip && <Tooltip>{tooltipMessage}</Tooltip>}
             {blok?.button?.map(($buttonData) => (
               <div
                 {...storyblokEditable($buttonData)}

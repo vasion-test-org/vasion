@@ -67,55 +67,55 @@ const Nav = ({ blok }) => {
     ? slugParts.slice(1).join('/')
     : slugParts.join('/');
 
-  // const handleNavigate = async (locale) => {
-  //   // console.log('handleNavigate called with locale:', locale);
-  //   const basePath = locale === 'en' ? '' : `/${locale}`;
-  //   const newPath = nonHomeSlug
-  //     ? `${basePath}/${nonHomeSlug}`
-  //     : basePath || '/';
+  const handleNavigate = async (locale) => {
+    // console.log('handleNavigate called with locale:', locale);
+    const basePath = locale === 'en' ? '' : `/${locale}`;
+    const newPath = nonHomeSlug
+      ? `${basePath}/${nonHomeSlug}`
+      : basePath || '/';
 
-  //   // console.log('Attempting to navigate to:', newPath);
+    // console.log('Attempting to navigate to:', newPath);
 
-  //   try {
-  //     const storyblokApi = getStoryblokApi();
-  //     const storySlug = nonHomeSlug || 'home';
+    try {
+      const storyblokApi = getStoryblokApi();
+      const storySlug = nonHomeSlug || 'home';
 
-  //     // console.log('Checking story:', storySlug, 'in language:', locale);
-  //     const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
-  //       version: 'published',
-  //       language: locale,
-  //     });
+      // console.log('Checking story:', storySlug, 'in language:', locale);
+      const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
+        version: 'published',
+        language: locale,
+      });
 
-  //     // console.log('Storyblok response:', data);
+      // console.log('Storyblok response:', data);
 
-  //     if (data.story) {
-  //       // console.log('Story exists, navigating...');
-  //       router.push(newPath);
-  //     } else {
-  //       // console.log('Story does not exist, showing tooltip');
-  //       setTooltipMessage(
-  //         'This page is not yet available in the selected language'
-  //       );
-  //       setShowTooltip(true);
-  //       // console.log('Tooltip state updated:', { showTooltip: true, message: tooltipMessage });
-  //       setTimeout(() => {
-  //         setShowTooltip(false);
-  //         // console.log('Tooltip hidden after timeout');
-  //       }, 3000);
-  //     }
-  //   } catch (error) {
-  //     // console.log('Error occurred:', error);
-  //     setTooltipMessage(
-  //       'This page is not yet available in the selected language'
-  //     );
-  //     setShowTooltip(true);
-  //     // console.log('Tooltip state updated after error:', { showTooltip: true, message: tooltipMessage });
-  //     setTimeout(() => {
-  //       setShowTooltip(false);
-  //       // console.log('Tooltip hidden after error timeout');
-  //     }, 3000);
-  //   }
-  // };
+      if (data.story) {
+        // console.log('Story exists, navigating...');
+        router.push(newPath);
+      } else {
+        // console.log('Story does not exist, showing tooltip');
+        setTooltipMessage(
+          'This page is not yet available in the selected language'
+        );
+        setShowTooltip(true);
+        // console.log('Tooltip state updated:', { showTooltip: true, message: tooltipMessage });
+        setTimeout(() => {
+          setShowTooltip(false);
+          // console.log('Tooltip hidden after timeout');
+        }, 3000);
+      }
+    } catch (error) {
+      // console.log('Error occurred:', error);
+      setTooltipMessage(
+        'This page is not yet available in the selected language'
+      );
+      setShowTooltip(true);
+      // console.log('Tooltip state updated after error:', { showTooltip: true, message: tooltipMessage });
+      setTimeout(() => {
+        setShowTooltip(false);
+        // console.log('Tooltip hidden after error timeout');
+      }, 3000);
+    }
+  };
 
   const mappedNav = navItems.map((item, index) => (
     <KeyDiv key={`item.tab_name-${index}`}>
@@ -297,26 +297,26 @@ const Nav = ({ blok }) => {
     };
   }, [navReady]);
 
-  // useEffect(() => {
-  //   const handleGlobeHover = () => {
-  //     gsap.to('#languageItemsContainer', { width: '100%' });
-  //   };
+  useEffect(() => {
+    const handleGlobeHover = () => {
+      gsap.to('#languageItemsContainer', { width: '100%' });
+    };
 
-  //   const handleGlobeExit = () => {
-  //     gsap.to('#languageItemsContainer', { width: '0%' });
-  //   };
+    const handleGlobeExit = () => {
+      gsap.to('#languageItemsContainer', { width: '0%' });
+    };
 
-  //   const globe = document.querySelector('#globe');
-  //   const langSelector = document.querySelector('#languageSelector');
+    const globe = document.querySelector('#globe');
+    const langSelector = document.querySelector('#languageSelector');
 
-  //   globe?.addEventListener('mouseenter', handleGlobeHover);
-  //   langSelector?.addEventListener('mouseleave', handleGlobeExit);
+    globe?.addEventListener('mouseenter', handleGlobeHover);
+    langSelector?.addEventListener('mouseleave', handleGlobeExit);
 
-  //   return () => {
-  //     globe?.removeEventListener('mouseenter', handleGlobeHover);
-  //     langSelector?.removeEventListener('mouseleave', handleGlobeExit);
-  //   };
-  // }, []);
+    return () => {
+      globe?.removeEventListener('mouseenter', handleGlobeHover);
+      langSelector?.removeEventListener('mouseleave', handleGlobeExit);
+    };
+  }, []);
 
   return (
     <ThemeProvider theme={selectedTheme}>
@@ -334,7 +334,7 @@ const Nav = ({ blok }) => {
                 </div>
               ))}
             </Banner>
-            {/* <LanguageSelector id='languageSelector'>
+            <LanguageSelector id='languageSelector'>
               <LanguageItems id='languageItemsContainer'>
                 <LanguageItem onClick={() => handleNavigate('en')}>
                   English
@@ -349,7 +349,7 @@ const Nav = ({ blok }) => {
               <LanguageIcon id='globe' />
 
               {showTooltip && <Tooltip>{tooltipMessage}</Tooltip>}
-            </LanguageSelector> */}
+            </LanguageSelector>
           </TopElementsContainer>
         </TopNav>
         <MainNavWrapper className='mainNavWrapper desktopNav'>

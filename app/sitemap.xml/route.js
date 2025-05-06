@@ -1,7 +1,7 @@
 import { getStoryblokApi } from "@/lib/storyblok";
 
 // export const dynamic = "force-dynamic";
-export const revalidate = 1800;
+export const revalidate = 21600;
 
 const locales = ["en", "de", "fr"];
 const baseUrls = {
