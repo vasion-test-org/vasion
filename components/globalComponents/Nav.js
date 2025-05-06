@@ -330,7 +330,7 @@ const Nav = ({ blok }) => {
                 </div>
               ))}
             </Banner>
-            {/* <LanguageSelector id="languageSelector">
+            <LanguageSelector id="languageSelector">
               <LanguageItems id="languageItemsContainer">
                 <LanguageItem onClick={() => handleNavigate("en")}>
                   English
@@ -349,7 +349,7 @@ const Nav = ({ blok }) => {
                   {tooltipMessage}
                 </Tooltip>
               )}
-            </LanguageSelector> */}
+            </LanguageSelector> 
           </TopElementsContainer>
         </TopNav>
         <MainNavWrapper className="mainNavWrapper desktopNav">
