@@ -1,34 +1,34 @@
-import StoryblokProvider from "@/components/StoryblokProvider";
-import { ThemeProviderWrapper } from "@/context/ThemeContext";
-import { ThankYouProvider } from "@/context/ThankYouContext";
-import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
-import FormTracking from "@/components/FormTracking";
-import Script from "next/script";
-import "./globals.css";
-import ScrollSmootherWrapper from "@/components/ScrollSmoothWrapper";
-import Providers from "@/components/providers";
-import Config from "@/components/Config";
-import { getStoryblokApi } from "@/lib/storyblok";
-import { Metadata } from "next";
+import StoryblokProvider from '@/components/StoryblokProvider';
+import { ThemeProviderWrapper } from '@/context/ThemeContext';
+import { ThankYouProvider } from '@/context/ThankYouContext';
+import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
+import FormTracking from '@/components/FormTracking';
+import Script from 'next/script';
+import './globals.css';
+import ScrollSmootherWrapper from '@/components/ScrollSmoothWrapper';
+import Providers from '@/components/providers';
+import Config from '@/components/Config';
+import { getStoryblokApi } from '@/lib/storyblok';
+import { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
-  metadataBase: new URL("https://vasion.com"),
+  metadataBase: new URL('https://vasion.com'),
   title: {
-    template: "%s | Vasion",
-    default: "Vasion",
+    template: '%s | Vasion',
+    default: 'Vasion',
   },
-  description: "Vasion site",
+  description: 'Vasion site',
 };
 
 export default async function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <head>
         {/* Marketo Munchkin */}
         <Script
-          id="marketo-munchkin"
-          strategy="afterInteractive"
+          id='marketo-munchkin'
+          strategy='afterInteractive'
           dangerouslySetInnerHTML={{
             __html: `
       (function() {
@@ -57,65 +57,55 @@ export default async function RootLayout({ children }) {
 
         {/* CookieYes */}
         <Script
-          id="cookieyes"
-          strategy="afterInteractive"
-          src="https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js"
+          id='cookieyes'
+          strategy='afterInteractive'
+          src='https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js'
         />
 
         {/* Marketo Forms2 */}
         <Script
-          id="marketo-forms"
-          strategy="afterInteractive"
+          id='marketo-forms'
+          strategy='afterInteractive'
           defer
-          src="https://info.printerlogic.com/js/forms2/js/forms2.min.js"
+          src='https://info.printerlogic.com/js/forms2/js/forms2.min.js'
         />
 
-        {/* Intercom Settings */}
+        {/* Intercom */}
         <Script
-          id="intercom-settings"
-          strategy="afterInteractive"
+          id='intercom'
+          strategy='afterInteractive'
           dangerouslySetInnerHTML={{
             __html: `
-        window.intercomSettings = {
-          api_base: "https://api-iam.intercom.io",
-          app_id: "h87qerzy"
+      window.intercomSettings = {
+        api_base: "https://api-iam.intercom.io",
+        app_id: "h87qerzy"
+      };
+      (function(){var w=window;var ic=w.Intercom;
+      if(typeof ic==="function"){
+        ic('reattach_activator');
+        ic('update',w.intercomSettings);
+      }else{
+        var d=document;var i=function(){i.c(arguments);};
+        i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;
+        var l=function(){
+          var s=d.createElement('script');
+          s.type='text/javascript';s.async=true;
+          s.src='https://widget.intercom.io/widget/h87qerzy';
+          var x=d.getElementsByTagName('script')[0];
+          x.parentNode.insertBefore(s,x);
         };
-      `,
-          }}
-        />
-
-        {/* Intercom Script */}
-        <Script
-          id="intercom-script"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-        (function(){var w=window;var ic=w.Intercom;
-        if(typeof ic==="function"){
-          ic('reattach_activator');
-          ic('update',w.intercomSettings);
-        }else{
-          var d=document;var i=function(){i.c(arguments);};
-          i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;
-          var l=function(){
-            var s=d.createElement('script');
-            s.type='text/javascript';s.async=true;
-            s.src='https://widget.intercom.io/widget/h87qerzy';
-            var x=d.getElementsByTagName('script')[0];
-            x.parentNode.insertBefore(s,x);
-          };
-          if(document.readyState==='complete'){l();}
-          else if(w.attachEvent){w.attachEvent('onload',l);}
-          else{w.addEventListener('load',l,false);}
-        }})();
-      `,
+        if(document.readyState==='complete'){l();}
+        else if(w.attachEvent){w.attachEvent('onload',l);}
+        else{w.addEventListener('load',l,false);}
+      }})();
+    `,
           }}
         />
 
         {/* VWO */}
         <Script
-          id="vwo"
-          strategy="afterInteractive"
+          id='vwo'
+          strategy='afterInteractive'
           dangerouslySetInnerHTML={{
             __html: `
         window._vwo_code || (function() {
@@ -169,7 +159,7 @@ export default async function RootLayout({ children }) {
 
         {/* Google Tag Manager */}
         <Script
-          id="gtm"
+          id='gtm'
           async
           dangerouslySetInnerHTML={{
             __html: `
@@ -184,7 +174,7 @@ export default async function RootLayout({ children }) {
 
         {/* Hotjar */}
         <Script
-          id="hotjar"
+          id='hotjar'
           async
           dangerouslySetInnerHTML={{
             __html: `
