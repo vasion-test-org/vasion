@@ -102,7 +102,7 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
         responsiveTextStyles[0],
         responsiveTextStyles[1],
       );
-console.log('selectedClassName', selectedClassName)
+// console.log('selectedClassName', selectedClassName)
       return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
     },
   };

@@ -9,6 +9,7 @@ import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
 import media from '@/styles/media';
 
 const Button = ({ $buttonData, stretch }) => {
+  console.log('$buttonData', $buttonData);
   const themes = useAvailableThemes();
   const pathname = usePathname();
   // useEffect(() => {
