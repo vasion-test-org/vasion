@@ -50,7 +50,7 @@ export async function generateMetadata({ params }) {
 async function fetchStory(slug, locale) {
   const storyblokApi = getStoryblokApi();
   const sbParams = {
-    version: 'draft',
+    version: 'published',
     language: locale,
   };
 
@@ -121,7 +121,7 @@ async function fetchData(slug, locale) {
 export async function generateStaticParams() {
   const storyblokApi = getStoryblokApi();
   const { data } = await storyblokApi.get('cdn/stories/', {
-    version: 'draft',
+    version: 'published',
   });
 
   const params = [];
