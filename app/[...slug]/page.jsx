@@ -47,6 +47,7 @@ export async function generateMetadata({ params }) {
         translation.path,
         translation.lang
       );
+
       if (translatedStory) {
         alternateLinks[translation.lang] =
           `${basePath}/${translation.lang}/${translation.path}`.replace(
@@ -56,8 +57,6 @@ export async function generateMetadata({ params }) {
       }
     }
   }
-  // Always include the current page as an alternate
-  alternateLinks[currentLocale] = canonicalUrl;
 
   return {
     title,
