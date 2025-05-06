@@ -28,30 +28,36 @@ export async function generateMetadata({ params }) {
   const description = content.metadata?.description || 'Default Description';
 
   const basePath = 'https://vasion.com';
-  const locales = ['en', 'fr', 'de'];
-  const alternateLinks = {};
+  const currentLocale = locale; // 'en', 'fr', or 'de'
 
+  // Always include the current page as canonical
+  let canonicalPath = story.full_slug;
+  if (currentLocale === 'en') {
+    // Remove 'en' prefix for canonical
+    canonicalPath = canonicalPath.replace(/^en\//, '');
+  }
+  const canonicalUrl = `${basePath}/${canonicalPath}`.replace(/\/+$/, '/');
+
+  // Build alternate links only for published translations
+  const alternateLinks = {};
   if (story.translated_slugs) {
     for (const translation of story.translated_slugs) {
-      const loc = translation.lang;
-      const path =
-        loc === 'en'
-          ? `/${translation.path.replace(/^(fr|de)\//, '')}`
-          : `/${loc}/${translation.path.replace(/^(fr|de)\//, '')}`;
-      alternateLinks[loc] = `${basePath}${path}`;
+      // translation.lang is 'fr' or 'de', translation.path is the slug
+      alternateLinks[translation.lang] =
+        `${basePath}/${translation.lang}/${translation.path}`.replace(
+          /\/+$/,
+          '/'
+        );
     }
   }
-
-  // Always include the canonical (current) page
-  alternateLinks[locale] = `${basePath}${
-    story.full_slug.startsWith(locale) ? '' : `/${locale}`
-  }${story.full_slug.replace(/^(fr|de)\//, '')}`;
+  // Always include the current page as an alternate
+  alternateLinks[currentLocale] = canonicalUrl;
 
   return {
     title,
     description,
     alternates: {
-      canonical: alternateLinks[locale],
+      canonical: canonicalUrl,
       languages: alternateLinks,
     },
   };
