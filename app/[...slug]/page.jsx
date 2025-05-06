@@ -42,12 +42,18 @@ export async function generateMetadata({ params }) {
   const alternateLinks = {};
   if (story.translated_slugs) {
     for (const translation of story.translated_slugs) {
-      // translation.lang is 'fr' or 'de', translation.path is the slug
-      alternateLinks[translation.lang] =
-        `${basePath}/${translation.lang}/${translation.path}`.replace(
-          /\/+$/,
-          '/'
-        );
+      // Check if the translation is published
+      const translatedStory = await fetchStory(
+        translation.path,
+        translation.lang
+      );
+      if (translatedStory) {
+        alternateLinks[translation.lang] =
+          `${basePath}/${translation.lang}/${translation.path}`.replace(
+            /\/+$/,
+            '/'
+          );
+      }
     }
   }
   // Always include the current page as an alternate
