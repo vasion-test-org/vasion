@@ -21,6 +21,15 @@ const Hero = ({ blok }) => {
     customTheme = undefined;
   }
 
+  const handleNavigate = (link) => {
+    const isExternalLink = link.startsWith("http") || link.startsWith("https");
+    if (isExternalLink) {
+      window.open(link, "_blank");
+    } else {
+      router.push(link);
+    }
+  };
+
   // console.log(blok.centered_image);
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
@@ -130,21 +139,21 @@ const Hero = ({ blok }) => {
                 alt={"review-us"}
                 width="164"
                 height="62"
-                onClick={() => navigate("/review-us")}
+                onClick={() => handleNavigate("/review-us")}
               />
               <ReviewButton
                 src={"images/reviewButton-1.webp"}
                 alt={"G2 Reviews"}
                 width="164"
                 height="62"
-                onClick={() => navigate("/review-us")}
+                onClick={() => handleNavigate("/review-us")}
               />
               <ReviewButton
                 src={"images/reviewButton-2.webp"}
                 alt={"Review Us"}
                 width="164"
                 height="62"
-                onClick={() => navigate("/review-us")}
+                onClick={() => handleNavigate("/review-us")}
               />
               <AnchorButton href="#reddit-reviews">
                 <ReviewButton
