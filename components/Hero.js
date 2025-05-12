@@ -11,8 +11,10 @@ import Button from "@/components/globalComponents/Button";
 import Image from "@/components/globalComponents/Image";
 import LogoCube from "./LogoCube";
 import LightboxBtn from "@/components/LightboxButton";
+import { useRouter } from "next/navigation";
 
 const Hero = ({ blok }) => {
+  const router = useRouter();
   // console.log("HERO", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
