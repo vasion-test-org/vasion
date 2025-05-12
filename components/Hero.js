@@ -11,8 +11,10 @@ import Button from "@/components/globalComponents/Button";
 import Image from "@/components/globalComponents/Image";
 import LogoCube from "./LogoCube";
 import LightboxBtn from "@/components/LightboxButton";
+import { useRouter } from "next/navigation";
 
 const Hero = ({ blok }) => {
+  const router = useRouter();
   // console.log("HERO", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
@@ -20,6 +22,15 @@ const Hero = ({ blok }) => {
   if (!blok.custom_theme_builder) {
     customTheme = undefined;
   }
+
+  const handleNavigate = (link) => {
+    const isExternalLink = link.startsWith("http") || link.startsWith("https");
+    if (isExternalLink) {
+      window.open(link, "_blank");
+    } else {
+      router.push(link);
+    }
+  };
 
   // console.log(blok.centered_image);
   return (
@@ -130,21 +141,21 @@ const Hero = ({ blok }) => {
                 alt={"review-us"}
                 width="164"
                 height="62"
-                onClick={() => navigate("/review-us")}
+                onClick={() => handleNavigate("/review-us")}
               />
               <ReviewButton
                 src={"images/reviewButton-1.webp"}
                 alt={"G2 Reviews"}
                 width="164"
                 height="62"
-                onClick={() => navigate("/review-us")}
+                onClick={() => handleNavigate("/review-us")}
               />
               <ReviewButton
                 src={"images/reviewButton-2.webp"}
                 alt={"Review Us"}
                 width="164"
                 height="62"
-                onClick={() => navigate("/review-us")}
+                onClick={() => handleNavigate("/review-us")}
               />
               <AnchorButton href="#reddit-reviews">
                 <ReviewButton

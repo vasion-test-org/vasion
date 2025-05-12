@@ -289,29 +289,30 @@ const HeaderDiv = styled.div`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   height: 100%;
   background-color: ${colors.lightPurpleGrey};
-  width: 61.389vw;
+  width: 81.5vw;
   border-radius: 0.556vw;
   padding: 2.222vw 1.389vw;
   gap: 1.389vw;
 
   ${media.fullWidth} {
-    width: 884px;
+    width: 1304px;
     border-radius: 8px;
     padding: 32px 20px;
     gap: 20px;
   }
 
   ${media.tablet} {
-    width: 68.555vw;
+    width: 92.188vw;
     border-radius: 0.781vw;
     padding: 3.125vw 1.953vw;
     gap: 1.953vw;
   }
 
   ${media.mobile} {
-    width: 100%;
+    width: 89.167vw;
     padding: unset;
     gap: 4.673vw;
     background-color: ${(props) =>
@@ -325,14 +326,14 @@ const Wrapper = styled.div`
   justify-content: center;
   justify-self: center;
   gap: 23px;
-  width: 79.444vw;
+  width: 100%;
   ${media.fullWidth} {
-    width: 1144px;
+    width: 100%;
     gap: 23px;
   }
 
   ${media.tablet} {
-    width: 91.992vw;
+    width: 100%;
     gap: 2.246vw;
   }
 
