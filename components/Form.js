@@ -475,7 +475,65 @@ const FormContainer = styled.div`
       0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.833vw 1.667vw 0vw rgba(25, 29, 30, 0.16);
   }
+  .mktoCheckboxList {
+    width: unset !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .mktoCheckboxList input[type="checkbox"] {
+    height: auto !important;
+    margin-right: 0.5vw !important;
 
+    ${media.fullWidth} {
+      margin-right: 8px !important;
+    }
+
+    ${media.tablet} {
+      margin-right: 0.781vw !important;
+    }
+
+    ${media.mobile} {
+      margin-right: 1.667vw !important;
+    }
+  }
+  #LblemailOptIn {
+    color: ${(props) => props.theme.form.textColor};
+    display: flex;
+    align-items: center !important;
+    gap: 0.5vw;
+    margin: 0 !important;
+
+    ${media.fullWidth} {
+      gap: 8px;
+    }
+
+    ${media.tablet} {
+      gap: 0.781vw;
+    }
+
+    ${media.mobile} {
+      gap: 1.667vw;
+    }
+  }
+  .mktoFormRow:has(.mktoCheckboxList) {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 1vw 0;
+
+    ${media.fullWidth} {
+      margin: 16px 0;
+    }
+
+    ${media.tablet} {
+      margin: 1.563vw 0;
+    }
+
+    ${media.mobile} {
+      margin: 3.333vw 0;
+    }
+  }
   .mktoFieldDescriptor {
     max-height: 3.375vw !important;
 
