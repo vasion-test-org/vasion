@@ -1,6 +1,10 @@
 "use client";
 import React, { useEffect, useContext, useRef } from "react";
 import styled from "styled-components";
+import DemoPrint from "assets/svg/demoprint.svg";
+import AI from "assets/svg/ai.svg";
+import Tune from "assets/svg/tune.svg";
+import DemoStar from "assets/svg/demostar.svg";
 
 import Form from "@/components/Form";
 import colors from "@/styles/colors";
@@ -10,10 +14,6 @@ import gsap from "gsap";
 import { ScreenContext } from "@/components/providers/Screen";
 import { storyblokEditable } from "@storyblok/react/rsc";
 import Chevron from "assets/svg/WhiteChevron.svg";
-import DemoPrint from "assets/svg/demoprint.svg";
-import AI from "assets/svg/ai.svg";
-import Tune from "assets/svg/tune.svg";
-import DemoStar from "assets/svg/demostar.svg";
 import getMedia from "@/functions/getMedia";
 import RichTextRenderer from "./renderers/RichTextRenderer";
 import Icons from "@/components/renderers/Icons";
@@ -39,7 +39,15 @@ const Demo = ({ blok }) => {
     "small_quote",
   ];
   // console.log(blok);
-
+  useEffect(() => {
+    optionRefs.current = [];
+    arrowRefs.current = [];
+    contentRefs.current = [];
+    iconRefs.current = [];
+    handlersRef.current = [];
+    prevIndex.current = 0;
+    demoExperienceRef.current = "";
+  }, []);
   useEffect(() => {
     const tl = gsap.timeline({});
     gsap.set(optionRefs.current[0], { height: "auto" });
