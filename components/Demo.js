@@ -1,24 +1,24 @@
-'use client';
-import React, { useEffect, useContext, useRef } from 'react';
-import styled from 'styled-components';
+"use client";
+import React, { useEffect, useContext, useRef } from "react";
+import styled from "styled-components";
 
-import Form from '@/components/Form';
-import colors from '@/styles/colors';
-import media from '@/styles/media';
-import text from '@/styles/text';
-import gsap from 'gsap';
-import { ScreenContext } from '@/components/providers/Screen';
+import Form from "@/components/Form";
+import colors from "@/styles/colors";
+import media from "@/styles/media";
+import text from "@/styles/text";
+import gsap from "gsap";
+import { ScreenContext } from "@/components/providers/Screen";
 import { storyblokEditable } from "@storyblok/react/rsc";
-import Chevron from 'assets/svg/WhiteChevron.svg';
-import DemoPrint from 'assets/svg/demoprint.svg';
-import AI from 'assets/svg/ai.svg';
-import Tune from 'assets/svg/tune.svg';
-import DemoStar from 'assets/svg/demostar.svg';
-import getMedia from '@/functions/getMedia';
-import RichTextRenderer from './renderers/RichTextRenderer';
-import Icons from '@/components/renderers/Icons';
-import ComponentRenderer from './renderers/ComponentRenderer';
-import TestForm from './TestForm';
+import Chevron from "assets/svg/WhiteChevron.svg";
+import DemoPrint from "assets/svg/demoprint.svg";
+import AI from "assets/svg/ai.svg";
+import Tune from "assets/svg/tune.svg";
+import DemoStar from "assets/svg/demostar.svg";
+import getMedia from "@/functions/getMedia";
+import RichTextRenderer from "./renderers/RichTextRenderer";
+import Icons from "@/components/renderers/Icons";
+import ComponentRenderer from "./renderers/ComponentRenderer";
+import TestForm from "./TestForm";
 
 const Demo = ({ blok }) => {
   const { mobile } = useContext(ScreenContext);
@@ -26,9 +26,9 @@ const Demo = ({ blok }) => {
   const arrowRefs = useRef([]);
   const contentRefs = useRef([]);
   const iconRefs = useRef([]);
-  const handlersRef = useRef([]); 
+  const handlersRef = useRef([]);
   const prevIndex = useRef(0);
-  const demoExperienceRef = useRef('');
+  const demoExperienceRef = useRef("");
   const copycomponents = [
     "body_copy",
     "header",
@@ -42,50 +42,50 @@ const Demo = ({ blok }) => {
 
   useEffect(() => {
     const tl = gsap.timeline({});
-    gsap.set(optionRefs.current[0], { height: 'auto' });
+    gsap.set(optionRefs.current[0], { height: "auto" });
     gsap.set(arrowRefs.current[0], { rotate: 180 });
     gsap.set(contentRefs.current[0], { opacity: 1 });
-    gsap.set(iconRefs.current[0], { filter: 'grayscale(90%) brightness(2)' });
+    gsap.set(iconRefs.current[0], { filter: "grayscale(90%) brightness(2)" });
 
     const handleClick = (index) => {
       if (prevIndex.current === index) {
-        tl.to('.content', {
+        tl.to(".content", {
           duration: 0.1,
           opacity: 0,
         })
-          .to('.options', {
-            height: getMedia('64px', '4vw', '6.25vw', '18.953vw'),
+          .to(".options", {
+            height: getMedia("64px", "4vw", "6.25vw", "18.953vw"),
             duration: 0.25,
           })
-          .to('.arrows', {
+          .to(".arrows", {
             rotate: 0,
             duration: 0.25,
           });
       } else {
-        tl.to('.content', {
+        tl.to(".content", {
           duration: 0.1,
           opacity: 0,
         })
-          .to('.options', {
-            height: getMedia('64px', '4vw', '6.25vw', '18.953vw'),
+          .to(".options", {
+            height: getMedia("64px", "4vw", "6.25vw", "18.953vw"),
             duration: 0.35,
           })
           .to(
-            '.icons',
-            { duration: 0.1, filter: 'brightness(1) grayscale(0%)' },
-            'start'
+            ".icons",
+            { duration: 0.1, filter: "brightness(1) grayscale(0%)" },
+            "start",
           )
-          .to('.arrows', {
+          .to(".arrows", {
             rotate: 0,
             duration: 0.1,
           })
           .to(
             iconRefs.current[index],
-            { duration: 0.1, filter: 'grayscale(90%) brightness(2)' },
-            'start'
+            { duration: 0.1, filter: "grayscale(90%) brightness(2)" },
+            "start",
           )
           .to(optionRefs.current[index], {
-            height: 'auto',
+            height: "auto",
             duration: 0.35,
           })
           .to(
@@ -94,7 +94,7 @@ const Demo = ({ blok }) => {
               opacity: 1,
               duration: 0.25,
             },
-            '-=.1'
+            "-=.1",
           )
           .to(
             arrowRefs.current[index],
@@ -102,7 +102,7 @@ const Demo = ({ blok }) => {
               rotate: 180,
               duration: 0.15,
             },
-            '-=.5'
+            "-=.5",
           );
       }
 
@@ -112,14 +112,14 @@ const Demo = ({ blok }) => {
     optionRefs.current.forEach((option, index) => {
       handlersRef.current[index] = () => handleClick(index);
       if (option) {
-        option.addEventListener('click', handlersRef.current[index]);
+        option.addEventListener("click", handlersRef.current[index]);
       }
     });
 
     return () => {
       optionRefs.current.forEach((option, index) => {
         if (option) {
-          option.removeEventListener('click', handlersRef.current[index]);
+          option.removeEventListener("click", handlersRef.current[index]);
         }
       });
     };
@@ -128,7 +128,7 @@ const Demo = ({ blok }) => {
   useEffect(() => {
     const checkFormLoad = () => {
       const demoExperienceElement = document.querySelector(
-        '#formFriendlyProductofInterest'
+        "#formFriendlyProductofInterest",
       );
       const tl = gsap.timeline({});
 
@@ -136,31 +136,31 @@ const Demo = ({ blok }) => {
         const handleChange = (event) => {
           demoExperienceRef.current = event.target.value;
 
-          if (demoExperienceRef.current === 'Vasion Print') {
-            tl.to('.content', {
+          if (demoExperienceRef.current === "Vasion Print") {
+            tl.to(".content", {
               duration: 0.25,
               opacity: 0,
             })
-              .to('.options', {
-                height: getMedia('64px', '4vw', '6.25vw', '14.953vw'),
+              .to(".options", {
+                height: getMedia("64px", "4vw", "6.25vw", "14.953vw"),
                 duration: 0.25,
               })
-              .to('.arrows', {
+              .to(".arrows", {
                 rotate: 0,
                 duration: 0.25,
               })
               .to(
-                '.icons',
-                { duration: 0.15, filter: 'brightness(1) grayscale(0%)' },
-                'start'
+                ".icons",
+                { duration: 0.15, filter: "brightness(1) grayscale(0%)" },
+                "start",
               )
               .to(
                 iconRefs.current[0],
-                { duration: 0.15, filter: 'grayscale(90%) brightness(2)' },
-                'start'
+                { duration: 0.15, filter: "grayscale(90%) brightness(2)" },
+                "start",
               )
               .to(optionRefs.current[0], {
-                height: 'auto',
+                height: "auto",
               })
               .to(
                 contentRefs.current[0],
@@ -168,7 +168,7 @@ const Demo = ({ blok }) => {
                   opacity: 1,
                   duration: 0.35,
                 },
-                '-=.5'
+                "-=.5",
               )
               .to(
                 arrowRefs.current[0],
@@ -176,33 +176,33 @@ const Demo = ({ blok }) => {
                   rotate: 180,
                   duration: 0.25,
                 },
-                '-=.5'
+                "-=.5",
               );
-          } else if (demoExperienceRef.current === 'Vasion Output') {
-            tl.to('.content', {
+          } else if (demoExperienceRef.current === "Vasion Output") {
+            tl.to(".content", {
               duration: 0.25,
               opacity: 0,
             })
-              .to('.options', {
-                height: getMedia('64px', '4vw', '6.25vw', '14.953vw'),
+              .to(".options", {
+                height: getMedia("64px", "4vw", "6.25vw", "14.953vw"),
                 duration: 0.25,
               })
-              .to('.arrows', {
+              .to(".arrows", {
                 rotate: 0,
                 duration: 0.25,
               })
               .to(
-                '.icons',
-                { duration: 0.15, filter: 'brightness(1) grayscale(0%)' },
-                'start'
+                ".icons",
+                { duration: 0.15, filter: "brightness(1) grayscale(0%)" },
+                "start",
               )
               .to(
                 iconRefs.current[1],
-                { duration: 0.15, filter: 'grayscale(90%) brightness(2)' },
-                'start'
+                { duration: 0.15, filter: "grayscale(90%) brightness(2)" },
+                "start",
               )
               .to(optionRefs.current[1], {
-                height: 'auto',
+                height: "auto",
               })
               .to(
                 contentRefs.current[1],
@@ -210,7 +210,7 @@ const Demo = ({ blok }) => {
                   opacity: 1,
                   duration: 0.35,
                 },
-                '-=.5'
+                "-=.5",
               )
               .to(
                 arrowRefs.current[1],
@@ -218,33 +218,33 @@ const Demo = ({ blok }) => {
                   rotate: 180,
                   duration: 0.25,
                 },
-                '-=.5'
+                "-=.5",
               );
-          } else if (demoExperienceRef.current === 'Vasion Automate') {
-            tl.to('.content', {
+          } else if (demoExperienceRef.current === "Vasion Automate") {
+            tl.to(".content", {
               duration: 0.25,
               opacity: 0,
             })
-              .to('.options', {
-                height: getMedia('64px', '4vw', '6.25vw', '14.953vw'),
+              .to(".options", {
+                height: getMedia("64px", "4vw", "6.25vw", "14.953vw"),
                 duration: 0.25,
               })
-              .to('.arrows', {
+              .to(".arrows", {
                 rotate: 0,
                 duration: 0.25,
               })
               .to(
-                '.icons',
-                { duration: 0.15, filter: 'brightness(1) grayscale(0%)' },
-                'start'
+                ".icons",
+                { duration: 0.15, filter: "brightness(1) grayscale(0%)" },
+                "start",
               )
               .to(
                 iconRefs.current[2],
-                { duration: 0.15, filter: 'grayscale(90%) brightness(2)' },
-                'start'
+                { duration: 0.15, filter: "grayscale(90%) brightness(2)" },
+                "start",
               )
               .to(optionRefs.current[2], {
-                height: 'auto',
+                height: "auto",
               })
               .to(
                 contentRefs.current[2],
@@ -252,7 +252,7 @@ const Demo = ({ blok }) => {
                   opacity: 1,
                   duration: 0.35,
                 },
-                '-=.5'
+                "-=.5",
               )
               .to(
                 arrowRefs.current[2],
@@ -260,35 +260,35 @@ const Demo = ({ blok }) => {
                   rotate: 180,
                   duration: 0.25,
                 },
-                '-=.5'
+                "-=.5",
               );
           } else if (
-            demoExperienceRef.current === 'Vasion Automation Platform'
+            demoExperienceRef.current === "Vasion Automation Platform"
           ) {
-            tl.to('.content', {
+            tl.to(".content", {
               duration: 0.25,
               opacity: 0,
             })
-              .to('.options', {
-                height: getMedia('64px', '4vw', '6.25vw', '14.953vw'),
+              .to(".options", {
+                height: getMedia("64px", "4vw", "6.25vw", "14.953vw"),
                 duration: 0.25,
               })
-              .to('.arrows', {
+              .to(".arrows", {
                 rotate: 0,
                 duration: 0.25,
               })
               .to(
-                '.icons',
-                { duration: 0.15, filter: 'brightness(1) grayscale(0%)' },
-                'start'
+                ".icons",
+                { duration: 0.15, filter: "brightness(1) grayscale(0%)" },
+                "start",
               )
               .to(
                 iconRefs.current[3],
-                { duration: 0.15, filter: 'grayscale(90%) brightness(2)' },
-                'start'
+                { duration: 0.15, filter: "grayscale(90%) brightness(2)" },
+                "start",
               )
               .to(optionRefs.current[3], {
-                height: 'auto',
+                height: "auto",
               })
               .to(
                 contentRefs.current[3],
@@ -296,7 +296,7 @@ const Demo = ({ blok }) => {
                   opacity: 1,
                   duration: 0.35,
                 },
-                '-=.5'
+                "-=.5",
               )
               .to(
                 arrowRefs.current[3],
@@ -304,16 +304,16 @@ const Demo = ({ blok }) => {
                   rotate: 180,
                   duration: 0.25,
                 },
-                '-=.5'
+                "-=.5",
               );
           }
         };
-        demoExperienceElement.addEventListener('change', handleChange);
+        demoExperienceElement.addEventListener("change", handleChange);
 
         clearInterval(intervalId);
 
         return () => {
-          demoExperienceElement.removeEventListener('change', handleChange);
+          demoExperienceElement.removeEventListener("change", handleChange);
         };
       }
     };
@@ -330,44 +330,41 @@ const Demo = ({ blok }) => {
   ));
 
   const mappedOptions = blok.cards.map((option, index) => {
-    const formattedIconString = option.icon.replace(/\s+/g, '');
+    const formattedIconString = option.icon.replace(/\s+/g, "");
 
     let IconComponent = Icons[formattedIconString] || null;
     // console.log(option);
     return (
       <div {...storyblokEditable(option)}>
-      <OptionDiv
-      
-        className='options preformContent'
-        ref={(el) => (optionRefs.current[index] = el)}
-        key={option.header}
-      >
-        <OptionHeader>
-          {IconComponent && (
-            <OptionIconWrapper>
-              {IconComponent ? <IconComponent /> : null}
-            </OptionIconWrapper>
-          )}
-          {option.header}
-          <ArrowDiv
-            className='arrows'
-            ref={(el) => (arrowRefs.current[index] = el)}
-          >
-            <OptionArrow />
-          </ArrowDiv>{' '}
-        </OptionHeader>
-        <OptionContentContainer
-          className='content'
-          ref={(el) => (contentRefs.current[index] = el)}
+        <OptionDiv
+          className="options preformContent"
+          ref={(el) => (optionRefs.current[index] = el)}
+          key={option.header}
         >
-          <OptionSubheader>{option.sub_header}</OptionSubheader>
-          <div {...storyblokEditable(option)}>
-          <RichTextRenderer document={option.body_copy} />
-
-          </div>
-        </OptionContentContainer>
-      </OptionDiv>
-
+          <OptionHeader>
+            {IconComponent && (
+              <OptionIconWrapper>
+                {IconComponent ? <IconComponent /> : null}
+              </OptionIconWrapper>
+            )}
+            {option.header}
+            <ArrowDiv
+              className="arrows"
+              ref={(el) => (arrowRefs.current[index] = el)}
+            >
+              <OptionArrow />
+            </ArrowDiv>{" "}
+          </OptionHeader>
+          <OptionContentContainer
+            className="content"
+            ref={(el) => (contentRefs.current[index] = el)}
+          >
+            <OptionSubheader>{option.sub_header}</OptionSubheader>
+            <div {...storyblokEditable(option)}>
+              <RichTextRenderer document={option.body_copy} />
+            </div>
+          </OptionContentContainer>
+        </OptionDiv>
       </div>
     );
   });
@@ -375,25 +372,23 @@ const Demo = ({ blok }) => {
   return (
     <BackgroundWrapper>
       <Wrapper>
-        <Content className='preformContent'>
-          <Header>
-            {blok.header}
-          </Header>
+        <Content className="preformContent">
+          <Header>{blok.header}</Header>
           <AllOptionsContainer>{mappedOptions}</AllOptionsContainer>
           {!mobile && <BadgesContainer>{mappedBadges}</BadgesContainer>}
         </Content>
 
-        {blok.demo_form[0].component === 'form' && (
-          <FormPositionContainer id='formPos'>
+        {blok.demo_form[0].component === "form" && (
+          <FormPositionContainer id="formPos">
             <Form blok={blok.demo_form[0]} />
           </FormPositionContainer>
         )}
-         {blok.demo_form[0].component === 'test_form' && (
-          <FormPositionContainer id='formPos'>
+        {blok.demo_form[0].component === "test_form" && (
+          <FormPositionContainer id="formPos">
             <TestForm blok={blok.demo_form[0]} />
           </FormPositionContainer>
         )}
-        {blok.demo_form[0].component === 'demo_thank_you' && (
+        {blok.demo_form[0].component === "demo_thank_you" && (
           <FormThankYouContainer>
             {blok.demo_form[0]?.copy?.map((item, index) => (
               <div key={index} {...storyblokEditable(item)}>
@@ -407,9 +402,7 @@ const Demo = ({ blok }) => {
           </FormThankYouContainer>
         )}
       </Wrapper>
-      <ZoomLegalStatement>
-        {blok.legal_text}
-      </ZoomLegalStatement>
+      <ZoomLegalStatement>{blok.legal_text}</ZoomLegalStatement>
     </BackgroundWrapper>
   );
 };
@@ -427,14 +420,16 @@ const FormThankYouContainer = styled.div`
   padding: 2vw;
   width: 35.25vw;
   height: 80vh;
-  box-shadow: 0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
+  box-shadow:
+    0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.25vw 0.5vw 0vw rgba(25, 29, 30, 0.16);
 
   ${media.fullWidth} {
     border-radius: 32px;
     padding: 32px;
     width: 564px;
-    box-shadow: 0px 0px 2px 0px rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0px 0px 2px 0px rgba(25, 29, 30, 0.04),
       0px 4px 8px 0px rgba(25, 29, 30, 0.16);
   }
 
@@ -442,7 +437,8 @@ const FormThankYouContainer = styled.div`
     border-radius: 3.125vw;
     padding: 3.125vw;
     width: 45.313vw;
-    box-shadow: 0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.391vw 0.781vw 0vw rgba(25, 29, 30, 0.16);
   }
 
@@ -450,7 +446,8 @@ const FormThankYouContainer = styled.div`
     border-radius: 6.667vw;
     padding: 6.667vw;
     width: 89.167vw;
-    box-shadow: 0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.833vw 1.667vw 0vw rgba(25, 29, 30, 0.16);
   }
 `;
@@ -577,7 +574,7 @@ const OptionContentContainer = styled.div`
 `;
 const OptionDiv = styled.div`
   cursor: pointer;
-  background: url('/images/DemoCardBG.webp');
+  background: url("/images/DemoCardBG.webp");
   background-position: center;
   overflow: hidden;
   background-position: 0% 2%;
@@ -685,7 +682,7 @@ const Wrapper = styled.div`
   }
 
   ${media.mobile} {
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap: 9.346vw;
     padding: 9.346vw 6.075vw;
   }
