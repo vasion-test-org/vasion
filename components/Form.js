@@ -393,9 +393,7 @@ const CalendarContainer = styled.div`
 const MarketoForm = styled.form`
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
   align-items: start;
-  text-align: center;
   width: 31.25vw !important;
   gap: 1.25vw 1.25vw;
 
@@ -475,12 +473,62 @@ const FormContainer = styled.div`
       0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.833vw 1.667vw 0vw rgba(25, 29, 30, 0.16);
   }
+
+  .mktoFieldDescriptor {
+    max-height: 3.375vw !important;
+
+    ${media.fullWidth} {
+      max-height: 54px !important;
+    }
+
+    ${media.tablet} {
+      max-height: 5.273vw !important;
+    }
+
+    ${media.mobile} {
+      max-height: 11.25vw !important;
+    }
+  }
+
+  .mktoCaptchaDisclaimer {
+    display: none;
+  }
+
+  .mktoFormRow:has(> .mktoPlaceholder) {
+    display: none;
+  }
+
+  .mktoFormRow:has(a[href*="vasion.com/privacy-policy"]) span {
+    ${text.bodySm};
+    text-align: center;
+    color: ${(props) => props.theme.form.textColor};
+
+    a {
+      color: ${colors.primaryOrange};
+    }
+  }
+
+  .mktoFormRow:has(> input[type="hidden"]) {
+    display: none;
+  }
+
+  .mktoButtonRow {
+    width: 100%;
+  }
+
+  .mktoOffset,
+  .mktoGutter {
+    width: unset !important;
+  }
+
+  /* Checkbox styles - fixed version */
   .mktoCheckboxList {
     width: unset !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
   }
+
   .mktoCheckboxList input[type="checkbox"] {
     height: auto !important;
     margin-right: 0.5vw !important;
@@ -516,9 +564,10 @@ const FormContainer = styled.div`
       gap: 1.667vw;
     }
   }
+
   .mktoFormRow:has(.mktoCheckboxList) {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
     margin: 1vw 0;
 
@@ -533,58 +582,6 @@ const FormContainer = styled.div`
     ${media.mobile} {
       margin: 3.333vw 0;
     }
-  }
-  .mktoFieldDescriptor {
-    max-height: 3.375vw !important;
-
-    ${media.fullWidth} {
-      max-height: 54px !important;
-    }
-
-    ${media.tablet} {
-      max-height: 5.273vw !important;
-    }
-
-    ${media.mobile} {
-      max-height: 11.25vw !important;
-    }
-  }
-
-  .mktoCaptchaDisclaimer {
-    display: none;
-  }
-  .mktoFormRow:has(> .mktoPlaceholder) {
-    display: none;
-  }
-
-  .mktoFormRow:has(a[href*="vasion.com/privacy-policy"]) span {
-    ${text.bodySm};
-    text-align: center;
-    color: ${(props) => props.theme.form.textColor};
-
-    a {
-      color: ${colors.primaryOrange};
-    }
-  }
-
-  .mktoFormRow:has(> input[type="hidden"]) {
-    display: none;
-  }
-
-  .mktoButtonRow {
-    width: 100%;
-  }
-  .mktoOffset,
-  .mktoGutter {
-    width: unset !important;
-  }
-  .mktoCheckboxList {
-    width: unset !important;
-  }
-  #LblemailOptIn {
-    color: ${(props) => props.theme.form.textColor};
-    display: flex;
-    gap: 0.125vw;
   }
 
   button {
@@ -619,9 +616,11 @@ const FormContainer = styled.div`
       border: 1px solid ${colors.primaryOrange};
     }
   }
+
   label {
     display: none;
   }
+
   input {
     ${text.bodyMd};
     border: 1px solid ${(props) => props.theme.form.inputBorder};
@@ -745,23 +744,23 @@ const FormContainer = styled.div`
     option {
       ${text.bodyMd};
     }
+  }
+  .mktoFieldWrap {
+    display: flex !important;
+    gap: 0vw;
 
     ${media.fullWidth} {
+      gap: 0px;
     }
-
     ${media.tablet} {
+      gap: 0px;
     }
-
     ${media.mobile} {
+      gap: 1.042vw;
     }
   }
-  ${media.fullWidth} {
-  }
-
-  ${media.tablet} {
-  }
-
-  ${media.mobile} {
+  .mktoHtmlText {
+    width: unset !important;
   }
 `;
 export default Form;
