@@ -121,14 +121,14 @@ const Form = ({ blok }) => {
         defaultLanguage: languageRef.current,
         useIframe: blok.animated,
       };
-
+      // switched this from using hard coded  'Demo Request - EN', where it now says routingLang.current @bubba
       window.LDBookItV2.initialize(
         "00DE0000000bt64MAA",
-        routingLang.current,
+        routingLang.current, // change I am referring too
         "LD_BookIt_Log_ID__c",
         initConfig,
       );
-
+      // end of changes
       if (aliIdExists) {
         window.LDBookItV2.submit(
           blok.animated
@@ -172,6 +172,7 @@ const Form = ({ blok }) => {
           form.onSuccess(function (submittedValues) {
             clearTimeout(submissionTimeout);
             if (blok.animated) {
+              //This is Brand new from when you were gone @bubba
               if (window.LDBookItV2) {
                 window.LDBookItV2.saveFormData(submittedValues);
                 console.log("Thank You");
@@ -182,6 +183,7 @@ const Form = ({ blok }) => {
                   "There was a problem connecting to our scheduling system. Please contact support.",
                 );
               }
+              // changes end here
             } else if (blok.redirect_link.cached_url) {
               updateThankYouCopy(blok?.thank_you_copy);
 
@@ -705,4 +707,3 @@ const FormContainer = styled.div`
   }
 `;
 export default Form;
-

@@ -45,7 +45,9 @@ const Demo = ({ blok }) => {
     gsap.set(optionRefs.current[0], { height: "auto" });
     gsap.set(arrowRefs.current[0], { rotate: 180 });
     gsap.set(contentRefs.current[0], { opacity: 1 });
-    gsap.set(iconRefs.current[0], { filter: "grayscale(90%) brightness(2)" });
+    if (iconRefs.current[0]) {
+      gsap.set(iconRefs.current[0], { filter: "grayscale(90%) brightness(2)" });
+    }
 
     const handleClick = (index) => {
       if (prevIndex.current === index) {
@@ -343,8 +345,11 @@ const Demo = ({ blok }) => {
         >
           <OptionHeader>
             {IconComponent && (
-              <OptionIconWrapper>
-                {IconComponent ? <IconComponent /> : null}
+              <OptionIconWrapper
+                classname="icons"
+                ref={(el) => (iconRefs.current[index] = el)}
+              >
+                {IconComponent && <IconComponent />}
               </OptionIconWrapper>
             )}
             {option.header}
