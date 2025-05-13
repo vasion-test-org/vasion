@@ -171,7 +171,6 @@ const Form = ({ blok }) => {
 
           form.onSuccess(function (submittedValues) {
             clearTimeout(submissionTimeout);
-
             if (blok.animated) {
               if (window.LDBookItV2) {
                 window.LDBookItV2.saveFormData(submittedValues);
@@ -179,14 +178,10 @@ const Form = ({ blok }) => {
                 console.log("Form submitted successfully:", submittedValues);
               } else {
                 console.error("LDBookItV2 not available, booking may fail");
-                // Handle the error case - maybe show an error to the user
                 alert(
                   "There was a problem connecting to our scheduling system. Please contact support.",
                 );
               }
-              LDBookItV2.saveFormData(submittedValues);
-              console.log("Thank You");
-              console.log("Form submitted successfully:", submittedValues);
             } else if (blok.redirect_link.cached_url) {
               updateThankYouCopy(blok?.thank_you_copy);
 
