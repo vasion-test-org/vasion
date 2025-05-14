@@ -656,6 +656,7 @@ const Header = styled.h3`
   ${media.mobile} {
     ${text.h2};
     margin-bottom: 2.804vw;
+    text-align: center;
   }
 `;
 const Content = styled.div`
