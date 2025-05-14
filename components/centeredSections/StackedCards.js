@@ -249,7 +249,7 @@ const CardContainer = styled.div`
 
   ${media.tablet} {
     opacity: 1;
-    width: ${(props) => (props?.$last ? "92.188vw" : "29.102vw")};
+    width: ${(props) => (props?.$last ? "89.488vw" : "29.102vw")};
     padding: ${(props) => (props?.$last ? "3.906vw" : "1.953vw")};
     height: ${(props) => (props?.$last ? "fit-content" : "45.953vw")};
     border-radius: 1.172vw;
