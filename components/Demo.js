@@ -386,7 +386,7 @@ const Demo = ({ blok }) => {
     <BackgroundWrapper>
       <Wrapper>
         <Content className="preformContent">
-          <Header>{blok.header}</Header>
+          {!mobile && <Header>{blok.header}</Header>}
           <AllOptionsContainer>{mappedOptions}</AllOptionsContainer>
           {!mobile && <BadgesContainer>{mappedBadges}</BadgesContainer>}
         </Content>
@@ -401,6 +401,7 @@ const Demo = ({ blok }) => {
             <TestForm blok={blok.demo_form[0]} />
           </FormPositionContainer>
         )}
+        {mobile && <Header>{blok.header}</Header>}
         {blok.demo_form[0].component === "demo_thank_you" && (
           <FormThankYouContainer>
             {blok.demo_form[0]?.copy?.map((item, index) => (
@@ -655,6 +656,7 @@ const Header = styled.h3`
   ${media.mobile} {
     ${text.h2};
     margin-bottom: 2.804vw;
+    text-align: center;
   }
 `;
 const Content = styled.div`
