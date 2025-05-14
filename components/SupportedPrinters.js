@@ -1,42 +1,44 @@
-'use client'
-import React, { useEffect, useState } from "react"
+"use client";
+import React, { useEffect, useState } from "react";
 
-import styled from "styled-components"
-import media from "styles/media"
-import colors from "styles/colors"
-import text from "styles/text"
-import gsap from "gsap"
-import axios from "axios"
-import XSVG from "assets/svg/Le-X.svg"
-import DownSVG  from "assets/svg/ChevronDown.svg"
-import RichTextRenderer from "./renderers/RichTextRenderer"
+import styled from "styled-components";
+import media from "styles/media";
+import colors from "styles/colors";
+import text from "styles/text";
+import gsap from "gsap";
+import axios from "axios";
+import XSVG from "assets/svg/Le-X.svg";
+import DownSVG from "assets/svg/ChevronDown.svg";
+import RichTextRenderer from "./renderers/RichTextRenderer";
 
-const SupportedPrinters = ({blok}) => {
-  const [tableData, setTableData] = useState([])
-  const [searchData, setSearchData] = useState("")
+const SupportedPrinters = ({ blok }) => {
+  const [tableData, setTableData] = useState([]);
+  const [searchData, setSearchData] = useState("");
   const initialData = {
     searchTerm: "",
     manuInput: "",
     platformInput: "",
     featureInput: "",
-  }
-  const [filteredData, setFilteredData] = useState(initialData)
-  const [manuValue, setManuValue] = useState(blok.table_headers[0].copy)
-  const [platformValue, setPlatformValue] = useState(blok.table_headers[4].copy)
-  const [featureValue, setFeatureValue] = useState(blok.table_headers[5].copy)
+  };
+  const [filteredData, setFilteredData] = useState(initialData);
+  const [manuValue, setManuValue] = useState(blok.table_headers[0].copy);
+  const [platformValue, setPlatformValue] = useState(
+    blok.table_headers[4].copy,
+  );
+  const [featureValue, setFeatureValue] = useState(blok.table_headers[5].copy);
 
   useEffect(() => {
     axios
       .get(
-        "https://sheets.googleapis.com/v4/spreadsheets/1ukBB6L9pGGUfChH7BafNNExqbec75w0LBgHfMkyK1L8/values/A1:G10000?key=AIzaSyA3GpKJdlj4jxJsdHzDKxoDUr0z2lL1u8A"
+        "https://sheets.googleapis.com/v4/spreadsheets/1ukBB6L9pGGUfChH7BafNNExqbec75w0LBgHfMkyK1L8/values/A1:G10000?key=AIzaSyA3GpKJdlj4jxJsdHzDKxoDUr0z2lL1u8A",
       )
-      .then(res => {
-        setTableData(res.data.values)
-      })
-  }, [])
+      .then((res) => {
+        setTableData(res.data.values);
+      });
+  }, []);
 
   useEffect(() => {
-    const tl = gsap.timeline({})
+    const tl = gsap.timeline({});
 
     const closeAlert = () => {
       tl.to("#alertBox", {
@@ -47,15 +49,15 @@ const SupportedPrinters = ({blok}) => {
         duration: 0.75,
       }).to("#alertBox", {
         display: "none",
-      })
-    }
+      });
+    };
 
-    document.querySelector("#xsvg").addEventListener("click", closeAlert)
-  }, [])
+    document.querySelector("#xsvg").addEventListener("click", closeAlert);
+  }, []);
 
   useEffect(() => {
     //manufacturer dropdown timeline
-    const manuDropDownTL = gsap.timeline({ paused: true })
+    const manuDropDownTL = gsap.timeline({ paused: true });
     manuDropDownTL
       .set("#manuOptions", {
         display: "flex",
@@ -63,10 +65,10 @@ const SupportedPrinters = ({blok}) => {
       .to("#manuOptions", {
         height: "auto",
         duration: 0.55,
-      })
+      });
 
     //platform dropdown timeline
-    const platformDropDownTL = gsap.timeline({ paused: true })
+    const platformDropDownTL = gsap.timeline({ paused: true });
     platformDropDownTL
       .set("#platformOptions", {
         display: "flex",
@@ -74,10 +76,10 @@ const SupportedPrinters = ({blok}) => {
       .to("#platformOptions", {
         height: "auto",
         duration: 0.55,
-      })
+      });
 
     //feature dropdown timeline
-    const featureDropDownTL = gsap.timeline({ paused: true })
+    const featureDropDownTL = gsap.timeline({ paused: true });
     featureDropDownTL
       .set("#featureOptions", {
         display: "flex",
@@ -85,65 +87,65 @@ const SupportedPrinters = ({blok}) => {
       .to("#featureOptions", {
         height: "auto",
         duration: 0.55,
-      })
+      });
 
-    const handleManuDrop = e => {
+    const handleManuDrop = (e) => {
       manuDropDownTL.paused() || manuDropDownTL.reversed()
         ? manuDropDownTL.play()
-        : manuDropDownTL.reverse()
-      featureDropDownTL.reverse()
-      platformDropDownTL.reverse()
-    }
+        : manuDropDownTL.reverse();
+      featureDropDownTL.reverse();
+      platformDropDownTL.reverse();
+    };
 
     const handlePlatformDrop = () => {
       platformDropDownTL.paused() || platformDropDownTL.reversed()
         ? platformDropDownTL.play()
-        : platformDropDownTL.reverse()
-      manuDropDownTL.reverse()
-      featureDropDownTL.reverse()
-    }
+        : platformDropDownTL.reverse();
+      manuDropDownTL.reverse();
+      featureDropDownTL.reverse();
+    };
 
     const handleFeatureDrop = () => {
       featureDropDownTL.paused() || featureDropDownTL.reversed()
         ? featureDropDownTL.play()
-        : featureDropDownTL.reverse()
-      manuDropDownTL.reverse()
-      platformDropDownTL.reverse()
-    }
+        : featureDropDownTL.reverse();
+      manuDropDownTL.reverse();
+      platformDropDownTL.reverse();
+    };
 
     document
       .querySelector("#manuDropdown")
-      .addEventListener("click", handleManuDrop)
+      .addEventListener("click", handleManuDrop);
     document
       .querySelector("#platformDropdown")
-      .addEventListener("click", handlePlatformDrop)
+      .addEventListener("click", handlePlatformDrop);
     document
       .querySelector("#featureDropdown")
-      .addEventListener("click", handleFeatureDrop)
-  }, [])
+      .addEventListener("click", handleFeatureDrop);
+  }, []);
 
-  const handleSearchChange = e => {
-    e.preventDefault()
-    setSearchData(e.target.value)
-  }
+  const handleSearchChange = (e) => {
+    e.preventDefault();
+    setSearchData(e.target.value);
+  };
 
-  const handleManufacturerChange = e => {
-    e.preventDefault()
-    setFilteredData({ ...filteredData, manuInput: e.target.innerText })
-    setManuValue(e.target.innerText)
-  }
+  const handleManufacturerChange = (e) => {
+    e.preventDefault();
+    setFilteredData({ ...filteredData, manuInput: e.target.innerText });
+    setManuValue(e.target.innerText);
+  };
 
-  const handlePlatformChange = e => {
-    e.preventDefault()
-    setFilteredData({ ...filteredData, platformInput: e.target.innerText })
-    setPlatformValue(e.target.innerText)
-  }
+  const handlePlatformChange = (e) => {
+    e.preventDefault();
+    setFilteredData({ ...filteredData, platformInput: e.target.innerText });
+    setPlatformValue(e.target.innerText);
+  };
 
-  const handleFeatureChange = e => {
-    e.preventDefault()
-    setFilteredData({ ...filteredData, featureInput: e.target.innerText })
-    setFeatureValue(e.target.innerText)
-  }
+  const handleFeatureChange = (e) => {
+    e.preventDefault();
+    setFilteredData({ ...filteredData, featureInput: e.target.innerText });
+    setFeatureValue(e.target.innerText);
+  };
 
   const manuList = [
     "Canon",
@@ -158,54 +160,54 @@ const SupportedPrinters = ({blok}) => {
     "Kyocera",
     "Fujifilm",
     "Epson",
-  ]
+  ];
 
-  const platformList = ["Saas", "VA", "Web stack"]
+  const platformList = ["Saas", "VA", "Web stack"];
 
-  const featuresList = ["CPA 1", "CPA 2", "Off-Network Cloud Printing"]
+  const featuresList = ["CPA 1", "CPA 2", "Off-Network Cloud Printing"];
 
-  const manufacturers = manuList.map(value => (
+  const manufacturers = manuList.map((value) => (
     <Option onClick={handleManufacturerChange}>{value}</Option>
-  ))
+  ));
 
-  const platformVersions = platformList.map(value => (
+  const platformVersions = platformList.map((value) => (
     <Option onClick={handlePlatformChange}>{value}</Option>
-  ))
-  const features = featuresList.map(value => (
+  ));
+  const features = featuresList.map((value) => (
     <Option onClick={handleFeatureChange}>{value}</Option>
-  ))
+  ));
 
   const resetFilters = () => {
-    setFilteredData(initialData)
-    setSearchData("")
-    setManuValue(blok.table_headers[0].copy)
-    setPlatformValue(blok.table_headers[4].copy)
-    setFeatureValue(blok.table_headers[5].copy)
-  }
+    setFilteredData(initialData);
+    setSearchData("");
+    setManuValue(blok.table_headers[0].copy);
+    setPlatformValue(blok.table_headers[4].copy);
+    setFeatureValue(blok.table_headers[5].copy);
+  };
 
-  const filteredTableData = tableData.slice(1).filter(entry => {
+  const filteredTableData = tableData.slice(1).filter((entry) => {
     const manufacturerMatch = entry[0]
       .toLowerCase()
-      .includes(filteredData.manuInput.toLowerCase())
+      .includes(filteredData.manuInput.toLowerCase());
     const platformVersionMatch = entry[4]
       .toLowerCase()
-      .includes(filteredData.platformInput.toLowerCase())
+      .includes(filteredData.platformInput.toLowerCase());
     const featureMatch = entry[5]
       .toLowerCase()
-      .includes(filteredData.featureInput.toLowerCase())
+      .includes(filteredData.featureInput.toLowerCase());
     const searchTermMatch = entry[2]
       .toLowerCase()
-      .includes(searchData.toLowerCase())
+      .includes(searchData.toLowerCase());
 
     return (
       manufacturerMatch &&
       platformVersionMatch &&
       searchTermMatch &&
       featureMatch
-    )
-  })
+    );
+  });
 
-  const tableRows = filteredTableData.map(dataPoint => {
+  const tableRows = filteredTableData.map((dataPoint) => {
     return (
       <TableBodyRow>
         <TableData>{dataPoint[0]}</TableData>
@@ -215,76 +217,76 @@ const SupportedPrinters = ({blok}) => {
         <TableData>{dataPoint[4]}</TableData>
         <TableData>{dataPoint[5]}</TableData>
       </TableBodyRow>
-    )
-  })
+    );
+  });
 
   return (
-        <Wrapper>   
-          <SearchDiv>
-            <SearchHeader>{blok.search_header}</SearchHeader>
-            <Search
-              placeholder={blok.search_placeholder}
-              type="text"
-              onChange={handleSearchChange}
-              value={searchData}
-            />
-          </SearchDiv>
+    <Wrapper>
+      <SearchDiv>
+        <SearchHeader>{blok.search_header}</SearchHeader>
+        <Search
+          placeholder={blok.search_placeholder}
+          type="text"
+          onChange={handleSearchChange}
+          value={searchData}
+        />
+      </SearchDiv>
 
-          <FilterDiv>
-            <Filters>
-              <Manufacturer id="manuDropdown">
-                {manuValue}
-                <DownArrow />
-                <OptionsContainer id="manuOptions">
-                  {manufacturers}
-                </OptionsContainer>
-              </Manufacturer>
+      <FilterDiv>
+        <Filters>
+          <Manufacturer id="manuDropdown">
+            {manuValue}
+            <DownArrow />
+            <OptionsContainer id="manuOptions">
+              {manufacturers}
+            </OptionsContainer>
+          </Manufacturer>
 
-              <PlatformVersion id="platformDropdown">
-                {platformValue}
-                <DownArrow />
-                <OptionsContainer id="platformOptions">
-                  {platformVersions}
-                </OptionsContainer>
-              </PlatformVersion>
+          <PlatformVersion id="platformDropdown">
+            {platformValue}
+            <DownArrow />
+            <OptionsContainer id="platformOptions">
+              {platformVersions}
+            </OptionsContainer>
+          </PlatformVersion>
 
-              <Feature id="featureDropdown">
-                {featureValue}
-                <DownArrow />
-                <OptionsContainer id="featureOptions">
-                  {features}
-                </OptionsContainer>
-              </Feature>
-            </Filters>
-            <ClearFilter onClick={resetFilters}>{blok.clear_button_text}</ClearFilter>
-          </FilterDiv>
+          <Feature id="featureDropdown">
+            {featureValue}
+            <DownArrow />
+            <OptionsContainer id="featureOptions">{features}</OptionsContainer>
+          </Feature>
+        </Filters>
+        <ClearFilter onClick={resetFilters}>
+          {blok.clear_button_text}
+        </ClearFilter>
+      </FilterDiv>
 
-          <AlertBox id="alertBox">
-            <X id="xsvg" />
-            <AlertHeader>{blok.notice_header}</AlertHeader>
-            <AlertBody>
-              <RichTextRenderer document={blok.notice}/>
-            </AlertBody>
-          </AlertBox>
+      <AlertBox id="alertBox">
+        <X id="xsvg" />
+        <AlertHeader>{blok.notice_header}</AlertHeader>
+        <AlertBody>
+          <RichTextRenderer document={blok.notice} />
+        </AlertBody>
+      </AlertBox>
 
-          <TableContainer>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead scope="col">{blok.table_headers[0].copy}</TableHead>
-                  <TableHead scope="col">{blok.table_headers[1].copy}</TableHead>
-                  <TableHead scope="col">{blok.table_headers[2].copy}</TableHead>
-                  <TableHead scope="col">{blok.table_headers[3].copy}</TableHead>
-                  <TableHead scope="col">{blok.table_headers[4].copy}</TableHead>
-                  <TableHead scope="col">{blok.table_headers[5].copy}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>{tableRows}</TableBody>
-            </Table>
-          </TableContainer>
-        </Wrapper>
-  )
-}
+      <TableContainer>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead scope="col">{blok.table_headers[0].copy}</TableHead>
+              <TableHead scope="col">{blok.table_headers[1].copy}</TableHead>
+              <TableHead scope="col">{blok.table_headers[2].copy}</TableHead>
+              <TableHead scope="col">{blok.table_headers[3].copy}</TableHead>
+              <TableHead scope="col">{blok.table_headers[4].copy}</TableHead>
+              <TableHead scope="col">{blok.table_headers[5].copy}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>{tableRows}</TableBody>
+        </Table>
+      </TableContainer>
+    </Wrapper>
+  );
+};
 
 const TableContainer = styled.div`
   overflow: hidden;
@@ -310,7 +312,7 @@ const TableContainer = styled.div`
     width: 100%;
     height: 150.486vw;
   }
-`
+`;
 const TableData = styled.td`
   ${text.bodyMd};
   display: flex;
@@ -331,7 +333,7 @@ const TableData = styled.td`
     min-width: 28.374vw;
     padding: 7.477vw 2.336vw 7.477vw 2.336vw !important;
   }
-`
+`;
 const TableBodyRow = styled.tr`
   display: flex;
   width: 100%;
@@ -353,7 +355,7 @@ const TableBodyRow = styled.tr`
       padding: 1.477vw 2.336vw 7.477vw 2.336vw !important;
     }
   }
-`
+`;
 const TableBody = styled.tbody`
   display: block;
   width: 100%;
@@ -376,7 +378,7 @@ const TableBody = styled.tbody`
     width: 100vw;
     height: 155.486vw;
   }
-`
+`;
 const TableRow = styled.tr`
   display: flex;
   width: 100%;
@@ -384,7 +386,7 @@ const TableRow = styled.tr`
   ${media.mobile} {
     flex-direction: column;
   }
-`
+`;
 const TableHead = styled.th`
   ${text.bodyMd};
   display: flex;
@@ -404,7 +406,7 @@ const TableHead = styled.th`
     ${text.bodySmBold};
     padding: 7.477vw 2.336vw 7.477vw 2.336vw !important;
   }
-`
+`;
 const TableHeader = styled.thead`
   display: flex; /* Change to display: flex */
   position: sticky;
@@ -416,7 +418,7 @@ const TableHeader = styled.thead`
   ${media.mobile} {
     width: 32.944vw;
   }
-`
+`;
 const Table = styled.table`
   width: 100%;
   height: 27.917vw;
@@ -435,10 +437,10 @@ const Table = styled.table`
     width: 100vw;
     height: 150.486vw;
   }
-`
+`;
 const SupportLink = styled.a`
   ${text.bodyMd};
-`
+`;
 const AlertBody = styled.div`
   ${text.bodyMd};
   width: 69.444vw;
@@ -454,10 +456,10 @@ const AlertBody = styled.div`
   ${media.mobile} {
     width: 72.897vw;
   }
-`
+`;
 const AlertHeader = styled.p`
   ${text.bodyLgBold};
-`
+`;
 const X = styled(XSVG)`
   position: absolute;
   cursor: pointer;
@@ -492,7 +494,7 @@ const X = styled(XSVG)`
       stroke: ${colors.primaryOrange};
     }
   }
-`
+`;
 const AlertBox = styled.div`
   position: relative;
   display: flex;
@@ -527,7 +529,7 @@ const AlertBox = styled.div`
     padding: 9.346vw 9.346vw 9.346vw 5.607vw;
     margin-bottom: 5.607vw;
   }
-`
+`;
 const ClearFilter = styled.button`
   ${text.bodyMdBold};
   background-color: ${colors.primaryOrange};
@@ -567,7 +569,7 @@ const ClearFilter = styled.button`
     color: ${colors.primaryOrange};
     border: 0.069vw solid ${colors.primaryOrange};
   }
-`
+`;
 
 const DownArrow = styled(DownSVG)`
   width: 0.694vw;
@@ -588,7 +590,7 @@ const DownArrow = styled(DownSVG)`
     width: 2.336vw;
     height: 2.336vw;
   }
-`
+`;
 
 const Option = styled.div`
   width: 100%;
@@ -615,7 +617,7 @@ const Option = styled.div`
     background-color: ${colors.white};
     color: ${colors.primaryOrange};
   }
-`
+`;
 
 const OptionsContainer = styled.div`
   position: absolute;
@@ -645,7 +647,7 @@ const OptionsContainer = styled.div`
     border-radius: 1.869vw;
     top: 13.551vw;
   }
-`
+`;
 const Feature = styled.div`
   ${text.bodyMd};
   cursor: pointer;
@@ -682,7 +684,7 @@ const Feature = styled.div`
     padding: 4.673vw;
     gap: 4.673vw;
   }
-`
+`;
 const PlatformVersion = styled.div`
   ${text.bodyMd};
   cursor: pointer;
@@ -719,7 +721,7 @@ const PlatformVersion = styled.div`
     padding: 4.673vw;
     gap: 4.673vw;
   }
-`
+`;
 const Manufacturer = styled.div`
   ${text.bodyMd};
   cursor: pointer;
@@ -755,7 +757,7 @@ const Manufacturer = styled.div`
     padding: 4.673vw;
     gap: 4.673vw;
   }
-`
+`;
 const Filters = styled.div`
   display: flex;
   flex-direction: row;
@@ -773,7 +775,7 @@ const Filters = styled.div`
     flex-wrap: wrap;
     gap: 2.607vw;
   }
-`
+`;
 const FilterDiv = styled.div`
   display: flex;
   flex-direction: row;
@@ -795,10 +797,10 @@ const FilterDiv = styled.div`
     align-items: unset;
     padding: 7.009vw 7.009vw 5.607vw 6.075vw;
   }
-`
+`;
 const SearchHeader = styled.h3`
   ${text.h3};
-`
+`;
 const Search = styled.input`
   padding: 1.667vw 2.917vw;
   width: 30.278vw;
@@ -829,7 +831,7 @@ const Search = styled.input`
     border-radius: 13.084vw;
     border: 0.234vw solid ${colors.primaryOrange};
   }
-`
+`;
 
 const SearchDiv = styled.div`
   display: flex;
@@ -849,7 +851,7 @@ const SearchDiv = styled.div`
   ${media.mobile} {
     gap: 5.607vw;
   }
-`
+`;
 const IntroBody = styled.p`
   ${text.bodyMd};
   text-align: center;
@@ -866,14 +868,14 @@ const IntroBody = styled.p`
   ${media.mobile} {
     width: 87.85vw;
   }
-`
+`;
 const Header = styled.h2`
   ${text.h2};
 
   ${media.mobile} {
     ${text.h2};
   }
-`
+`;
 const IntroDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -897,10 +899,10 @@ const IntroDiv = styled.div`
     gap: 9.346vw;
     margin: 18.692vw 0 9.346vw 0;
   }
-`
+`;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
-export default SupportedPrinters
+`;
+export default SupportedPrinters;
