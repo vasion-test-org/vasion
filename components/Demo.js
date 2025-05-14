@@ -38,24 +38,12 @@ const Demo = ({ blok }) => {
     "overview_controller",
     "small_quote",
   ];
-  // console.log(blok);
-  useEffect(() => {
-    optionRefs.current = [];
-    arrowRefs.current = [];
-    contentRefs.current = [];
-    iconRefs.current = [];
-    handlersRef.current = [];
-    prevIndex.current = 0;
-    demoExperienceRef.current = "";
-  }, []);
   useEffect(() => {
     const tl = gsap.timeline({});
     gsap.set(optionRefs.current[0], { height: "auto" });
     gsap.set(arrowRefs.current[0], { rotate: 180 });
     gsap.set(contentRefs.current[0], { opacity: 1 });
-    if (iconRefs.current[0]) {
-      gsap.set(iconRefs.current[0], { filter: "grayscale(90%) brightness(2)" });
-    }
+    gsap.set(iconRefs.current[0], { filter: "grayscale(90%) brightness(2)" });
 
     const handleClick = (index) => {
       if (prevIndex.current === index) {
@@ -353,10 +341,7 @@ const Demo = ({ blok }) => {
         >
           <OptionHeader>
             {IconComponent && (
-              <OptionIconWrapper
-                classname="icons"
-                ref={(el) => (iconRefs.current[index] = el)}
-              >
+              <OptionIconWrapper classname="icons">
                 {IconComponent && <IconComponent />}
               </OptionIconWrapper>
             )}
