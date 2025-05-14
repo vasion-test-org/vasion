@@ -18,6 +18,7 @@ const IntegrationBloks = ({ types, isMobile }) => {
       />
     ));
   };
+  //when links are added back add <Link href={item?.link_url.url} key={index}>
   const typeList = types?.map((item, index) => {
     let titleContent;
     if (isMobile && item?.title.includes("Virtual Desktop Infrastructure")) {
@@ -26,12 +27,12 @@ const IntegrationBloks = ({ types, isMobile }) => {
       titleContent = item?.title;
     }
     return (
-      <Link href={item?.link_url.url} key={index}>
+      <div>
         <IntegrationItem $columns={index}>
           <Title>{titleContent}</Title>
           <ImagesContainer>{imageList(item?.icons)}</ImagesContainer>
         </IntegrationItem>
-      </Link>
+      </div>
     );
   });
 
@@ -210,6 +211,5 @@ const TypeContainer = styled.div`
     gap: 0.833vw;
     width: 100%;
     max-width: 100%;
-    
   }
 `;
