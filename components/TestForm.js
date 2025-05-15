@@ -336,14 +336,22 @@ const Form = ({ blok }) => {
 
           form.onSuccess(function (submittedValues) {
             clearTimeout(submissionTimeout);
-            // Store form data in localStorage before refresh
-            localStorage.setItem(
-              'lastFormSubmission',
-              JSON.stringify({
-                values: submittedValues,
+
+            // Create an array to store all form data
+            let allFormData = [];
+
+            // Override the saveFormData method to capture all data
+            const originalSaveFormData = window.LDBookItV2.saveFormData;
+            window.LDBookItV2.saveFormData = function (data) {
+              allFormData.push({
+                data: data,
                 timestamp: new Date().toISOString(),
-              })
-            );
+              });
+              // Store in localStorage for persistence
+              localStorage.setItem('allFormData', JSON.stringify(allFormData));
+              // Call the original method
+              return originalSaveFormData.apply(this, arguments);
+            };
 
             if (blok.animated) {
               //This is Brand new from when you were gone @bubba
