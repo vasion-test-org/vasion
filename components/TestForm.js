@@ -93,6 +93,8 @@ const Form = ({ blok }) => {
         return;
       }
 
+      const formData = window.LDBookItV2.getFormData() || {};
+
       switch (e.data.message) {
         case 'LD_ROUTING_RESPONSE':
           let routingResponseData = e.data.responseData;
@@ -102,61 +104,35 @@ const Form = ({ blok }) => {
             if (
               calendarLink.toLowerCase().startsWith('https://app.leandata.com')
             ) {
-              console.log('Calendar should be displayed:', calendarLink);
-              // Add calendar data to form
-              window.LDBookItV2.saveFormData({
-                calendar_link: calendarLink,
-                routing_response: routingResponseData,
-              });
-              if (blok.animated) {
-                demoTl.play();
-                setStepDone(true);
-              }
+              formData['calendar_displayed'] = true;
+              formData['calendar_link'] = calendarLink;
+              formData['calendar_timestamp'] = new Date().toISOString();
             } else {
-              console.log('Redirecting to:', calendarLink);
-              window.LDBookItV2.saveFormData({
-                redirect_url: calendarLink,
-                routing_response: routingResponseData,
-              });
+              formData['redirect_triggered'] = true;
+              formData['redirect_url'] = calendarLink;
+              formData['redirect_timestamp'] = new Date().toISOString();
             }
-          } else {
-            console.log('No calendar link provided in routing response');
           }
           break;
 
         case 'LD_POPUP_CLOSED':
-          console.log('Popup modal closed');
-          window.LDBookItV2.saveFormData({
-            popup_closed: true,
-            closed_timestamp: new Date().toISOString(),
-          });
+          formData['popup_closed'] = true;
+          formData['popup_closed_timestamp'] = new Date().toISOString();
           break;
 
         case 'LD_POST_BOOKING_IMMEDIATE':
-          let postBookingData = e.data.data;
-          console.log('Post booking data:', postBookingData);
-
-          // Add booking data to form
-          window.LDBookItV2.saveFormData({
-            booking_completed: true,
-            booking_data: postBookingData,
-            booking_timestamp: new Date().toISOString(),
-          });
-
-          setTimeout(() => {
-            console.log('Running post booking actions');
-            // Add your post booking actions here
-          }, 3000);
+          formData['booking_completed'] = true;
+          formData['booking_data'] = e.data.data;
+          formData['booking_timestamp'] = new Date().toISOString();
           break;
 
         case 'LD_ROUTING_TIMED_OUT':
-          console.log('Routing timed out - implement fallback experience');
-          window.LDBookItV2.saveFormData({
-            routing_timeout: true,
-            timeout_timestamp: new Date().toISOString(),
-          });
+          formData['routing_timeout'] = true;
+          formData['timeout_timestamp'] = new Date().toISOString();
           break;
       }
+
+      window.LDBookItV2.saveFormData(formData);
     };
 
     window.addEventListener('message', handleBookItMessage);
@@ -203,6 +179,15 @@ const Form = ({ blok }) => {
           console.log('lean data language:', languageRef.current);
           formData['thank_you_language'] = languageRef.current;
           formData['origin_domain'] = originRef.current;
+
+          // Add form data from the current state
+          if (window.LDBookItV2) {
+            const currentFormData = window.LDBookItV2.getFormData();
+            if (currentFormData) {
+              Object.assign(formData, currentFormData);
+            }
+          }
+
           console.log('Form data before routing:', formData);
         },
         defaultLanguage: languageRef.current,
@@ -210,81 +195,27 @@ const Form = ({ blok }) => {
       };
 
       // Add event listeners for BookIt events
-      // const bookitIframe = document.querySelector(
-      //   '.bookit-content-container iframe'
-      // );
+      window.LDBookItV2.on('formDataSaved', (data) => {
+        const formData = window.LDBookItV2.getFormData() || {};
+        formData['form_data_saved'] = true;
+        formData['saved_timestamp'] = new Date().toISOString();
+        window.LDBookItV2.saveFormData(formData);
+      });
 
-      // if (bookitIframe) {
-      //   window.LDBookItV2.on('formDataSaved', (data) => {
-      //     if (data.source === bookitIframe.contentWindow) {
-      //       console.log('Form data saved:', data);
-      //     }
-      //   });
+      window.LDBookItV2.on('formDataSubmitted', (data) => {
+        const formData = window.LDBookItV2.getFormData() || {};
+        formData['form_submitted'] = true;
+        formData['submitted_timestamp'] = new Date().toISOString();
+        window.LDBookItV2.saveFormData(formData);
+      });
 
-      //   window.LDBookItV2.on('formDataCleared', () => {
-      //     console.log('Form data cleared');
-      //   });
-
-      //   window.LDBookItV2.on('formDataLoaded', (data) => {
-      //     if (data.source === bookitIframe.contentWindow) {
-      //       console.log('Form data loaded:', data);
-      //     }
-      //   });
-
-      //   window.LDBookItV2.on('formDataUpdated', (data) => {
-      //     if (data.source === bookitIframe.contentWindow) {
-      //       console.log('Form data updated:', data);
-      //     }
-      //   });
-
-      //   window.LDBookItV2.on('formDataSubmitted', (data) => {
-      //     if (data.source === bookitIframe.contentWindow) {
-      //       console.log('Form data submitted:', data);
-      //     }
-      //   });
-
-      //   window.LDBookItV2.on('formDataError', (error) => {
-      //     if (error.source === bookitIframe.contentWindow) {
-      //       console.error('Form data error:', error);
-      //     }
-      //   });
-
-      //   window.LDBookItV2.on('formDataTimeout', () => {
-      //     console.log('Form data timeout');
-      //   });
-
-      //   window.LDBookItV2.on('formDataInvalid', (data) => {
-      //     if (data.source === bookitIframe.contentWindow) {
-      //       console.log('Form data invalid:', data);
-      //     }
-      //   });
-
-      //   window.LDBookItV2.on('formDataValid', (data) => {
-      //     if (data.source === bookitIframe.contentWindow) {
-      //       console.log('Form data valid:', data);
-      //     }
-      //   });
-
-      //   window.LDBookItV2.on('formDataReset', () => {
-      //     console.log('Form data reset');
-      //   });
-
-      //   window.LDBookItV2.on('formDataCancel', () => {
-      //     console.log('Form data cancel');
-      //   });
-
-      //   window.LDBookItV2.on('formDataSuccess', (data) => {
-      //     if (data.source === bookitIframe.contentWindow) {
-      //       console.log('Form data success:', data);
-      //     }
-      //   });
-
-      //   window.LDBookItV2.on('formDataFailure', (error) => {
-      //     if (error.source === bookitIframe.contentWindow) {
-      //       console.error('Form data failure:', error);
-      //     }
-      //   });
-      // }
+      window.LDBookItV2.on('formDataError', (error) => {
+        const formData = window.LDBookItV2.getFormData() || {};
+        formData['form_error'] = true;
+        formData['error_message'] = error.message;
+        formData['error_timestamp'] = new Date().toISOString();
+        window.LDBookItV2.saveFormData(formData);
+      });
 
       // switched this from using hard coded  'Demo Request - EN', where it now says routingLang.current @bubba
       window.LDBookItV2.initialize(
