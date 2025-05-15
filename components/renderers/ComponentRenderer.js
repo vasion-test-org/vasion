@@ -91,7 +91,7 @@ const ComponentRenderer = ({ blok, extra_copy }) => {
       );
     case "copy_block":
       return (
-        <CopyDiv>
+        <CopyDiv className='preformContent'>
           {blok?.copy_block_sections?.map((item, index) => (
             <BlockWrapper key={index} {...storyblokEditable(item)}>
               {copycomponents.includes(item.component) ? (

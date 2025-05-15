@@ -26,7 +26,7 @@ const SideBySide = ({ blok }) => {
         extra_copy={blok.extra_copy}
         card={blok.card}
       >
-        <ComponentRenderer className='preformContent' extra_copy={blok.left_extra_copy?.[0]} blok={blok.left_side_component[0]} />
+        <ComponentRenderer extra_copy={blok.left_extra_copy?.[0]} blok={blok.left_side_component[0]} />
         <ComponentRenderer extra_copy={blok.right_extra_copy?.[0]} blok={blok.right_side_component[0]} />
       </SideBySideWrapper>
     </ThemeProvider>
