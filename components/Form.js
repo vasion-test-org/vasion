@@ -89,6 +89,7 @@ const Form = ({ blok }) => {
     if (blok.animated) {
       demoTl
         .to(".preformContent", { opacity: contentVisibility })
+        .to(".preformContent", { display: "none" }, "<")
         .to(".marketoForm", { opacity: 0 }, "<")
         .to("#formPos", { xPercent: xFormPosition, duration: 1.25 })
         .to(
