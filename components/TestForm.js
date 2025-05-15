@@ -345,8 +345,6 @@ const Form = ({ blok }) => {
               })
             );
 
-            console.log('Form submitted successfully:', submittedValues);
-
             if (blok.animated) {
               //This is Brand new from when you were gone @bubba
               if (window.LDBookItV2) {
