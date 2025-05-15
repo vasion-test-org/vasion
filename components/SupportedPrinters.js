@@ -1,36 +1,36 @@
-"use client";
-import React, { useEffect, useState } from "react";
+'use client';
+import React, { useEffect, useState } from 'react';
 
-import styled from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import text from "styles/text";
-import gsap from "gsap";
-import axios from "axios";
-import XSVG from "assets/svg/Le-X.svg";
-import DownSVG from "assets/svg/ChevronDown.svg";
-import RichTextRenderer from "./renderers/RichTextRenderer";
+import styled from 'styled-components';
+import media from 'styles/media';
+import colors from 'styles/colors';
+import text from 'styles/text';
+import gsap from 'gsap';
+import axios from 'axios';
+import XSVG from 'assets/svg/Le-X.svg';
+import DownSVG from 'assets/svg/ChevronDown.svg';
+import RichTextRenderer from './renderers/RichTextRenderer';
 
 const SupportedPrinters = ({ blok }) => {
   const [tableData, setTableData] = useState([]);
-  const [searchData, setSearchData] = useState("");
+  const [searchData, setSearchData] = useState('');
   const initialData = {
-    searchTerm: "",
-    manuInput: "",
-    platformInput: "",
-    featureInput: "",
+    searchTerm: '',
+    manuInput: '',
+    platformInput: '',
+    featureInput: '',
   };
   const [filteredData, setFilteredData] = useState(initialData);
   const [manuValue, setManuValue] = useState(blok.table_headers[0].copy);
   const [platformValue, setPlatformValue] = useState(
-    blok.table_headers[4].copy,
+    blok.table_headers[4].copy
   );
   const [featureValue, setFeatureValue] = useState(blok.table_headers[5].copy);
 
   useEffect(() => {
     axios
       .get(
-        "https://sheets.googleapis.com/v4/spreadsheets/1ukBB6L9pGGUfChH7BafNNExqbec75w0LBgHfMkyK1L8/values/A1:G10000?key=AIzaSyA3GpKJdlj4jxJsdHzDKxoDUr0z2lL1u8A",
+        'https://sheets.googleapis.com/v4/spreadsheets/1ukBB6L9pGGUfChH7BafNNExqbec75w0LBgHfMkyK1L8/values/A1:G10000?key=AIzaSyA3GpKJdlj4jxJsdHzDKxoDUr0z2lL1u8A'
       )
       .then((res) => {
         setTableData(res.data.values);
@@ -41,51 +41,51 @@ const SupportedPrinters = ({ blok }) => {
     const tl = gsap.timeline({});
 
     const closeAlert = () => {
-      tl.to("#alertBox", {
+      tl.to('#alertBox', {
         opacity: 0,
         height: 0,
         padding: 0,
         margin: 0,
         duration: 0.75,
-      }).to("#alertBox", {
-        display: "none",
+      }).to('#alertBox', {
+        display: 'none',
       });
     };
 
-    document.querySelector("#xsvg").addEventListener("click", closeAlert);
+    document.querySelector('#xsvg').addEventListener('click', closeAlert);
   }, []);
 
   useEffect(() => {
     //manufacturer dropdown timeline
     const manuDropDownTL = gsap.timeline({ paused: true });
     manuDropDownTL
-      .set("#manuOptions", {
-        display: "flex",
+      .set('#manuOptions', {
+        display: 'flex',
       })
-      .to("#manuOptions", {
-        height: "auto",
+      .to('#manuOptions', {
+        height: 'auto',
         duration: 0.55,
       });
 
     //platform dropdown timeline
     const platformDropDownTL = gsap.timeline({ paused: true });
     platformDropDownTL
-      .set("#platformOptions", {
-        display: "flex",
+      .set('#platformOptions', {
+        display: 'flex',
       })
-      .to("#platformOptions", {
-        height: "auto",
+      .to('#platformOptions', {
+        height: 'auto',
         duration: 0.55,
       });
 
     //feature dropdown timeline
     const featureDropDownTL = gsap.timeline({ paused: true });
     featureDropDownTL
-      .set("#featureOptions", {
-        display: "flex",
+      .set('#featureOptions', {
+        display: 'flex',
       })
-      .to("#featureOptions", {
-        height: "auto",
+      .to('#featureOptions', {
+        height: 'auto',
         duration: 0.55,
       });
 
@@ -114,14 +114,14 @@ const SupportedPrinters = ({ blok }) => {
     };
 
     document
-      .querySelector("#manuDropdown")
-      .addEventListener("click", handleManuDrop);
+      .querySelector('#manuDropdown')
+      .addEventListener('click', handleManuDrop);
     document
-      .querySelector("#platformDropdown")
-      .addEventListener("click", handlePlatformDrop);
+      .querySelector('#platformDropdown')
+      .addEventListener('click', handlePlatformDrop);
     document
-      .querySelector("#featureDropdown")
-      .addEventListener("click", handleFeatureDrop);
+      .querySelector('#featureDropdown')
+      .addEventListener('click', handleFeatureDrop);
   }, []);
 
   const handleSearchChange = (e) => {
@@ -148,23 +148,23 @@ const SupportedPrinters = ({ blok }) => {
   };
 
   const manuList = [
-    "Canon",
-    "Fuji Xerox",
-    "HP",
-    "Konica Minolta",
-    "Lexmark",
-    "Ricoh",
-    "Sharp",
-    "Toshiba",
-    "Xerox",
-    "Kyocera",
-    "Fujifilm",
-    "Epson",
+    'Canon',
+    'Fuji Xerox',
+    'HP',
+    'Konica Minolta',
+    'Lexmark',
+    'Ricoh',
+    'Sharp',
+    'Toshiba',
+    'Xerox',
+    'Kyocera',
+    'Fujifilm',
+    'Epson',
   ];
 
-  const platformList = ["Saas", "VA", "Web stack"];
+  const platformList = ['Saas', 'VA', 'Web stack'];
 
-  const featuresList = ["CPA 1", "CPA 2", "Off-Network Cloud Printing"];
+  const featuresList = ['CPA 1', 'CPA 2', 'Off-Network Cloud Printing'];
 
   const manufacturers = manuList.map((value) => (
     <Option onClick={handleManufacturerChange}>{value}</Option>
@@ -179,7 +179,7 @@ const SupportedPrinters = ({ blok }) => {
 
   const resetFilters = () => {
     setFilteredData(initialData);
-    setSearchData("");
+    setSearchData('');
     setManuValue(blok.table_headers[0].copy);
     setPlatformValue(blok.table_headers[4].copy);
     setFeatureValue(blok.table_headers[5].copy);
@@ -226,7 +226,7 @@ const SupportedPrinters = ({ blok }) => {
         <SearchHeader>{blok.search_header}</SearchHeader>
         <Search
           placeholder={blok.search_placeholder}
-          type="text"
+          type='text'
           onChange={handleSearchChange}
           value={searchData}
         />
@@ -234,26 +234,26 @@ const SupportedPrinters = ({ blok }) => {
 
       <FilterDiv>
         <Filters>
-          <Manufacturer id="manuDropdown">
+          <Manufacturer id='manuDropdown'>
             {manuValue}
             <DownArrow />
-            <OptionsContainer id="manuOptions">
+            <OptionsContainer id='manuOptions'>
               {manufacturers}
             </OptionsContainer>
           </Manufacturer>
 
-          <PlatformVersion id="platformDropdown">
+          <PlatformVersion id='platformDropdown'>
             {platformValue}
             <DownArrow />
-            <OptionsContainer id="platformOptions">
+            <OptionsContainer id='platformOptions'>
               {platformVersions}
             </OptionsContainer>
           </PlatformVersion>
 
-          <Feature id="featureDropdown">
+          <Feature id='featureDropdown'>
             {featureValue}
             <DownArrow />
-            <OptionsContainer id="featureOptions">{features}</OptionsContainer>
+            <OptionsContainer id='featureOptions'>{features}</OptionsContainer>
           </Feature>
         </Filters>
         <ClearFilter onClick={resetFilters}>
@@ -261,8 +261,8 @@ const SupportedPrinters = ({ blok }) => {
         </ClearFilter>
       </FilterDiv>
 
-      <AlertBox id="alertBox">
-        <X id="xsvg" />
+      <AlertBox id='alertBox'>
+        <X id='xsvg' />
         <AlertHeader>{blok.notice_header}</AlertHeader>
         <AlertBody>
           <RichTextRenderer document={blok.notice} />
@@ -273,12 +273,12 @@ const SupportedPrinters = ({ blok }) => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead scope="col">{blok.table_headers[0].copy}</TableHead>
-              <TableHead scope="col">{blok.table_headers[1].copy}</TableHead>
-              <TableHead scope="col">{blok.table_headers[2].copy}</TableHead>
-              <TableHead scope="col">{blok.table_headers[3].copy}</TableHead>
-              <TableHead scope="col">{blok.table_headers[4].copy}</TableHead>
-              <TableHead scope="col">{blok.table_headers[5].copy}</TableHead>
+              <TableHead scope='col'>{blok.table_headers[0].copy}</TableHead>
+              <TableHead scope='col'>{blok.table_headers[1].copy}</TableHead>
+              <TableHead scope='col'>{blok.table_headers[2].copy}</TableHead>
+              <TableHead scope='col'>{blok.table_headers[3].copy}</TableHead>
+              <TableHead scope='col'>{blok.table_headers[4].copy}</TableHead>
+              <TableHead scope='col'>{blok.table_headers[5].copy}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>{tableRows}</TableBody>
