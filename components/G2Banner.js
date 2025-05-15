@@ -159,7 +159,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 100%;
   align-self: center;
-  jusify-self: center;
+  justify-self: center;
   align-items: center;
   justify-content: center;
 `;

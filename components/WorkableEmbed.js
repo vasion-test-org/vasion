@@ -346,7 +346,7 @@ const SelectFilter = styled.select`
 `;
 const ToggleText = styled.p`
   ${text.bodySm}
-  text-wrap:nowrap;
+  white-space:nowrap;
 `;
 const ToggleContainer = styled.div`
   display: inline-block;

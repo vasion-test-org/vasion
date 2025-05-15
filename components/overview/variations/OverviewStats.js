@@ -252,7 +252,7 @@ const StatItemsContainer = styled.div`
 `;
 const Headline = styled.h4`
   ${text.h4};
-  text-wrap: nowrap;
+  white-space: nowrap;
   ${media.mobile} {
     ${text.eyebrow};
     color: ${colors.lightPurple};
@@ -275,7 +275,7 @@ const HeaderDiv = styled.div`
   align-items: center;
   justify-self: center;
   overflow: visible;
-  /* text-wrap: nowrap; */
+  /* white-space: nowrap; */
   ${media.mobile} {
     width: 109%;
     padding: 9.346vw 4.673vw 4.673vw 4.673vw;
