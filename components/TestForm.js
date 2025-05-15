@@ -336,6 +336,15 @@ const Form = ({ blok }) => {
 
           form.onSuccess(function (submittedValues) {
             clearTimeout(submissionTimeout);
+            // Store form data in localStorage before refresh
+            localStorage.setItem(
+              'lastFormSubmission',
+              JSON.stringify({
+                values: submittedValues,
+                timestamp: new Date().toISOString(),
+              })
+            );
+
             if (blok.animated) {
               //This is Brand new from when you were gone @bubba
               if (window.LDBookItV2) {
