@@ -12,7 +12,7 @@ import text from '@/styles/text';
 import { useThankYou } from '@/context/ThankYouContext';
 import { useRouter } from 'next/navigation';
 
-const TestForm = ({ blok }) => {
+const Form = ({ blok }) => {
   // console.log(blok.redirect_link)
   const { thankYouCopy, updateThankYouCopy } = useThankYou();
   const router = useRouter();
@@ -20,8 +20,8 @@ const TestForm = ({ blok }) => {
   const selectedTheme = themes[blok.theme] || themes.default;
   const [isLoaded, setIsLoaded] = useState(false);
   const [stepDone, setStepDone] = useState(false);
-  const formWidth = getMedia("1096px", "76.111vw", '90.82vw', '87.85vw');
-  const formHeight = getMedia("733px", "50.875vw", '77.137vw', '288.084vw');
+  const formWidth = getMedia('1096px', '76.111vw', '90.82vw', '87.85vw');
+  const formHeight = getMedia('733px', '50.875vw', '77.137vw', '288.084vw');
   const lineWidth = getMedia('220px', '15.278vw', '19.531vw', '7.187vw');
   const xFormPosition = getMedia(-28, -28, -27, 0);
   // const yFormPosition = getMedia(-277, -277, -27, 0);
@@ -61,17 +61,17 @@ const TestForm = ({ blok }) => {
       if (['de', 'fr'].includes(pathLocale)) {
         languageRef.current = pathLocale;
         if (pathLocale === 'de') {
-          routingLang.current = "Demo Request - DE"
+          routingLang.current = 'Demo Request - DE';
         } else if (pathLocale === 'fr') {
-          routingLang.current = "Demo Request - FR"
+          routingLang.current = 'Demo Request - FR';
         } else {
-          routingLang.current = 'Demo Request - EN'
+          routingLang.current = 'Demo Request - EN';
         }
       } else {
         languageRef.current = 'en';
       }
     }
-    console.log(routingLang.current)
+    console.log(routingLang.current);
   }, []);
 
   useEffect(() => {
@@ -82,6 +82,61 @@ const TestForm = ({ blok }) => {
     }
   }, []);
 
+  // Add LeanData BookIt event listener
+  useEffect(() => {
+    const handleBookItMessage = (e) => {
+      switch (e.data.message) {
+        case 'LD_ROUTING_RESPONSE':
+          let routingResponseData = e.data.responseData;
+          let calendarLink = routingResponseData?.calendarLink;
+
+          if (calendarLink) {
+            // if a link was returned, we either display a calendar or we redirect,
+            // depending on the decision node of the graph
+            if (
+              calendarLink.toLowerCase().startsWith('https://app.leandata.com')
+            ) {
+              console.log(
+                'Calendar displayed from graph (Schedule Node reached)'
+              );
+            } else {
+              console.log('Redirecting user (Redirect to URL Node reached)');
+            }
+          } else {
+            // The graph determined to not provide a calendar
+            console.log('No calendar provided (Schedule Node not reached)');
+          }
+          break;
+
+        case 'LD_POPUP_CLOSED':
+          console.log('Popup modal closed');
+          break;
+
+        case 'LD_POST_BOOKING_IMMEDIATE':
+          let postBookingData = e.data.data;
+          console.log('Post booking data:', postBookingData);
+
+          // recommended to use a setTimeout here so user can see confirmation screen
+          setTimeout(() => {
+            console.log('Running post booking actions');
+            // Add your post booking actions here
+          }, 3000);
+          break;
+
+        case 'LD_ROUTING_TIMED_OUT':
+          console.log('Routing timed out - implement fallback experience');
+          break;
+      }
+    };
+
+    window.addEventListener('message', handleBookItMessage);
+
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener('message', handleBookItMessage);
+    };
+  }, []);
+
   useEffect(() => {
     const demoTl = gsap.timeline({ paused: true });
     gsap.set('.bookit-content-container', { display: 'none', opacity: 0 });
@@ -89,9 +144,13 @@ const TestForm = ({ blok }) => {
     if (blok.animated) {
       demoTl
         .to('.preformContent', { opacity: contentVisibility })
+        .to('.preformContent nondemo', { display: 'none' }, '<')
         .to('.marketoForm', { opacity: 0 }, '<')
-        .to('#formPos', { xPercent: xFormPosition,  duration: 1.25 })
-        .to('#formContainer',{ width: formWidth, height: formHeight, duration: 1.25 },'<'
+        .to('#formPos', { xPercent: xFormPosition, duration: 1.25 })
+        .to(
+          '#formContainer',
+          { width: formWidth, height: formHeight, duration: 1.25 },
+          '<'
         )
         .to('.lines', { width: lineWidth, duration: 1.25 }, '<')
         .from('.second', { duration: 1.25, background: 'unset' }, '<')
@@ -109,7 +168,7 @@ const TestForm = ({ blok }) => {
       const urlParams = new URLSearchParams(window.location.search);
       const aliIdExists = urlParams.has('aliId');
       const initConfig = {
-        calendarTimeoutLength: 900,
+        // calendarTimeoutLength: 900,
         beforeRouting: (formTarget, formData) => {
           console.log('lean data language:', languageRef.current); // Use the ref here
           formData['thank_you_language'] = languageRef.current;
@@ -119,13 +178,67 @@ const TestForm = ({ blok }) => {
         useIframe: blok.animated,
       };
 
+      // Add event listeners for BookIt events
+      window.LDBookItV2.on('formDataSaved', (data) => {
+        console.log('Form data saved:', data);
+      });
+
+      window.LDBookItV2.on('formDataCleared', () => {
+        console.log('Form data cleared');
+      });
+
+      window.LDBookItV2.on('formDataLoaded', (data) => {
+        console.log('Form data loaded:', data);
+      });
+
+      window.LDBookItV2.on('formDataUpdated', (data) => {
+        console.log('Form data updated:', data);
+      });
+
+      window.LDBookItV2.on('formDataSubmitted', (data) => {
+        console.log('Form data submitted:', data);
+      });
+
+      window.LDBookItV2.on('formDataError', (error) => {
+        console.error('Form data error:', error);
+      });
+
+      window.LDBookItV2.on('formDataTimeout', () => {
+        console.log('Form data timeout');
+      });
+
+      window.LDBookItV2.on('formDataInvalid', (data) => {
+        console.log('Form data invalid:', data);
+      });
+
+      window.LDBookItV2.on('formDataValid', (data) => {
+        console.log('Form data valid:', data);
+      });
+
+      window.LDBookItV2.on('formDataReset', () => {
+        console.log('Form data reset');
+      });
+
+      window.LDBookItV2.on('formDataCancel', () => {
+        console.log('Form data cancel');
+      });
+
+      window.LDBookItV2.on('formDataSuccess', (data) => {
+        console.log('Form data success:', data);
+      });
+
+      window.LDBookItV2.on('formDataFailure', (error) => {
+        console.error('Form data failure:', error);
+      });
+
+      // switched this from using hard coded  'Demo Request - EN', where it now says routingLang.current @bubba
       window.LDBookItV2.initialize(
         '00DE0000000bt64MAA',
-        routingLang.current,
+        routingLang.current, // change I am referring too
         'LD_BookIt_Log_ID__c',
         initConfig
       );
-
+      // end of changes
       if (aliIdExists) {
         window.LDBookItV2.submit(
           blok.animated
@@ -150,53 +263,63 @@ const TestForm = ({ blok }) => {
 
   useEffect(() => {
     isLoaded &&
-    window?.MktoForms2?.loadForm(
-      'https://info.printerlogic.com',
-      '338-HTA-134',
-      blok.form_id,
-      (form) => {
-        let submissionTimeout;
+      window?.MktoForms2?.loadForm(
+        'https://info.printerlogic.com',
+        '338-HTA-134',
+        blok.form_id,
+        (form) => {
+          let submissionTimeout;
 
-        form.onSubmit(() => {
-          submissionTimeout = setTimeout(() => {
-            console.error("Form submission timeout: assuming failure");
-            alert("There was a problem submitting the form. Please refresh page and try again.");
-          }, 5000);
-        });
+          form.onSubmit(() => {
+            submissionTimeout = setTimeout(() => {
+              console.error('Form submission timeout: assuming failure');
+              alert(
+                'There was a problem submitting the form. Please refresh page and try again.'
+              );
+            }, 5000);
+          });
 
-        form.onSuccess(function (submittedValues) {
-          clearTimeout(submissionTimeout);
+          form.onSuccess(function (submittedValues) {
+            clearTimeout(submissionTimeout);
+            if (blok.animated) {
+              //This is Brand new from when you were gone @bubba
+              if (window.LDBookItV2) {
+                window.LDBookItV2.saveFormData(submittedValues);
+                console.log('Thank You');
+                console.log('Form submitted successfully:', submittedValues);
+              } else {
+                console.error('LDBookItV2 not available, booking may fail');
+                alert(
+                  'There was a problem connecting to our scheduling system. Please contact support.'
+                );
+              }
+              // changes end here
+            } else if (blok.redirect_link.cached_url) {
+              updateThankYouCopy(blok?.thank_you_copy);
 
-          if (blok.animated) {
-            LDBookItV2.saveFormData(submittedValues);
-            console.log('Thank You');
-            console.log("Form submitted successfully:", submittedValues);
-          } else if (blok.redirect_link.cached_url) {
-            updateThankYouCopy(blok?.thank_you_copy);
-  
-            const isExternal = (url) => /^https?:\/\//.test(url);
+              const isExternal = (url) => /^https?:\/\//.test(url);
 
-            let redirectUrl =
-              typeof blok.redirect_link === "string"
-                ? blok.redirect_link
-                : blok.redirect_link?.cached_url || "/thank-you";
-            
-            // 👇 Ensure root-relative if internal
-            if (!isExternal(redirectUrl) && !redirectUrl.startsWith("/")) {
-              redirectUrl = "/" + redirectUrl;
+              let redirectUrl =
+                typeof blok.redirect_link === 'string'
+                  ? blok.redirect_link
+                  : blok.redirect_link?.cached_url || '/thank-you';
+
+              // 👇 Ensure root-relative if internal
+              if (!isExternal(redirectUrl) && !redirectUrl.startsWith('/')) {
+                redirectUrl = '/' + redirectUrl;
+              }
+
+              if (isExternal(redirectUrl)) {
+                window.location.href = redirectUrl;
+              } else {
+                router.push(redirectUrl);
+              }
+
+              return false;
             }
-            
-            if (isExternal(redirectUrl)) {
-              window.location.href = redirectUrl;
-            } else {
-              router.push(redirectUrl);
-            }
-  
-            return false; 
-          }
-        });
-      }
-    );
+          });
+        }
+      );
   }, [isLoaded, blok.form_id, blok.redirectLink]);
 
   const loadScript = () => {
@@ -380,9 +503,7 @@ const CalendarContainer = styled.div`
 const MarketoForm = styled.form`
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
   align-items: start;
-  text-align: center;
   width: 31.25vw !important;
   gap: 1.25vw 1.25vw;
 
@@ -424,7 +545,7 @@ const FormHeader = styled.h4`
   }
 `;
 const FormContainer = styled.div`
-position: relative;
+  position: relative;
   display: flex;
   flex-direction: column;
   background: ${(props) => props.theme.form.formBg};
@@ -478,6 +599,7 @@ position: relative;
   .mktoCaptchaDisclaimer {
     display: none;
   }
+
   .mktoFormRow:has(> .mktoPlaceholder) {
     display: none;
   }
@@ -499,19 +621,74 @@ position: relative;
   .mktoButtonRow {
     width: 100%;
   }
+
   .mktoOffset,
   .mktoGutter {
     width: unset !important;
   }
+
+  /* Checkbox styles - fixed version */
   .mktoCheckboxList {
     width: unset !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
-#LblemailOptIn {
-  color: ${(props) => props.theme.form.textColor};
-  display: flex;
-  gap: 0.125vw;
 
-}
+  .mktoCheckboxList input[type='checkbox'] {
+    height: auto !important;
+    margin-right: 0.5vw !important;
+
+    ${media.fullWidth} {
+      margin-right: 8px !important;
+    }
+
+    ${media.tablet} {
+      margin-right: 0.781vw !important;
+    }
+
+    ${media.mobile} {
+      margin-right: 1.667vw !important;
+    }
+  }
+  #LblemailOptIn {
+    color: ${(props) => props.theme.form.textColor};
+    display: flex;
+    align-items: center !important;
+    gap: 0.5vw;
+    margin: 0 !important;
+
+    ${media.fullWidth} {
+      gap: 8px;
+    }
+
+    ${media.tablet} {
+      gap: 0.781vw;
+    }
+
+    ${media.mobile} {
+      gap: 1.667vw;
+    }
+  }
+
+  .mktoFormRow:has(.mktoCheckboxList) {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    margin: 1vw 0;
+
+    ${media.fullWidth} {
+      margin: 16px 0;
+    }
+
+    ${media.tablet} {
+      margin: 1.563vw 0;
+    }
+
+    ${media.mobile} {
+      margin: 3.333vw 0;
+    }
+  }
 
   button {
     ${text.bodyMdBold};
@@ -545,9 +722,11 @@ position: relative;
       border: 1px solid ${colors.primaryOrange};
     }
   }
+
   label {
     display: none;
   }
+
   input {
     ${text.bodyMd};
     border: 1px solid ${(props) => props.theme.form.inputBorder};
@@ -671,23 +850,23 @@ position: relative;
     option {
       ${text.bodyMd};
     }
+  }
+  .mktoFieldWrap {
+    display: flex !important;
+    gap: 0vw;
 
     ${media.fullWidth} {
+      gap: 0px;
     }
-
     ${media.tablet} {
+      gap: 0px;
     }
-
     ${media.mobile} {
+      gap: 1.042vw;
     }
   }
-  ${media.fullWidth} {
-  }
-
-  ${media.tablet} {
-  }
-
-  ${media.mobile} {
+  .mktoHtmlText {
+    width: unset !important;
   }
 `;
-export default TestForm;
+export default Form;
