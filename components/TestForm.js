@@ -85,26 +85,27 @@ const Form = ({ blok }) => {
   // Add LeanData BookIt event listener
   useEffect(() => {
     const handleBookItMessage = (e) => {
+      console.log('Received message event:', e.data); // Debug all messages
       switch (e.data.message) {
         case 'LD_ROUTING_RESPONSE':
           let routingResponseData = e.data.responseData;
           let calendarLink = routingResponseData?.calendarLink;
+          console.log('Routing response data:', routingResponseData); // Debug routing response
 
           if (calendarLink) {
-            // if a link was returned, we either display a calendar or we redirect,
-            // depending on the decision node of the graph
             if (
               calendarLink.toLowerCase().startsWith('https://app.leandata.com')
             ) {
-              console.log(
-                'Calendar displayed from graph (Schedule Node reached)'
-              );
+              console.log('Calendar should be displayed:', calendarLink);
+              if (blok.animated) {
+                demoTl.play();
+                setStepDone(true);
+              }
             } else {
-              console.log('Redirecting user (Redirect to URL Node reached)');
+              console.log('Redirecting to:', calendarLink);
             }
           } else {
-            // The graph determined to not provide a calendar
-            console.log('No calendar provided (Schedule Node not reached)');
+            console.log('No calendar link provided in routing response');
           }
           break;
 
@@ -168,11 +169,12 @@ const Form = ({ blok }) => {
       const urlParams = new URLSearchParams(window.location.search);
       const aliIdExists = urlParams.has('aliId');
       const initConfig = {
-        // calendarTimeoutLength: 900,
+        calendarTimeoutLength: 900,
         beforeRouting: (formTarget, formData) => {
           console.log('lean data language:', languageRef.current); // Use the ref here
           formData['thank_you_language'] = languageRef.current;
           formData['origin_domain'] = originRef.current;
+          console.log('Form data before routing:', formData); // Debug form data
         },
         defaultLanguage: languageRef.current,
         useIframe: blok.animated,
@@ -181,6 +183,10 @@ const Form = ({ blok }) => {
       // Add event listeners for BookIt events
       window.LDBookItV2.on('formDataSaved', (data) => {
         console.log('Form data saved:', data);
+      });
+
+      window.LDBookItV2.on('formDataSubmitted', (data) => {
+        console.log('Form data submitted:', data);
       });
 
       window.LDBookItV2.on('formDataCleared', () => {
@@ -193,10 +199,6 @@ const Form = ({ blok }) => {
 
       window.LDBookItV2.on('formDataUpdated', (data) => {
         console.log('Form data updated:', data);
-      });
-
-      window.LDBookItV2.on('formDataSubmitted', (data) => {
-        console.log('Form data submitted:', data);
       });
 
       window.LDBookItV2.on('formDataError', (error) => {
