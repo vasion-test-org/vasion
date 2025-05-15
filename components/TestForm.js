@@ -357,9 +357,19 @@ const Form = ({ blok }) => {
 
             if (blok.animated) {
               if (window.LDBookItV2) {
+                // First save the form data
                 window.LDBookItV2.saveFormData(submittedValues);
+
+                // Then update with BookIt data
+                Object.entries(storedBookItData).forEach(([key, value]) => {
+                  window.LDBookItV2.saveFormData({ [key]: value });
+                });
+
                 console.log('Thank You');
-                console.log('Form submitted successfully:', submittedValues);
+                console.log(
+                  'Form submitted successfully with BookIt data:',
+                  mergedFormData
+                );
               } else {
                 console.error('LDBookItV2 not available, booking may fail');
                 alert(
