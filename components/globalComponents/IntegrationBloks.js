@@ -86,7 +86,7 @@ const Title = styled.div`
   color: black;
   ${text.bodySmBold};
   align-self: center;
-  text-wrap: nowrap;
+  white-space: nowrap;
   width: fit-content;
   padding: 0.25vw 0.5vw;
   border-radius: 1.5vw;
