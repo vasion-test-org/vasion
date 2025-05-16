@@ -416,6 +416,7 @@ const ContentDiv = styled.div`
 const Wrapper = styled.div`
   position: relative;
   display: flex;
+  align-items: center;
   justify-self: center;
   flex-direction: column;
   z-index: 1;
