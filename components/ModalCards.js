@@ -210,6 +210,8 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
   justify-self: center;
   width: 81.5vw;
   gap: 2vw;
