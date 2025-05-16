@@ -130,7 +130,6 @@ async function fetchData(slug, locale) {
       );
       return null;
     }
-
     try {
       sbParams.version = 'draft';
       const { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
@@ -157,7 +156,7 @@ export async function generateStaticParams() {
     const splitSlug = slug === 'home' ? [] : slug.split('/');
     params.push({ slug: splitSlug, locale: 'en' });
 
-    if (story.translated_slugs) {
+r   if (story.translated_slugs) {
       for (const translation of story.translated_slugs) {
         const translatedSlug =
           translation.path === '' ? [] : translation.path.split('/');
