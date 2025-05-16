@@ -342,6 +342,9 @@ const Form = ({ blok }) => {
               ? JSON.parse(localStorage.getItem('bookitData'))
               : {};
 
+            console.log('Initial BookIt Data:', storedBookItData);
+            console.log('Form Submission Values:', submittedValues);
+
             // Merge form data with BookIt data
             const mergedFormData = {
               ...submittedValues,
@@ -354,16 +357,30 @@ const Form = ({ blok }) => {
               'lastFormSubmission',
               JSON.stringify(mergedFormData)
             );
+            console.log('Merged Form Data:', mergedFormData);
 
             if (blok.animated) {
               if (window.LDBookItV2) {
                 // First save the form data
                 window.LDBookItV2.saveFormData(submittedValues);
+                console.log('Initial form data saved to BookIt');
+
+                // Track each piece of BookIt data being saved
+                const savedBookItData = {};
 
                 // Then update with BookIt data
                 Object.entries(storedBookItData).forEach(([key, value]) => {
                   window.LDBookItV2.saveFormData({ [key]: value });
+                  savedBookItData[key] = value;
+                  console.log(`Saving BookIt data - ${key}:`, value);
                 });
+
+                // Store the complete saved data
+                localStorage.setItem(
+                  'savedBookItData',
+                  JSON.stringify(savedBookItData)
+                );
+                console.log('Complete saved BookIt data:', savedBookItData);
 
                 console.log('Thank You');
                 console.log(

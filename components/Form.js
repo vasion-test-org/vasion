@@ -30,6 +30,7 @@ const Form = ({ blok }) => {
   const routingLang = useRef("Demo Request - EN");
   const originRef = useRef("va");
 
+  //gets thank you copy for dynamic thank you page
   useEffect(() => {
     if (blok?.thank_you_copy) {
       updateThankYouCopy(blok?.thank_you_copy);
@@ -52,7 +53,8 @@ const Form = ({ blok }) => {
       }
     }
   }, []);
-  // TODO: refactor this to work with our new structure
+
+  //checking for pathname to set routing language and path
   useEffect(() => {
     if (typeof window !== "undefined") {
       const pathname = window.location.pathname;
@@ -74,6 +76,7 @@ const Form = ({ blok }) => {
     console.log(routingLang.current);
   }, []);
 
+  //checks script is loadedfor marketo form
   useEffect(() => {
     if (!document.getElementById("mktoForms")) {
       loadScript();
@@ -82,6 +85,7 @@ const Form = ({ blok }) => {
     }
   }, []);
 
+  //loads script for bookit form and gsap animations for form
   useEffect(() => {
     const demoTl = gsap.timeline({ paused: true });
     gsap.set(".bookit-content-container", { display: "none", opacity: 0 });
