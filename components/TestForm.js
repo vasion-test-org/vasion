@@ -119,9 +119,38 @@ const Form = ({ blok }) => {
       const initConfig = {
         calendarTimeoutLength: 900,
         beforeRouting: (formTarget, formData) => {
-          console.log('lean data language:', languageRef.current); // Use the ref here
+          console.log('lean data language:', languageRef.current);
           formData['thank_you_language'] = languageRef.current;
           formData['origin_domain'] = originRef.current;
+
+          // Get the stored logs and add them to formData
+          const logs = JSON.parse(localStorage.getItem('leanDataLogs') || '[]');
+
+          // Add the logs as a JSON string to formData
+          formData['lean_data_logs'] = JSON.stringify(logs);
+
+          // Add specific log information as separate fields
+          const lastLog = logs[logs.length - 1];
+          if (lastLog) {
+            formData['last_event_type'] = lastLog.type;
+            formData['last_event_timestamp'] = lastLog.timestamp;
+            if (lastLog.data) {
+              // Add specific data fields based on the event type
+              switch (lastLog.type) {
+                case 'CALENDAR_LINK_RECEIVED':
+                case 'REDIRECT_LINK_RECEIVED':
+                  formData['calendar_link'] = lastLog.data.link;
+                  formData['link_type'] = lastLog.data.type;
+                  break;
+                case 'POST_BOOKING_DATA':
+                  // Add any specific booking data fields you want to track
+                  Object.entries(lastLog.data).forEach(([key, value]) => {
+                    formData[`booking_${key}`] = value;
+                  });
+                  break;
+              }
+            }
+          }
         },
         defaultLanguage: languageRef.current,
         useIframe: blok.animated,
