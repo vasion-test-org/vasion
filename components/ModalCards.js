@@ -187,6 +187,7 @@ const CardsWrapper = styled.div`
   ${media.tablet} {
     gap: 2.539vw 2.344vw;
   }
+
   ${media.mobile} {
     gap: 3.333vw;
     width: fit-content;
