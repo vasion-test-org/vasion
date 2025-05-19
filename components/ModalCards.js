@@ -195,6 +195,7 @@ const CardsWrapper = styled.div`
     padding: 0vw 5.417vw;
   }
 `;
+
 const CardsOuterWrapper = styled.div`
   display: flex;
 
