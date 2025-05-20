@@ -1,14 +1,11 @@
 "use client";
 import React from "react";
-
 import styled, { ThemeProvider } from "styled-components";
 import { useAvailableThemes } from "@/context/ThemeContext";
 import media from "@/styles/media";
 import { storyblokEditable } from "@storyblok/react/rsc";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import colors from "styles/colors";
-// import text from 'styles/text';
-import Button from "@/components/globalComponents/Button";
 import useMedia from "@/functions/useMedia";
 
 const InfographicPill = ({ blok }) => {
