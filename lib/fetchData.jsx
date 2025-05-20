@@ -20,7 +20,7 @@ export async function fetchData(slug, isPreview) {
     const { data } = await storyblokApi.get(`cdn/stories/${slug}`, {
       version,
       cache: isPreview ? "no-store" : "force-cache", // Prevent caching in draft mode
-      token: apiToken, // Ensure correct token is used
+      token: apiToken, 
     });
 
     if (!data.story) {
