@@ -46,7 +46,10 @@ const InfographicPill = ({ blok }) => {
             {blok.copy_blok &&
               blok.copy_blok.map((copy) => (
                 <div {...storyblokEditable(copy)} key={copy._uid}>
-                  <RichTextRenderer document={copy?.copy} />
+                  <RichTextRenderer
+                    document={copy?.copy}
+                    responsiveTextStyles={copy.responsive_text_styles}
+                  />
                 </div>
               ))}
           </CopySection>
@@ -115,18 +118,21 @@ const PillWrapper = styled.div`
   height: 19vw;
   gap: 3.75vw;
   border-radius: 1.063vw;
+  padding: 3.75vw;
 
   ${media.fullWidth} {
     width: 1304px;
     height: 304px;
     gap: 60px;
     border-radius: 17px;
+    padding: 60px;
   }
   ${media.tablet} {
     width: 92.188vw;
     height: 23.242vw;
     gap: 3.906vw;
     border-radius: 1.66vw;
+    padding: 2.539vw;
   }
   ${media.mobile} {
     width: 89.167vw;
@@ -136,6 +142,7 @@ const PillWrapper = styled.div`
     gap: 8.333vw;
     border-radius: 3.542vw;
     text-align: center;
+    padding: 10.833vw;
   }
 `;
 const Wrapper = styled.div`
