@@ -126,8 +126,10 @@ const SupportedPrinters = ({ blok }) => {
   }, []);
 
   useEffect(() => {
-    const tableBody = document.querySelector('tbody');
+    const tableBody = document.querySelector('#tableBody');
     const smoother = getSmoother();
+
+    if (!tableBody) return;
 
     const handleMouseEnter = () => {
       if (smoother) {
@@ -148,7 +150,7 @@ const SupportedPrinters = ({ blok }) => {
       tableBody.removeEventListener('mouseenter', handleMouseEnter);
       tableBody.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, []);
+  }, [tableData]);
 
   const handleSearchChange = (e) => {
     e.preventDefault();
@@ -307,7 +309,7 @@ const SupportedPrinters = ({ blok }) => {
               <TableHead scope='col'>{blok.table_headers[5].copy}</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>{tableRows}</TableBody>
+          <TableBody id='tableBody'>{tableRows}</TableBody>
         </Table>
       </TableContainer>
     </Wrapper>
