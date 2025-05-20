@@ -1,9 +1,9 @@
-'use client';
-import React from 'react';
+"use client";
+import React from "react";
 
-import styled from 'styled-components';
-import media from '@/styles/media';
-import colors from '@/styles/colors';
+import styled from "styled-components";
+import media from "@/styles/media";
+import colors from "@/styles/colors";
 // import text from '@/styles/text';
 const BodyCopy = ({ className, children }) => {
   return <StyledBodyCopy className={className}>{children}</StyledBodyCopy>;
@@ -13,7 +13,7 @@ export default BodyCopy;
 
 const StyledBodyCopy = styled.div`
   display: inline-block;
-  font-family: 'Archivo';
+  font-family: "Archivo";
   font-weight: 400;
   white-space: pre-wrap;
 

@@ -5,10 +5,11 @@ import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import { useAvailableThemes } from "@/context/ThemeContext";
 import { storyblokEditable } from "@storyblok/react/rsc";
 import media from "@/styles/media";
-import colors from "styles/colors";
+import colors from "@/styles/colors";
 import useMedia from "@/functions/useMedia";
 
 const InfographicPill = ({ blok }) => {
+  console.log("infographicPill", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const backgroundColor =
@@ -24,6 +25,7 @@ const InfographicPill = ({ blok }) => {
           blok.gallery[2]?.filename || blok.gallery[0]?.filename,
         )
       : null;
+
   return (
     <ThemeProvider theme={selectedTheme}>
       <Wrapper>
@@ -41,11 +43,12 @@ const InfographicPill = ({ blok }) => {
             )}
           </MediaWrapper>
           <CopySection>
-            {blok.copy_section && (
-              <div {...storyblokEditable(blok.copy_section)}>
-                <RichTextRenderer document={blok.copy_section} />
-              </div>
-            )}
+            {blok.copy_blok &&
+              blok.copy_blok.map((copy) => (
+                <div {...storyblokEditable(copy)} key={copy._uid}>
+                  <RichTextRenderer document={copy?.copy} />
+                </div>
+              ))}
           </CopySection>
         </PillWrapper>
       </Wrapper>
@@ -55,16 +58,16 @@ const InfographicPill = ({ blok }) => {
 
 export default InfographicPill;
 const CopySection = styled.div`
-  max-width: 50.25vw;
+  width: 50.25vw;
 
   ${media.fullWidth} {
-    max-width: 804px;
+    width: 804px;
   }
   ${media.tablet} {
-    max-width: 122.083vw;
+    width: 122.083vw;
   }
   ${media.mobile} {
-    max-width: 376px;
+    width: 78.333vw;
   }
 `;
 const SideImage = styled.img`
