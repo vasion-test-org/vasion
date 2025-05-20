@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import media from "@/styles/media";
-import { storyblokEditable } from "@storyblok/react/rsc";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
+import { useAvailableThemes } from "@/context/ThemeContext";
+import { storyblokEditable } from "@storyblok/react/rsc";
+import media from "@/styles/media";
 import colors from "styles/colors";
 import useMedia from "@/functions/useMedia";
 
