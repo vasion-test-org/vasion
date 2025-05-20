@@ -13,9 +13,11 @@ const InfographicPill = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const backgroundColor =
-    blok.theme === "default" || blok.theme === "light"
+    blok.theme === "default"
       ? colors?.lightPurpleGrey
-      : colors?.primaryPurple;
+      : blok?.theme === "light"
+        ? "unest"
+        : colors?.primaryPurple;
   const imageSrc =
     blok.gallery && blok.gallery.length > 0
       ? useMedia(
