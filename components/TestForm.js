@@ -158,6 +158,11 @@ const Form = ({ blok }) => {
                 );
                 demoTl.play();
                 setStepDone(true);
+                dataLayer.push({
+                  event: 'marketo_form_submission_success',
+                  form_id: blok.form_id,
+                  form_submission_date: new Date().toISOString(),
+                });
                 console.log('Thank You');
                 console.log('Form submitted successfully:', submittedValues);
               } else {
