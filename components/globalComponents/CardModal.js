@@ -12,7 +12,6 @@ import Video from "./Video";
 import { getSmoother } from "@/components/ScrollSmoothWrapper";
 
 const CardModal = ({ data, setShowModal }) => {
-  console.log("CardModal", data);
   const [closeButton, setCloseButton] = useState(
     "/images/uiElements/closeButton.webp",
   );
@@ -32,22 +31,48 @@ const CardModal = ({ data, setShowModal }) => {
       setShowModal(false);
     }
   };
-
   useEffect(() => {
     document.body.style.overflow = "hidden";
-
-    const smoother =
-      typeof window !== "undefined" ? window.ScrollSmoother?.get() : null;
-    smoother?.paused(true);
-    document
-      .getElementById("modal-scroll-group")
-      .addEventListener("mouseenter", () => {
+    let smoother;
+    try {
+      smoother = getSmoother();
+      if (!smoother && typeof window !== "undefined" && window.ScrollSmoother) {
+        smoother = window.ScrollSmoother.get();
+      }
+      if (smoother) {
         smoother.paused(true);
-      });
+        console.log("ScrollSmoother paused successfully");
+      } else {
+        console.warn("ScrollSmoother not found");
+      }
+    } catch (error) {
+      console.error("Error accessing ScrollSmoother:", error);
+    }
+    const modalScrollGroup = document.getElementById("modal-scroll-group");
+    const handleMouseEnter = () => {
+      if (smoother) {
+        smoother.paused(true);
+      }
+    };
+
+    if (modalScrollGroup) {
+      modalScrollGroup.addEventListener("mouseenter", handleMouseEnter);
+    }
 
     return () => {
       document.body.style.overflow = "auto";
-      smoother?.paused(false);
+      try {
+        if (smoother) {
+          smoother.paused(false);
+          console.log("ScrollSmoother unpaused successfully");
+        }
+      } catch (error) {
+        console.error("Error unpausing ScrollSmoother:", error);
+      }
+
+      if (modalScrollGroup) {
+        modalScrollGroup.removeEventListener("mouseenter", handleMouseEnter);
+      }
     };
   }, []);
 
@@ -106,7 +131,7 @@ const CardModal = ({ data, setShowModal }) => {
                 <RichTextRenderer document={data.bio[0].copy} />
               )}
 
-              {hasBio && data.asset && (
+              {hasBio && data?.asset.length > 1 && (
                 <VideoContainer hasbio={hasBio}>
                   {data?.asset?.[0]?.thumbnails ? (
                     <Video
