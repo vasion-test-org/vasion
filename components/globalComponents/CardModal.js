@@ -18,7 +18,7 @@ const CardModal = ({ data, setShowModal }) => {
   );
   const videoWidth = useMedia("1440px", "89.6vw", "89vw", "87.85vw");
   const videoHeight = useMedia("900px", "51.25vw", "51vw", "49.299vw");
-  const combinedStyledWidth = useMedia("px", "89.6vw", "89vw", "87.85vw");
+  const combinedStyledWidth = useMedia("500px", "500px", "70vw", "78.85vw");
   const combinedStyledHeight = useMedia("900px", "51.25vw", "51vw", "49.299vw");
   const hasBio = data?.person?.length > 0;
 
@@ -39,6 +39,11 @@ const CardModal = ({ data, setShowModal }) => {
     const smoother =
       typeof window !== "undefined" ? window.ScrollSmoother?.get() : null;
     smoother?.paused(true);
+    document
+      .getElementById("modal-scroll-group")
+      .addEventListener("mouseenter", () => {
+        smoother.paused(true);
+      });
 
     return () => {
       document.body.style.overflow = "auto";
@@ -82,7 +87,7 @@ const CardModal = ({ data, setShowModal }) => {
               width={342}
               src={data?.asset?.[0]?.media?.[0]?.filename}
             />
-            <TitleAndBioDiv>
+            <TitleAndBioDiv id="modal-scroll-group">
               <Title>
                 <NameAndStar>
                   {data?.person?.[0]?.copy && (
@@ -117,7 +122,7 @@ const CardModal = ({ data, setShowModal }) => {
                       muted={false}
                       playsinline={true}
                       width={"100%"}
-                      height={videoHeight}
+                      height={combinedStyledHeight}
                     />
                   )}
                 </VideoContainer>
@@ -149,19 +154,23 @@ export default CardModal;
 const VideoContainer = styled.div`
   overflow: hidden;
   border-radius: 0.75vw;
+  height: 32vw;
   margin-top: ${(props) => (props?.hasbio ? "unset" : "3.125vw")};
 
   ${media.fullWidth} {
     border-radius: 12px;
     margin-top: ${(props) => (props?.hasbio ? "unset" : "50px")};
+    height: 512px;
   }
   ${media.tablet} {
     margin-top: ${(props) => (props?.hasbio ? "unset" : "7.152vw")};
     border-radius: 1.172vw;
+    height: 50vw;
   }
   ${media.mobile} {
     margin-top: ${(props) => (props?.hasbio ? "unset" : "8.25vw")};
     border-radius: 2.5vw;
+    height: 100%;
   }
 `;
 
@@ -266,6 +275,7 @@ const TitleAndBioDiv = styled.div`
   flex-direction: column;
   height: fit-content;
   gap: 26px;
+
   ${media.fullWidth} {
     gap: 26px;
   }

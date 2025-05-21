@@ -1,11 +1,10 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import { useAvailableThemes } from "@/context/ThemeContext";
 import { storyblokEditable } from "@storyblok/react/rsc";
 import media from "@/styles/media";
-import colors from "@/styles/colors";
 import useMedia from "@/functions/useMedia";
 
 const InfographicPill = ({ blok }) => {
@@ -21,7 +20,6 @@ const InfographicPill = ({ blok }) => {
           blok.gallery[2]?.filename || blok.gallery[0]?.filename,
         )
       : null;
-
   return (
     <ThemeProvider theme={selectedTheme}>
       <Wrapper
