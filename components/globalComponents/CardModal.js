@@ -17,7 +17,7 @@ const CardModal = ({ data, setShowModal }) => {
   );
   const videoWidth = useMedia("1440px", "89.6vw", "89vw", "87.85vw");
   const videoHeight = useMedia("690px", "51.25vw", "51vw", "49.299vw");
-  const combinedStyledHeight = useMedia("900px", "51.25vw", "51vw", "49.299vw");
+  const combinedStyledHeight = useMedia("500px", "51.25vw", "51vw", "49.299vw");
   const hasBio = data?.person?.length > 0;
 
   const videoSrc =
