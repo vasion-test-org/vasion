@@ -12,12 +12,14 @@ const InfographicPill = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const imageSrc =
-    blok.gallery && blok.gallery.length > 0
+    blok.media && blok.media.length > 0 && blok.media[0]?.media?.length > 0
       ? useMedia(
-          blok.gallery[0]?.filename,
-          blok.gallery[0]?.filename,
-          blok.gallery[1]?.filename || blok.gallery[0]?.filename,
-          blok.gallery[2]?.filename || blok.gallery[0]?.filename,
+          blok.media[0]?.media[0]?.filename,
+          blok.media[0]?.media[0]?.filename,
+          blok.media[0]?.media[1]?.filename ||
+            blok.media[0]?.media[0]?.filename,
+          blok.media[0]?.media[2]?.filename ||
+            blok.media[0]?.media[0]?.filename,
         )
       : null;
   return (
@@ -31,7 +33,7 @@ const InfographicPill = ({ blok }) => {
             {imageSrc && (
               <SideImage
                 src={imageSrc}
-                alt={blok.gallery[0]?.alt || ""}
+                alt={blok.media[0]?.alt || ""}
                 borderradius={blok.image_border}
               />
             )}
