@@ -41,7 +41,6 @@ const CardModal = ({ data, setShowModal }) => {
       }
       if (smoother) {
         smoother.paused(true);
-        console.log("ScrollSmoother paused successfully");
       } else {
         console.warn("ScrollSmoother not found");
       }
@@ -54,7 +53,6 @@ const CardModal = ({ data, setShowModal }) => {
         smoother.paused(true);
       }
     };
-
     if (modalScrollGroup) {
       modalScrollGroup.addEventListener("mouseenter", handleMouseEnter);
     }
