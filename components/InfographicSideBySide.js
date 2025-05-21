@@ -33,7 +33,7 @@ const InfographicSideBySide = ({ blok }) => {
                 <Image images={component.image[0].media} />
                 </ImageContainer>
                 {component.copy.map((copy) => (
-                  <RichTextRenderer document={copy.copy} />
+                  <RichTextRenderer document={copy.copy} responsiveTextStyles={copy.responsive_text_styles}/>
                 ))}
               </InfographicBlok>
             )}
@@ -46,9 +46,33 @@ const InfographicSideBySide = ({ blok }) => {
 
 const ImageContainer = styled.div`
   width: 20vw;
+
+  ${media.fullWidth} {
+    width: 320px;
+  }
+
+  ${media.tablet} {
+    width: 22.656vw;
+  }
+
+  ${media.mobile} {
+    width: 45.833vw;
+  }
 `;
 const SideContainer = styled.div`
   max-width: 38.875vw;
+
+  ${media.fullWidth} {
+    max-width: 622px;
+  }
+
+  ${media.tablet} {
+    max-width: 44.141vw;
+  }
+
+  ${media.mobile} {
+    max-width: 89.167vw;
+  }
 `;
 const InfographicBlok = styled.div`
   display: flex;
@@ -56,11 +80,32 @@ const InfographicBlok = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+  background-color: ${colors.lightPurpleGrey};
   max-width: 38.875vw;
   gap: 2.5vw;
   padding: 3.969vw 4.625vw;
-  background-color: ${colors.lightPurpleGrey};
   border-radius: 1.25vw;
+
+  ${media.fullWidth} {
+    max-width: 622px;
+  gap: 40px;
+  padding: 64px 74px;
+  border-radius: 20px;
+  }
+
+  ${media.tablet} {
+    max-width: 44.141vw;
+  gap: 3.906vw;
+  padding: 4.443vw 3.906vw;
+  border-radius: 1.953vw;
+  }
+
+  ${media.mobile} {
+    max-width: 89.167vw;
+  gap: 8.333vw;
+  padding: 7.083vw 5.417vw;
+  border-radius: 4.167vw;
+  }
 `;
 const Wrapper = styled.div`
   display: flex;
@@ -159,8 +204,7 @@ const Wrapper = styled.div`
   }
 
   ${media.mobile} {
-    flex-direction: ${(props) =>
-      props.flipped === 'true' ? 'column-reverse' : 'column'};
+    flex-direction:column;
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
         return props.spacing === 'default'
