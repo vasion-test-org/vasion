@@ -9,17 +9,23 @@ import ReactPlayer from "react-player/youtube";
 import useMedia from "@/functions/useMedia";
 import RichTextRenderer from "../renderers/RichTextRenderer";
 import Video from "./Video";
+import { getSmoother } from "@/components/ScrollSmoothWrapper";
 
 const CardModal = ({ data, setShowModal }) => {
-  // console.log("CardModal", data);
+  console.log("CardModal", data);
   const [closeButton, setCloseButton] = useState(
     "/images/uiElements/closeButton.webp",
   );
-
   const videoWidth = useMedia("1440px", "89.6vw", "89vw", "87.85vw");
   const videoHeight = useMedia("900px", "51.25vw", "51vw", "49.299vw");
+  const combinedStyledWidth = useMedia("px", "89.6vw", "89vw", "87.85vw");
+  const combinedStyledHeight = useMedia("900px", "51.25vw", "51vw", "49.299vw");
+  const hasBio = data?.person?.length > 0;
 
-  const videoSrc = data?.asset?.[0]?.media?.[0]?.filename;
+  const videoSrc =
+    hasBio && data?.asset?.length > 1
+      ? data?.asset?.[1]?.media?.[0]?.filename
+      : data?.asset?.[0]?.media?.[0]?.filename;
 
   const handleClose = (e) => {
     if (e.target === e.currentTarget) {
@@ -44,7 +50,7 @@ const CardModal = ({ data, setShowModal }) => {
 
   return createPortal(
     <Wrapper onClick={handleClose}>
-      <Modal $isvideo={!data?.person[0]?.copy}>
+      <Modal $isvideo={!hasBio}>
         <CloseBtn
           src={closeButton}
           onMouseEnter={() =>
@@ -55,7 +61,7 @@ const CardModal = ({ data, setShowModal }) => {
           }
           onClick={handleClose}
         />
-        {data?.person[0]?.copy && (
+        {hasBio && (
           <FeaturedContent>
             <Title $mobile>
               <NameAndStar>
@@ -94,21 +100,39 @@ const CardModal = ({ data, setShowModal }) => {
               {data?.bio?.[0]?.copy && (
                 <RichTextRenderer document={data.bio[0].copy} />
               )}
+
+              {hasBio && data.asset && (
+                <VideoContainer hasbio={hasBio}>
+                  {data?.asset?.[0]?.thumbnails ? (
+                    <Video
+                      videos={data.asset[0].media[0]}
+                      thumbnails={data.asset[0].thumbnails}
+                    />
+                  ) : (
+                    <ReactPlayer
+                      url={videoSrc}
+                      controls={true}
+                      playing={false}
+                      volume={1}
+                      muted={false}
+                      playsinline={true}
+                      width={"100%"}
+                      height={videoHeight}
+                    />
+                  )}
+                </VideoContainer>
+              )}
             </TitleAndBioDiv>
           </FeaturedContent>
         )}
-        {!data?.position[0]?.copy && (
+        {!data?.position?.[0]?.copy && (
           <VideoContainer>
-            <Video
-              videos={data.asset[0].media[0]}
-              thumbnails={data.asset[0].media[0].thumbnails}
-            />
             <ReactPlayer
               url={videoSrc}
               controls={true}
-              playing={true}
+              playing={false}
               volume={1}
-              muted={true}
+              muted={false}
               playsinline={true}
               width={videoWidth}
               height={videoHeight}
@@ -125,18 +149,18 @@ export default CardModal;
 const VideoContainer = styled.div`
   overflow: hidden;
   border-radius: 0.75vw;
-  margin-top: 3.125vw;
+  margin-top: ${(props) => (props?.hasbio ? "unset" : "3.125vw")};
 
   ${media.fullWidth} {
     border-radius: 12px;
-    margin-top: 50px;
+    margin-top: ${(props) => (props?.hasbio ? "unset" : "50px")};
   }
   ${media.tablet} {
-    margin-top: 7.152vw;
+    margin-top: ${(props) => (props?.hasbio ? "unset" : "7.152vw")};
     border-radius: 1.172vw;
   }
   ${media.mobile} {
-    margin-top: 8.25vw;
+    margin-top: ${(props) => (props?.hasbio ? "unset" : "8.25vw")};
     border-radius: 2.5vw;
   }
 `;
@@ -240,6 +264,7 @@ const Title = styled.div`
 const TitleAndBioDiv = styled.div`
   display: flex;
   flex-direction: column;
+  height: fit-content;
   gap: 26px;
   ${media.fullWidth} {
     gap: 26px;

@@ -3,11 +3,11 @@ import colors from "./colors";
 
 export const defaultTheme = {
   customer_success: {
-    bg: '#F5F4F7',
+    bg: "#F5F4F7",
   },
   customer_logos: {
     card_bg: colors.lightPurpleGrey,
-    bg: colors.white
+    bg: colors.white,
   },
   nav: {
     textColor: "#1B1D21",
@@ -54,11 +54,14 @@ export const defaultTheme = {
     buttonBg: "#ff5100",
     placeHolderColor: "#808085",
     selectPlaceHolderColor: "#1B1D21",
-    errorColor: '#BA1A1A'
+    errorColor: "#BA1A1A",
   },
   small_quote: {
     textColor: "#1B1D21",
     bg: "#F5F4F7",
+  },
+  infographic_pill: {
+    bg: `#F5F4F7`,
   },
 };
 
@@ -69,7 +72,7 @@ export const darkTheme = {
   },
   customer_logos: {
     card_bg: colors.white,
-    bg: colors.lightPurpleGradient
+    bg: colors.lightPurpleGradient,
   },
   hero: {
     textColor: "#ffffff",
@@ -98,7 +101,11 @@ export const darkTheme = {
     inputBorder: "rgba(255, 255, 255, 0.30)",
     placeHolderColor: "rgba(255, 255, 255, 0.60)",
     selectPlaceHolderColor: "#FFFFFF",
-    errorColor: '#ffb4ab'
+    errorColor: "#ffb4ab",
+  },
+  infographic_pill: {
+    bg: `#3D2562`,
+    text_color: `#FFFFFF`,
   },
 };
 
@@ -111,7 +118,7 @@ export const lightTheme = {
     textColor: "#1B1D21",
     cardBg: "#ffffff",
   },
-}
+};
 
 export const buttonThemes = {
   nav: {

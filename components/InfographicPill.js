@@ -12,12 +12,6 @@ const InfographicPill = ({ blok }) => {
   console.log("infographicPill", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  const backgroundColor =
-    blok.theme === "default"
-      ? colors?.lightPurpleGrey
-      : blok?.theme === "light"
-        ? "unest"
-        : colors?.primaryPurple;
   const imageSrc =
     blok.gallery && blok.gallery.length > 0
       ? useMedia(
@@ -30,11 +24,11 @@ const InfographicPill = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <Wrapper>
-        <PillWrapper
-          backgroundcolor={backgroundColor}
-          flipcontent={blok.flip_content}
-        >
+      <Wrapper
+        spacing={blok.section_spacing}
+        spacingOffset={blok.offset_spacing}
+      >
+        <PillWrapper flipcontent={blok.flip_content}>
           <MediaWrapper {...storyblokEditable(blok)}>
             {imageSrc && (
               <SideImage
@@ -45,8 +39,8 @@ const InfographicPill = ({ blok }) => {
             )}
           </MediaWrapper>
           <CopySection>
-            {blok.copy_blok &&
-              blok.copy_blok.map((copy) => (
+            {blok.copy_sections &&
+              blok.copy_sections.map((copy) => (
                 <div {...storyblokEditable(copy)} key={copy._uid}>
                   <RichTextRenderer
                     document={copy?.copy}
@@ -63,6 +57,7 @@ const InfographicPill = ({ blok }) => {
 
 export default InfographicPill;
 const CopySection = styled.div`
+  color: ${(props) => props.theme.infographic_pill.text_color || "unset"};
   width: 50.25vw;
 
   ${media.fullWidth} {
@@ -115,7 +110,7 @@ const PillWrapper = styled.div`
   flex-direction: ${(props) => (props?.flipcontent ? "row-reverse" : "row")};
   align-items: center;
   justify-content: center;
-  background-color: ${(props) => props.backgroundcolor};
+  background: ${(props) => props.theme?.infographic_pill?.bg || "unset"};
   width: 81.5vw;
   height: 19vw;
   gap: 3.75vw;
@@ -173,4 +168,76 @@ const Wrapper = styled.div`
         ? `${props.spacing}px 0`
         : "3.75vw 0";
   }};
+
+  ${media.fullWidth} {
+    padding: ${(props) => {
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "60px 0 0"
+          : props.spacing
+            ? `${props.spacing}px 0 0`
+            : "60px 0 0";
+      }
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 0 60px"
+          : props.spacing
+            ? `0 0 ${props.spacing}px`
+            : "0 0 60px";
+      }
+      return props.spacing === "default"
+        ? "60px 0"
+        : props.spacing
+          ? `${props.spacing}px 0`
+          : "60px 0";
+    }};
+  }
+
+  ${media.tablet} {
+    padding: ${(props) => {
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "5.859vw 0 0"
+          : props.spacing
+            ? `${props.spacing}px 0 0`
+            : "5.859vw 0 0";
+      }
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 0 5.859vw"
+          : props.spacing
+            ? `0 0 ${props.spacing}px`
+            : "0 0 5.859vw";
+      }
+      return props.spacing === "default"
+        ? "5.859vw 0"
+        : props.spacing
+          ? `${props.spacing}px 0`
+          : "5.859vw 0";
+    }};
+  }
+
+  ${media.mobile} {
+    padding: ${(props) => {
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "12.5vw 0 0"
+          : props.spacing
+            ? `${props.spacing}px 0 0`
+            : "12.5vw 0 0";
+      }
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 0 12.5vw"
+          : props.spacing
+            ? `0 0 ${props.spacing}px`
+            : "0 0 12.5vw";
+      }
+      return props.spacing === "default"
+        ? "12.5vw 0"
+        : props.spacing
+          ? `${props.spacing}px 0`
+          : "12.5vw 0";
+    }};
+  }
 `;
