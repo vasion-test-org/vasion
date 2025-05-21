@@ -182,7 +182,7 @@ const VideoContainer = styled.div`
   ${media.fullWidth} {
     border-radius: 12px;
     margin-top: ${(props) => (props?.hasbio ? "unset" : "50px")};
-    height: 512px;
+    height: auto;
   }
   ${media.tablet} {
     margin-top: ${(props) => (props?.hasbio ? "unset" : "7.152vw")};
