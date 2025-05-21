@@ -66,6 +66,11 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
         <NumberBlock blok={props} />
       </div>
     ),
+    infographic_pill: (props) => (
+      <div className="component-wrapper">
+        <InfographicPill blok={props} />
+      </div>
+    ),
   };
 
   const customMarkResolvers = {
@@ -77,7 +82,7 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
 
   const customNodeResolvers = {
     [NODE_HEADING]: (children, node) => {
-      const level = node?.level || 1; 
+      const level = node?.level || 1;
       const headingText = extractText(node.content) || children;
 
       const tabletStyle = responsiveTextStyles[0] || `h${level}`;
@@ -89,12 +94,15 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
         mobileStyle,
       );
 
-      return <Header as={selectedHeaderStyle} className={selectedHeaderStyle}>{headingText}</Header>;
+      return (
+        <Header as={selectedHeaderStyle} className={selectedHeaderStyle}>
+          {headingText}
+        </Header>
+      );
     },
 
     [NODE_PARAGRAPH]: (children) => {
-    
-      const className = children?.[0]?.props?.className
+      const className = children?.[0]?.props?.className;
 
       const selectedClassName = useMedia(
         className,
@@ -102,7 +110,7 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
         responsiveTextStyles[0],
         responsiveTextStyles[1],
       );
-console.log('selectedClassName', selectedClassName)
+      // console.log('selectedClassName', selectedClassName)
       return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
     },
   };
