@@ -29,7 +29,7 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
     return contentArray.map((node) => node.text || "").join(" ");
   };
   // console.log('document', document)
-  // console.log(responsiveTextStyles[1])
+  // console.log(responsiveTextStyles)
   const blokResolvers = {
     two_column_list: (props) => (
       <div className="component-wrapper">
@@ -102,7 +102,7 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
         responsiveTextStyles[0],
         responsiveTextStyles[1],
       );
-// console.log('selectedClassName', selectedClassName)
+console.log('selectedClassName', selectedClassName)
       return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
     },
   };
