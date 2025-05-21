@@ -144,7 +144,8 @@ const StyledBodyCopy = styled.div`
         line-height: 4.583vw;
       }
     }
-    &.bodyXL {
+
+    &.bodyXl {
       font-size: 1.438vw;
       line-height: 1.875vw;
       ${media.fullWidth} {
@@ -176,6 +177,46 @@ const StyledBodyCopy = styled.div`
       }
       ${media.mobile} {
         font-size: 3.738vw;
+        line-height: 5.14vw;
+      }
+    }
+
+    &.bodyLrg {
+      font-size: 1.125vw;
+      line-height: 1.5vw;
+
+      ${media.fullWidth} {
+        font-size: 18px;
+        line-height: 24px;
+      }
+
+      ${media.tablet} {
+        font-size: 1.758vw;
+        line-height: 2.344vw;
+      }
+
+      ${media.mobile} {
+        font-size: 3.75vw;
+        line-height: 4.583vw;
+      }
+    }
+
+    &.bodyXl {
+      font-size: 1.438vw;
+      line-height: 1.875vw;
+
+      ${media.fullWidth} {
+        font-size: 23px;
+        line-height: 30px;
+      }
+
+      ${media.tablet} {
+        font-size: 2.246vw;
+        line-height: 2.93vw;
+      }
+
+      ${media.mobile} {
+        font-size: 4.206vw;
         line-height: 5.14vw;
       }
     }
@@ -282,7 +323,8 @@ const StyledBodyCopy = styled.div`
       line-height: 4.583vw;
     }
   }
-  &.bodyXL {
+
+  &.bodyXl {
     font-size: 1.438vw;
     line-height: 1.875vw;
     ${media.fullWidth} {

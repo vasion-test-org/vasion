@@ -25,7 +25,7 @@ gsap.registerPlugin(ScrollTrigger);
 const Nav = ({ blok }) => {
   const router = useRouter();
   const path = usePathname();
-  console.log("blok", blok);
+  // console.log("blok", blok);
   const [language, setLanguage] = useState("en");
   const [navItems, setNavItems] = useState(blok.english_nav_items);
   const themes = useAvailableThemes();
