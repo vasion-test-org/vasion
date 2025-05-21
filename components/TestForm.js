@@ -28,6 +28,7 @@ const Form = ({ blok }) => {
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
   const routingLang = useRef('Demo Request - EN');
+  const demoTl = useRef(null);
 
   //gets thank you copy for dynamic thank you page
   useEffect(() => {
@@ -70,11 +71,11 @@ const Form = ({ blok }) => {
 
   //loads script for bookit form and gsap animations for form
   useEffect(() => {
-    const demoTl = gsap.timeline({ paused: true });
+    demoTl.current = gsap.timeline({ paused: true });
     gsap.set('.bookit-content-container', { display: 'none', opacity: 0 });
 
     if (blok.animated) {
-      demoTl
+      demoTl.current
         .to('.preformContent', { opacity: contentVisibility })
         .to('.preformContent nondemo', { display: 'none' }, '<')
         .to('.marketoForm', { opacity: 0 }, '<')
@@ -103,7 +104,7 @@ const Form = ({ blok }) => {
         beforeRouting: (formTarget, formData) => {
           console.log('lean data language:', languageRef.current);
           formData['thank_you_language'] = languageRef.current;
-          formData["routing_node_trigger"] = routingLang.current;
+          formData['routing_node_trigger'] = routingLang.current;
         },
         defaultLanguage: languageRef.current,
         useIframe: blok.animated,
@@ -111,7 +112,7 @@ const Form = ({ blok }) => {
 
       window.LDBookItV2.initialize(
         '00DE0000000bt64MAA',
-        routingLang.current, 
+        routingLang.current,
         'LD_BookIt_Log_ID__c',
         initConfig
       );
@@ -151,12 +152,11 @@ const Form = ({ blok }) => {
             if (blok.animated) {
               if (window.LDBookItV2) {
                 window.LDBookItV2.saveFormData(submittedValues);
-                window.LDBookItV2.submit({ 
+                window.LDBookItV2.submit({
                   formData: submittedValues,
-                  cb: window.LDBookItV2.getIframeFn('100%', '100%', '300')
-                 }
-                );
-                demoTl.play();
+                  cb: window.LDBookItV2.getIframeFn('100%', '100%', '300'),
+                });
+                demoTl.current.play();
                 setStepDone(true);
                 dataLayer.push({
                   event: 'marketo_form_submission_success',
