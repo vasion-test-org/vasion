@@ -163,8 +163,10 @@ const Form = ({ blok }) => {
                   form_id: blok.form_id,
                   form_submission_date: new Date().toISOString(),
                 });
+                
                 console.log('Thank You');
                 console.log('Form submitted successfully:', submittedValues);
+                return false;
               } else {
                 console.error('LDBookItV2 not available, booking may fail');
                 alert(
