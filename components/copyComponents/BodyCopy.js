@@ -175,7 +175,7 @@ const StyledBodyCopy = styled.div`
       }
     }
 
-    &.bodyXL {
+    &.bodyXl {
       font-size: 1.438vw;
       line-height: 1.875vw;
 
@@ -339,7 +339,7 @@ const StyledBodyCopy = styled.div`
       }
     }
 
-    &.bodyXL {
+    &.bodyXl {
       font-size: 1.438vw;
       line-height: 1.875vw;
 
@@ -484,7 +484,7 @@ const StyledBodyCopy = styled.div`
     }
   }
 
-  &.bodyXL {
+  &.bodyXl {
     font-size: 1.438vw;
     line-height: 1.875vw;
 

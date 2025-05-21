@@ -28,7 +28,7 @@ const RichTextRenderer = ({ document, responsiveTextStyles = [], blok }) => {
     if (!Array.isArray(contentArray)) return "";
     return contentArray.map((node) => node.text || "").join(" ");
   };
-
+  // console.log('document', document)
   // console.log(responsiveTextStyles[1])
   const blokResolvers = {
     two_column_list: (props) => (

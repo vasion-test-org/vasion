@@ -1,0 +1,28 @@
+{
+  "React Component with Theme": {
+    "prefix": "beginr",
+    "body": [
+      "'use client'",
+      "import React from 'react';",
+      "",
+      "import styled, { ThemeProvider } from 'styled-components';",
+      "import { useAvailableThemes } from '@/context/ThemeContext';",
+      "import { storyblokEditable } from '@storyblok/react/rsc';",
+      "import media from 'styles/media';",
+      "import RichTextRenderer from '@/components/renderers/RichTextRenderer';",
+      "",
+      "const ${1:functionName} = ({ blok }) => {",
+      "  const themes = useAvailableThemes();",
+      "  const selectedTheme = themes[blok.theme] || themes.default;",
+      "  return (",
+      "    <ThemeProvider theme={selectedTheme}>",
+      "      $0",
+      "    </ThemeProvider>",
+      "  )",
+      "}",
+      "",
+      "export default ${1:functionName}"
+    ],
+    "description": "Create a new React component with theme provider"
+  }
+} 
