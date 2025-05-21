@@ -28,7 +28,6 @@ const Form = ({ blok }) => {
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
   const routingLang = useRef('Demo Request - EN');
-  const originRef = useRef('va');
 
   //gets thank you copy for dynamic thank you page
   useEffect(() => {
@@ -37,22 +36,6 @@ const Form = ({ blok }) => {
       // console.log(thankYouCopy, blok?.thank_you_copy);
     }
   }, [thankYouCopy, blok?.thank_you_copy]);
-
-  useEffect(() => {
-    function getOriginDomain(url) {
-      return url.split('.com')[0] + '.com';
-    }
-
-    if (typeof window !== 'undefined') {
-      const originDomain = getOriginDomain(window.location.hostname);
-
-      if (originDomain.includes('printerlogic')) {
-        originRef.current = 'pl';
-      } else if (originDomain.includes('vasion')) {
-        originRef.current = 'va';
-      }
-    }
-  }, []);
 
   //checking for pathname to set routing language and path
   useEffect(() => {
@@ -114,165 +97,26 @@ const Form = ({ blok }) => {
 
     script.addEventListener('load', () => {
       console.log('timeoutLang', languageRef.current);
-      const urlParams = new URLSearchParams(window.location.search);
-      const aliIdExists = urlParams.has('aliId');
+
       const initConfig = {
         calendarTimeoutLength: 900,
         beforeRouting: (formTarget, formData) => {
           console.log('lean data language:', languageRef.current);
           formData['thank_you_language'] = languageRef.current;
-          formData['origin_domain'] = originRef.current;
-
-          // Get the stored logs and add them to formData
-          const logs = JSON.parse(localStorage.getItem('leanDataLogs') || '[]');
-
-          // Add the logs as a JSON string to formData
-          formData['lean_data_logs'] = JSON.stringify(logs);
-
-          // Add specific log information as separate fields
-          const lastLog = logs[logs.length - 1];
-          if (lastLog) {
-            formData['last_event_type'] = lastLog.type;
-            formData['last_event_timestamp'] = lastLog.timestamp;
-            if (lastLog.data) {
-              // Add specific data fields based on the event type
-              switch (lastLog.type) {
-                case 'CALENDAR_LINK_RECEIVED':
-                case 'REDIRECT_LINK_RECEIVED':
-                  formData['calendar_link'] = lastLog.data.link;
-                  formData['link_type'] = lastLog.data.type;
-                  break;
-                case 'POST_BOOKING_DATA':
-                  // Add any specific booking data fields you want to track
-                  Object.entries(lastLog.data).forEach(([key, value]) => {
-                    formData[`booking_${key}`] = value;
-                  });
-                  break;
-              }
-            }
-          }
+          formData["routing_node_trigger"] = routingLang.current;
         },
         defaultLanguage: languageRef.current,
         useIframe: blok.animated,
       };
 
-      // Function to store logs in localStorage
-      const storeLog = (type, data) => {
-        const timestamp = new Date().toISOString();
-        const logEntry = {
-          timestamp,
-          type,
-          data,
-        };
-
-        // Get existing logs or initialize empty array
-        const existingLogs = JSON.parse(
-          localStorage.getItem('leanDataLogs') || '[]'
-        );
-        existingLogs.push(logEntry);
-
-        // Keep only last 50 logs to prevent localStorage from getting too full
-        const recentLogs = existingLogs.slice(-50);
-        localStorage.setItem('leanDataLogs', JSON.stringify(recentLogs));
-
-        // Also log to console for immediate feedback
-        console.log(`[${timestamp}] ${type}:`, data);
-      };
-
-      // Function to retrieve logs
-      const getLogs = () => {
-        const logs = JSON.parse(localStorage.getItem('leanDataLogs') || '[]');
-        console.log('All Lean Data Logs:', logs);
-        return logs;
-      };
-
-      // Add Lean Data event listener
-      const handleLeanDataMessage = (e) => {
-        switch (e.data.message) {
-          case 'LD_ROUTING_RESPONSE':
-            let routingResponseData = e.data.responseData;
-            let calendarLink = routingResponseData?.calendarLink;
-
-            if (calendarLink) {
-              if (
-                calendarLink
-                  .toLowerCase()
-                  .startsWith('https://app.leandata.com')
-              ) {
-                storeLog('CALENDAR_LINK_RECEIVED', {
-                  link: calendarLink,
-                  type: 'calendar',
-                });
-              } else {
-                storeLog('REDIRECT_LINK_RECEIVED', {
-                  link: calendarLink,
-                  type: 'redirect',
-                });
-              }
-            } else {
-              storeLog('NO_CALENDAR_LINK', {
-                message: 'No calendar link provided',
-              });
-            }
-            break;
-          case 'LD_POPUP_CLOSED':
-            storeLog('POPUP_CLOSED', {
-              timestamp: new Date().toISOString(),
-            });
-            break;
-          case 'LD_POST_BOOKING_IMMEDIATE':
-            let postBookingData = e.data.data;
-            storeLog('POST_BOOKING_DATA', postBookingData);
-
-            setTimeout(() => {
-              storeLog('POST_BOOKING_ACTIONS', {
-                message: 'Running post booking actions',
-                timestamp: new Date().toISOString(),
-              });
-            }, 3000);
-            break;
-          case 'LD_ROUTING_TIMED_OUT':
-            storeLog('ROUTING_TIMED_OUT', {
-              timestamp: new Date().toISOString(),
-            });
-            break;
-        }
-      };
-
-      window.addEventListener('message', handleLeanDataMessage);
-
-      // Check for existing logs on page load
-      if (typeof window !== 'undefined') {
-        const existingLogs = getLogs();
-        if (existingLogs.length > 0) {
-          console.log(
-            'Found existing Lean Data logs from previous session:',
-            existingLogs
-          );
-        }
-      }
-
-      // switched this from using hard coded  'Demo Request - EN', where it now says routingLang.current @bubba
       window.LDBookItV2.initialize(
         '00DE0000000bt64MAA',
-        routingLang.current, // change I am referring too
+        routingLang.current, 
         'LD_BookIt_Log_ID__c',
         initConfig
       );
-      // end of changes
-      if (aliIdExists) {
-        window.LDBookItV2.submit(
-          blok.animated
-            ? { cb: window.LDBookItV2.getIframeFn('100%', '100%', '300') }
-            : undefined
-        );
-        if (blok.animated) {
-          demoTl.play();
-          setStepDone(true);
-        }
-      } else {
-        window.LDBookItV2.setFormProvider('marketo');
-      }
+
+      window.LDBookItV2.setFormProvider('marketo');
     });
 
     document.body.appendChild(script);
@@ -305,9 +149,20 @@ const Form = ({ blok }) => {
           form.onSuccess(function (submittedValues) {
             clearTimeout(submissionTimeout);
             if (blok.animated) {
-              //This is Brand new from when you were gone @bubba
               if (window.LDBookItV2) {
                 window.LDBookItV2.saveFormData(submittedValues);
+                window.LDBookItV2.submit({ 
+                  formData: submittedValues,
+                  cb: window.LDBookItV2.getIframeFn('100%', '100%', '300')
+                 }
+                );
+                demoTl.play();
+                setStepDone(true);
+                dataLayer.push({
+                  event: 'marketo_form_submission_success',
+                  form_id: blok.form_id,
+                  form_submission_date: new Date().toISOString(),
+                });
                 console.log('Thank You');
                 console.log('Form submitted successfully:', submittedValues);
               } else {
@@ -315,6 +170,11 @@ const Form = ({ blok }) => {
                 alert(
                   'There was a problem connecting to our scheduling system. Please contact support.'
                 );
+                dataLayer.push({
+                  event: 'marketo_form_submission_failed',
+                  form_id: blok.form_id,
+                  form_submission_date: new Date().toISOString(),
+                });
               }
               // changes end here
             } else if (blok.redirect_link.cached_url) {

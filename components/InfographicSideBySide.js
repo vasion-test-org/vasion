@@ -33,7 +33,7 @@ const InfographicSideBySide = ({ blok }) => {
                 <Image images={component.image[0].media} />
                 </ImageContainer>
                 {component.copy.map((copy) => (
-                  <RichTextRenderer document={copy.copy} responsiveTextStyles={copy.responsive_text_styles}/>
+                  <RichTextRenderer document={copy.copy} responsiveTextStyles={copy?.responsive_text_styles}/>
                 ))}
               </InfographicBlok>
             )}
