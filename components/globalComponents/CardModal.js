@@ -56,7 +56,6 @@ const CardModal = ({ data, setShowModal }) => {
     if (modalScrollGroup) {
       modalScrollGroup.addEventListener("mouseenter", handleMouseEnter);
     }
-
     return () => {
       document.body.style.overflow = "auto";
       try {
