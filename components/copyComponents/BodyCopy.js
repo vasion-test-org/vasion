@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+
 import styled from "styled-components";
 import media from "@/styles/media";
 import colors from "@/styles/colors";
@@ -7,20 +8,26 @@ import colors from "@/styles/colors";
 const BodyCopy = ({ className, children }) => {
   return <StyledBodyCopy className={className}>{children}</StyledBodyCopy>;
 };
+
 export default BodyCopy;
+
 const StyledBodyCopy = styled.div`
   display: inline-block;
   font-family: "Archivo";
   font-weight: 400;
   white-space: pre-wrap;
+
   img {
     max-width: 56.25vw;
+
     ${media.fullWidth} {
       max-width: 900px;
     }
+
     ${media.tablet} {
       max-width: 58.594vw;
     }
+
     ${media.mobile} {
       max-width: 82vw;
     }
@@ -42,55 +49,67 @@ const StyledBodyCopy = styled.div`
     &.bold {
       font-weight: 600;
     }
+
     &.eyebrow {
       font-weight: 700;
       font-size: 0.875vw;
       line-height: 1.125vw;
       letter-spacing: 0.175vw;
       text-transform: uppercase;
+
       ${media.fullWidth} {
         font-size: 14px;
         line-height: 18px;
         letter-spacing: 3px;
       }
+
       ${media.tablet} {
         font-size: 1.367vw;
         line-height: 1.758vw;
       }
+
       ${media.mobile} {
         font-size: 2.804vw;
         line-height: 4.206vw;
       }
     }
+
     &.tag {
       font-weight: 600;
       font-size: 0.625vw;
       line-height: 0.75vw;
+
       ${media.fullWidth} {
         font-size: 10px;
         line-height: 12px;
       }
+
       ${media.tablet} {
         font-size: 0.977vw;
         line-height: 1.172vw;
       }
+
       ${media.mobile} {
         font-size: 2.336vw;
         line-height: 2.804vw;
       }
     }
+
     &.tagLight {
       font-weight: 400;
       font-size: 0.625vw;
       line-height: 0.75vw;
+
       ${media.fullWidth} {
         font-size: 10px;
         line-height: 12px;
       }
+
       ${media.tablet} {
         font-size: 0.977vw;
         line-height: 1.172vw;
       }
+
       ${media.mobile} {
         font-size: 2.336vw;
         line-height: 2.804vw;
@@ -99,46 +118,57 @@ const StyledBodyCopy = styled.div`
     &.bodySm {
       font-size: 0.875vw;
       line-height: 1.125vw;
+
       ${media.fullWidth} {
         font-size: 14px;
         line-height: 18px;
       }
+
       ${media.tablet} {
         font-size: 1.367vw;
         line-height: 1.758vw;
       }
+
       ${media.mobile} {
         font-size: 2.917vw;
         line-height: 3.75vw;
       }
     }
+
     &.bodyMd {
       font-size: 1vw;
       line-height: 1.375vw;
+
       ${media.fullWidth} {
         font-size: 16px;
         line-height: 22px;
       }
+
       ${media.tablet} {
         font-size: 16px;
         line-height: 2.148vw;
       }
+
       ${media.mobile} {
         font-size: 3.738vw;
         line-height: 5.14vw;
       }
     }
+
     &.bodyLrg {
       font-size: 1.125vw;
       line-height: 1.5vw;
+
       ${media.fullWidth} {
         font-size: 18px;
         line-height: 24px;
       }
+
       ${media.tablet} {
         font-size: 1.758vw;
         line-height: 2.344vw;
       }
+
       ${media.mobile} {
         font-size: 3.75vw;
         line-height: 4.583vw;
@@ -148,33 +178,141 @@ const StyledBodyCopy = styled.div`
     &.bodyXl {
       font-size: 1.438vw;
       line-height: 1.875vw;
+
       ${media.fullWidth} {
         font-size: 23px;
         line-height: 30px;
       }
+
       ${media.tablet} {
         font-size: 2.246vw;
         line-height: 2.93vw;
       }
+
       ${media.mobile} {
         font-size: 4.206vw;
         line-height: 5.14vw;
       }
     }
-    // Default styles for spans WITHOUT a specific class
-    &:not(.bodySm):not(.bodyMd):not(.bodyLrg):not(.bodyXL):not(.eyebrow):not(
-        .tag
-      ):not(.tagLight) {
+
+    // Default styles for spans without a specific class
+    font-size: 1vw;
+    line-height: 1.375vw;
+
+    ${media.fullWidth} {
+      font-size: 16px;
+      line-height: 22px;
+    }
+
+    ${media.tablet} {
+      font-size: 16px;
+      line-height: 2.148vw;
+    }
+
+    ${media.mobile} {
+      font-size: 3.738vw;
+      line-height: 5.14vw;
+    }
+
+    &.eyebrow {
+      font-weight: 700;
+      font-size: 0.875vw;
+      line-height: 1.125vw;
+      letter-spacing: 0.175vw;
+      text-transform: uppercase;
+
+      ${media.fullWidth} {
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 3px;
+      }
+
+      ${media.tablet} {
+        font-size: 1.367vw;
+        line-height: 1.758vw;
+      }
+
+      ${media.mobile} {
+        font-size: 2.804vw;
+        line-height: 4.206vw;
+      }
+    }
+
+    &.tag {
+      font-weight: 600;
+      font-size: 0.625vw;
+      line-height: 0.75vw;
+
+      ${media.fullWidth} {
+        font-size: 10px;
+        line-height: 12px;
+      }
+
+      ${media.tablet} {
+        font-size: 0.977vw;
+        line-height: 1.172vw;
+      }
+
+      ${media.mobile} {
+        font-size: 2.336vw;
+        line-height: 2.804vw;
+      }
+    }
+
+    &.tagLight {
+      font-weight: 400;
+      font-size: 0.625vw;
+      line-height: 0.75vw;
+
+      ${media.fullWidth} {
+        font-size: 10px;
+        line-height: 12px;
+      }
+
+      ${media.tablet} {
+        font-size: 0.977vw;
+        line-height: 1.172vw;
+      }
+
+      ${media.mobile} {
+        font-size: 2.336vw;
+        line-height: 2.804vw;
+      }
+    }
+    &.bodySm {
+      font-size: 0.875vw;
+      line-height: 1.125vw;
+
+      ${media.fullWidth} {
+        font-size: 14px;
+        line-height: 18px;
+      }
+
+      ${media.tablet} {
+        font-size: 1.367vw;
+        line-height: 1.758vw;
+      }
+
+      ${media.mobile} {
+        font-size: 2.917vw;
+        line-height: 3.75vw;
+      }
+    }
+
+    &.bodyMd {
       font-size: 1vw;
       line-height: 1.375vw;
+
       ${media.fullWidth} {
         font-size: 16px;
         line-height: 22px;
       }
+
       ${media.tablet} {
         font-size: 16px;
         line-height: 2.148vw;
       }
+
       ${media.mobile} {
         font-size: 3.738vw;
         line-height: 5.14vw;
@@ -227,49 +365,60 @@ const StyledBodyCopy = styled.div`
     line-height: 1.125vw;
     letter-spacing: 0.175vw;
     text-transform: uppercase;
+
     ${media.fullWidth} {
       font-size: 14px;
       line-height: 18px;
       letter-spacing: 3px;
     }
+
     ${media.tablet} {
       font-size: 1.367vw;
       line-height: 1.758vw;
     }
+
     ${media.mobile} {
       font-size: 2.804vw;
       line-height: 4.206vw;
     }
   }
+
   &.tag {
     font-weight: 600;
     font-size: 0.625vw;
     line-height: 0.75vw;
+
     ${media.fullWidth} {
       font-size: 10px;
       line-height: 12px;
     }
+
     ${media.tablet} {
       font-size: 0.977vw;
       line-height: 1.172vw;
     }
+
     ${media.mobile} {
       font-size: 2.336vw;
       line-height: 2.804vw;
     }
   }
+
   &.tagLight {
     font-weight: 400;
     font-size: 0.625vw;
     line-height: 0.75vw;
+
     ${media.fullWidth} {
       font-size: 10px;
       line-height: 12px;
     }
+
     ${media.tablet} {
       font-size: 0.977vw;
       line-height: 1.172vw;
     }
+
     ${media.mobile} {
       font-size: 2.336vw;
       line-height: 2.804vw;
@@ -278,46 +427,57 @@ const StyledBodyCopy = styled.div`
   &.bodySm {
     font-size: 0.875vw;
     line-height: 1.125vw;
+
     ${media.fullWidth} {
       font-size: 14px;
       line-height: 18px;
     }
+
     ${media.tablet} {
       font-size: 1.367vw;
       line-height: 1.758vw;
     }
+
     ${media.mobile} {
       font-size: 2.917vw;
       line-height: 3.75vw;
     }
   }
+
   &.bodyMd {
     font-size: 1vw;
     line-height: 1.375vw;
+
     ${media.fullWidth} {
       font-size: 16px;
       line-height: 22px;
     }
+
     ${media.tablet} {
       font-size: 16px;
       line-height: 2.148vw;
     }
+
     ${media.mobile} {
       font-size: 3.738vw;
       line-height: 5.14vw;
     }
   }
+
   &.bodyLrg {
     font-size: 1.125vw;
     line-height: 1.5vw;
+
     ${media.fullWidth} {
       font-size: 18px;
       line-height: 24px;
     }
+
     ${media.tablet} {
       font-size: 1.758vw;
       line-height: 2.344vw;
     }
+
     ${media.mobile} {
       font-size: 3.75vw;
       line-height: 4.583vw;
@@ -327,14 +487,17 @@ const StyledBodyCopy = styled.div`
   &.bodyXl {
     font-size: 1.438vw;
     line-height: 1.875vw;
+
     ${media.fullWidth} {
       font-size: 23px;
       line-height: 30px;
     }
+
     ${media.tablet} {
       font-size: 2.246vw;
       line-height: 2.93vw;
     }
+
     ${media.mobile} {
       font-size: 4.206vw;
       line-height: 5.14vw;
