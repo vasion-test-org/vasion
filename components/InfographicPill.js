@@ -112,28 +112,24 @@ const PillWrapper = styled.div`
   justify-content: center;
   background: ${(props) => props.theme?.infographic_pill?.bg || "unset"};
   width: 81.5vw;
-  height: 19vw;
   gap: 3.75vw;
   border-radius: 1.063vw;
   padding: 3.75vw;
 
   ${media.fullWidth} {
     width: 1304px;
-    height: 304px;
     gap: 60px;
     border-radius: 17px;
     padding: 60px;
   }
   ${media.tablet} {
     width: 92.188vw;
-    height: 23.242vw;
     gap: 3.906vw;
     border-radius: 1.66vw;
     padding: 2.539vw;
   }
   ${media.mobile} {
     width: 89.167vw;
-    height: 66.875vw;
     flex-direction: ${(props) =>
       props?.flipcontent ? "column-reverse" : "column"};
     gap: 8.333vw;
