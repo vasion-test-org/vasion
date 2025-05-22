@@ -148,7 +148,7 @@ const Form = ({ blok }) => {
           // });
 
           form.onSuccess(function (submittedValues) {
-            clearTimeout(submissionTimeout);
+            // clearTimeout(submissionTimeout);
             if (blok.animated) {
               if (window.LDBookItV2) {
                 window.LDBookItV2.saveFormData(submittedValues);
