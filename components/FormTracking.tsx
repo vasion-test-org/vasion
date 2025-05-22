@@ -8,7 +8,7 @@ function FormTrackingComponent() {
   const [domain, setDomain] = useState('www.vasion.com');
   const [language, setLanguage] = useState('en');
   const [isLoaded, setIsLoaded] = useState(false);
-  const searchParams = useSearchParams(); // Requires Suspense boundary
+  const searchParams = useSearchParams(); 
 
   useEffect(() => {
     if (document.getElementById('mktoForms')) {
