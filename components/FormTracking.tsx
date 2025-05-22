@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import Script from "next/script";
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import Script from 'next/script';
 
 function FormTrackingComponent() {
-  const [domain, setDomain] = useState("www.vasion.com");
-  const [language, setLanguage] = useState("en");
+  const [domain, setDomain] = useState('www.vasion.com');
+  const [language, setLanguage] = useState('en');
   const [isLoaded, setIsLoaded] = useState(false);
   const searchParams = useSearchParams(); // Requires Suspense boundary
 
   useEffect(() => {
-    if (document.getElementById("mktoForms")) {
+    if (document.getElementById('mktoForms')) {
       setIsLoaded(true);
     }
   }, []);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
     // Save UTM parameters as cookies
     searchParams.forEach((value, key) => {
@@ -25,10 +25,10 @@ function FormTrackingComponent() {
     });
 
     // Populate hidden fields in Marketo form
-    if (isLoaded && window.MktoForms2) {
+    if (window.MktoForms2) {
       window.MktoForms2.whenReady((form) => {
         form.getFields().forEach((field) => {
-          if (field.element.type === "hidden") {
+          if (field.element.type === 'hidden') {
             const cookieValue = getCookie(field.name);
             if (cookieValue) field.val(cookieValue);
           }
@@ -39,32 +39,25 @@ function FormTrackingComponent() {
     function getCookie(name) {
       const value = `; ${document.cookie}`;
       const parts = value.split(`; ${name}=`);
-      return parts.length === 2 ? parts.pop()?.split(";").shift() : undefined;
+      return parts.length === 2 ? parts.pop()?.split(';').shift() : undefined;
     }
-// TODO: check the cookies and pathname
+
     function checkPathLocale(url) {
       const { pathname } = new URL(url);
-      
-      const pathLocale = pathname.split('/')[1]; 
-      // console.log('pathname:', pathLocale);
-    
+      const pathLocale = pathname.split('/')[1];
       const supportedLocales = ['en', 'fr', 'de'];
       const defaultLocale = 'en';
-    
-      const language = supportedLocales.includes(pathLocale) ? pathLocale : defaultLocale;
-    
-      setDomain("www.vasion.com"); 
+      const language = supportedLocales.includes(pathLocale)
+        ? pathLocale
+        : defaultLocale;
+      setDomain('www.vasion.com');
       setLanguage(language);
     }
-    
-    checkPathLocale(window.location.href);
-    
-  }, [isLoaded, searchParams]);
 
-  return (
-    <>
-    </>
-  );
+    checkPathLocale(window.location.href);
+  }, [searchParams]);
+
+  return <></>;
 }
 
 export default function FormTracking() {
