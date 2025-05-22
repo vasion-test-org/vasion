@@ -122,7 +122,7 @@ const Form = ({ blok }) => {
           console.log("lean data language:", languageRef.current); // Use the ref here
           formData["thank_you_language"] = languageRef.current;
           formData["origin_domain"] = originRef.current;
-          formData["routing_node_trigger"] = routingLang.current;
+
         },
         defaultLanguage: languageRef.current,
         useIframe: blok.animated,
