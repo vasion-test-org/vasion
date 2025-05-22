@@ -8,7 +8,6 @@ import media from "@/styles/media";
 import useMedia from "@/functions/useMedia";
 
 const InfographicPill = ({ blok }) => {
-  console.log("infographicPill", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const imageSrc =

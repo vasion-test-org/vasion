@@ -63,6 +63,9 @@ export const defaultTheme = {
   infographic_pill: {
     bg: `#F5F4F7`,
   },
+  comparison_table: {
+    bg: "#3D2562",
+  },
 };
 
 export const darkTheme = {
@@ -107,6 +110,9 @@ export const darkTheme = {
     bg: `#3D2562`,
     text_color: `#FFFFFF`,
   },
+  comparison_table: {
+    bg: "#3D2562",
+  },
 };
 
 export const lightTheme = {
@@ -117,6 +123,9 @@ export const lightTheme = {
   logoCube: {
     textColor: "#1B1D21",
     cardBg: "#ffffff",
+  },
+  comparison_table: {
+    bg: "#F5F4F7",
   },
 };
 
