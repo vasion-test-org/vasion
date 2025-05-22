@@ -65,6 +65,7 @@ export const defaultTheme = {
   },
   comparison_table: {
     bg: "#3D2562",
+    text_color: "#FFFFFF",
   },
 };
 
@@ -112,6 +113,7 @@ export const darkTheme = {
   },
   comparison_table: {
     bg: "#3D2562",
+    text_color: "#FFFFFF",
   },
 };
 
@@ -126,6 +128,7 @@ export const lightTheme = {
   },
   comparison_table: {
     bg: "#F5F4F7",
+    text_color: "#1B1D21",
   },
 };
 
