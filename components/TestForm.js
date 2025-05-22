@@ -13,6 +13,7 @@ import { useThankYou } from '@/context/ThankYouContext';
 import { useRouter } from 'next/navigation';
 
 const Form = ({ blok }) => {
+  // console.log(blok.redirect_link)
   const { thankYouCopy, updateThankYouCopy } = useThankYou();
   const router = useRouter();
   const themes = useAvailableThemes();
@@ -23,6 +24,7 @@ const Form = ({ blok }) => {
   const formHeight = getMedia('733px', '50.875vw', '77.137vw', '288.084vw');
   const lineWidth = getMedia('220px', '15.278vw', '19.531vw', '7.187vw');
   const xFormPosition = getMedia(-28, -28, -27, 0);
+  // const yFormPosition = getMedia(-277, -277, -27, 0);
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
   const routingLang = useRef('Demo Request - EN');
@@ -32,6 +34,7 @@ const Form = ({ blok }) => {
   useEffect(() => {
     if (blok?.thank_you_copy) {
       updateThankYouCopy(blok?.thank_you_copy);
+      // console.log(thankYouCopy, blok?.thank_you_copy);
     }
   }, [thankYouCopy, blok?.thank_you_copy]);
 
@@ -57,9 +60,11 @@ const Form = ({ blok }) => {
     console.log(routingLang.current);
   }, []);
 
-  //checks script is loaded for marketo form
+  //checks script is loadedfor marketo form
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.MktoForms2) {
+    if (!document.getElementById('mktoForms')) {
+      loadScript();
+    } else {
       setIsLoaded(true);
     }
   }, []);
@@ -119,12 +124,14 @@ const Form = ({ blok }) => {
 
     return () => {
       document.body.removeChild(script);
+      // Clean up the event listener when component unmounts
+      window.removeEventListener('message', handleLeanDataMessage);
     };
   }, []);
 
   useEffect(() => {
-    if (isLoaded && window?.MktoForms2) {
-      window.MktoForms2.loadForm(
+    isLoaded &&
+      window?.MktoForms2?.loadForm(
         'https://info.printerlogic.com',
         '338-HTA-134',
         blok.form_id,
@@ -156,7 +163,7 @@ const Form = ({ blok }) => {
                   form_id: blok.form_id,
                   form_submission_date: new Date().toISOString(),
                 });
-
+                
                 console.log('Thank You');
                 console.log('Form submitted successfully:', submittedValues);
                 return false;
@@ -171,6 +178,7 @@ const Form = ({ blok }) => {
                   form_submission_date: new Date().toISOString(),
                 });
               }
+              // changes end here
             } else if (blok.redirect_link.cached_url) {
               updateThankYouCopy(blok?.thank_you_copy);
 
@@ -181,6 +189,7 @@ const Form = ({ blok }) => {
                   ? blok.redirect_link
                   : blok.redirect_link?.cached_url || '/thank-you';
 
+              // 👇 Ensure root-relative if internal
               if (!isExternal(redirectUrl) && !redirectUrl.startsWith('/')) {
                 redirectUrl = '/' + redirectUrl;
               }
@@ -196,8 +205,22 @@ const Form = ({ blok }) => {
           });
         }
       );
-    }
   }, [isLoaded, blok.form_id, blok.redirectLink]);
+
+  const loadScript = () => {
+    var s = document.createElement('script');
+    s.id = 'mktoForms';
+    s.type = 'text/javascript';
+    s.async = true;
+    s.src = 'https://info.printerlogic.com/js/forms2/js/forms2.min.js';
+    s.onreadystatechange = function () {
+      if (this.readyState === 'complete' || this.readyState === 'loaded') {
+        setIsLoaded(true);
+      }
+    };
+    s.onload = () => setIsLoaded(true);
+    document.getElementsByTagName('head')[0].appendChild(s);
+  };
 
   return (
     <ThemeProvider theme={selectedTheme}>

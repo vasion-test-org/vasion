@@ -68,12 +68,12 @@ export default async function RootLayout({ children }) {
         />
 
         {/* Marketo Forms2 */}
-        <Script
+        {/* <Script
           id='marketo-forms'
           strategy='afterInteractive'
           defer
           src='https://info.printerlogic.com/js/forms2/js/forms2.min.js'
-        />
+        /> */}
 
         {/* Intercom */}
         <Script
