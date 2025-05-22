@@ -58,7 +58,6 @@ export default async function RootLayout({ children }) {
     `,
           }}
         />
-        <MarketoScripts />
 
         {/* CookieYes */}
         <Script
