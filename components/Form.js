@@ -13,7 +13,6 @@ import { useThankYou } from '@/context/ThankYouContext';
 import { useRouter } from 'next/navigation';
 
 const Form = ({ blok }) => {
-  // console.log(blok.redirect_link)
   const { thankYouCopy, updateThankYouCopy } = useThankYou();
   const router = useRouter();
   const themes = useAvailableThemes();
@@ -24,35 +23,17 @@ const Form = ({ blok }) => {
   const formHeight = getMedia('733px', '50.875vw', '77.137vw', '288.084vw');
   const lineWidth = getMedia('220px', '15.278vw', '19.531vw', '7.187vw');
   const xFormPosition = getMedia(-28, -28, -27, 0);
-  // const yFormPosition = getMedia(-277, -277, -27, 0);
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
   const routingLang = useRef('Demo Request - EN');
-  const originRef = useRef('va');
+  const demoTl = useRef(null);
 
   //gets thank you copy for dynamic thank you page
   useEffect(() => {
     if (blok?.thank_you_copy) {
       updateThankYouCopy(blok?.thank_you_copy);
-      // console.log(thankYouCopy, blok?.thank_you_copy);
     }
   }, [thankYouCopy, blok?.thank_you_copy]);
-
-  useEffect(() => {
-    function getOriginDomain(url) {
-      return url.split('.com')[0] + '.com';
-    }
-
-    if (typeof window !== 'undefined') {
-      const originDomain = getOriginDomain(window.location.hostname);
-
-      if (originDomain.includes('printerlogic')) {
-        originRef.current = 'pl';
-      } else if (originDomain.includes('vasion')) {
-        originRef.current = 'va';
-      }
-    }
-  }, []);
 
   //checking for pathname to set routing language and path
   useEffect(() => {
@@ -76,7 +57,7 @@ const Form = ({ blok }) => {
     console.log(routingLang.current);
   }, []);
 
-  //checks script is loadedfor marketo form
+  //checks script is loaded for marketo form
   useEffect(() => {
     if (typeof window !== 'undefined' && window.MktoForms2) {
       setIsLoaded(true);
@@ -85,11 +66,11 @@ const Form = ({ blok }) => {
 
   //loads script for bookit form and gsap animations for form
   useEffect(() => {
-    const demoTl = gsap.timeline({ paused: true });
+    demoTl.current = gsap.timeline({ paused: true });
     gsap.set('.bookit-content-container', { display: 'none', opacity: 0 });
 
     if (blok.animated) {
-      demoTl
+      demoTl.current
         .to('.preformContent', { opacity: contentVisibility })
         .to('.preformContent nondemo', { display: 'none' }, '<')
         .to('.marketoForm', { opacity: 0 }, '<')
@@ -112,14 +93,12 @@ const Form = ({ blok }) => {
 
     script.addEventListener('load', () => {
       console.log('timeoutLang', languageRef.current);
-      const urlParams = new URLSearchParams(window.location.search);
-      const aliIdExists = urlParams.has('aliId');
+
       const initConfig = {
         calendarTimeoutLength: 900,
         beforeRouting: (formTarget, formData) => {
           console.log('lean data language:', languageRef.current);
           formData['thank_you_language'] = languageRef.current;
-          formData['origin_domain'] = originRef.current;
           formData['routing_node_trigger'] = routingLang.current;
         },
         defaultLanguage: languageRef.current,
@@ -133,19 +112,7 @@ const Form = ({ blok }) => {
         initConfig
       );
 
-      if (aliIdExists) {
-        window.LDBookItV2.submit(
-          blok.animated
-            ? { cb: window.LDBookItV2.getIframeFn('100%', '100%', '300') }
-            : undefined
-        );
-        if (blok.animated) {
-          demoTl.play();
-          setStepDone(true);
-        }
-      } else {
-        window.LDBookItV2.setFormProvider('marketo');
-      }
+      window.LDBookItV2.setFormProvider('marketo');
     });
 
     document.body.appendChild(script);
@@ -178,35 +145,54 @@ const Form = ({ blok }) => {
             if (blok.animated) {
               if (window.LDBookItV2) {
                 window.LDBookItV2.saveFormData(submittedValues);
+                window.LDBookItV2.submit({
+                  formData: submittedValues,
+                  cb: window.LDBookItV2.getIframeFn('100%', '100%', '300'),
+                });
+                demoTl.current.play();
+                setStepDone(true);
+                dataLayer.push({
+                  event: 'marketo_form_submission_success',
+                  form_id: blok.form_id,
+                  form_submission_date: new Date().toISOString(),
+                });
+
                 console.log('Thank You');
                 console.log('Form submitted successfully:', submittedValues);
+                return false;
               } else {
                 console.error('LDBookItV2 not available, booking may fail');
                 alert(
                   'There was a problem connecting to our scheduling system. Please contact support.'
                 );
+                dataLayer.push({
+                  event: 'marketo_form_submission_failed',
+                  form_id: blok.form_id,
+                  form_submission_date: new Date().toISOString(),
+                });
               }
+            } else if (blok.redirect_link.cached_url) {
+              updateThankYouCopy(blok?.thank_you_copy);
+
+              const isExternal = (url) => /^https?:\/\//.test(url);
+
+              let redirectUrl =
+                typeof blok.redirect_link === 'string'
+                  ? blok.redirect_link
+                  : blok.redirect_link?.cached_url || '/thank-you';
+
+              if (!isExternal(redirectUrl) && !redirectUrl.startsWith('/')) {
+                redirectUrl = '/' + redirectUrl;
+              }
+
+              if (isExternal(redirectUrl)) {
+                window.location.href = redirectUrl;
+              } else {
+                router.push(redirectUrl);
+              }
+
+              return false;
             }
-            updateThankYouCopy(blok?.thank_you_copy);
-
-            const isExternal = (url) => /^https?:\/\//.test(url);
-
-            let redirectUrl =
-              typeof blok.redirect_link === 'string'
-                ? blok.redirect_link
-                : blok.redirect_link?.cached_url || '/thank-you';
-
-            if (!isExternal(redirectUrl) && !redirectUrl.startsWith('/')) {
-              redirectUrl = '/' + redirectUrl;
-            }
-
-            if (isExternal(redirectUrl)) {
-              window.location.href = redirectUrl;
-            } else {
-              router.push(redirectUrl);
-            }
-
-            return false;
           });
         }
       );
