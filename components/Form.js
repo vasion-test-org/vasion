@@ -129,16 +129,16 @@ const Form = ({ blok }) => {
         '338-HTA-134',
         blok.form_id,
         (form) => {
-          let submissionTimeout;
+          // let submissionTimeout;
 
-          form.onSubmit(() => {
-            submissionTimeout = setTimeout(() => {
-              console.error('Form submission timeout: assuming failure');
-              alert(
-                'There was a problem submitting the form. Please refresh page and try again.'
-              );
-            }, 5000);
-          });
+          // form.onSubmit(() => {
+          //   submissionTimeout = setTimeout(() => {
+          //     console.error('Form submission timeout: assuming failure');
+          //     alert(
+          //       'There was a problem submitting the form. Please refresh page and try again.'
+          //     );
+          //   }, 5000);
+          // });
 
           form.onSuccess(function (submittedValues) {
             clearTimeout(submissionTimeout);
