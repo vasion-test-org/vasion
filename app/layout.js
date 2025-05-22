@@ -1,83 +1,48 @@
-import StoryblokProvider from "@/components/StoryblokProvider";
-import { ThemeProviderWrapper } from "@/context/ThemeContext";
-import { ThankYouProvider } from "@/context/ThankYouContext";
-import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
-import FormTracking from "@/components/FormTracking";
-import Script from "next/script";
-import "./globals.css";
-import ScrollSmootherWrapper from "@/components/ScrollSmoothWrapper";
-import Providers from "@/components/providers";
-import Config from "@/components/Config";
-import { getStoryblokApi } from "@/lib/storyblok";
-import { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/next";
+import StoryblokProvider from '@/components/StoryblokProvider';
+import { ThemeProviderWrapper } from '@/context/ThemeContext';
+import { ThankYouProvider } from '@/context/ThankYouContext';
+import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
+import FormTracking from '@/components/FormTracking';
+import Script from 'next/script';
+import './globals.css';
+import ScrollSmootherWrapper from '@/components/ScrollSmoothWrapper';
+import Providers from '@/components/providers';
+import Config from '@/components/Config';
+import { getStoryblokApi } from '@/lib/storyblok';
+import { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/next';
+import MarketoScripts from '@/components/MarketoScripts';
 
 export const metadata = {
-  metadataBase: new URL("https://vasion.com"),
+  metadataBase: new URL('https://vasion.com'),
   title: {
-    template: "%s | Vasion",
-    default: "Vasion",
+    template: '%s | Vasion',
+    default: 'Vasion',
   },
-  description: "Vasion site",
+  description: 'Vasion site',
 };
 
 export default async function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <head>
         <meta
-          name="google-site-verification"
-          content="9aTxhC978Sh5yhlRXic1mj23gCh4RcexRTfgiwMKbks"
+          name='google-site-verification'
+          content='9aTxhC978Sh5yhlRXic1mj23gCh4RcexRTfgiwMKbks'
         />
-        {/* Marketo Munchkin */}
-        <Script
-          id="marketo-munchkin"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-      (function() {
-        var didInit = false;
-        function initMunchkin() {
-          if(didInit === false) {
-            didInit = true;
-            Munchkin.init('338-HTA-134');
-          }
-        }
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.async = true;
-        s.src = '//munchkin.marketo.net/munchkin.js';
-        s.onreadystatechange = function() {
-          if (this.readyState == 'complete' || this.readyState == 'loaded') {
-            initMunchkin();
-          }
-        };
-        s.onload = initMunchkin;
-        document.getElementsByTagName('head')[0].appendChild(s);
-      })();
-    `,
-          }}
-        />
+        <MarketoScripts />
 
         {/* CookieYes */}
         <Script
-          id="cookieyes"
-          strategy="afterInteractive"
-          src="https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js"
-        />
-
-        {/* Marketo Forms2 */}
-        <Script
-          id="marketo-forms"
-          strategy="afterInteractive"
-          defer
-          src="https://info.printerlogic.com/js/forms2/js/forms2.min.js"
+          id='cookieyes'
+          strategy='afterInteractive'
+          src='https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js'
         />
 
         {/* Intercom */}
         <Script
-          id="intercom"
-          strategy="afterInteractive"
+          id='intercom'
+          strategy='afterInteractive'
           dangerouslySetInnerHTML={{
             __html: `
       window.intercomSettings = {
@@ -108,8 +73,8 @@ export default async function RootLayout({ children }) {
 
         {/* VWO */}
         <Script
-          id="vwo"
-          strategy="afterInteractive"
+          id='vwo'
+          strategy='afterInteractive'
           dangerouslySetInnerHTML={{
             __html: `
         window._vwo_code || (function() {
@@ -163,7 +128,7 @@ export default async function RootLayout({ children }) {
 
         {/* Google Tag Manager */}
         <Script
-          id="gtm"
+          id='gtm'
           async
           dangerouslySetInnerHTML={{
             __html: `
@@ -178,7 +143,7 @@ export default async function RootLayout({ children }) {
 
         {/* Hotjar */}
         <Script
-          id="hotjar"
+          id='hotjar'
           async
           dangerouslySetInnerHTML={{
             __html: `
