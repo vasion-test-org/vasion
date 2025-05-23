@@ -1,18 +1,18 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useThankYou } from "@/context/ThankYouContext";
-import styled from "styled-components";
-import colors from "@/styles/colors";
-import ComponentRenderer from "@/components/renderers/ComponentRenderer";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
+'use client';
+import React from 'react';
+import { useThankYou } from '@/context/ThankYouContext';
+import styled from 'styled-components';
+import colors from '@/styles/colors';
+import ComponentRenderer from '@/components/renderers/ComponentRenderer';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
-const ThankYou = () => {
+const ThankYouComponent = ({ className }) => {
   const copycomponents = [
-    "body_copy",
-    "header",
-    "eyebrow",
-    "long_form_text",
-    "copy_block",
+    'body_copy',
+    'header',
+    'eyebrow',
+    'long_form_text',
+    'copy_block',
   ];
   const { thankYouCopy } = useThankYou();
 
@@ -21,7 +21,7 @@ const ThankYou = () => {
   // }, [thankYouCopy]);
 
   return (
-    <Wrapper>
+    <Wrapper className={className}>
       <Content>
         {thankYouCopy?.map((item, index) => (
           <div key={`item.component_${index}`}>
@@ -43,6 +43,7 @@ const Content = styled.div`
   align-items: center;
   gap: 1.5vw;
 `;
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -51,6 +52,8 @@ const Wrapper = styled.div`
   background: ${colors.primaryPurple};
   color: ${colors.white};
   width: 100%;
-  height: 100vh;
+  min-height: 100%;
+  padding: 2rem;
 `;
-export default ThankYou;
+
+export default ThankYouComponent;
