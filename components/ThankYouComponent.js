@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useThankYou } from '@/context/ThankYouContext';
 import styled from 'styled-components';
 import colors from '@/styles/colors';
@@ -15,10 +15,15 @@ const ThankYouComponent = ({ className }) => {
     'copy_block',
   ];
   const { thankYouCopy } = useThankYou();
+  const [isClient, setIsClient] = useState(false);
 
-  // useEffect(() => {
-  //   // console.log("Another Page - Thank You Copy:", thankYouCopy);
-  // }, [thankYouCopy]);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null; // or a loading state if you prefer
+  }
 
   return (
     <Wrapper className={className}>
@@ -52,7 +57,7 @@ const Wrapper = styled.div`
   background: ${colors.primaryPurple};
   color: ${colors.white};
   width: 100%;
-  min-height: 100%;
+  min-height: 100vh;
   padding: 2rem;
 `;
 
