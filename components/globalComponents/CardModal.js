@@ -60,10 +60,10 @@ const CardModal = ({ data, setShowModal }) => {
       try {
         if (smoother) {
           smoother.paused(false);
-          console.log("ScrollSmoother unpaused successfully");
+          // console.log("ScrollSmoother unpaused successfully");
         }
       } catch (error) {
-        console.error("Error unpausing ScrollSmoother:", error);
+        // console.error("Error unpausing ScrollSmoother:", error);
       }
 
       if (modalScrollGroup) {
