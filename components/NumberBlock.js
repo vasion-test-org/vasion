@@ -8,10 +8,17 @@ import text from "@/styles/text";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 
 const NumberBlock = ({ blok }) => {
-  // console.log(blok)
   return (
-    <NumberBlockContainer {...storyblokEditable(blok.header[0])}>
-      <NumberBlockDiv bg={blok.block_color.value} color={blok.text_color.value}>
+    <NumberBlockContainer
+      {...storyblokEditable(blok.header[0], {
+        resolveRelations: [""],
+      })}
+    >
+      <NumberBlockDiv
+        bg={blok.block_color.value}
+        color={blok.text_color.value}
+        {...storyblokEditable(blok)}
+      >
         {blok.number}
       </NumberBlockDiv>
       <RichTextRenderer
