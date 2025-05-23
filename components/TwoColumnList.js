@@ -188,7 +188,7 @@ const Wrapper = styled.div`
   justify-self: center;
   align-items: center;
   justify-content: center;
-  gap:2.5vw;
+  gap: 2.5vw;
 
   padding: ${(props) => {
     if (props.spacingOffset === "top") {
@@ -213,7 +213,7 @@ const Wrapper = styled.div`
   }};
 
   ${media.fullWidth} {
-    gap:40px;
+    gap: 40px;
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
         return props.spacing === "default"
@@ -238,7 +238,7 @@ const Wrapper = styled.div`
   }
 
   ${media.tablet} {
-      gap:3.906vw;
+    gap: 3.906vw;
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
         return props.spacing === "default"

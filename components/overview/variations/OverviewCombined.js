@@ -7,13 +7,12 @@ import text from "@/styles/text";
 import Button from "components/globalComponents/Button";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import Parenthesis from "@/assets/svg/Parenthesis.svg";
-import Link from "next/link";
 import { storyblokEditable } from "@storyblok/react/rsc";
+
 const Combined = ({ blok }) => {
-  // console.log("Combined->", blok);
   const statlist = blok?.stats?.stat_list?.map((item) => {
     return (
-      <StatItem key={item._uid}>
+      <StatItem key={item._uid} {...storyblokEditable(item)}>
         <StatHeadline>{item?.headline}</StatHeadline>
         <StatBody>
           <RichTextRenderer document={item?.body_copy} />
@@ -23,24 +22,14 @@ const Combined = ({ blok }) => {
   });
 
   return (
-    <Wrapper
-      spacingOffset={blok.offset_spacing}
-      spacing={blok.section_spacing}
-      {...storyblokEditable(blok)}
-    >
+    <Wrapper spacingOffset={blok.offset_spacing} spacing={blok.section_spacing}>
       <ContentDiv {...storyblokEditable(blok)}>
         <Quotation />
         <QuoteBlock>
-          {/* {blok?.quote?.quote_image?.[0]?.media[0]?.filename && ( */}
-          {/*   <QuoteImageStart */}
-          {/*     src={blok?.quote?.quote_image[0].media[0].filename} */}
-          {/*     alt={blok?.quote?.quote_image[0]?.media[0].alt} */}
-          {/*   /> */}
-          {/* )} */}
           <QuoteCopy>
             {blok?.quote?.copy?.find((item) => item.component === "header")
               ?.copy?.content && (
-              <Header {...storyblokEditable(blok.quote.copy)}>
+              <Header {...storyblokEditable(item)}>
                 <RichTextRenderer
                   document={
                     blok?.quote?.copy?.find(
@@ -53,7 +42,7 @@ const Combined = ({ blok }) => {
 
             {blok?.quote?.copy?.find((item) => item.component === "body_copy")
               ?.copy?.content && (
-              <BodyCopy {...storyblokEditable(blok.quote.copy[0 || 1])}>
+              <BodyCopy {...storyblokEditable(blok.quote)}>
                 <RichTextRenderer
                   document={
                     blok?.quote?.copy?.find(
@@ -64,7 +53,9 @@ const Combined = ({ blok }) => {
               </BodyCopy>
             )}
             {blok.quote?.copy && blok.quote?.copy.length >= 2 && (
-              <Attribution>
+              <Attribution
+                {...storyblokEditable(blok.quote.copy[2] || blok.quote.copy[1])}
+              >
                 -
                 <RichTextRenderer
                   document={
@@ -77,16 +68,18 @@ const Combined = ({ blok }) => {
             )}
           </QuoteCopy>
           {blok?.quote?.quote_image[0]?.media[0]?.filename && (
-            <QuoteSideImg
-              src={blok?.quote?.quote_image[0]?.media[0].filename}
-              alt={blok?.quote?.quote_image[0]?.media[0].alt}
-            />
+            <div {...storyblokEditable(blok.quote.quote_image[0])}>
+              <QuoteSideImg
+                src={blok?.quote?.quote_image[0]?.media[0].filename}
+                alt={blok?.quote?.quote_image[0]?.media[0].alt}
+              />
+            </div>
           )}
         </QuoteBlock>
 
         <Divider />
 
-        <StatBlock>
+        <StatBlock {...storyblokEditable(blok.stats)}>
           <HeaderDiv>
             <Headline>{blok?.stats?.headline}</Headline>
           </HeaderDiv>

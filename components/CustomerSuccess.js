@@ -77,7 +77,7 @@ const FeaturedTestimonials = ({ blok }) => {
   const featured = blok?.testimonials?.map((item, index) => (
     // console.log(item.copy_sections[0]),
     <FeaturedItem
-    {...storyblokEditable(item)}
+      {...storyblokEditable(item)}
       key={index}
       href={item?.linkUrl}
       ref={(el) => (itemsRef.current[index] = el)}
@@ -96,10 +96,18 @@ const FeaturedTestimonials = ({ blok }) => {
             <RichTextRenderer document={item.copy_sections[0].copy} />
           </Headline>
           <Body {...storyblokEditable(item)}>
-            <RichTextRenderer document={item.copy_sections[1].copy} responsiveTextStyles={item.copy_sections[1].responsive_text_styles} />
+            <RichTextRenderer
+              document={item.copy_sections[1].copy}
+              responsiveTextStyles={
+                item.copy_sections[1].responsive_text_styles
+              }
+            />
           </Body>
         </TitleAndBody>
-        <RichTextRenderer document={item.copy_sections[2].copy} responsiveTextStyles={item.copy_sections[2].responsive_text_styles}/>
+        <RichTextRenderer
+          document={item.copy_sections[2].copy}
+          responsiveTextStyles={item.copy_sections[2].responsive_text_styles}
+        />
       </BlocksDiv>
       <GoTo
         className="goto-arrow"
@@ -122,8 +130,7 @@ const FeaturedTestimonials = ({ blok }) => {
       <StatAndBodyDiv>
         <Stat> {item?.stat}</Stat>
         <div {...storyblokEditable(item)}>
-        <RichTextRenderer document={item?.body_copy} />
-
+          <RichTextRenderer document={item?.body_copy} />
         </div>
       </StatAndBodyDiv>
       <StatBlokBottomContainer>
@@ -270,13 +277,6 @@ const StatBlokBottomContainer = styled.div`
   align-items: center;
 `;
 
-const BodyCopy = styled.p`
-  ${text.bodyMd};
-  ${media.mobile} {
-    ${text.bodySm};
-  }
-`;
-
 const Stat = styled.p`
   ${text.stat};
   ${media.mobile} {
@@ -301,7 +301,6 @@ const StatAndBodyDiv = styled.div`
 `;
 
 const StatTag = styled.div`
-  ${text.tagBold};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -447,9 +446,7 @@ const Body = styled.p`
   }
 `;
 
-const Headline = styled.div`
-
-`;
+const Headline = styled.div``;
 
 const TitleAndBody = styled.div`
   display: flex;
@@ -469,12 +466,11 @@ const TitleAndBody = styled.div`
 
 const Tag = styled.div`
   position: absolute;
-  ${text.tagBold};
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  background-color: ${colors.purpleTag};
+  background: ${colors.purpleTag};
   color: ${colors.primaryPurple};
   width: fit-content;
   padding: 0.25vw 0.5vw;

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import media from "styles/media";
 import colors from "styles/colors";
 import text from "styles/text";
@@ -20,48 +20,53 @@ const ComparisonTable = ({ blok }) => {
   const rows = tableData?.tbody || [];
 
   return (
-    <Wrapper spacing={blok.section_spacing} spacingOffset={blok.offset_spacing}>
-      <TableContainer>
-        <StyledTable>
-          <TableHead>
-            <tr>
-              {headers.map((header) => (
-                <TableHeader
-                  key={header._uid}
-                  center={header.value !== "Solution"}
-                >
-                  {header.value}
-                </TableHeader>
-              ))}
-            </tr>
-          </TableHead>
-          <tbody>
-            {rows.map((row, index) => (
-              <TableRow key={row._uid} bg={index % 2}>
-                {row.body.map((cell, cellIndex) => {
-                  // First column is the solution name
-                  if (cellIndex === 0) {
-                    return (
-                      <SolutionName key={`${row._uid}-${cellIndex}`}>
-                        {cell.value}
-                      </SolutionName>
-                    );
-                  }
+    <ThemeProvider theme={selectedTheme}>
+      <Wrapper
+        spacing={blok.section_spacing}
+        spacingOffset={blok.offset_spacing}
+      >
+        <TableContainer>
+          <StyledTable>
+            <TableHead>
+              <tr>
+                {headers.map((header) => (
+                  <TableHeader
+                    key={header._uid}
+                    center={header.value !== "Solution"}
+                  >
+                    {header.value}
+                  </TableHeader>
+                ))}
+              </tr>
+            </TableHead>
+            <tbody>
+              {rows.map((row, index) => (
+                <TableRow key={row._uid} bg={index % 2}>
+                  {row.body.map((cell, cellIndex) => {
+                    // First column is the solution name
+                    if (cellIndex === 0) {
+                      return (
+                        <SolutionName key={`${row._uid}-${cellIndex}`}>
+                          {cell.value}
+                        </SolutionName>
+                      );
+                    }
 
-                  return (
-                    <TableCell key={`${row._uid}-${cellIndex}`} center>
-                      {cell.value && cell.value.toLowerCase() === "true" && (
-                        <CheckMark src={imagesrc} alt={"checkmark"} />
-                      )}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </tbody>
-        </StyledTable>
-      </TableContainer>
-    </Wrapper>
+                    return (
+                      <TableCell key={`${row._uid}-${cellIndex}`} center>
+                        {cell.value && cell.value.toLowerCase() === "true" && (
+                          <CheckMark src={imagesrc} alt={"checkmark"} />
+                        )}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              ))}
+            </tbody>
+          </StyledTable>
+        </TableContainer>
+      </Wrapper>
+    </ThemeProvider>
   );
 };
 
@@ -93,8 +98,11 @@ const StyledTable = styled.table`
 
 const TableHead = styled.thead`
   height: 3.375vw;
-  background-color: ${colors.primaryPurple};
-  color: white;
+  background: ${(props) =>
+    props.theme?.comparison_table?.bg || `${colors.primaryPurple}`};
+  color: $white;
+  color: ${(props) => props.theme?.comparison_table?.text_color};
+
   padding: 1vw !important;
   ${media.fullWidth} {
     padding: 16px !important;
@@ -188,11 +196,10 @@ const Wrapper = styled.div`
   justify-content: center;
   align-self: center;
   justify-self: center;
-
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: #f5f5f5;
-
+  margin-left: auto;
+  margin-right: auto;
   width: 81.5vw;
   padding: ${(props) => {
     if (props.spacingOffset === "top") {
