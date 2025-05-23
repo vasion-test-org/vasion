@@ -1,36 +1,36 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
-import media from 'styles/media';
-import colors from 'styles/colors';
-import text from 'styles/text';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import RichTextRenderer from './renderers/RichTextRenderer';
-import { getSmoother } from '@/components/ScrollSmoothWrapper';
+import React, { useEffect, useState, useRef } from "react";
+import styled from "styled-components";
+import media from "styles/media";
+import colors from "styles/colors";
+import text from "styles/text";
+import gsap from "gsap";
+import RichTextRenderer from "./renderers/RichTextRenderer";
+import { storyblokEditable } from "@storyblok/react";
+import { getSmoother } from "@/components/ScrollSmoothWrapper";
 
 const PressTimeline = ({ blok }) => {
   const [filteredCards, setFilteredCards] = useState([]);
-  const [selectedRange, setSelectedRange] = useState('2025-2020');
+  const [selectedRange, setSelectedRange] = useState("2025-2020");
   const timelineRef = useRef(null);
   const starRef = useRef(null);
 
   const dateRanges = {
-    '2025-2020': [],
-    '2019-2017': [],
+    "2025-2020": [],
+    "2019-2017": [],
   };
 
   blok.cards.forEach((card) => {
     if (
-      card.date.includes('2021') ||
-      card.date.includes('2020') ||
-      card.date.includes('2024') ||
-      card.date.includes('2025')
+      card.date.includes("2021") ||
+      card.date.includes("2020") ||
+      card.date.includes("2024") ||
+      card.date.includes("2025")
     ) {
-      dateRanges['2025-2020'].push(card);
-    } else if (card.date.includes('2019') || card.date.includes('2017')) {
-      dateRanges['2019-2017'].push(card);
+      dateRanges["2025-2020"].push(card);
+    } else if (card.date.includes("2019") || card.date.includes("2017")) {
+      dateRanges["2019-2017"].push(card);
     }
   });
 
@@ -62,25 +62,25 @@ const PressTimeline = ({ blok }) => {
       }
     };
 
-    timelineElement.addEventListener('mouseenter', handleMouseEnter);
-    timelineElement.addEventListener('mouseleave', handleMouseLeave);
+    timelineElement.addEventListener("mouseenter", handleMouseEnter);
+    timelineElement.addEventListener("mouseleave", handleMouseLeave);
 
     gsap.to(starElement, {
       scrollTrigger: {
         scroller: timelineElement,
         trigger: timelineElement,
-        start: 'top top',
-        endTrigger: '#last-element',
-        end: 'bottom bottom',
+        start: "top top",
+        endTrigger: "#last-element",
+        end: "bottom bottom",
         scrub: 2,
       },
       y: () => timelineElement.offsetHeight - starElement.offsetHeight,
-      ease: 'none',
+      ease: "none",
     });
 
     return () => {
-      timelineElement.removeEventListener('mouseenter', handleMouseEnter);
-      timelineElement.removeEventListener('mouseleave', handleMouseLeave);
+      timelineElement.removeEventListener("mouseenter", handleMouseEnter);
+      timelineElement.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [filteredCards]);
 
@@ -94,10 +94,10 @@ const PressTimeline = ({ blok }) => {
     return (
       <TimelineCardContainer
         key={card.date}
-        id={isLastElement ? 'last-element' : undefined}
+        id={isLastElement ? "last-element" : undefined}
       >
         <Date>{card.date}</Date>
-        <Card>
+        <Card {...storyblokEditable(card)}>
           <RichTextRenderer document={card.header} />
           <RichTextRenderer document={card.body_copy} />
           {/* <StyledLink href={card.link}>{card.linkText}</StyledLink> */}
@@ -126,7 +126,7 @@ const PressTimeline = ({ blok }) => {
         <TLGradient />
         <LineDiv>
           <TimelineStar
-            src='/images/uiElements/VasionStarNewsroom.webp'
+            src="/images/uiElements/VasionStarNewsroom.webp"
             ref={starRef}
           />
           <Line />
