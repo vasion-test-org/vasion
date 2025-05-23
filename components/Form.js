@@ -33,9 +33,10 @@ const Form = ({ blok }) => {
   //gets thank you copy for dynamic thank you page
   useEffect(() => {
     if (blok?.thank_you_copy) {
-      updateThankYouCopy(blok.thank_you_copy);
+      updateThankYouCopy(blok?.thank_you_copy);
+      // console.log(thankYouCopy, blok?.thank_you_copy);
     }
-  }, [blok?.thank_you_copy]);
+  }, [thankYouCopy, blok?.thank_you_copy]);
 
   //checking for pathname to set routing language and path
   useEffect(() => {
@@ -162,7 +163,7 @@ const Form = ({ blok }) => {
                   form_id: blok.form_id,
                   form_submission_date: new Date().toISOString(),
                 });
-
+                
                 console.log('Thank You');
                 console.log('Form submitted successfully:', submittedValues);
                 return false;
@@ -193,14 +194,11 @@ const Form = ({ blok }) => {
                 redirectUrl = '/' + redirectUrl;
               }
 
-              // Add a small delay to ensure localStorage is updated
-              setTimeout(() => {
-                if (isExternal(redirectUrl)) {
-                  window.location.href = redirectUrl;
-                } else {
-                  router.push(redirectUrl);
-                }
-              }, 100);
+              if (isExternal(redirectUrl)) {
+                window.location.href = redirectUrl;
+              } else {
+                router.push(redirectUrl);
+              }
 
               return false;
             }
