@@ -15,15 +15,14 @@ const ThankYouComponent = ({ className }) => {
     'copy_block',
   ];
   const { thankYouCopy } = useThankYou();
-  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    // Only refresh if this is the first load
+    if (!sessionStorage.getItem('thankYouPageLoaded')) {
+      sessionStorage.setItem('thankYouPageLoaded', 'true');
+      window.location.reload();
+    }
   }, []);
-
-  if (!isClient) {
-    return null; // or a loading state if you prefer
-  }
 
   return (
     <Wrapper className={className}>
