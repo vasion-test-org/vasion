@@ -10,7 +10,7 @@ import Image from '@/components/globalComponents/Image';
 import colors from '@/styles/colors';
 
 const InfographicSideBySide = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   return (

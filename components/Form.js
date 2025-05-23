@@ -130,7 +130,7 @@ const Form = ({ blok }) => {
       // switched this from using hard coded  'Demo Request - EN', where it now says routingLang.current @bubba
       window.LDBookItV2.initialize(
         "00DE0000000bt64MAA",
-        routingLang.current, // change I am referring too
+        routingLang.current, 
         "LD_BookIt_Log_ID__c",
         initConfig,
       );
