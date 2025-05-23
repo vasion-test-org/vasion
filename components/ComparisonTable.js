@@ -199,7 +199,6 @@ const Wrapper = styled.div`
 
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: #f5f5f5;
 
   width: 81.5vw;
   padding: ${(props) => {
