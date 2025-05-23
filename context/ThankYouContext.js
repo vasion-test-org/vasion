@@ -1,36 +1,36 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const ThankYouContext = createContext();
 
 const defaultThankYouCopy = [
   {
-    _uid: "default-header",
-    component: "header",
+    _uid: 'default-header',
+    component: 'header',
     copy: {
-      type: "doc",
+      type: 'doc',
       content: [
         {
-          type: "heading",
+          type: 'heading',
           attrs: { level: 1 },
-          content: [{ type: "text", text: "Thank you!" }],
+          content: [{ type: 'text', text: 'Thank you!' }],
         },
       ],
     },
   },
   {
-    _uid: "default-body",
-    component: "body_copy",
+    _uid: 'default-body',
+    component: 'body_copy',
     copy: {
-      type: "doc",
+      type: 'doc',
       content: [
         {
-          type: "paragraph",
+          type: 'paragraph',
           content: [
             {
-              type: "text",
-              text: "Your download has been successful",
+              type: 'text',
+              text: 'Your download has been successful',
             },
           ],
         },
@@ -41,9 +41,10 @@ const defaultThankYouCopy = [
 
 export const ThankYouProvider = ({ children }) => {
   const [thankYouCopy, setThankYouCopy] = useState(defaultThankYouCopy);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedData = localStorage.getItem("thankYouCopy");
+    const storedData = localStorage.getItem('thankYouCopy');
     if (storedData) {
       try {
         const parsed = JSON.parse(storedData);
@@ -51,18 +52,22 @@ export const ThankYouProvider = ({ children }) => {
           setThankYouCopy(parsed);
         }
       } catch (error) {
-        console.warn("Failed to parse thankYouCopy from localStorage:", error);
+        console.warn('Failed to parse thankYouCopy from localStorage:', error);
       }
     }
+    setIsLoading(false);
   }, []);
 
   const updateThankYouCopy = (newArray) => {
+    if (!newArray) return;
     setThankYouCopy(newArray);
-    localStorage.setItem("thankYouCopy", JSON.stringify(newArray));
+    localStorage.setItem('thankYouCopy', JSON.stringify(newArray));
   };
 
   return (
-    <ThankYouContext.Provider value={{ thankYouCopy, updateThankYouCopy }}>
+    <ThankYouContext.Provider
+      value={{ thankYouCopy, updateThankYouCopy, isLoading }}
+    >
       {children}
     </ThankYouContext.Provider>
   );
