@@ -32,7 +32,6 @@ const Hero = ({ blok }) => {
     }
   };
 
-  // console.log(blok.centered_image);
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
       <HeroBGWrapper>
