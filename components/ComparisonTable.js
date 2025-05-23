@@ -198,6 +198,8 @@ const Wrapper = styled.div`
   justify-self: center;
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin-left: auto;
+  margin-right: auto;
   width: 81.5vw;
   padding: ${(props) => {
     if (props.spacingOffset === "top") {
