@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 const ThankYouContext = createContext();
 
@@ -41,22 +41,6 @@ const defaultThankYouCopy = [
 
 export const ThankYouProvider = ({ children }) => {
   const [thankYouCopy, setThankYouCopy] = useState(defaultThankYouCopy);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const storedData = localStorage.getItem('thankYouCopy');
-    if (storedData) {
-      try {
-        const parsed = JSON.parse(storedData);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setThankYouCopy(parsed);
-        }
-      } catch (error) {
-        console.warn('Failed to parse thankYouCopy from localStorage:', error);
-      }
-    }
-    setIsLoading(false);
-  }, []);
 
   const updateThankYouCopy = (newArray) => {
     if (!newArray) return;
@@ -65,9 +49,7 @@ export const ThankYouProvider = ({ children }) => {
   };
 
   return (
-    <ThankYouContext.Provider
-      value={{ thankYouCopy, updateThankYouCopy, isLoading }}
-    >
+    <ThankYouContext.Provider value={{ thankYouCopy, updateThankYouCopy }}>
       {children}
     </ThankYouContext.Provider>
   );

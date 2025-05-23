@@ -33,10 +33,9 @@ const Form = ({ blok }) => {
   //gets thank you copy for dynamic thank you page
   useEffect(() => {
     if (blok?.thank_you_copy) {
-      updateThankYouCopy(blok?.thank_you_copy);
-      // console.log(thankYouCopy, blok?.thank_you_copy);
+      updateThankYouCopy(blok.thank_you_copy);
     }
-  }, [thankYouCopy, blok?.thank_you_copy]);
+  }, [blok?.thank_you_copy]);
 
   //checking for pathname to set routing language and path
   useEffect(() => {
