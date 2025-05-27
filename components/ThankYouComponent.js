@@ -15,14 +15,22 @@ const ThankYouComponent = ({ className }) => {
     'copy_block',
   ];
   const { thankYouCopy } = useThankYou();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Only refresh if this is the first load
-    if (!sessionStorage.getItem('thankYouPageLoaded')) {
-      sessionStorage.setItem('thankYouPageLoaded', 'true');
-      window.location.reload();
-    }
+    // We can render if we have either stored content or default content
+    setIsLoading(false);
   }, []);
+
+  if (isLoading) {
+    return (
+      <Wrapper className={className}>
+        <Content>
+          <div>Loading...</div>
+        </Content>
+      </Wrapper>
+    );
+  }
 
   return (
     <Wrapper className={className}>
