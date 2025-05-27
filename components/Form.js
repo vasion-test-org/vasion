@@ -90,43 +90,43 @@ const Form = ({ blok }) => {
         .to('.marketoForm', { display: 'none' }, '<')
         .set('.bookit-content-container', { display: 'block' })
         .to('.bookit-content-container', { opacity: 1 });
-    }
 
-    const script = document.createElement('script');
-    script.src = 'https://cdn.leandata.com/js-snippet/ld-book-v2.js';
-    script.async = false;
+      const script = document.createElement('script');
+      script.src = 'https://cdn.leandata.com/js-snippet/ld-book-v2.js';
+      script.async = false;
 
-    script.addEventListener('load', () => {
-      console.log('timeoutLang', languageRef.current);
+      script.addEventListener('load', () => {
+        console.log('timeoutLang', languageRef.current);
 
-      const initConfig = {
-        calendarTimeoutLength: 900,
-        beforeRouting: (formTarget, formData) => {
-          console.log('lean data language:', languageRef.current);
-          formData['thank_you_language'] = languageRef.current;
-          formData['routing_node_trigger'] = routingLang.current;
-        },
-        defaultLanguage: languageRef.current,
-        useIframe: blok.animated,
+        const initConfig = {
+          calendarTimeoutLength: 900,
+          beforeRouting: (formTarget, formData) => {
+            console.log('lean data language:', languageRef.current);
+            formData['thank_you_language'] = languageRef.current;
+            formData['routing_node_trigger'] = routingLang.current;
+          },
+          defaultLanguage: languageRef.current,
+          useIframe: blok.animated,
+        };
+
+        window.LDBookItV2.initialize(
+          '00DE0000000bt64MAA',
+          routingLang.current,
+          'LD_BookIt_Log_ID__c',
+          initConfig
+        );
+
+        window.LDBookItV2.setFormProvider('marketo');
+      });
+
+      document.body.appendChild(script);
+
+      return () => {
+        document.body.removeChild(script);
+        // Clean up the event listener when component unmounts
+        window.removeEventListener('message', handleLeanDataMessage);
       };
-
-      window.LDBookItV2.initialize(
-        '00DE0000000bt64MAA',
-        routingLang.current,
-        'LD_BookIt_Log_ID__c',
-        initConfig
-      );
-
-      window.LDBookItV2.setFormProvider('marketo');
-    });
-
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-      // Clean up the event listener when component unmounts
-      window.removeEventListener('message', handleLeanDataMessage);
-    };
+    }
   }, []);
 
   useEffect(() => {
@@ -136,19 +136,7 @@ const Form = ({ blok }) => {
         '338-HTA-134',
         blok.form_id,
         (form) => {
-          // let submissionTimeout;
-
-          // form.onSubmit(() => {
-          //   submissionTimeout = setTimeout(() => {
-          //     console.error('Form submission timeout: assuming failure');
-          //     alert(
-          //       'There was a problem submitting the form. Please refresh page and try again.'
-          //     );
-          //   }, 5000);
-          // });
-
           form.onSuccess(function (submittedValues) {
-            // clearTimeout(submissionTimeout);
             if (blok.animated) {
               if (window.LDBookItV2) {
                 window.LDBookItV2.saveFormData(submittedValues);
@@ -163,7 +151,7 @@ const Form = ({ blok }) => {
                   form_id: blok.form_id,
                   form_submission_date: new Date().toISOString(),
                 });
-                
+
                 console.log('Thank You');
                 console.log('Form submitted successfully:', submittedValues);
                 return false;
@@ -178,7 +166,6 @@ const Form = ({ blok }) => {
                   form_submission_date: new Date().toISOString(),
                 });
               }
-              // changes end here
             } else if (blok.redirect_link.cached_url) {
               updateThankYouCopy(blok?.thank_you_copy);
 
