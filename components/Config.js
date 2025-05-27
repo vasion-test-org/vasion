@@ -1,31 +1,30 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import Footer from './globalComponents/Footer';
-import Nav from './globalComponents/Nav';
-import MobileNav from './globalComponents/MobileNav';
-import styled from 'styled-components';
-import media from '@/styles/media';
-import { usePathname } from 'next/navigation';
-import { getStoryblokApi } from '@/lib/storyblok';
-
+import React, { useEffect, useState } from "react";
+import Footer from "./globalComponents/Footer";
+import Nav from "./globalComponents/Nav";
+import MobileNav from "./globalComponents/MobileNav";
+import styled from "styled-components";
+import media from "@/styles/media";
+import { usePathname } from "next/navigation";
+import { getStoryblokApi } from "@/lib/storyblok";
 const Config = ({ blok, children }) => {
   const pathname = usePathname();
   const [configData, setConfigData] = useState(null);
 
   const getLocaleFromPath = () => {
-    const parts = pathname?.split('/');
+    const parts = pathname?.split("/");
     const localeCandidate = parts[1];
-    const supportedLocales = ['en', 'de', 'fr'];
-    return supportedLocales.includes(localeCandidate) ? localeCandidate : 'en';
+    const supportedLocales = ["en", "de", "fr"];
+    return supportedLocales.includes(localeCandidate) ? localeCandidate : "en";
   };
 
   useEffect(() => {
     const fetchConfig = async () => {
       const locale = getLocaleFromPath();
       const storyblokApi = getStoryblokApi();
-      const { data } = await storyblokApi.get('cdn/stories/config', {
-        version: 'published',
+      const { data } = await storyblokApi.get("cdn/stories/config", {
+        version: "published",
         language: locale,
       });
       setConfigData(data?.story?.content ?? null);
@@ -47,7 +46,7 @@ const Config = ({ blok, children }) => {
           <MobileNav blok={configData.nav?.[0]} />
         </MobileNavWrapper>
       )}
-      
+
       <ChildrenVisibilityWrapper $visible={!!configData}>
         {children}
       </ChildrenVisibilityWrapper>
@@ -58,7 +57,7 @@ const Config = ({ blok, children }) => {
 };
 
 const ChildrenVisibilityWrapper = styled.div`
-  visibility: ${({ $visible }) => ($visible ? 'visible' : 'hidden')};
+  visibility: ${({ $visible }) => ($visible ? "visible" : "hidden")};
 `;
 
 const NavWrapper = styled.div`
