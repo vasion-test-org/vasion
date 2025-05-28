@@ -71,7 +71,6 @@ const NavWrapper = styled.div`
     display: none;
   }
 `;
-
 const MobileNavWrapper = styled.div`
   display: none;
   ${media.mobile} {
