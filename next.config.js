@@ -443,11 +443,11 @@ const nextConfig = {
         destination: "/connect-with-vasion/",
         permanent: true,
       },
-      {
-        source: "/event/tradeshow-demo-emea/",
-        destination: "/connect-with-vasion/",
-        permanent: true,
-      },
+      // {
+      //   source: "/event/tradeshow-demo-emea/",
+      //   destination: "/connect-with-vasion/",
+      //   permanent: true,
+      // },
       {
         source: "/event/testing-thank-you/",
         destination: "/connect-with-vasion/",
@@ -458,11 +458,11 @@ const nextConfig = {
         destination: "/connect-with-vasion/",
         permanent: true,
       },
-      {
-        source: "/event/tradeshow-demo/",
-        destination: "/connect-with-vasion/",
-        permanent: true,
-      },
+      // {
+      //   source: "/event/tradeshow-demo/",
+      //   destination: "/connect-with-vasion/",
+      //   permanent: true,
+      // },
       {
         source: "/event/texas-erecord-conference/",
         destination: "/connect-with-vasion/",
