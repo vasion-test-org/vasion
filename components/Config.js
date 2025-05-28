@@ -8,6 +8,7 @@ import styled from "styled-components";
 import media from "@/styles/media";
 import { usePathname } from "next/navigation";
 import { getStoryblokApi } from "@/lib/storyblok";
+
 const Config = ({ blok, children }) => {
   const pathname = usePathname();
   const [configData, setConfigData] = useState(null);
