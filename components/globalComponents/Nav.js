@@ -200,7 +200,7 @@ const Nav = ({ blok }) => {
             })}
           </Column>
         ))}
-        {/* {item.cta && <DropDownCTA>hello world</DropDownCTA>} */}
+        {item.cta && <DropDownCTA>hello world</DropDownCTA>}
       </Dropdown>
     </KeyDiv>
   ));
@@ -442,8 +442,7 @@ const Nav = ({ blok }) => {
 const DropDownCTA = styled.div`
   display: flex;
   flex-direction: column;
-
-`
+`;
 const StyledNextLink = styled(NextLink)`
   ${text.tag};
   color: ${colors.txtSubtle};
