@@ -154,6 +154,7 @@ const SupportingBadge = styled.img`
     width: 23.131vw;
   }
 `;
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
