@@ -129,6 +129,7 @@ const BadgeContainer = styled.div`
     width: 73.196vw;
   }
 `;
+
 const SpotLightImage = styled.img`
   width: 23.056vw;
   ${media.fullWidth} {
