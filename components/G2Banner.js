@@ -141,6 +141,7 @@ const SpotLightImage = styled.img`
     width: 77.57vw;
   }
 `;
+
 const SupportingBadge = styled.img`
   width: 6.875vw;
 
