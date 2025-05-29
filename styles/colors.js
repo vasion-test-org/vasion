@@ -21,6 +21,7 @@ const colors = {
   primaryPurple: "#3D2562",
   purple500: "#6A2C6A",
   purple400: "#8B5B8B",
+  pink: '#DD5FC1',
   purple300: "#AC8AAC",
   purple200: "#CBBFF1",
   purple100: "#E6DFF8",
