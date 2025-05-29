@@ -646,6 +646,9 @@ const FormContainer = styled.div`
     &#Email,
     &#Phone,
     &#Company,
+    &#Address,
+    &#City,
+    &#PostalCode,
     &#How_did_you_hear_about_us__c {
       width: 31.25vw !important;
 

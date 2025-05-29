@@ -420,7 +420,6 @@ const MainFooterContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
-  background-color: ${colors.darkPurple};
   align-items: flex-start;
   justify-content: center;
   width: 100%;
@@ -444,13 +443,12 @@ const MainFooterContainer = styled.div`
     padding: 18.692vw 6.075vw 9.813vw 6.075vw;
   }
 `;
-const Wrapper = styled.footer`
+const Wrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-
-  background-color: ${colors.darkPurple};
+  background: linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0.00) 100%), linear-gradient(270deg, #CC4800 1.74%, #5F47A8 99.26%), #201435;
   height: 88.806vw;
   gap: 3.611vw;
   bottom: 0;
