@@ -12,6 +12,7 @@ import Button from "./globalComponents/Button";
 // import Pill from "components/Pill";
 
 const FeaturedCard = ({ blok }) => {
+  // console.log(blok)
   return (
     <Wrapper>
       <CardWrapper>
