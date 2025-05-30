@@ -200,7 +200,7 @@ const Nav = ({ blok }) => {
             })}
           </Column>
         ))}
-        {item.cta && <DropDownCTA>hello world</DropDownCTA>}
+        {/* {item.cta && <DropDownCTA>hello world</DropDownCTA>} */}
       </Dropdown>
     </KeyDiv>
   ));
