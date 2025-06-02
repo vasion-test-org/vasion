@@ -1,11 +1,11 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
-import styled from "styled-components";
-import colors from "@/styles/colors";
-import media from "@/styles/media";
-import Form from "./Form";
-import text from "@/styles/text";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import styled from 'styled-components';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import Form from './Form';
+import text from '@/styles/text';
 
 const LightboxBtn = ({ blok }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +22,7 @@ const LightboxBtn = ({ blok }) => {
     form_id: blok.form_id,
     thank_you_copy: blok.thank_you,
     redirect_link: blok.redirect_link || null,
-    theme: blok.theme || "dark",
+    theme: blok.theme || 'dark',
     header: blok.form_header || null,
     animated: blok.animated || false,
   };
@@ -34,12 +34,12 @@ const LightboxBtn = ({ blok }) => {
   useEffect(() => {
     if (!isOpen) return;
 
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     const smoother = window.ScrollSmoother?.get();
     smoother?.paused(true);
 
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = 'auto';
       smoother?.paused(false);
     };
   }, [isOpen]);
@@ -47,7 +47,8 @@ const LightboxBtn = ({ blok }) => {
   return (
     <LightboxContainer>
       <Button onClick={handleOpen}>{blok.lightbox_text}</Button>
-      {isOpen && isClient &&
+      {isOpen &&
+        isClient &&
         createPortal(
           <Overlay onClick={handleClose}>
             <FormContent>
@@ -61,17 +62,14 @@ const LightboxBtn = ({ blok }) => {
   );
 };
 
-
 const Button = styled.div`
-cursor: pointer;
-width: max-content;
+  ${text.bodyMd};
+  cursor: pointer;
+  width: max-content;
   background-color: ${colors.primaryOrange};
   color: white;
-  text-transform: uppercase;
   border-radius: 1.75vw;
-    padding: 0.75vw 1vw;
-  
-     ${text.bodyMd};
+  padding: 0.75vw 1vw;
 
   ${media.fullWidth} {
     border-radius: 28px;
@@ -134,7 +132,7 @@ const CloseBtn = styled.p`
   left: 93%;
   top: 2.5vw;
   width: fit-content;
-  font-family: "Archivo";
+  font-family: 'Archivo';
   color: ${colors.grey600};
   z-index: 4;
   cursor: pointer;
