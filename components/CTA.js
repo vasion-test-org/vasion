@@ -9,7 +9,7 @@ import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 // import colors from 'styles/colors';
 // import text from 'styles/text';
 import Button from '@/components/globalComponents/Button';
-
+import LightboxBtn from '@/components/LightboxButton';
 import useMedia from '@/functions/useMedia';
 
 const CTA = ({ blok }) => {
@@ -22,7 +22,7 @@ const CTA = ({ blok }) => {
     blok?.image?.[2] || blok?.image?.[0]
   );
 
-  // console.log(blok.section_spacing);
+  console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <PillContainer
@@ -46,14 +46,21 @@ const CTA = ({ blok }) => {
               </div>
             ))}
           </ContentWrapper>
-          {blok?.button_group?.map(($buttonData) => (
-            <div
-              {...storyblokEditable($buttonData)}
-              key={$buttonData?.link_text}
-            >
-              <Button key={$buttonData?.link_text} $buttonData={$buttonData} />
-            </div>
-          ))}
+          {blok?.button_group?.map(($buttonData) =>
+            $buttonData.component === 'light_box_button' ? (
+              <LightboxBtn key='lightbox' blok={$buttonData} />
+            ) : (
+              <div
+                {...storyblokEditable($buttonData)}
+                key={$buttonData?.link_text}
+              >
+                <Button
+                  key={$buttonData?.link_text}
+                  $buttonData={$buttonData}
+                />
+              </div>
+            )
+          )}
         </CtaWrapper>
       </PillContainer>
     </ThemeProvider>
