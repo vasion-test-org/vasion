@@ -390,7 +390,7 @@ const MarketoForm = styled.form`
   }
 
   ${media.mobile} {
-    width: 75.833vw !important;
+    width: 78.833vw !important;
     gap: 4.167vw 4.167vw;
     padding: unset !important;
   }

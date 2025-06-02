@@ -390,7 +390,7 @@ const MarketoForm = styled.form`
   }
 
   ${media.mobile} {
-    width: 75.833vw !important;
+    width: 78.833vw !important;
     gap: 4.167vw 4.167vw;
     padding: unset !important;
   }
@@ -452,6 +452,10 @@ const FormContainer = styled.div`
       0vw 0.833vw 1.667vw 0vw rgba(25, 29, 30, 0.16);
   }
 
+  /* .mktoRadioList {
+
+  } */
+
   .mktoFieldDescriptor {
     max-height: 3.375vw !important;
 
@@ -504,24 +508,96 @@ const FormContainer = styled.div`
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+
+    label {
+      ${text.bodySm};
+      margin-left: unset !important;
+    }
+
+    input[type='checkbox'] {
+      margin-right: 0.5vw !important;
+      border-radius: 0.25vw !important;
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      width: 1.25vw !important;
+      height: 1.05vw !important;
+      border: 1px solid ${colors.grey400} !important;
+      background-color: ${colors.white} !important;
+      cursor: pointer !important;
+      position: relative !important;
+      transition: background-color 0.2s ease-in-out !important;
+      padding: unset !important;
+
+      &:hover {
+        background-color: ${colors.ghostGrey} !important;
+      }
+
+      &:checked {
+        background-color: ${colors.primaryOrange} !important;
+        border-color: ${colors.primaryOrange} !important;
+
+        &:hover {
+          background-color: ${colors.primaryOrange} !important;
+        }
+
+        &::after {
+          content: '' !important;
+          position: absolute !important;
+          left: 50% !important;
+          top: 40% !important;
+          transform: translate(-50%, -50%) rotate(45deg) !important;
+          width: 0.35vw !important;
+          height: 0.5vw !important;
+          border: 0.12vw solid white !important;
+          border-top: 0 !important;
+          border-left: 0 !important;
+
+          ${media.fullWidth} {
+            width: 5px !important;
+            height: 8px !important;
+            border: 1.5px solid white !important;
+            border-top: 0 !important;
+            border-left: 0 !important;
+          }
+
+          ${media.tablet} {
+            width: 0.547vw !important;
+            height: 0.781vw !important;
+            border: 0.195vw solid white !important;
+            border-top: 0 !important;
+            border-left: 0 !important;
+          }
+
+          ${media.mobile} {
+            width: 1.167vw !important;
+            height: 1.667vw !important;
+            border: 0.417vw solid white !important;
+            border-top: 0 !important;
+            border-left: 0 !important;
+          }
+        }
+      }
+
+      ${media.fullWidth} {
+        margin-right: 8px !important;
+        width: 20px !important;
+        height: 17px !important;
+      }
+
+      ${media.tablet} {
+        margin-right: 0.781vw !important;
+        width: 1.953vw !important;
+        height: 1.66vw !important;
+      }
+
+      ${media.mobile} {
+        margin-right: 1.667vw !important;
+        width: 4.167vw !important;
+        height: 3.542vw !important;
+      }
+    }
   }
 
-  .mktoCheckboxList input[type='checkbox'] {
-    height: auto !important;
-    margin-right: 0.5vw !important;
-
-    ${media.fullWidth} {
-      margin-right: 8px !important;
-    }
-
-    ${media.tablet} {
-      margin-right: 0.781vw !important;
-    }
-
-    ${media.mobile} {
-      margin-right: 1.667vw !important;
-    }
-  }
   #LblemailOptIn {
     color: ${(props) => props.theme.form.textColor};
     display: flex;
