@@ -146,15 +146,18 @@ const RichWrapper = styled.div`
     color: ${colors.primaryOrange};
   }
   img {
+    padding: 1.25vw 0;
     max-width: 56.25vw ${media.fullWidth} {
       max-width: 900px;
     }
 
     ${media.tablet} {
+      padding: 1.953vw 0;
       max-width: 58.594vw;
     }
 
     ${media.mobile} {
+      padding: 4.167vw 0;
       max-width: 82vw;
     }
   }

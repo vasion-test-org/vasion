@@ -5,6 +5,7 @@ import styled from "styled-components";
 import colors from "@/styles/colors";
 import media from "@/styles/media";
 import Form from "./Form";
+import text from "@/styles/text";
 
 const LightboxBtn = ({ blok }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +22,7 @@ const LightboxBtn = ({ blok }) => {
     form_id: blok.form_id,
     thank_you_copy: blok.thank_you,
     redirect_link: blok.redirect_link || null,
-    theme: blok.theme || "default",
+    theme: blok.theme || "dark",
     header: blok.form_header || null,
     animated: blok.animated || false,
   };
@@ -45,7 +46,7 @@ const LightboxBtn = ({ blok }) => {
 
   return (
     <LightboxContainer>
-      <PrimaryCta onClick={handleOpen}>{blok.lightbox_text}</PrimaryCta>
+      <Button onClick={handleOpen}>{blok.lightbox_text}</Button>
       {isOpen && isClient &&
         createPortal(
           <Overlay onClick={handleClose}>
@@ -61,25 +62,28 @@ const LightboxBtn = ({ blok }) => {
 };
 
 
-const PrimaryCta = styled.button`
+const Button = styled.div`
+cursor: pointer;
+width: max-content;
   background-color: ${colors.primaryOrange};
   color: white;
   text-transform: uppercase;
-  padding: 0.556vw 2.083vw;
-  border-radius: 1.667vw;
-  font-family: "Archivo", sans-serif;
+  border-radius: 1.75vw;
+    padding: 0.75vw 1vw;
+  
+     ${text.bodyMd};
 
   ${media.fullWidth} {
-    padding: 8px 30px;
-    border-radius: 24px;
+    border-radius: 28px;
+    padding: 12px 16px;
   }
   ${media.tablet} {
-    padding: 0.781vw 2.93vw;
-    border-radius: 2.344vw;
+    border-radius: 2.734vw;
+    padding: 1.172vw 1.563vw;
   }
   ${media.mobile} {
-    padding: 1.869vw 7.009vw;
-    border-radius: 5.607vw;
+    border-radius: 5.833vw;
+    padding: 2.5vw 3.333vw;
     margin-bottom: 4.673vw;
   }
   ${media.hover} {
