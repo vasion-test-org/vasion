@@ -510,8 +510,9 @@ const FormContainer = styled.div`
     justify-content: center !important;
 
     label {
-      ${text.bodySm};
+      ${text.tagBold};
       margin-left: unset !important;
+      margin-right: 0.5vw !important;
     }
 
     input[type='checkbox'] {
@@ -520,7 +521,7 @@ const FormContainer = styled.div`
       appearance: none !important;
       -webkit-appearance: none !important;
       width: 1.25vw !important;
-      height: 1.05vw !important;
+      height: 1.25vw !important;
       border: 1px solid ${colors.grey400} !important;
       background-color: ${colors.white} !important;
       cursor: pointer !important;
@@ -581,19 +582,19 @@ const FormContainer = styled.div`
       ${media.fullWidth} {
         margin-right: 8px !important;
         width: 20px !important;
-        height: 17px !important;
+        height: 20px !important;
       }
 
       ${media.tablet} {
         margin-right: 0.781vw !important;
         width: 1.953vw !important;
-        height: 1.66vw !important;
+        height: 1.953vw !important;
       }
 
       ${media.mobile} {
         margin-right: 1.667vw !important;
         width: 4.167vw !important;
-        height: 3.542vw !important;
+        height: 4.167vw !important;
       }
     }
   }
