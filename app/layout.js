@@ -30,6 +30,12 @@ export default async function RootLayout({ children }) {
           name='google-site-verification'
           content='9aTxhC978Sh5yhlRXic1mj23gCh4RcexRTfgiwMKbks'
         />
+        {/* Google reCAPTCHA */}
+<Script
+  id='recaptcha'
+  strategy='afterInteractive'
+  src='https://www.google.com/recaptcha/api.js'
+/>
         {/* Marketo Munchkin */}
         <Script
           id='marketo-munchkin'
