@@ -212,10 +212,10 @@ const Nav = ({ blok }) => {
         </ColumnsWrapper>
         {item.cta && (
           <>
-            {console.log('CTA Data:', {
+            {/* {console.log('CTA Data:', {
               cta: item.cta,
               copySections: item.cta?.[0]?.copy_sections,
-            })}
+            })} */}
             <DropDownCTA
               bgImg={item.cta?.[0]?.media?.[0]?.media?.[0]?.filename}
             >
