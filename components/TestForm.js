@@ -49,15 +49,15 @@ const TestForm = ({ blok }) => {
           routing_data: event.data.responseData,
         });
         break;
-      case 'LD_ROUTING_TIMED_OUT':
-        console.log('Routing timed out:', event.data.responseData);
-        dataLayer.push({
-          event: 'lean_data_routing_timeout',
-          form_id: blok.form_id,
-          timeout_date: new Date().toISOString(),
-          timeout_data: event.data.responseData,
-        });
-        break;
+      // case 'LD_ROUTING_TIMED_OUT':
+      //   console.log('Routing timed out');
+      //   dataLayer.push({
+      //     event: 'lean_data_routing_timeout',
+      //     form_id: blok.form_id,
+      //     timeout_date: new Date().toISOString(),
+      //     timeout_data: event.data.responseData,
+      //   });
+      //   break;
       case 'LD_POST_BOOKING_IMMEDIATE':
         console.log('Booking completed:', event.data.responseData);
         dataLayer.push({
