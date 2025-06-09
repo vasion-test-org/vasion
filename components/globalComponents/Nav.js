@@ -19,10 +19,18 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 import VasionNavLogo from '@/assets/svg/vasion-nav-logo.svg';
 import { getStoryblokApi } from '@/lib/storyblok';
+import ComponentRenderer from '@/components/renderers/ComponentRenderer';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Nav = ({ blok }) => {
+  const copycomponents = [
+    'body_copy',
+    'header',
+    'eyebrow',
+    'long_form_text',
+    'copy_block',
+  ];
   const router = useRouter();
   const path = usePathname();
   // console.log("blok", blok);
@@ -124,83 +132,108 @@ const Nav = ({ blok }) => {
     <KeyDiv key={`item.tab_name-${index}`}>
       <Tab className='tab tabs'>{item.tab_name}</Tab>
       <Dropdown className='dropdowns' id={`dropdown-${index}`}>
-        {item.tab_columns.map((column, colIdx) => (
-          <Column key={`column.column_header-${colIdx}`}>
-            {column?.column_header && (
-              <ColumnHeader>{column.column_header}</ColumnHeader>
-            )}
-            {column.nav_items.map((navItem, itemIdx) => {
-              const formattedIconString = navItem.icon.replace(/\s+/g, '');
-              const IconComponent = Icons[formattedIconString] || null;
+        <ColumnsWrapper>
+          {item.tab_columns.map((column, colIdx) => (
+            <Column key={`column.column_header-${colIdx}`}>
+              {column?.column_header && (
+                <ColumnHeader>{column.column_header}</ColumnHeader>
+              )}
+              {column.nav_items.map((navItem, itemIdx) => {
+                const formattedIconString = navItem.icon.replace(/\s+/g, '');
+                const IconComponent = Icons[formattedIconString] || null;
 
-              const rawUrl = navItem.item_link?.cached_url || '#';
-              const isExternal =
-                rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
-              const supportedLocales = ['en', 'fr', 'de'];
-              const rawPathParts = rawUrl.split('/').filter(Boolean);
-              const alreadyHasLocale = supportedLocales.includes(
-                rawPathParts[0]
-              );
+                const rawUrl = navItem.item_link?.cached_url || '#';
+                const isExternal =
+                  rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
+                const supportedLocales = ['en', 'fr', 'de'];
+                const rawPathParts = rawUrl.split('/').filter(Boolean);
+                const alreadyHasLocale = supportedLocales.includes(
+                  rawPathParts[0]
+                );
 
-              const normalizedUrl = isExternal
-                ? rawUrl
-                : `/${
-                    alreadyHasLocale ? '' : currentLocale ?? ''
-                  }/${rawUrl}`.replace(/\/+/g, '/');
+                const normalizedUrl = isExternal
+                  ? rawUrl
+                  : `/${
+                      alreadyHasLocale ? '' : currentLocale ?? ''
+                    }/${rawUrl}`.replace(/\/+/g, '/');
 
-              return (
-                <StyledNextLink
-                  href={isExternal ? normalizedUrl : normalizedUrl}
-                  target={isExternal ? '_blank' : undefined}
-                  rel={isExternal ? 'noopener noreferrer' : undefined}
-                  passHref
-                  key={`item-${navItem._uid}`}
-                >
-                  <NavItem
-                    card={navItem.card}
-                    card_size={navItem.card_size}
-                    role='link'
-                    tabIndex={0}
+                return (
+                  <StyledNextLink
+                    href={isExternal ? normalizedUrl : normalizedUrl}
+                    target={isExternal ? '_blank' : undefined}
+                    rel={isExternal ? 'noopener noreferrer' : undefined}
+                    passHref
+                    key={`item-${navItem._uid}`}
                   >
-                    {navItem.card &&
-                      navItem.card_size &&
-                      navItem.card_size !== 'small' && (
-                        <ImageWrapper card_size={navItem.card_size}>
-                          <Image images={navItem?.card_image?.[0].media} />
-                        </ImageWrapper>
-                      )}
-                    {IconComponent && (
-                      <NavIconWrapper
-                        card={navItem.card}
-                        card_size={navItem.card_size}
-                      >
-                        <IconComponent />
-                      </NavIconWrapper>
-                    )}
-                    <NavCopy>
-                      <NavItemCopy card_size={navItem.card_size}>
-                        <RichTextRenderer document={navItem.item_copy} />
-                      </NavItemCopy>
-                      {navItem.card_size === 'medium' && (
-                        <StyledAnchor
-                          onClick={(e) => e.stopPropagation()}
-                          target={isExternal ? '_blank' : undefined}
-                          rel={isExternal ? 'noopener noreferrer' : undefined}
+                    <NavItem
+                      card={navItem.card}
+                      card_size={navItem.card_size}
+                      role='link'
+                      tabIndex={0}
+                    >
+                      {navItem.card &&
+                        navItem.card_size &&
+                        navItem.card_size !== 'small' && (
+                          <ImageWrapper card_size={navItem.card_size}>
+                            <Image images={navItem?.card_image?.[0].media} />
+                          </ImageWrapper>
+                        )}
+                      {IconComponent && (
+                        <NavIconWrapper
+                          card={navItem.card}
+                          card_size={navItem.card_size}
                         >
-                          Learn More
-                        </StyledAnchor>
+                          <IconComponent />
+                        </NavIconWrapper>
                       )}
-                      {navItem.sub_copy && navItem.card && (
-                        <NavItemSubCopy>{navItem.sub_copy}</NavItemSubCopy>
-                      )}
-                    </NavCopy>
-                  </NavItem>
-                </StyledNextLink>
-              );
+                      <NavCopy>
+                        <NavItemCopy card_size={navItem.card_size}>
+                          <RichTextRenderer document={navItem.item_copy} />
+                        </NavItemCopy>
+                        {navItem.card_size === 'medium' && (
+                          <StyledAnchor
+                            onClick={(e) => e.stopPropagation()}
+                            target={isExternal ? '_blank' : undefined}
+                            rel={isExternal ? 'noopener noreferrer' : undefined}
+                          >
+                            Learn More
+                          </StyledAnchor>
+                        )}
+                        {navItem.sub_copy && navItem.card && (
+                          <NavItemSubCopy>{navItem.sub_copy}</NavItemSubCopy>
+                        )}
+                      </NavCopy>
+                    </NavItem>
+                  </StyledNextLink>
+                );
+              })}
+            </Column>
+          ))}
+        </ColumnsWrapper>
+        {item.cta && (
+          <>
+            {console.log('CTA Data:', {
+              cta: item.cta,
+              copySections: item.cta?.[0]?.copy_sections,
             })}
-          </Column>
-        ))}
-        {/* {item.cta && <DropDownCTA>hello world</DropDownCTA>} */}
+            <DropDownCTA
+              bgImg={item.cta?.[0]?.media?.[0]?.media?.[0]?.filename}
+            >
+              {item.cta?.[0]?.copy_sections.map((item, index) => (
+                <div
+                  key={`item.component_${index}`}
+                  {...storyblokEditable(item)}
+                >
+                  {copycomponents.includes(item.component) ? (
+                    <RichTextRenderer document={item.copy} blok={item} />
+                  ) : (
+                    <ComponentRenderer blok={item} />
+                  )}
+                </div>
+              ))}
+            </DropDownCTA>
+          </>
+        )}
       </Dropdown>
     </KeyDiv>
   ));
@@ -442,6 +475,31 @@ const Nav = ({ blok }) => {
 const DropDownCTA = styled.div`
   display: flex;
   flex-direction: column;
+  width: 60.5vw;
+  height: 4.688vw;
+  border-radius: 0.25vw;
+  margin-top: 1.5vw;
+  padding: 1.156vw 2.5vw;
+  background-image: url(${(props) => props.bgImg});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  ${media.fullWidth} {
+    width: 968px;
+    height: 75px;
+    border-radius: 4px;
+    margin-top: 24px;
+    padding: 18px 40px;
+  }
+
+  ${media.tablet} {
+    width: 90.531vw;
+    height: 7.324vw;
+    border-radius: 0.391vw;
+    margin-top: 2.344vw;
+    padding: 1.758vw 3.906vw;
+  }
 `;
 const StyledNextLink = styled(NextLink)`
   ${text.tag};
@@ -881,7 +939,7 @@ const Dropdown = styled.div`
   position: absolute;
   background: ${colors.white};
   display: none;
-  flex-direction: row;
+  flex-direction: column;
   width: max-content;
   height: auto;
   overflow: hidden;
@@ -899,14 +957,23 @@ const Dropdown = styled.div`
   }
 
   ${media.tablet} {
+    position: fixed;
     top: 4.199vw;
-    left: 0vw;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
     padding: 1.953vw 2.344vw 2.344vw 2.344vw;
     border-radius: 0 0 1.172vw 1.172vw;
+    width: 94.531vw;
   }
 
   ${media.mobile} {
   }
+`;
+const ColumnsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 
   ${Column}:not(:last-child) {
     padding-right: 2vw;
