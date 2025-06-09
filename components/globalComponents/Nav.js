@@ -475,30 +475,30 @@ const Nav = ({ blok }) => {
 const DropDownCTA = styled.div`
   display: flex;
   flex-direction: column;
-  width: 60.5vw;
+  width: 43vw;
   height: 4.688vw;
   border-radius: 0.25vw;
   margin-top: 1.5vw;
-  padding: 1.156vw 2.5vw;
+  padding: 1.25vw;
   background-image: url(${(props) => props.bgImg});
-  background-size: cover;
+  background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
 
   ${media.fullWidth} {
-    width: 968px;
+    width: 688px;
     height: 75px;
     border-radius: 4px;
     margin-top: 24px;
-    padding: 18px 40px;
+    padding: 20px;
   }
 
   ${media.tablet} {
-    width: 90.531vw;
+    width: 60.938vw;
     height: 7.324vw;
     border-radius: 0.391vw;
     margin-top: 2.344vw;
-    padding: 1.758vw 3.906vw;
+    padding: 1.758vw 1.953vw;
   }
 `;
 const StyledNextLink = styled(NextLink)`
