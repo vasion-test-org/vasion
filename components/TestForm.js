@@ -33,8 +33,11 @@ const TestForm = ({ blok }) => {
   // Add handler for LeanData events
   const handleLeanDataMessage = (event) => {
     // Only process messages from LeanData
-    if (event.origin !== 'https://cdn.leandata.com') return;
+    // if (event.origin !== 'https://cdn.leandata.com') return;
 
+    console.log('Full event data:', event);
+    console.log('Event origin:', event.origin);
+    console.log('Event data:', event.data);
     const { event: eventType, data } = event.data;
 
     switch (eventType) {
