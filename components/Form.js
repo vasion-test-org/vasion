@@ -38,43 +38,42 @@ const Form = ({ blok }) => {
     console.log('Full event data:', event);
     console.log('Event origin:', event.origin);
     console.log('Event data:', event.data);
-    const { event: eventType, data } = event.data;
 
-    switch (eventType) {
+    switch (event.data.message) {
       case 'LD_ROUTING_RESPONSE':
-        console.log('Routing response received:', data);
+        console.log('Routing response received:', event.data.responseData);
         dataLayer.push({
           event: 'lean_data_routing_response',
           form_id: blok.form_id,
           routing_response_date: new Date().toISOString(),
-          routing_data: data,
+          routing_data: event.data.responseData,
         });
         break;
       case 'LD_ROUTING_TIMED_OUT':
-        console.log('Routing timed out:', data);
+        console.log('Routing timed out:', event.data.responseData);
         dataLayer.push({
           event: 'lean_data_routing_timeout',
           form_id: blok.form_id,
           timeout_date: new Date().toISOString(),
-          timeout_data: data,
+          timeout_data: event.data.responseData,
         });
         break;
       case 'LD_POST_BOOKING_IMMEDIATE':
-        console.log('Booking completed:', data);
+        console.log('Booking completed:', event.data.responseData);
         dataLayer.push({
           event: 'lean_data_booking_completed',
           form_id: blok.form_id,
           booking_date: new Date().toISOString(),
-          booking_data: data,
+          booking_data: event.data.responseData,
         });
         break;
       case 'LD_POPUP_CLOSED':
-        console.log('Popup closed:', data);
+        console.log('Popup closed:', event.data.responseData);
         dataLayer.push({
           event: 'lean_data_popup_closed',
           form_id: blok.form_id,
           popup_close_date: new Date().toISOString(),
-          popup_data: data,
+          popup_data: event.data.responseData,
         });
         break;
       default:
