@@ -30,6 +30,55 @@ const Form = ({ blok }) => {
   const routingLang = useRef('Demo Request - EN');
   const demoTl = useRef(null);
 
+  // Add handler for LeanData events
+  const handleLeanDataMessage = (event) => {
+    // Only process messages from LeanData
+    if (event.origin !== 'https://cdn.leandata.com') return;
+
+    const { event: eventType, data } = event.data;
+
+    switch (eventType) {
+      case 'LD_ROUTING_RESPONSE':
+        console.log('Routing response received:', data);
+        dataLayer.push({
+          event: 'lean_data_routing_response',
+          form_id: blok.form_id,
+          routing_response_date: new Date().toISOString(),
+          routing_data: data,
+        });
+        break;
+      case 'LD_ROUTING_TIMED_OUT':
+        console.log('Routing timed out:', data);
+        dataLayer.push({
+          event: 'lean_data_routing_timeout',
+          form_id: blok.form_id,
+          timeout_date: new Date().toISOString(),
+          timeout_data: data,
+        });
+        break;
+      case 'LD_POST_BOOKING_IMMEDIATE':
+        console.log('Booking completed:', data);
+        dataLayer.push({
+          event: 'lean_data_booking_completed',
+          form_id: blok.form_id,
+          booking_date: new Date().toISOString(),
+          booking_data: data,
+        });
+        break;
+      case 'LD_POPUP_CLOSED':
+        console.log('Popup closed:', data);
+        dataLayer.push({
+          event: 'lean_data_popup_closed',
+          form_id: blok.form_id,
+          popup_close_date: new Date().toISOString(),
+          popup_data: data,
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
   //gets thank you copy for dynamic thank you page
   useEffect(() => {
     if (blok?.thank_you_copy) {
@@ -75,6 +124,9 @@ const Form = ({ blok }) => {
     gsap.set('.bookit-content-container', { display: 'none', opacity: 0 });
 
     if (blok.animated) {
+      // Add event listener for LeanData messages
+      window.addEventListener('message', handleLeanDataMessage);
+
       demoTl.current
         .to('.preformContent', { opacity: contentVisibility })
         .to('.preformContent nondemo', { display: 'none' }, '<')
