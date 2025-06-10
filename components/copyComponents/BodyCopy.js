@@ -6,19 +6,32 @@ import media from '@/styles/media';
 import colors from '@/styles/colors';
 // import text from '@/styles/text';
 const BodyCopy = ({ className, children }) => {
-  // Clone children and pass down the className
-  const childrenWithClassName = React.Children.map(children, (child) => {
-    if (React.isValidElement(child)) {
-      return React.cloneElement(child, {
+  // Recursive function to clone children and pass down className
+  const cloneChildrenWithClassName = (children) => {
+    return React.Children.map(children, (child) => {
+      if (!React.isValidElement(child)) {
+        return child;
+      }
+
+      // Clone the child with the className
+      const clonedChild = React.cloneElement(child, {
         className: `${child.props.className || ''} ${className || ''}`.trim(),
       });
-    }
-    return child;
-  });
+
+      // If the child has children, recursively process them
+      if (child.props.children) {
+        return React.cloneElement(clonedChild, {
+          children: cloneChildrenWithClassName(child.props.children),
+        });
+      }
+
+      return clonedChild;
+    });
+  };
 
   return (
     <StyledBodyCopy className={className}>
-      {childrenWithClassName}
+      {cloneChildrenWithClassName(children)}
     </StyledBodyCopy>
   );
 };
