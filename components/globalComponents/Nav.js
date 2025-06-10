@@ -334,6 +334,33 @@ const Nav = ({ blok }) => {
     };
   }, [navReady]);
 
+  // Add new useEffect to close dropdowns on route changes
+  useEffect(() => {
+    if (!navReady) return;
+
+    const closeDropdownsOnRouteChange = () => {
+      gsap.to('.dropdowns', {
+        autoAlpha: 0,
+        duration: 0.35,
+      });
+    };
+
+    // Close dropdowns when path changes
+    closeDropdownsOnRouteChange();
+
+    // Also close dropdowns when clicking any nav link
+    const navLinks = document.querySelectorAll('.dropdowns a');
+    navLinks.forEach((link) => {
+      link.addEventListener('click', closeDropdownsOnRouteChange);
+    });
+
+    return () => {
+      navLinks.forEach((link) => {
+        link.removeEventListener('click', closeDropdownsOnRouteChange);
+      });
+    };
+  }, [path, navReady]); // Add path as a dependency to trigger on route changes
+
   useEffect(() => {
     const handleGlobeHover = () => {
       gsap.to('#languageItemsContainer', { width: '100%' });
@@ -959,7 +986,7 @@ const Dropdown = styled.div`
 
   ${media.tablet} {
     position: fixed;
-    top: 4.199vw;
+    top: 6.1vw;
     left: 0;
     right: 0;
     margin: 0 auto;
