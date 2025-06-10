@@ -367,7 +367,7 @@ const Demo = ({ blok }) => {
         <Content className="preformContent">
           {!mobile && <Header>{blok.header}</Header>}
           <AllOptionsContainer>{mappedOptions}</AllOptionsContainer>
-          {!mobile && <BadgesContainer>{mappedBadges}</BadgesContainer>}
+          {mobile && <BadgesContainer>{mappedBadges}</BadgesContainer>}
         </Content>
 
         {blok.demo_form[0].component === "form" && (
@@ -380,6 +380,7 @@ const Demo = ({ blok }) => {
             <TestForm blok={blok.demo_form[0]} />
           </FormPositionContainer>
         )}
+        
         {mobile && <Header>{blok.header}</Header>}
         {blok.demo_form[0].component === "demo_thank_you" && (
           <FormThankYouContainer>
@@ -446,8 +447,23 @@ const FormThankYouContainer = styled.div`
 `;
 
 const OptionIconWrapper = styled.div`
-  width: 2.375vw;
-  height: 2.375vw;
+    width: 2.375vw;
+    height: 2.375vw;
+
+    ${media.fullWidth} {
+      width: 38px;
+      height: 38px;
+    }
+
+    ${media.tablet} {
+      width: 3.711vw;
+      height: 3.711vw;
+    }
+
+    ${media.mobile} {
+      width: 7.917vw;
+      height: 7.917vw;
+    }
 `;
 const OptionIcon = styled.img`
   filter: brightness(1) grayscale(0%);
@@ -560,6 +576,21 @@ const OptionDiv = styled.div`
   gap: 1.25vw;
   margin-bottom: 2.25vw;
   overflow: hidden;
+
+  ${media.fullWidth} {
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+
+  ${media.tablet} {
+    gap: 1.953vw;
+    margin-bottom: 3.516vw;
+  }
+  
+  ${media.mobile} {
+    gap: 4.167vw;
+    margin-bottom: 7.5vw;
+  }
 `;
 
 const AllOptionsContainer = styled.div`
@@ -568,13 +599,11 @@ const AllOptionsContainer = styled.div`
   margin-bottom: 3vw;
 
   ${media.fullWidth} {
-    gap: 7px;
     margin-bottom: 48px;
-
   }
 
   ${media.tablet} {
-    margin-bottom: 8.691vw;
+    margin-bottom: 4.688vw;
   }
 
   ${media.mobile} {
@@ -585,19 +614,20 @@ const Header = styled.h3`
   ${text.h2};
   color: ${colors.white};
   margin-bottom: 1.875vw;
+  text-align: left;
 
   ${media.fullWidth} {
-    margin-bottom: 27px;
+    margin-bottom: 30px;
   }
 
   ${media.tablet} {
-    margin-bottom: 2.344vw;
+    margin-bottom: 2.93vw;
   }
 
   ${media.mobile} {
     ${text.h2};
-    margin-bottom: 2.804vw;
-    text-align: center;
+    margin-bottom: 6.25vw;
+    text-align: left;
   }
 `;
 const Content = styled.div`

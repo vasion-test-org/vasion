@@ -554,10 +554,11 @@ const FormContainer = styled.div`
   }
   /* Checkbox styles - fixed version */
   .mktoCheckboxList {
-    width: unset !important;
+    width: 100% !important;
     display: flex !important;
+    flex-wrap: wrap !important;
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: left !important;
 
     label {
       ${text.bodyMd};
