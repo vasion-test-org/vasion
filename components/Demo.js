@@ -38,290 +38,290 @@ const Demo = ({ blok }) => {
     "overview_controller",
     "small_quote",
   ];
-  useEffect(() => {
-    const tl = gsap.timeline({});
-    gsap.set(optionRefs.current[0], { height: "auto" });
-    gsap.set(arrowRefs.current[0], { rotate: 180 });
-    gsap.set(contentRefs.current[0], { opacity: 1 });
-    gsap.set(iconRefs.current[0], { filter: "grayscale(90%) brightness(2)" });
+  // useEffect(() => {
+  //   const tl = gsap.timeline({});
+  //   gsap.set(optionRefs.current[0], { height: "auto" });
+  //   gsap.set(arrowRefs.current[0], { rotate: 180 });
+  //   gsap.set(contentRefs.current[0], { opacity: 1 });
+  //   gsap.set(iconRefs.current[0], { filter: "grayscale(90%) brightness(2)" });
 
-    const handleClick = (index) => {
-      if (prevIndex.current === index) {
-        tl.to(".content", {
-          duration: 0.1,
-          opacity: 0,
-        })
-          .to(".options", {
-            height: getMedia("64px", "4vw", "6.25vw", "18.953vw"),
-            duration: 0.25,
-          })
-          .to(".arrows", {
-            rotate: 0,
-            duration: 0.25,
-          });
-      } else {
-        tl.to(".content", {
-          duration: 0.1,
-          opacity: 0,
-        })
-          .to(".options", {
-            height: getMedia("64px", "4vw", "6.25vw", "18.953vw"),
-            duration: 0.35,
-          })
-          .to(
-            ".icons",
-            { duration: 0.1, filter: "brightness(1) grayscale(0%)" },
-            "start",
-          )
-          .to(".arrows", {
-            rotate: 0,
-            duration: 0.1,
-          })
-          .to(
-            iconRefs.current[index],
-            { duration: 0.1, filter: "grayscale(90%) brightness(2)" },
-            "start",
-          )
-          .to(optionRefs.current[index], {
-            height: "auto",
-            duration: 0.35,
-          })
-          .to(
-            contentRefs.current[index],
-            {
-              opacity: 1,
-              duration: 0.25,
-            },
-            "-=.1",
-          )
-          .to(
-            arrowRefs.current[index],
-            {
-              rotate: 180,
-              duration: 0.15,
-            },
-            "-=.5",
-          );
-      }
+  //   const handleClick = (index) => {
+  //     if (prevIndex.current === index) {
+  //       tl.to(".content", {
+  //         duration: 0.1,
+  //         opacity: 0,
+  //       })
+  //         .to(".options", {
+  //           height: getMedia("64px", "4vw", "6.25vw", "18.953vw"),
+  //           duration: 0.25,
+  //         })
+  //         .to(".arrows", {
+  //           rotate: 0,
+  //           duration: 0.25,
+  //         });
+  //     } else {
+  //       tl.to(".content", {
+  //         duration: 0.1,
+  //         opacity: 0,
+  //       })
+  //         .to(".options", {
+  //           height: getMedia("64px", "4vw", "6.25vw", "18.953vw"),
+  //           duration: 0.35,
+  //         })
+  //         .to(
+  //           ".icons",
+  //           { duration: 0.1, filter: "brightness(1) grayscale(0%)" },
+  //           "start",
+  //         )
+  //         .to(".arrows", {
+  //           rotate: 0,
+  //           duration: 0.1,
+  //         })
+  //         .to(
+  //           iconRefs.current[index],
+  //           { duration: 0.1, filter: "grayscale(90%) brightness(2)" },
+  //           "start",
+  //         )
+  //         .to(optionRefs.current[index], {
+  //           height: "auto",
+  //           duration: 0.35,
+  //         })
+  //         .to(
+  //           contentRefs.current[index],
+  //           {
+  //             opacity: 1,
+  //             duration: 0.25,
+  //           },
+  //           "-=.1",
+  //         )
+  //         .to(
+  //           arrowRefs.current[index],
+  //           {
+  //             rotate: 180,
+  //             duration: 0.15,
+  //           },
+  //           "-=.5",
+  //         );
+  //     }
 
-      prevIndex.current = index;
-    };
+  //     prevIndex.current = index;
+  //   };
 
-    optionRefs.current.forEach((option, index) => {
-      handlersRef.current[index] = () => handleClick(index);
-      if (option) {
-        option.addEventListener("click", handlersRef.current[index]);
-      }
-    });
+  //   optionRefs.current.forEach((option, index) => {
+  //     handlersRef.current[index] = () => handleClick(index);
+  //     if (option) {
+  //       option.addEventListener("click", handlersRef.current[index]);
+  //     }
+  //   });
 
-    return () => {
-      optionRefs.current.forEach((option, index) => {
-        if (option) {
-          option.removeEventListener("click", handlersRef.current[index]);
-        }
-      });
-    };
-  }, []);
+  //   return () => {
+  //     optionRefs.current.forEach((option, index) => {
+  //       if (option) {
+  //         option.removeEventListener("click", handlersRef.current[index]);
+  //       }
+  //     });
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    const checkFormLoad = () => {
-      const demoExperienceElement = document.querySelector(
-        "#formFriendlyProductofInterest",
-      );
-      const tl = gsap.timeline({});
+  // useEffect(() => {
+  //   const checkFormLoad = () => {
+  //     const demoExperienceElement = document.querySelector(
+  //       "#formFriendlyProductofInterest",
+  //     );
+  //     const tl = gsap.timeline({});
 
-      if (demoExperienceElement) {
-        const handleChange = (event) => {
-          demoExperienceRef.current = event.target.value;
+  //     if (demoExperienceElement) {
+  //       const handleChange = (event) => {
+  //         demoExperienceRef.current = event.target.value;
 
-          if (demoExperienceRef.current === "Vasion Print") {
-            tl.to(".content", {
-              duration: 0.25,
-              opacity: 0,
-            })
-              .to(".options", {
-                height: getMedia("64px", "4vw", "6.25vw", "14.953vw"),
-                duration: 0.25,
-              })
-              .to(".arrows", {
-                rotate: 0,
-                duration: 0.25,
-              })
-              .to(
-                ".icons",
-                { duration: 0.15, filter: "brightness(1) grayscale(0%)" },
-                "start",
-              )
-              .to(
-                iconRefs.current[0],
-                { duration: 0.15, filter: "grayscale(90%) brightness(2)" },
-                "start",
-              )
-              .to(optionRefs.current[0], {
-                height: "auto",
-              })
-              .to(
-                contentRefs.current[0],
-                {
-                  opacity: 1,
-                  duration: 0.35,
-                },
-                "-=.5",
-              )
-              .to(
-                arrowRefs.current[0],
-                {
-                  rotate: 180,
-                  duration: 0.25,
-                },
-                "-=.5",
-              );
-          } else if (demoExperienceRef.current === "Vasion Output") {
-            tl.to(".content", {
-              duration: 0.25,
-              opacity: 0,
-            })
-              .to(".options", {
-                height: getMedia("64px", "4vw", "6.25vw", "14.953vw"),
-                duration: 0.25,
-              })
-              .to(".arrows", {
-                rotate: 0,
-                duration: 0.25,
-              })
-              .to(
-                ".icons",
-                { duration: 0.15, filter: "brightness(1) grayscale(0%)" },
-                "start",
-              )
-              .to(
-                iconRefs.current[1],
-                { duration: 0.15, filter: "grayscale(90%) brightness(2)" },
-                "start",
-              )
-              .to(optionRefs.current[1], {
-                height: "auto",
-              })
-              .to(
-                contentRefs.current[1],
-                {
-                  opacity: 1,
-                  duration: 0.35,
-                },
-                "-=.5",
-              )
-              .to(
-                arrowRefs.current[1],
-                {
-                  rotate: 180,
-                  duration: 0.25,
-                },
-                "-=.5",
-              );
-          } else if (demoExperienceRef.current === "Vasion Automate") {
-            tl.to(".content", {
-              duration: 0.25,
-              opacity: 0,
-            })
-              .to(".options", {
-                height: getMedia("64px", "4vw", "6.25vw", "14.953vw"),
-                duration: 0.25,
-              })
-              .to(".arrows", {
-                rotate: 0,
-                duration: 0.25,
-              })
-              .to(
-                ".icons",
-                { duration: 0.15, filter: "brightness(1) grayscale(0%)" },
-                "start",
-              )
-              .to(
-                iconRefs.current[2],
-                { duration: 0.15, filter: "grayscale(90%) brightness(2)" },
-                "start",
-              )
-              .to(optionRefs.current[2], {
-                height: "auto",
-              })
-              .to(
-                contentRefs.current[2],
-                {
-                  opacity: 1,
-                  duration: 0.35,
-                },
-                "-=.5",
-              )
-              .to(
-                arrowRefs.current[2],
-                {
-                  rotate: 180,
-                  duration: 0.25,
-                },
-                "-=.5",
-              );
-          } else if (
-            demoExperienceRef.current === "Vasion Automation Platform"
-          ) {
-            tl.to(".content", {
-              duration: 0.25,
-              opacity: 0,
-            })
-              .to(".options", {
-                height: getMedia("64px", "4vw", "6.25vw", "14.953vw"),
-                duration: 0.25,
-              })
-              .to(".arrows", {
-                rotate: 0,
-                duration: 0.25,
-              })
-              .to(
-                ".icons",
-                { duration: 0.15, filter: "brightness(1) grayscale(0%)" },
-                "start",
-              )
-              .to(
-                iconRefs.current[3],
-                { duration: 0.15, filter: "grayscale(90%) brightness(2)" },
-                "start",
-              )
-              .to(optionRefs.current[3], {
-                height: "auto",
-              })
-              .to(
-                contentRefs.current[3],
-                {
-                  opacity: 1,
-                  duration: 0.35,
-                },
-                "-=.5",
-              )
-              .to(
-                arrowRefs.current[3],
-                {
-                  rotate: 180,
-                  duration: 0.25,
-                },
-                "-=.5",
-              );
-          }
-        };
-        demoExperienceElement.addEventListener("change", handleChange);
+  //         if (demoExperienceRef.current === "Vasion Print") {
+  //           tl.to(".content", {
+  //             duration: 0.25,
+  //             opacity: 0,
+  //           })
+  //             .to(".options", {
+  //               height: getMedia("64px", "4vw", "6.25vw", "14.953vw"),
+  //               duration: 0.25,
+  //             })
+  //             .to(".arrows", {
+  //               rotate: 0,
+  //               duration: 0.25,
+  //             })
+  //             .to(
+  //               ".icons",
+  //               { duration: 0.15, filter: "brightness(1) grayscale(0%)" },
+  //               "start",
+  //             )
+  //             .to(
+  //               iconRefs.current[0],
+  //               { duration: 0.15, filter: "grayscale(90%) brightness(2)" },
+  //               "start",
+  //             )
+  //             .to(optionRefs.current[0], {
+  //               height: "auto",
+  //             })
+  //             .to(
+  //               contentRefs.current[0],
+  //               {
+  //                 opacity: 1,
+  //                 duration: 0.35,
+  //               },
+  //               "-=.5",
+  //             )
+  //             .to(
+  //               arrowRefs.current[0],
+  //               {
+  //                 rotate: 180,
+  //                 duration: 0.25,
+  //               },
+  //               "-=.5",
+  //             );
+  //         } else if (demoExperienceRef.current === "Vasion Output") {
+  //           tl.to(".content", {
+  //             duration: 0.25,
+  //             opacity: 0,
+  //           })
+  //             .to(".options", {
+  //               height: getMedia("64px", "4vw", "6.25vw", "14.953vw"),
+  //               duration: 0.25,
+  //             })
+  //             .to(".arrows", {
+  //               rotate: 0,
+  //               duration: 0.25,
+  //             })
+  //             .to(
+  //               ".icons",
+  //               { duration: 0.15, filter: "brightness(1) grayscale(0%)" },
+  //               "start",
+  //             )
+  //             .to(
+  //               iconRefs.current[1],
+  //               { duration: 0.15, filter: "grayscale(90%) brightness(2)" },
+  //               "start",
+  //             )
+  //             .to(optionRefs.current[1], {
+  //               height: "auto",
+  //             })
+  //             .to(
+  //               contentRefs.current[1],
+  //               {
+  //                 opacity: 1,
+  //                 duration: 0.35,
+  //               },
+  //               "-=.5",
+  //             )
+  //             .to(
+  //               arrowRefs.current[1],
+  //               {
+  //                 rotate: 180,
+  //                 duration: 0.25,
+  //               },
+  //               "-=.5",
+  //             );
+  //         } else if (demoExperienceRef.current === "Vasion Automate") {
+  //           tl.to(".content", {
+  //             duration: 0.25,
+  //             opacity: 0,
+  //           })
+  //             .to(".options", {
+  //               height: getMedia("64px", "4vw", "6.25vw", "14.953vw"),
+  //               duration: 0.25,
+  //             })
+  //             .to(".arrows", {
+  //               rotate: 0,
+  //               duration: 0.25,
+  //             })
+  //             .to(
+  //               ".icons",
+  //               { duration: 0.15, filter: "brightness(1) grayscale(0%)" },
+  //               "start",
+  //             )
+  //             .to(
+  //               iconRefs.current[2],
+  //               { duration: 0.15, filter: "grayscale(90%) brightness(2)" },
+  //               "start",
+  //             )
+  //             .to(optionRefs.current[2], {
+  //               height: "auto",
+  //             })
+  //             .to(
+  //               contentRefs.current[2],
+  //               {
+  //                 opacity: 1,
+  //                 duration: 0.35,
+  //               },
+  //               "-=.5",
+  //             )
+  //             .to(
+  //               arrowRefs.current[2],
+  //               {
+  //                 rotate: 180,
+  //                 duration: 0.25,
+  //               },
+  //               "-=.5",
+  //             );
+  //         } else if (
+  //           demoExperienceRef.current === "Vasion Automation Platform"
+  //         ) {
+  //           tl.to(".content", {
+  //             duration: 0.25,
+  //             opacity: 0,
+  //           })
+  //             .to(".options", {
+  //               height: getMedia("64px", "4vw", "6.25vw", "14.953vw"),
+  //               duration: 0.25,
+  //             })
+  //             .to(".arrows", {
+  //               rotate: 0,
+  //               duration: 0.25,
+  //             })
+  //             .to(
+  //               ".icons",
+  //               { duration: 0.15, filter: "brightness(1) grayscale(0%)" },
+  //               "start",
+  //             )
+  //             .to(
+  //               iconRefs.current[3],
+  //               { duration: 0.15, filter: "grayscale(90%) brightness(2)" },
+  //               "start",
+  //             )
+  //             .to(optionRefs.current[3], {
+  //               height: "auto",
+  //             })
+  //             .to(
+  //               contentRefs.current[3],
+  //               {
+  //                 opacity: 1,
+  //                 duration: 0.35,
+  //               },
+  //               "-=.5",
+  //             )
+  //             .to(
+  //               arrowRefs.current[3],
+  //               {
+  //                 rotate: 180,
+  //                 duration: 0.25,
+  //               },
+  //               "-=.5",
+  //             );
+  //         }
+  //       };
+  //       demoExperienceElement.addEventListener("change", handleChange);
 
-        clearInterval(intervalId);
+  //       clearInterval(intervalId);
 
-        return () => {
-          demoExperienceElement.removeEventListener("change", handleChange);
-        };
-      }
-    };
+  //       return () => {
+  //         demoExperienceElement.removeEventListener("change", handleChange);
+  //       };
+  //     }
+  //   };
 
-    const intervalId = setInterval(checkFormLoad, 100);
+  //   const intervalId = setInterval(checkFormLoad, 100);
 
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   };
+  // }, []);
 
   const mappedBadges = blok.badges.map((badge) => (
     <Badge key={badge.filename} src={badge.filename} />
@@ -339,24 +339,18 @@ const Demo = ({ blok }) => {
           ref={(el) => (optionRefs.current[index] = el)}
           key={option.header}
         >
-          <OptionHeader>
             {IconComponent && (
               <OptionIconWrapper classname="icons">
                 {IconComponent && <IconComponent />}
               </OptionIconWrapper>
             )}
-            {option.header}
-            <ArrowDiv
-              className="arrows"
-              ref={(el) => (arrowRefs.current[index] = el)}
-            >
-              <OptionArrow />
-            </ArrowDiv>{" "}
-          </OptionHeader>
           <OptionContentContainer
             className="content"
             ref={(el) => (contentRefs.current[index] = el)}
-          >
+            >
+          <OptionHeader>
+            {option.header}
+          </OptionHeader>
             <OptionSubheader>{option.sub_header}</OptionSubheader>
             <div {...storyblokEditable(option)}>
               <RichTextRenderer document={option.body_copy} />
@@ -451,7 +445,10 @@ const FormThankYouContainer = styled.div`
   }
 `;
 
-const OptionIconWrapper = styled.div``;
+const OptionIconWrapper = styled.div`
+  width: 2.375vw;
+  height: 2.375vw;
+`;
 const OptionIcon = styled.img`
   filter: brightness(1) grayscale(0%);
 `;
@@ -480,12 +477,12 @@ const FormPositionContainer = styled.div`
 `;
 
 const Badge = styled.img`
-  width: 5.903vw;
-  height: 7.639vw;
+  width: 5.625vw;
+  height: 7.313vw;
 
   ${media.fullWidth} {
-    width: 85px;
-    height: 110px;
+    width: 90px;
+    height: 117px;
   }
 
   ${media.tablet} {
@@ -539,94 +536,53 @@ const OptionSubheader = styled.p`
   }
 `;
 const OptionHeader = styled.div`
-  ${text.h5};
+  ${text.bodyLgBold};
   display: flex;
   flex-direction: row;
-  align-items: center;
-  gap: 0.556vw;
-  margin-bottom: 0.556vw;
-
-  ${media.fullWidth} {
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-
-  ${media.tablet} {
-    gap: 0.781vw;
-    margin-bottom: 0.781vw;
-  }
+  align-items: start;
 
   ${media.mobile} {
     ${text.bodyLgBold}
-    gap: 1.869vw;
-    margin-bottom: 1.869vw;
   }
 `;
-const OptionArrow = styled(Chevron)`
-  transform: rotate(180deg);
-`;
+// const OptionArrow = styled(Chevron)`
+//   transform: rotate(180deg);
+// `;
 const OptionContentContainer = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
-  opacity: 0;
 `;
 const OptionDiv = styled.div`
-  cursor: pointer;
-  background: url("/images/DemoCardBG.webp");
-  background-position: center;
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  gap: 1.25vw;
+  margin-bottom: 2.25vw;
   overflow: hidden;
-  background-position: 0% 2%;
-  border-radius: 0.5vw;
-  padding: 1.25vw 1.563vw;
-  height: 4vw;
-
-  ${media.fullWidth} {
-    border-radius: 7px;
-    padding: 18px 23px;
-    height: 58px;
-  }
-
-  ${media.tablet} {
-    border-radius: 0.781vw;
-    padding: 1.953vw 2.344vw;
-    height: 6.25vw;
-  }
-
-  ${media.mobile} {
-    border-radius: 1.869vw;
-    padding: 4.673vw 5.607vw;
-    height: 19.486vw;
-  }
 `;
 
 const AllOptionsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5vw;
-  margin-bottom: 9.375vw;
-  min-height: 28vw;
+  margin-bottom: 3vw;
 
   ${media.fullWidth} {
     gap: 7px;
-    margin-bottom: 135px;
-    min-height: 403px;
+    margin-bottom: 48px;
+
   }
 
   ${media.tablet} {
-    gap: 0.781vw;
     margin-bottom: 8.691vw;
-    min-height: 39.355vw;
   }
 
   ${media.mobile} {
-    gap: 1.869vw;
     margin-bottom: unset;
-    min-height: 100vw;
   }
 `;
 const Header = styled.h3`
-  ${text.h3};
+  ${text.h2};
   color: ${colors.white};
   margin-bottom: 1.875vw;
 

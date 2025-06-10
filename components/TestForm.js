@@ -558,6 +558,12 @@ const FormContainer = styled.div`
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+
+    label {
+      ${text.bodyMd};
+      margin: 0 1.5vw 0 0.5vw !important;
+      width: max-content !important;
+    }
   }
 
   .mktoCheckboxList input[type='checkbox'] {
@@ -649,7 +655,8 @@ const FormContainer = styled.div`
   }
 
   label {
-    display: none;
+    ${text.bodyMd};
+    width: max-content !important;
   }
 
   input {
@@ -679,6 +686,8 @@ const FormContainer = styled.div`
       min-height: 11.25vw;
     }
 
+    &#Email,
+    &#Phone,
     &#FirstName,
     &#LastName {
       width: 15vw !important;
@@ -696,8 +705,6 @@ const FormContainer = styled.div`
       }
     }
 
-    &#Email,
-    &#Phone,
     &#Company,
     &#Address,
     &#City,
@@ -792,9 +799,23 @@ const FormContainer = styled.div`
     ${media.mobile} {
       gap: 1.042vw;
     }
+
+    label {
+      #formFriendlyProductofInterest {
+        margin-bottom: 0.75vw !important;
+      }
+    }
+
+    &:has(> label) {
+      flex-direction: column !important;
+    }
   }
   .mktoHtmlText {
     width: unset !important;
+  }
+
+  .mktoAsterix {
+    display: none !important;
   }
 `;
 export default TestForm;

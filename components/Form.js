@@ -680,6 +680,8 @@ const FormContainer = styled.div`
       min-height: 11.25vw;
     }
 
+    &#Email,
+    &#Phone,
     &#FirstName,
     &#LastName {
       width: 15vw !important;
@@ -697,8 +699,6 @@ const FormContainer = styled.div`
       }
     }
 
-    &#Email,
-    &#Phone,
     &#Company,
     &#Address,
     &#City,
