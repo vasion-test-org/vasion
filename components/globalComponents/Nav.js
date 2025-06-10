@@ -730,6 +730,7 @@ const NavItemCopy = styled.div`
   }
 
   ${media.tablet} {
+    ${text.bodyMd};
     margin-left: ${(props) =>
       props.card_size === 'large' ? '1.563vw' : 'unset'};
   }
