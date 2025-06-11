@@ -160,7 +160,7 @@ const ImageWrapper = styled.div`
   }
 
   ${media.tablet} {
-    width: ${(props) => (props.$isSideBySideAsset ? '622px' : '44.531vw')};
+    width: ${(props) => (props.$isSideBySideAsset ? '44.141vw' : '44.531vw')};
   }
 
   ${media.mobile} {

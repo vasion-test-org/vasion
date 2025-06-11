@@ -181,8 +181,9 @@ const CardWrapper = styled.div`
   }
 
   ${media.tablet} {
-    border-radius: 24px;
-    padding: 40px;
+    width: 92.188vw;
+    border-radius: 2.344vw;
+    padding: 3.906vw 2.539vw;
   }
 
   ${media.mobile} {
