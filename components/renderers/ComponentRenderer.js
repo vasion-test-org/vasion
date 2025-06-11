@@ -153,7 +153,7 @@ const AssetContainer = styled.div`
 `;
 const ImageWrapper = styled.div`
   width: ${(props) => (props.$isSideBySideAsset ? '38.875vw' : '32vw')};
-  height: ${(props) => (props.$isSideBySideAsset ? '29.188vw' : 'auto')};
+  height: auto;
 
   ${media.fullWidth} {
     width: ${(props) => (props.$isSideBySideAsset ? '622px' : '512px')};

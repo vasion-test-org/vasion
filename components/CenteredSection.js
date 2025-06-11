@@ -32,13 +32,18 @@ const CenteredSection = ({ blok }) => {
       <CenteredWrapper
         spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
+        backgroundImage={blok.background_image?.[0]?.filename}
         {...storyblokEditable(blok)}
       >
         <ContentWrapper>
           {blok.centered_copy &&
             blok.centered_copy.map((copy) => (
               <div {...storyblokEditable(copy)} key={copy.component}>
-                <RichTextRenderer document={copy?.copy} responsiveTextStyles={copy?.responsive_text_styles} gradientText={copy?.gradient} />
+                <RichTextRenderer
+                  document={copy?.copy}
+                  responsiveTextStyles={copy?.responsive_text_styles}
+                  gradientText={copy?.gradient}
+                />
               </div>
             ))}
           {blok.button_position === 'above' &&
@@ -189,12 +194,18 @@ const CenteredWrapper = styled.div`
   justify-content: center;
   gap: 1vw;
   color: ${(props) => props.theme.centered.textColor};
+  background: ${(props) =>
+    props.backgroundImage
+      ? `url(${props.backgroundImage})`
+      : props.theme.centered.bg};
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 
   span {
     color: ${(props) => props.theme.centered.textColor};
   }
 
-  background: ${(props) => props.theme.centered.bg};
   padding: ${(props) => {
     if (props.spacingOffset === 'top') {
       return props.spacing === 'default'

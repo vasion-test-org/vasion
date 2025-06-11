@@ -34,7 +34,7 @@ const SideBySide = ({ blok }) => {
   );
 
   const sideBySideContent = blok.card ? (
-    <CardWrapper {...storyblokEditable(blok)}>
+    <CardWrapper {...storyblokEditable(blok)} flipped={blok.flipped ? 'true' : undefined}>
       <SideBySideWrapper
         gap={blok.gap}
         asset_form={blok.asset_form}
@@ -186,8 +186,11 @@ const CardWrapper = styled.div`
   }
 
   ${media.mobile} {
-    border-radius: 24px;
-    padding: 32px;
+    flex-direction: ${(props) =>
+      props.flipped === 'true' ? 'column-reverse' : 'column'};
+    width: 89.167vw;
+    border-radius: 5vw;
+    padding: 5.417vw;
   }
 `;
 
@@ -214,6 +217,7 @@ const SideBySideWrapper = styled.div`
     }
 
     ${media.mobile} {
+      width: 78.333vw;
       margin-top: ${(props) => (props.asset_form ? 'unset' : 'unset')};
     }
   }
