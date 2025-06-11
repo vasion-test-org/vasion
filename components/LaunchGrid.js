@@ -244,6 +244,7 @@ const CtaContent = styled.div`
     width: 79.167vw;
   }
 `;
+
 const Cta = styled.div`
   position: relative;
   justify-content: right;
