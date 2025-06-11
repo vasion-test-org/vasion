@@ -16,56 +16,70 @@ const LaunchGrid = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const responsiveBackground = useMedia(
-    blok?.launch_cta[0].assets[1]?.filename,
-    blok?.launch_cta[0].assets[1]?.filename,
-    blok?.launch_cta[0].assets[2]?.filename,
-    blok?.launch_cta[0].assets[3]?.filename,
+    blok?.launch_cta?.[0]?.assets?.[1]?.filename,
+    blok?.launch_cta?.[0]?.assets?.[1]?.filename,
+    blok?.launch_cta?.[0]?.assets?.[2]?.filename,
+    blok?.launch_cta?.[0]?.assets?.[3]?.filename,
   );
-  const mainHeading = blok?.copy_section?.map((copy, index) => {
-    return <RichTextRenderer document={copy.copy} key={index} />;
-  });
+  const mainHeading = Array.isArray(blok?.copy_section)
+    ? blok.copy_section.map((copy, index) => {
+        return <RichTextRenderer document={copy.copy} key={index} />;
+      })
+    : null;
 
-  const ctaCopy = blok?.launch_cta[0].copy_section?.map((copy, index) => {
-    return <RichTextRenderer document={copy.copy} key={index} />;
-  });
-  const cards = blok?.launch_cards?.map((card) => {
-    if (!card.assets?.[0]?.filename) return null;
-    return (
-      <Card key={card._uid} blur={card.blur_card} {...storyblokEditable(card)}>
-        <CardImage src={card.assets[0].filename} />
-        <CardCopy>
-          {card.copy_section?.map((copyItem) => (
-            <div key={copyItem._uid}>
-              {copyItem.component === "eyebrow" && (
-                <RichTextRenderer document={copyItem.copy} />
-              )}
-              {copyItem.component === "header" && (
-                <RichTextRenderer document={copyItem.copy} />
-              )}
-              {copyItem.component === "body_copy" && (
-                <RichTextRenderer document={copyItem.copy} />
-              )}
-            </div>
-          ))}
-          {card?.button_group?.map(($buttonData) => (
-            <div
-              {...storyblokEditable($buttonData)}
-              key={$buttonData.link_text}
-            >
-              <Button key={$buttonData.link_text} $buttonData={$buttonData} />
-            </div>
-          ))}
-        </CardCopy>
-      </Card>
-    );
-  });
+  const ctaCopy = Array.isArray(blok?.launch_cta?.[0]?.copy_section)
+    ? blok.launch_cta[0].copy_section.map((copy, index) => {
+        return <RichTextRenderer document={copy.copy} key={index} />;
+      })
+    : null;
+
+  const cards = Array.isArray(blok?.launch_cards)
+    ? blok?.launch_cards?.map((card) => {
+        if (!card.assets?.[0]?.filename) return null;
+        return (
+          <Card
+            key={card._uid}
+            blur={card.blur_card}
+            {...storyblokEditable(card)}
+          >
+            <CardImage src={card.assets[0].filename} />
+            <CardCopy>
+              {card.copy_section?.map((copyItem) => (
+                <div key={copyItem._uid}>
+                  {copyItem.component === "eyebrow" && (
+                    <RichTextRenderer document={copyItem.copy} />
+                  )}
+                  {copyItem.component === "header" && (
+                    <RichTextRenderer document={copyItem.copy} />
+                  )}
+                  {copyItem.component === "body_copy" && (
+                    <RichTextRenderer document={copyItem.copy} />
+                  )}
+                </div>
+              ))}
+              {card?.button_group?.map(($buttonData) => (
+                <div
+                  {...storyblokEditable($buttonData)}
+                  key={$buttonData.link_text}
+                >
+                  <Button
+                    key={$buttonData.link_text}
+                    $buttonData={$buttonData}
+                  />
+                </div>
+              ))}
+            </CardCopy>
+          </Card>
+        );
+      })
+    : null;
 
   const ctaContent = (
     <CtaContent>
       <Tag>
         <RichTextRenderer document={blok?.launch_cta[0]?.tag?.[0]?.copy} />
       </Tag>
-      <CtaCopy {...storyblokEditable(blok.launch_cta[0])}>{ctaCopy}</CtaCopy>
+      <CtaCopy {...storyblokEditable(blok?.launch_cta?.[0])}>{ctaCopy}</CtaCopy>
       {blok?.launch_cta?.[0]?.button_group?.map(($buttonData) => (
         <div {...storyblokEditable($buttonData)} key={$buttonData.link_text}>
           <Button key={$buttonData.link_text} $buttonData={$buttonData} />
