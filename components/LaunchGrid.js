@@ -251,7 +251,6 @@ const Cta = styled.div`
   width: 81.5vw;
   height: 24.5vw;
   border-radius: 0.5vw;
-  outline: 1px solid purple;
   padding-right: 3.75vw;
   background: ${(props) => (props?.bg ? `url(${props.bg})` : "unset")};
   background-size: contain;
