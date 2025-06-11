@@ -561,26 +561,72 @@ const FormContainer = styled.div`
     justify-content: left !important;
 
     label {
-      ${text.bodyMd};
-      margin: 0 1.5vw 0 0.5vw !important;
+      margin: 0 1vw 0 0.5vw !important;
       width: max-content !important;
+
+      ${media.fullWidth} {
+        margin: 0 16px 0 8px !important;
+      }
     }
   }
 
   .mktoCheckboxList input[type='checkbox'] {
     height: auto !important;
     margin-right: 0.5vw !important;
+    border-radius: 0.25vw !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    width: 0.938vw !important;
+    height: 0.938vw !important;
+    border: 1px solid ${(props) => props.theme.form.inputBorder} !important;
+    background-color: ${(props) => props.theme.form.inputBg} !important;
+    cursor: pointer !important;
+    position: relative !important;
+    padding: unset !important;
+
+    &:checked {
+      background-color: ${colors.primaryOrange} !important;
+      border-color: ${colors.primaryOrange} !important;
+    }
+
+    &:checked::after {
+      content: '✓' !important;
+      position: absolute !important;
+      color: white !important;
+      font-size: 0.75vw !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+    }
 
     ${media.fullWidth} {
       margin-right: 8px !important;
+      width: 15px !important;
+      height: 15px !important;
+      border-radius: 4px !important;
+      &:checked::after {
+        font-size: 12px !important;
+      }
     }
 
     ${media.tablet} {
       margin-right: 0.781vw !important;
+      width: 1.563vw !important;
+      height: 1.563vw !important;
+      border-radius: 0.391vw !important;
+      &:checked::after {
+        font-size: 0.977vw !important;
+      }
     }
 
     ${media.mobile} {
       margin-right: 1.667vw !important;
+      width: 4.167vw !important;
+      height: 4.167vw !important;
+      border-radius: 0.833vw !important;
+      &:checked::after {
+        font-size: 2.5vw !important;
+      }
     }
   }
   #LblemailOptIn {
@@ -607,18 +653,18 @@ const FormContainer = styled.div`
     display: flex;
     justify-content: flex-start;
     width: 100%;
-    margin: 1vw 0;
+    margin: 1vw 0 0 0;
 
     ${media.fullWidth} {
-      margin: 16px 0;
+      margin: 16px 0 0 0;
     }
 
     ${media.tablet} {
-      margin: 1.563vw 0;
+      margin: 1.563vw 0 0 0;
     }
 
     ${media.mobile} {
-      margin: 3.333vw 0;
+      margin: 3.333vw 0 0 0;
     }
   }
 
@@ -789,16 +835,21 @@ const FormContainer = styled.div`
   }
   .mktoFieldWrap {
     display: flex !important;
-    gap: 0vw;
+  
 
     ${media.fullWidth} {
-      gap: 0px;
+  
     }
     ${media.tablet} {
-      gap: 0px;
+   
     }
     ${media.mobile} {
       gap: 1.042vw;
+    }
+
+    .mktoLabel {
+      ${text.bodyMd};
+      font-weight: 400 !important;
     }
 
     label {
