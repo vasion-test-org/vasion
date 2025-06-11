@@ -122,7 +122,10 @@ const CtaWrapper = styled.div`
     props.$ctastyle === 'pill' && props.$pillbgimg ? '100% 100%' : 'cover'};
   background-repeat: no-repeat;
   color: ${(props) => props.theme.cta.textColor};
-  justify-content: space-between;
+  justify-content: ${(props) =>
+    props.$ctastyle === 'pill' && props.$pillbgimg
+      ? 'flex-start'
+      : 'space-between'};
   flex-direction: ${(props) =>
     props.$ctastyle === 'pill' && props.$pillbgimg
       ? 'column'
@@ -166,7 +169,11 @@ const CtaWrapper = styled.div`
     gap: ${(props) =>
       props.$ctastyle === 'pill' && props.$pillbgimg ? '40px' : '60px'};
     flex-direction: ${(props) =>
-      props.$ctastyle === 'pill' ? 'row' : 'column'};
+      props.$ctastyle === 'pill' && props.$pillbgimg
+        ? 'column'
+        : props.$ctastyle === 'pill'
+        ? 'row'
+        : 'column'};
     padding: ${(props) =>
       props.$ctastyle === 'pill'
         ? '60px 96px'
@@ -247,12 +254,12 @@ const CtaWrapper = styled.div`
         : props.$ctastyle === 'pill' || props.$ctastyle === 'image'
         ? '5vw'
         : 'unset'};
-    padding: ${(props) =>
-      props.$ctastyle === 'pill'
-        ? '8.333vw 5vw'
-        : props.$ctastyle === 'image'
-        ? '8.333vw 4.167vw 30.833vw 39.167vw'
-        : '8.333vw 5vw'};
+    justify-content: ${(props) =>
+      props.$ctastyle === 'pill' && props.$pillbgimg
+        ? 'flex-start'
+        : 'space-between'};
+    padding-top: ${(props) =>
+      props.$ctastyle === 'pill' && props.$pillbgimg ? '8.333vw' : '8.333vw'};
   }
 `;
 
