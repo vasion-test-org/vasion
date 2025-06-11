@@ -11,6 +11,7 @@ import colors from "@/styles/colors";
 import useMedia from "@/functions/useMedia";
 
 const LaunchGrid = ({ blok }) => {
+  console.log(blok);
   const { mobile } = useContext(ScreenContext);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
@@ -27,7 +28,6 @@ const LaunchGrid = ({ blok }) => {
   const ctaCopy = blok?.launch_cta[0].copy_section?.map((copy, index) => {
     return <RichTextRenderer document={copy.copy} key={index} />;
   });
-
   const cards = blok?.launch_cards?.map((card) => {
     if (!card.assets?.[0]?.filename) return null;
     return (
@@ -45,6 +45,14 @@ const LaunchGrid = ({ blok }) => {
               {copyItem.component === "body_copy" && (
                 <RichTextRenderer document={copyItem.copy} />
               )}
+            </div>
+          ))}
+          {card?.button_group?.map(($buttonData) => (
+            <div
+              {...storyblokEditable($buttonData)}
+              key={$buttonData.link_text}
+            >
+              <Button key={$buttonData.link_text} $buttonData={$buttonData} />
             </div>
           ))}
         </CardCopy>
