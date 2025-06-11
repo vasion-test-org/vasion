@@ -253,7 +253,7 @@ const Cta = styled.div`
   border-radius: 0.5vw;
   padding-right: 3.75vw;
   background: ${(props) => (props?.bg ? `url(${props.bg})` : "unset")};
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
 
   ${media.fullWidth} {
