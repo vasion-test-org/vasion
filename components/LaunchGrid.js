@@ -29,6 +29,7 @@ const LaunchGrid = ({ blok }) => {
   });
 
   const cards = blok?.launch_cards?.map((card) => {
+    if (!card.assets?.[0]?.filename) return null;
     return (
       <Card key={card._uid} blur={card.blur_card} {...storyblokEditable(card)}>
         <CardImage src={card.assets[0].filename} />
