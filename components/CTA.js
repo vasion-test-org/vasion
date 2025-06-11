@@ -6,8 +6,6 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 import media from '@/styles/media';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-// import colors from 'styles/colors';
-// import text from 'styles/text';
 import Button from '@/components/globalComponents/Button';
 import LightboxBtn from '@/components/LightboxButton';
 import useMedia from '@/functions/useMedia';
