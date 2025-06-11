@@ -7,21 +7,29 @@ import colors from '@/styles/colors';
 // import text from '@/styles/text';
 const BodyCopy = ({ className, children }) => {
   // Recursive function to clone children and pass down className
-  const cloneChildrenWithClassName = (children) => {
+  const cloneChildrenWithClassName = (children, parentClassName = '') => {
     return React.Children.map(children, (child) => {
       if (!React.isValidElement(child)) {
         return child;
       }
 
-      // Clone the child with the className
+      // Combine parent class with current class and passed className
+      const combinedClassName = `${parentClassName} ${
+        child.props.className || ''
+      } ${className || ''}`.trim();
+
+      // Clone the child with the combined className
       const clonedChild = React.cloneElement(child, {
-        className: `${child.props.className || ''} ${className || ''}`.trim(),
+        className: combinedClassName,
       });
 
-      // If the child has children, recursively process them
+      // If the child has children, recursively process them with the combined class
       if (child.props.children) {
         return React.cloneElement(clonedChild, {
-          children: cloneChildrenWithClassName(child.props.children),
+          children: cloneChildrenWithClassName(
+            child.props.children,
+            combinedClassName
+          ),
         });
       }
 
@@ -51,6 +59,29 @@ const StyledBodyCopy = styled.div`
     white-space: inherit;
   }
 
+  /* Ensure spans inherit styles properly */
+  span {
+    display: inline;
+    font-family: inherit;
+    font-weight: inherit;
+    white-space: inherit;
+  }
+
+  /* Handle bold text */
+  b,
+  strong {
+    display: inline-block;
+    white-space: pre-wrap;
+    font-weight: 600;
+  }
+
+  /* Handle line breaks */
+  br {
+    display: block;
+    content: '';
+    margin: 0.5em 0;
+  }
+
   img {
     max-width: 56.25vw;
 
@@ -71,14 +102,6 @@ const StyledBodyCopy = styled.div`
       color: ${colors.primaryOrange};
     }
     color: ${colors.primaryOrange};
-  }
-  b {
-    display: inline-block;
-    white-space: pre-wrap;
-  }
-  &.bold,
-  & > .bold {
-    font-weight: 600;
   }
   &.eyebrow,
   & > .eyebrow {

@@ -13,17 +13,22 @@ const SideBySide = ({ blok }) => {
   // console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  // console.log(blok.left_extra_copy?.[0]);
+
+  const isLeftAsset = blok.left_side_component?.[0]?.component === 'assets';
+  const isRightAsset = blok.right_side_component?.[0]?.component === 'assets';
+  const isSideBySideAsset = isLeftAsset && isRightAsset;
 
   const content = (
     <>
       <ComponentRenderer
         extra_copy={blok.left_extra_copy?.[0]}
         blok={blok.left_side_component[0]}
+        isSideBySideAsset={isSideBySideAsset}
       />
       <ComponentRenderer
         extra_copy={blok.right_extra_copy?.[0]}
         blok={blok.right_side_component[0]}
+        isSideBySideAsset={isSideBySideAsset}
       />
     </>
   );
