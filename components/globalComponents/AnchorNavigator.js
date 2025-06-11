@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useContext} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
@@ -9,7 +9,7 @@ import media from '@/styles/media';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { getSmoother } from '@/components/ScrollSmoothWrapper';
-import { ScreenContext } from "@/components/providers/Screen";
+import { ScreenContext } from '@/components/providers/Screen';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -24,25 +24,24 @@ const AnchorNavigator = ({ blok }) => {
       const allAnchors = Array.from(document.querySelectorAll('.anchor'));
       setAnchorList(allAnchors);
     };
-  
-    updateAnchors(); 
-  
+
+    updateAnchors();
+
     const observer = new MutationObserver(() => {
       updateAnchors();
     });
-  
+
     observer.observe(document.body, {
       childList: true,
       subtree: true,
     });
-  
+
     return () => {
       observer.disconnect();
     };
   }, []);
-  
 
-  // console.log(anchorList);
+  console.log(anchorList);
   const anchorMap = anchorList.map((anchor, i) => (
     <AnchorButton
       key={i}
@@ -50,7 +49,7 @@ const AnchorNavigator = ({ blok }) => {
         const smoother = getSmoother();
 
         if (smoother && anchor) {
-          smoother.scrollTo(anchor, true, 'top top'); 
+          smoother.scrollTo(anchor, true, 'top top');
         }
       }}
     >
@@ -61,11 +60,11 @@ const AnchorNavigator = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       <AnchorWrapper className='anchorNav'>
-      {anchorList.length > 0 && (
-        <AnchorNavWrapper>
-          <ButtonsDiv>{anchorMap}</ButtonsDiv>
-        </AnchorNavWrapper>
-      )}
+        {anchorList.length > 0 && (
+          <AnchorNavWrapper>
+            <ButtonsDiv>{anchorMap}</ButtonsDiv>
+          </AnchorNavWrapper>
+        )}
       </AnchorWrapper>
     </ThemeProvider>
   );
@@ -84,22 +83,22 @@ const AnchorButton = styled.div`
 
   ${media.fullWidth} {
     height: 30px;
-  padding: 4px 8px;
-  border-radius: 4px;
+    padding: 4px 8px;
+    border-radius: 4px;
   }
-  
+
   ${media.tablet} {
     height: 2.93vw;
-  padding: 0.391vw 0.781vw;
-  border-radius: 0.391vw;
+    padding: 0.391vw 0.781vw;
+    border-radius: 0.391vw;
   }
-  
+
   ${media.mobile} {
     height: 5.417vw;
-  padding: 0.833vw 1.667vw;
-  border-radius: 0.833vw; 
-  width: max-content;
-  min-width: max-content;
+    padding: 0.833vw 1.667vw;
+    border-radius: 0.833vw;
+    width: max-content;
+    min-width: max-content;
   }
 
   &:hover {
@@ -116,11 +115,11 @@ const ButtonsDiv = styled.div`
   ${media.fullWidth} {
     gap: 8px;
   }
-  
+
   ${media.tablet} {
     gap: 0.781vw;
   }
-  
+
   ${media.mobile} {
     gap: 1.667vw;
     width: 100%;
@@ -141,32 +140,32 @@ const AnchorNavWrapper = styled.div`
 
   ${media.fullWidth} {
     margin: 8px auto;
-  width: 1230px;
-  height: 54px;
-  border-radius: 8px;
-  padding: 12px 60px;
+    width: 1230px;
+    height: 54px;
+    border-radius: 8px;
+    padding: 12px 60px;
   }
-  
+
   ${media.tablet} {
     margin: 0.781vw auto;
-  width: 92.188vw;
-  height: 5.273vw;
-  border-radius: 0.781vw;
-  padding: 1.172vw 5.859vw;
+    width: 92.188vw;
+    height: 5.273vw;
+    border-radius: 0.781vw;
+    padding: 1.172vw 5.859vw;
   }
-  
+
   ${media.mobile} {
     margin: 1.667vw auto;
-  width: 89.167vw;
-  height: 10.417vw;
-  border-radius: 1.667vw;
-  padding: 2.5vw 12.5vw;
-  overflow: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  &::-webkit-scrollbar {
-    display: none; 
-  }
+    width: 89.167vw;
+    height: 10.417vw;
+    border-radius: 1.667vw;
+    padding: 2.5vw 12.5vw;
+    overflow: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;
 
@@ -183,14 +182,14 @@ const AnchorWrapper = styled.div`
   ${media.fullWidth} {
     top: 65px;
   }
-  
+
   ${media.tablet} {
     top: 6.348vw;
   }
-  
+
   ${media.mobile} {
     top: 13.542vw;
   }
-`
+`;
 
 export default AnchorNavigator;
