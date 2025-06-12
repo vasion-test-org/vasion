@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import Button from "@/components/globalComponents/Button";
 import { ScreenContext } from "@/components/providers/Screen";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
+import Card from "./globalComponents/Card";
 import styled, { ThemeProvider } from "styled-components";
 import { useAvailableThemes } from "@/context/ThemeContext";
 import { storyblokEditable } from "@storyblok/react/rsc";
@@ -11,7 +12,6 @@ import colors from "@/styles/colors";
 import useMedia from "@/functions/useMedia";
 
 const LaunchGrid = ({ blok }) => {
-  console.log(blok);
   const { mobile } = useContext(ScreenContext);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
@@ -21,56 +21,48 @@ const LaunchGrid = ({ blok }) => {
     blok?.launch_cta?.[0]?.assets?.[2]?.filename,
     blok?.launch_cta?.[0]?.assets?.[3]?.filename,
   );
-  const mainHeading = Array.isArray(blok?.copy_section)
-    ? blok.copy_section.map((copy, index) => {
-        return <RichTextRenderer document={copy.copy} key={index} />;
-      })
-    : null;
 
-  const ctaCopy = Array.isArray(blok?.launch_cta?.[0]?.copy_section)
-    ? blok.launch_cta[0].copy_section.map((copy, index) => {
-        return <RichTextRenderer document={copy.copy} key={index} />;
-      })
-    : null;
+  const ctaCopy = blok.launch_cta[0].copy_section.map((copy, index) => {
+    return <RichTextRenderer document={copy.copy} key={index} />;
+  });
 
-  const cards = Array.isArray(blok?.launch_cards)
-    ? blok?.launch_cards?.map((card) => {
-        if (!card.assets?.[0]?.filename) return null;
-        return (
-          <Card
-            key={card._uid}
-            blur={card.blur_card}
-            {...storyblokEditable(card)}
+  const cards = blok?.cards?.map((card) => {
+    if (!card.Image?.filename) return null;
+    const cardContent = {
+      content: card.content,
+      Button: card.Button,
+      Image: card.Image,
+      has_hover: card.has_hover,
+      image_border: card.image_border,
+      blur_card: card.blur_card,
+    };
+
+    return (
+      <Card
+        key={card._uid}
+        blur={card.blur_card}
+        content={cardContent}
+        {...storyblokEditable(card)}
+      >
+        <CardImage src={card.Image.filename} />
+        <CardCopy>
+          {card.content?.map((copyItem) => (
+            <div key={copyItem._uid}>
+              <RichTextRenderer document={copyItem.copy} />
+            </div>
+          ))}
+        </CardCopy>
+        {card?.Button?.map(($buttonData) => (
+          <ButtonWrapper
+            {...storyblokEditable($buttonData)}
+            key={$buttonData.link_text}
           >
-            <CardImage src={card.assets[0].filename} />
-            <CardCopy>
-              {card.copy_section?.map((copyItem) => (
-                <div key={copyItem._uid}>
-                  {copyItem.component === "eyebrow" && (
-                    <RichTextRenderer document={copyItem.copy} />
-                  )}
-                  {copyItem.component === "header" && (
-                    <RichTextRenderer document={copyItem.copy} />
-                  )}
-                  {copyItem.component === "body_copy" && (
-                    <RichTextRenderer document={copyItem.copy} />
-                  )}
-                </div>
-              ))}
-            </CardCopy>
-            {card?.button_group?.map(($buttonData) => (
-              <ButtonWrapper
-                {...storyblokEditable($buttonData)}
-                key={$buttonData.link_text}
-              >
-                <Button key={$buttonData.link_text} $buttonData={$buttonData} />
-              </ButtonWrapper>
-            ))}
-          </Card>
-        );
-      })
-    : null;
-
+            <Button key={$buttonData.link_text} $buttonData={$buttonData} />
+          </ButtonWrapper>
+        ))}
+      </Card>
+    );
+  });
   const ctaContent = (
     <CtaContent>
       <Tag>
@@ -91,7 +83,6 @@ const LaunchGrid = ({ blok }) => {
         spacing={blok.section_spacing}
         spacingOffset={blok.offset_spacing}
       >
-        <CopyWrapper>{mainHeading}</CopyWrapper>
         <ContentWrapper>
           {!mobile && <Cta bg={responsiveBackground}>{ctaContent}</Cta>}
           {mobile && (
@@ -149,53 +140,53 @@ const CardImage = styled.img`
     border-radius: 1.25vw;
   }
 `;
-const Card = styled.div`
-  position: relative;
-  filter: ${(props) => (props?.blur ? `blur(0.25vw)` : "unset")};
-  display: flex;
-  flex-direction: column;
-  width: 26.313vw;
-  gap: 1vw;
-  padding: 0.5vw;
-  border-radius: 1vw;
-  background: #fff;
-  box-shadow:
-    0vw 0vw 0.063vw 0vw rgba(25, 29, 30, 0.04),
-    0vw 0.125vw 0.25vw 0vw rgba(25, 29, 30, 0.16);
-  ${media.fullWidth} {
-    filter: ${(props) => (props?.blur ? `blur(4px)` : "unset")};
-    width: 421px;
-    gap: 16px;
-    border-radius: 16px;
-    padding: 8px;
-    background: #fff;
-    box-shadow:
-      0px 0px 1px 0px rgba(25, 29, 30, 0.04),
-      0px 2px 4px 0px rgba(25, 29, 30, 0.16);
-  }
-  ${media.tablet} {
-    filter: ${(props) => (props?.blur ? `blur(0.391vw)` : "unset")};
-    width: 29.395vw;
-    gap: 1.563vw;
-    border-radius: 1.563vw;
-    padding: 0.781vw;
-    background: #fff;
-    box-shadow:
-      0vw 0vw 0.098vw 0vw rgba(25, 29, 30, 0.04),
-      0vw 0.195vw 0.391vw 0vw rgba(25, 29, 30, 0.16);
-  }
-  ${media.mobile} {
-    display: ${(props) => (props?.blur ? "none" : "flex")};
-    width: 89.167vw;
-    gap: 3.333vw;
-    border-radius: 3.333vw;
-    padding: 1.667vw;
-    background: #fff;
-    box-shadow:
-      0vw 0vw 0.208vw 0vw rgba(25, 29, 30, 0.04),
-      0vw 0.417vw 0.833vw 0vw rgba(25, 29, 30, 0.16);
-  }
-`;
+// const Card = styled.div`
+//   position: relative;
+//   filter: ${(props) => (props?.blur ? `blur(0.25vw)` : "unset")};
+//   display: flex;
+//   flex-direction: column;
+//   width: 26.313vw;
+//   gap: 1vw;
+//   padding: 0.5vw;
+//   border-radius: 1vw;
+//   background: #fff;
+//   box-shadow:
+//     0vw 0vw 0.063vw 0vw rgba(25, 29, 30, 0.04),
+//     0vw 0.125vw 0.25vw 0vw rgba(25, 29, 30, 0.16);
+//   ${media.fullWidth} {
+//     filter: ${(props) => (props?.blur ? `blur(4px)` : "unset")};
+//     width: 421px;
+//     gap: 16px;
+//     border-radius: 16px;
+//     padding: 8px;
+//     background: #fff;
+//     box-shadow:
+//       0px 0px 1px 0px rgba(25, 29, 30, 0.04),
+//       0px 2px 4px 0px rgba(25, 29, 30, 0.16);
+//   }
+//   ${media.tablet} {
+//     filter: ${(props) => (props?.blur ? `blur(0.391vw)` : "unset")};
+//     width: 29.395vw;
+//     gap: 1.563vw;
+//     border-radius: 1.563vw;
+//     padding: 0.781vw;
+//     background: #fff;
+//     box-shadow:
+//       0vw 0vw 0.098vw 0vw rgba(25, 29, 30, 0.04),
+//       0vw 0.195vw 0.391vw 0vw rgba(25, 29, 30, 0.16);
+//   }
+//   ${media.mobile} {
+//     display: ${(props) => (props?.blur ? "none" : "flex")};
+//     width: 89.167vw;
+//     gap: 3.333vw;
+//     border-radius: 3.333vw;
+//     padding: 1.667vw;
+//     background: #fff;
+//     box-shadow:
+//       0vw 0vw 0.208vw 0vw rgba(25, 29, 30, 0.04),
+//       0vw 0.417vw 0.833vw 0vw rgba(25, 29, 30, 0.16);
+//   }
+// `;
 const ButtonWrapper = styled.div`
   position: relative;
   display: flex;
@@ -205,6 +196,8 @@ const ButtonWrapper = styled.div`
 `;
 const CardsWrapper = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 1.25vw;
   height: max-content;
   ${media.fullWidth} {
