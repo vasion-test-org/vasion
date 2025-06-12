@@ -1,39 +1,39 @@
-"use client";
+'use client';
 
-import React from "react";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import Image from "@/components/globalComponents/Image";
-import styled from "styled-components";
-import media from "@/styles/media";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import LogoCube from "@/components/LogoCube";
-import { usePathname } from "next/navigation";
-import Button from "../globalComponents/Button";
-import Form from "../Form";
-import ContactCard from "../globalComponents/ContactCard";
-import OverviewController from "../overview/OverviewController";
-import SmallQuote from "components/SmallQuote";
+import React from 'react';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import Image from '@/components/globalComponents/Image';
+import styled from 'styled-components';
+import media from '@/styles/media';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import LogoCube from '@/components/LogoCube';
+import { usePathname } from 'next/navigation';
+import Button from '../globalComponents/Button';
+import Form from '../Form';
+import ContactCard from '../globalComponents/ContactCard';
+import OverviewController from '../overview/OverviewController';
+import SmallQuote from 'components/SmallQuote';
 
-const ComponentRenderer = ({ blok, extra_copy }) => {
+const ComponentRenderer = ({ blok, extra_copy, isSideBySideAsset }) => {
   if (!blok) return null;
   const copycomponents = [
-    "body_copy",
-    "header",
-    "eyebrow",
-    "long_form_text",
-    "copy_block",
-    "overview_controller",
-    "small_quote",
+    'body_copy',
+    'header',
+    'eyebrow',
+    'long_form_text',
+    'copy_block',
+    'overview_controller',
+    'small_quote',
   ];
   // console.log(blok);
 
   const pathname = usePathname();
-  const isFrench = pathname.startsWith("/fr");
-  const isGerman = pathname.startsWith("/de");
+  const isFrench = pathname.startsWith('/fr');
+  const isGerman = pathname.startsWith('/de');
   const isEnglish = !isFrench && !isGerman;
 
   if (
-    blok.component === "personalized_page" &&
+    blok.component === 'personalized_page' &&
     Array.isArray(blok.personalized_section)
   ) {
     return (
@@ -45,7 +45,7 @@ const ComponentRenderer = ({ blok, extra_copy }) => {
     );
   }
 
-  if (blok.component === "personalized_section") {
+  if (blok.component === 'personalized_section') {
     let contentBlocks = [];
 
     if (isEnglish && blok.english_blocks.length > 0) {
@@ -68,10 +68,13 @@ const ComponentRenderer = ({ blok, extra_copy }) => {
   }
 
   switch (blok.component) {
-    case "assets":
+    case 'assets':
       return (
-        <AssetContainer>
-          <ImageWrapper {...storyblokEditable(blok)}>
+        <AssetContainer $isSideBySideAsset={isSideBySideAsset}>
+          <ImageWrapper
+            $isSideBySideAsset={isSideBySideAsset}
+            {...storyblokEditable(blok)}
+          >
             <Image images={blok.media} borderradius={blok.border_radius} />
           </ImageWrapper>
           {extra_copy && (
@@ -89,7 +92,7 @@ const ComponentRenderer = ({ blok, extra_copy }) => {
           )}
         </AssetContainer>
       );
-    case "copy_block":
+    case 'copy_block':
       return (
         <CopyDiv className='preformContent nondemo'>
           {blok?.copy_block_sections?.map((item, index) => (
@@ -103,17 +106,17 @@ const ComponentRenderer = ({ blok, extra_copy }) => {
           ))}
         </CopyDiv>
       );
-    case "logo_cube":
+    case 'logo_cube':
       return <LogoCube blok={blok} />;
-    case "form":
+    case 'form':
       return <Form blok={blok} />;
-    case "global_link":
+    case 'global_link':
       return <Button $buttonData={blok} />;
-    case "contact_card":
+    case 'contact_card':
       return <ContactCard blok={blok} />;
-    case "overview":
+    case 'overview':
       return <OverviewController blok={blok} />;
-    case "small_quote":
+    case 'small_quote':
       return <SmallQuote short blok={blok} />;
     default:
       return (
@@ -128,36 +131,42 @@ const AssetContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.25vw;
-  width: 32vw;
+  width: ${(props) => (props.$isSideBySideAsset ? '38.875vw' : '32vw')};
+  height: 'auto';
 
   ${media.fullWidth} {
-    width: 512px;
+    width: ${(props) => (props.$isSideBySideAsset ? '622px' : '512px')};
     gap: 20px;
   }
 
   ${media.tablet} {
-    width: 44.531vw;
+    width: ${(props) => (props.$isSideBySideAsset ? '622px' : '44.531vw')};
     gap: 1.953vw;
   }
 
   ${media.mobile} {
     min-width: 100%;
+    width: ${(props) => (props.$isSideBySideAsset ? '100%' : '100%')};
+    height: ${(props) => (props.$isSideBySideAsset ? 'auto' : 'auto')};
     gap: 4.167vw;
   }
 `;
 const ImageWrapper = styled.div`
-  width: 32vw;
+  width: ${(props) => (props.$isSideBySideAsset ? '38.875vw' : '32vw')};
+  height: auto;
 
   ${media.fullWidth} {
-    width: 512px;
+    width: ${(props) => (props.$isSideBySideAsset ? '622px' : '512px')};
   }
 
   ${media.tablet} {
-    width: 44.531vw;
+    width: ${(props) => (props.$isSideBySideAsset ? '44.141vw' : '44.531vw')};
   }
 
   ${media.mobile} {
     min-width: 100%;
+    width: ${(props) => (props.$isSideBySideAsset ? '100%' : '100%')};
+    height: ${(props) => (props.$isSideBySideAsset ? 'auto' : 'auto')};
   }
 `;
 const SectionWrapper = styled.section`
