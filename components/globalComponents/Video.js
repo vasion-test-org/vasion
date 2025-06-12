@@ -5,7 +5,14 @@ import styled from "styled-components";
 import media from "@/styles/media";
 import useMedia from "@/functions/useMedia";
 
-const Video = ({ videos, borderradius, filename, thumbnails }) => {
+const Video = ({
+  videos,
+  borderradius,
+  filename,
+  thumbnails,
+  isSideBySideVideo = false,
+}) => {
+  console.log(isSideBySideVideo);
   let videoSrc = filename
     ? filename
     : useMedia(
@@ -18,7 +25,10 @@ const Video = ({ videos, borderradius, filename, thumbnails }) => {
   if (!videoSrc) return null;
 
   return (
-    <VideoWrapper borderradius={borderradius}>
+    <VideoWrapper
+      borderradius={borderradius}
+      isSideBySideVideo={isSideBySideVideo}
+    >
       <ReactPlayer
         url={videoSrc}
         width="100%"
@@ -32,19 +42,19 @@ const Video = ({ videos, borderradius, filename, thumbnails }) => {
 };
 
 const VideoWrapper = styled.div`
-  width: 67.75vw;
-  height: 38vw;
+  width: ${(props) => (props.isSideBySideVideo ? "32vw" : "67.75vw")};
+  height: ${(props) => (props.isSideBySideVideo ? "24vw" : "38vw")};
   max-width: 100%;
   border-radius: ${(props) => `${props.borderradius || 0}px`};
   overflow: hidden;
   ${media.fullWidth} {
-    width: 1084px;
-    height: 608px;
+    width: ${(props) => (props.isSideBySideVideo ? "512px" : "1084px")};
+    height: ${(props) => (props.isSideBySideVideo ? "384px" : "608px")};
     border-radius: ${(props) => `${props.borderradius || 0}px`};
   }
   ${media.tablet} {
-    width: 92.188vw;
-    height: 51.758vw;
+    width: ${(props) => (props.isSideBySideVideo ? "44.531vw" : "92.188vw")};
+    height: ${(props) => (props.isSideBySideVideo ? "33.398vw" : "51.758vw")};
   }
   ${media.mobile} {
     width: 89.167vw;

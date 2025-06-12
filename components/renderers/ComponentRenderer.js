@@ -15,7 +15,12 @@ import ContactCard from "../globalComponents/ContactCard";
 import OverviewController from "../overview/OverviewController";
 import SmallQuote from "components/SmallQuote";
 
-const ComponentRenderer = ({ blok, extra_copy, isSideBySideAsset }) => {
+const ComponentRenderer = ({
+  blok,
+  extra_copy,
+  isSideBySideAsset,
+  isSideBySideVideo,
+}) => {
   if (!blok) return null;
   const copycomponents = [
     "body_copy",
@@ -98,6 +103,7 @@ const ComponentRenderer = ({ blok, extra_copy, isSideBySideAsset }) => {
           videos={blok.media}
           thumbnails={blok.thumbnails}
           borderradius={blok.border_radius}
+          isSideBySideVideo={isSideBySideVideo}
         />
       );
     case "copy_block":

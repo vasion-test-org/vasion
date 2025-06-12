@@ -22,7 +22,7 @@ const SideBySide = ({ blok }) => {
     blok.right_side_component?.[0]?.component === "video_assets";
 
   const isSideBySideAsset = isLeftAsset && isRightAsset;
-  const isSideBySideVideo = isLeftVideo && isRightVideo;
+  const isSideBySideVideo = isLeftVideo || isRightVideo;
 
   const content = (
     <>
@@ -30,11 +30,13 @@ const SideBySide = ({ blok }) => {
         extra_copy={blok.left_extra_copy?.[0]}
         blok={blok.left_side_component[0]}
         isSideBySideAsset={isSideBySideAsset}
+        isSideBySideVideo={isSideBySideVideo}
       />
       <ComponentRenderer
         extra_copy={blok.right_extra_copy?.[0]}
         blok={blok.right_side_component[0]}
         isSideBySideAsset={isSideBySideAsset}
+        isSideBySideVideo={isSideBySideVideo}
       />
     </>
   );
