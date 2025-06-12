@@ -390,7 +390,6 @@ const Wrapper = styled.div`
           : "5.859vw 0";
     }};
   }
-
   ${media.mobile} {
     gap: 8.333vw;
     padding: ${(props) => {
