@@ -7,6 +7,7 @@ import styled from "styled-components";
 import media from "@/styles/media";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import LogoCube from "@/components/LogoCube";
+import Video from "@/components/globalComponents/Video";
 import { usePathname } from "next/navigation";
 import Button from "../globalComponents/Button";
 import Form from "../Form";
@@ -90,6 +91,14 @@ const ComponentRenderer = ({ blok, extra_copy, isSideBySideAsset }) => {
             </>
           )}
         </AssetContainer>
+      );
+    case "video_assets":
+      return (
+        <Video
+          videos={blok.media}
+          thumbnails={blok.thumbnails}
+          borderradius={blok.border_radius}
+        />
       );
     case "copy_block":
       return (

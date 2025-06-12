@@ -1,22 +1,28 @@
-'use client';
-import React from 'react';
+"use client";
+import React from "react";
 
-import { storyblokEditable } from '@storyblok/react/rsc';
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import media, { mobile, desktop, tablet } from '@/styles/media';
+import { storyblokEditable } from "@storyblok/react/rsc";
+import styled, { ThemeProvider } from "styled-components";
+import { useAvailableThemes } from "@/context/ThemeContext";
+import media, { mobile, desktop, tablet } from "@/styles/media";
 // import colors from 'styles/colors';
 // import text from 'styles/text';
-import ComponentRenderer from './renderers/ComponentRenderer';
+import ComponentRenderer from "./renderers/ComponentRenderer";
 
 const SideBySide = ({ blok }) => {
-  // console.log(blok);
+  console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
-  const isLeftAsset = blok.left_side_component?.[0]?.component === 'assets';
-  const isRightAsset = blok.right_side_component?.[0]?.component === 'assets';
+  const isLeftAsset = blok.left_side_component?.[0]?.component === "assets";
+  const isRightAsset = blok.right_side_component?.[0]?.component === "assets";
+  const isLeftVideo =
+    blok.left_side_component?.[0]?.component === "video_assets";
+  const isRightVideo =
+    blok.right_side_component?.[0]?.component === "video_assets";
+
   const isSideBySideAsset = isLeftAsset && isRightAsset;
+  const isSideBySideVideo = isLeftVideo && isRightVideo;
 
   const content = (
     <>
@@ -34,7 +40,10 @@ const SideBySide = ({ blok }) => {
   );
 
   const sideBySideContent = blok.card ? (
-    <CardWrapper {...storyblokEditable(blok)} flipped={blok.flipped ? 'true' : undefined}>
+    <CardWrapper
+      {...storyblokEditable(blok)}
+      flipped={blok.flipped ? "true" : undefined}
+    >
       <SideBySideWrapper
         gap={blok.gap}
         asset_form={blok.asset_form}
@@ -49,7 +58,7 @@ const SideBySide = ({ blok }) => {
       gap={blok.gap}
       asset_form={blok.asset_form}
       extra_copy={blok.extra_copy}
-      flipped={blok.flipped ? 'true' : undefined}
+      flipped={blok.flipped ? "true" : undefined}
     >
       {content}
     </SideBySideWrapper>
@@ -60,7 +69,7 @@ const SideBySide = ({ blok }) => {
       <SpacingContainer
         spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
-        flipped={blok.flipped ? 'true' : undefined}
+        flipped={blok.flipped ? "true" : undefined}
       >
         {sideBySideContent}
       </SpacingContainer>
@@ -70,96 +79,96 @@ const SideBySide = ({ blok }) => {
 
 const SpacingContainer = styled.div`
   padding: ${(props) => {
-    if (props.spacingOffset === 'top') {
-      return props.spacing === 'default'
-        ? '3.75vw 0 0'
+    if (props.spacingOffset === "top") {
+      return props.spacing === "default"
+        ? "3.75vw 0 0"
         : props.spacing
-        ? `calc(${props.spacing}px / 1600 * 100vw) 0 0`
-        : '3.75vw 0 0';
+          ? `calc(${props.spacing}px / 1600 * 100vw) 0 0`
+          : "3.75vw 0 0";
     }
-    if (props.spacingOffset === 'bottom') {
-      return props.spacing === 'default'
-        ? '0 0 3.75vw'
+    if (props.spacingOffset === "bottom") {
+      return props.spacing === "default"
+        ? "0 0 3.75vw"
         : props.spacing
-        ? `0 0 calc(${props.spacing}px / 1600 * 100vw)`
-        : '0 0 3.75vw';
+          ? `0 0 calc(${props.spacing}px / 1600 * 100vw)`
+          : "0 0 3.75vw";
     }
-    return props.spacing === 'default'
-      ? '3.75vw 0'
+    return props.spacing === "default"
+      ? "3.75vw 0"
       : props.spacing
-      ? `calc(${props.spacing}px / 1600 * 100vw) 0`
-      : '3.75vw 0';
+        ? `calc(${props.spacing}px / 1600 * 100vw) 0`
+        : "3.75vw 0";
   }};
 
   ${media.fullWidth} {
     padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '60px 0 0'
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "60px 0 0"
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+            ? `${props.spacing}px 0 0`
+            : "60px 0 0";
       }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 60px'
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 0 60px"
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+            ? `0 0 ${props.spacing}px`
+            : "0 0 60px";
       }
-      return props.spacing === 'default'
-        ? '60px 0'
+      return props.spacing === "default"
+        ? "60px 0"
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+          ? `${props.spacing}px 0`
+          : "60px 0";
     }};
   }
 
   ${media.tablet} {
     padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '3.906vw 3.906vw 0'
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "3.906vw 3.906vw 0"
           : props.spacing
-          ? `${props.spacing}px 3.906vw 0`
-          : '3.906vw 3.906vw 0';
+            ? `${props.spacing}px 3.906vw 0`
+            : "3.906vw 3.906vw 0";
       }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 3.906vw 3.906vw'
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 3.906vw 3.906vw"
           : props.spacing
-          ? `0 3.906vw ${props.spacing}px`
-          : '0 3.906vw 3.906vw';
+            ? `0 3.906vw ${props.spacing}px`
+            : "0 3.906vw 3.906vw";
       }
-      return props.spacing === 'default'
-        ? '3.906vw 3.906vw'
+      return props.spacing === "default"
+        ? "3.906vw 3.906vw"
         : props.spacing
-        ? `${props.spacing}px 3.906vw`
-        : '3.906vw 3.906vw';
+          ? `${props.spacing}px 3.906vw`
+          : "3.906vw 3.906vw";
     }};
   }
 
   ${media.mobile} {
     padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '5.417vw 5.417vw 0'
+      if (props.spacingOffset === "top") {
+        return props.spacing === "default"
+          ? "5.417vw 5.417vw 0"
           : props.spacing
-          ? `${props.spacing}px 5.417vw 0`
-          : '5.417vw 5.417vw 0';
+            ? `${props.spacing}px 5.417vw 0`
+            : "5.417vw 5.417vw 0";
       }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 5.417vw 5.417vw'
+      if (props.spacingOffset === "bottom") {
+        return props.spacing === "default"
+          ? "0 5.417vw 5.417vw"
           : props.spacing
-          ? `0 5.417vw ${props.spacing}px`
-          : '0 5.417vw 5.417vw';
+            ? `0 5.417vw ${props.spacing}px`
+            : "0 5.417vw 5.417vw";
       }
-      return props.spacing === 'default'
-        ? '5.417vw 5.417vw'
+      return props.spacing === "default"
+        ? "5.417vw 5.417vw"
         : props.spacing
-        ? `${props.spacing}px 5.417vw`
-        : '5.417vw 5.417vw';
+          ? `${props.spacing}px 5.417vw`
+          : "5.417vw 5.417vw";
     }};
   }
 `;
@@ -188,7 +197,7 @@ const CardWrapper = styled.div`
 
   ${media.mobile} {
     flex-direction: ${(props) =>
-      props.flipped === 'true' ? 'column-reverse' : 'column'};
+      props.flipped === "true" ? "column-reverse" : "column"};
     width: 89.167vw;
     border-radius: 5vw;
     padding: 5.417vw;
@@ -198,65 +207,65 @@ const CardWrapper = styled.div`
 const SideBySideWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: ${(props) => (props.extra_copy ? 'start' : 'center')};
+  align-items: ${(props) => (props.extra_copy ? "start" : "center")};
   justify-content: center;
   text-align: left;
   background: ${(props) =>
-    props.card ? 'transparent' : props.theme.side_by_side.bg};
+    props.card ? "transparent" : props.theme.side_by_side.bg};
   color: ${(props) =>
-    props.card ? 'inherit' : props.theme.side_by_side.textColor};
+    props.card ? "inherit" : props.theme.side_by_side.textColor};
 
   > * {
-    margin-top: ${(props) => (props.asset_form ? '-6vw' : 'unset')};
+    margin-top: ${(props) => (props.asset_form ? "-6vw" : "unset")};
 
     ${media.fullWidth} {
-      margin-top: ${(props) => (props.asset_form ? '-96px' : 'unset')};
+      margin-top: ${(props) => (props.asset_form ? "-96px" : "unset")};
     }
 
     ${media.tablet} {
-      margin-top: ${(props) => (props.asset_form ? '-9.375vw' : 'unset')};
+      margin-top: ${(props) => (props.asset_form ? "-9.375vw" : "unset")};
     }
 
     ${media.mobile} {
       width: 78.333vw;
-      margin-top: ${(props) => (props.asset_form ? 'unset' : 'unset')};
+      margin-top: ${(props) => (props.asset_form ? "unset" : "unset")};
     }
   }
 
   gap: ${(props) =>
-    props.gap === 'default'
-      ? '7.75vw'
+    props.gap === "default"
+      ? "7.75vw"
       : props.gap
-      ? `${props.gap}px`
-      : '7.75vw'};
+        ? `${props.gap}px`
+        : "7.75vw"};
 
   ${media.fullWidth} {
     gap: ${(props) =>
-      props.gap === 'default'
-        ? '124px'
+      props.gap === "default"
+        ? "124px"
         : props.gap
-        ? `${props.gap}px`
-        : '124px'};
+          ? `${props.gap}px`
+          : "124px"};
   }
 
   ${media.tablet} {
     gap: ${(props) =>
-      props.gap === 'default'
-        ? '3.906vw'
+      props.gap === "default"
+        ? "3.906vw"
         : props.gap
-        ? `${props.gap}px`
-        : '3.906vw'};
+          ? `${props.gap}px`
+          : "3.906vw"};
   }
 
   ${media.mobile} {
     flex-direction: ${(props) =>
-      props.flipped === 'true' ? 'column-reverse' : 'column'};
+      props.flipped === "true" ? "column-reverse" : "column"};
     gap: ${(props) =>
-      props.gap === 'default'
-        ? '6.667vw'
+      props.gap === "default"
+        ? "6.667vw"
         : props.gap
-        ? `${props.gap}px`
-        : '6.667vw'};
+          ? `${props.gap}px`
+          : "6.667vw"};
   }
 `;
 
