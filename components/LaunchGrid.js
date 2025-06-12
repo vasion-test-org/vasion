@@ -57,18 +57,15 @@ const LaunchGrid = ({ blok }) => {
                   )}
                 </div>
               ))}
-              {card?.button_group?.map(($buttonData) => (
-                <div
-                  {...storyblokEditable($buttonData)}
-                  key={$buttonData.link_text}
-                >
-                  <Button
-                    key={$buttonData.link_text}
-                    $buttonData={$buttonData}
-                  />
-                </div>
-              ))}
             </CardCopy>
+            {card?.button_group?.map(($buttonData) => (
+              <ButtonWrapper
+                {...storyblokEditable($buttonData)}
+                key={$buttonData.link_text}
+              >
+                <Button key={$buttonData.link_text} $buttonData={$buttonData} />
+              </ButtonWrapper>
+            ))}
           </Card>
         );
       })
@@ -154,7 +151,7 @@ const CardImage = styled.img`
 `;
 const Card = styled.div`
   position: relative;
-  filter: ${(props) => (props?.blur ? `blur(8px)` : "unset")};
+  filter: ${(props) => (props?.blur ? `blur(0.25vw)` : "unset")};
   display: flex;
   flex-direction: column;
   width: 26.313vw;
@@ -166,7 +163,7 @@ const Card = styled.div`
     0vw 0vw 0.063vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.125vw 0.25vw 0vw rgba(25, 29, 30, 0.16);
   ${media.fullWidth} {
-    filter: ${(props) => (props?.blur ? `blur(8px)` : "unset")};
+    filter: ${(props) => (props?.blur ? `blur(4px)` : "unset")};
     width: 421px;
     gap: 16px;
     border-radius: 16px;
@@ -177,7 +174,7 @@ const Card = styled.div`
       0px 2px 4px 0px rgba(25, 29, 30, 0.16);
   }
   ${media.tablet} {
-    filter: ${(props) => (props?.blur ? `blur(0.781vw)` : "unset")};
+    filter: ${(props) => (props?.blur ? `blur(0.391vw)` : "unset")};
     width: 29.395vw;
     gap: 1.563vw;
     border-radius: 1.563vw;
@@ -199,6 +196,13 @@ const Card = styled.div`
       0vw 0.417vw 0.833vw 0vw rgba(25, 29, 30, 0.16);
   }
 `;
+const ButtonWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-self: flex-start;
+  justify-self: flex-end;
+  margin-top: auto;
+`;
 const CardsWrapper = styled.div`
   display: flex;
   gap: 1.25vw;
@@ -215,7 +219,7 @@ const CardsWrapper = styled.div`
 `;
 const CtaCopy = styled.div`
   margin-bottom: 2.5vw;
-
+  text-wrap: none;
   ${media.fullWidth} {
     margin-bottom: 40px;
   }
@@ -240,7 +244,7 @@ const Tag = styled.div`
     margin-bottom: 12px;
   }
   ${media.tablet} {
-    padding: 0.391vw 0.781vw;
+    padding: 4px 7px;
     border-radius: 2.344vw;
     margin-bottom: 1.172vw;
   }
@@ -273,7 +277,8 @@ const Cta = styled.div`
   align-items: center;
   display: flex;
   width: 81.5vw;
-  height: 24.5vw;
+  height: fit-content;
+  min-height: 24.5vw;
   border-radius: 0.5vw;
   padding-right: 3.75vw;
   background: ${(props) => (props?.bg ? `url(${props.bg})` : "unset")};
@@ -283,18 +288,18 @@ const Cta = styled.div`
   ${media.fullWidth} {
     width: 1304px;
     border-radius: 8px;
-    height: 392px;
+    height: fit-content;
+    min-height: 392px;
     padding-right: 60px;
   }
   ${media.tablet} {
     width: 92.188vw;
     border-radius: 0.781vw;
-    height: 33.594vw;
+    height: auto;
+    min-height: 33.594vw;
     padding-right: 5.859vw;
     background-size: contain;
     background-repeat: no-repeat;
-  }
-  ${media.mobile} {
   }
 `;
 const ContentWrapper = styled.div`
