@@ -9,6 +9,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const Card = ({ content, paginated, borderradius }) => {
+  console.log(content);
   const pathname = usePathname();
   const buttonData = content.Button?.[0];
   const isEmail = buttonData?.link_url?.email;
@@ -67,6 +68,7 @@ const Card = ({ content, paginated, borderradius }) => {
         as="a"
         {...storyblokEditable(content)}
         paginated={paginated}
+        blur={content?.blur_card}
         $canhover={content?.has_hover}
       >
         {WrapperContent}
@@ -76,6 +78,7 @@ const Card = ({ content, paginated, borderradius }) => {
     <CardWrapper
       href={normalizedUrl}
       target={target}
+      blur={content?.blur_card}
       rel={rel}
       {...storyblokEditable(content)}
       paginated={paginated}
@@ -119,6 +122,7 @@ const ContentWrapper = styled.div`
   }
 `;
 const CardWrapper = styled.div`
+  filter: ${(props) => (props?.blur ? `blur(0.25vw)` : "unset")};
   text-decoration: none;
   color: inherit;
   cursor: pointer;
@@ -144,6 +148,7 @@ const CardWrapper = styled.div`
   }
 
   ${media.fullWidth} {
+    filter: ${(props) => (props?.blur ? `blur(4px)` : "unset")};
     gap: 16px;
     border-radius: 16px;
     width: clamp(350px, 100%, 408px);
@@ -153,6 +158,7 @@ const CardWrapper = styled.div`
   }
 
   ${media.tablet} {
+    filter: ${(props) => (props?.blur ? `blur(0.391vw)` : "unset")};
     gap: 1.563vw;
     border-radius: 1.563vw;
     width: clamp(29.102vw, 100%, 44.922vw);
@@ -162,6 +168,7 @@ const CardWrapper = styled.div`
   }
 
   ${media.mobile} {
+    display: ${(props) => (props?.blur ? "none" : "flex")};
     gap: 3.333vw;
     border-radius: 3.333vw;
     width: clamp(89.167vw, 100%, 89.167vw);
