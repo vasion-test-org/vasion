@@ -18,10 +18,9 @@ const AnchorNavigator = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok?.theme] || themes.default;
   const [anchorList, setAnchorList] = useState([]);
-  const { mobile } = useContext(ScreenContext);
   const formattedIconString = blok?.page_icon?.replace(/\s+/g, '');
   const IconComponent = Icons[formattedIconString] || null;
-
+// console.log(IconComponent)
   useEffect(() => {
     const updateAnchors = () => {
       const allAnchors = Array.from(
@@ -59,8 +58,8 @@ const AnchorNavigator = ({ blok }) => {
         onClick={() => {
           const smoother = getSmoother();
 
-          if (smoother && anchor.dataset.anchorId) {
-            smoother.scrollTo(anchor.dataset.anchorId, true, 'top top');
+          if (smoother && anchor) {
+            smoother.scrollTo(anchor, true, 'top top');
           }
         }}
       >
