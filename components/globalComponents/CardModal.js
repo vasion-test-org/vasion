@@ -172,6 +172,7 @@ const CardModal = ({ data, setShowModal }) => {
 };
 
 export default CardModal;
+
 const VideoContainer = styled.div`
   overflow: hidden;
   border-radius: 0.75vw;
@@ -181,7 +182,7 @@ const VideoContainer = styled.div`
   ${media.fullWidth} {
     border-radius: 12px;
     margin-top: ${(props) => (props?.hasbio ? "unset" : "50px")};
-    height: ${(props) => (props?.hasbio ? "auto" : "50vw")};
+    height: ${(props) => (props?.hasbio ? "auto" : "240px")};
   }
   ${media.tablet} {
     margin-top: ${(props) => (props?.hasbio ? "unset" : "7.152vw")};
