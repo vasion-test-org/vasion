@@ -1,11 +1,12 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import styled from 'styled-components';
-import colors from '@/styles/colors';
-import media from '@/styles/media';
-import Form from './Form';
-import text from '@/styles/text';
+"use client";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import styled from "styled-components";
+import colors from "@/styles/colors";
+import media from "@/styles/media";
+import Form from "./Form";
+import CardModal from "./globalComponents/CardModal";
+import text from "@/styles/text";
 
 const LightboxBtn = ({ blok }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,28 +19,43 @@ const LightboxBtn = ({ blok }) => {
     }
   };
 
+  const isVideoModal = blok.video_modal === true;
+
+  const videoModalData = isVideoModal
+    ? {
+        asset: blok.asset
+          ? blok.asset.map((asset) => ({
+              media: [
+                {
+                  filename: asset.filename || asset.url || asset.src,
+                },
+              ],
+              thumbnails: asset.thumbnails || null,
+            }))
+          : [],
+      }
+    : null;
+
   const formBlok = {
     form_id: blok.form_id,
     thank_you_copy: blok.thank_you,
     redirect_link: blok.redirect_link || null,
-    theme: blok.theme || 'dark',
+    theme: blok.theme || "dark",
     header: blok.form_header || null,
     animated: blok.animated || false,
   };
 
   useEffect(() => {
-    setIsClient(true); // for portal mount safety
+    setIsClient(true);
   }, []);
 
   useEffect(() => {
     if (!isOpen) return;
-
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     const smoother = window.ScrollSmoother?.get();
     smoother?.paused(true);
-
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
       smoother?.paused(false);
     };
   }, [isOpen]);
@@ -47,17 +63,24 @@ const LightboxBtn = ({ blok }) => {
   return (
     <LightboxContainer>
       <Button onClick={handleOpen}>{blok.lightbox_text}</Button>
-      {isOpen &&
-        isClient &&
-        createPortal(
-          <Overlay onClick={handleClose}>
-            <FormContent>
-              <CloseBtn onClick={handleClose}>ⓧ</CloseBtn>
-              <Form blok={formBlok} />
-            </FormContent>
-          </Overlay>,
-          document.body
-        )}
+      {isOpen && isClient && (
+        <>
+          {isVideoModal ? (
+            <CardModal data={videoModalData} setShowModal={setIsOpen} />
+          ) : (
+            // Use original form modal for non-video content
+            createPortal(
+              <Overlay onClick={handleClose}>
+                <FormContent>
+                  <CloseBtn onClick={handleClose}>ⓧ</CloseBtn>
+                  <Form blok={formBlok} />
+                </FormContent>
+              </Overlay>,
+              document.body,
+            )
+          )}
+        </>
+      )}
     </LightboxContainer>
   );
 };
@@ -70,7 +93,6 @@ const Button = styled.div`
   color: white;
   border-radius: 1.75vw;
   padding: 0.75vw 1vw;
-
   ${media.fullWidth} {
     border-radius: 28px;
     padding: 12px 16px;
@@ -92,6 +114,7 @@ const Button = styled.div`
     }
   }
 `;
+
 const LightboxContainer = styled.div``;
 
 const Overlay = styled.div`
@@ -111,7 +134,6 @@ const FormContent = styled.div`
   background-color: transparent;
   padding: 1.389vw;
   border-radius: 1.389vw;
-
   ${media.fullWidth} {
     padding: 20px;
     border-radius: 20px;
@@ -125,6 +147,7 @@ const FormContent = styled.div`
     border-radius: 4.673vw;
   }
 `;
+
 const CloseBtn = styled.p`
   opacity: 0;
   position: relative;
@@ -132,11 +155,10 @@ const CloseBtn = styled.p`
   left: 93%;
   top: 2.5vw;
   width: fit-content;
-  font-family: 'Archivo';
+  font-family: "Archivo";
   color: ${colors.grey600};
   z-index: 4;
   cursor: pointer;
-
   ${media.fullWidth} {
     font-size: 20px;
     left: 93%;

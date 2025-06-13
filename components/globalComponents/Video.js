@@ -12,7 +12,6 @@ const Video = ({
   thumbnails,
   isSideBySideVideo = false,
 }) => {
-  console.log(isSideBySideVideo);
   let videoSrc = filename
     ? filename
     : useMedia(
