@@ -15,7 +15,6 @@ import { useRouter } from "next/navigation";
 
 const Hero = ({ blok }) => {
   const router = useRouter();
-  console.log("HERO", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   let customTheme = blok.custom_theme?.[0] || {};

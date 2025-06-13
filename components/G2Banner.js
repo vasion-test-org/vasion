@@ -10,7 +10,7 @@ const G2Banner = ({ blok }) => {
   const headerContent = blok.copy_section?.[0]?.copy ? (
     <RichTextRenderer document={blok.copy_section[0].copy} />
   ) : (
-    "The #1 Print Management Software on G2" // Fallback text
+    "The #1 Print Management Software on G2"
   );
   const spotlightImage = blok.assets?.[0];
   const supportingBadges = blok.assets?.slice(1) || [];
