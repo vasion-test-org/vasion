@@ -9,7 +9,6 @@ import CardModal from "./globalComponents/CardModal";
 import text from "@/styles/text";
 
 const LightboxBtn = ({ blok }) => {
-  console.log(blok);
   const [isOpen, setIsOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
