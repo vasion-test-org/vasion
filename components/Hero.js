@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 
 const Hero = ({ blok }) => {
   const router = useRouter();
-  // console.log("HERO", blok);
+  console.log("HERO", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   let customTheme = blok.custom_theme?.[0] || {};
@@ -80,9 +80,10 @@ const Hero = ({ blok }) => {
                 ))}
               </ButtonRow>
             )}
-            {blok?.light_box_button && blok?.light_box_button[0]?.form_id && (
-              <LightboxBtn blok={blok?.light_box_button[0]} />
-            )}
+            {blok?.light_box_button &&
+              blok?.light_box_button[0]?.lightbox_text && (
+                <LightboxBtn blok={blok?.light_box_button[0]} />
+              )}
           </ContentWrapper>
           {blok?.hero_asset[0] && !blok.centered_image && (
             <ImageWrapper {...storyblokEditable(blok)}>
