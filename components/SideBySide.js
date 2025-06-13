@@ -5,8 +5,6 @@ import { storyblokEditable } from "@storyblok/react/rsc";
 import styled, { ThemeProvider } from "styled-components";
 import { useAvailableThemes } from "@/context/ThemeContext";
 import media, { mobile, desktop, tablet } from "@/styles/media";
-// import colors from 'styles/colors';
-// import text from 'styles/text';
 import ComponentRenderer from "./renderers/ComponentRenderer";
 
 const SideBySide = ({ blok }) => {
