@@ -12,7 +12,7 @@ import Button from './globalComponents/Button';
 // import Pill from "components/Pill";
 
 const FeaturedCard = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   const getTagBackgroundColor = (tagContent) => {
     const tagText =
       tagContent?.content?.[0]?.content?.[0]?.text?.toLowerCase() || '';

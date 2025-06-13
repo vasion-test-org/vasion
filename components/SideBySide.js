@@ -10,7 +10,6 @@ import media, { mobile, desktop, tablet } from '@/styles/media';
 import ComponentRenderer from './renderers/ComponentRenderer';
 
 const SideBySide = ({ blok }) => {
-  // console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
@@ -36,7 +35,7 @@ const SideBySide = ({ blok }) => {
   const sideBySideContent = blok.card ? (
     <CardWrapper
       {...storyblokEditable(blok)}
-      flipped={blok.flipped ? 'true' : undefined}
+      flipped={blok.flipped}
       card_background_color={blok?.card_background_color?.value}
     >
       <SideBySideWrapper
@@ -45,6 +44,7 @@ const SideBySide = ({ blok }) => {
         extra_copy={blok.extra_copy}
         card={blok.card}
         isSideBySideAsset={isSideBySideAsset}
+        flipped={blok.flipped}
       >
         {content}
       </SideBySideWrapper>
@@ -55,7 +55,7 @@ const SideBySide = ({ blok }) => {
       gap={blok.gap}
       asset_form={blok.asset_form}
       extra_copy={blok.extra_copy}
-      flipped={blok.flipped ? 'true' : undefined}
+      flipped={blok.flipped}
       isSideBySideAsset={isSideBySideAsset}
     >
       {content}
@@ -67,7 +67,6 @@ const SideBySide = ({ blok }) => {
       <SpacingContainer
         spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
-        flipped={blok.flipped ? 'true' : undefined}
       >
         {sideBySideContent}
       </SpacingContainer>
@@ -196,7 +195,7 @@ const CardWrapper = styled.div`
 
   ${media.mobile} {
     flex-direction: ${(props) =>
-      props.flipped === 'true' ? 'column-reverse' : 'column'};
+      props.flipped === true ? 'column-reverse' : 'column'};
     width: 89.167vw;
     border-radius: 5vw;
     padding: 5.417vw;
@@ -266,7 +265,7 @@ const SideBySideWrapper = styled.div`
 
   ${media.mobile} {
     flex-direction: ${(props) =>
-      props.flipped === 'true' ? 'column-reverse' : 'column'};
+      props.flipped === true ? 'column-reverse' : 'column'};
     gap: ${(props) =>
       props.gap === 'default'
         ? '6.667vw'
