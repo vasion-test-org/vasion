@@ -65,6 +65,7 @@ const SideBySide = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       <SpacingContainer
+        data-anchor-id={blok.anchor_id}
         spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
       >
