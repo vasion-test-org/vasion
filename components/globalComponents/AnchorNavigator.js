@@ -68,7 +68,7 @@ const AnchorNavigator = ({ blok }) => {
       </AnchorButton>
     );
   });
-  // console.log(blok?.page_title);
+ 
   return (
     <ThemeProvider theme={selectedTheme}>
       <AnchorWrapper className='anchorNav'>
