@@ -15,12 +15,11 @@ import Icons from '@/components/renderers/Icons';
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const AnchorNavigator = ({ blok }) => {
-  console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok?.theme] || themes.default;
   const [anchorList, setAnchorList] = useState([]);
   const { mobile } = useContext(ScreenContext);
-  const formattedIconString = blok?.icon?.replace(/\s+/g, '');
+  const formattedIconString = blok?.page_icon?.replace(/\s+/g, '');
   const IconComponent = Icons[formattedIconString] || null;
 
   useEffect(() => {
@@ -47,11 +46,12 @@ const AnchorNavigator = ({ blok }) => {
     };
   }, []);
 
-  console.log(anchorList);
   const anchorMap = anchorList.map((anchor, i) => {
     const anchorText = anchor.dataset.anchorId
       .replace(/-/g, ' ')
-      .replace(/^\w/, (c) => c.toUpperCase());
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
 
     return (
       <AnchorButton
@@ -68,14 +68,14 @@ const AnchorNavigator = ({ blok }) => {
       </AnchorButton>
     );
   });
-
+  // console.log(blok?.page_title);
   return (
     <ThemeProvider theme={selectedTheme}>
       <AnchorWrapper className='anchorNav'>
         {anchorList.length > 0 && (
           <AnchorNavWrapper>
             <PageInfoContainer>
-              <PageTitle>{blok.page_title}</PageTitle>{' '}
+              {blok?.page_title && <PageTitle>{blok.page_title}</PageTitle>}
               {IconComponent && (
                 <IconWrapper>
                   <IconComponent />
