@@ -12,7 +12,6 @@ const Video = ({
   thumbnails,
   isSideBySideVideo = false,
 }) => {
-  console.log(isSideBySideVideo);
   let videoSrc = filename
     ? filename
     : useMedia(
@@ -47,7 +46,6 @@ const VideoWrapper = styled.div`
   max-width: 100%;
   border-radius: ${(props) => `${props.borderradius || 0}px`};
   overflow: hidden;
-
   ${media.fullWidth} {
     width: ${(props) => (props.isSideBySideVideo ? "512px" : "1084px")};
     height: ${(props) => (props.isSideBySideVideo ? "384px" : "608px")};
