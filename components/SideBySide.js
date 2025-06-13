@@ -34,11 +34,17 @@ const SideBySide = ({ blok }) => {
   );
 
   const sideBySideContent = blok.card ? (
-    <CardWrapper {...storyblokEditable(blok)} flipped={blok.flipped ? 'true' : undefined}>
+    <CardWrapper
+      {...storyblokEditable(blok)}
+      flipped={blok.flipped ? 'true' : undefined}
+      card_background_color={blok?.card_background_color?.value}
+    >
       <SideBySideWrapper
         gap={blok.gap}
         asset_form={blok.asset_form}
         extra_copy={blok.extra_copy}
+        card={blok.card}
+        isSideBySideAsset={isSideBySideAsset}
       >
         {content}
       </SideBySideWrapper>
@@ -50,6 +56,7 @@ const SideBySide = ({ blok }) => {
       asset_form={blok.asset_form}
       extra_copy={blok.extra_copy}
       flipped={blok.flipped ? 'true' : undefined}
+      isSideBySideAsset={isSideBySideAsset}
     >
       {content}
     </SideBySideWrapper>
@@ -165,7 +172,8 @@ const SpacingContainer = styled.div`
 `;
 
 const CardWrapper = styled.div`
-  background: ${(props) => props.theme.side_by_side.bg};
+  background: ${(props) =>
+    props.card_background_color || props.theme.side_by_side.bg};
   color: ${(props) => props.theme.side_by_side.textColor};
   border-radius: 1.5vw;
   overflow: hidden;
@@ -173,11 +181,11 @@ const CardWrapper = styled.div`
   margin: 0 auto;
   display: flex;
   justify-content: center;
-  padding: 3.75vw;
+  padding: ${(props) => (props.card ? '3.75vw' : '3.75vw')};
 
   ${media.fullWidth} {
     border-radius: 24px;
-    padding: 60px;
+    padding: ${(props) => (props.card ? '60px' : '60px')};
   }
 
   ${media.tablet} {
@@ -225,18 +233,26 @@ const SideBySideWrapper = styled.div`
 
   gap: ${(props) =>
     props.gap === 'default'
-      ? '7.75vw'
+      ? props.card || props.isSideBySideAsset
+        ? '3.75vw'
+        : '9.25vw'
       : props.gap
       ? `${props.gap}px`
-      : '7.75vw'};
+      : props.card || props.isSideBySideAsset
+      ? '3.75vw'
+      : '9.25vw'};
 
   ${media.fullWidth} {
     gap: ${(props) =>
       props.gap === 'default'
-        ? '124px'
+        ? props.card || props.isSideBySideAsset
+          ? '60px'
+          : '148px'
         : props.gap
         ? `${props.gap}px`
-        : '124px'};
+        : props.card || props.isSideBySideAsset
+        ? '60px'
+        : '148px'};
   }
 
   ${media.tablet} {

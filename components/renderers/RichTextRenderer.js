@@ -34,7 +34,7 @@ const RichTextRenderer = ({
     if (!Array.isArray(contentArray)) return '';
     return contentArray.map((node) => node.text || '').join(' ');
   };
-  console.log('gradientText', gradientText);
+  // console.log('gradientText', gradientText);
   // console.log('document', document)
   // console.log(responsiveTextStyles)
   const blokResolvers = {
