@@ -321,6 +321,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 2.5vw;
+  background: ${colors.lightPurpleGrey};
   padding: ${(props) => {
     if (props.spacingOffset === "top") {
       return props.spacing === "default"
