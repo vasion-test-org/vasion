@@ -30,6 +30,7 @@ const CenteredSection = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper
+        data-anchor-id={blok.anchor_id}
         spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
         backgroundImage={blok.background_image?.[0]?.filename}

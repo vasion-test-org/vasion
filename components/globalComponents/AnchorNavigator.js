@@ -10,6 +10,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { getSmoother } from '@/components/ScrollSmoothWrapper';
 import { ScreenContext } from '@/components/providers/Screen';
+import Icons from '@/components/renderers/Icons';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -18,10 +19,14 @@ const AnchorNavigator = ({ blok }) => {
   const selectedTheme = themes[blok?.theme] || themes.default;
   const [anchorList, setAnchorList] = useState([]);
   const { mobile } = useContext(ScreenContext);
+  const formattedIconString = blok?.page_icon?.replace(/\s+/g, '');
+  const IconComponent = Icons[formattedIconString] || null;
 
   useEffect(() => {
     const updateAnchors = () => {
-      const allAnchors = Array.from(document.querySelectorAll('.anchor'));
+      const allAnchors = Array.from(
+        document.querySelectorAll('[data-anchor-id]')
+      );
       setAnchorList(allAnchors);
     };
 
@@ -41,27 +46,42 @@ const AnchorNavigator = ({ blok }) => {
     };
   }, []);
 
-  console.log(anchorList);
-  const anchorMap = anchorList.map((anchor, i) => (
-    <AnchorButton
-      key={i}
-      onClick={() => {
-        const smoother = getSmoother();
+  const anchorMap = anchorList.map((anchor, i) => {
+    const anchorText = anchor.dataset.anchorId
+      .replace(/-/g, ' ')
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
 
-        if (smoother && anchor) {
-          smoother.scrollTo(anchor, true, 'top top');
-        }
-      }}
-    >
-      {anchor.innerText}
-    </AnchorButton>
-  ));
+    return (
+      <AnchorButton
+        key={i}
+        onClick={() => {
+          const smoother = getSmoother();
 
+          if (smoother && anchor.dataset.anchorId) {
+            smoother.scrollTo(anchor.dataset.anchorId, true, 'top top');
+          }
+        }}
+      >
+        {anchorText}
+      </AnchorButton>
+    );
+  });
+ 
   return (
     <ThemeProvider theme={selectedTheme}>
       <AnchorWrapper className='anchorNav'>
         {anchorList.length > 0 && (
           <AnchorNavWrapper>
+            <PageInfoContainer>
+              {blok?.page_title && <PageTitle>{blok.page_title}</PageTitle>}
+              {IconComponent && (
+                <IconWrapper>
+                  <IconComponent />
+                </IconWrapper>
+              )}
+            </PageInfoContainer>
             <ButtonsDiv>{anchorMap}</ButtonsDiv>
           </AnchorNavWrapper>
         )}
@@ -69,6 +89,30 @@ const AnchorNavigator = ({ blok }) => {
     </ThemeProvider>
   );
 };
+
+const PageTitle = styled.p`
+  ${text.bodyMdBold};
+  color: ${colors.primaryPurple};
+`;
+const PageInfoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5vw;
+
+  ${media.fullWidth} {
+    gap: 8px;
+  }
+
+  ${media.tablet} {
+    gap: 0.781vw;
+  }
+
+  ${media.mobile} {
+    gap: 1.667vw;
+  }
+`;
 
 const AnchorButton = styled.div`
   ${text.bodySm};
@@ -130,7 +174,7 @@ const AnchorNavWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: end;
+  justify-content: space-between;
   background: ${colors.purple100};
   margin: 0.5vw auto;
   width: 76.875vw;
@@ -189,6 +233,34 @@ const AnchorWrapper = styled.div`
 
   ${media.mobile} {
     top: 13.542vw;
+  }
+`;
+
+const IconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25vw;
+  height: 1.25vw;
+
+  ${media.fullWidth} {
+    width: 20px;
+    height: 20px;
+  }
+
+  ${media.tablet} {
+    width: 1.953vw;
+    height: 1.953vw;
+  }
+
+  ${media.mobile} {
+    width: 5.417vw;
+    height: 5.417vw;
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
   }
 `;
 
