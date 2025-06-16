@@ -692,8 +692,7 @@ const Banner = styled.div`
 `;
 
 const TopNav = styled.nav`
-  background-image: url('images/TopBar.png');
-  background-color: ${colors.darkPurple};
+  background: linear-gradient(90deg, #CC4800 0.11%, #5F47A8 38.75%, rgba(126, 95, 221, 0.00) 71.55%), #201435;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -705,8 +704,6 @@ const TopNav = styled.nav`
   z-index: 10;
 
   ${media.fullWidth} {
-    background-image: unset;
-    background-color: ${colors.darkPurple};
     padding: 0px 148px;
     height: 40px;
   }
