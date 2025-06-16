@@ -68,7 +68,6 @@ const LightboxBtn = ({ blok }) => {
           {isVideoModal ? (
             <CardModal data={videoModalData} setShowModal={setIsOpen} />
           ) : (
-            // Use original form modal for non-video content
             createPortal(
               <Overlay onClick={handleClose}>
                 <FormContent>
