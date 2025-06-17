@@ -12,7 +12,7 @@ import text from "@/styles/text";
 import gsap from "gsap";
 
 const FeaturedTestimonials = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const [currentIndex, setCurrentIndex] = useState(0);
