@@ -33,7 +33,6 @@ const Config = ({ blok, children }) => {
 
     fetchConfig();
   }, [pathname]);
-
   return (
     <>
       {configData && (
