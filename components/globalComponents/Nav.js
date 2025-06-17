@@ -692,7 +692,13 @@ const Banner = styled.div`
 `;
 
 const TopNav = styled.nav`
-  background: linear-gradient(90deg, #CC4800 0.11%, #5F47A8 38.75%, rgba(126, 95, 221, 0.00) 71.55%), #201435;
+  background: linear-gradient(
+      90deg,
+      #cc4800 0.11%,
+      #5f47a8 38.75%,
+      rgba(126, 95, 221, 0) 71.55%
+    ),
+    #201435;
   display: flex;
   flex-direction: row;
   align-items: center;
