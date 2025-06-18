@@ -22,7 +22,6 @@ const Rotator = ({ rotatorData }) => {
   useEffect(() => {
     gsap.set(".rotator", { autoAlpha: 0 });
     gsap.set("#rotator-0", { autoAlpha: 1 });
-
     const tabs = gsap.utils.toArray(".rotator-tabs");
 
     tabs.forEach((tab, index) => {
