@@ -59,29 +59,29 @@ const SmallQuote = ({ blok, short }) => {
 
 const OrangeQuote = styled.img`
   position: absolute;
-  height: 3.75vw;
+  height: 6.75vw;
   width: 3.75vw;
-  top: -1.9vw;
+  top: -3.875vw;
   left: 2vw;
 
   ${media.fullWidth} {
-    height: 60px;
+    height: 108px;
     width: 60px;
-    top: -30px;
+    top: -62px;
     left: 32px;
   }
 
   ${media.tablet} {
-    height: 5.859vw;
-    width: 5.859vw;
-    top: -2.93vw;
+    height: 9.547vw;
+    width: 4.859vw;
+    top: -4.93vw;
     left: 3.125vw;
   }
 
   ${media.mobile} {
-    height: 12.5vw;
+    height: 19.5vw;
     width: 12.5vw;
-    top: -6.25vw;
+    top: -10.25vw;
     left: 6.667vw;
   }
 `;

@@ -10,7 +10,7 @@ const nextConfig = {
   },
   webpack: (config) => {
     const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.('.svg')
+      rule.test?.test?.(".svg"),
     );
 
     config.module.rules.push(
@@ -25,14 +25,14 @@ const nextConfig = {
         resourceQuery: { not: [/url/] },
         use: [
           {
-            loader: '@svgr/webpack',
+            loader: "@svgr/webpack",
             options: {
               svgo: true,
               svgoConfig: {
                 plugins: [
-                  'prefixIds', // ✅ moved outside to ensure it runs
+                  "prefixIds",
                   {
-                    name: 'preset-default',
+                    name: "preset-default",
                     params: {
                       overrides: {
                         removeViewBox: false,
@@ -44,7 +44,7 @@ const nextConfig = {
             },
           },
         ],
-      }
+      },
     );
 
     fileLoaderRule.exclude = /\.svg$/i;
@@ -54,7 +54,8 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: "/blog/news-release-lamar-cisd-eliminates-print-servers-across-school-district-with-printerlogic/",
+        source:
+          "/blog/news-release-lamar-cisd-eliminates-print-servers-across-school-district-with-printerlogic/",
         destination: "/print/",
         permanent: true,
       },
@@ -80,7 +81,7 @@ const nextConfig = {
       },
       {
         source: "/product-detail-content/",
-        destination: "/content/",
+        destination: "/automate/content-management/",
         permanent: true,
       },
       {
@@ -90,7 +91,7 @@ const nextConfig = {
       },
       {
         source: "/product-detail-capture/",
-        destination: "/capture/",
+        destination: "/automate/capture/",
         permanent: true,
       },
       {
@@ -129,7 +130,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/blog/how-going-paperless-will-improve-your-use-of-information/",
+        source:
+          "/blog/how-going-paperless-will-improve-your-use-of-information/",
         destination: "/blog/",
         permanent: true,
       },
@@ -139,7 +141,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/blog/manage-document-workflow-software-to-boost-productivity/",
+        source:
+          "/blog/manage-document-workflow-software-to-boost-productivity/",
         destination: "/blog/",
         permanent: true,
       },
@@ -149,7 +152,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/blog/revolutionize-your-customer-service-with-document-management/",
+        source:
+          "/blog/revolutionize-your-customer-service-with-document-management/",
         destination: "/blog/",
         permanent: true,
       },
@@ -164,7 +168,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/blog/the-benefits-of-moving-to-a-content-management-system-for-productivity/",
+        source:
+          "/blog/the-benefits-of-moving-to-a-content-management-system-for-productivity/",
         destination: "/blog/",
         permanent: true,
       },
@@ -179,12 +184,14 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/blog/why-online-document-management-must-replace-traditional-systems/",
+        source:
+          "/blog/why-online-document-management-must-replace-traditional-systems/",
         destination: "/blog/",
         permanent: true,
       },
       {
-        source: "/blog/printerlogic-acquires-maxxvault-rebrands-solution-as-vasion/",
+        source:
+          "/blog/printerlogic-acquires-maxxvault-rebrands-solution-as-vasion/",
         destination: "/blog/",
         permanent: true,
       },
@@ -220,7 +227,7 @@ const nextConfig = {
       },
       {
         source: "/manufactoring/",
-        destination: "/manufacturing/",
+        destination: "/industries/manufacturing/",
         permanent: true,
       },
       {
@@ -250,7 +257,7 @@ const nextConfig = {
       },
       {
         source: "/slg-integration/",
-        destination: "/government/",
+        destination: "/industries/government/",
         permanent: true,
       },
       {
@@ -280,7 +287,8 @@ const nextConfig = {
       },
       {
         source: "/vasion-master-software-agreement/",
-        destination: "https://info.printerlogic.com/rs/338-HTA-134/images/Master_Software_Agreement_MSA_EN.pdf?version=3",
+        destination:
+          "https://info.printerlogic.com/rs/338-HTA-134/images/Master_Software_Agreement_MSA_EN.pdf?version=3",
         permanent: true,
       },
       {
@@ -290,17 +298,19 @@ const nextConfig = {
       },
       {
         source: "/global-sla/",
-        destination: "https://info.printerlogic.com/rs/338-HTA-134/images/Service_Level_Agreement_SLA_EN.pdf?version=0",
+        destination:
+          "https://info.printerlogic.com/rs/338-HTA-134/images/Service_Level_Agreement_SLA_EN.pdf?version=0",
         permanent: true,
       },
       {
         source: "/software-support-service-level-terms-and-conditions/",
-        destination: "https://info.printerlogic.com/rs/338-HTA-134/images/Service_Level_Agreement_SLA_EN.pdf?version=0",
+        destination:
+          "https://info.printerlogic.com/rs/338-HTA-134/images/Service_Level_Agreement_SLA_EN.pdf?version=0",
         permanent: true,
       },
       {
         source: "/pga/",
-        destination: "/register/pga-tour/",
+        destination: "/connect-with-vasion/",
         permanent: true,
       },
       {
@@ -604,25 +614,25 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/:path*',
+        source: "/:path*",
         has: [
           {
-            type: 'host',
-            value: 'de.vasion.com',
+            type: "host",
+            value: "de.vasion.com",
           },
         ],
-        destination: 'https://vasion.com/de/:path*',
+        destination: "https://vasion.com/de/:path*",
         permanent: false,
       },
       {
-        source: '/:path*',
+        source: "/:path*",
         has: [
           {
-            type: 'host',
-            value: 'fr.vasion.com',
+            type: "host",
+            value: "fr.vasion.com",
           },
         ],
-        destination: 'https://vasion.com/fr/:path*',
+        destination: "https://vasion.com/fr/:path*",
         permanent: false,
       },
     ];
@@ -630,55 +640,55 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/:path*',
+        source: "/:path*",
         has: [
           {
-            type: 'host',
-            value: 'de.vasion.com',
+            type: "host",
+            value: "de.vasion.com",
           },
         ],
-        destination: '/de/:path*',
+        destination: "/de/:path*",
       },
       {
-        source: '/:path*',
+        source: "/:path*",
         has: [
           {
-            type: 'host',
-            value: 'fr.vasion.com',
+            type: "host",
+            value: "fr.vasion.com",
           },
         ],
-        destination: '/fr/:path*',
+        destination: "/fr/:path*",
       },
     ];
   },
+
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
           {
-            key: 'X-Frame-Options',
-            value: 'ALLOWALL',
+            key: "X-Frame-Options",
+            value: "ALLOWALL",
           },
           {
-            key: 'Content-Security-Policy',
+            key: "Content-Security-Policy",
             value:
               "frame-ancestors 'self' https://app.storyblok.com https://editor.storyblok.com https://m.storyblok.com;",
           },
         ],
       },
       {
-        source: '/api/draft',
+        source: "/api/draft",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'no-store, max-age=0, must-revalidate',
+            key: "Cache-Control",
+            value: "no-store, max-age=0, must-revalidate",
           },
         ],
       },
     ];
   },
-  
 };
 
 module.exports = nextConfig;
