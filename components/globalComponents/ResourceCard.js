@@ -8,6 +8,7 @@ import media from '@/styles/media';
 import { getClick } from '@/functions/navigation';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
+import { usePathname } from 'next/navigation';
 
 const resourceImages = {
   topic: '/images/resources/Pillar-Piece.webp',
@@ -28,30 +29,101 @@ const resourceImages = {
   infographic2: '/images/resources/Infographic.webp',
   infographicMedium: '/images/resources/Infographic-Medium.webp',
   guide1: '/images/resources/Guide-1.webp',
-  guide2: '/images/resources/Guide.webp'
+  guide2: '/images/resources/Guide.webp',
 };
 
-const contentTypeTags = ['white paper', 'customer story', 'guide', 'faq', 'playbook', 'solution brief', 'video', 'topic', 'infographic'];
+const contentTypeTags = [
+  'white paper',
+  'customer story',
+  'guide',
+  'faq',
+  'playbook',
+  'solution brief',
+  'video',
+  'topic',
+  'infographic',
+];
 
 const getRandomImageForType = (type) => {
   const typeImages = {
-    'white paper': [resourceImages.whitePaper1, resourceImages.whitePaper2, resourceImages.whitePaperMedium],
-    'guide': [resourceImages.guide1, resourceImages.guide2],
-    'faq': [resourceImages.faq],
-    'playbook': [resourceImages.playbook1, resourceImages.playbook2, resourceImages.playbook3],
+    'white paper': [
+      resourceImages.whitePaper1,
+      resourceImages.whitePaper2,
+      resourceImages.whitePaperMedium,
+    ],
+    guide: [resourceImages.guide1, resourceImages.guide2],
+    faq: [resourceImages.faq],
+    playbook: [
+      resourceImages.playbook1,
+      resourceImages.playbook2,
+      resourceImages.playbook3,
+    ],
     'solution brief': [resourceImages.solutionBrief],
-    'video': [resourceImages.video1, resourceImages.video2],
-    'topic': [resourceImages.topic],
-    'infographic': [resourceImages.infographic1, resourceImages.infographic2, resourceImages.infographicMedium],
-    'customer story': [resourceImages.caseStudy1, resourceImages.caseStudy2, resourceImages.caseStudy3]
+    video: [resourceImages.video1, resourceImages.video2],
+    topic: [resourceImages.topic],
+    infographic: [
+      resourceImages.infographic1,
+      resourceImages.infographic2,
+      resourceImages.infographicMedium,
+    ],
+    'customer story': [
+      resourceImages.caseStudy1,
+      resourceImages.caseStudy2,
+      resourceImages.caseStudy3,
+    ],
   };
 
   const images = typeImages[type.toLowerCase()] || [];
-  return images[Math.floor(Math.random() * images.length)] || resourceImages.topic;
+  return (
+    images[Math.floor(Math.random() * images.length)] || resourceImages.topic
+  );
 };
 
 const ResourceCard = ({ content, paginated, index, borderradius }) => {
-  // console.log(content.content.page_thumbnail.filename)
+  console.log(content);
+  const pathname = usePathname();
+
+  // Get current locale from pathname
+  const getCurrentLocale = () => {
+    const parts = pathname?.split('/');
+    const localeCandidate = parts[1];
+    const supportedLocales = ['en', 'de', 'fr'];
+    return supportedLocales.includes(localeCandidate) ? localeCandidate : 'en';
+  };
+
+  const currentLocale = getCurrentLocale();
+
+  // Get the translated name for the current locale
+  const getTranslatedName = () => {
+    if (currentLocale === 'en') {
+      return content.name; // Use original name for English
+    }
+
+    if (content.translated_slugs) {
+      const translation = content.translated_slugs.find(
+        (slug) => slug.lang === currentLocale
+      );
+      return translation?.name || content.name; // Fallback to original name if translation not found
+    }
+
+    return content.name; // Fallback to original name
+  };
+
+  // Get the translated button text for the current locale
+  const getTranslatedButtonText = () => {
+    switch (currentLocale) {
+      case 'fr':
+        return 'Lire maintenant';
+      case 'de':
+        return 'Jetzt lesen';
+      default:
+        return 'Read Now';
+    }
+  };
+
+  const displayName = getTranslatedName();
+  const buttonText = getTranslatedButtonText();
+
   const oddImages = [
     '/images/RandomResource1.webp',
     '/images/RandomResource2.webp',
@@ -63,11 +135,11 @@ const ResourceCard = ({ content, paginated, index, borderradius }) => {
     '/images/RandomResource6.webp',
   ];
 
-  const contentTypeTag = content.tag_list?.find(tag => 
+  const contentTypeTag = content.tag_list?.find((tag) =>
     contentTypeTags.includes(tag.toLowerCase())
   );
 
-  const imageToUse = contentTypeTag 
+  const imageToUse = contentTypeTag
     ? getRandomImageForType(contentTypeTag)
     : (index % 2 === 0 ? evenImages : oddImages)[Math.floor(Math.random() * 3)];
 
@@ -83,13 +155,13 @@ const ResourceCard = ({ content, paginated, index, borderradius }) => {
 
       <ContentWrapper>
         {contentTypeTag && <Eyebrow>{contentTypeTag}</Eyebrow>}
-        <Header>{content.name}</Header>
+        <Header>{displayName}</Header>
         {/* {content.Button[0] && (
           <ButtonWrapper>
             <Button $buttonData={content.Button[0]} />
           </ButtonWrapper>
         )} */}
-        <Link href={`/${content.full_slug}`}>Read Now</Link>
+        <Link href={`/${content.full_slug}`}>{buttonText}</Link>
       </ContentWrapper>
     </CardWrapper>
   );

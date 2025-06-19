@@ -83,12 +83,12 @@ const G2BadgesMobile = ({ badges }) => {
           <ProgressValue className="pro-bar" />
         </ProgressBar>
       </ProgessBarsDiv>
-      {mobile && (
+
         <BadgeCounterDiv>
           <BadgeCounter id="badgeCounter">{countRef.current}</BadgeCounter>/
-          {badges.length}
+          {badges.badge_cards.length}
         </BadgeCounterDiv>
-      )}
+   
     </Wrapper>
   );
 };

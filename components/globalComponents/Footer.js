@@ -15,7 +15,7 @@ import LinkedIn from '@/assets/svg/footer/LinkedIn.svg';
 import { storyblokEditable } from '@storyblok/react/rsc';
 
 const Footer = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   const router = useRouter();
   const path = usePathname();
   const [language, setLanguage] = useState('en');
@@ -34,16 +34,16 @@ const Footer = ({ blok }) => {
         ? pathLocale
         : defaultLocale;
       setLanguage(lang);
-      console.log('lang', lang);
+      // console.log('lang', lang);
       if (lang === 'de') {
         setFooterColumns(blok.german_footer_columns);
-        console.log('blok.german_footer_columns', blok.german_footer_columns);
+        // console.log('blok.german_footer_columns', blok.german_footer_columns);
       } else if (lang === 'fr') {
         setFooterColumns(blok.french_footer_columns);
-        console.log('blok.french_footer_columns', blok.french_footer_columns);
+        // console.log('blok.french_footer_columns', blok.french_footer_columns);
       } else {
         setFooterColumns(blok.footer_columns);
-        console.log('blok.footer_columns', blok.footer_columns);
+        // console.log('blok.footer_columns', blok.footer_columns);
       }
     }
 
@@ -73,7 +73,7 @@ const Footer = ({ blok }) => {
     if (canvas) {
     }
   }, []);
-  console.log('footerColumns', footerColumns);
+  // console.log('footerColumns', footerColumns);
 
   const allLinksColumns =
     footerColumns?.map((column) => (

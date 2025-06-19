@@ -20,7 +20,6 @@ export const metadata = {
   },
   description: 'Vasion site',
 };
-//pushing
 
 export default async function RootLayout({ children }) {
   return (
@@ -31,11 +30,11 @@ export default async function RootLayout({ children }) {
           content='9aTxhC978Sh5yhlRXic1mj23gCh4RcexRTfgiwMKbks'
         />
         {/* Google reCAPTCHA */}
-<Script
-  id='recaptcha'
-  strategy='afterInteractive'
-  src='https://www.google.com/recaptcha/api.js'
-/>
+        <Script
+          id='recaptcha'
+          strategy='afterInteractive'
+          src='https://www.google.com/recaptcha/api.js'
+        />
         {/* Marketo Munchkin */}
         <Script
           id='marketo-munchkin'
