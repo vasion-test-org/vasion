@@ -35,6 +35,7 @@ const ReviewsCarousel = ({ blok }) => {
           target: "_blank",
           rel: "noopener noreferrer",
         })}
+        haslink={hasValidLink}
         key={index}
         className="reviewItems"
       >
@@ -439,6 +440,7 @@ const Stars = styled.img`
   }
 `;
 const ReviewItem = styled.a`
+  cursor: ${(props) => (props.haslink ? "pointer" : "default")};
   display: flex;
   flex-direction: column;
   color: ${colors?.white};
