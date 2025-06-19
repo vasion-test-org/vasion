@@ -141,7 +141,11 @@ const BackgroundImage = styled.div`
 
   ${media.mobile} {
     padding: 7.083vw;
-    background: ${(props) => `url(${props.backgroundImage?.[2].filename})`};
+    background: ${(props) =>
+      props.backgroundImage?.[2]?.filename
+        ? `url(${props.backgroundImage[2].filename})`
+        : "none"};
+
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
@@ -168,7 +172,7 @@ const CardBackground = styled.div`
 
   ${media.mobile} {
     width: 89.167vw;
-    height: 89.167vw;
+    height: 100.167vw;
     border-radius: 4.167vw;
   }
 `;
