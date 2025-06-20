@@ -146,7 +146,6 @@ const BackgroundImage = styled.div`
 
   ${media.mobile} {
     padding: 7.083vw;
-
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
