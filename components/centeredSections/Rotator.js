@@ -58,22 +58,21 @@ const Rotator = ({ rotatorData }) => {
       />
     </Tab>
   ));
-  const cardBackgrounds = rotatorData.map((card) =>
-    useMedia(
+
+  const cardMap = rotatorData.map((card, index) => {
+    const cardBg = useMedia(
       card.background_images[0],
       card.background_images[0],
       card?.background_images[1],
       card?.background_images[2] || "unset",
-    ),
-  );
+    );
 
-  const cardMap = rotatorData.map((card, index) => {
     return (
       <BackgroundImage
         id={`rotator-${index}`}
         className="rotator"
         key={`${card.component}-${index}`}
-        backgroundImage={cardBackgrounds?.filename}
+        backgroundImage={cardBg.filename}
       >
         <ContentContainer>
           {card.copy.map((item, index) =>
