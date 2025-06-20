@@ -69,7 +69,7 @@ const OverviewStats = ({ blok }) => {
             src={
               isOpen
                 ? "/images/uiElements/closeVector.webp"
-                : "/images/uiElements/OpenBtn"
+                : "/images/uiElements/OpenBtn.webp"
             }
             alt={isOpen ? "close-btn" : "open-btn"}
             $isopen={isOpen}
@@ -160,7 +160,7 @@ const ImageHeadline = styled.img`
 const CalloutWrapper = styled.div`
   position: relative;
   display: flex;
-
+  height: 100%;
   flex-direction: column;
   background-color: ${colors.lightPurpleGrey};
   width: 16.458vw;
@@ -292,13 +292,14 @@ const ContentWrapper = styled.div`
   align-items: center;
   height: 100%;
   background-color: ${colors.lightPurpleGrey};
-  width: 81.5vw;
+  width: 65.813vw;
   border-radius: 0.556vw;
   padding: 2.222vw 1.389vw;
   gap: 1.389vw;
 
   ${media.fullWidth} {
     width: 1304px;
+    width: 1053px;
     border-radius: 8px;
     padding: 32px 20px;
     gap: 20px;
@@ -327,7 +328,9 @@ const Wrapper = styled.div`
   justify-self: center;
   gap: 23px;
   width: 100%;
+  padding-top: 3.75vw;
   ${media.fullWidth} {
+    padding-top: 60px;
     width: 100%;
     gap: 23px;
   }
