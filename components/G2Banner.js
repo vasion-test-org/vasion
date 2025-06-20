@@ -1,51 +1,41 @@
 "use client";
 import React from "react";
 import styled, { ThemeProvider } from "styled-components";
+import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import media from "@/styles/media";
 import colors from "@/styles/colors";
 import text from "@/styles/text";
 
-const G2Banner = () => {
+const G2Banner = ({ blok }) => {
+  const headerContent = blok.copy_section?.[0]?.copy ? (
+    <RichTextRenderer document={blok.copy_section[0].copy} />
+  ) : (
+    "The #1 Print Management Software on G2"
+  );
+  const spotlightImage = blok.assets?.[0];
+  const supportingBadges = blok.assets?.slice(1) || [];
+
   return (
     <Background>
       <Wrapper>
-        <Heading>The #1 Print Management Software on G2</Heading>
+        <Heading>{headerContent}</Heading>
         <FlexContainer>
-          <SpotLightImage
-            loading="lazy"
-            alt="spotlight Image"
-            src="/images/G2/23/summer/SpotlightBadge.webp"
-          />
+          {spotlightImage && (
+            <SpotLightImage
+              loading="lazy"
+              alt={spotlightImage.alt || "G2 Spotlight Badge"}
+              src={spotlightImage.filename}
+            />
+          )}
           <BadgeContainer>
-            <SupportingBadge
-              loading="lazy"
-              alt="highest"
-              src="/images/G2/23/summer/BestRelationship.webp"
-            />
-            <SupportingBadge
-              alt="results"
-              src="/images/G2/23/summer/BestResults.webp"
-            />
-            <SupportingBadge
-              loading="lazy"
-              alt="momentum"
-              src="/images/G2/23/summer/BestSupport.webp"
-            />
-            <SupportingBadge
-              loading="lazy"
-              alt="implement"
-              src="/images/G2/23/summer/BestUsability.webp"
-            />
-            <SupportingBadge
-              loading="lazy"
-              alt="usability"
-              src="/images/G2/23/summer/MomentumLeader.webp"
-            />
-            <SupportingBadge
-              loading="lazy"
-              alt="relationship"
-              src="/images/G2/23/summer/MostImplementable.webp"
-            />
+            {supportingBadges.map((badge, index) => (
+              <SupportingBadge
+                key={badge.id || index}
+                loading="lazy"
+                alt={badge.alt || `G2 Badge ${index + 1}`}
+                src={badge.filename}
+              />
+            ))}
           </BadgeContainer>
         </FlexContainer>
       </Wrapper>
@@ -59,7 +49,6 @@ const Background = styled.div`
   background-color: ${colors.primaryPurple};
   width: 100%;
   padding: 5.556vw 0vw;
-
   ${media.fullWidth} {
     padding: 80px 0px;
     width: 100%;
@@ -73,12 +62,12 @@ const Background = styled.div`
     padding: 9.346vw 0vw;
   }
 `;
+
 const Heading = styled.h2`
   color: ${colors.white};
   ${text.h3};
   font-weight: 700;
   padding-bottom: 2.083vw;
-
   ${media.fullWidth} {
     padding-bottom: 30px;
   }
@@ -90,12 +79,12 @@ const Heading = styled.h2`
     text-align: center;
   }
 `;
+
 const FlexContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 4.861vw;
-
   ${media.fullWidth} {
     gap: 70px;
   }
@@ -109,13 +98,13 @@ const FlexContainer = styled.div`
     gap: 5.607vw;
   }
 `;
+
 const BadgeContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 26.486vw;
   gap: 2.431vw;
-
   ${media.fullWidth} {
     width: 367px;
     gap: 35px;
@@ -129,6 +118,7 @@ const BadgeContainer = styled.div`
     width: 73.196vw;
   }
 `;
+
 const SpotLightImage = styled.img`
   width: 23.056vw;
   ${media.fullWidth} {
@@ -141,9 +131,9 @@ const SpotLightImage = styled.img`
     width: 77.57vw;
   }
 `;
+
 const SupportingBadge = styled.img`
   width: 6.875vw;
-
   ${media.fullWidth} {
     width: 99px;
   }
@@ -154,6 +144,7 @@ const SupportingBadge = styled.img`
     width: 23.131vw;
   }
 `;
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;

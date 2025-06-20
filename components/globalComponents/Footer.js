@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import VasionStarSVG from '@/assets/svg/VasionStarBig.svg';
 import VasionSmall from '@/assets/svg/SmallVasion.svg';
 import colors from '@/styles/colors';
@@ -15,8 +15,43 @@ import LinkedIn from '@/assets/svg/footer/LinkedIn.svg';
 import { storyblokEditable } from '@storyblok/react/rsc';
 
 const Footer = ({ blok }) => {
-  // console.log(blok);
+  console.log(blok);
   const router = useRouter();
+  const path = usePathname();
+  const [language, setLanguage] = useState('en');
+  const [footerColumns, setFooterColumns] = useState(
+    blok.footer_columns
+  );
+
+  useEffect(() => {
+    function checkPathLocale(url) {
+      const { pathname } = new URL(url, 'https://vasion.com');
+      const pathLocale = pathname.split('/')[1];
+      const supportedLocales = ['en', 'fr', 'de'];
+      const defaultLocale = 'en';
+
+      const lang = supportedLocales.includes(pathLocale)
+        ? pathLocale
+        : defaultLocale;
+      setLanguage(lang);
+      console.log('lang', lang);
+      if (lang === 'de') {
+        setFooterColumns(blok.german_footer_columns);
+        console.log('blok.german_footer_columns', blok.german_footer_columns);
+      } else if (lang === 'fr') {
+        setFooterColumns(blok.french_footer_columns);
+        console.log('blok.french_footer_columns', blok.french_footer_columns);
+      } else {
+        setFooterColumns(blok.footer_columns);
+        console.log('blok.footer_columns', blok.footer_columns);
+      }
+    }
+
+    if (path) {
+      checkPathLocale(path);
+    }
+  }, [path, blok]);
+
   useEffect(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -38,9 +73,10 @@ const Footer = ({ blok }) => {
     if (canvas) {
     }
   }, []);
+  console.log('footerColumns', footerColumns);
 
   const allLinksColumns =
-    blok?.footer_columns?.map((column) => (
+    footerColumns?.map((column) => (
       <LinkColumn key={column._uid}>
         <LinkColumnHeader>
           {column.column_header?.content?.[0]?.content?.[0]?.text || ''}
@@ -448,7 +484,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0.00) 100%), linear-gradient(270deg, #CC4800 1.74%, #5F47A8 99.26%), #201435;
+  background: linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%),
+    linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
   height: 88.806vw;
   gap: 3.611vw;
   bottom: 0;

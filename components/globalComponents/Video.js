@@ -1,14 +1,17 @@
 "use client";
-
 import React from "react";
 import ReactPlayer from "react-player";
 import styled from "styled-components";
 import media from "@/styles/media";
 import useMedia from "@/functions/useMedia";
 
-const Video = ({ videos, borderradius, filename, thumbnails }) => {
-  // console.log("thumbnails", thumbnails);
-
+const Video = ({
+  videos,
+  borderradius,
+  filename,
+  thumbnails,
+  isSideBySideVideo = false,
+}) => {
   let videoSrc = filename
     ? filename
     : useMedia(
@@ -18,42 +21,40 @@ const Video = ({ videos, borderradius, filename, thumbnails }) => {
         videos?.[2]?.filename || videos?.[0]?.filename,
       );
 
-  // console.log('videoSrc:', videoSrc); // Debugging video source
-
   if (!videoSrc) return null;
 
   return (
-    <VideoWrapper borderradius={borderradius}>
+    <VideoWrapper
+      borderradius={borderradius}
+      isSideBySideVideo={isSideBySideVideo}
+    >
       <ReactPlayer
         url={videoSrc}
-        controls
         width="100%"
         height="100%"
-        playing={false}
-        light={thumbnails[0]?.filename}
+        controls={true}
+        light={thumbnails?.[0]?.filename}
+        playsinline={true}
       />
     </VideoWrapper>
   );
 };
 
 const VideoWrapper = styled.div`
-  width: 67.75vw;
-  height: 38vw;
+  width: ${(props) => (props.isSideBySideVideo ? "32vw" : "67.75vw")};
+  height: ${(props) => (props.isSideBySideVideo ? "24vw" : "38vw")};
   max-width: 100%;
   border-radius: ${(props) => `${props.borderradius || 0}px`};
   overflow: hidden;
-
   ${media.fullWidth} {
-    width: 1084px;
-    height: 608px;
+    width: ${(props) => (props.isSideBySideVideo ? "512px" : "1084px")};
+    height: ${(props) => (props.isSideBySideVideo ? "384px" : "608px")};
     border-radius: ${(props) => `${props.borderradius || 0}px`};
   }
-
   ${media.tablet} {
-    width: 92.188vw;
-    height: 51.758vw;
+    width: ${(props) => (props.isSideBySideVideo ? "44.531vw" : "92.188vw")};
+    height: ${(props) => (props.isSideBySideVideo ? "33.398vw" : "51.758vw")};
   }
-
   ${media.mobile} {
     width: 89.167vw;
     height: 50vw;

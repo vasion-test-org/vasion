@@ -334,6 +334,33 @@ const Nav = ({ blok }) => {
     };
   }, [navReady]);
 
+  // Add new useEffect to close dropdowns on route changes
+  useEffect(() => {
+    if (!navReady) return;
+
+    const closeDropdownsOnRouteChange = () => {
+      gsap.to('.dropdowns', {
+        autoAlpha: 0,
+        duration: 0.35,
+      });
+    };
+
+    // Close dropdowns when path changes
+    closeDropdownsOnRouteChange();
+
+    // Also close dropdowns when clicking any nav link
+    const navLinks = document.querySelectorAll('.dropdowns a');
+    navLinks.forEach((link) => {
+      link.addEventListener('click', closeDropdownsOnRouteChange);
+    });
+
+    return () => {
+      navLinks.forEach((link) => {
+        link.removeEventListener('click', closeDropdownsOnRouteChange);
+      });
+    };
+  }, [path, navReady]); // Add path as a dependency to trigger on route changes
+
   useEffect(() => {
     const handleGlobeHover = () => {
       gsap.to('#languageItemsContainer', { width: '100%' });
@@ -665,8 +692,13 @@ const Banner = styled.div`
 `;
 
 const TopNav = styled.nav`
-  background-image: url('images/TopBar.png');
-  background-color: ${colors.darkPurple};
+  background: linear-gradient(
+      90deg,
+      #cc4800 0.11%,
+      #5f47a8 38.75%,
+      rgba(126, 95, 221, 0) 71.55%
+    ),
+    #201435;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -678,8 +710,6 @@ const TopNav = styled.nav`
   z-index: 10;
 
   ${media.fullWidth} {
-    background-image: unset;
-    background-color: ${colors.darkPurple};
     padding: 0px 148px;
     height: 40px;
   }
@@ -959,7 +989,7 @@ const Dropdown = styled.div`
 
   ${media.tablet} {
     position: fixed;
-    top: 4.199vw;
+    top: 6.1vw;
     left: 0;
     right: 0;
     margin: 0 auto;

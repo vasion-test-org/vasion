@@ -7,6 +7,7 @@ import styled from "styled-components";
 import media from "@/styles/media";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import LogoCube from "@/components/LogoCube";
+import Video from "@/components/globalComponents/Video";
 import { usePathname } from "next/navigation";
 import Button from "../globalComponents/Button";
 import Form from "../Form";
@@ -14,7 +15,12 @@ import ContactCard from "../globalComponents/ContactCard";
 import OverviewController from "../overview/OverviewController";
 import SmallQuote from "components/SmallQuote";
 
-const ComponentRenderer = ({ blok, extra_copy }) => {
+const ComponentRenderer = ({
+  blok,
+  extra_copy,
+  isSideBySideAsset,
+  isSideBySideVideo,
+}) => {
   if (!blok) return null;
   const copycomponents = [
     "body_copy",
@@ -25,7 +31,6 @@ const ComponentRenderer = ({ blok, extra_copy }) => {
     "overview_controller",
     "small_quote",
   ];
-  // console.log(blok);
 
   const pathname = usePathname();
   const isFrench = pathname.startsWith("/fr");
@@ -70,8 +75,11 @@ const ComponentRenderer = ({ blok, extra_copy }) => {
   switch (blok.component) {
     case "assets":
       return (
-        <AssetContainer>
-          <ImageWrapper {...storyblokEditable(blok)}>
+        <AssetContainer $isSideBySideAsset={isSideBySideAsset}>
+          <ImageWrapper
+            $isSideBySideAsset={isSideBySideAsset}
+            {...storyblokEditable(blok)}
+          >
             <Image images={blok.media} borderradius={blok.border_radius} />
           </ImageWrapper>
           {extra_copy && (
@@ -89,9 +97,18 @@ const ComponentRenderer = ({ blok, extra_copy }) => {
           )}
         </AssetContainer>
       );
+    case "video_assets":
+      return (
+        <Video
+          videos={blok.media}
+          thumbnails={blok.thumbnails}
+          borderradius={blok.border_radius}
+          isSideBySideVideo={isSideBySideVideo}
+        />
+      );
     case "copy_block":
       return (
-        <CopyDiv className='preformContent nondemo'>
+        <CopyDiv className="preformContent nondemo">
           {blok?.copy_block_sections?.map((item, index) => (
             <BlockWrapper key={index} {...storyblokEditable(item)}>
               {copycomponents.includes(item.component) ? (
@@ -128,36 +145,42 @@ const AssetContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.25vw;
-  width: 32vw;
+  width: ${(props) => (props.$isSideBySideAsset ? "38.875vw" : "32vw")};
+  height: "auto";
 
   ${media.fullWidth} {
-    width: 512px;
+    width: ${(props) => (props.$isSideBySideAsset ? "622px" : "512px")};
     gap: 20px;
   }
 
   ${media.tablet} {
-    width: 44.531vw;
+    width: ${(props) => (props.$isSideBySideAsset ? "622px" : "44.531vw")};
     gap: 1.953vw;
   }
 
   ${media.mobile} {
     min-width: 100%;
+    width: ${(props) => (props.$isSideBySideAsset ? "100%" : "100%")};
+    height: ${(props) => (props.$isSideBySideAsset ? "auto" : "auto")};
     gap: 4.167vw;
   }
 `;
 const ImageWrapper = styled.div`
-  width: 32vw;
+  width: ${(props) => (props.$isSideBySideAsset ? "38.875vw" : "32vw")};
+  height: auto;
 
   ${media.fullWidth} {
-    width: 512px;
+    width: ${(props) => (props.$isSideBySideAsset ? "622px" : "512px")};
   }
 
   ${media.tablet} {
-    width: 44.531vw;
+    width: ${(props) => (props.$isSideBySideAsset ? "44.141vw" : "44.531vw")};
   }
 
   ${media.mobile} {
     min-width: 100%;
+    width: ${(props) => (props.$isSideBySideAsset ? "100%" : "100%")};
+    height: ${(props) => (props.$isSideBySideAsset ? "auto" : "auto")};
   }
 `;
 const SectionWrapper = styled.section`

@@ -16,7 +16,7 @@ const CardModal = ({ data, setShowModal }) => {
     "/images/uiElements/closeButton.webp",
   );
   const videoWidth = useMedia("1440px", "89.6vw", "89vw", "87.85vw");
-  const videoHeight = useMedia("690px", "51.25vw", "51vw", "49.299vw");
+  const videoHeight = useMedia("100%", "100%", "51vw", "49.299vw");
   const combinedStyledHeight = useMedia("500px", "51.25vw", "51vw", "49.299vw");
   const hasBio = data?.person?.length > 0;
 
@@ -172,16 +172,17 @@ const CardModal = ({ data, setShowModal }) => {
 };
 
 export default CardModal;
+
 const VideoContainer = styled.div`
   overflow: hidden;
   border-radius: 0.75vw;
-  height: 32vw;
+  height: ${(props) => (props?.hasbio ? "32vw" : "50vw")};
   margin-top: ${(props) => (props?.hasbio ? "unset" : "3.125vw")};
 
   ${media.fullWidth} {
     border-radius: 12px;
     margin-top: ${(props) => (props?.hasbio ? "unset" : "50px")};
-    height: auto;
+    height: ${(props) => (props?.hasbio ? "auto" : "100%")};
   }
   ${media.tablet} {
     margin-top: ${(props) => (props?.hasbio ? "unset" : "7.152vw")};

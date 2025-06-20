@@ -2,6 +2,7 @@ import { pxToVw } from "@/functions/functions";
 import colors from "./colors";
 
 export const defaultTheme = {
+
   customer_success: {
     bg: "#F5F4F7",
   },
@@ -118,6 +119,10 @@ export const darkTheme = {
 };
 
 export const lightTheme = {
+  side_by_side: {
+    textColor: "#1B1D21",
+    bg: "#E5DFF8",
+  },
   cta: {
     textColor: "#1B1D21",
     cardBg: "#F5F4F7",
