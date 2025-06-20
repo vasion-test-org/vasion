@@ -25,7 +25,6 @@ const ReviewsCarousel = ({ blok }) => {
     ? [...statsList, ...statsList, ...statsList]
     : [];
   const dragReviews = clonedReviews.map((rev, index) => {
-    console.log("LOGGED HERE", rev);
     const hasValidLink = rev.link?.[0]?.link_url?.url;
 
     return (
