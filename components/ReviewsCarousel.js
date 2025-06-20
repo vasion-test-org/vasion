@@ -29,7 +29,7 @@ const ReviewsCarousel = ({ blok }) => {
     // console.log(rev);
     return (
       <ReviewItem
-        href={rev.link[0].link_url.url}
+        href={rev.link[0]?.link_url?.url}
         target={"_blank"}
         rel={"noopener noreferrer"}
         key={index}
@@ -40,8 +40,8 @@ const ReviewsCarousel = ({ blok }) => {
           <RichTextRenderer document={rev?.body_copy} />
         </div>
         <RedditTextContainer>
-          <div {...storyblokEditable(rev.link[0].link_text)}>
-            <RedditText> {rev.link[0].link_text}</RedditText>
+          <div {...storyblokEditable(rev.link[0]?.link_text)}>
+            <RedditText> {rev.link[0]?.link_text}</RedditText>
           </div>
           <RedditOpener
             src="/images/RedditNewTab.webp"

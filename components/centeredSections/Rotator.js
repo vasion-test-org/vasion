@@ -121,7 +121,7 @@ const BackgroundImage = styled.div`
   background-repeat: no-repeat;
 
   ${media.fullWidth} {
-    background: ${(props) => `url(${props.backgroundImage?.[0].filename})`};
+    background: ${(props) => `url(${props.backgroundImage?.[0]?.filename})`};
     background-size: 100% 100%;
     background-repeat: no-repeat;
 
@@ -130,14 +130,14 @@ const BackgroundImage = styled.div`
 
   ${media.tablet} {
     padding: 4.492vw;
-    background: ${(props) => `url(${props.backgroundImage?.[1].filename})`};
+    background: ${(props) => `url(${props.backgroundImage?.[1]?.filename})`};
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
 
   ${media.mobile} {
     padding: 7.083vw;
-    background: ${(props) => `url(${props.backgroundImage?.[2].filename})`};
+    background: ${(props) => `url(${props.backgroundImage?.[2]?.filename})`};
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
