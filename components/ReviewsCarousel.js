@@ -24,14 +24,18 @@ const ReviewsCarousel = ({ blok }) => {
   const clonedStats = hasStats
     ? [...statsList, ...statsList, ...statsList]
     : [];
-
   const dragReviews = clonedReviews.map((rev, index) => {
-    // console.log(rev);
+    console.log("LOGGED HERE", rev);
+    const hasValidLink = rev.link?.[0]?.link_url?.url;
+
     return (
       <ReviewItem
-        href={rev.link[0].link_url.url}
-        target={"_blank"}
-        rel={"noopener noreferrer"}
+        {...(hasValidLink && {
+          href: rev.link[0].link_url.url,
+          target: "_blank",
+          rel: "noopener noreferrer",
+        })}
+        haslink={hasValidLink}
         key={index}
         className="reviewItems"
       >
@@ -39,14 +43,24 @@ const ReviewsCarousel = ({ blok }) => {
         <div {...storyblokEditable(rev)}>
           <RichTextRenderer document={rev?.body_copy} />
         </div>
+        {rev?.body_copy_attribution && (
+          <AttributionDiv>
+            <RichTextRenderer document={rev.body_copy_attribution} />
+          </AttributionDiv>
+        )}
+
         <RedditTextContainer>
-          <div {...storyblokEditable(rev.link[0].link_text)}>
-            <RedditText> {rev.link[0].link_text}</RedditText>
-          </div>
-          <RedditOpener
-            src="/images/RedditNewTab.webp"
-            alt={"compose-new-tab"}
-          />
+          {hasValidLink && (
+            <>
+              <div {...storyblokEditable(rev.link[0].link_text)}>
+                <RedditText> {rev.link[0].link_text}</RedditText>
+              </div>
+              <RedditOpener
+                src="/images/RedditNewTab.webp"
+                alt={"compose-new-tab"}
+              />
+            </>
+          )}
         </RedditTextContainer>
       </ReviewItem>
     );
@@ -132,6 +146,14 @@ const ReviewsCarousel = ({ blok }) => {
 };
 
 export default ReviewsCarousel;
+
+const AttributionDiv = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+`;
 const RedditOpener = styled.img`
   width: 1.25vw;
   height: 1.25vw;
@@ -418,6 +440,7 @@ const Stars = styled.img`
   }
 `;
 const ReviewItem = styled.a`
+  cursor: ${(props) => (props.haslink ? "pointer" : "default")};
   display: flex;
   flex-direction: column;
   color: ${colors?.white};
