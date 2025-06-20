@@ -126,7 +126,8 @@ const BackgroundImage = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: ${(props) => props.backgroundImage || colors.purpleTag};
+  background: ${(props) =>
+    props.backgroundImage ? `url(${props.backgroundImage})` : colors.purpleTag};
   background-size: 100% 100%;
   background-repeat: no-repeat;
 
