@@ -614,6 +614,12 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/spring-launch-2025/",
+        destination: "/launches/spring-launch-2025/",
+        permanent: true,
+      },
+
+      {
         source: "/:path*",
         has: [
           {
@@ -648,6 +654,16 @@ const nextConfig = {
           },
         ],
         destination: "/de/:path*",
+      },
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "fr.vasion.com",
+          },
+        ],
+        destination: "/fr/:path*",
       },
       {
         source: "/:path*",

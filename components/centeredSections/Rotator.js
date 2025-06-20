@@ -8,6 +8,7 @@ import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import colors from "@/styles/colors";
 import ComponentRenderer from "../renderers/ComponentRenderer";
 import gsap from "gsap";
+import useMedia from "@/functions/useMedia";
 
 const Rotator = ({ rotatorData }) => {
   // console.log(rotatorData)
@@ -58,28 +59,37 @@ const Rotator = ({ rotatorData }) => {
     </Tab>
   ));
 
-  const cardMap = rotatorData.map((card, index) => (
-    <BackgroundImage
-      id={`rotator-${index}`}
-      className="rotator"
-      key={`${card.component}-${index}`}
-      backgroundImage={card.background_images}
-    >
-      <ContentContainer>
-        {card.copy.map((item, index) =>
-          copycomponents.includes(item.component) ? (
-            <RichTextRenderer
-              key={`card-richtext-${index}`}
-              document={item.copy}
-              blok={item}
-            />
-          ) : (
-            <ComponentRenderer key={`component-${index}`} blok={item} />
-          ),
-        )}
-      </ContentContainer>
-    </BackgroundImage>
-  ));
+  const cardMap = rotatorData.map((card, index) => {
+    const cardBg = useMedia(
+      card.background_images[0],
+      card.background_images[0],
+      card?.background_images[1],
+      card?.background_images[2] || "unset",
+    );
+
+    return (
+      <BackgroundImage
+        id={`rotator-${index}`}
+        className="rotator"
+        key={`${card.component}-${index}`}
+        backgroundImage={cardBg.filename}
+      >
+        <ContentContainer>
+          {card.copy.map((item, index) =>
+            copycomponents.includes(item.component) ? (
+              <RichTextRenderer
+                key={`card-richtext-${index}`}
+                document={item.copy}
+                blok={item}
+              />
+            ) : (
+              <ComponentRenderer key={`component-${index}`} blok={item} />
+            ),
+          )}
+        </ContentContainer>
+      </BackgroundImage>
+    );
+  });
   return (
     <Wrapper>
       <Tabs>{tabMap}</Tabs>
@@ -116,12 +126,12 @@ const BackgroundImage = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: ${(props) => `url(${props.backgroundImage?.[0].filename})`};
+  background: ${(props) =>
+    props.backgroundImage ? `url(${props.backgroundImage})` : colors.purpleTag};
   background-size: 100% 100%;
   background-repeat: no-repeat;
 
   ${media.fullWidth} {
-    background: ${(props) => `url(${props.backgroundImage?.[0]?.filename})`};
     background-size: 100% 100%;
     background-repeat: no-repeat;
 
@@ -130,14 +140,12 @@ const BackgroundImage = styled.div`
 
   ${media.tablet} {
     padding: 4.492vw;
-    background: ${(props) => `url(${props.backgroundImage?.[1]?.filename})`};
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
 
   ${media.mobile} {
     padding: 7.083vw;
-    background: ${(props) => `url(${props.backgroundImage?.[2]?.filename})`};
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
@@ -164,7 +172,7 @@ const CardBackground = styled.div`
 
   ${media.mobile} {
     width: 89.167vw;
-    height: 89.167vw;
+    height: 100.167vw;
     border-radius: 4.167vw;
   }
 `;
