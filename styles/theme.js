@@ -69,6 +69,7 @@ export const defaultTheme = {
   },
   two_column_list: {
     bg: `#FFFFFF`,
+    textColor: `#1B1D21`,
   },
 };
 
@@ -120,6 +121,7 @@ export const darkTheme = {
   },
   two_column_list: {
     bg: `#F5F4F7`,
+    textColor: `#1B1D21`,
   },
 };
 
