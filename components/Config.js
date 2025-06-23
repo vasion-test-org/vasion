@@ -8,10 +8,12 @@ import styled from 'styled-components';
 import media from '@/styles/media';
 import { usePathname } from 'next/navigation';
 import { getStoryblokApi } from '@/lib/storyblok';
+import { usePageData } from '@/context/PageDataContext';
 
 const Config = ({ blok, children }) => {
   const pathname = usePathname();
   const [configData, setConfigData] = useState(null);
+  const { pageData } = usePageData();
 
   const getLocaleFromPath = () => {
     const parts = pathname?.split('/');
@@ -33,25 +35,31 @@ const Config = ({ blok, children }) => {
 
     fetchConfig();
   }, [pathname]);
+
+  const shouldHideNav = pageData?.content?.hide_nav === true;
+  const shouldHideFooter = pageData?.content?.hide_footer === true;
+
   return (
     <>
-      {configData && (
+      {configData && !shouldHideNav && (
         <NavWrapper>
           <Nav blok={configData.nav?.[0]} />
         </NavWrapper>
       )}
 
-      {configData && (
+      {configData && !shouldHideNav && (
         <MobileNavWrapper>
           <MobileNav blok={configData.nav?.[0]} />
         </MobileNavWrapper>
       )}
-      
+
       <ChildrenVisibilityWrapper $visible={!!configData}>
         {children}
       </ChildrenVisibilityWrapper>
 
-      {configData && <Footer blok={configData.footer?.[0]} />}
+      {configData && !shouldHideFooter && (
+        <Footer blok={configData.footer?.[0]} />
+      )}
     </>
   );
 };

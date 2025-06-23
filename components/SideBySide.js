@@ -220,11 +220,12 @@ const SideBySideWrapper = styled.div`
   color: ${(props) =>
     props.card ? 'inherit' : props.theme.side_by_side.textColor};
 
-  > * {
-    margin-top: ${(props) => (props.asset_form ? '-6vw' : 'unset')};
+  /* Apply negative margin only to form components */
+  > .form-component {
+    margin-top: ${(props) => (props.asset_form ? '-12.5vw' : 'unset')};
 
     ${media.fullWidth} {
-      margin-top: ${(props) => (props.asset_form ? '-96px' : 'unset')};
+      margin-top: ${(props) => (props.asset_form ? '-200px' : 'unset')};
     }
 
     ${media.tablet} {
@@ -232,8 +233,13 @@ const SideBySideWrapper = styled.div`
     }
 
     ${media.mobile} {
-      width: 78.333vw;
       margin-top: ${(props) => (props.asset_form ? 'unset' : 'unset')};
+    }
+  }
+
+  > * {
+    ${media.mobile} {
+      width: 78.333vw;
     }
   }
 

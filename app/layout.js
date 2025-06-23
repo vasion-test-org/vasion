@@ -1,6 +1,7 @@
 import StoryblokProvider from '@/components/StoryblokProvider';
 import { ThemeProviderWrapper } from '@/context/ThemeContext';
 import { ThankYouProvider } from '@/context/ThankYouContext';
+import { PageDataProvider } from '@/context/PageDataContext';
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
 import FormTracking from '@/components/FormTracking';
 import Script from 'next/script';
@@ -31,11 +32,11 @@ export default async function RootLayout({ children }) {
           content='9aTxhC978Sh5yhlRXic1mj23gCh4RcexRTfgiwMKbks'
         />
         {/* Google reCAPTCHA */}
-<Script
-  id='recaptcha'
-  strategy='afterInteractive'
-  src='https://www.google.com/recaptcha/api.js'
-/>
+        <Script
+          id='recaptcha'
+          strategy='afterInteractive'
+          src='https://www.google.com/recaptcha/api.js'
+        />
         {/* Marketo Munchkin */}
         <Script
           id='marketo-munchkin'
@@ -208,13 +209,15 @@ export default async function RootLayout({ children }) {
             <StyledComponentsRegistry>
               <Providers>
                 <ThankYouProvider>
-                  <FormTracking />
-                  <ScrollSmootherWrapper>
-                    <Config>
-                      {children}
-                      <Analytics />
-                    </Config>
-                  </ScrollSmootherWrapper>
+                  <PageDataProvider>
+                    <FormTracking />
+                    <ScrollSmootherWrapper>
+                      <Config>
+                        {children}
+                        <Analytics />
+                      </Config>
+                    </ScrollSmootherWrapper>
+                  </PageDataProvider>
                 </ThankYouProvider>
               </Providers>
             </StyledComponentsRegistry>
