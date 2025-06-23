@@ -2,7 +2,6 @@ import { pxToVw } from "@/functions/functions";
 import colors from "./colors";
 
 export const defaultTheme = {
-
   customer_success: {
     bg: "#F5F4F7",
   },
@@ -68,6 +67,9 @@ export const defaultTheme = {
     bg: "#3D2562",
     text_color: "#FFFFFF",
   },
+  two_column_list: {
+    bg: `#FFFFFF`,
+  },
 };
 
 export const darkTheme = {
@@ -116,6 +118,9 @@ export const darkTheme = {
     bg: "#3D2562",
     text_color: "#FFFFFF",
   },
+  two_column_list: {
+    bg: `#F5F4F7`,
+  },
 };
 
 export const lightTheme = {
@@ -134,6 +139,9 @@ export const lightTheme = {
   comparison_table: {
     bg: "#F5F4F7",
     text_color: "#1B1D21",
+  },
+  two_coloumn_list: {
+    bg: `#FFFFFF`,
   },
 };
 
