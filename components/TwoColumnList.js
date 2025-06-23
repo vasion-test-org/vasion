@@ -195,7 +195,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 2.5vw;
-
+  color: ${(props) => props.theme.two_column_list.textColor};
   padding: ${(props) => {
     if (props.spacingOffset === "top") {
       return props.spacing === "default"
