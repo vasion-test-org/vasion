@@ -9,6 +9,7 @@ import { getClick } from '@/functions/navigation';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
 import { usePathname } from 'next/navigation';
+import NextLink from 'next/link';
 
 const resourceImages = {
   topic: '/images/resources/Pillar-Piece.webp',
@@ -43,6 +44,50 @@ const contentTypeTags = [
   'topic',
   'infographic',
 ];
+
+// Translation mapping for content type tags
+const getTranslatedTag = (tag, locale) => {
+  const tagTranslations = {
+    'white paper': {
+      de: 'Whitepaper',
+      fr: 'Livre blanc',
+    },
+    'customer story': {
+      de: 'Kundenbericht',
+      fr: 'Témoignage client',
+    },
+    guide: {
+      de: 'Leitfaden',
+      fr: 'Guide',
+    },
+    faq: {
+      de: 'FAQ',
+      fr: 'FAQ',
+    },
+    playbook: {
+      de: 'Playbook',
+      fr: 'Guide pratique',
+    },
+    'solution brief': {
+      de: 'Lösungsübersicht',
+      fr: 'Aperçu de solution',
+    },
+    video: {
+      de: 'Video',
+      fr: 'Vidéo',
+    },
+    topic: {
+      de: 'Thema',
+      fr: 'Sujet',
+    },
+    infographic: {
+      de: 'Infografik',
+      fr: 'Infographie',
+    },
+  };
+
+  return tagTranslations[tag.toLowerCase()]?.[locale] || tag;
+};
 
 const getRandomImageForType = (type) => {
   const typeImages = {
@@ -139,37 +184,84 @@ const ResourceCard = ({ content, paginated, index, borderradius }) => {
     contentTypeTags.includes(tag.toLowerCase())
   );
 
+  const translatedTag = contentTypeTag
+    ? getTranslatedTag(contentTypeTag, currentLocale)
+    : null;
+
   const imageToUse = contentTypeTag
     ? getRandomImageForType(contentTypeTag)
     : (index % 2 === 0 ? evenImages : oddImages)[Math.floor(Math.random() * 3)];
 
-  return (
-    <CardWrapper paginated={paginated}>
-      <ImageWrapper>
-        <Image
-          imageAlt={content.Image?.alt || 'Resource Image'}
-          filename={content?.content?.page_thumbnail?.filename || imageToUse}
-          borderradius={borderradius || content.image_border}
-        />
-      </ImageWrapper>
+  // Build the URL with proper locale routing
+  const buildUrl = () => {
+    const rawUrl = content.full_slug || '';
+    const isExternal =
+      rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
 
-      <ContentWrapper>
-        {contentTypeTag && <Eyebrow>{contentTypeTag}</Eyebrow>}
-        <Header>{displayName}</Header>
-        {/* {content.Button[0] && (
-          <ButtonWrapper>
-            <Button $buttonData={content.Button[0]} />
-          </ButtonWrapper>
-        )} */}
-        <Link href={`/${content.full_slug}`}>{buttonText}</Link>
-      </ContentWrapper>
-    </CardWrapper>
+    if (isExternal) {
+      return rawUrl;
+    }
+
+    const supportedLocales = ['en', 'fr', 'de'];
+    const rawPathParts = rawUrl.split('/').filter(Boolean);
+    const alreadyHasLocale = supportedLocales.includes(rawPathParts[0]);
+
+    const normalizedUrl = `/${
+      alreadyHasLocale ? '' : currentLocale === 'en' ? '' : currentLocale
+    }/${rawUrl}`.replace(/\/+/g, '/');
+    return normalizedUrl;
+  };
+
+  const cardUrl = buildUrl();
+
+  return (
+    <StyledNextLink href={cardUrl} passHref>
+      <CardWrapper paginated={paginated}>
+        <ImageWrapper>
+          <Image
+            imageAlt={content.Image?.alt || 'Resource Image'}
+            filename={content?.content?.page_thumbnail?.filename || imageToUse}
+            borderradius={borderradius || content.image_border}
+          />
+        </ImageWrapper>
+
+        <ContentWrapper>
+          {translatedTag && <Eyebrow>{translatedTag}</Eyebrow>}
+          <Header>{displayName}</Header>
+          {/* {content.Button[0] && (
+            <ButtonWrapper>
+              <Button $buttonData={content.Button[0]} />
+            </ButtonWrapper>
+          )} */}
+          <Link>{buttonText}</Link>
+        </ContentWrapper>
+      </CardWrapper>
+    </StyledNextLink>
   );
 };
 
 export default ResourceCard;
 
-const Link = styled.a`
+const StyledNextLink = styled(NextLink)`
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: clamp(21.875vw, 100%, 25.5vw);
+
+  ${media.fullWidth} {
+    width: clamp(350px, 100%, 408px);
+  }
+
+  ${media.tablet} {
+    width: clamp(29.102vw, 100%, 44.922vw);
+  }
+
+  ${media.mobile} {
+    width: clamp(89.167vw, 100%, 89.167vw);
+  }
+`;
+
+const Link = styled.span`
   ${text.bodySm};
   color: ${colors.primaryOrange};
 `;
