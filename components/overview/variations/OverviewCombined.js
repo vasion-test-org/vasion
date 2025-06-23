@@ -148,7 +148,6 @@ const StatItem = styled.div`
   display: flex;
   flex-direction: column;
   width: fit-content;
-  flex-wrap: wrap;
   gap: 0.25vw;
 
   ${media.fullWidth} {
@@ -171,7 +170,6 @@ const StatItemsContainer = styled.div`
   display: flex;
   gap: 3.75vw;
   width: 100%;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
 
