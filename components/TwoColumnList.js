@@ -1,12 +1,15 @@
 "use client";
 import React from "react";
 
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { storyblokEditable } from "@storyblok/react/rsc";
 import media from "styles/media";
+import { useAvailableThemes } from "@/context/ThemeContext";
+
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 const TwoColumnList = ({ blok }) => {
-  // console.log(blok);
+  const themes = useAvailableThemes();
+  const selectedTheme = themes[blok.theme] || themes.default;
 
   const introMap = blok?.intro_content?.map((item) => (
     <RichTextRenderer document={item.copy} />
@@ -43,17 +46,19 @@ const TwoColumnList = ({ blok }) => {
 
   // console.log('column 2',column2)
   return (
-    <Wrapper
-      spacingOffset={blok.offset_spacing}
-      spacing={blok.section_spacing}
-      {...storyblokEditable(blok)}
-    >
-      <IntroContent alignment={blok.alignment}>{introMap}</IntroContent>
-      <Columns comparison={blok.comparison}>
-        <Column doublecolumn={column2.length < 0}>{column1}</Column>
-        {column2.length > 0 && <Column>{column2}</Column>}
-      </Columns>
-    </Wrapper>
+    <ThemeProvider theme={selectedTheme}>
+      <Wrapper
+        spacingOffset={blok.offset_spacing}
+        spacing={blok.section_spacing}
+        {...storyblokEditable(blok)}
+      >
+        <IntroContent alignment={blok.alignment}>{introMap}</IntroContent>
+        <Columns comparison={blok.comparison}>
+          <Column doublecolumn={column2.length < 0}>{column1}</Column>
+          {column2.length > 0 && <Column>{column2}</Column>}
+        </Columns>
+      </Wrapper>
+    </ThemeProvider>
   );
 };
 
@@ -185,11 +190,12 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  background: ${(props) => props.theme.two_column_list.bg};
   justify-self: center;
   align-items: center;
   justify-content: center;
   gap: 2.5vw;
-
+  color: ${(props) => props.theme.two_column_list.textColor};
   padding: ${(props) => {
     if (props.spacingOffset === "top") {
       return props.spacing === "default"
