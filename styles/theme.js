@@ -145,6 +145,10 @@ export const lightTheme = {
   two_coloumn_list: {
     bg: `#FFFFFF`,
   },
+  centered: {
+    bg: `#F5F4F7`,
+    card_bg: `#ffffffff`,
+  },
 };
 
 export const buttonThemes = {
