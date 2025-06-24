@@ -23,6 +23,7 @@ import { ScreenContext } from "@/components/providers/Screen";
 import LogosGallery from "@/components/centeredSections/LogosGallery";
 
 const CenteredSection = ({ blok }) => {
+  console.log("CENTERED SECTION", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { mobile } = useContext(ScreenContext);
@@ -60,12 +61,14 @@ const CenteredSection = ({ blok }) => {
           <AttachedComponent>
             {blok.component_type === "media" &&
               blok?.media[0].component === "assets" && (
-                <MediaWrapper {...storyblokEditable(blok.media)}>
-                  <Image
-                    images={blok.media?.[0]?.media}
-                    borderradius={blok.media?.[0]?.border_radius}
-                  />
-                </MediaWrapper>
+                <CustomSizing custom_size={blok.smaller_assets}>
+                  <MediaWrapper {...storyblokEditable(blok.media)}>
+                    <Image
+                      images={blok.media?.[0]?.media}
+                      borderradius={blok.media?.[0]?.border_radius}
+                    />
+                  </MediaWrapper>
+                </CustomSizing>
               )}
 
             {blok.component_type === "media" &&
@@ -149,6 +152,21 @@ const AttachedComponent = styled.div`
     margin: 8.333vw 0;
   }
 `;
+const CustomSizing = styled.div`
+  display: flex;
+  width: ${(props) => (props.custom_size ? "38.875vw " : "unset")};
+  height: auto;
+
+  ${media.fullWidth} {
+    width: ${(props) => (props.custom_size ? "622px " : "unset")};
+  }
+  ${media.tablet} {
+    width: ${(props) => (props.custom_size ? "49.609vw " : "unset")};
+  }
+  ${media.mobile} {
+    width: ${(props) => (props.custom_size ? "89.167vw " : "unset")};
+  }
+`;
 const MediaWrapper = styled.div`
   max-width: 67.75vw;
 
@@ -162,6 +180,7 @@ const MediaWrapper = styled.div`
 
   ${media.mobile} {
     max-width: 89.167vw;
+    align-self: centered;
   }
 `;
 const ContentWrapper = styled.div`

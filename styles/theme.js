@@ -26,7 +26,7 @@ export const defaultTheme = {
     textColor: "#1B1D21",
     bg: "#F5F4F7",
   },
-  logoCube: {
+  logo_cube: {
     textColor: "#ffffff",
     cardBg: "#3D2562",
   },
@@ -86,7 +86,7 @@ export const darkTheme = {
     textColor: "#ffffff",
     bg: "linear-gradient(180deg, #583F99 0%, #3D2562 100%)",
   },
-  logoCube: {
+  logo_cube: {
     textColor: "#ffffff",
     cardBg: "#190C30",
   },
@@ -134,9 +134,9 @@ export const lightTheme = {
     textColor: "#1B1D21",
     cardBg: "#F5F4F7",
   },
-  logoCube: {
+  logo_cube: {
     textColor: "#1B1D21",
-    cardBg: "#ffffff",
+    cardBg: "#F5F4F7",
   },
   comparison_table: {
     bg: "#F5F4F7",
