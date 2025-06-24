@@ -112,6 +112,7 @@ const CardContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   background: ${(props) =>
     props.transparent ? "transparent" : props.theme.logo_cube.cardBg};
   color: ${(props) => props.theme.logo_cube.textColor};
