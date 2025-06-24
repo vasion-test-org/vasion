@@ -8,8 +8,6 @@ import media from "@/styles/media";
 // import colors from 'styles/colors';
 // import text from 'styles/text';
 const Cards = ({ cardData }) => {
-  console.log("CENTERED:", cardData.theme);
-
   return (
     <CardsContainer>
       {cardData.map((card, index) => (

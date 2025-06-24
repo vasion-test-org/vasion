@@ -91,14 +91,15 @@ const Combined = ({ blok }) => {
           )}
           <StatItemsContainer>{statlist}</StatItemsContainer>
         </StatBlock>
+
         {blok?.link?.link_text && (
           <Button
             {...storyblokEditable(blok?.link)}
             $buttonData={{
               theme: "orange_link",
-              link_url: { url: blok.link.link_url },
+              link_url: blok.link.link_url,
               link_text: blok?.link.link_text,
-              link_size: "small",
+              link_size: "medium",
             }}
           />
         )}
@@ -254,22 +255,21 @@ const Divider = styled.div`
 
 //Quote Component
 const QuoteSideImg = styled.img`
-  width: 22.222vw;
-  height: 6.222vw;
-
+  width: 19.375vw;
+  height: 3.875vw;
   ${media.fullWidth} {
-    width: 320px;
-    height: 99px;
+    width: 310px;
+    height: 62px;
   }
 
   ${media.tablet} {
-    width: 33.25vw;
-    height: 10.156vw;
+    width: 31.25vw;
+    height: 7.52vw;
   }
 
   ${media.mobile} {
-    width: 74.766vw;
-    height: 20.299vw;
+    width: 64.583vw;
+    height: 13.125vw;
   }
 `;
 const Attribution = styled.div`

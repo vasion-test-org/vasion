@@ -46,9 +46,9 @@ const LogoCube = ({ blok }) => {
         spacing={blok.section_spacing}
       >
         <CardContainer transparent={blok.transparent_background}>
-          {blok.header && 
+          {blok.header && (
             <RichTextRenderer document={blok.header} blok={blok} />
-          }
+          )}
           <LogoContainer transparent={blok.transparent_background}>
             {allLogos}
           </LogoContainer>
@@ -112,9 +112,10 @@ const CardContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   background: ${(props) =>
-    props.transparent ? "transparent" : props.theme.logoCube.cardBg};
-  color: ${(props) => props.theme.logoCube.textColor};
+    props.transparent ? "transparent" : props.theme.logo_cube.cardBg};
+  color: ${(props) => props.theme.logo_cube.textColor};
   overflow: hidden;
   width: ${(props) => (props.transparent ? "100%" : "81.5vw")};
   border-radius: 1.5vw;
