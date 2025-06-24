@@ -10,7 +10,6 @@ import Parenthesis from "@/assets/svg/Parenthesis.svg";
 import { storyblokEditable } from "@storyblok/react/rsc";
 
 const Combined = ({ blok }) => {
-  console.log("COMBINED", blok);
   const statlist = blok?.stats?.stat_list?.map((item) => {
     return (
       <StatItem key={item._uid} {...storyblokEditable(item)}>

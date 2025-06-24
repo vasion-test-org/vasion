@@ -23,7 +23,6 @@ import { ScreenContext } from "@/components/providers/Screen";
 import LogosGallery from "@/components/centeredSections/LogosGallery";
 
 const CenteredSection = ({ blok }) => {
-  console.log("CENTERED SECTION", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { mobile } = useContext(ScreenContext);
