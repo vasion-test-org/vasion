@@ -11,8 +11,8 @@ const TwoColumnList = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
-  const introMap = blok?.intro_content?.map((item) => (
-    <RichTextRenderer document={item.copy} />
+  const introMap = blok?.intro_content?.map((item, index) => (
+    <RichTextRenderer document={item.copy} key={index} />
   ));
 
   const column1 = blok?.column_1?.map((item, index) => (
@@ -21,8 +21,8 @@ const TwoColumnList = ({ blok }) => {
         <ItemIcon small_icons={blok.small_icons} src={item.icon.filename} />
       )}
       <ColumnCopy>
-        {item?.copy?.map((item) => (
-          <RichTextRenderer document={item.copy} />
+        {item?.copy?.map((item, columnIndex) => (
+          <RichTextRenderer document={item.copy} key={columnIndex} />
         ))}
       </ColumnCopy>
     </ColumnItem>

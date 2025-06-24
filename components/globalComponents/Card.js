@@ -9,7 +9,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const Card = ({ content, paginated, borderradius }) => {
-  console.log(content);
   const pathname = usePathname();
   const buttonData = content.Button?.[0];
   const isEmail = buttonData?.link_url?.email;
@@ -135,6 +134,7 @@ const CardWrapper = styled.div`
   padding: 0.5vw;
   gap: 1vw;
   border-radius: 1vw;
+  background: ${(props) => props.theme.centered.card_bg};
   box-shadow:
     0vw 0vw 0.063vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.125vw 0.25vw 0vw rgba(25, 29, 30, 0.16);
