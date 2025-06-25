@@ -54,6 +54,16 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/cpa/",
+        destination: "/print/printer-apps/",
+        permanent: true,
+      },
+      {
+        source: "/content-management/",
+        destination: "/automate/content-management/",
+        permanent: true,
+      },
+      {
         source:
           "/blog/news-release-lamar-cisd-eliminates-print-servers-across-school-district-with-printerlogic/",
         destination: "/print/",
