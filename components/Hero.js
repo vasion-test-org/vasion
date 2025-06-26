@@ -13,6 +13,31 @@ import LogoCube from "./LogoCube";
 import LightboxBtn from "@/components/LightboxButton";
 import { useRouter } from "next/navigation";
 
+const getBackgroundStyle = (customTheme) => {
+  if (!customTheme) return null;
+
+  if (
+    customTheme.background_type === "image" &&
+    customTheme.background_media?.length
+  ) {
+    const backgroundImage = customTheme.background_media[0];
+    return {
+      type: "image",
+      url: backgroundImage.filename,
+      hasOverlay: true,
+    };
+  }
+
+  if (customTheme.background_color?.value) {
+    return {
+      type: "color",
+      color: customTheme.background_color.value,
+    };
+  }
+
+  return null;
+};
+
 const Hero = ({ blok }) => {
   const router = useRouter();
   const themes = useAvailableThemes();
@@ -21,6 +46,8 @@ const Hero = ({ blok }) => {
   if (!blok.custom_theme_builder) {
     customTheme = undefined;
   }
+
+  const backgroundStyle = getBackgroundStyle(customTheme);
 
   const handleNavigate = (link) => {
     const isExternalLink = link.startsWith("http") || link.startsWith("https");
@@ -31,10 +58,9 @@ const Hero = ({ blok }) => {
     }
   };
 
-  // console.log(blok.centered_image);
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
-      <HeroBGWrapper>
+      <HeroBGWrapper backgroundStyle={backgroundStyle}>
         <HeroWrapper
           layout={blok.hero_layout}
           gap={blok.gap}
@@ -227,6 +253,7 @@ const ReviewButtons = styled.div`
     right: 8.191vw;
   }
 `;
+
 const SocailLogo = styled.img`
   width: 2.222vw;
   height: 2.222vw;
@@ -245,9 +272,11 @@ const SocailLogo = styled.img`
     height: 6.667vw;
   }
 `;
+
 const SocialLink = styled.a`
   text-decoration: none;
 `;
+
 const SocialLogoContainer = styled.div`
   display: flex;
   align-items: center;
@@ -265,6 +294,7 @@ const SocialLogoContainer = styled.div`
     gap: 2.917vw;
   }
 `;
+
 const SocialCTA = styled.div`
   display: flex;
   flex-direction: column;
@@ -300,6 +330,7 @@ const ImageWrapper = styled.div`
     min-width: 100%;
   }
 `;
+
 const ButtonRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -323,6 +354,7 @@ const ButtonRow = styled.div`
     margin-top: ${(props) => (props.socials ? "unset" : "6.667vw")};
   }
 `;
+
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -513,7 +545,44 @@ const HeroBGWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: ${(props) =>
-    props.theme.customtheme?.background_color?.value || props.theme.hero.bg};
+  position: relative;
+
+  /* Handle background based on type */
+  ${(props) => {
+    if (props.backgroundStyle?.type === "image") {
+      return `
+        background: url(${props.backgroundStyle.url}) center/cover no-repeat;
+        background-attachment: fixed;
+        
+        /* Add overlay for better text readability */
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.2);
+          z-index: 1;
+        }
+        
+        /* Ensure content appears above overlay */
+        > * {
+          position: relative;
+          z-index: 2;
+        }
+        
+        /* Remove background attachment on mobile for better performance */
+        ${media.mobile} {
+          background-attachment: scroll;
+        }
+      `;
+    } else if (props.backgroundStyle?.type === "color") {
+      return `background: ${props.backgroundStyle.color};`;
+    } else {
+      return `background: ${props.theme.hero.bg};`;
+    }
+  }}
 `;
+
 export default Hero;

@@ -139,7 +139,6 @@ const Nav = ({ blok }) => {
                   <ColumnHeader>{column.column_header}</ColumnHeader>
                 )}
                 {column.nav_items.map((navItem, itemIdx) => {
-                  console.log(navItem);
                   const formattedIconString = navItem.icon.replace(/\s+/g, "");
                   const IconComponent = Icons[formattedIconString] || null;
 
