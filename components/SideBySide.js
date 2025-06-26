@@ -221,10 +221,10 @@ const SideBySideWrapper = styled.div`
 
   /* Apply negative margin only to form components */
   > .form-component {
-    margin-top: ${(props) => (props.asset_form ? "-12.5vw" : "unset")};
+    margin-top: ${(props) => (props.asset_form ? "-7.5vw" : "unset")};
 
     ${media.fullWidth} {
-      margin-top: ${(props) => (props.asset_form ? "-200px" : "unset")};
+      margin-top: ${(props) => (props.asset_form ? "-150px" : "unset")};
     }
 
     ${media.tablet} {
