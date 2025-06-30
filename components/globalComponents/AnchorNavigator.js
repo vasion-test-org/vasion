@@ -20,7 +20,7 @@ const AnchorNavigator = ({ blok }) => {
   const [anchorList, setAnchorList] = useState([]);
   const formattedIconString = blok?.page_icon?.replace(/\s+/g, '');
   const IconComponent = Icons[formattedIconString] || null;
-// console.log(IconComponent)
+  // console.log(IconComponent)
   useEffect(() => {
     const updateAnchors = () => {
       const allAnchors = Array.from(
@@ -67,7 +67,7 @@ const AnchorNavigator = ({ blok }) => {
       </AnchorButton>
     );
   });
- 
+
   return (
     <ThemeProvider theme={selectedTheme}>
       <AnchorWrapper className='anchorNav'>
