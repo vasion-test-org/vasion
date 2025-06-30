@@ -119,6 +119,10 @@ export const darkTheme = {
 };
 
 export const lightTheme = {
+  centered: {
+    textColor: "#ffffff",
+    bg: "#F5F4F7",
+  },
   side_by_side: {
     textColor: "#1B1D21",
     bg: "#E5DFF8",
