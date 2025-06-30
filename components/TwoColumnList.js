@@ -1,25 +1,28 @@
 "use client";
 import React from "react";
 
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { storyblokEditable } from "@storyblok/react/rsc";
 import media from "styles/media";
+import { useAvailableThemes } from "@/context/ThemeContext";
+
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 const TwoColumnList = ({ blok }) => {
-  // console.log(blok);
+  const themes = useAvailableThemes();
+  const selectedTheme = themes[blok.theme] || themes.default;
 
-  const introMap = blok?.intro_content?.map((item) => (
-    <RichTextRenderer document={item.copy} />
+  const introMap = blok?.intro_content?.map((item, index) => (
+    <RichTextRenderer document={item.copy} key={index} />
   ));
 
   const column1 = blok?.column_1?.map((item, index) => (
     <ColumnItem key={`col1-item-${index}`}>
       {item?.icon?.filename && (
-        <ItemIcon small_icons={blok.small_icons} src={item.icon.filename} />
+        <ItemIcon small_icons={item.small_icon} src={item.icon.filename} />
       )}
       <ColumnCopy>
-        {item?.copy?.map((item) => (
-          <RichTextRenderer document={item.copy} />
+        {item?.copy?.map((item, columnIndex) => (
+          <RichTextRenderer document={item.copy} key={columnIndex} />
         ))}
       </ColumnCopy>
     </ColumnItem>
@@ -28,7 +31,7 @@ const TwoColumnList = ({ blok }) => {
   const column2 = blok?.column_2?.map((item, index) => (
     <ColumnItem key={`col2-item-${index}`}>
       {item?.icon?.filename && (
-        <ItemIcon small_icons={blok?.small_icons} src={item?.icon?.filename} />
+        <ItemIcon small_icons={item?.small_icon} src={item?.icon?.filename} />
       )}
       <ColumnCopy>
         {item?.copy?.map((copyItem, copyIndex) => (
@@ -43,17 +46,20 @@ const TwoColumnList = ({ blok }) => {
 
   // console.log('column 2',column2)
   return (
-    <Wrapper
-      spacingOffset={blok.offset_spacing}
-      spacing={blok.section_spacing}
-      {...storyblokEditable(blok)}
+    <ComponentWrapper
+      spacingOffset={blok.spacing_offset}
+      spacing={blok.spacing}
     >
-      <IntroContent alignment={blok.alignment}>{introMap}</IntroContent>
-      <Columns comparison={blok.comparison}>
-        <Column doublecolumn={column2.length < 0}>{column1}</Column>
-        {column2.length > 0 && <Column>{column2}</Column>}
-      </Columns>
-    </Wrapper>
+      <ThemeProvider theme={selectedTheme}>
+        <Wrapper {...storyblokEditable(blok)}>
+          <IntroContent alignment={blok.alignment}>{introMap}</IntroContent>
+          <ColumnContainer comparison={blok.comparison}>
+            <Column doublecolumn={column2.length < 0}>{column1}</Column>
+            {column2.length > 0 && <Column>{column2}</Column>}
+          </ColumnContainer>
+        </Wrapper>
+      </ThemeProvider>
+    </ComponentWrapper>
   );
 };
 
@@ -96,6 +102,7 @@ const ItemIcon = styled.img`
 `;
 const ColumnItem = styled.div`
   display: flex;
+  align-items: center;
   flex-direction: row;
   gap: 0.75vw;
 
@@ -108,50 +115,53 @@ const ColumnItem = styled.div`
   }
 
   ${media.mobile} {
-    flex-direction: column;
-    gap: 2.5vw;
+    align-items: unset;
+    gap: 1.5vw;
   }
 `;
 const Column = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2.5vw;
+  gap: 1.25vw;
   width: ${(props) => (props.doublecolumn ? "39.938vw" : "100%")};
 
   ${media.fullWidth} {
-    gap: 40px;
+    gap: 20px;
     width: ${(props) => (props.doublecolumn ? "639px" : "100%")};
   }
 
   ${media.tablet} {
-    gap: 3.906vw;
+    gap: 1.953vw;
     width: ${(props) => (props.doublecolumn ? "45.313vw" : "100%")};
   }
 
   ${media.mobile} {
-    gap: 8.333vw;
+    gap: 4.167vw;
     width: ${(props) => (props.doublecolumn ? "83.333vw" : "100%")};
   }
 `;
-const Columns = styled.div`
+const ColumnContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1.625vw;
+  margin-left: 21.875vw;
   width: ${(props) => (props.comparison ? "max-content" : "81.5vw")};
 
   ${media.fullWidth} {
     gap: 26px;
     width: ${(props) => (props.comparison ? "max-content" : "1304px")};
+    margin-left: 350px;
   }
 
   ${media.tablet} {
     gap: 1.563vw;
     width: ${(props) => (props.comparison ? "max-content" : "92.188vw")};
+    margin-left: 18vw;
   }
 
   ${media.mobile} {
     flex-direction: column;
-    gap: unset;
+    gap: 8.167vw;
     width: ${(props) => (props.comparison ? "max-content" : "89.167vw")};
   }
 `;
@@ -185,11 +195,30 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  background: ${(props) => props.theme.two_column_list.bg};
   justify-self: center;
   align-items: center;
   justify-content: center;
   gap: 2.5vw;
+  color: ${(props) => props.theme.two_column_list.textColor};
+  padding: 5vw 0vw;
 
+  ${media.fullWidth} {
+    gap: 40px;
+    padding: 80px 0px;
+  }
+
+  ${media.tablet} {
+    gap: 3.906vw;
+    padding: 5.859vw 0vw;
+  }
+
+  ${media.mobile} {
+    gap: 8.333vw;
+    padding: 8.333vw 0vw;
+  }
+`;
+const ComponentWrapper = styled.div`
   padding: ${(props) => {
     if (props.spacingOffset === "top") {
       return props.spacing === "default"
@@ -213,7 +242,6 @@ const Wrapper = styled.div`
   }};
 
   ${media.fullWidth} {
-    gap: 40px;
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
         return props.spacing === "default"
@@ -238,7 +266,6 @@ const Wrapper = styled.div`
   }
 
   ${media.tablet} {
-    gap: 3.906vw;
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
         return props.spacing === "default"
@@ -263,7 +290,6 @@ const Wrapper = styled.div`
   }
 
   ${media.mobile} {
-    gap: 8.333vw;
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
         return props.spacing === "default"
@@ -285,6 +311,6 @@ const Wrapper = styled.div`
           ? `${props.spacing}px 0`
           : "12.5vw 0";
     }};
-  }
+
 `;
 export default TwoColumnList;
