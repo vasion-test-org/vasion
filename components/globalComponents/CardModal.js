@@ -5,7 +5,7 @@ import styled from "styled-components";
 import media from "styles/media";
 import colors from "styles/colors";
 import text from "styles/text";
-import ReactPlayer from "react-player/youtube";
+import ReactPlayer from "react-player";
 import useMedia from "@/functions/useMedia";
 import RichTextRenderer from "../renderers/RichTextRenderer";
 import Video from "./Video";
