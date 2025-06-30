@@ -74,54 +74,47 @@ const FeaturedTestimonials = ({ blok }) => {
     };
   }, [blok]);
 
-  const featured = blok?.testimonials?.map(
-    (item, index) => (
-      console.log("Featured", item),
-      (
-        <FeaturedItem
-          {...storyblokEditable(item)}
-          key={index}
-          href={item?.link?.url}
-          ref={(el) => (itemsRef.current[index] = el)}
-          onMouseOver={() => handleMouseEnter(index)}
-          onMouseLeave={handleMouseLeave}
-        >
-          <ImageContainer>
-            <Tag {...storyblokEditable(item)}>
-              <RichTextRenderer document={item?.tag} />
-            </Tag>
-            <LogoImage src={item?.asset.filename} alt={item?.image?.alt} />
-          </ImageContainer>
-          <BlocksDiv>
-            <TitleAndBody>
-              <Headline {...storyblokEditable(item)}>
-                <RichTextRenderer document={item.copy_sections[0].copy} />
-              </Headline>
-              <Body {...storyblokEditable(item)}>
-                <RichTextRenderer
-                  document={item.copy_sections[1].copy}
-                  responsiveTextStyles={
-                    item.copy_sections[1].responsive_text_styles
-                  }
-                />
-              </Body>
-            </TitleAndBody>
+  const featured = blok?.testimonials?.map((item, index) => (
+    <FeaturedItem
+      {...storyblokEditable(item)}
+      key={index}
+      href={item?.link?.url}
+      ref={(el) => (itemsRef.current[index] = el)}
+      onMouseOver={() => handleMouseEnter(index)}
+      onMouseLeave={handleMouseLeave}
+    >
+      <ImageContainer>
+        <Tag {...storyblokEditable(item)}>
+          <RichTextRenderer document={item?.tag} />
+        </Tag>
+        <LogoImage src={item?.asset.filename} alt={item?.image?.alt} />
+      </ImageContainer>
+      <BlocksDiv>
+        <TitleAndBody>
+          <Headline {...storyblokEditable(item)}>
+            <RichTextRenderer document={item.copy_sections[0].copy} />
+          </Headline>
+          <Body {...storyblokEditable(item)}>
             <RichTextRenderer
-              document={item.copy_sections[2].copy}
+              document={item.copy_sections[1].copy}
               responsiveTextStyles={
-                item.copy_sections[2].responsive_text_styles
+                item.copy_sections[1].responsive_text_styles
               }
             />
-          </BlocksDiv>
-          <GoTo
-            className="goto-arrow"
-            src={"/images/uiElements/GoToActive.webp"}
-            alt={"Arrow To Link"}
-          />
-        </FeaturedItem>
-      )
-    ),
-  );
+          </Body>
+        </TitleAndBody>
+        <RichTextRenderer
+          document={item.copy_sections[2].copy}
+          responsiveTextStyles={item.copy_sections[2].responsive_text_styles}
+        />
+      </BlocksDiv>
+      <GoTo
+        className="goto-arrow"
+        src={"/images/uiElements/GoToActive.webp"}
+        alt={"Arrow To Link"}
+      />
+    </FeaturedItem>
+  ));
 
   const renderBlock = (item, index) => (
     <BlockItem

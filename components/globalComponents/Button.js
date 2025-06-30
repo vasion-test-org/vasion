@@ -1,12 +1,12 @@
-'use client';
-import React, {useEffect} from 'react';
-import styled, { ThemeProvider } from 'styled-components';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import text from '@/styles/text';
-import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
-import media from '@/styles/media';
+"use client";
+import React, { useEffect } from "react";
+import styled, { ThemeProvider } from "styled-components";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useAvailableThemes } from "@/context/ThemeContext";
+import text from "@/styles/text";
+import LinkArrowSVG from "@/assets/svg/LinkArrow.svg";
+import media from "@/styles/media";
 
 const Button = ({ $buttonData, stretch }) => {
   // console.log('$buttonData', $buttonData);
@@ -21,33 +21,39 @@ const Button = ({ $buttonData, stretch }) => {
   const isEmail = $buttonData?.link_url?.email;
   const rawHref = isEmail
     ? `mailto:${$buttonData?.link_url.email}`
-    : $buttonData?.link_url?.cached_url || '#';
+    : $buttonData?.link_url?.cached_url || "#";
 
   const target = $buttonData?.link_url?.target;
-  const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
+  const rel = target === "_blank" ? "noopener noreferrer" : undefined;
 
-  const isExternal = rawHref.startsWith('http');
-  const alreadyLocalized = rawHref.startsWith('/de') || rawHref.startsWith('/fr') || rawHref.startsWith('/en');
+  const isExternal = rawHref.startsWith("http");
+  const alreadyLocalized =
+    rawHref.startsWith("/de") ||
+    rawHref.startsWith("/fr") ||
+    rawHref.startsWith("/en");
 
-  const slugParts = pathname.split('/').filter(Boolean);
-  const currentLocale = ['de', 'fr'].includes(slugParts[0]) ? slugParts[0] : null;
+  const slugParts = pathname.split("/").filter(Boolean);
+  const currentLocale = ["de", "fr"].includes(slugParts[0])
+    ? slugParts[0]
+    : null;
 
-  const normalizedUrl = isEmail || isExternal || alreadyLocalized
-    ? rawHref
-    : `/${currentLocale ?? ''}/${rawHref}`.replace(/\/+/g, '/');
+  const normalizedUrl =
+    isEmail || isExternal || alreadyLocalized
+      ? rawHref
+      : `/${currentLocale ?? ""}/${rawHref}`.replace(/\/+/g, "/");
 
   return (
     <ButtonWrapper layout={$buttonData?.layout} size={$buttonData?.link_size}>
       <ThemeProvider theme={selectedTheme}>
-        {target !== '_blank' ? (
+        {target !== "_blank" ? (
           <NextLink href={normalizedUrl} passHref>
             <StyledSpan stretch={stretch}>{$buttonData?.link_text}</StyledSpan>
-            {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
+            {$buttonData?.theme.includes("link") && <StyledLinkArrow />}
           </NextLink>
         ) : (
           <StyledLink href={normalizedUrl} target={target} rel={rel}>
             {$buttonData?.link_text}
-            {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
+            {$buttonData?.theme.includes("link") && <StyledLinkArrow />}
           </StyledLink>
         )}
       </ThemeProvider>
@@ -93,7 +99,7 @@ const StyledSpan = styled.p`
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  min-width: ${(props) => props.stretch ? '100%' : 'auto'};
+  min-width: ${(props) => (props.stretch ? "100%" : "auto")};
   width: auto;
   gap: 0.5vw;
   padding: ${(props) => props.theme.padding};
@@ -136,11 +142,11 @@ const StyledLink = styled.a`
   ${media.fullWidth} {
     gap: 8px;
   }
-  
+
   ${media.tablet} {
     gap: 0.781vw;
   }
-  
+
   ${media.mobile} {
     gap: 1.667vw;
   }
@@ -150,17 +156,17 @@ const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: ${(props) => props.layout || 'row'};
+  flex-direction: ${(props) => props.layout || "row"};
   gap: 1.5vw;
 
   ${(props) =>
-    props.size === 'small'
+    props.size === "small"
       ? text.bodySm
-      : props.size === 'large'
-      ? text.bodyLg
-      : props.size === 'tiny'
-      ? text.tagLight
-      : text.bodyMd};
+      : props.size === "large"
+        ? text.bodyLg
+        : props.size === "tiny"
+          ? text.tagLight
+          : text.bodyMd};
 
   width: max-content;
 `;

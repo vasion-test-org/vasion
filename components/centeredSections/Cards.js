@@ -8,7 +8,6 @@ import media from "@/styles/media";
 // import colors from 'styles/colors';
 // import text from 'styles/text';
 const Cards = ({ cardData }) => {
-  // console.log(cardData)
   return (
     <CardsContainer>
       {cardData.map((card, index) => (
@@ -27,7 +26,6 @@ const CardsContainer = styled.div`
   justify-content: center;
   gap: 2.5vw;
   width: 95.125vw;
-
   ${media.fullWidth} {
     gap: 40px;
     width: 1522px;
@@ -43,4 +41,3 @@ const CardsContainer = styled.div`
     width: 89.167vw;
   }
 `;
-

@@ -2,6 +2,7 @@ import { StoryblokStory } from '@storyblok/react/rsc';
 import { notFound } from 'next/navigation';
 import { getStoryblokApi } from '@/lib/storyblok';
 import { headers } from 'next/headers';
+import PageDataUpdater from '@/components/PageDataUpdater';
 export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
@@ -102,6 +103,7 @@ export default async function DynamicPage({ params }) {
 
   return (
     <div>
+      <PageDataUpdater story={story} />
       <StoryblokStory story={story} />
     </div>
   );
