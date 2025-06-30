@@ -213,7 +213,7 @@ const SideBySideWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: ${(props) => (props.extra_copy ? "start" : "center")};
   text-align: left;
   background: ${(props) =>
     props.card ? "transparent" : props.theme.side_by_side.bg};
