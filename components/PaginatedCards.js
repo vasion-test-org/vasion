@@ -43,8 +43,21 @@ const PaginatedCards = ({ blok }) => {
     }
   };
 
+  // Get the translated search placeholder text for the current locale
+  const getTranslatedSearchPlaceholder = () => {
+    switch (currentLocale) {
+      case 'fr':
+        return 'Rechercher par titre...';
+      case 'de':
+        return 'Nach Titel suchen...';
+      default:
+        return 'Search by title...';
+    }
+  };
+
   const previousText = getTranslatedNavigationText('previous');
   const nextText = getTranslatedNavigationText('next');
+  const searchPlaceholder = getTranslatedSearchPlaceholder();
 
   const currentIndex = useRef(0);
   const cardsLoop = useRef(null);
@@ -676,7 +689,7 @@ const PaginatedCards = ({ blok }) => {
             <SearchBar>
               <SearchInput
                 type='text'
-                placeholder='Search by title...'
+                placeholder={searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
