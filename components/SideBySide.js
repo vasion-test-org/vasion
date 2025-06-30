@@ -193,6 +193,7 @@ const CardWrapper = styled.div`
     border-radius: 24px;
     padding: ${(props) => (props.card ? "60px" : "60px")};
   }
+
   ${media.tablet} {
     width: 92.188vw;
     border-radius: 2.344vw;
