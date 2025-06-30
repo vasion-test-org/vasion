@@ -14,42 +14,118 @@ import colors from '@/styles/colors';
 import text from '@/styles/text';
 import ResourceCard from './globalComponents/ResourceCard';
 import ChrevronDown from '@/assets/svg/selectDownChevron.svg';
+import { usePathname } from 'next/navigation';
 
 const PaginatedCards = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
+  const pathname = usePathname();
+
+  // Get current locale from pathname
+  const getCurrentLocale = () => {
+    const parts = pathname?.split('/');
+    const localeCandidate = parts[1];
+    const supportedLocales = ['en', 'de', 'fr'];
+    return supportedLocales.includes(localeCandidate) ? localeCandidate : 'en';
+  };
+
+  const currentLocale = getCurrentLocale();
+
+  // Get the translated navigation text for the current locale
+  const getTranslatedNavigationText = (type) => {
+    switch (currentLocale) {
+      case 'fr':
+        return type === 'previous' ? 'Précédent' : 'Suivant';
+      case 'de':
+        return type === 'previous' ? 'Zurück' : 'Weiter';
+      default:
+        return type === 'previous' ? 'Previous' : 'Next';
+    }
+  };
+
+  // Get the translated search placeholder text for the current locale
+  const getTranslatedSearchPlaceholder = () => {
+    switch (currentLocale) {
+      case 'fr':
+        return 'Rechercher par titre...';
+      case 'de':
+        return 'Nach Titel suchen...';
+      default:
+        return 'Search by title...';
+    }
+  };
+
+  const previousText = getTranslatedNavigationText('previous');
+  const nextText = getTranslatedNavigationText('next');
+  const searchPlaceholder = getTranslatedSearchPlaceholder();
 
   const currentIndex = useRef(0);
   const cardsLoop = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilters, setSelectedFilters] = useState([]);
-   const solutionsTags = ['print automation', 'serverless printing', 'digital transformation', 'security & compliance', 'output automation', 'cost management', 'process automation', 'paperless process', 'sustainability'];
-  const productTags = ['capture', 'workflow', 'signature', 'print', 'content management', 'storage', 'reporting', 'templates', 'admin', 'output automation', 'advanced security', 'cost management'];
-  const contentTypeTags = ['white paper', 'customer story', 'guide', 'FAQ', 'playbook', 'solution brief', 'video', 'topic'];
+  const solutionsTags = [
+    'print automation',
+    'serverless printing',
+    'digital transformation',
+    'security & compliance',
+    'output automation',
+    'cost management',
+    'process automation',
+    'paperless process',
+    'sustainability',
+  ];
+  const productTags = [
+    'capture',
+    'workflow',
+    'signature',
+    'print',
+    'content management',
+    'storage',
+    'reporting',
+    'templates',
+    'admin',
+    'output automation',
+    'advanced security',
+    'cost management',
+  ];
+  const contentTypeTags = [
+    'white paper',
+    'customer story',
+    'guide',
+    'FAQ',
+    'playbook',
+    'solution brief',
+    'video',
+    'topic',
+  ];
   const industryTags = ['healthcare'];
-  const newsTags = ['media mentions', 'videos'] 
-// console.log(blok.cards)
+  const newsTags = ['media mentions', 'videos'];
+  // console.log(blok.cards)
 
   const filteredCards = blok.cards.filter((card) => {
-    const headerContent = Array.isArray(card?.content) 
-      ? card.content.find(item => item.component === 'header')
+    const headerContent = Array.isArray(card?.content)
+      ? card.content.find((item) => item.component === 'header')
       : null;
-    const cardTitle = headerContent?.copy?.content?.[0]?.content?.[0]?.text || '';
-    
-    const matchesSearch = searchQuery === '' || 
+    const cardTitle =
+      headerContent?.copy?.content?.[0]?.content?.[0]?.text || '';
+
+    const matchesSearch =
+      searchQuery === '' ||
       cardTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (card.name && card.name.toLowerCase().includes(searchQuery.toLowerCase()));
-    
-    const matchesFilters = selectedFilters.length === 0 || 
+      (card.name &&
+        card.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    const matchesFilters =
+      selectedFilters.length === 0 ||
       selectedFilters.every((filter) =>
         card.tag_list?.some((tag) => tag.toLowerCase() === filter.toLowerCase())
-      ); 
-    
+      );
+
     return matchesSearch && matchesFilters;
   });
 
-   const availableTags = {
+  const availableTags = {
     solutions: new Set(),
     products: new Set(),
     contentTypes: new Set(),
@@ -85,17 +161,17 @@ const PaginatedCards = ({ blok }) => {
       ...availableTags.products,
       ...availableTags.contentTypes,
       ...availableTags.industryType,
-      ...availableTags.newsTypeTags
+      ...availableTags.newsTypeTags,
     ]);
 
-    const newSelectedFilters = selectedFilters.filter(filter => 
+    const newSelectedFilters = selectedFilters.filter((filter) =>
       allAvailableTags.has(filter.toLowerCase())
     );
 
     if (newSelectedFilters.length !== selectedFilters.length) {
       setSelectedFilters(newSelectedFilters);
     }
-  }, [filteredCards]); 
+  }, [filteredCards]);
 
   const capitalizeFirstLetter = (str) => {
     return str
@@ -103,12 +179,12 @@ const PaginatedCards = ({ blok }) => {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   };
-   const countTagOccurrences = (tag) => {
+  const countTagOccurrences = (tag) => {
     return blok.cards.filter((card) =>
       card.tag_list?.some((t) => t.toLowerCase() === tag.toLowerCase())
     ).length;
-  }; 
-  
+  };
+
   const mappedCards = [];
   for (let i = 0; i < filteredCards.length; i += 6) {
     const chunk = filteredCards.slice(i, i + 6);
@@ -225,7 +301,7 @@ const PaginatedCards = ({ blok }) => {
     setCurrentPage(0);
 
     // Get new card chunks
-    const cardChunks = gsap.utils.toArray(".cardChunks");
+    const cardChunks = gsap.utils.toArray('.cardChunks');
     const totalItems = cardChunks.length;
 
     // Initialize new animation if we have cards
@@ -237,26 +313,27 @@ const PaginatedCards = ({ blok }) => {
     }
 
     // Set up navigation handlers
-    const nextBtn = document.querySelector(".next");
-    const prevBtn = document.querySelector(".prev");
+    const nextBtn = document.querySelector('.next');
+    const prevBtn = document.querySelector('.prev');
 
     const handleNext = () => {
       if (!cardsLoop.current || totalItems === 0) return;
-      cardsLoop.current.next({ duration: 0.4, ease: "power1.inOut" });
+      cardsLoop.current.next({ duration: 0.4, ease: 'power1.inOut' });
       currentIndex.current = (currentIndex.current + 1) % totalItems;
       setCurrentPage(currentIndex.current);
     };
 
     const handlePrev = () => {
       if (!cardsLoop.current || totalItems === 0) return;
-      cardsLoop.current.previous({ duration: 0.4, ease: "power1.inOut" });
-      currentIndex.current = (currentIndex.current - 1 + totalItems) % totalItems;
+      cardsLoop.current.previous({ duration: 0.4, ease: 'power1.inOut' });
+      currentIndex.current =
+        (currentIndex.current - 1 + totalItems) % totalItems;
       setCurrentPage(currentIndex.current);
     };
 
     // Add event listeners
-    if (nextBtn) nextBtn.addEventListener("click", handleNext);
-    if (prevBtn) prevBtn.addEventListener("click", handlePrev);
+    if (nextBtn) nextBtn.addEventListener('click', handleNext);
+    if (prevBtn) prevBtn.addEventListener('click', handlePrev);
 
     // Cleanup function
     return () => {
@@ -264,8 +341,8 @@ const PaginatedCards = ({ blok }) => {
         cardsLoop.current.kill();
         cardsLoop.current = null;
       }
-      if (nextBtn) nextBtn.removeEventListener("click", handleNext);
-      if (prevBtn) prevBtn.removeEventListener("click", handlePrev);
+      if (nextBtn) nextBtn.removeEventListener('click', handleNext);
+      if (prevBtn) prevBtn.removeEventListener('click', handlePrev);
     };
   }, [filteredCards.length]); // Only depend on the length of filtered cards
 
@@ -273,7 +350,8 @@ const PaginatedCards = ({ blok }) => {
     const manuDropDownTL = gsap
       .timeline({ paused: true })
       .set('#solutionsOptions', { display: 'flex', height: 0 })
-      .fromTo('#solutionsOptions', 
+      .fromTo(
+        '#solutionsOptions',
         { height: 0 },
         { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
       );
@@ -281,7 +359,8 @@ const PaginatedCards = ({ blok }) => {
     const platformDropDownTL = gsap
       .timeline({ paused: true })
       .set('#productOptions', { display: 'flex', height: 0 })
-      .fromTo('#productOptions',
+      .fromTo(
+        '#productOptions',
         { height: 0 },
         { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
       );
@@ -289,7 +368,8 @@ const PaginatedCards = ({ blok }) => {
     const featureDropDownTL = gsap
       .timeline({ paused: true })
       .set('#contentTypesOptions', { display: 'flex', height: 0 })
-      .fromTo('#contentTypesOptions',
+      .fromTo(
+        '#contentTypesOptions',
         { height: 0 },
         { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
       );
@@ -297,7 +377,8 @@ const PaginatedCards = ({ blok }) => {
     const industryDropDownTL = gsap
       .timeline({ paused: true })
       .set('#industryTypesOptions', { display: 'flex', height: 0 })
-      .fromTo('#industryTypesOptions',
+      .fromTo(
+        '#industryTypesOptions',
         { height: 0 },
         { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
       );
@@ -305,7 +386,8 @@ const PaginatedCards = ({ blok }) => {
     const newsTypeDropDownTL = gsap
       .timeline({ paused: true })
       .set('#newsTypeTagsOptions', { display: 'flex', height: 0 })
-      .fromTo('#newsTypeTagsOptions',
+      .fromTo(
+        '#newsTypeTagsOptions',
         { height: 0 },
         { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
       );
@@ -386,11 +468,21 @@ const PaginatedCards = ({ blok }) => {
     };
 
     // Add click event listeners
-    document.querySelector('#solutionsDrop')?.addEventListener('click', handleManuDrop);
-    document.querySelector('#productDrop')?.addEventListener('click', handlePlatformDrop);
-    document.querySelector('#contentTypesDrop')?.addEventListener('click', handleFeatureDrop);
-    document.querySelector('#industryTypesDrop')?.addEventListener('click', handleIndustryDrop);
-    document.querySelector('#newsTypeTagsDrop')?.addEventListener('click', handleNewsTypeDrop);
+    document
+      .querySelector('#solutionsDrop')
+      ?.addEventListener('click', handleManuDrop);
+    document
+      .querySelector('#productDrop')
+      ?.addEventListener('click', handlePlatformDrop);
+    document
+      .querySelector('#contentTypesDrop')
+      ?.addEventListener('click', handleFeatureDrop);
+    document
+      .querySelector('#industryTypesDrop')
+      ?.addEventListener('click', handleIndustryDrop);
+    document
+      .querySelector('#newsTypeTagsDrop')
+      ?.addEventListener('click', handleNewsTypeDrop);
 
     // Add click event listener to document to close dropdowns when clicking outside
     const handleClickOutside = (event) => {
@@ -399,18 +491,18 @@ const PaginatedCards = ({ blok }) => {
         '#productDrop',
         '#contentTypesDrop',
         '#industryTypesDrop',
-        '#newsTypeTagsDrop'
+        '#newsTypeTagsDrop',
       ];
-      
-      if (!dropdowns.some(selector => event.target.closest(selector))) {
+
+      if (!dropdowns.some((selector) => event.target.closest(selector))) {
         manuDropDownTL.reverse();
         platformDropDownTL.reverse();
         featureDropDownTL.reverse();
         industryDropDownTL.reverse();
         newsTypeDropDownTL.reverse();
-        
+
         // Remove active class from all dropdowns
-        dropdowns.forEach(selector => {
+        dropdowns.forEach((selector) => {
           document.querySelector(selector)?.classList.remove('active');
         });
       }
@@ -419,11 +511,21 @@ const PaginatedCards = ({ blok }) => {
     document.addEventListener('click', handleClickOutside);
 
     return () => {
-      document.querySelector('#solutionsDrop')?.removeEventListener('click', handleManuDrop);
-      document.querySelector('#productDrop')?.removeEventListener('click', handlePlatformDrop);
-      document.querySelector('#contentTypesDrop')?.removeEventListener('click', handleFeatureDrop);
-      document.querySelector('#industryTypesDrop')?.removeEventListener('click', handleIndustryDrop);
-      document.querySelector('#newsTypeTagsDrop')?.removeEventListener('click', handleNewsTypeDrop);
+      document
+        .querySelector('#solutionsDrop')
+        ?.removeEventListener('click', handleManuDrop);
+      document
+        .querySelector('#productDrop')
+        ?.removeEventListener('click', handlePlatformDrop);
+      document
+        .querySelector('#contentTypesDrop')
+        ?.removeEventListener('click', handleFeatureDrop);
+      document
+        .querySelector('#industryTypesDrop')
+        ?.removeEventListener('click', handleIndustryDrop);
+      document
+        .querySelector('#newsTypeTagsDrop')
+        ?.removeEventListener('click', handleNewsTypeDrop);
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
@@ -434,146 +536,183 @@ const PaginatedCards = ({ blok }) => {
         spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
       >
-        <FiltersWrapper>
-          <Filters>
-            {availableTags.solutions.size > 0 && (
-              <StyledSelect id='solutionsDrop'>
-                <StyledSelectHeader>Solutions <ChrevronDown className="chevron" /></StyledSelectHeader>
-                <OptionsContainer id='solutionsOptions'>
-                  {[...availableTags.solutions].map((tag) => (
-                    <Option
-                      key={tag}
-                      $isSelected={selectedFilters.includes(tag)}
-                      onClick={() => {
-                        if (selectedFilters.includes(tag)) {
-                          setSelectedFilters(selectedFilters.filter((f) => f !== tag));
-                        } else {
-                          setSelectedFilters([...selectedFilters, tag]);
-                        }
-                      }}
-                    >
-                      <Circle src="/images/addCircle.webp" />{" "}
-                      {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
-                    </Option>
-                  ))}
-                </OptionsContainer>
-              </StyledSelect>
-            )}
+        {blok.filters && (
+          <FiltersWrapper>
+            <Filters>
+              {availableTags.solutions.size > 0 && (
+                <StyledSelect id='solutionsDrop'>
+                  <StyledSelectHeader>
+                    Solutions <ChrevronDown className='chevron' />
+                  </StyledSelectHeader>
+                  <OptionsContainer id='solutionsOptions'>
+                    {[...availableTags.solutions].map((tag) => (
+                      <Option
+                        key={tag}
+                        $isSelected={selectedFilters.includes(tag)}
+                        onClick={() => {
+                          if (selectedFilters.includes(tag)) {
+                            setSelectedFilters(
+                              selectedFilters.filter((f) => f !== tag)
+                            );
+                          } else {
+                            setSelectedFilters([...selectedFilters, tag]);
+                          }
+                        }}
+                      >
+                        <Circle src='/images/addCircle.webp' />{' '}
+                        {capitalizeFirstLetter(tag)}{' '}
+                        <TagCounter>{countTagOccurrences(tag)}</TagCounter>
+                      </Option>
+                    ))}
+                  </OptionsContainer>
+                </StyledSelect>
+              )}
 
-            {availableTags.products.size > 0 && (
-              <StyledSelect id='productDrop'>
-                <StyledSelectHeader>Product<ChrevronDown className="chevron" /></StyledSelectHeader>
-                <OptionsContainer id='productOptions'>
-                  {[...availableTags.products].map((tag) => (
-                    <Option
-                      key={tag}
-                      $isSelected={selectedFilters.includes(tag)}
-                      onClick={() => {
-                        if (selectedFilters.includes(tag)) {
-                          setSelectedFilters(selectedFilters.filter((f) => f !== tag));
-                        } else {
-                          setSelectedFilters([...selectedFilters, tag]);
-                        }
-                      }}
-                    >
-                      <Circle src="/images/addCircle.webp" />{" "}
-                      {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
-                    </Option>
-                  ))}
-                </OptionsContainer>
-              </StyledSelect>
-            )}
+              {availableTags.products.size > 0 && (
+                <StyledSelect id='productDrop'>
+                  <StyledSelectHeader>
+                    Product
+                    <ChrevronDown className='chevron' />
+                  </StyledSelectHeader>
+                  <OptionsContainer id='productOptions'>
+                    {[...availableTags.products].map((tag) => (
+                      <Option
+                        key={tag}
+                        $isSelected={selectedFilters.includes(tag)}
+                        onClick={() => {
+                          if (selectedFilters.includes(tag)) {
+                            setSelectedFilters(
+                              selectedFilters.filter((f) => f !== tag)
+                            );
+                          } else {
+                            setSelectedFilters([...selectedFilters, tag]);
+                          }
+                        }}
+                      >
+                        <Circle src='/images/addCircle.webp' />{' '}
+                        {capitalizeFirstLetter(tag)}{' '}
+                        <TagCounter>{countTagOccurrences(tag)}</TagCounter>
+                      </Option>
+                    ))}
+                  </OptionsContainer>
+                </StyledSelect>
+              )}
 
-            {availableTags.contentTypes.size > 0 && (
-              <StyledSelect id='contentTypesDrop'>
-                <StyledSelectHeader>Content Types<ChrevronDown className="chevron" /></StyledSelectHeader>
-                <OptionsContainer id='contentTypesOptions'>
-                  {[...availableTags.contentTypes].map((tag) => (
-                    <Option
-                      key={tag}
-                      $isSelected={selectedFilters.includes(tag)}
-                      onClick={() => {
-                        if (selectedFilters.includes(tag)) {
-                          setSelectedFilters(selectedFilters.filter((f) => f !== tag));
-                        } else {
-                          setSelectedFilters([...selectedFilters, tag]);
-                        }
-                      }}
-                    >
-                      <Circle src="/images/addCircle.webp" />{" "}
-                      {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
-                    </Option>
-                  ))}
-                </OptionsContainer>
-              </StyledSelect>
-            )}
+              {availableTags.contentTypes.size > 0 && (
+                <StyledSelect id='contentTypesDrop'>
+                  <StyledSelectHeader>
+                    Content Types
+                    <ChrevronDown className='chevron' />
+                  </StyledSelectHeader>
+                  <OptionsContainer id='contentTypesOptions'>
+                    {[...availableTags.contentTypes].map((tag) => (
+                      <Option
+                        key={tag}
+                        $isSelected={selectedFilters.includes(tag)}
+                        onClick={() => {
+                          if (selectedFilters.includes(tag)) {
+                            setSelectedFilters(
+                              selectedFilters.filter((f) => f !== tag)
+                            );
+                          } else {
+                            setSelectedFilters([...selectedFilters, tag]);
+                          }
+                        }}
+                      >
+                        <Circle src='/images/addCircle.webp' />{' '}
+                        {capitalizeFirstLetter(tag)}{' '}
+                        <TagCounter>{countTagOccurrences(tag)}</TagCounter>
+                      </Option>
+                    ))}
+                  </OptionsContainer>
+                </StyledSelect>
+              )}
 
-            {availableTags.industryType.size > 0 && (
-              <StyledSelect id='industryTypesDrop'>
-                <StyledSelectHeader>Industry Type <ChrevronDown className="chevron" /></StyledSelectHeader>
-                <OptionsContainer id='industryTypesOptions'>
-                  {[...availableTags.industryType].map((tag) => (
-                    <Option
-                      key={tag}
-                      $isSelected={selectedFilters.includes(tag)}
-                      onClick={() => {
-                        if (selectedFilters.includes(tag)) {
-                          setSelectedFilters(selectedFilters.filter((f) => f !== tag));
-                        } else {
-                          setSelectedFilters([...selectedFilters, tag]);
-                        }
-                      }}
-                    >
-                      <Circle src="/images/addCircle.webp" />{" "}
-                      {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
-                    </Option>
-                  ))}
-                </OptionsContainer>
-              </StyledSelect>
-            )}
+              {availableTags.industryType.size > 0 && (
+                <StyledSelect id='industryTypesDrop'>
+                  <StyledSelectHeader>
+                    Industry Type <ChrevronDown className='chevron' />
+                  </StyledSelectHeader>
+                  <OptionsContainer id='industryTypesOptions'>
+                    {[...availableTags.industryType].map((tag) => (
+                      <Option
+                        key={tag}
+                        $isSelected={selectedFilters.includes(tag)}
+                        onClick={() => {
+                          if (selectedFilters.includes(tag)) {
+                            setSelectedFilters(
+                              selectedFilters.filter((f) => f !== tag)
+                            );
+                          } else {
+                            setSelectedFilters([...selectedFilters, tag]);
+                          }
+                        }}
+                      >
+                        <Circle src='/images/addCircle.webp' />{' '}
+                        {capitalizeFirstLetter(tag)}{' '}
+                        <TagCounter>{countTagOccurrences(tag)}</TagCounter>
+                      </Option>
+                    ))}
+                  </OptionsContainer>
+                </StyledSelect>
+              )}
 
-            {availableTags.newsTypeTags.size > 0 && (
-              <StyledSelect id='newsTypeTagsDrop'>
-                <StyledSelectHeader>News Type <ChrevronDown className="chevron" /></StyledSelectHeader>
-                <OptionsContainer id='newsTypeTagsOptions'>
-                  {[...availableTags.newsTypeTags].map((tag) => (
-                    <Option
-                      key={tag}
-                      $isSelected={selectedFilters.includes(tag)}
-                      onClick={() => {
-                        if (selectedFilters.includes(tag)) {
-                          setSelectedFilters(selectedFilters.filter((f) => f !== tag));
-                        } else {
-                          setSelectedFilters([...selectedFilters, tag]);
-                        }
-                      }}
-                    >
-                      <Circle src="/images/addCircle.webp" />{" "}
-                      {capitalizeFirstLetter(tag)} <TagCounter>{countTagOccurrences(tag)}</TagCounter>
-                    </Option>
-                  ))}
-                </OptionsContainer>
-              </StyledSelect>
-            )}
-          </Filters>
-         {blok.filters && <SearchBar>
-            <SearchInput
-              type="text"
-              placeholder="Search by title..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </SearchBar>
-}
-          <SelectedFilters>
-            {selectedFilters.map((filter) => (
-              <SelectedFilterTag key={filter} onClick={() => setSelectedFilters(selectedFilters.filter(f => f !== filter))}>
-                <Circle src="/images/minusCircle.webp" />{" "}
-                {capitalizeFirstLetter(filter)} <TagCounter>{countTagOccurrences(filter)}</TagCounter>
-              </SelectedFilterTag>
-            ))}
-          </SelectedFilters>
-        </FiltersWrapper>
+              {availableTags.newsTypeTags.size > 0 && (
+                <StyledSelect id='newsTypeTagsDrop'>
+                  <StyledSelectHeader>
+                    News Type <ChrevronDown className='chevron' />
+                  </StyledSelectHeader>
+                  <OptionsContainer id='newsTypeTagsOptions'>
+                    {[...availableTags.newsTypeTags].map((tag) => (
+                      <Option
+                        key={tag}
+                        $isSelected={selectedFilters.includes(tag)}
+                        onClick={() => {
+                          if (selectedFilters.includes(tag)) {
+                            setSelectedFilters(
+                              selectedFilters.filter((f) => f !== tag)
+                            );
+                          } else {
+                            setSelectedFilters([...selectedFilters, tag]);
+                          }
+                        }}
+                      >
+                        <Circle src='/images/addCircle.webp' />{' '}
+                        {capitalizeFirstLetter(tag)}{' '}
+                        <TagCounter>{countTagOccurrences(tag)}</TagCounter>
+                      </Option>
+                    ))}
+                  </OptionsContainer>
+                </StyledSelect>
+              )}
+            </Filters>
+            <SearchBar>
+              <SearchInput
+                type='text'
+                placeholder={searchPlaceholder}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </SearchBar>
+
+            <SelectedFilters>
+              {selectedFilters.map((filter) => (
+                <SelectedFilterTag
+                  key={filter}
+                  onClick={() =>
+                    setSelectedFilters(
+                      selectedFilters.filter((f) => f !== filter)
+                    )
+                  }
+                >
+                  <Circle src='/images/minusCircle.webp' />{' '}
+                  {capitalizeFirstLetter(filter)}{' '}
+                  <TagCounter>{countTagOccurrences(filter)}</TagCounter>
+                </SelectedFilterTag>
+              ))}
+            </SelectedFilters>
+          </FiltersWrapper>
+        )}
 
         {blok.card_type === 'event' && (
           <EventHeaderContainer>
@@ -594,9 +733,9 @@ const PaginatedCards = ({ blok }) => {
 
         {filteredCards.length > 0 && (
           <PaginationDiv>
-            <PageNavigation className='prev'>Previous</PageNavigation>
+            <PageNavigation className='prev'>{previousText}</PageNavigation>
             {mappedPages}
-            <PageNavigation className='next'>Next</PageNavigation>
+            <PageNavigation className='next'>{nextText}</PageNavigation>
           </PaginationDiv>
         )}
       </Wrapper>
@@ -636,7 +775,7 @@ const StyledSelectHeader = styled.div`
 `;
 
 const SelectedFilterTag = styled.div`
-cursor: pointer;
+  cursor: pointer;
   ${text.bodySm};
   display: flex;
   align-items: center;
@@ -652,12 +791,12 @@ cursor: pointer;
   ${media.fullWidth} {
     height: 26px;
     padding: 4px;
-      gap: 8px;
-       border-radius: 6px;
+    gap: 8px;
+    border-radius: 6px;
   }
 
   ${media.tablet} {
-     height: 2.539vw;
+    height: 2.539vw;
     padding: 0.391vw;
     gap: 0.781vw;
     border-radius: 0.586vw;
@@ -706,7 +845,7 @@ const TagCounter = styled.div`
     width: 20px;
     height: 20px;
   }
-`
+`;
 const Circle = styled.img`
   height: 0.75vw;
   width: 0.75vw;
@@ -745,11 +884,11 @@ const FiltersWrapper = styled.div`
   ${media.tablet} {
     width: 90.188vw;
     margin-bottom: 4.883vw;
-       gap: 0.781vw;
+    gap: 0.781vw;
   }
 
   ${media.mobile} {
-  // flex-direction: column-reverse;
+    // flex-direction: column-reverse;
     margin-bottom: 10.417vw;
   }
 `;
@@ -760,30 +899,32 @@ const Option = styled.div`
   width: fit-content;
   height: 1.625vw;
   padding: 0.25vw;
-  border: 1px solid ${props => props.$isSelected ? colors.lightPurple : colors.grey100};
+  border: 1px solid
+    ${(props) => (props.$isSelected ? colors.lightPurple : colors.grey100)};
   border-radius: 0.375vw;
   gap: 0.5vw;
-  color: ${props => props.$isSelected ? colors.lightPurple : colors.txtPrimary};
+  color: ${(props) =>
+    props.$isSelected ? colors.lightPurple : colors.txtPrimary};
 
   ${media.fullWidth} {
     height: 26px;
     padding: 4px;
-      gap: 8px;
-       border-radius: 6px;
+    gap: 8px;
+    border-radius: 6px;
   }
 
   ${media.tablet} {
-   height: 2.539vw;
-   padding: 0.391vw;
-      gap: 0.781vw ;
-       border-radius: 0.586vw;
+    height: 2.539vw;
+    padding: 0.391vw;
+    gap: 0.781vw;
+    border-radius: 0.586vw;
   }
 
   ${media.mobile} {
     height: 5.417vw;
-       padding: 1.5vw;
+    padding: 1.5vw;
     gap: 1.667vw;
-       border-radius: 1.25vw;
+    border-radius: 1.25vw;
   }
 
   &:hover {
@@ -808,17 +949,17 @@ const OptionsContainer = styled.div`
 
   ${media.fullWidth} {
     border-radius: 8px;
-      gap: 8px;
+    gap: 8px;
   }
 
   ${media.tablet} {
     border-radius: 0.781vw;
-      gap: 0.781vw;
+    gap: 0.781vw;
   }
 
   ${media.mobile} {
     border-radius: 1.869vw;
-      gap: 1.667vw;
+    gap: 1.667vw;
   }
 `;
 const StyledSelect = styled.div`
@@ -863,17 +1004,17 @@ const StyledSelect = styled.div`
   }
 
   ${media.tablet} {
-     width: 20.508vw;
+    width: 20.508vw;
     gap: 0.781vw;
     padding: 0.781vw 1.172vw;
-      border-radius: 0.781vw;
+    border-radius: 0.781vw;
   }
 
   ${media.mobile} {
-      width: 43.75vw;
+    width: 43.75vw;
     gap: 1.667vw;
     padding: 1.667vw 2.5vw;
-      border-radius: 1.667vw;
+    border-radius: 1.667vw;
   }
 `;
 const PageNumberBlock = styled.div`
@@ -988,24 +1129,24 @@ const CardsContainer = styled.div`
   overflow: hidden;
   gap: 0.625vw;
   width: 81.5vw;
-  padding: ${props => props.card_type === 'event' ? '0' : '0.313vw'};
+  padding: ${(props) => (props.card_type === 'event' ? '0' : '0.313vw')};
 
   ${media.fullWidth} {
     gap: 10px;
     width: 1304px;
-  padding: ${props => props.card_type === 'event' ? '0' : '5px'};
+    padding: ${(props) => (props.card_type === 'event' ? '0' : '5px')};
   }
 
   ${media.tablet} {
     gap: 0.977vw;
     width: 92.188vw;
-      padding: ${props => props.card_type === 'event' ? '0' : '0.488vw'};
+    padding: ${(props) => (props.card_type === 'event' ? '0' : '0.488vw')};
   }
 
   ${media.mobile} {
     gap: 2.083vw;
     width: 89.167vw;
-    padding: ${props => props.card_type === 'event' ? '0' : '1.042vw'};
+    padding: ${(props) => (props.card_type === 'event' ? '0' : '1.042vw')};
   }
 `;
 
@@ -1242,18 +1383,18 @@ const SearchBar = styled.div`
   }
 
   ${media.tablet} {
-      width: 20.508vw;
+    width: 20.508vw;
     gap: 0.781vw;
     padding: 0.781vw 1.172vw;
-      border-radius: 0.781vw;
+    border-radius: 0.781vw;
   }
 
   ${media.mobile} {
-  position: relative;
-    width:100%;
+    position: relative;
+    width: 100%;
     gap: 1.667vw;
     padding: 1.667vw 2.5vw;
-      border-radius: 1.667vw;
+    border-radius: 1.667vw;
   }
 `;
 
