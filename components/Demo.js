@@ -690,11 +690,11 @@ const BackgroundWrapper = styled.div`
 const ZoomLegalStatement = styled.p`
   ${text.bodyMd}
   color:${colors.txtSubtle};
-  padding: 6vw 0vw 3.472vw 0vw;
+  padding: 1.875vw 0vw 6vw 0vw;
   text-align: center;
 
   ${media.fullWidth} {
-    padding: 96px 0px 50px 0px;
+    padding: 30px 0px 96px 0px;
   }
 
   ${media.tablet} {
