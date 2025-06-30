@@ -11,10 +11,6 @@ import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 const LogoCube = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  useEffect(() => {
-    const logosArr = gsap.utils.toArray('.cubeLogos');
-    horizontalLoop(logosArr, { deep: false, repeat: -1 });
-  }, []);
 
   const defaultLogos = [
     { alt: 'nascar logo', image: '/images/icons/nascar.png' },
@@ -28,6 +24,13 @@ const LogoCube = ({ blok }) => {
   ];
 
   const logosToDisplay = blok.logos?.length > 0 ? blok.logos : defaultLogos;
+
+  useEffect(() => {
+    if (logosToDisplay.length >= 7) {
+      const logosArr = gsap.utils.toArray(".cubeLogos");
+      horizontalLoop(logosArr, { deep: false, repeat: -1 });
+    }
+  }, [logosToDisplay.length]);
 
   const allLogos = logosToDisplay.map((logo, index) => (
     <LogosDiv key={logo.filename || logo.alt || index} className='cubeLogos'>
@@ -49,7 +52,10 @@ const LogoCube = ({ blok }) => {
           {blok.header && (
             <RichTextRenderer document={blok.header} blok={blok} />
           )}
-          <LogoContainer transparent={blok.transparent_background}>
+          <LogoContainer
+            transparent={blok.transparent_background}
+            shouldCenter={logosToDisplay.length < 6}
+          >
             {allLogos}
           </LogoContainer>
         </CardContainer>
@@ -86,12 +92,12 @@ const Logo = styled.img`
 const LogoContainer = styled.div`
   display: flex;
   flex-direction: row;
-  /* justify-content: center;
-  align-items: center; */
+  justify-content: ${(props) => (props.shouldCenter ? "center" : "flex-start")};
+  align-items: center;
   height: auto;
   overflow: hidden;
   gap: 1.25vw;
-  width: ${(props) => (props.transparent ? '100%' : '77.222vw')};
+  width: ${(props) => (props.transparent ? "100%" : "77.188vw")};
 
   ${media.fullWidth} {
     width: ${(props) => (props.transparent ? '100%' : '1236px')};
@@ -112,9 +118,10 @@ const CardContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   background: ${(props) =>
-    props.transparent ? 'transparent' : props.theme.logoCube.cardBg};
-  color: ${(props) => props.theme.logoCube.textColor};
+    props.transparent ? "transparent" : props.theme.logo_cube.cardBg};
+  color: ${(props) => props.theme.logo_cube.textColor};
   overflow: hidden;
   width: ${(props) => (props.transparent ? '100%' : '81.5vw')};
   border-radius: 1.5vw;
@@ -122,7 +129,7 @@ const CardContainer = styled.div`
   gap: 2.5vw;
 
   ${media.fullWidth} {
-    width: 1600px;
+    width: 1304px;
     border-radius: 24px;
     padding: ${(props) => (props.transparent ? '60px 0px' : '60px 96px')};
     gap: 40px;

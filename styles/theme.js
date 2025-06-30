@@ -2,7 +2,6 @@ import { pxToVw } from "@/functions/functions";
 import colors from "./colors";
 
 export const defaultTheme = {
-
   customer_success: {
     bg: "#F5F4F7",
   },
@@ -27,7 +26,7 @@ export const defaultTheme = {
     textColor: "#1B1D21",
     bg: "#F5F4F7",
   },
-  logoCube: {
+  logo_cube: {
     textColor: "#ffffff",
     cardBg: "#3D2562",
   },
@@ -68,6 +67,10 @@ export const defaultTheme = {
     bg: "#3D2562",
     text_color: "#FFFFFF",
   },
+  two_column_list: {
+    bg: `#FFFFFF`,
+    textColor: `#1B1D21`,
+  },
 };
 
 export const darkTheme = {
@@ -83,7 +86,7 @@ export const darkTheme = {
     textColor: "#ffffff",
     bg: "linear-gradient(180deg, #583F99 0%, #3D2562 100%)",
   },
-  logoCube: {
+  logo_cube: {
     textColor: "#ffffff",
     cardBg: "#190C30",
   },
@@ -116,13 +119,13 @@ export const darkTheme = {
     bg: "#3D2562",
     text_color: "#FFFFFF",
   },
+  two_column_list: {
+    bg: `#F5F4F7`,
+    textColor: `#1B1D21`,
+  },
 };
 
 export const lightTheme = {
-  centered: {
-    textColor: "#ffffff",
-    bg: "#F5F4F7",
-  },
   side_by_side: {
     textColor: "#1B1D21",
     bg: "#E5DFF8",
@@ -131,13 +134,20 @@ export const lightTheme = {
     textColor: "#1B1D21",
     cardBg: "#F5F4F7",
   },
-  logoCube: {
+  logo_cube: {
     textColor: "#1B1D21",
-    cardBg: "#ffffff",
+    cardBg: "#F5F4F7",
   },
   comparison_table: {
     bg: "#F5F4F7",
     text_color: "#1B1D21",
+  },
+  two_coloumn_list: {
+    bg: `#FFFFFF`,
+  },
+  centered: {
+    bg: `#F5F4F7`,
+    card_bg: `#FFFFFF`,
   },
 };
 
