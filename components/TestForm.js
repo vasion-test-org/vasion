@@ -560,12 +560,25 @@ const FormContainer = styled.div`
     align-items: center !important;
     justify-content: left !important;
 
+    ${media.mobile} {
+      width: 78% !important;
+    }
+
     label {
       margin: 0 1vw 0 0.5vw !important;
       width: max-content !important;
 
       ${media.fullWidth} {
         margin: 0 16px 0 8px !important;
+      }
+
+      ${media.tablet} {
+        margin: 0 1.563vw 0 0.781vw !important;
+      }
+
+      ${media.mobile} {
+        ${text.bodySm};
+        margin: 0 3.333vw 0 1.667vw !important;
       }
     }
   }
@@ -578,6 +591,7 @@ const FormContainer = styled.div`
     -webkit-appearance: none !important;
     width: 0.938vw !important;
     height: 0.938vw !important;
+    min-height: 0.938vw !important;
     border: 1px solid ${(props) => props.theme.form.inputBorder} !important;
     background-color: ${(props) => props.theme.form.inputBg} !important;
     cursor: pointer !important;
@@ -603,6 +617,7 @@ const FormContainer = styled.div`
       margin-right: 8px !important;
       width: 15px !important;
       height: 15px !important;
+      min-height: 15px !important;
       border-radius: 4px !important;
       &:checked::after {
         font-size: 12px !important;
@@ -613,6 +628,7 @@ const FormContainer = styled.div`
       margin-right: 0.781vw !important;
       width: 1.563vw !important;
       height: 1.563vw !important;
+      min-height: 1.563vw !important;
       border-radius: 0.391vw !important;
       &:checked::after {
         font-size: 0.977vw !important;
@@ -620,9 +636,11 @@ const FormContainer = styled.div`
     }
 
     ${media.mobile} {
-      margin-right: 1.667vw !important;
+      margin-right: 0vw !important;
+      margin-top: 1vw !important;
       width: 4.167vw !important;
       height: 4.167vw !important;
+      min-height: 4.167vw !important;
       border-radius: 0.833vw !important;
       &:checked::after {
         font-size: 2.5vw !important;
@@ -835,13 +853,10 @@ const FormContainer = styled.div`
   }
   .mktoFieldWrap {
     display: flex !important;
-  
 
     ${media.fullWidth} {
-  
     }
     ${media.tablet} {
-   
     }
     ${media.mobile} {
       gap: 1.042vw;
