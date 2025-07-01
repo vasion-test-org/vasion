@@ -1,12 +1,9 @@
 "use client";
 import React, { useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import { useAvailableThemes } from "@/context/ThemeContext";
 import { storyblokEditable } from "@storyblok/react/rsc";
 import media from "@/styles/media";
-import colors from "@/styles/colors";
-import useMedia from "@/functions/useMedia";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
@@ -44,8 +41,13 @@ const LogoBanner = ({ blok }) => {
         className="logo-banner"
         spacing={blok.section_spacing}
         spacingOffset={blok.offset_spacing}
+        {...storyblokEditable(blok)}
       >
-        <Logo src={blok.assets.filename} alt="centered-banner-logo" />
+        <Logo
+          src={blok.assets.filename}
+          alt="centered-banner-logo"
+          {...storyblokEditable(blok)}
+        />
       </Wrapper>
     </ThemeProvider>
   );
