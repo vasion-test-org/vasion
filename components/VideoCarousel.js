@@ -493,28 +493,28 @@ const Wrapper = styled.div`
   width: 100%;
   gap: 4.167vw;
   padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '3.75vw 0 0'
-          : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '3.75vw 0 0';
-      }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 3.75vw'
-          : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 3.75vw';
-      }
+    if (props.spacingOffset === 'top') {
       return props.spacing === 'default'
-        ? '3.75vw 0'
+        ? '3.75vw 0 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '3.75vw 0';
-    }};
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
+    }
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
+        : props.spacing
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
+    }
+    return props.spacing === 'default'
+      ? '3.75vw 0'
+      : props.spacing
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
+  }};
 
-    ${media.fullWidth} {
+  ${media.fullWidth} {
     width: 100vw;
     gap: 60px;
     padding: ${(props) => {

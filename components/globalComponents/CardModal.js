@@ -1,23 +1,23 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
-import styled from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import text from "styles/text";
-import ReactPlayer from "react-player";
-import useMedia from "@/functions/useMedia";
-import RichTextRenderer from "../renderers/RichTextRenderer";
-import Video from "./Video";
-import { getSmoother } from "@/components/ScrollSmoothWrapper";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import styled from 'styled-components';
+import media from 'styles/media';
+import colors from 'styles/colors';
+import text from 'styles/text';
+import ReactPlayer from 'react-player';
+import useMedia from '@/functions/useMedia';
+import RichTextRenderer from '../renderers/RichTextRenderer';
+import Video from './Video';
+import { getSmoother } from '@/components/ScrollSmoothWrapper';
 
 const CardModal = ({ data, setShowModal }) => {
   const [closeButton, setCloseButton] = useState(
-    "/images/uiElements/closeButton.webp",
+    '/images/uiElements/closeButton.webp'
   );
-  const videoWidth = useMedia("1440px", "89.6vw", "89vw", "87.85vw");
-  const videoHeight = useMedia("100%", "100%", "51vw", "49.299vw");
-  const combinedStyledHeight = useMedia("500px", "51.25vw", "51vw", "49.299vw");
+  const videoWidth = useMedia('1440px', '89.6vw', '89vw', '87.85vw');
+  const videoHeight = useMedia('100%', '100%', '51vw', '49.299vw');
+  const combinedStyledHeight = useMedia('500px', '51.25vw', '51vw', '49.299vw');
   const hasBio = data?.person?.length > 0;
 
   const videoSrc =
@@ -31,32 +31,32 @@ const CardModal = ({ data, setShowModal }) => {
     }
   };
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     let smoother;
     try {
       smoother = getSmoother();
-      if (!smoother && typeof window !== "undefined" && window.ScrollSmoother) {
+      if (!smoother && typeof window !== 'undefined' && window.ScrollSmoother) {
         smoother = window.ScrollSmoother.get();
       }
       if (smoother) {
         smoother.paused(true);
       } else {
-        console.warn("ScrollSmoother not found");
+        console.warn('ScrollSmoother not found');
       }
     } catch (error) {
-      console.error("Error accessing ScrollSmoother:", error);
+      console.error('Error accessing ScrollSmoother:', error);
     }
-    const modalScrollGroup = document.getElementById("modal-scroll-group");
+    const modalScrollGroup = document.getElementById('modal-scroll-group');
     const handleMouseEnter = () => {
       if (smoother) {
         smoother.paused(true);
       }
     };
     if (modalScrollGroup) {
-      modalScrollGroup.addEventListener("mouseenter", handleMouseEnter);
+      modalScrollGroup.addEventListener('mouseenter', handleMouseEnter);
     }
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = 'auto';
       try {
         if (smoother) {
           smoother.paused(false);
@@ -67,12 +67,12 @@ const CardModal = ({ data, setShowModal }) => {
       }
 
       if (modalScrollGroup) {
-        modalScrollGroup.removeEventListener("mouseenter", handleMouseEnter);
+        modalScrollGroup.removeEventListener('mouseenter', handleMouseEnter);
       }
     };
   }, []);
 
-  if (typeof window === "undefined") return null;
+  if (typeof window === 'undefined') return null;
 
   return createPortal(
     <Wrapper onClick={handleClose}>
@@ -80,10 +80,10 @@ const CardModal = ({ data, setShowModal }) => {
         <CloseBtn
           src={closeButton}
           onMouseEnter={() =>
-            setCloseButton("/images/uiElements/closeButtonActive.webp")
+            setCloseButton('/images/uiElements/closeButtonActive.webp')
           }
           onMouseLeave={() =>
-            setCloseButton("/images/uiElements/closeButton.webp")
+            setCloseButton('/images/uiElements/closeButton.webp')
           }
           onClick={handleClose}
         />
@@ -95,8 +95,8 @@ const CardModal = ({ data, setShowModal }) => {
                   <RichTextRenderer document={data.person[0].copy} />
                 )}
                 <Sparkle
-                  src="/images/uiElements/VasionStarNewsroom.webp"
-                  alt="vasion-sparkle"
+                  src='/images/uiElements/VasionStarNewsroom.webp'
+                  alt='vasion-sparkle'
                 />
               </NameAndStar>
               {data?.position?.[0]?.copy && (
@@ -108,15 +108,15 @@ const CardModal = ({ data, setShowModal }) => {
               width={342}
               src={data?.asset?.[0]?.media?.[0]?.filename}
             />
-            <TitleAndBioDiv id="modal-scroll-group">
+            <TitleAndBioDiv id='modal-scroll-group'>
               <Title>
                 <NameAndStar>
                   {data?.person?.[0]?.copy && (
                     <RichTextRenderer document={data.person[0].copy} />
                   )}
                   <Sparkle
-                    src="/images/uiElements/VasionStarNewsroom.webp"
-                    alt="vasion-sparkle"
+                    src='/images/uiElements/VasionStarNewsroom.webp'
+                    alt='vasion-sparkle'
                   />
                 </NameAndStar>
                 {data?.position?.[0]?.copy && (
@@ -142,7 +142,7 @@ const CardModal = ({ data, setShowModal }) => {
                       volume={1}
                       muted={false}
                       playsinline={true}
-                      width={"100%"}
+                      width={'100%'}
                       height={combinedStyledHeight}
                     />
                   )}
@@ -167,7 +167,7 @@ const CardModal = ({ data, setShowModal }) => {
         )}
       </Modal>
     </Wrapper>,
-    document.body,
+    document.body
   );
 };
 
@@ -176,21 +176,21 @@ export default CardModal;
 const VideoContainer = styled.div`
   overflow: hidden;
   border-radius: 0.75vw;
-  height: ${(props) => (props?.hasbio ? "32vw" : "50vw")};
-  margin-top: ${(props) => (props?.hasbio ? "unset" : "3.125vw")};
+  height: ${(props) => (props?.hasbio ? '32vw' : '50vw')};
+  margin-top: ${(props) => (props?.hasbio ? 'unset' : '3.125vw')};
 
   ${media.fullWidth} {
     border-radius: 12px;
-    margin-top: ${(props) => (props?.hasbio ? "unset" : "50px")};
-    height: ${(props) => (props?.hasbio ? "auto" : "100%")};
+    margin-top: ${(props) => (props?.hasbio ? 'unset' : '50px')};
+    height: ${(props) => (props?.hasbio ? 'auto' : '100%')};
   }
   ${media.tablet} {
-    margin-top: ${(props) => (props?.hasbio ? "unset" : "7.152vw")};
+    margin-top: ${(props) => (props?.hasbio ? 'unset' : '7.152vw')};
     border-radius: 1.172vw;
     height: 50vw;
   }
   ${media.mobile} {
-    margin-top: ${(props) => (props?.hasbio ? "unset" : "8.25vw")};
+    margin-top: ${(props) => (props?.hasbio ? 'unset' : '8.25vw')};
     border-radius: 2.5vw;
     height: 100%;
   }
@@ -275,7 +275,7 @@ const NameAndStar = styled.div`
 `;
 
 const Title = styled.div`
-  display: ${(props) => (props?.$mobile ? "none" : "flex")};
+  display: ${(props) => (props?.$mobile ? 'none' : 'flex')};
   flex-direction: column;
   gap: 0.25vw;
   ${media.fullWidth} {
@@ -287,7 +287,7 @@ const Title = styled.div`
   }
 
   ${media.mobile} {
-    display: ${(props) => (props?.$mobile ? "flex" : "none")};
+    display: ${(props) => (props?.$mobile ? 'flex' : 'none')};
     gap: 0.833vw;
   }
 `;
@@ -448,14 +448,14 @@ const Modal = styled.div`
   flex-direction: column;
   overflow: hidden;
   width: 92.5vw;
-  height: ${(props) => (props?.$isvideo ? "58.125vw" : " 41.25vw ")};
+  height: ${(props) => (props?.$isvideo ? '58.125vw' : ' 41.25vw ')};
   background-color: ${colors.white};
   border-radius: 1.75vw;
   padding: ${(props) =>
-    props?.$isvideo ? "2.3vw 0vw 1.3vw 1.3vw" : "2.5vw 0.313vw 3.75vw 2.5vw"};
+    props?.$isvideo ? '2.3vw 0vw 1.3vw 1.3vw' : '2.5vw 0.313vw 3.75vw 2.5vw'};
   ${media.fullWidth} {
     border-radius: 28px;
-    height: ${(props) => (props?.$isvideo ? "788px" : " 600px ")};
+    height: ${(props) => (props?.$isvideo ? '788px' : ' 600px ')};
     padding: 40px 0px 20px 20px;
     width: 1480px;
   }
@@ -464,18 +464,18 @@ const Modal = styled.div`
     border-radius: 2.734vw;
     padding: ${(props) =>
       props?.$isvideo
-        ? " 1.4vw 0vw 1.4vw 1.4vw"
-        : "0vw 0.391vw 5.762vw 3.809vw"};
-    height: ${(props) => (props?.$isvideo ? "unset" : "66.797vw")};
+        ? ' 1.4vw 0vw 1.4vw 1.4vw'
+        : '0vw 0.391vw 5.762vw 3.809vw'};
+    height: ${(props) => (props?.$isvideo ? 'unset' : '66.797vw')};
     width: 92.188vw;
   }
 
   ${media.mobile} {
-    width: ${(props) => (props?.$isvideo ? "95.167vw" : "89.167vw")};
-    height: ${(props) => (props?.$isvideo ? "33vh" : "89vh")};
+    width: ${(props) => (props?.$isvideo ? '95.167vw' : '89.167vw')};
+    height: ${(props) => (props?.$isvideo ? '33vh' : '89vh')};
     border-radius: 5.417vw;
     padding: ${(props) =>
-      props?.$isvideo ? "9vw 2vw 2vw 2vw" : "5vw 0.5vw 5vw 5vw"};
+      props?.$isvideo ? '9vw 2vw 2vw 2vw' : '5vw 0.5vw 5vw 5vw'};
     align-items: center;
     justify-content: center;
     z-index: 23;
