@@ -71,6 +71,9 @@ export const defaultTheme = {
     bg: `#FFFFFF`,
     textColor: `#1B1D21`,
   },
+  logo_banner: {
+    bg: `${colors.navyBlue}`,
+  },
 };
 
 export const darkTheme = {
@@ -123,6 +126,9 @@ export const darkTheme = {
     bg: `#F5F4F7`,
     textColor: `#1B1D21`,
   },
+  logo_banner: {
+    bg: `${colors.navyBlue}`,
+  },
 };
 
 export const lightTheme = {
@@ -148,6 +154,9 @@ export const lightTheme = {
   centered: {
     bg: `#F5F4F7`,
     card_bg: `#FFFFFF`,
+  },
+  logo_banner: {
+    bg: `#FFFFFF`,
   },
 };
 

@@ -13,6 +13,7 @@ const colors = {
   teal300: "#99DAD7",
   teal200: "#CCECEB",
   teal100: "#E5F6F5",
+  navyBlue: "#090121",
   borderPurple: "#945AEE",
   lightPurple: "#7E5FDD",
   mediumPurple: "#583F99",
@@ -21,7 +22,7 @@ const colors = {
   primaryPurple: "#3D2562",
   purple500: "#6A2C6A",
   purple400: "#8B5B8B",
-  pink: '#DD5FC1',
+  pink: "#DD5FC1",
   purple300: "#AC8AAC",
   purple200: "#CBBFF1",
   purple100: "#E6DFF8",
@@ -66,3 +67,4 @@ const colors = {
 };
 
 export default colors;
+
