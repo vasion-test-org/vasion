@@ -10,7 +10,6 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const LogoBanner = ({ blok }) => {
-  console.log("Logo Banner", blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
