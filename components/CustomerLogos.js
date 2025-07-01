@@ -144,7 +144,7 @@ const CustomerLogos = ({ blok }) => {
           {logoOverflow}
         </RemainingLogos>
         <SeeMoreDiv ref={moreRef} className={`${blok?.logos_category}-more`}>
-          See other {blok?.logos_category} Clients
+          {/* See other {blok?.logos_category} Clients */}
         </SeeMoreDiv>
       </Wrapper>
     </ThemeProvider>

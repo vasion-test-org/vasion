@@ -60,19 +60,24 @@ const Hero = ({ blok }) => {
 
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
-      <HeroBGWrapper backgroundStyle={backgroundStyle}>
+      <HeroBGWrapper
+        backgroundStyle={backgroundStyle}
+        text_alignment={blok.text_alignment}
+      >
         <HeroWrapper
           layout={blok.hero_layout}
           gap={blok.gap}
           spacingOffset={blok.offset_spacing}
           spacing={blok.section_spacing}
           centered={!blok?.hero_asset[0]}
+          text_alignment={blok.text_alignment}
           socials={blok.socials}
         >
           <ContentWrapper
             socials={blok.socials}
             centered={!blok?.hero_asset[0] && !blok.socials}
             centered_image={blok.centered_image}
+            text_alignment={blok.text_alignment}
           >
             {blok?.hero_asset[0] && blok.centered_image && (
               <ImageWrapper {...storyblokEditable(blok)}>
@@ -358,16 +363,34 @@ const ButtonRow = styled.div`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: ${(props) =>
-    props.centered_image ? "center" : props.centered ? "center" : "left"};
+  text-align: ${(props) => {
+    if (props.text_alignment) {
+      return props.text_alignment;
+    }
+    return props.centered_image ? "center" : props.centered ? "center" : "left";
+  }};
 
-  align-items: ${(props) =>
-    props.centered_image ? "center" : props.centered ? "center" : "start"};
+  align-items: ${(props) => {
+    if (props.text_alignment) {
+      return props.text_alignment === "center"
+        ? "center"
+        : props.text_alignment === "right"
+          ? "flex-end"
+          : "flex-start";
+    }
+    return props.centered_image
+      ? "center"
+      : props.centered
+        ? "center"
+        : "start";
+  }};
 
   width: ${(props) =>
     props.socials
       ? "clamp(27.75vw, 100%, 26.5vw)"
-      : "clamp(27.75vw, 100%, 54.75vw)"};
+      : props.text_alignment
+        ? "40.25vw"
+        : "clamp(27.75vw, 100%, 54.75vw)"};
 
   h1,
   h2,
@@ -386,11 +409,14 @@ const ContentWrapper = styled.div`
     width: ${(props) =>
       props.socials
         ? "clamp(444px, 100%, 424px)"
-        : "clamp(444px, 100%, 876px)"};
+        : props.text_alignment
+          ? "644px"
+          : "clamp(444px, 100%, 876px)"};
   }
 
   ${media.tablet} {
-    width: clamp(39.453vw, 100%, 58.984vw);
+    width: ${(props) =>
+      props.text_alignment ? "39.453vw" : "clamp(39.355vw, 100%, 58.887vw)"};
   }
 
   ${media.mobile} {
@@ -403,7 +429,16 @@ const HeroWrapper = styled.div`
   display: flex;
   flex-direction: ${(props) => `${props.layout || "row"}`};
   align-items: center;
-  justify-content: ${(props) => (props.centered ? "center" : "space-between")};
+  justify-content: ${(props) => {
+    if (props.text_alignment) {
+      return props.text_alignment === "center"
+        ? "center"
+        : props.text_alignment === "right"
+          ? "flex-end"
+          : "flex-start";
+    }
+    return props.centered ? "center" : "space-between";
+  }};
   color: ${(props) =>
     props.theme.customtheme?.text_color?.value || props.theme.hero.textColor};
 
@@ -543,7 +578,8 @@ const HeroWrapper = styled.div`
 const HeroBGWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: ${(props) =>
+    props?.text_alignment ? props.text_alignment : "center"};
   justify-content: center;
   position: relative;
 
