@@ -147,7 +147,7 @@ export const lightTheme = {
   },
   centered: {
     bg: `#F5F4F7`,
-    card_bg: `#ffffffff`,
+    card_bg: `#FFFFFF`,
   },
 };
 

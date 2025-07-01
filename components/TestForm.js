@@ -522,6 +522,22 @@ const FormContainer = styled.div`
     }
   }
 
+  .mktoFieldDescriptor:has(#LblformFriendlyProductofInterest) {
+    max-height: none !important;
+
+    ${media.fullWidth} {
+      max-height: none !important;
+    }
+
+    ${media.tablet} {
+      max-height: none !important;
+    }
+
+    ${media.mobile} {
+      max-height: none !important;
+    }
+  }
+
   .mktoCaptchaDisclaimer {
     display: none;
   }
@@ -561,7 +577,7 @@ const FormContainer = styled.div`
     justify-content: left !important;
 
     ${media.mobile} {
-      width: 78% !important;
+      width: 108% !important;
     }
 
     label {
@@ -578,7 +594,7 @@ const FormContainer = styled.div`
 
       ${media.mobile} {
         ${text.bodySm};
-        margin: 0 3.333vw 0 1.667vw !important;
+        margin: 0 1.333vw 0 0.667vw !important;
       }
     }
   }
@@ -653,6 +669,7 @@ const FormContainer = styled.div`
     align-items: center !important;
     gap: 0.5vw;
     margin: 0 !important;
+    min-width: 100%;
 
     ${media.fullWidth} {
       gap: 8px;
@@ -774,7 +791,8 @@ const FormContainer = styled.div`
     &#Address,
     &#City,
     &#PostalCode,
-    &#How_did_you_hear_about_us__c {
+    &#How_did_you_hear_about_us__c,
+    &#Number_of_Printer__c {
       width: 31.25vw !important;
 
       ${media.fullWidth} {
@@ -867,6 +885,10 @@ const FormContainer = styled.div`
       font-weight: 400 !important;
     }
 
+    #LblformFriendlyProductofInterest {
+      width: 100% !important;
+    }
+
     label {
       #formFriendlyProductofInterest {
         margin-bottom: 0.75vw !important;
@@ -875,6 +897,11 @@ const FormContainer = styled.div`
 
     &:has(> label) {
       flex-direction: column !important;
+    }
+
+    &:has(label[id='LblemailOptIn']) {
+      flex-direction: row !important;
+      width: max-content !important;
     }
   }
   .mktoHtmlText {
