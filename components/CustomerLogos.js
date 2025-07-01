@@ -24,10 +24,7 @@ const CustomerLogos = ({ blok }) => {
   const logosRef = useRef(`.${blok?.logos_category}-logos`);
   const mainCardRef = useRef(`.${blok?.logos_category}-mainContent`);
   const cardsRef = useRef(`.${blok?.logos_category}-cards`);
-  const moreRef = useRef(`.${blok?.logos_category}-more`);
-  const remainingRef = useRef(`.${blok?.logos_category}-remaining`);
   const primaryLogoCount = getMedia(9, 9, 6);
-  // const remainingLogoCount = getMedia(9,9,6,0)
   const primaryLogos = blok?.logos?.slice(0, primaryLogoCount);
   const remainingLogos = blok?.logos?.slice(primaryLogoCount);
 
@@ -70,26 +67,6 @@ const CustomerLogos = ({ blok }) => {
       })
       .from(mainCardRef.current, { autoAlpha: 0, duration: 2.25 }, ">-.75")
       .from(logosRef.current, { autoAlpha: 0, duration: 1.75 }, "<");
-
-    const moreTl = gsap.timeline({ paused: true });
-    moreTl
-      .to(remainingRef.current, {
-        margin: "40, 0",
-        height: "auto",
-        duration: 0.5,
-      })
-      .reversed(true)
-      .to(remainingRef.current, { autoAlpha: 1, duration: 0.5 }, ">-.25")
-      .reversed(true);
-
-    function expand() {
-      moreTl.reversed() ? moreTl.play() : moreTl.reverse();
-      moreRef.current.textContent = moreTl.reversed()
-        ? `See other ${blok?.logos_category} Clients`
-        : `Collapse other ${blok?.logos_category} Clients`;
-    }
-
-    moreRef.current.addEventListener("click", () => expand());
   }, []);
 
   return (
@@ -100,7 +77,6 @@ const CustomerLogos = ({ blok }) => {
         spacing={blok.section_spacing}
       >
         <CardsDiv main_side={blok?.main_side} {...storyblokEditable(blok)}>
-          {/* <Link href={blok?.main_link[0].link_url.url}> */}
           <MainCard className={`${blok?.logos_category}-cards`}>
             <MainLogo
               loading="lazy"
@@ -126,7 +102,6 @@ const CustomerLogos = ({ blok }) => {
               </div>
             ))}
           </MainCard>
-          {/* </Link> */}
           <LogosCard
             className={`${blok?.logos_category}-cards`}
             cardcolor={blok?.cardColor}
@@ -143,9 +118,6 @@ const CustomerLogos = ({ blok }) => {
         >
           {logoOverflow}
         </RemainingLogos>
-        <SeeMoreDiv ref={moreRef} className={`${blok?.logos_category}-more`}>
-          {/* See other {blok?.logos_category} Clients */}
-        </SeeMoreDiv>
       </Wrapper>
     </ThemeProvider>
   );
@@ -340,19 +312,21 @@ const RemainingLogos = styled.div`
   align-items: center;
   flex-flow: row wrap;
   background: ${(props) => props.theme.customer_logos.card_bg};
-  height: 0;
-  opacity: 0;
-  overflow: hidden;
+  height: auto;
+  opacity: 1;
+  overflow: visible;
   gap: 1.944vw;
   border-radius: 1.667vw;
   width: 79.444vw;
   padding: 1.667vw 1.528vw 1.389vw 1.528vw;
+  margin-top: 1.667vw;
 
   ${media.fullWidth} {
     gap: 28px;
     border-radius: 24px;
     width: 1144px;
     padding: 24px 22px 20px 22px;
+    margin-top: 24px;
   }
 
   ${media.tablet} {
@@ -360,34 +334,11 @@ const RemainingLogos = styled.div`
     border-radius: 2.344vw;
     width: 92.188vw;
     padding: 2.344vw 4.199vw;
+    margin-top: 2.344vw;
   }
 
   ${media.mobile} {
     display: none;
-  }
-`;
-const SeeMoreDiv = styled.div`
-  ${text.eyebrow};
-  color: ${colors.grey500};
-  margin: 1.667vw 0;
-
-  ${media.fullWidth} {
-    margin: 24px 0;
-  }
-
-  ${media.tablet} {
-    margin: 2.344vw 0;
-  }
-
-  ${media.mobile} {
-    display: none;
-  }
-
-  ${media.hover} {
-    &:hover {
-      cursor: pointer;
-      color: ${colors.primaryOrange};
-    }
   }
 `;
 const CardsDiv = styled.div`
