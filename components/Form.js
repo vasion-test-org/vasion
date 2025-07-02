@@ -472,7 +472,6 @@ const FormHeader = styled.h4`
 `;
 const FormContainer = styled.div`
   position: relative;
-  z-index: 2;
   display: flex;
   flex-direction: column;
   background: ${(props) => props.theme.form.formBg};
@@ -523,6 +522,22 @@ const FormContainer = styled.div`
     }
   }
 
+  .mktoFieldDescriptor:has(#LblformFriendlyProductofInterest) {
+    max-height: none !important;
+
+    ${media.fullWidth} {
+      max-height: none !important;
+    }
+
+    ${media.tablet} {
+      max-height: none !important;
+    }
+
+    ${media.mobile} {
+      max-height: none !important;
+    }
+  }
+
   .mktoCaptchaDisclaimer {
     display: none;
   }
@@ -538,6 +553,7 @@ const FormContainer = styled.div`
 
     a {
       color: ${colors.primaryOrange};
+      padding: unset !important;
     }
   }
 
@@ -553,29 +569,100 @@ const FormContainer = styled.div`
   .mktoGutter {
     width: unset !important;
   }
-
   /* Checkbox styles - fixed version */
   .mktoCheckboxList {
-    width: unset !important;
+    width: 100% !important;
     display: flex !important;
+    flex-wrap: wrap !important;
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: left !important;
+    padding: unset !important;
+
+    ${media.mobile} {
+      width: 108% !important;
+    }
+
+    label {
+      margin: 0 1vw 0 0.5vw !important;
+      width: max-content !important;
+
+      ${media.fullWidth} {
+        margin: 0 16px 0 8px !important;
+      }
+
+      ${media.tablet} {
+        margin: 0 1.563vw 0 0.781vw !important;
+      }
+
+      ${media.mobile} {
+        ${text.bodySm};
+        margin: 0 15.5vw 0 0.5vw !important;
+      }
+    }
   }
 
   .mktoCheckboxList input[type='checkbox'] {
     height: auto !important;
-    margin-right: 0.5vw !important;
+    margin-right: 0vw !important;
+    border-radius: 0.25vw !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    width: 0.938vw !important;
+    height: 0.938vw !important;
+    min-height: 0.938vw !important;
+    border: 1px solid ${(props) => props.theme.form.inputBorder} !important;
+    background-color: ${(props) => props.theme.form.inputBg} !important;
+    cursor: pointer !important;
+    position: relative !important;
+    padding: unset !important;
+
+    &:checked {
+      background-color: ${colors.primaryOrange} !important;
+      border-color: ${colors.primaryOrange} !important;
+    }
+
+    &:checked::after {
+      content: '✓' !important;
+      position: absolute !important;
+      color: white !important;
+      font-size: 0.75vw !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+    }
 
     ${media.fullWidth} {
-      margin-right: 8px !important;
+      margin-right: 0px !important;
+      width: 15px !important;
+      height: 15px !important;
+      min-height: 15px !important;
+      border-radius: 4px !important;
+      &:checked::after {
+        font-size: 12px !important;
+      }
     }
 
     ${media.tablet} {
       margin-right: 0.781vw !important;
+      width: 1.563vw !important;
+      height: 1.563vw !important;
+      min-height: 1.563vw !important;
+      border-radius: 0.391vw !important;
+      &:checked::after {
+        font-size: 0.977vw !important;
+      }
     }
 
     ${media.mobile} {
-      margin-right: 1.667vw !important;
+      margin-right: 0vw !important;
+      margin-top: 1vw !important;
+      width: 4.167vw !important;
+      height: 4.167vw !important;
+      min-height: 4.167vw !important;
+      border-radius: 0.833vw !important;
+      &:checked::after {
+        font-size: 2.5vw !important;
+      }
     }
   }
   #LblemailOptIn {
@@ -584,16 +671,22 @@ const FormContainer = styled.div`
     align-items: center !important;
     gap: 0.5vw;
     margin: 0 !important;
+    min-width: max-content !important;
+    min-height: unset !important;
+    margin-right: 0.5vw !important;
 
     ${media.fullWidth} {
+      margin-right: 8px !important;
       gap: 8px;
     }
 
     ${media.tablet} {
+      margin-right: 0.781vw !important;
       gap: 0.781vw;
     }
 
     ${media.mobile} {
+      margin-right: 1.667vw !important;
       gap: 1.667vw;
     }
   }
@@ -602,18 +695,19 @@ const FormContainer = styled.div`
     display: flex;
     justify-content: flex-start;
     width: 100%;
-    margin: 1vw 0;
+    margin: 1vw 0 0 0;
+    padding: unset !important;
 
     ${media.fullWidth} {
-      margin: 16px 0;
+      margin: 16px 0 0 0;
     }
 
     ${media.tablet} {
-      margin: 1.563vw 0;
+      margin: 1.563vw 0 0 0;
     }
 
     ${media.mobile} {
-      margin: 3.333vw 0;
+      margin: 3.333vw 0 0 0;
     }
   }
 
@@ -651,7 +745,8 @@ const FormContainer = styled.div`
   }
 
   label {
-    display: none;
+    ${text.bodyMd};
+    width: max-content !important;
   }
 
   input {
@@ -681,6 +776,8 @@ const FormContainer = styled.div`
       min-height: 11.25vw;
     }
 
+    &#Email,
+    &#Phone,
     &#FirstName,
     &#LastName {
       width: 15vw !important;
@@ -698,13 +795,12 @@ const FormContainer = styled.div`
       }
     }
 
-    &#Email,
-    &#Phone,
     &#Company,
     &#Address,
     &#City,
     &#PostalCode,
-    &#How_did_you_hear_about_us__c {
+    &#How_did_you_hear_about_us__c,
+    &#Number_of_Printer__c {
       width: 31.25vw !important;
 
       ${media.fullWidth} {
@@ -783,20 +879,45 @@ const FormContainer = styled.div`
   }
   .mktoFieldWrap {
     display: flex !important;
-    gap: 0vw;
 
     ${media.fullWidth} {
-      gap: 0px;
     }
     ${media.tablet} {
-      gap: 0px;
     }
     ${media.mobile} {
       gap: 1.042vw;
     }
+
+    .mktoLabel {
+      ${text.bodyMd};
+      font-weight: 400 !important;
+    }
+
+    #LblformFriendlyProductofInterest {
+      width: 100% !important;
+    }
+
+    label {
+      #formFriendlyProductofInterest {
+        margin-bottom: 0.75vw !important;
+      }
+    }
+
+    &:has(> label) {
+      flex-direction: column !important;
+    }
+
+    &:has(label[id='LblemailOptIn']) {
+      flex-direction: row !important;
+      width: max-content !important;
+    }
   }
   .mktoHtmlText {
     width: unset !important;
+  }
+
+  .mktoAsterix {
+    display: none !important;
   }
 `;
 export default Form;
