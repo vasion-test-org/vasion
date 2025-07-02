@@ -553,6 +553,7 @@ const FormContainer = styled.div`
 
     a {
       color: ${colors.primaryOrange};
+      padding: unset !important;
     }
   }
 
@@ -575,6 +576,7 @@ const FormContainer = styled.div`
     flex-wrap: wrap !important;
     align-items: center !important;
     justify-content: left !important;
+    padding: unset !important;
 
     ${media.mobile} {
       width: 108% !important;
@@ -594,14 +596,14 @@ const FormContainer = styled.div`
 
       ${media.mobile} {
         ${text.bodySm};
-        margin: 0 1.333vw 0 0.667vw !important;
+        margin: 0 15.5vw 0 0.5vw !important;
       }
     }
   }
 
   .mktoCheckboxList input[type='checkbox'] {
     height: auto !important;
-    margin-right: 0.5vw !important;
+    margin-right: 0vw !important;
     border-radius: 0.25vw !important;
     appearance: none !important;
     -webkit-appearance: none !important;
@@ -630,7 +632,7 @@ const FormContainer = styled.div`
     }
 
     ${media.fullWidth} {
-      margin-right: 8px !important;
+      margin-right: 0px !important;
       width: 15px !important;
       height: 15px !important;
       min-height: 15px !important;
@@ -669,17 +671,22 @@ const FormContainer = styled.div`
     align-items: center !important;
     gap: 0.5vw;
     margin: 0 !important;
-    min-width: 100%;
+    min-width: max-content !important;
+    min-height: unset !important;
+    margin-right: 0.5vw !important;
 
     ${media.fullWidth} {
+      margin-right: 8px !important;
       gap: 8px;
     }
 
     ${media.tablet} {
+      margin-right: 0.781vw !important;
       gap: 0.781vw;
     }
 
     ${media.mobile} {
+      margin-right: 1.667vw !important;
       gap: 1.667vw;
     }
   }
@@ -689,6 +696,7 @@ const FormContainer = styled.div`
     justify-content: flex-start;
     width: 100%;
     margin: 1vw 0 0 0;
+    padding: unset !important;
 
     ${media.fullWidth} {
       margin: 16px 0 0 0;
