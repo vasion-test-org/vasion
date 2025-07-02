@@ -1,59 +1,105 @@
-"use client";
-import React, { useEffect } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import text from "@/styles/text";
-import LinkArrowSVG from "@/assets/svg/LinkArrow.svg";
-import media from "@/styles/media";
+'use client';
+import React, { useEffect } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import text from '@/styles/text';
+import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
+import media from '@/styles/media';
+import { gsap } from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+
+// Register the ScrollToPlugin
+gsap.registerPlugin(ScrollToPlugin);
 
 const Button = ({ $buttonData, stretch }) => {
-  // console.log('$buttonData', $buttonData);
   const themes = useAvailableThemes();
   const pathname = usePathname();
+
   // useEffect(() => {
   //   window.scrollTo(0, 0);
   // }, [pathname]);
+
   const selectedTheme =
     themes.button?.[$buttonData?.theme] || themes.button.primary;
 
   const isEmail = $buttonData?.link_url?.email;
   const rawHref = isEmail
     ? `mailto:${$buttonData?.link_url.email}`
-    : $buttonData?.link_url?.cached_url || "#";
+    : $buttonData?.link_url?.cached_url || '#';
 
   const target = $buttonData?.link_url?.target;
-  const rel = target === "_blank" ? "noopener noreferrer" : undefined;
+  const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
 
-  const isExternal = rawHref.startsWith("http");
+  const isExternal = rawHref.startsWith('http');
   const alreadyLocalized =
-    rawHref.startsWith("/de") ||
-    rawHref.startsWith("/fr") ||
-    rawHref.startsWith("/en");
+    rawHref.startsWith('/de') ||
+    rawHref.startsWith('/fr') ||
+    rawHref.startsWith('/en');
 
-  const slugParts = pathname.split("/").filter(Boolean);
-  const currentLocale = ["de", "fr"].includes(slugParts[0])
+  const slugParts = pathname.split('/').filter(Boolean);
+  const currentLocale = ['de', 'fr'].includes(slugParts[0])
     ? slugParts[0]
     : null;
 
-  const normalizedUrl =
+  let normalizedUrl =
     isEmail || isExternal || alreadyLocalized
       ? rawHref
-      : `/${currentLocale ?? ""}/${rawHref}`.replace(/\/+/g, "/");
+      : `/${currentLocale ?? ''}/${rawHref}`.replace(/\/+/g, '/');
+
+  // Handle anchor scrolling with GSAP
+  const handleClick = (e) => {
+    if ($buttonData?.link_url?.anchor) {
+      // First try to find by ID
+      let anchorElement = document.getElementById($buttonData.link_url.anchor);
+
+      // If not found by ID, try to find by data-anchor-id attribute
+      if (!anchorElement) {
+        anchorElement = document.querySelector(
+          `[data-anchor-id="${$buttonData.link_url.anchor}"]`
+        );
+      }
+
+      if (anchorElement) {
+        // Only prevent default if we found the element and can scroll to it
+        e.preventDefault();
+
+        gsap.to(window, {
+          duration: 1,
+          scrollTo: {
+            y: anchorElement,
+            offsetY: 200,
+            center: true,
+          },
+          ease: 'power2.out',
+        });
+      }
+    }
+  };
+
+  // Add anchor to URL if it exists
+  if ($buttonData?.link_url?.anchor) {
+    normalizedUrl += `#${$buttonData.link_url.anchor}`;
+  }
 
   return (
     <ButtonWrapper layout={$buttonData?.layout} size={$buttonData?.link_size}>
       <ThemeProvider theme={selectedTheme}>
-        {target !== "_blank" ? (
-          <NextLink href={normalizedUrl} passHref>
+        {target !== '_blank' ? (
+          <NextLink href={normalizedUrl} passHref onClick={handleClick}>
             <StyledSpan stretch={stretch}>{$buttonData?.link_text}</StyledSpan>
-            {$buttonData?.theme.includes("link") && <StyledLinkArrow />}
+            {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
           </NextLink>
         ) : (
-          <StyledLink href={normalizedUrl} target={target} rel={rel}>
+          <StyledLink
+            href={normalizedUrl}
+            target={target}
+            rel={rel}
+            onClick={handleClick}
+          >
             {$buttonData?.link_text}
-            {$buttonData?.theme.includes("link") && <StyledLinkArrow />}
+            {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
           </StyledLink>
         )}
       </ThemeProvider>
@@ -99,7 +145,7 @@ const StyledSpan = styled.p`
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  min-width: ${(props) => (props.stretch ? "100%" : "auto")};
+  min-width: ${(props) => (props.stretch ? '100%' : 'auto')};
   width: auto;
   gap: 0.5vw;
   padding: ${(props) => props.theme.padding};
@@ -156,17 +202,17 @@ const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: ${(props) => props.layout || "row"};
+  flex-direction: ${(props) => props.layout || 'row'};
   gap: 1.5vw;
 
   ${(props) =>
-    props.size === "small"
+    props.size === 'small'
       ? text.bodySm
-      : props.size === "large"
-        ? text.bodyLg
-        : props.size === "tiny"
-          ? text.tagLight
-          : text.bodyMd};
+      : props.size === 'large'
+      ? text.bodyLg
+      : props.size === 'tiny'
+      ? text.tagLight
+      : text.bodyMd};
 
   width: max-content;
 `;
