@@ -30,6 +30,10 @@ export default async function RootLayout({ children }) {
           name='google-site-verification'
           content='9aTxhC978Sh5yhlRXic1mj23gCh4RcexRTfgiwMKbks'
         />
+        <meta
+          name='facebook-domain-verification'
+          content='vw5hfzh0aj764x59srftw18eksj8nq'
+        />
         {/* Google reCAPTCHA */}
         <Script
           id='recaptcha'
