@@ -233,6 +233,7 @@ const SideBySideWrapper = styled.div`
     }
 
     ${media.mobile} {
+      width: auto !important;
       margin-top: ${(props) => (props.asset_form ? "unset" : "unset")};
     }
   }

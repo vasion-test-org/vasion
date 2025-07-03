@@ -1,42 +1,17 @@
-"use client";
-import React from "react";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import styled, { ThemeProvider } from "styled-components";
-import media from "@/styles/media";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { ScreenContext } from "@/components/providers/Screen";
-import Button from "@/components/globalComponents/Button";
-import Image from "@/components/globalComponents/Image";
-import LogoCube from "./LogoCube";
-import LightboxBtn from "@/components/LightboxButton";
-import { useRouter } from "next/navigation";
-
-const getBackgroundStyle = (customTheme) => {
-  if (!customTheme) return null;
-
-  if (
-    customTheme.background_type === "image" &&
-    customTheme.background_media?.length
-  ) {
-    const backgroundImage = customTheme.background_media[0];
-    return {
-      type: "image",
-      url: backgroundImage.filename,
-      hasOverlay: true,
-    };
-  }
-
-  if (customTheme.background_color?.value) {
-    return {
-      type: "color",
-      color: customTheme.background_color.value,
-    };
-  }
-
-  return null;
-};
+'use client';
+import React from 'react';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+import media from '@/styles/media';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { ScreenContext } from '@/components/providers/Screen';
+import Button from '@/components/globalComponents/Button';
+import Image from '@/components/globalComponents/Image';
+import LogoCube from './LogoCube';
+import LightboxBtn from '@/components/LightboxButton';
+import { useRouter } from 'next/navigation';
+import useMedia from '@/functions/useMedia';
 
 const Hero = ({ blok }) => {
   const router = useRouter();
@@ -47,12 +22,26 @@ const Hero = ({ blok }) => {
     customTheme = undefined;
   }
 
-  const backgroundStyle = getBackgroundStyle(customTheme);
+  const backgroundType = customTheme?.background_type;
+  const bg_img =
+    backgroundType === 'image'
+      ? useMedia(
+          customTheme?.background_media?.[0]?.filename,
+          customTheme?.background_media?.[0]?.filename ||
+            customTheme?.background_media?.[0]?.filename,
+          customTheme?.background_media?.[1]?.filename ||
+            customTheme?.background_media?.[0]?.filename,
+          customTheme?.background_media?.[2]?.filename ||
+            customTheme?.background_media?.[0]?.filename
+        )
+      : null;
+  const bg_color =
+    backgroundType === 'color' ? customTheme?.background_color?.value : null;
 
   const handleNavigate = (link) => {
-    const isExternalLink = link.startsWith("http") || link.startsWith("https");
+    const isExternalLink = link.startsWith('http') || link.startsWith('https');
     if (isExternalLink) {
-      window.open(link, "_blank");
+      window.open(link, '_blank');
     } else {
       router.push(link);
     }
@@ -61,8 +50,10 @@ const Hero = ({ blok }) => {
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
       <HeroBGWrapper
-        backgroundStyle={backgroundStyle}
-        text_alignment={blok.text_alignment}
+        bg_img={bg_img}
+        bg_color={bg_color}
+        background_type={backgroundType}
+        // text_alignment={blok.text_alignment}
       >
         <HeroWrapper
           layout={blok.hero_layout}
@@ -70,14 +61,14 @@ const Hero = ({ blok }) => {
           spacingOffset={blok.offset_spacing}
           spacing={blok.section_spacing}
           centered={!blok?.hero_asset[0]}
-          text_alignment={blok.text_alignment}
+          // text_alignment={blok.text_alignment}
           socials={blok.socials}
         >
           <ContentWrapper
             socials={blok.socials}
             centered={!blok?.hero_asset[0] && !blok.socials}
             centered_image={blok.centered_image}
-            text_alignment={blok.text_alignment}
+            // text_alignment={blok.text_alignment}
           >
             {blok?.hero_asset[0] && blok.centered_image && (
               <ImageWrapper {...storyblokEditable(blok)}>
@@ -126,27 +117,27 @@ const Hero = ({ blok }) => {
           {blok?.socials && (
             <SocialCTA>
               <SocialLogoContainer>
-                <SocialLink href={"https://www.facebook.com/VasionSoftware"}>
+                <SocialLink href={'https://www.facebook.com/VasionSoftware'}>
                   <SocailLogo
-                    loading="lazy"
-                    src="/images/icons/Facebook.webp"
-                    alt="facebook-logo"
+                    loading='lazy'
+                    src='/images/icons/Facebook.webp'
+                    alt='facebook-logo'
                   />
                 </SocialLink>
                 <SocialLink
-                  href={"https://www.linkedin.com/company/printerlogic/"}
+                  href={'https://www.linkedin.com/company/printerlogic/'}
                 >
                   <SocailLogo
-                    loading="lazy"
-                    src="/images/icons/LinkedIn.webp"
-                    alt="linkedin-logo"
+                    loading='lazy'
+                    src='/images/icons/LinkedIn.webp'
+                    alt='linkedin-logo'
                   />
                 </SocialLink>
-                <SocialLink href={"https://x.com/VasionSoftware"}>
+                <SocialLink href={'https://x.com/VasionSoftware'}>
                   <SocailLogo
-                    loading="lazy"
-                    src="/images/icons/Twitter.webp"
-                    alt="twitter-logo"
+                    loading='lazy'
+                    src='/images/icons/Twitter.webp'
+                    alt='twitter-logo'
                   />
                 </SocialLink>
               </SocialLogoContainer>
@@ -168,30 +159,30 @@ const Hero = ({ blok }) => {
           {blok.review_buttons && (
             <ReviewButtons>
               <ReviewButton
-                src={"images/reviewButton.webp"}
-                alt={"review-us"}
-                width="164"
-                height="62"
-                onClick={() => handleNavigate("/review-us")}
+                src={'images/reviewButton.webp'}
+                alt={'review-us'}
+                width='164'
+                height='62'
+                onClick={() => handleNavigate('/review-us')}
               />
               <ReviewButton
-                src={"images/reviewButton-1.webp"}
-                alt={"G2 Reviews"}
-                width="164"
-                height="62"
-                onClick={() => handleNavigate("/review-us")}
+                src={'images/reviewButton-1.webp'}
+                alt={'G2 Reviews'}
+                width='164'
+                height='62'
+                onClick={() => handleNavigate('/review-us')}
               />
               <ReviewButton
-                src={"images/reviewButton-2.webp"}
-                alt={"Review Us"}
-                width="164"
-                height="62"
-                onClick={() => handleNavigate("/review-us")}
+                src={'images/reviewButton-2.webp'}
+                alt={'Review Us'}
+                width='164'
+                height='62'
+                onClick={() => handleNavigate('/review-us')}
               />
-              <AnchorButton href="#reddit-reviews">
+              <AnchorButton href='#reddit-reviews'>
                 <ReviewButton
-                  src={"images/ReviewButton-4.webp"}
-                  alt={"Reviews"}
+                  src={'images/ReviewButton-4.webp'}
+                  alt={'Reviews'}
                 />
               </AnchorButton>
             </ReviewButtons>
@@ -342,21 +333,21 @@ const ButtonRow = styled.div`
   align-items: center;
   width: min-content;
   gap: 0.75vw;
-  margin-top: ${(props) => (props.socials ? "unset" : "2vw")};
+  margin-top: ${(props) => (props.socials ? 'unset' : '2vw')};
 
   ${media.fullWidth} {
     gap: 12px;
-    margin-top: ${(props) => (props.socials ? "unset" : "32px")};
+    margin-top: ${(props) => (props.socials ? 'unset' : '32px')};
   }
 
   ${media.tablet} {
     gap: 1.172vw;
-    margin-top: ${(props) => (props.socials ? "unset" : "3.125vw")};
+    margin-top: ${(props) => (props.socials ? 'unset' : '3.125vw')};
   }
 
   ${media.mobile} {
     gap: 2.5vw;
-    margin-top: ${(props) => (props.socials ? "unset" : "6.667vw")};
+    margin-top: ${(props) => (props.socials ? 'unset' : '6.667vw')};
   }
 `;
 
@@ -364,33 +355,33 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   text-align: ${(props) => {
-    if (props.text_alignment) {
-      return props.text_alignment;
-    }
-    return props.centered_image ? "center" : props.centered ? "center" : "left";
+    // if (props.text_alignment) {
+    //   return props.text_alignment;
+    // }
+    return props.centered_image ? 'center' : props.centered ? 'center' : 'left';
   }};
 
   align-items: ${(props) => {
-    if (props.text_alignment) {
-      return props.text_alignment === "center"
-        ? "center"
-        : props.text_alignment === "right"
-          ? "flex-end"
-          : "flex-start";
-    }
+    // if (props.text_alignment) {
+    //   return props.text_alignment === 'center'
+    //     ? 'center'
+    //     : props.text_alignment === 'right'
+    //     ? 'flex-end'
+    //     : 'flex-start';
+    // }
     return props.centered_image
-      ? "center"
+      ? 'center'
       : props.centered
-        ? "center"
-        : "start";
+      ? 'center'
+      : 'start';
   }};
 
   width: ${(props) =>
     props.socials
-      ? "clamp(27.75vw, 100%, 26.5vw)"
-      : props.text_alignment
-        ? "40.25vw"
-        : "clamp(27.75vw, 100%, 54.75vw)"};
+      ? 'clamp(27.75vw, 100%, 26.5vw)'
+      : // : props.text_alignment
+        // ? '40.25vw'
+        'clamp(27.75vw, 100%, 54.75vw)'};
 
   h1,
   h2,
@@ -408,15 +399,16 @@ const ContentWrapper = styled.div`
   ${media.fullWidth} {
     width: ${(props) =>
       props.socials
-        ? "clamp(444px, 100%, 424px)"
-        : props.text_alignment
-          ? "644px"
-          : "clamp(444px, 100%, 876px)"};
+        ? 'clamp(444px, 100%, 424px)'
+        : // : props.text_alignment
+          // ? '644px'
+          'clamp(444px, 100%, 876px)'};
   }
 
   ${media.tablet} {
     width: ${(props) =>
-      props.text_alignment ? "39.453vw" : "clamp(39.355vw, 100%, 58.887vw)"};
+      // props.text_alignment ? '39.453vw' :
+      'clamp(39.355vw, 100%, 58.887vw)'};
   }
 
   ${media.mobile} {
@@ -427,151 +419,151 @@ const ContentWrapper = styled.div`
 const HeroWrapper = styled.div`
   position: relative;
   display: flex;
-  flex-direction: ${(props) => `${props.layout || "row"}`};
+  flex-direction: ${(props) => `${props.layout || 'row'}`};
   align-items: center;
   justify-content: ${(props) => {
-    if (props.text_alignment) {
-      return props.text_alignment === "center"
-        ? "center"
-        : props.text_alignment === "right"
-          ? "flex-end"
-          : "flex-start";
-    }
-    return props.centered ? "center" : "space-between";
+    // if (props.text_alignment) {
+    //   return props.text_alignment === 'center'
+    //     ? 'center'
+    //     : props.text_alignment === 'right'
+    //     ? 'flex-end'
+    //     : 'flex-start';
+    // }
+    return props.centered ? 'center' : 'space-between';
   }};
   color: ${(props) =>
     props.theme.customtheme?.text_color?.value || props.theme.hero.textColor};
 
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "6vw 9.25vw 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '6vw 9.25vw 0'
         : props.spacing
-          ? `calc(${props.spacing} / 1600 * 100vw) 9.25vw 0`
-          : "6vw 9.25vw 0";
+        ? `calc(${props.spacing} / 1600 * 100vw) 9.25vw 0`
+        : '6vw 9.25vw 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 9.25vw 6vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 9.25vw 6vw'
         : props.spacing
-          ? `0 9.25vw calc(${props.spacing} / 1600 * 100vw)`
-          : "0 9.25vw 6vw";
+        ? `0 9.25vw calc(${props.spacing} / 1600 * 100vw)`
+        : '0 9.25vw 6vw';
     }
-    return props.spacing === "default"
-      ? "6vw 9.25vw"
+    return props.spacing === 'default'
+      ? '6vw 9.25vw'
       : props.spacing
-        ? `calc(${props.spacing} / 1600 * 100vw) 9.25vw`
-        : "6vw 9.25vw";
+      ? `calc(${props.spacing} / 1600 * 100vw) 9.25vw`
+      : '6vw 9.25vw';
   }};
 
   gap: ${(props) =>
     props.socials
-      ? "46vw"
-      : props.gap === "default"
-        ? "3.75vw"
-        : props.gap
-          ? `calc(${props.gap} / 1600 * 100vw)`
-          : "3.75vw"};
+      ? '46vw'
+      : props.gap === 'default'
+      ? '3.75vw'
+      : props.gap
+      ? `calc(${props.gap} / 1600 * 100vw)`
+      : '3.75vw'};
 
   ${media.fullWidth} {
     max-width: 1600px;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "96px 148px 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '96px 148px 0'
           : props.spacing
-            ? `${props.spacing}px 148px 0`
-            : "96px 148px 0";
+          ? `${props.spacing}px 148px 0`
+          : '96px 148px 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 148px 96px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 148px 96px'
           : props.spacing
-            ? `0 148px ${props.spacing}px`
-            : "0 148px 96px";
+          ? `0 148px ${props.spacing}px`
+          : '0 148px 96px';
       }
-      return props.spacing === "default"
-        ? "96px 148px"
+      return props.spacing === 'default'
+        ? '96px 148px'
         : props.spacing
-          ? `${props.spacing}px 148px`
-          : "96px 148px";
+        ? `${props.spacing}px 148px`
+        : '96px 148px';
     }};
     gap: ${(props) =>
       props.socials
-        ? "736px"
-        : props.gap === "default"
-          ? "60px"
-          : props.gap
-            ? `${props.gap}px`
-            : "60px"};
+        ? '736px'
+        : props.gap === 'default'
+        ? '60px'
+        : props.gap
+        ? `${props.gap}px`
+        : '60px'};
   }
 
   ${media.tablet} {
     max-width: 100%;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.859vw 3.906vw 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 3.906vw 0'
           : props.spacing
-            ? `calc(${props.spacing} / 1024 * 100vw) 3.906vw 0`
-            : "5.859vw 3.906vw 0";
+          ? `calc(${props.spacing} / 1024 * 100vw) 3.906vw 0`
+          : '5.859vw 3.906vw 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 3.906vw 5.859vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 3.906vw 5.859vw'
           : props.spacing
-            ? `0 3.906vw calc(${props.spacing} / 1024 * 100vw)`
-            : "0 3.906vw 5.859vw";
+          ? `0 3.906vw calc(${props.spacing} / 1024 * 100vw)`
+          : '0 3.906vw 5.859vw';
       }
-      return props.spacing === "default"
-        ? "5.859vw 3.906vw"
+      return props.spacing === 'default'
+        ? '5.859vw 3.906vw'
         : props.spacing
-          ? `calc(${props.spacing} / 1024 * 100vw) 3.906vw`
-          : "5.859vw 3.906vw";
+        ? `calc(${props.spacing} / 1024 * 100vw) 3.906vw`
+        : '5.859vw 3.906vw';
     }};
     gap: ${(props) =>
       props.socials
-        ? "45.996vw"
-        : props.gap === "default"
-          ? "3.906vw"
-          : props.gap
-            ? `calc(${props.gap}/ 1024 * 100vw) `
-            : "3.906vw"};
+        ? '45.996vw'
+        : props.gap === 'default'
+        ? '3.906vw'
+        : props.gap
+        ? `calc(${props.gap}/ 1024 * 100vw) `
+        : '3.906vw'};
   }
 
   ${media.mobile} {
-    flex-direction: ${(props) => (props.socials ? "column" : "column-reverse")};
-    align-items: ${(props) => (props.socials ? "flex-start" : "center")};
+    flex-direction: ${(props) => (props.socials ? 'column' : 'column-reverse')};
+    align-items: ${(props) => (props.socials ? 'flex-start' : 'center')};
     max-width: 100%;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 5.417vw 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 5.417vw 0'
           : props.spacing
-            ? `calc(${props.spacing} / 480 * 100vw) 5.417vw 0`
-            : "12.5vw 5.417vw 0";
+          ? `calc(${props.spacing} / 480 * 100vw) 5.417vw 0`
+          : '12.5vw 5.417vw 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 5.417vw 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 5.417vw 12.5vw'
           : props.spacing
-            ? `0 5.417vw calc(${props.spacing} / 480 * 100vw)`
-            : "0 5.417vw 12.5vw";
+          ? `0 5.417vw calc(${props.spacing} / 480 * 100vw)`
+          : '0 5.417vw 12.5vw';
       }
-      return props.spacing === "default"
-        ? "5.417vw 5.417vw"
+      return props.spacing === 'default'
+        ? '5.417vw 5.417vw'
         : props.spacing
-          ? `calc(${props.spacing} / 480 * 100vw) 5.417vw`
-          : "5.417vw 5.417vw";
+        ? `calc(${props.spacing} / 480 * 100vw) 5.417vw`
+        : '5.417vw 5.417vw';
     }};
     gap: ${(props) =>
       props.socials
-        ? "8.333vw"
-        : props.gap === "default"
-          ? "5.417vw"
-          : props.gap
-            ? `calc(${props.gap}/ 480 * 100vw) `
-            : "5.417vw"};
+        ? '8.333vw'
+        : props.gap === 'default'
+        ? '5.417vw'
+        : props.gap
+        ? `calc(${props.gap}/ 480 * 100vw) `
+        : '5.417vw'};
   }
 `;
 
@@ -579,46 +571,22 @@ const HeroBGWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: ${(props) =>
-    props?.text_alignment ? props.text_alignment : "center"};
+    // props?.text_alignment ? props.text_alignment :
+    'center'};
   justify-content: center;
   position: relative;
-
-  /* Handle background based on type */
-  ${(props) => {
-    if (props.backgroundStyle?.type === "image") {
-      return `
-        background: url(${props.backgroundStyle.url}) center/cover no-repeat;
-        background-attachment: fixed;
-        
-        /* Add overlay for better text readability */
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.2);
-          z-index: 1;
-        }
-        
-        /* Ensure content appears above overlay */
-        > * {
-          position: relative;
-          z-index: 2;
-        }
-        
-        /* Remove background attachment on mobile for better performance */
-        ${media.mobile} {
-          background-attachment: scroll;
-        }
-      `;
-    } else if (props.backgroundStyle?.type === "color") {
-      return `background: ${props.backgroundStyle.color};`;
-    } else {
-      return `background: ${props.theme.hero.bg};`;
+  background: ${(props) => {
+    if (props.background_type === 'image' && props.bg_img) {
+      return `url(${props.bg_img})`;
     }
-  }}
+    if (props.background_type === 'color' && props.bg_color) {
+      return props.bg_color;
+    }
+    return props.theme.hero.bg;
+  }};
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
 `;
 
 export default Hero;
