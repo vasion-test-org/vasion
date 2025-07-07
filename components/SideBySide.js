@@ -18,7 +18,6 @@ const SideBySide = ({ blok }) => {
   const isRightVideo =
     blok.right_side_component?.[0]?.component === 'video_assets';
   const isRightForm = blok.right_side_component?.[0]?.component === 'form';
-
   const isSideBySideAsset = isLeftAsset && isRightAsset;
   const isSideBySideVideo = isLeftVideo || isRightVideo;
 
@@ -29,13 +28,14 @@ const SideBySide = ({ blok }) => {
         blok={blok.left_side_component[0]}
         isSideBySideAsset={isSideBySideAsset}
         isSideBySideVideo={isSideBySideVideo}
-        className={isRightForm ? 'preformContent' : undefined}
+        isRightForm={isRightForm}
       />
       <ComponentRenderer
         extra_copy={blok.right_extra_copy?.[0]}
         blok={blok.right_side_component[0]}
         isSideBySideAsset={isSideBySideAsset}
         isSideBySideVideo={isSideBySideVideo}
+        isRightForm={isRightForm}
       />
     </>
   );
