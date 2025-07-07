@@ -23,7 +23,7 @@ const Form = ({ blok }) => {
   const formWidth = getMedia('1096px', '76.111vw', '90.82vw', '87.85vw');
   const formHeight = getMedia('733px', '50.875vw', '77.137vw', '288.084vw');
   const lineWidth = getMedia('220px', '15.278vw', '19.531vw', '7.187vw');
-  const xFormPosition = getMedia(-28, -14, -27, 0);
+  const xFormPosition = getMedia(-28, 0, -27, 0);
   // const yFormPosition = getMedia(-277, -277, -27, 0);
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
