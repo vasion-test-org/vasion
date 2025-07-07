@@ -24,6 +24,7 @@ const SideBySide = ({ blok }) => {
   const content = (
     <>
       <ComponentRenderer
+        className="preformContent"
         extra_copy={blok.left_extra_copy?.[0]}
         blok={blok.left_side_component[0]}
         isSideBySideAsset={isSideBySideAsset}
