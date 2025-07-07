@@ -20,6 +20,7 @@ const ComponentRenderer = ({
   extra_copy,
   isSideBySideAsset,
   isSideBySideVideo,
+  isRightForm,
 }) => {
   if (!blok) return null;
   const copycomponents = [
@@ -108,7 +109,7 @@ const ComponentRenderer = ({
       );
     case 'copy_block':
       return (
-        <CopyDiv className='preformContent nondemo'>
+        <CopyDiv className={isRightForm ? 'preformContent nondemo' : undefined}>
           {blok?.copy_block_sections?.map((item, index) => (
             <BlockWrapper key={index} {...storyblokEditable(item)}>
               {copycomponents.includes(item.component) ? (
