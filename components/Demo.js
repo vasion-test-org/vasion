@@ -447,22 +447,22 @@ const FormThankYouContainer = styled.div`
 `;
 
 const OptionIconWrapper = styled.div`
-    width: 2.375vw;
-    height: 2.375vw;
+    min-width: 2.375vw;
+    min-height: 2.375vw;
 
     ${media.fullWidth} {
-      width: 38px;
-      height: 38px;
+      min-width: 38px;
+      min-height: 38px;
     }
 
     ${media.tablet} {
-      width: 3.711vw;
-      height: 3.711vw;
+      min-width: 3.711vw;
+      min-height: 3.711vw;
     }
 
     ${media.mobile} {
-      width: 7.917vw;
-      height: 7.917vw;
+      min-width: 7.917vw;
+      min-height: 7.917vw;
     }
 `;
 const OptionIcon = styled.img`
