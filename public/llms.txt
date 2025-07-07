@@ -1,0 +1,54 @@
+# Vasion llms.txt
+# This file guides Large Language Models to key pages and explicitly allows access for major LLM crawlers.
+## Overview
+Vasion, formerly PrinterLogic, leverages its leading enterprise serverless print automation technology to deliver an intuitive content management and business process cloud platform. With Vasion's SaaS solution, businesses can effortlessly capture analog and digital content, automate workflows, create eSignature agreements, and securely manage content across all storage locations. Vasion simplifies processes through seamless automation and integration built on cloud-based automation, utilizing AI, OCR, and ICR technologies, making digital transformation accessible and efficient for organizations of all sizes.
+## Key Pages
+### Homepage
+[Vasion | Intelligent Orchestrated Automation] https://vasion.com
+### Core Product Pages
+[Vasion Print | Vasion] https://vasion.com/print
+[Output Automation | Vasion] https://vasion.com/output-automation/
+[Vasion Automate | Vasion] https://vasion.com/automate/
+[Advanced Security Bundle | Vasion] https://vasion.com/advanced-security/
+[Cost Management | Vasion] https://vasion.com/cost-management/
+### Solution Pages
+[Your Zero Trust Printing Solution | Vasion] https://vasion.com/zero-trust/
+[Eco Friendly Print Management | Vasion] https://vasion.com/print/eco-friendly-print-management/
+[Enterprise Print Management Solution | Vasion] https://vasion.com/enterprise-print-management/
+[HR Document Management Solutions | Vasion] https://vasion.com/hr-management/
+[Simplify Healthcare Printing | Vasion] https://vasion.com/industries/healthcare/
+[Manufacturing | Vasion] https://vasion.com/industries/manufacturing/
+[Government | Vasion ] https://vasion.com/industries/government/
+[Financial Services Digitization Solutions | Vasion] https://vasion.com/industries/financial-services/
+[Higher Education | Vasion] https://vasion.com/industries/higher-education/
+[Retail Print Solutions | Vasion] https://vasion.com/retail-print/
+## Sitemap
+Sitemap: https://vasion.com/sitemap.xml
+## AI Crawler Access
+# This section ensures consistent access for all crawlers including Google
+# Major LLM crawlers - always allowed for consistency
+User-agent: GPTBot
+Allow: /
+Disallow: /go/
+User-agent: PerplexityBot
+Allow: /
+Disallow: /go/
+User-agent: ClaudeBot
+Allow: /
+Disallow: /go/
+User-agent: GeminiBot
+Allow: /
+Disallow: /go/
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /go/
+User-agent: Googlebot
+Allow: /
+Disallow: /go/
+User-agent: Bingbot
+Allow: /
+Disallow: /go/
+# Default allow for all other crawlers
+User-agent: *
+Allow: /
+Disallow: /go/ 
