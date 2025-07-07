@@ -20,7 +20,7 @@ const AnchorNavigator = ({ blok }) => {
   const [anchorList, setAnchorList] = useState([]);
   const formattedIconString = blok?.page_icon?.replace(/\s+/g, '');
   const IconComponent = Icons[formattedIconString] || null;
-// console.log(IconComponent)
+  // console.log(IconComponent)
   useEffect(() => {
     const updateAnchors = () => {
       const allAnchors = Array.from(
@@ -67,11 +67,11 @@ const AnchorNavigator = ({ blok }) => {
       </AnchorButton>
     );
   });
- 
+
   return (
     <ThemeProvider theme={selectedTheme}>
-      <AnchorWrapper className='anchorNav'>
-        {anchorList.length > 0 && (
+      {blok && anchorList.length > 0 && (
+        <AnchorWrapper className='anchorNav'>
           <AnchorNavWrapper>
             <PageInfoContainer>
               {blok?.page_title && <PageTitle>{blok.page_title}</PageTitle>}
@@ -83,8 +83,8 @@ const AnchorNavigator = ({ blok }) => {
             </PageInfoContainer>
             <ButtonsDiv>{anchorMap}</ButtonsDiv>
           </AnchorNavWrapper>
-        )}
-      </AnchorWrapper>
+        </AnchorWrapper>
+      )}
     </ThemeProvider>
   );
 };
