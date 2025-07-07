@@ -59,6 +59,9 @@ export async function generateMetadata({ params }) {
     }
   }
 
+  // Check if page should be no-index, no-follow
+  const shouldNoIndex = content.index === false;
+
   return {
     title,
     description,
@@ -66,6 +69,7 @@ export async function generateMetadata({ params }) {
       canonical: canonicalUrl,
       languages: alternateLinks,
     },
+    robots: shouldNoIndex ? 'noindex, nofollow' : undefined,
   };
 }
 
