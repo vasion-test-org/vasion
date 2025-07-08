@@ -367,7 +367,7 @@ const Demo = ({ blok }) => {
         <Content className="preformContent">
           {!mobile && <Header>{blok.header}</Header>}
           <AllOptionsContainer>{mappedOptions}</AllOptionsContainer>
-          {mobile && <BadgesContainer>{mappedBadges}</BadgesContainer>}
+          <BadgesContainer>{mappedBadges}</BadgesContainer>
         </Content>
 
         {blok.demo_form[0].component === "form" && (
