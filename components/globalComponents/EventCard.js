@@ -66,6 +66,16 @@ const DetailIcon = styled.img`
   width: 1.25vw;
   height: 1.25vw;
 
+  ${media.fullWidth} {
+    width: 20px;
+    height: 20px;
+  }
+
+  ${media.tablet} {
+    width: 1.953vw;
+    height: 1.953vw;
+  }
+
   ${media.mobile} {
     width: 4.167vw;
     height: 4.167vw;
@@ -76,6 +86,10 @@ const DetailDiv = styled.div`
   flex-direction: row;
   gap: 0.5vw;
 
+  ${media.fullWidth} {
+    gap: 8px;
+  }
+
   ${media.mobile} {
     gap: 1.667vw;
   }
@@ -84,6 +98,10 @@ const Details = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5vw;
+
+  ${media.fullWidth} {
+    gap: 8px;
+  }
 
   ${media.mobile} {
     gap: 1.667vw;
@@ -123,6 +141,11 @@ const EventContent = styled.div`
   width: 25.125vw;
   gap: 0.5vw;
 
+  ${media.fullWidth} {
+    width: 402px;
+    gap: 8px;
+  }
+
   ${media.mobile} {
     width: 100%;
     gap: 1.667vw;
@@ -131,6 +154,11 @@ const EventContent = styled.div`
 const EventImage = styled.img`
   width: 3.625vw;
   height: 3.625vw;
+
+  ${media.fullWidth} {
+    width: 58px;
+    height: 58px;
+  }
 
   ${media.mobile} {
     display: none;
@@ -141,6 +169,10 @@ const EventInfoContainer = styled.div`
   align-items: center;
   flex-direction: row;
   gap: 1vw;
+
+  ${media.fullWidth} {
+    gap: 16px;
+  }
 
   ${media.mobile} {
     flex-direction: column;
