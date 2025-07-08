@@ -12,7 +12,11 @@ let smootherInstance = null; // <-- add this at the top
 
 export const getSmoother = () => smootherInstance; // <-- export a getter
 
-export default function ScrollSmootherWrapper({ children }: { children: React.ReactNode }) {
+export default function ScrollSmootherWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const pathname = usePathname();
 
   useEffect(() => {
@@ -34,8 +38,8 @@ export default function ScrollSmootherWrapper({ children }: { children: React.Re
   }, [pathname]);
 
   return (
-    <div id="smooth-wrapper">
-      <div id="smooth-content">{children}</div>
+    <div id='smooth-wrapper'>
+      <div id='smooth-content'>{children}</div>
     </div>
   );
 }
