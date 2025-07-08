@@ -1,26 +1,28 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import Footer from './globalComponents/Footer';
-import Nav from './globalComponents/Nav';
-import MobileNav from './globalComponents/MobileNav';
-import styled from 'styled-components';
-import media from '@/styles/media';
-import { usePathname } from 'next/navigation';
-import { getStoryblokApi } from '@/lib/storyblok';
-import { usePageData } from '@/context/PageDataContext';
+import React, { useEffect, useState } from "react";
+import Footer from "./globalComponents/Footer";
+import Nav from "./globalComponents/Nav";
+import MobileNav from "./globalComponents/MobileNav";
+import styled from "styled-components";
+import media from "@/styles/media";
+import { usePathname } from "next/navigation";
+import { getStoryblokApi } from "@/lib/storyblok";
+import { usePageData } from "@/context/PageDataContext";
 
 const Config = ({ blok, children }) => {
   const pathname = usePathname();
   const [configData, setConfigData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { pageData } = usePageData();
-
+  if (pathname === "/404" || pathname.includes("/404")) {
+    return children;
+  }
   const getLocaleFromPath = () => {
-    const parts = pathname?.split('/');
+    const parts = pathname?.split("/");
     const localeCandidate = parts[1];
-    const supportedLocales = ['en', 'de', 'fr'];
-    return supportedLocales.includes(localeCandidate) ? localeCandidate : 'en';
+    const supportedLocales = ["en", "de", "fr"];
+    return supportedLocales.includes(localeCandidate) ? localeCandidate : "en";
   };
 
   // Fallback navigation data for 404 pages or when config fetch fails
@@ -30,34 +32,34 @@ const Config = ({ blok, children }) => {
       nav: [
         {
           banner:
-            locale === 'en'
-              ? 'Free Trial Available'
-              : locale === 'fr'
-              ? 'Essai gratuit disponible'
-              : 'Kostenlose Testversion verfügbar',
+            locale === "en"
+              ? "Free Trial Available"
+              : locale === "fr"
+                ? "Essai gratuit disponible"
+                : "Kostenlose Testversion verfügbar",
           english_nav_items: [
             {
-              tab_name: 'Products',
+              tab_name: "Products",
               tab_columns: [
                 {
-                  column_header: 'Print Management',
+                  column_header: "Print Management",
                   nav_items: [
                     {
-                      _uid: 'fallback-print',
-                      tab_name: 'Print Management',
-                      icon: 'Print',
+                      _uid: "fallback-print",
+                      tab_name: "Print Management",
+                      icon: "Print",
                       item_copy: {
-                        type: 'doc',
+                        type: "doc",
                         content: [
                           {
-                            type: 'paragraph',
+                            type: "paragraph",
                             content: [
-                              { type: 'text', text: 'Print Management' },
+                              { type: "text", text: "Print Management" },
                             ],
                           },
                         ],
                       },
-                      item_link: { cached_url: '/print/' },
+                      item_link: { cached_url: "/print/" },
                     },
                   ],
                 },
@@ -66,27 +68,27 @@ const Config = ({ blok, children }) => {
           ],
           french_nav_items: [
             {
-              tab_name: 'Produits',
+              tab_name: "Produits",
               tab_columns: [
                 {
                   column_header: "Gestion d'impression",
                   nav_items: [
                     {
-                      _uid: 'fallback-print-fr',
+                      _uid: "fallback-print-fr",
                       tab_name: "Gestion d'impression",
-                      icon: 'Print',
+                      icon: "Print",
                       item_copy: {
-                        type: 'doc',
+                        type: "doc",
                         content: [
                           {
-                            type: 'paragraph',
+                            type: "paragraph",
                             content: [
-                              { type: 'text', text: "Gestion d'impression" },
+                              { type: "text", text: "Gestion d'impression" },
                             ],
                           },
                         ],
                       },
-                      item_link: { cached_url: '/fr/print/' },
+                      item_link: { cached_url: "/fr/print/" },
                     },
                   ],
                 },
@@ -95,27 +97,27 @@ const Config = ({ blok, children }) => {
           ],
           german_nav_items: [
             {
-              tab_name: 'Produkte',
+              tab_name: "Produkte",
               tab_columns: [
                 {
-                  column_header: 'Druckverwaltung',
+                  column_header: "Druckverwaltung",
                   nav_items: [
                     {
-                      _uid: 'fallback-print-de',
-                      tab_name: 'Druckverwaltung',
-                      icon: 'Print',
+                      _uid: "fallback-print-de",
+                      tab_name: "Druckverwaltung",
+                      icon: "Print",
                       item_copy: {
-                        type: 'doc',
+                        type: "doc",
                         content: [
                           {
-                            type: 'paragraph',
+                            type: "paragraph",
                             content: [
-                              { type: 'text', text: 'Druckverwaltung' },
+                              { type: "text", text: "Druckverwaltung" },
                             ],
                           },
                         ],
                       },
-                      item_link: { cached_url: '/de/print/' },
+                      item_link: { cached_url: "/de/print/" },
                     },
                   ],
                 },
@@ -140,13 +142,13 @@ const Config = ({ blok, children }) => {
 
       try {
         const storyblokApi = getStoryblokApi();
-        const { data } = await storyblokApi.get('cdn/stories/config', {
-          version: 'published',
+        const { data } = await storyblokApi.get("cdn/stories/config", {
+          version: "published",
           language: locale,
         });
         setConfigData(data?.story?.content ?? null);
       } catch (error) {
-        console.error('Failed to fetch config:', error);
+        console.error("Failed to fetch config:", error);
         // Use fallback data when config fetch fails (like on 404 pages)
         setConfigData(getFallbackNavData());
       } finally {
@@ -191,7 +193,7 @@ const Config = ({ blok, children }) => {
 };
 
 const ChildrenVisibilityWrapper = styled.div`
-  visibility: ${({ $visible }) => ($visible ? 'visible' : 'hidden')};
+  visibility: ${({ $visible }) => ($visible ? "visible" : "hidden")};
 `;
 
 const NavWrapper = styled.div`
