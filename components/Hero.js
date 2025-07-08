@@ -159,21 +159,21 @@ const Hero = ({ blok }) => {
           {blok.review_buttons && (
             <ReviewButtons>
               <ReviewButton
-                src={'images/reviewButton.webp'}
+                src={'/images/reviewButton.webp'}
                 alt={'review-us'}
                 width='164'
                 height='62'
                 onClick={() => handleNavigate('/review-us')}
               />
               <ReviewButton
-                src={'images/reviewButton-1.webp'}
+                src={'/images/reviewButton-1.webp'}
                 alt={'G2 Reviews'}
                 width='164'
                 height='62'
                 onClick={() => handleNavigate('/review-us')}
               />
               <ReviewButton
-                src={'images/reviewButton-2.webp'}
+                src={'/images/reviewButton-2.webp'}
                 alt={'Review Us'}
                 width='164'
                 height='62'
@@ -181,7 +181,7 @@ const Hero = ({ blok }) => {
               />
               <AnchorButton href='#reddit-reviews'>
                 <ReviewButton
-                  src={'images/ReviewButton-4.webp'}
+                  src={'/images/ReviewButton-4.webp'}
                   alt={'Reviews'}
                 />
               </AnchorButton>
