@@ -595,7 +595,6 @@ const FormContainer = styled.div`
       }
 
       ${media.mobile} {
-        ${text.bodySm};
         margin: 1vw 15.5vw 0 0.833vw !important;
       }
     }
