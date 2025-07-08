@@ -431,7 +431,7 @@ line-height: 40px;
     }
 
     ${media.mobile} {
-       font-size: 3.738vw;
+       font-size: 3.333vw;
       line-height: 5.14vw;
     }
     `,

@@ -23,7 +23,7 @@ const TestForm = ({ blok }) => {
   const formWidth = getMedia('1096px', '76.111vw', '90.82vw', '87.85vw');
   const formHeight = getMedia('733px', '50.875vw', '77.137vw', '288.084vw');
   const lineWidth = getMedia('220px', '15.278vw', '19.531vw', '7.187vw');
-  const xFormPosition = getMedia(-28, -28, -27, 0);
+  const xFormPosition = getMedia(0, 0, -27, 0);
   // const yFormPosition = getMedia(-277, -277, -27, 0);
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
@@ -583,20 +583,20 @@ const FormContainer = styled.div`
     }
 
     label {
-      margin: 0 1vw 0 0.5vw !important;
+      margin: 0 1vw 0 0.25vw !important;
       width: max-content !important;
 
       ${media.fullWidth} {
-        margin: 0 16px 0 8px !important;
+        margin: 0 16px 0 4px !important;
       }
 
       ${media.tablet} {
-        margin: 0 1.563vw 0 0.781vw !important;
+        margin: 0 7.563vw 0 0.325vw !important;
       }
 
       ${media.mobile} {
         ${text.bodySm};
-        margin: 0 15.5vw 0 0.5vw !important;
+        margin: 1vw 15.5vw 0 0.833vw !important;
       }
     }
   }
@@ -849,27 +849,27 @@ const FormContainer = styled.div`
     background: ${(props) => props.theme.form.inputBg};
     color: ${(props) => props.theme.form.selectPlaceHolderColor} !important;
     width: 31.25vw !important;
-    padding: 1vw;
+    padding: 1vw !important;
     border-radius: 0.25vw;
     height: 3.375vw;
 
     ${media.fullWidth} {
       width: 500px !important;
-      padding: 16px;
+      padding: 16px !important;
       border-radius: 4px;
       height: 54px;
     }
 
     ${media.tablet} {
       width: 39.063vw !important;
-      padding: 1.563vw;
+      padding: 1.563vw !important;
       border-radius: 0.391vw;
       height: 5.273vw;
     }
 
     ${media.mobile} {
       width: 75.833vw !important;
-      padding: 3.333vw;
+      padding: 3.333vw !important;
       border-radius: 0.833vw;
       min-height: 11.25vw;
     }
