@@ -94,7 +94,9 @@ const MobileNav = ({ blok }) => {
   };
   const mappedNav = currentNavItems.map((item, index) => (
     <Tab key={`tab-${index}`}>
-      <TabHeader className='tabHeader'>{item.tab_name}</TabHeader>
+      <TabHeader className='tabHeader' data-tab-index={index}>
+        {item.tab_name}
+      </TabHeader>
       <TabDropdown className='tabDropdowns' id={`tabHeader-${index}`}>
         {item.tab_columns.map((column, colIndex) => (
           <NavItemsDiv key={`column-${colIndex}`}>
@@ -255,14 +257,34 @@ const MobileNav = ({ blok }) => {
         tl.to(`#tabHeader-${index}`, { height: 0 }).set(`#tabHeader-${index}`, {
           display: 'none',
         });
+        // Remove active class from tab header
+        const activeTabHeader = document.querySelector(
+          `[data-tab-index="${index}"]`
+        );
+        if (activeTabHeader) {
+          activeTabHeader.classList.remove('active');
+        }
         isOpen.current = false;
         dropdownIndex.current = null;
         tl.play();
         return;
       }
 
+      // Remove active class from all tab headers
+      document.querySelectorAll('.tabHeader').forEach((header) => {
+        header.classList.remove('active');
+      });
+
       dropdownIndex.current = index;
       isOpen.current = true;
+
+      // Add active class to current tab header
+      const currentTabHeader = document.querySelector(
+        `[data-tab-index="${index}"]`
+      );
+      if (currentTabHeader) {
+        currentTabHeader.classList.add('active');
+      }
 
       tl.to('.tabDropdowns', { height: 0 })
         .set('.tabDropdowns', { display: 'none' }, '>-0.15')
@@ -461,8 +483,8 @@ const NavIconWrapper = styled.div`
   align-self: ${(props) => (props.card ? 'start' : 'unset')};
 
   ${media.mobile} {
-    width: ${(props) => (props.card && props.card_size ? '54px' : '20px')};
-    height: ${(props) => (props.card && props.card_size ? 'unset' : '20px')};
+    width: ${(props) => (props.card && props.card_size ? '7.917vw' : '4.167vw')};
+    height: ${(props) => (props.card && props.card_size ? 'unset' : '4.167vw')};
   }
 
   svg {
@@ -539,7 +561,7 @@ const NavItem = styled.div`
 
 const ColumnHeader = styled.p`
   ${media.mobile} {
-    margin-bottom: 3.333vw;
+    margin-bottom: 2.5vw;
   }
   ${text.bodySm};
   color: ${colors.txtSubtle};
@@ -578,7 +600,12 @@ const TabHeader = styled.div`
     height: 10.833vw;
     /* margin-bottom: 3.333vw; */
     width: 100%;
-    background: rgba(61, 37, 98, 0.05);
+    background: ${colors.white};
+    transition: background-color 0.3s ease;
+
+    &.active {
+      background: rgba(61, 37, 98, 0.05);
+    }
   }
 `;
 const Tab = styled.div`
