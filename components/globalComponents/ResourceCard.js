@@ -125,7 +125,7 @@ const getRandomImageForType = (type) => {
 };
 
 const ResourceCard = ({ content, paginated, index, borderradius }) => {
-  console.log(content);
+  // console.log(content);
   const pathname = usePathname();
 
   // Get current locale from pathname
