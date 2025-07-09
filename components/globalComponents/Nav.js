@@ -1253,6 +1253,7 @@ const NavBackdrop = styled.div`
   -webkit-backface-visibility: hidden;
 
   /* Create cutouts for nav elements */
+
   &::before {
     content: "";
     position: absolute;
