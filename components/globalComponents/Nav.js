@@ -190,6 +190,9 @@ const Nav = ({ blok }) => {
                         <NavCopy>
                           <NavItemCopy card_size={navItem.card_size}>
                             <RichTextRenderer document={navItem.item_copy} />
+                            {navItem.add_chevron_arrow && (
+                              <ChevronArrow src="/images/uiElements/chevron-arrow-label.webp" />
+                            )}
                           </NavItemCopy>
                           {navItem.card_size === "medium" && (
                             <StyledAnchor
@@ -756,7 +759,28 @@ const NavItemSubCopy = styled.div`
   ${text.bodySm};
   color: ${colors.txtSubtle};
 `;
+const ChevronArrow = styled.img`
+  width: 0.75vw;
+  height: 0.75vw;
+
+  ${media.fullWidth} {
+    width: 12px;
+    height: 12px;
+  }
+  ${media.tablet} {
+    width: 1.172vw;
+    height: 1.172vw;
+  }
+  ${media.mobile} {
+    width: 2.5vw;
+    height: 2.5vw;
+  }
+`;
 const NavItemCopy = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5vw;
   color: ${colors.grey800};
   margin-left: ${(props) => (props.card_size === "large" ? "1vw" : "unset")};
 
@@ -773,6 +797,7 @@ const NavItemCopy = styled.div`
   ${media.mobile} {
   }
 `;
+
 const NavCopy = styled.div`
   display: flex;
   flex-direction: column;
@@ -1066,18 +1091,18 @@ const Tab = styled.div`
   align-items: center;
   justify-content: center;
   height: 1.625vw;
-  padding: 0.125vw 0.25vw;
+  padding: 0.25vw 0.125vw;
   border-radius: 0.25vw;
 
   ${media.fullWidth} {
     height: 26px;
-    padding: 2px 4px;
+    padding: 4px 2px;
     border-radius: 4px;
   }
 
   ${media.tablet} {
     height: 2.539vw;
-    padding: 0.195vw 0.391vw;
+    padding: 0.391vw 0.195vw;
     border-radius: 0.391vw;
   }
 
