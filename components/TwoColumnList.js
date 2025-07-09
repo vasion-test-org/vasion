@@ -8,7 +8,6 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 const TwoColumnList = ({ blok }) => {
-
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
