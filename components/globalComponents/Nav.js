@@ -107,10 +107,10 @@ const Nav = ({ blok }) => {
           "This page is not yet available in the selected language",
         );
         setShowTooltip(true);
-        // console.log('Tooltip state updated:', { showTooltip: true, message: tooltipMessage });
+       
         setTimeout(() => {
           setShowTooltip(false);
-          // console.log('Tooltip hidden after timeout');
+       
         }, 3000);
       }
     } catch (error) {
