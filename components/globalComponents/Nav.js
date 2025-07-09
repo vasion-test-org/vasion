@@ -785,12 +785,14 @@ const NavItemCopy = styled.div`
 
   ${media.fullWidth} {
     margin-left: ${(props) => (props.card_size === "large" ? "16px" : "unset")};
+    gap: 8px;
   }
 
   ${media.tablet} {
     ${text.bodyMd};
     margin-left: ${(props) =>
       props.card_size === "large" ? "1.563vw" : "unset"};
+    gap: 0.781vw;
   }
 
   ${media.mobile} {
