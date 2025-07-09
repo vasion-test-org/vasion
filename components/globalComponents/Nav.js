@@ -107,10 +107,9 @@ const Nav = ({ blok }) => {
           "This page is not yet available in the selected language",
         );
         setShowTooltip(true);
-       
+
         setTimeout(() => {
           setShowTooltip(false);
-       
         }, 3000);
       }
     } catch (error) {
@@ -1078,7 +1077,6 @@ const ColumnsWrapper = styled.div`
     ${media.tablet} {
       padding: 0 3.125vw;
     }
-
     ${media.mobile} {
     }
   }
