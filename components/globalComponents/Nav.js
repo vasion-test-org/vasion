@@ -113,7 +113,7 @@ const Nav = ({ blok }) => {
         }, 3000);
       }
     } catch (error) {
-      // console.log('Error occurred:', error);
+     
       setTooltipMessage(
         "This page is not yet available in the selected language",
       );

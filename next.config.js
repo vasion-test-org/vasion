@@ -628,6 +628,11 @@ const nextConfig = {
         destination: "/launches/spring-launch-2025/",
         permanent: true,
       },
+      {
+        source: "/go/superman/t&c/",
+        destination: "/go/superman/t-c/",
+        permanent: true,
+      },
 
       {
         source: "/:path*",
