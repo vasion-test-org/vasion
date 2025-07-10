@@ -188,9 +188,19 @@ const Nav = ({ blok }) => {
                         <NavCopy>
                           <NavItemCopy card_size={navItem.card_size}>
                             <RichTextRenderer document={navItem.item_copy} />
-                            {navItem.add_chevron_arrow && (
-                              <ChevronArrow src="/images/uiElements/chevron-arrow-label.webp" />
-                            )}
+                            {navItem.add_chevron_arrow &&
+                              (navItem.orange_chevron ? (
+                                <ChevronArrow
+                                  src="/images/uiElements/open-link-orange.webp"
+                                  alt={"chevron-link"}
+                                  orangearrow
+                                />
+                              ) : (
+                                <ChevronArrow
+                                  src="/images/uiElements/chevron-arrow-label.webp"
+                                  alt={"chevron-orange-link"}
+                                />
+                              ))}
                           </NavItemCopy>
                           {navItem.card_size === "medium" && (
                             <StyledAnchor
@@ -761,20 +771,18 @@ const NavItemSubCopy = styled.div`
   color: ${colors.txtSubtle};
 `;
 const ChevronArrow = styled.img`
-  width: 0.75vw;
-  height: 0.75vw;
+  width: ${(props) => (props?.orangearrow ? "1.5vw" : "0.75vw")};
+  height: ${(props) => (props?.orangearrow ? "1.5vw" : "0.75vw")};
 
   ${media.fullWidth} {
-    width: 12px;
-    height: 12px;
+    width: ${(props) => (props?.orangearrow ? "24px" : "12px")};
+    height: ${(props) => (props?.orangearrow ? "24px" : "12px")};
   }
   ${media.tablet} {
-    width: 1.172vw;
-    height: 1.172vw;
+    width: ${(props) => (props?.orangearrow ? "2.344vw" : "1.172vw")};
+    height: ${(props) => (props?.orangearrow ? "2.344vw" : "1.172vw")};
   }
   ${media.mobile} {
-    width: 2.5vw;
-    height: 2.5vw;
   }
 `;
 const NavItemCopy = styled.div`
