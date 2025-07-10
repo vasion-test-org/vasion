@@ -113,7 +113,6 @@ const Nav = ({ blok }) => {
         }, 3000);
       }
     } catch (error) {
-     
       setTooltipMessage(
         "This page is not yet available in the selected language",
       );
@@ -508,7 +507,7 @@ const Nav = ({ blok }) => {
 const DropDownCTA = styled.div`
   display: flex;
   flex-direction: column;
-  width: 60.5vw;
+  width: 65.625vw;
   height: 4.688vw;
   border-radius: 0.25vw;
   margin-top: 1.5vw;
@@ -519,7 +518,7 @@ const DropDownCTA = styled.div`
   background-repeat: no-repeat;
 
   ${media.fullWidth} {
-    width: 968px;
+    width: 1050px;
     height: 75px;
     border-radius: 4px;
     margin-top: 24px;
@@ -527,6 +526,7 @@ const DropDownCTA = styled.div`
   }
 
   ${media.tablet} {
+    width: 60.938vw;
     width: 90.531vw;
     height: 7.324vw;
     border-radius: 0.391vw;
