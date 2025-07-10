@@ -77,13 +77,13 @@ export default async function RootLayout({ children }) {
           src='https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js'
         />
 
-        {/* Marketo Forms2 */}
+        {/* Marketo Forms2
         <Script
           id='marketo-forms'
           strategy='afterInteractive'
           defer
           src='https://info.printerlogic.com/js/forms2/js/forms2.min.js'
-        />
+        /> */}
 
         {/* Intercom */}
         <Script
