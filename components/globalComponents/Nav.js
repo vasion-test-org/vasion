@@ -534,10 +534,12 @@ const DropDownCTA = styled.div`
     padding: 1.758vw 3.906vw;
   }
 `;
+
 const StyledNextLink = styled(NextLink)`
   ${text.tag};
   color: ${colors.txtSubtle};
 `;
+
 const StyledAnchor = styled.span`
   ${text.tag};
   color: ${colors.primaryOrange};
