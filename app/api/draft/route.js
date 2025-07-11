@@ -15,7 +15,7 @@ export async function GET(request) {
   draftMode().enable();
 
   const redirectUrl = new URL(`/${slug}`, request.nextUrl.origin).toString();
-  console.log(`[✅ Success] Draft mode enabled. Redirecting to: ${redirectUrl}`);
+  // console.log(`[✅ Success] Draft mode enabled. Redirecting to: ${redirectUrl}`);
 
   return NextResponse.redirect(redirectUrl);
 }
