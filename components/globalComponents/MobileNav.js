@@ -463,6 +463,10 @@ const NavItemSubCopy = styled.div`
 `;
 const NavItemCopy = styled.div`
   ${media.mobile} {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
     margin-left: ${(props) =>
       props.card_size === "large" ? "3.333vw" : "unset"};
   }
