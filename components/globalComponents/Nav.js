@@ -527,7 +527,7 @@ const DropDownCTA = styled.div`
   background-position: center;
   background-repeat: no-repeat;
 
-  ${media.fullwidth} {
+  ${media.fullWidth} {
     width: 1050px;
     height: 75px;
     border-radius: 4px;
