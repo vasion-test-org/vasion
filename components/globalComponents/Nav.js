@@ -231,7 +231,7 @@ const Nav = ({ blok }) => {
               copySections: item.cta?.[0]?.copy_sections,
             })} */}
               <DropDownCTA
-                bgImg={item.cta?.[0]?.media?.[0]?.media?.[0]?.filename}
+                bgimg={item.cta?.[0]?.media?.[0]?.media?.[0]?.filename}
               >
                 {item.cta?.[0]?.copy_sections.map((item, index) => (
                   <div
@@ -522,12 +522,12 @@ const DropDownCTA = styled.div`
   border-radius: 0.25vw;
   margin-top: 1.5vw;
   padding: 1.156vw 2.5vw;
-  background-image: url(${(props) => props.bgImg});
-  background-size: cover;
+  background-image: url(${(props) => props.bgimg});
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 
-  ${media.fullWidth} {
+  ${media.fullwidth} {
     width: 1050px;
     height: 75px;
     border-radius: 4px;
