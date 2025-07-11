@@ -1,3 +1,4 @@
+import Image from "next/image";
 import FilmBlock from "@/assets/svg/purple-film-block.svg";
 import VasionStar from "@/assets/svg/vasion-star-block.svg";
 import ZeroTrust from "@/assets/svg/zero-trust.svg";
@@ -37,11 +38,14 @@ import Workflow from "@/assets/svg/product_workflow.svg";
 import WorkflowBlock from "@/assets/svg/workflow_block.svg";
 import Rocket from "@/assets/svg/rocket_launch.svg";
 import PlainStar from "@/assets/svg/plain_star.svg";
-import AwsTextract from "@/assets/svg/aws_textract.svg";
-import AwsS3 from "@/assets/svg/aws_s3.svg";
 import Fingerprint from "@/assets/svg/fingerprint.svg";
 
-const Icons = {
+const imageIcons = {
+  aws_textract: "/images/nav-webp/aws_textract.webp",
+  aws_s3: "/images/nav-webp/amazon-s3.webp",
+};
+
+const svgIcons = {
   film_block: FilmBlock,
   vasion_star: VasionStar,
   zero_trust: ZeroTrust,
@@ -81,9 +85,24 @@ const Icons = {
   workflow: Workflow,
   rocket_launch: Rocket,
   plain_star: PlainStar,
-  // aws_textract: AwsTextract,
-  // aws_s3: AwsS3,
-  // fingerprint: Fingerprint,
+  fingerprint: Fingerprint,
 };
 
-export default Icons;
+const IconRenderer = ({ iconName, ...props }) => {
+  if (imageIcons[iconName]) {
+    return (
+      <Image
+        src={imageIcons[iconName]}
+        alt={iconName}
+        width={20}
+        height={20}
+        {...props}
+      />
+    );
+  }
+
+  const SvgIcon = svgIcons[iconName];
+  return SvgIcon ? <SvgIcon {...props} /> : null;
+};
+
+export default IconRenderer;

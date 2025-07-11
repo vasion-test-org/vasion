@@ -164,16 +164,16 @@ const MobileNav = ({ blok }) => {
                             />
                           ))}
                       </NavItemCopy>
-                      {/* {item.card_size === "medium" && ( */}
-                      <Link
-                        href={normalizedUrl}
-                        target={isExternal ? "_blank" : "_self"}
-                        rel={isExternal ? "noopener noreferrer" : undefined}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        Learn More
-                      </Link>
-                      {/* )} */}
+                      {item.card_size === "medium" && (
+                        <Link
+                          href={normalizedUrl}
+                          target={isExternal ? "_blank" : "_self"}
+                          rel={isExternal ? "noopener noreferrer" : undefined}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Learn More
+                        </Link>
+                      )}
                       {item.sub_copy && item.card && (
                         <NavItemSubCopy>{item.sub_copy}</NavItemSubCopy>
                       )}

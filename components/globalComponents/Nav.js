@@ -11,7 +11,7 @@ import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import Button from "./Button";
 import text from "@/styles/text";
 import colors from "@/styles/colors";
-import Icons from "@/components/renderers/Icons";
+import IconRenderer from "@/components/renderers/Icons";
 import Image from "./Image";
 import LinkArrow from "assets/svg/LinkArrow.svg";
 import LanguageGlobe from "assets/svg/languageglobe.svg";
@@ -136,9 +136,11 @@ const Nav = ({ blok }) => {
                 {column?.column_header && (
                   <ColumnHeader>{column.column_header}</ColumnHeader>
                 )}
-                {column.nav_items.map((navItem, itemIdx) => {
+                {column.nav_items.map((navItem) => {
                   const formattedIconString = navItem.icon.replace(/\s+/g, "");
-                  const IconComponent = Icons[formattedIconString] || null;
+                  const IconComponent = ({ ...props }) => (
+                    <IconRenderer iconName={formattedIconString} {...props} />
+                  );
 
                   const rawUrl = navItem?.item_link?.cached_url || "#";
                   const isExternal =
@@ -169,6 +171,7 @@ const Nav = ({ blok }) => {
                         card_size={navItem.card_size}
                         role="link"
                         tabIndex={0}
+                        {...storyblokEditable(navItem)}
                       >
                         {navItem.card &&
                           navItem.card_size &&
