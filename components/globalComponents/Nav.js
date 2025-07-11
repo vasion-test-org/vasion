@@ -11,7 +11,7 @@ import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import Button from "./Button";
 import text from "@/styles/text";
 import colors from "@/styles/colors";
-import Icons from "@/components/renderers/Icons";
+import IconRenderer from "@/components/renderers/Icons";
 import Image from "./Image";
 import LinkArrow from "assets/svg/LinkArrow.svg";
 import LanguageGlobe from "assets/svg/languageglobe.svg";
@@ -107,14 +107,12 @@ const Nav = ({ blok }) => {
           "This page is not yet available in the selected language",
         );
         setShowTooltip(true);
-       
+
         setTimeout(() => {
           setShowTooltip(false);
-       
         }, 3000);
       }
     } catch (error) {
-     
       setTooltipMessage(
         "This page is not yet available in the selected language",
       );
@@ -138,9 +136,11 @@ const Nav = ({ blok }) => {
                 {column?.column_header && (
                   <ColumnHeader>{column.column_header}</ColumnHeader>
                 )}
-                {column.nav_items.map((navItem, itemIdx) => {
+                {column.nav_items.map((navItem) => {
                   const formattedIconString = navItem.icon.replace(/\s+/g, "");
-                  const IconComponent = Icons[formattedIconString] || null;
+                  const IconComponent = ({ ...props }) => (
+                    <IconRenderer iconName={formattedIconString} {...props} />
+                  );
 
                   const rawUrl = navItem?.item_link?.cached_url || "#";
                   const isExternal =
@@ -171,6 +171,7 @@ const Nav = ({ blok }) => {
                         card_size={navItem.card_size}
                         role="link"
                         tabIndex={0}
+                        {...storyblokEditable(navItem)}
                       >
                         {navItem.card &&
                           navItem.card_size &&
@@ -190,6 +191,19 @@ const Nav = ({ blok }) => {
                         <NavCopy>
                           <NavItemCopy card_size={navItem.card_size}>
                             <RichTextRenderer document={navItem.item_copy} />
+                            {navItem.add_chevron_arrow &&
+                              (navItem.orange_chevron ? (
+                                <ChevronArrow
+                                  src="/images/uiElements/open-link-orange.webp"
+                                  alt={"chevron-link"}
+                                  orangearrow
+                                />
+                              ) : (
+                                <ChevronArrow
+                                  src="/images/uiElements/chevron-arrow-label.webp"
+                                  alt={"chevron-orange-link"}
+                                />
+                              ))}
                           </NavItemCopy>
                           {navItem.card_size === "medium" && (
                             <StyledAnchor
@@ -220,7 +234,7 @@ const Nav = ({ blok }) => {
               copySections: item.cta?.[0]?.copy_sections,
             })} */}
               <DropDownCTA
-                bgImg={item.cta?.[0]?.media?.[0]?.media?.[0]?.filename}
+                bgimg={item.cta?.[0]?.media?.[0]?.media?.[0]?.filename}
               >
                 {item.cta?.[0]?.copy_sections.map((item, index) => (
                   <div
@@ -506,18 +520,18 @@ const Nav = ({ blok }) => {
 const DropDownCTA = styled.div`
   display: flex;
   flex-direction: column;
-  width: 60.5vw;
+  width: 65.625vw;
   height: 4.688vw;
   border-radius: 0.25vw;
   margin-top: 1.5vw;
   padding: 1.156vw 2.5vw;
-  background-image: url(${(props) => props.bgImg});
-  background-size: cover;
+  background-image: url(${(props) => props.bgimg});
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 
   ${media.fullWidth} {
-    width: 968px;
+    width: 1050px;
     height: 75px;
     border-radius: 4px;
     margin-top: 24px;
@@ -525,6 +539,7 @@ const DropDownCTA = styled.div`
   }
 
   ${media.tablet} {
+    width: 60.938vw;
     width: 90.531vw;
     height: 7.324vw;
     border-radius: 0.391vw;
@@ -532,10 +547,12 @@ const DropDownCTA = styled.div`
     padding: 1.758vw 3.906vw;
   }
 `;
+
 const StyledNextLink = styled(NextLink)`
   ${text.tag};
   color: ${colors.txtSubtle};
 `;
+
 const StyledAnchor = styled.span`
   ${text.tag};
   color: ${colors.primaryOrange};
@@ -756,23 +773,45 @@ const NavItemSubCopy = styled.div`
   ${text.bodySm};
   color: ${colors.txtSubtle};
 `;
+const ChevronArrow = styled.img`
+  width: ${(props) => (props?.orangearrow ? "1.5vw" : "0.75vw")};
+  height: ${(props) => (props?.orangearrow ? "1.5vw" : "0.75vw")};
+
+  ${media.fullWidth} {
+    width: ${(props) => (props?.orangearrow ? "24px" : "12px")};
+    height: ${(props) => (props?.orangearrow ? "24px" : "12px")};
+  }
+  ${media.tablet} {
+    width: ${(props) => (props?.orangearrow ? "2.344vw" : "1.172vw")};
+    height: ${(props) => (props?.orangearrow ? "2.344vw" : "1.172vw")};
+  }
+  ${media.mobile} {
+  }
+`;
 const NavItemCopy = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5vw;
   color: ${colors.grey800};
   margin-left: ${(props) => (props.card_size === "large" ? "1vw" : "unset")};
 
   ${media.fullWidth} {
     margin-left: ${(props) => (props.card_size === "large" ? "16px" : "unset")};
+    gap: 8px;
   }
 
   ${media.tablet} {
     ${text.bodyMd};
     margin-left: ${(props) =>
       props.card_size === "large" ? "1.563vw" : "unset"};
+    gap: 0.781vw;
   }
 
   ${media.mobile} {
   }
 `;
+
 const NavCopy = styled.div`
   display: flex;
   flex-direction: column;
@@ -1053,7 +1092,6 @@ const ColumnsWrapper = styled.div`
     ${media.tablet} {
       padding: 0 3.125vw;
     }
-
     ${media.mobile} {
     }
   }
@@ -1066,18 +1104,18 @@ const Tab = styled.div`
   align-items: center;
   justify-content: center;
   height: 1.625vw;
-  padding: 0.125vw 0.25vw;
+  padding: 0.25vw 0.125vw;
   border-radius: 0.25vw;
 
   ${media.fullWidth} {
     height: 26px;
-    padding: 2px 4px;
+    padding: 4px 2px;
     border-radius: 4px;
   }
 
   ${media.tablet} {
     height: 2.539vw;
-    padding: 0.195vw 0.391vw;
+    padding: 0.391vw 0.195vw;
     border-radius: 0.391vw;
   }
 
@@ -1230,6 +1268,7 @@ const NavBackdrop = styled.div`
   -webkit-backface-visibility: hidden;
 
   /* Create cutouts for nav elements */
+
   &::before {
     content: "";
     position: absolute;
