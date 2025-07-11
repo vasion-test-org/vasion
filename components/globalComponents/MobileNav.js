@@ -10,7 +10,7 @@ import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import Button from "./Button";
 import text from "@/styles/text";
 import colors from "@/styles/colors";
-import Icons from "@/components/renderers/Icons";
+import IconRenderer from "@/components/renderers/Icons";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Image from "./Image";
 import LinkArrow from "assets/svg/LinkArrow.svg";
@@ -104,7 +104,9 @@ const MobileNav = ({ blok }) => {
             <NavItemsContainer>
               {column.nav_items.map((item, itemIndex) => {
                 const formattedIconString = item.icon.replace(/\s+/g, "");
-                const IconComponent = Icons[formattedIconString] || null;
+                const IconComponent = ({ ...props }) => (
+                  <IconRenderer iconName={formattedIconString} {...props} />
+                );
                 const rawUrl = item.item_link?.cached_url || "#";
                 const isExternal =
                   rawUrl.startsWith("http://") || rawUrl.startsWith("https://");
