@@ -874,7 +874,7 @@ const NavItem = styled.div`
       ? "1.25vw"
       : props.card_size === "medium"
         ? "0.875vw"
-        : "0.625vw"};
+        : "0.313vw"};
 
   width: ${(props) =>
     props.card_size === "small"
@@ -906,7 +906,7 @@ const NavItem = styled.div`
         ? "20px"
         : props.card_size === "medium"
           ? "14px"
-          : "10px"};
+          : "5px"};
 
     width: ${(props) =>
       props.card_size === "small"
@@ -935,7 +935,7 @@ const NavItem = styled.div`
         ? "1.953vw"
         : props.card_size === "medium"
           ? "1.367vw"
-          : "0.977vw"};
+          : "5px"};
 
     width: ${(props) =>
       props.card_size === "small"
@@ -1081,15 +1081,19 @@ const ColumnsWrapper = styled.div`
   ${Column}:last-child {
     padding-right: unset;
     padding-left: 2vw;
+    gap: 0.75vw;
 
     ${media.fullWidth} {
       padding: 0 32px;
+      gap: 12px;
     }
 
     ${media.tablet} {
       padding: 0 3.125vw;
+      gap: 1.172vw;
     }
     ${media.mobile} {
+      gap: 2.5vw;
     }
   }
 `;
