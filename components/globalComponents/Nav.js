@@ -997,14 +997,11 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 1.5vw;
 
   ${media.fullWidth} {
-    gap: 24px;
   }
 
   ${media.tablet} {
-    gap: 2.344vw;
   }
 
   ${media.mobile} {
