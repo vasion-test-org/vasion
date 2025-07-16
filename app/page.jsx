@@ -17,16 +17,8 @@ export default async function Home() {
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata() {
-  // const locale = 'en';
+export async function generateMetadata({ searchParams }) {
   const story = await fetchStory('home');
-  // console.log(story)
-  // if (!story) {
-  //   return {
-  //     title: "Home - Page Not Found",
-  //     description: "The homepage could not be found.",
-  //   };
-  // }
 
   const { content } = story;
   const title = content.metadata?.title || 'Default Homepage Title';
@@ -35,11 +27,29 @@ export async function generateMetadata() {
 
   const basePath = 'https://vasion.com';
   const locales = ['en', 'fr', 'de'];
-  const alternateLinks = locales.reduce((acc, loc) => {
-    const path = loc === 'en' ? `/` : `/${loc}/`;
-    acc[loc] = `${basePath}${path}`;
-    return acc;
-  }, {});
+
+  // Extract UTM parameters from searchParams
+  const utmParams = new URLSearchParams();
+  if (searchParams) {
+    // Preserve all UTM parameters
+    for (const [key, value] of searchParams.entries()) {
+      if (key.startsWith('utm_')) {
+        utmParams.set(key, value);
+      }
+    }
+  }
+  const utmString = utmParams.toString();
+  const queryString = utmString ? `?${utmString}` : '';
+
+  // Build alternate links for all locales
+  const alternateLinks = {};
+  for (const loc of locales) {
+    const path = loc === 'en' ? '' : `/${loc}`;
+    alternateLinks[loc] = `${basePath}${path}${queryString}`;
+  }
+
+  // Add x-default pointing to English version
+  alternateLinks['x-default'] = alternateLinks['en'];
 
   // Check if page should be no-index, no-follow
   const shouldNoIndex = content.index === false;
