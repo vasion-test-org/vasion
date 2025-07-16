@@ -31,26 +31,12 @@ export async function generateMetadata({ params, searchParams }) {
   const basePath = 'https://vasion.com';
   const currentLocale = locale;
 
-  // Extract UTM parameters from searchParams
-  const utmParams = new URLSearchParams();
-  if (searchParams) {
-    // Preserve all UTM parameters
-    for (const [key, value] of searchParams.entries()) {
-      if (key.startsWith('utm_')) {
-        utmParams.set(key, value);
-      }
-    }
-  }
-  const utmString = utmParams.toString();
-  const queryString = utmString ? `?${utmString}` : '';
-
   // Build canonical URL
   let canonicalPath = story.full_slug;
   if (currentLocale === 'en') {
     canonicalPath = canonicalPath.replace(/^en\//, '');
   }
-  const canonicalUrl =
-    `${basePath}/${canonicalPath}`.replace(/\/+$/, '') + queryString;
+  const canonicalUrl = `${basePath}/${canonicalPath}`.replace(/\/+$/, '');
 
   // Build alternate links including self-referencing
   const alternateLinks = {};
@@ -60,8 +46,7 @@ export async function generateMetadata({ params, searchParams }) {
     alternateLinks['en'] = canonicalUrl;
   } else {
     alternateLinks[currentLocale] =
-      `${basePath}/${currentLocale}/${storySlug}`.replace(/\/+$/, '') +
-      queryString;
+      `${basePath}/${currentLocale}/${storySlug}`.replace(/\/+$/, '');
   }
 
   // Add other language versions if they exist
@@ -82,7 +67,7 @@ export async function generateMetadata({ params, searchParams }) {
                 ''
               );
 
-        alternateLinks[translation.lang] = translatedUrl + queryString;
+        alternateLinks[translation.lang] = translatedUrl;
       }
     }
   }

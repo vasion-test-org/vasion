@@ -28,24 +28,11 @@ export async function generateMetadata({ searchParams }) {
   const basePath = 'https://vasion.com';
   const locales = ['en', 'fr', 'de'];
 
-  // Extract UTM parameters from searchParams
-  const utmParams = new URLSearchParams();
-  if (searchParams) {
-    // Preserve all UTM parameters
-    for (const [key, value] of searchParams.entries()) {
-      if (key.startsWith('utm_')) {
-        utmParams.set(key, value);
-      }
-    }
-  }
-  const utmString = utmParams.toString();
-  const queryString = utmString ? `?${utmString}` : '';
-
   // Build alternate links for all locales
   const alternateLinks = {};
   for (const loc of locales) {
     const path = loc === 'en' ? '' : `/${loc}`;
-    alternateLinks[loc] = `${basePath}${path}${queryString}`;
+    alternateLinks[loc] = `${basePath}${path}`;
   }
 
   // Add x-default pointing to English version
