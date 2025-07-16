@@ -5,7 +5,7 @@ import { headers } from 'next/headers';
 import PageDataUpdater from '@/components/PageDataUpdater';
 export const revalidate = 60;
 
-export async function generateMetadata({ params, searchParams }) {
+export async function generateMetadata({ params }) {
   const slugArray = params.slug || [];
   const isLocalized = ['fr', 'de'].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : 'en';
@@ -29,42 +29,18 @@ export async function generateMetadata({ params, searchParams }) {
   const description = content.metadata?.description || 'Default Description';
 
   const basePath = 'https://vasion.com';
-  const currentLocale = locale;
+  const currentLocale = locale; // 'en', 'fr', or 'de'
 
-  // Extract UTM parameters from searchParams
-  const utmParams = new URLSearchParams();
-  if (searchParams) {
-    // Preserve all UTM parameters
-    for (const [key, value] of searchParams.entries()) {
-      if (key.startsWith('utm_')) {
-        utmParams.set(key, value);
-      }
-    }
-  }
-  const utmString = utmParams.toString();
-  const queryString = utmString ? `?${utmString}` : '';
-
-  // Build canonical URL
+  // Always include the current page as canonical
   let canonicalPath = story.full_slug;
   if (currentLocale === 'en') {
+    // Remove 'en' prefix for canonical
     canonicalPath = canonicalPath.replace(/^en\//, '');
   }
-  const canonicalUrl =
-    `${basePath}/${canonicalPath}`.replace(/\/+$/, '') + queryString;
+  const canonicalUrl = `${basePath}/${canonicalPath}`.replace(/\/+$/, '/');
 
-  // Build alternate links including self-referencing
+  // Build alternate links only for published translations
   const alternateLinks = {};
-
-  // Add self-referencing hreflang for current page
-  if (currentLocale === 'en') {
-    alternateLinks['en'] = canonicalUrl;
-  } else {
-    alternateLinks[currentLocale] =
-      `${basePath}/${currentLocale}/${storySlug}`.replace(/\/+$/, '') +
-      queryString;
-  }
-
-  // Add other language versions if they exist
   if (story.translated_slugs) {
     for (const translation of story.translated_slugs) {
       // Check if the translation is published
@@ -74,22 +50,14 @@ export async function generateMetadata({ params, searchParams }) {
       );
 
       if (translatedStory) {
-        const translatedUrl =
-          translation.lang === 'en'
-            ? `${basePath}/${translation.path}`.replace(/\/+$/, '')
-            : `${basePath}/${translation.lang}/${translation.path}`.replace(
-                /\/+$/,
-                ''
-              );
-
-        alternateLinks[translation.lang] = translatedUrl + queryString;
+        alternateLinks[translation.lang] =
+          `${basePath}/${translation.lang}/${translation.path}`.replace(
+            /\/+$/,
+            '/'
+          );
       }
     }
   }
-
-  // Add x-default pointing to English version (or current if English doesn't exist)
-  const englishVersion = alternateLinks['en'] || canonicalUrl;
-  alternateLinks['x-default'] = englishVersion;
 
   // Check if page should be no-index, no-follow
   const shouldNoIndex = content.index === false;
