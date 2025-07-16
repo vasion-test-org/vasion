@@ -1,64 +1,49 @@
-import StoryblokProvider from '@/components/StoryblokProvider';
-import { ThemeProviderWrapper } from '@/context/ThemeContext';
-import { ThankYouProvider } from '@/context/ThankYouContext';
-import { PageDataProvider } from '@/context/PageDataContext';
-import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
-import FormTracking from '@/components/FormTracking';
-import Script from 'next/script';
-import './globals.css';
-import ScrollSmootherWrapper from '@/components/ScrollSmoothWrapper';
-import Providers from '@/components/providers';
-import Config from '@/components/Config';
-import { getStoryblokApi } from '@/lib/storyblok';
-import { Metadata } from 'next';
-import { Analytics } from '@vercel/analytics/next';
+import StoryblokProvider from "@/components/StoryblokProvider";
+import { ThemeProviderWrapper } from "@/context/ThemeContext";
+import { ThankYouProvider } from "@/context/ThankYouContext";
+import { PageDataProvider } from "@/context/PageDataContext";
+import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
+import FormTracking from "@/components/FormTracking";
+import Script from "next/script";
+import "./globals.css";
+import ScrollSmootherWrapper from "@/components/ScrollSmoothWrapper";
+import Providers from "@/components/providers";
+import Config from "@/components/Config";
+import { getStoryblokApi } from "@/lib/storyblok";
+import { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
-  metadataBase: new URL('https://vasion.com'),
+  metadataBase: new URL("https://vasion.com"),
   title: {
-    template: '%s | Vasion',
-    default: 'Vasion',
+    template: "%s | Vasion",
+    default: "Vasion",
   },
-  description: 'Vasion site',
+  description: "Vasion site",
 };
 
 export default async function RootLayout({ children }) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
         <meta
-          name='google-site-verification'
-          content='9aTxhC978Sh5yhlRXic1mj23gCh4RcexRTfgiwMKbks'
+          name="google-site-verification"
+          content="9aTxhC978Sh5yhlRXic1mj23gCh4RcexRTfgiwMKbks"
         />
         <meta
-          name='facebook-domain-verification'
-          content='vw5hfzh0aj764x59srftw18eksj8nq'
+          name="facebook-domain-verification"
+          content="vw5hfzh0aj764x59srftw18eksj8nq"
         />
-        {/* Critical scripts - load immediately */}
+        {/* Google reCAPTCHA */}
         <Script
-          id='gtm'
-          strategy='beforeInteractive'
-          dangerouslySetInnerHTML={{
-            __html: `
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-WMKX59W');
-    `,
-          }}
+          id="recaptcha"
+          strategy="afterInteractive"
+          src="https://www.google.com/recaptcha/api.js"
         />
-
-        {/* Non-critical scripts - load after page is interactive */}
+        {/* Marketo Munchkin */}
         <Script
-          id='recaptcha'
-          strategy='lazyOnload'
-          src='https://www.google.com/recaptcha/api.js'
-        />
-
-        <Script
-          id='marketo-munchkin'
-          strategy='lazyOnload'
+          id="marketo-munchkin"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
       (function() {
@@ -87,9 +72,9 @@ export default async function RootLayout({ children }) {
 
         {/* CookieYes */}
         <Script
-          id='cookieyes'
-          strategy='lazyOnload'
-          src='https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js'
+          id="cookieyes"
+          strategy="afterInteractive"
+          src="https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js"
         />
 
         {/* Marketo Forms2
@@ -102,8 +87,8 @@ export default async function RootLayout({ children }) {
 
         {/* Intercom */}
         <Script
-          id='intercom'
-          strategy='lazyOnload'
+          id="intercom"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
       window.intercomSettings = {
@@ -134,8 +119,8 @@ export default async function RootLayout({ children }) {
 
         {/* VWO */}
         <Script
-          id='vwo'
-          strategy='lazyOnload'
+          id="vwo"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
         window._vwo_code || (function() {
@@ -187,10 +172,25 @@ export default async function RootLayout({ children }) {
           }}
         />
 
+        {/* Google Tag Manager */}
+        <Script
+          id="gtm"
+          async
+          dangerouslySetInnerHTML={{
+            __html: `
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-WMKX59W');
+      `,
+          }}
+        />
+
         {/* Hotjar */}
         <Script
-          id='hotjar'
-          strategy='lazyOnload'
+          id="hotjar"
+          async
           dangerouslySetInnerHTML={{
             __html: `
         (function(h,o,t,j,a,r){
