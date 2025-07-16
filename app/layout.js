@@ -129,7 +129,7 @@ export default async function RootLayout({ children }) {
         {/* VWO */}
         <Script
           id="vwo"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
         window._vwo_code || (function() {
