@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getStoryblokApi } from '@/lib/storyblok';
 import { headers } from 'next/headers';
 import PageDataUpdater from '@/components/PageDataUpdater';
+import UTMHandler from '@/components/UTMHandler';
 export const revalidate = 60;
 
 export async function generateMetadata({ params, searchParams }) {
@@ -124,6 +125,7 @@ export default async function DynamicPage({ params }) {
 
   return (
     <div>
+      <UTMHandler />
       <PageDataUpdater story={story} />
       <StoryblokStory story={story} />
     </div>
