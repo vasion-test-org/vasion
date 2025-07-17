@@ -39,9 +39,8 @@ function generateAltFromFilename(filename) {
     .replace(/[-_\.]/g, " ")
     .replace(/([a-z])([A-Z])/g, "$1 $2") // Handle camelCase
     .toLowerCase()
-    .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 
-  // Add descriptive prefix if it doesn't already exist
   if (
     !altText.toLowerCase().includes("image") &&
     !altText.toLowerCase().includes("photo")
@@ -52,19 +51,11 @@ function generateAltFromFilename(filename) {
   return altText;
 }
 
-// Advanced alt text generation (you can enhance this)
 function generateAdvancedAlt(asset) {
   const filename = asset.filename;
   const folder = asset.asset_folder_id;
 
-  // Basic alt from filename
   let altText = generateAltFromFilename(filename);
-
-  // You can add more logic here based on:
-  // - Folder structure
-  // - File metadata
-  // - Naming conventions
-
   return altText;
 }
 
@@ -81,7 +72,7 @@ async function fetchAllAssets() {
         params: {
           page: page,
           per_page: 100,
-          search_term: "", // Empty to get all assets
+          search_term: "",
           filter_query: {
             content_type: {
               in: ["image/jpeg", "image/png", "image/webp", "image/svg+xml"],
@@ -95,7 +86,6 @@ async function fetchAllAssets() {
 
       log(`Fetched page ${page}, got ${assets.length} assets`);
 
-      // Check if there are more pages
       hasMore = assets.length === 100;
       page++;
 
@@ -199,6 +189,7 @@ async function processAssetsInBatches(assets) {
 async function main() {
   try {
     fs.writeFileSync(LOG_FILE, "");
+
     // Validate configuration
     if (!STORYBLOK_SPACE_ID || !STORYBLOK_MANAGEMENT_TOKEN) {
       throw new Error(
@@ -208,7 +199,7 @@ async function main() {
 
     log("Starting Storyblok alt tag bulk update...");
 
-    // Fetch all assets
+    //fetch all
     const assets = await fetchAllAssets();
 
     // Filter only image assets without alt text
