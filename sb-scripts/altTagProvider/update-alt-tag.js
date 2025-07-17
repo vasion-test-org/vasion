@@ -198,6 +198,7 @@ async function processAssetsInBatches(assets) {
 // Main function
 async function main() {
   try {
+    fs.writeFileSync(LOG_FILE, "");
     // Validate configuration
     if (!STORYBLOK_SPACE_ID || !STORYBLOK_MANAGEMENT_TOKEN) {
       throw new Error(
