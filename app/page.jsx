@@ -2,6 +2,7 @@ import { draftMode } from 'next/headers';
 import { getStoryblokApi } from '@/lib/storyblok';
 import StoryRenderer from '@/components/renderers/StoryRenderer';
 import PageDataUpdater from '@/components/PageDataUpdater';
+import UTMHandler from '@/components/UTMHandler';
 
 export default async function Home() {
   const { isEnabled } = draftMode();
@@ -9,6 +10,7 @@ export default async function Home() {
 
   return (
     <div>
+      <UTMHandler />
       <PageDataUpdater story={story} />
       <StoryRenderer story={story} />
     </div>
