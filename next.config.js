@@ -8,7 +8,39 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  webpack: (config) => {
+  // Performance optimizations
+  compress: true,
+  poweredByHeader: false,
+  generateEtags: false,
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['@rive-app/react-canvas', 'gsap'],
+    webVitalsAttribution: ['CLS', 'LCP'],
+  },
+  
+ 
+  // Bundle analyzer (uncomment for analysis)
+  // webpack: (config, { isServer, dev }) => {
+  //   if (!isServer && !dev) {
+  //     const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+  //     config.plugins.push(
+  //       new BundleAnalyzerPlugin({
+  //         analyzerMode: 'static',
+  //         openAnalyzer: false,
+  //       })
+  //     );
+  //   }
+  //   return config;
+  // },
+  webpack: (config, { isServer }) => {
+    // Optimize WebAssembly loading for Rive
+    if (!isServer) {
+      config.experiments = {
+        ...config.experiments,
+        asyncWebAssembly: true,
+      };
+    }
+
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.(".svg"),
     );
