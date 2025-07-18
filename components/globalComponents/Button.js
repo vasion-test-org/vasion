@@ -80,6 +80,7 @@ const Button = ({ $buttonData, stretch }) => {
           router.push(englishUrl);
         }
       } catch (error) {
+        console.error('Error checking page existence:', error);
         // If there's an error, fallback to English
         const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
         router.push(englishUrl);
@@ -122,18 +123,20 @@ const Button = ({ $buttonData, stretch }) => {
     normalizedUrl += `#${$buttonData.link_url.anchor}`;
   }
 
+  // Combined click handler
+  const handleButtonClick = async (e) => {
+    // Handle anchor scrolling first
+    handleClick(e);
+
+    // Then check page existence if needed
+    await checkPageExistsAndNavigate(e);
+  };
+
   return (
     <ButtonWrapper layout={$buttonData?.layout} size={$buttonData?.link_size}>
       <ThemeProvider theme={selectedTheme}>
         {target !== '_blank' ? (
-          <NextLink
-            href={normalizedUrl}
-            passHref
-            onClick={(e) => {
-              checkPageExistsAndNavigate(e);
-              handleClick(e);
-            }}
-          >
+          <NextLink href={normalizedUrl} passHref onClick={handleButtonClick}>
             <StyledSpan stretch={stretch}>{$buttonData?.link_text}</StyledSpan>
             {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
           </NextLink>
@@ -142,10 +145,7 @@ const Button = ({ $buttonData, stretch }) => {
             href={normalizedUrl}
             target={target}
             rel={rel}
-            onClick={(e) => {
-              checkPageExistsAndNavigate(e);
-              handleClick(e);
-            }}
+            onClick={handleButtonClick}
           >
             {$buttonData?.link_text}
             {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
