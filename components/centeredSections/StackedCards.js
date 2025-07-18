@@ -25,9 +25,13 @@ const RiveAnimation = ({
 }) => {
   const shouldAutoplay = tablet || mobile || index === 0;
 
+  // For above-the-fold animations, load immediately with optimization
   const { rive, RiveComponent } = useRive({
     src,
     autoplay: shouldAutoplay,
+    // Add performance optimizations for above-the-fold content
+    fitCanvasToArtboardHeight: true,
+    shouldResizeCanvasToArtboardHeight: true,
   });
 
   useEffect(() => {
@@ -54,6 +58,9 @@ const RiveAnimation = ({
 const StackedCards = ({ blok }) => {
   // console.log(blok);
   const { mobile, tablet } = useContext(ScreenContext);
+  
+  // Performance optimization: Since Rive animations are above-the-fold,
+  // we load them immediately without lazy loading to improve LCP
   const stackedCardsRef = useRef(null);
   const riveInstancesRef = useRef([]);
   const [active, setActive] = useState(0);
