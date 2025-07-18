@@ -13,9 +13,7 @@ const nextConfig = {
   poweredByHeader: false,
   generateEtags: false,
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['@rive-app/react-canvas', 'gsap'],
-    webVitalsAttribution: ['CLS', 'LCP'],
   },
   
  
