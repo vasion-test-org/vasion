@@ -2,13 +2,14 @@
 import React, { useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import text from '@/styles/text';
 import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
 import media from '@/styles/media';
 import { gsap } from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import { getStoryblokApi } from '@/lib/storyblok';
 
 // Register the ScrollToPlugin
 gsap.registerPlugin(ScrollToPlugin);
@@ -16,6 +17,7 @@ gsap.registerPlugin(ScrollToPlugin);
 const Button = ({ $buttonData, stretch }) => {
   const themes = useAvailableThemes();
   const pathname = usePathname();
+  const router = useRouter();
 
   // useEffect(() => {
   //   window.scrollTo(0, 0);
@@ -47,6 +49,43 @@ const Button = ({ $buttonData, stretch }) => {
     isEmail || isExternal || alreadyLocalized
       ? rawHref
       : `/${currentLocale ?? ''}/${rawHref}`.replace(/\/+/g, '/');
+
+  // Check if page exists in Storyblok and fallback to English if needed
+  const checkPageExistsAndNavigate = async (e) => {
+    // If it's an external link, email, or anchor link, proceed normally
+    if (isExternal || isEmail || $buttonData?.link_url?.anchor) {
+      return; // Let the normal click handler proceed
+    }
+
+    // Only check for internal links that aren't already localized
+    if (!alreadyLocalized && currentLocale && currentLocale !== 'en') {
+      e.preventDefault();
+
+      try {
+        const storyblokApi = getStoryblokApi();
+        const storySlug = rawHref === '/' ? 'home' : rawHref.replace(/^\//, '');
+
+        // First try to get the page in the current locale
+        const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
+          version: 'published',
+          language: currentLocale,
+        });
+
+        if (data.story) {
+          // Page exists in current locale, navigate normally
+          router.push(normalizedUrl);
+        } else {
+          // Page doesn't exist in current locale, fallback to English
+          const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
+          router.push(englishUrl);
+        }
+      } catch (error) {
+        // If there's an error, fallback to English
+        const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
+        router.push(englishUrl);
+      }
+    }
+  };
 
   // Handle anchor scrolling with GSAP
   const handleClick = (e) => {
@@ -87,7 +126,14 @@ const Button = ({ $buttonData, stretch }) => {
     <ButtonWrapper layout={$buttonData?.layout} size={$buttonData?.link_size}>
       <ThemeProvider theme={selectedTheme}>
         {target !== '_blank' ? (
-          <NextLink href={normalizedUrl} passHref onClick={handleClick}>
+          <NextLink
+            href={normalizedUrl}
+            passHref
+            onClick={(e) => {
+              checkPageExistsAndNavigate(e);
+              handleClick(e);
+            }}
+          >
             <StyledSpan stretch={stretch}>{$buttonData?.link_text}</StyledSpan>
             {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
           </NextLink>
@@ -96,7 +142,10 @@ const Button = ({ $buttonData, stretch }) => {
             href={normalizedUrl}
             target={target}
             rel={rel}
-            onClick={handleClick}
+            onClick={(e) => {
+              checkPageExistsAndNavigate(e);
+              handleClick(e);
+            }}
           >
             {$buttonData?.link_text}
             {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
