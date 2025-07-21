@@ -1,8 +1,8 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import text from '@/styles/text';
 import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
@@ -17,7 +17,7 @@ gsap.registerPlugin(ScrollToPlugin);
 const Button = ({ $buttonData, stretch }) => {
   const themes = useAvailableThemes();
   const pathname = usePathname();
-  const router = useRouter();
+  const [validatedUrl, setValidatedUrl] = useState(null);
 
   // useEffect(() => {
   //   window.scrollTo(0, 0);
@@ -45,14 +45,85 @@ const Button = ({ $buttonData, stretch }) => {
     ? slugParts[0]
     : null;
 
-  let normalizedUrl =
-    isEmail || isExternal || alreadyLocalized
-      ? rawHref
-      : `/${currentLocale ?? ''}/${rawHref}`.replace(/\/+/g, '/');
+  // Function to validate route and fallback to English if needed
+  const validateRoute = async (url, locale) => {
+    // Skip validation for external links, emails, or already localized URLs
+    if (isEmail || isExternal || alreadyLocalized) {
+      return url;
+    }
 
-  // Handle navigation with Storyblok page existence check
-  const handleNavigate = (e) => {
-    // Handle anchor scrolling first
+    // Extract the story slug from the URL
+    const urlParts = url.split('/').filter(Boolean);
+    const storySlug =
+      locale === 'en'
+        ? urlParts.join('/')
+        : urlParts.slice(1).join('/') || 'home';
+
+    try {
+      const storyblokApi = getStoryblokApi();
+      const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
+        version: 'published',
+        language: locale,
+      });
+
+      // If story exists in current locale, return the original URL
+      if (data.story) {
+        return url;
+      }
+
+      // If story doesn't exist in current locale, try English version
+      if (locale !== 'en') {
+        const { data: englishData } = await storyblokApi.get(
+          `cdn/stories/${storySlug}`,
+          {
+            version: 'published',
+            language: 'en',
+          }
+        );
+
+        if (englishData.story) {
+          // Return English version of the URL
+          const englishUrl = url
+            .replace(`/${locale}/`, '/')
+            .replace(/\/+/g, '/');
+          return englishUrl;
+        }
+      }
+
+      // If neither exists, return the original URL
+      return url;
+    } catch (error) {
+      console.error('Error validating route:', error);
+      // On error, return the original URL
+      return url;
+    }
+  };
+
+  // Validate route on component mount
+  useEffect(() => {
+    const validateAndSetUrl = async () => {
+      if (!isEmail && !isExternal && !alreadyLocalized) {
+        const initialUrl = `/${currentLocale ?? ''}/${rawHref}`.replace(
+          /\/+/g,
+          '/'
+        );
+        const validated = await validateRoute(
+          initialUrl,
+          currentLocale || 'en'
+        );
+        setValidatedUrl(validated);
+      } else {
+        setValidatedUrl(rawHref);
+      }
+    };
+
+    validateAndSetUrl();
+  }, [rawHref, currentLocale, isEmail, isExternal, alreadyLocalized]);
+
+  let normalizedUrl = validatedUrl || rawHref;
+
+  // Handle anchor scrolling with GSAP
+  const handleClick = (e) => {
     if ($buttonData?.link_url?.anchor) {
       // First try to find by ID
       let anchorElement = document.getElementById($buttonData.link_url.anchor);
@@ -77,50 +148,7 @@ const Button = ({ $buttonData, stretch }) => {
           },
           ease: 'power2.out',
         });
-        return;
       }
-    }
-
-    // If it's an external link or email, let default navigation happen
-    if (isExternal || isEmail) {
-      return;
-    }
-
-    // For internal links, check if the page exists in Storyblok
-    e.preventDefault();
-
-    // Call async function for internal links only
-    checkStoryblokAndNavigate();
-  };
-
-  // Separate async function for Storyblok checking
-  const checkStoryblokAndNavigate = async () => {
-    try {
-      const storyblokApi = getStoryblokApi();
-
-      // Extract the story slug from the URL
-      const urlParts = rawHref.split('/').filter(Boolean);
-      const storySlug = urlParts.length > 0 ? urlParts.join('/') : 'home';
-
-      // Check if the page exists in the current locale
-      const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
-        version: 'published',
-        language: currentLocale,
-      });
-
-      if (data.story) {
-        // Page exists in current locale, navigate normally
-        router.push(normalizedUrl);
-      } else {
-        // Page doesn't exist in current locale, fallback to English
-        const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
-        router.push(englishUrl);
-      }
-    } catch (error) {
-      // Error occurred, fallback to English
-      console.warn('Storyblok API error, falling back to English:', error);
-      const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
-      router.push(englishUrl);
     }
   };
 
@@ -133,7 +161,7 @@ const Button = ({ $buttonData, stretch }) => {
     <ButtonWrapper layout={$buttonData?.layout} size={$buttonData?.link_size}>
       <ThemeProvider theme={selectedTheme}>
         {target !== '_blank' ? (
-          <NextLink href={normalizedUrl} passHref onClick={handleNavigate}>
+          <NextLink href={normalizedUrl} passHref onClick={handleClick}>
             <StyledSpan stretch={stretch}>{$buttonData?.link_text}</StyledSpan>
             {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
           </NextLink>
@@ -142,7 +170,7 @@ const Button = ({ $buttonData, stretch }) => {
             href={normalizedUrl}
             target={target}
             rel={rel}
-            onClick={handleNavigate}
+            onClick={handleClick}
           >
             {$buttonData?.link_text}
             {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
