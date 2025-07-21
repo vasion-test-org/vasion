@@ -74,6 +74,7 @@ const Card = ({ content, paginated, borderradius }) => {
           paginated={paginated}
           blur={content?.blur_card}
           $canhover={content?.has_hover}
+          $clickable={true}
         >
           {WrapperContent}
         </CardWrapper>
@@ -89,6 +90,7 @@ const Card = ({ content, paginated, borderradius }) => {
         {...storyblokEditable(content)}
         paginated={paginated}
         $canhover={content?.has_hover}
+        $clickable={true}
       >
         {WrapperContent}
       </CardWrapper>
@@ -101,6 +103,7 @@ const Card = ({ content, paginated, borderradius }) => {
         paginated={paginated}
         blur={content?.blur_card}
         $canhover={content?.has_hover}
+        $clickable={false}
       >
         {WrapperContent}
       </CardWrapper>
@@ -144,7 +147,7 @@ const CardWrapper = styled.div`
   filter: ${(props) => (props?.blur ? `blur(0.25vw)` : 'unset')};
   text-decoration: none;
   color: inherit;
-  cursor: pointer;
+  cursor: ${(props) => (props.$clickable ? 'pointer' : 'default')};
   display: flex;
   flex-direction: column;
   overflow: hidden;
