@@ -51,7 +51,7 @@ const Button = ({ $buttonData, stretch }) => {
       : `/${currentLocale ?? ''}/${rawHref}`.replace(/\/+/g, '/');
 
   // Handle navigation with Storyblok page existence check
-  const handleNavigate = async (e) => {
+  const handleNavigate = (e) => {
     // Handle anchor scrolling first
     if ($buttonData?.link_url?.anchor) {
       // First try to find by ID
@@ -89,6 +89,12 @@ const Button = ({ $buttonData, stretch }) => {
     // For internal links, check if the page exists in Storyblok
     e.preventDefault();
 
+    // Call async function for internal links only
+    checkStoryblokAndNavigate();
+  };
+
+  // Separate async function for Storyblok checking
+  const checkStoryblokAndNavigate = async () => {
     try {
       const storyblokApi = getStoryblokApi();
 
