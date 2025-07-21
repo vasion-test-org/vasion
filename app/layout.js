@@ -80,7 +80,6 @@ export default async function RootLayout({ children }) {
         <Script
           id="recaptcha"
           strategy="lazyOnload"
-          defer
           src="https://www.google.com/recaptcha/api.js"
         />
 
@@ -88,7 +87,6 @@ export default async function RootLayout({ children }) {
         <Script
           id="marketo-munchkin"
           strategy="afterInteractive"
-          defer
           dangerouslySetInnerHTML={{
             __html: `
       (function() {
@@ -119,7 +117,6 @@ export default async function RootLayout({ children }) {
         <Script
           id="cookieyes"
           strategy="afterInteractive"
-          defer
           src="https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js"
         />
 
