@@ -34,35 +34,37 @@ export default async function RootLayout({ children }) {
           name="facebook-domain-verification"
           content="vw5hfzh0aj764x59srftw18eksj8nq"
         />
-        
+
         {/* Resource hints for performance optimization */}
         <link rel="preconnect" href="https://a-us.storyblok.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google.com" />
         <link rel="dns-prefetch" href="https://js.intercomcdn.com" />
         <link rel="dns-prefetch" href="https://static.hotjar.com" />
-        <link rel="dns-prefetch" href="https://dev.visualwebsiteoptimizer.com" />
-        
+        <link
+          rel="dns-prefetch"
+          href="https://dev.visualwebsiteoptimizer.com"
+        />
+
         {/* Preload critical fonts */}
-        <link 
-          rel="preload" 
-          href="/fonts/Archivo-Regular.woff2" 
-          as="font" 
-          type="font/woff2" 
-          crossOrigin="anonymous" 
+        <link
+          rel="preload"
+          href="/fonts/Archivo-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
         />
-        <link 
-          rel="preload" 
-          href="/fonts/Archivo-Bold.woff2" 
-          as="font" 
-          type="font/woff2" 
-          crossOrigin="anonymous" 
+        <link
+          rel="preload"
+          href="/fonts/Archivo-Bold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
         />
-        
+
         {/* Google Tag Manager */}
         <Script
           id="gtm"
-          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -166,7 +168,6 @@ export default async function RootLayout({ children }) {
         {/* VWO - Load after page is interactive */}
         <Script
           id="vwo"
-          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
         window._vwo_code || (function() {
