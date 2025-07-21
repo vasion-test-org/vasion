@@ -14,20 +14,6 @@ import { getStoryblokApi } from '@/lib/storyblok';
 // Register the ScrollToPlugin
 gsap.registerPlugin(ScrollToPlugin);
 
-// Utility function to check if a page exists in Storyblok
-const checkPageExists = async (slug, locale) => {
-  try {
-    const storyblokApi = getStoryblokApi();
-    const { data } = await storyblokApi.get(`cdn/stories/${slug}`, {
-      version: 'published',
-      language: locale,
-    });
-    return !!data.story;
-  } catch (error) {
-    return false;
-  }
-};
-
 // Utility function to get the story slug from URL
 const getStorySlugFromUrl = (url) => {
   if (!url || url === '#') return 'home';
@@ -115,27 +101,61 @@ const Button = ({ $buttonData, stretch }) => {
     e.preventDefault();
 
     const storySlug = getStorySlugFromUrl(rawHref);
-    const targetLocale = currentLocale || 'en';
+    const targetLocale = currentLocale;
 
-    // First try to check if the page exists in the current locale
-    const pageExists = await checkPageExists(storySlug, targetLocale);
+    try {
+      const storyblokApi = getStoryblokApi();
+      const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
+        version: 'published',
+        language: targetLocale,
+      });
 
-    if (pageExists) {
-      // Page exists in current locale, navigate normally
-      router.push(normalizedUrl);
-    } else if (targetLocale !== 'en') {
-      // Page doesn't exist in current locale, try English fallback
-      const englishExists = await checkPageExists(storySlug, 'en');
-      if (englishExists) {
-        // Navigate to English version
-        const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
-        router.push(englishUrl);
+      if (data.story) {
+        // Story exists in current locale, navigate normally
+        router.push(normalizedUrl);
+      } else if (targetLocale && targetLocale !== 'en') {
+        // Story doesn't exist in current locale, try English fallback
+        const englishResponse = await storyblokApi.get(
+          `cdn/stories/${storySlug}`,
+          {
+            version: 'published',
+            language: 'en',
+          }
+        );
+
+        if (englishResponse.data.story) {
+          // Navigate to English version
+          const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
+          router.push(englishUrl);
+        } else {
+          // Neither version exists, navigate anyway (will show 404)
+          router.push(normalizedUrl);
+        }
       } else {
-        // Neither version exists, navigate anyway (will show 404)
+        // Already trying English version or no locale, navigate anyway
         router.push(normalizedUrl);
       }
-    } else {
-      // Already trying English version, navigate anyway
+    } catch (error) {
+      // If there's an error, try English fallback if not already on English
+      if (targetLocale && targetLocale !== 'en') {
+        try {
+          const storyblokApi = getStoryblokApi();
+          const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
+            version: 'published',
+            language: 'en',
+          });
+
+          if (data.story) {
+            const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
+            router.push(englishUrl);
+            return;
+          }
+        } catch (fallbackError) {
+          // Both attempts failed, navigate anyway
+        }
+      }
+
+      // Navigate anyway (will show 404)
       router.push(normalizedUrl);
     }
   };
