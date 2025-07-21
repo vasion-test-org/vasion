@@ -84,6 +84,10 @@ const SideBySide = ({ blok }) => {
 };
 
 const SpacingContainer = styled.div`
+  background: ${(props) =>
+    props.card ? 'transparent' : props.theme.side_by_side.bg};
+  color: ${(props) =>
+    props.card ? 'inherit' : props.theme.side_by_side.textColor};
   padding: ${(props) => {
     if (props.spacingOffset === 'top') {
       return props.spacing === 'default'
