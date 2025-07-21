@@ -87,7 +87,7 @@ const Button = ({ $buttonData, stretch }) => {
     }
 
     // For internal links, check if the page exists in Storyblok
-    e.preventDefault();
+    // e.preventDefault();
 
     try {
       const storyblokApi = getStoryblokApi();
@@ -99,7 +99,7 @@ const Button = ({ $buttonData, stretch }) => {
       // Check if the page exists in the current locale
       const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
         version: 'published',
-        language: currentLocale || 'en',
+        language: currentLocale,
       });
 
       if (data.story) {
