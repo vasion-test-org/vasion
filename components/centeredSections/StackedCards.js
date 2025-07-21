@@ -25,11 +25,13 @@ const RiveAnimation = ({
 }) => {
   const shouldAutoplay = tablet || mobile || index === 0;
 
-  // For above-the-fold animations, load immediately with optimization
+  // Only load the first animation immediately, others load when needed
+  const shouldLoad = index === 0 || isActive;
+  
   const { rive, RiveComponent } = useRive({
-    src,
-    autoplay: shouldAutoplay,
-    // Add performance optimizations for above-the-fold content
+    src: shouldLoad ? src : null,
+    autoplay: shouldAutoplay && shouldLoad,
+    // Performance optimizations for above-the-fold content
     fitCanvasToArtboardHeight: true,
     shouldResizeCanvasToArtboardHeight: true,
   });
@@ -50,7 +52,7 @@ const RiveAnimation = ({
 
   return (
     <RiveContainer>
-      <RiveComponent />
+      {shouldLoad ? <RiveComponent /> : null}
     </RiveContainer>
   );
 };
