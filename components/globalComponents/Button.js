@@ -2,13 +2,14 @@
 import React, { useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import text from '@/styles/text';
 import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
 import media from '@/styles/media';
 import { gsap } from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import { getStoryblokApi } from '@/lib/storyblok';
 
 // Register the ScrollToPlugin
 gsap.registerPlugin(ScrollToPlugin);
@@ -16,6 +17,7 @@ gsap.registerPlugin(ScrollToPlugin);
 const Button = ({ $buttonData, stretch }) => {
   const themes = useAvailableThemes();
   const pathname = usePathname();
+  const router = useRouter();
 
   // useEffect(() => {
   //   window.scrollTo(0, 0);
@@ -48,8 +50,9 @@ const Button = ({ $buttonData, stretch }) => {
       ? rawHref
       : `/${currentLocale ?? ''}/${rawHref}`.replace(/\/+/g, '/');
 
-  // Handle anchor scrolling with GSAP
-  const handleClick = (e) => {
+  // Handle navigation with Storyblok page existence check
+  const handleNavigate = async (e) => {
+    // Handle anchor scrolling first
     if ($buttonData?.link_url?.anchor) {
       // First try to find by ID
       let anchorElement = document.getElementById($buttonData.link_url.anchor);
@@ -74,7 +77,43 @@ const Button = ({ $buttonData, stretch }) => {
           },
           ease: 'power2.out',
         });
+        return;
       }
+    }
+
+    // If it's an external link or email, don't check Storyblok
+    if (isExternal || isEmail) {
+      return;
+    }
+
+    // For internal links, check if the page exists in Storyblok
+    e.preventDefault();
+
+    try {
+      const storyblokApi = getStoryblokApi();
+
+      // Extract the story slug from the URL
+      const urlParts = rawHref.split('/').filter(Boolean);
+      const storySlug = urlParts.length > 0 ? urlParts.join('/') : 'home';
+
+      // Check if the page exists in the current locale
+      const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
+        version: 'published',
+        language: currentLocale || 'en',
+      });
+
+      if (data.story) {
+        // Page exists in current locale, navigate normally
+        router.push(normalizedUrl);
+      } else {
+        // Page doesn't exist in current locale, fallback to English
+        const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
+        router.push(englishUrl);
+      }
+    } catch (error) {
+      // Error occurred, fallback to English
+      const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
+      router.push(englishUrl);
     }
   };
 
@@ -87,7 +126,7 @@ const Button = ({ $buttonData, stretch }) => {
     <ButtonWrapper layout={$buttonData?.layout} size={$buttonData?.link_size}>
       <ThemeProvider theme={selectedTheme}>
         {target !== '_blank' ? (
-          <NextLink href={normalizedUrl} passHref onClick={handleClick}>
+          <NextLink href={normalizedUrl} passHref onClick={handleNavigate}>
             <StyledSpan stretch={stretch}>{$buttonData?.link_text}</StyledSpan>
             {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
           </NextLink>
@@ -96,7 +135,7 @@ const Button = ({ $buttonData, stretch }) => {
             href={normalizedUrl}
             target={target}
             rel={rel}
-            onClick={handleClick}
+            onClick={handleNavigate}
           >
             {$buttonData?.link_text}
             {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
