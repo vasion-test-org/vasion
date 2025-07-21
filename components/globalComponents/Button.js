@@ -2,13 +2,14 @@
 import React, { useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import text from '@/styles/text';
 import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
 import media from '@/styles/media';
 import { gsap } from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import { getStoryblokApi } from '@/lib/storyblok';
 
 // Register the ScrollToPlugin
 gsap.registerPlugin(ScrollToPlugin);
@@ -16,6 +17,7 @@ gsap.registerPlugin(ScrollToPlugin);
 const Button = ({ $buttonData, stretch }) => {
   const themes = useAvailableThemes();
   const pathname = usePathname();
+  const router = useRouter();
 
   // useEffect(() => {
   //   window.scrollTo(0, 0);
@@ -49,8 +51,10 @@ const Button = ({ $buttonData, stretch }) => {
       : `/${currentLocale ?? ''}/${rawHref}`.replace(/\/+/g, '/');
 
   // Handle anchor scrolling with GSAP
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     console.log(normalizedUrl);
+
+    // Handle anchor scrolling
     if ($buttonData?.link_url?.anchor) {
       // First try to find by ID
       let anchorElement = document.getElementById($buttonData.link_url.anchor);
@@ -75,13 +79,76 @@ const Button = ({ $buttonData, stretch }) => {
           },
           ease: 'power2.out',
         });
+        return;
+      }
+    }
+
+    // Check if this is an internal navigation that needs page existence verification
+    if (!isEmail && !isExternal && target !== '_blank') {
+      e.preventDefault();
+
+      try {
+        const storyblokApi = getStoryblokApi();
+
+        // Extract the story slug from the normalized URL
+        const urlParts = normalizedUrl.split('/').filter(Boolean);
+        const locale = ['de', 'fr'].includes(urlParts[0]) ? urlParts[0] : 'en';
+        const storySlug =
+          locale === 'en'
+            ? urlParts.join('/')
+            : urlParts.slice(1).join('/') || 'home';
+
+        // First try to fetch the story in the target locale
+        const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
+          version: 'published',
+          language: locale,
+        });
+
+        if (data.story) {
+          // Page exists in the target locale, navigate normally
+          router.push(normalizedUrl);
+        } else {
+          // Page doesn't exist in target locale, try English fallback
+          if (locale !== 'en') {
+            const englishStorySlug = storySlug === 'home' ? 'home' : storySlug;
+
+            try {
+              const englishData = await storyblokApi.get(
+                `cdn/stories/${englishStorySlug}`,
+                {
+                  version: 'published',
+                  language: 'en',
+                }
+              );
+
+              if (englishData.data.story) {
+                // English version exists, navigate to English URL
+                const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
+                router.push(englishUrl);
+              } else {
+                // Neither localized nor English version exists, navigate to 404 or home
+                router.push('/');
+              }
+            } catch (englishError) {
+              // English version doesn't exist, navigate to home
+              router.push('/');
+            }
+          } else {
+            // Already trying English, page doesn't exist, navigate to home
+            router.push('/');
+          }
+        }
+      } catch (error) {
+        console.error('Error checking page existence:', error);
+        // On error, try to navigate to the original URL
+        router.push(normalizedUrl);
       }
     }
   };
 
   // Add anchor to URL if it exists
   if ($buttonData?.link_url?.anchor) {
-    normalizedUrl += `#${$buttonData.link_url.anchor}`;
+    normalizedUrl += `#${$buttonData?.link_url?.anchor}`;
   }
 
   return (
