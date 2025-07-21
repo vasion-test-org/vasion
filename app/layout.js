@@ -4,6 +4,7 @@ import { ThankYouProvider } from "@/context/ThankYouContext";
 import { PageDataProvider } from "@/context/PageDataContext";
 import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
 import FormTracking from "@/components/FormTracking";
+import ConditionalRecaptcha from "@/components/ConditionalRecaptcha";
 import Script from "next/script";
 import "./globals.css";
 import ScrollSmootherWrapper from "@/components/ScrollSmoothWrapper";
@@ -92,20 +93,7 @@ export default async function RootLayout({ children }) {
         />
 
         {/* Google reCAPTCHA - Load only when forms are present */}
-        <Script
-          id="recaptcha"
-          strategy="lazyOnload"
-          src="https://www.google.com/recaptcha/api.js"
-          onLoad={() => {
-            // Only load reCAPTCHA if there are forms on the page
-            if (document.querySelector('form')) {
-              return;
-            }
-            // Remove the script if no forms found
-            const script = document.getElementById('recaptcha');
-            if (script) script.remove();
-          }}
-        />
+        <ConditionalRecaptcha />
 
         {/* Marketo Munchkin - Load after page is interactive */}
         <Script
