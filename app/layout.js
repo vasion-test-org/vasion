@@ -4,7 +4,6 @@ import { ThankYouProvider } from "@/context/ThankYouContext";
 import { PageDataProvider } from "@/context/PageDataContext";
 import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
 import FormTracking from "@/components/FormTracking";
-import ConditionalRecaptcha from "@/components/ConditionalRecaptcha";
 import Script from "next/script";
 import "./globals.css";
 import ScrollSmootherWrapper from "@/components/ScrollSmoothWrapper";
@@ -93,7 +92,11 @@ export default async function RootLayout({ children }) {
         />
 
         {/* Google reCAPTCHA - Load only when forms are present */}
-        <ConditionalRecaptcha />
+        <Script
+          id="recaptcha"
+          strategy="lazyOnload"
+          src="https://www.google.com/recaptcha/api.js"
+        />
 
         {/* Marketo Munchkin - Load after page is interactive */}
         <Script
