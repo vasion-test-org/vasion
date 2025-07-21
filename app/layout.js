@@ -93,10 +93,10 @@ export default async function RootLayout({ children }) {
           }}
         />
 
-        {/* Google reCAPTCHA - Load after page is interactive */}
+        {/* Google reCAPTCHA - Load only when forms are present */}
         <Script
           id="recaptcha"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           src="https://www.google.com/recaptcha/api.js"
         />
 
@@ -137,34 +137,47 @@ export default async function RootLayout({ children }) {
           src="https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js"
         />
 
-        {/* Intercom - Load after page is interactive */}
+        {/* Intercom - Load with conditional loading based on user interaction */}
         <Script
           id="intercom"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
-      window.intercomSettings = {
-        api_base: "https://api-iam.intercom.io",
-        app_id: "h87qerzy"
-      };
-      (function(){var w=window;var ic=w.Intercom;
-      if(typeof ic==="function"){
-        ic('reattach_activator');
-        ic('update',w.intercomSettings);
-      }else{
-        var d=document;var i=function(){i.c(arguments);};
-        i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;
-        var l=function(){
-          var s=d.createElement('script');
-          s.type='text/javascript';s.async=true;
-          s.src='https://widget.intercom.io/widget/h87qerzy';
-          var x=d.getElementsByTagName('script')[0];
-          x.parentNode.insertBefore(s,x);
+      // Only load Intercom after user interaction to improve initial page performance
+      let intercomLoaded = false;
+      
+      function loadIntercom() {
+        if (intercomLoaded) return;
+        intercomLoaded = true;
+        
+        window.intercomSettings = {
+          api_base: "https://api-iam.intercom.io",
+          app_id: "h87qerzy"
         };
-        if(document.readyState==='complete'){l();}
-        else if(w.attachEvent){w.attachEvent('onload',l);}
-        else{w.addEventListener('load',l,false);}
-      }})();
+        (function(){var w=window;var ic=w.Intercom;
+        if(typeof ic==="function"){
+          ic('reattach_activator');
+          ic('update',w.intercomSettings);
+        }else{
+          var d=document;var i=function(){i.c(arguments);};
+          i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;
+          var l=function(){
+            var s=d.createElement('script');
+            s.type='text/javascript';s.async=true;
+            s.src='https://widget.intercom.io/widget/h87qerzy';
+            var x=d.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s,x);
+          };
+          if(document.readyState==='complete'){l();}
+          else if(w.attachEvent){w.attachEvent('onload',l);}
+          else{w.addEventListener('load',l,false);}
+        }})();
+      }
+      
+      // Load Intercom on first user interaction
+      ['click', 'scroll', 'mousemove'].forEach(event => {
+        document.addEventListener(event, loadIntercom, { once: true, passive: true });
+      });
     `,
           }}
         />
@@ -172,7 +185,6 @@ export default async function RootLayout({ children }) {
         {/* VWO - Load after page is interactive */}
         <Script
           id="vwo"
-          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
         window._vwo_code || (function() {
@@ -224,20 +236,33 @@ export default async function RootLayout({ children }) {
           }}
         />
 
-        {/* Hotjar - Load after page is interactive */}
+        {/* Hotjar - Load only after user interaction to improve initial performance */}
         <Script
           id="hotjar"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
-        (function(h,o,t,j,a,r){
-            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-            h._hjSettings={hjid:2119079,hjsv:6};
-            a=o.getElementsByTagName('head')[0];
-            r=o.createElement('script');r.async=1;
-            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+        // Only load Hotjar after user interaction to improve initial page performance
+        let hotjarLoaded = false;
+        
+        function loadHotjar() {
+          if (hotjarLoaded) return;
+          hotjarLoaded = true;
+          
+          (function(h,o,t,j,a,r){
+              h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+              h._hjSettings={hjid:2119079,hjsv:6};
+              a=o.getElementsByTagName('head')[0];
+              r=o.createElement('script');r.async=1;
+              r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+              a.appendChild(r);
+          })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+        }
+        
+        // Load Hotjar on first user interaction
+        ['click', 'scroll', 'mousemove'].forEach(event => {
+          document.addEventListener(event, loadHotjar, { once: true, passive: true });
+        });
       `,
           }}
         />
