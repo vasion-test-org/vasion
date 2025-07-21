@@ -51,7 +51,7 @@ const Button = ({ $buttonData, stretch }) => {
       : `/${currentLocale ?? ''}/${rawHref}`.replace(/\/+/g, '/');
 
   // Handle navigation with Storyblok page existence check
-  const handleNavigate = (e) => {
+  const handleNavigate = async (e) => {
     // Handle anchor scrolling first
     if ($buttonData?.link_url?.anchor) {
       // First try to find by ID
@@ -89,39 +89,33 @@ const Button = ({ $buttonData, stretch }) => {
     // For internal links, check if the page exists in Storyblok
     e.preventDefault();
 
-    // Wrap the async logic in a synchronous function
-    const checkAndNavigate = async () => {
-      try {
-        const storyblokApi = getStoryblokApi();
+    try {
+      const storyblokApi = getStoryblokApi();
 
-        // Extract the story slug from the URL
-        const urlParts = rawHref.split('/').filter(Boolean);
-        const storySlug = urlParts.length > 0 ? urlParts.join('/') : 'home';
+      // Extract the story slug from the URL
+      const urlParts = rawHref.split('/').filter(Boolean);
+      const storySlug = urlParts.length > 0 ? urlParts.join('/') : 'home';
 
-        // Check if the page exists in the current locale
-        const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
-          version: 'published',
-          language: currentLocale || 'en',
-        });
+      // Check if the page exists in the current locale
+      const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
+        version: 'published',
+        language: currentLocale || 'en',
+      });
 
-        if (data && data.story) {
-          // Page exists in current locale, navigate normally
-          router.push(normalizedUrl);
-        } else {
-          // Page doesn't exist in current locale, fallback to English
-          const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
-          router.push(englishUrl);
-        }
-      } catch (error) {
-        // Error occurred, fallback to English
-        console.warn('Storyblok API error, falling back to English:', error);
+      if (data.story) {
+        // Page exists in current locale, navigate normally
+        router.push(normalizedUrl);
+      } else {
+        // Page doesn't exist in current locale, fallback to English
         const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
         router.push(englishUrl);
       }
-    };
-
-    // Call the async function
-    checkAndNavigate();
+    } catch (error) {
+      // Error occurred, fallback to English
+      console.warn('Storyblok API error, falling back to English:', error);
+      const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
+      router.push(englishUrl);
+    }
   };
 
   // Add anchor to URL if it exists
