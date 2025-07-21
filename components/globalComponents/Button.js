@@ -9,7 +9,6 @@ import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
 import media from '@/styles/media';
 import { gsap } from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
-import { getStoryblokApi } from '@/lib/storyblok';
 
 // Register the ScrollToPlugin
 gsap.registerPlugin(ScrollToPlugin);
@@ -50,6 +49,20 @@ const Button = ({ $buttonData, stretch }) => {
       ? rawHref
       : `/${currentLocale ?? ''}/${rawHref}`.replace(/\/+/g, '/');
 
+  // Function to check if page exists in Storyblok
+  const checkPageExists = async (slug, locale) => {
+    try {
+      const response = await fetch(
+        `/api/storyblok-check?slug=${encodeURIComponent(slug)}&locale=${locale}`
+      );
+      const data = await response.json();
+      return data.exists;
+    } catch (error) {
+      console.error('Error checking page existence:', error);
+      return false;
+    }
+  };
+
   // Handle anchor scrolling with GSAP
   const handleClick = async (e) => {
     console.log(normalizedUrl);
@@ -88,8 +101,6 @@ const Button = ({ $buttonData, stretch }) => {
       e.preventDefault();
 
       try {
-        const storyblokApi = getStoryblokApi();
-
         // Extract the story slug from the normalized URL
         const urlParts = normalizedUrl.split('/').filter(Boolean);
         const locale = ['de', 'fr'].includes(urlParts[0]) ? urlParts[0] : 'en';
@@ -99,38 +110,26 @@ const Button = ({ $buttonData, stretch }) => {
             : urlParts.slice(1).join('/') || 'home';
 
         // First try to fetch the story in the target locale
-        const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
-          version: 'published',
-          language: locale,
-        });
+        const pageExists = await checkPageExists(storySlug, locale);
 
-        if (data.story) {
+        if (pageExists) {
           // Page exists in the target locale, navigate normally
           router.push(normalizedUrl);
         } else {
           // Page doesn't exist in target locale, try English fallback
           if (locale !== 'en') {
             const englishStorySlug = storySlug === 'home' ? 'home' : storySlug;
+            const englishPageExists = await checkPageExists(
+              englishStorySlug,
+              'en'
+            );
 
-            try {
-              const englishData = await storyblokApi.get(
-                `cdn/stories/${englishStorySlug}`,
-                {
-                  version: 'published',
-                  language: 'en',
-                }
-              );
-
-              if (englishData.data.story) {
-                // English version exists, navigate to English URL
-                const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
-                router.push(englishUrl);
-              } else {
-                // Neither localized nor English version exists, navigate to 404 or home
-                router.push('/');
-              }
-            } catch (englishError) {
-              // English version doesn't exist, navigate to home
+            if (englishPageExists) {
+              // English version exists, navigate to English URL
+              const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
+              router.push(englishUrl);
+            } else {
+              // Neither localized nor English version exists, navigate to 404 or home
               router.push('/');
             }
           } else {
