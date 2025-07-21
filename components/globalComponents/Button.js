@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -9,7 +9,6 @@ import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
 import media from '@/styles/media';
 import { gsap } from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
-import { getStoryblokApi } from '@/lib/storyblok';
 
 // Register the ScrollToPlugin
 gsap.registerPlugin(ScrollToPlugin);
@@ -17,7 +16,6 @@ gsap.registerPlugin(ScrollToPlugin);
 const Button = ({ $buttonData, stretch }) => {
   const themes = useAvailableThemes();
   const pathname = usePathname();
-  const [validatedUrl, setValidatedUrl] = useState(null);
 
   // useEffect(() => {
   //   window.scrollTo(0, 0);
@@ -45,82 +43,10 @@ const Button = ({ $buttonData, stretch }) => {
     ? slugParts[0]
     : null;
 
-  // Function to validate route and fallback to English if needed
-  const validateRoute = async (url, locale) => {
-    // Skip validation for external links, emails, or already localized URLs
-    if (isEmail || isExternal || alreadyLocalized) {
-      return url;
-    }
-
-    // Extract the story slug from the URL
-    const urlParts = url.split('/').filter(Boolean);
-    const storySlug =
-      locale === 'en'
-        ? urlParts.join('/')
-        : urlParts.slice(1).join('/') || 'home';
-
-    try {
-      const storyblokApi = getStoryblokApi();
-      const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
-        version: 'published',
-        language: locale,
-      });
-
-      // If story exists in current locale, return the original URL
-      if (data.story) {
-        return url;
-      }
-
-      // If story doesn't exist in current locale, try English version
-      if (locale !== 'en') {
-        const { data: englishData } = await storyblokApi.get(
-          `cdn/stories/${storySlug}`,
-          {
-            version: 'published',
-            language: 'en',
-          }
-        );
-
-        if (englishData.story) {
-          // Return English version of the URL
-          const englishUrl = url
-            .replace(`/${locale}/`, '/')
-            .replace(/\/+/g, '/');
-          return englishUrl;
-        }
-      }
-
-      // If neither exists, return the original URL
-      return url;
-    } catch (error) {
-      console.error('Error validating route:', error);
-      // On error, return the original URL
-      return url;
-    }
-  };
-
-  // Validate route on component mount
-  useEffect(() => {
-    const validateAndSetUrl = async () => {
-      if (!isEmail && !isExternal && !alreadyLocalized) {
-        const initialUrl = `/${currentLocale ?? ''}/${rawHref}`.replace(
-          /\/+/g,
-          '/'
-        );
-        const validated = await validateRoute(
-          initialUrl,
-          currentLocale || 'en'
-        );
-        setValidatedUrl(validated);
-      } else {
-        setValidatedUrl(rawHref);
-      }
-    };
-
-    validateAndSetUrl();
-  }, [rawHref, currentLocale, isEmail, isExternal, alreadyLocalized]);
-
-  let normalizedUrl = validatedUrl || rawHref;
+  let normalizedUrl =
+    isEmail || isExternal || alreadyLocalized
+      ? rawHref
+      : `/${currentLocale ?? ''}/${rawHref}`.replace(/\/+/g, '/');
 
   // Handle anchor scrolling with GSAP
   const handleClick = (e) => {
