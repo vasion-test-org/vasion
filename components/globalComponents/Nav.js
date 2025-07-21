@@ -515,6 +515,8 @@ const DropDownCTA = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  /* Add loading optimization */
+  background-color: #f0f0f0; /* Fallback color while image loads */
 
   ${media.fullWidth} {
     width: 968px;

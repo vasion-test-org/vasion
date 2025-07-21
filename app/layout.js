@@ -41,10 +41,9 @@ export default async function RootLayout({ children }) {
         <link rel="preconnect" href="https://www.google.com" />
         <link rel="dns-prefetch" href="https://js.intercomcdn.com" />
         <link rel="dns-prefetch" href="https://static.hotjar.com" />
-        <link
-          rel="dns-prefetch"
-          href="https://dev.visualwebsiteoptimizer.com"
-        />
+        <link rel="dns-prefetch" href="https://dev.visualwebsiteoptimizer.com" />
+        <link rel="dns-prefetch" href="https://www.gstatic.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
         {/* Preload critical fonts */}
         <link 
@@ -76,17 +75,20 @@ export default async function RootLayout({ children }) {
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-        // Optimize GTM loading to reduce payload
-        (function(w,d,s,l,i){
-          w[l]=w[l]||[];
-          w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-          var f=d.getElementsByTagName(s)[0],
-          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-          j.async=true;
-          j.defer=true; // Add defer to reduce blocking
-          j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-          f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-WMKX59W');
+        // Optimize GTM loading to reduce payload and prevent multiple loads
+        if (!window.gtmLoaded) {
+          window.gtmLoaded = true;
+          (function(w,d,s,l,i){
+            w[l]=w[l]||[];
+            w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+            var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+            j.async=true;
+            j.defer=true;
+            j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+            f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-WMKX59W');
+        }
       `,
           }}
         />
