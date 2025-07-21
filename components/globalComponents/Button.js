@@ -81,12 +81,13 @@ const Button = ({ $buttonData, stretch }) => {
       }
     }
 
-    // If it's an external link or email, don't check Storyblok
-    if (isExternal || isEmail) {
-      return;
-    }
+    // If it's an external link or email, navigate normally
+    // if (isExternal || isEmail) {
+    //   // Let the default navigation happen
+    //   return;
+    // }
 
-    // For internal links, check if the page exists in Storyblok
+    // // For internal links, check if the page exists in Storyblok
     // e.preventDefault();
 
     try {
