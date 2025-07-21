@@ -24,14 +24,33 @@ const RiveAnimation = ({
   onRiveInit,
 }) => {
   const shouldAutoplay = tablet || mobile || index === 0;
+  const [isInViewport, setIsInViewport] = useState(false);
+  const containerRef = useRef(null);
 
-  // Only load the first animation immediately, others load when needed
-  const shouldLoad = index === 0 || isActive;
+  // Use Intersection Observer to load animations when they come into view
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInViewport(true);
+        }
+      },
+      { threshold: 0.1, rootMargin: '50px' }
+    );
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Only load when in viewport or active
+  const shouldLoad = isInViewport || isActive;
   
   const { rive, RiveComponent } = useRive({
     src: shouldLoad ? src : null,
     autoplay: shouldAutoplay && shouldLoad,
-    // Performance optimizations for above-the-fold content
+    // Performance optimizations
     fitCanvasToArtboardHeight: true,
     shouldResizeCanvasToArtboardHeight: true,
   });
@@ -51,7 +70,7 @@ const RiveAnimation = ({
   }, [isActive]);
 
   return (
-    <RiveContainer>
+    <RiveContainer ref={containerRef}>
       {shouldLoad ? <RiveComponent /> : null}
     </RiveContainer>
   );
