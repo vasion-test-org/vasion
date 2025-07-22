@@ -37,7 +37,6 @@ export default async function RootLayout({ children }) {
         {/* Google Tag Manager */}
         <Script
           id="gtm"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -92,7 +91,6 @@ export default async function RootLayout({ children }) {
           strategy="lazyOnload"
           src="https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js"
         />
-
 
         {/* Intercom */}
         <Script
