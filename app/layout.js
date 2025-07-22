@@ -76,7 +76,6 @@ export default async function RootLayout({ children }) {
         <Script
           id="gtm"
           strategy="beforeInteractive"
-          g
           dangerouslySetInnerHTML={{
             __html: `
         // Optimize GTM loading to reduce payload and prevent multiple loads
