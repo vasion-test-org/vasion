@@ -15,6 +15,34 @@ import { storyblokEditable } from "@storyblok/react/rsc";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Custom hook to conditionally load Rive based on user interaction
+const useConditionalRive = () => {
+  const [shouldLoadRive, setShouldLoadRive] = useState(false);
+  
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      setShouldLoadRive(true);
+      // Remove listeners after first interaction
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('scroll', handleUserInteraction);
+      document.removeEventListener('mousemove', handleUserInteraction);
+    };
+    
+    // Only load Rive after user interaction to reduce initial payload
+    document.addEventListener('click', handleUserInteraction, { passive: true });
+    document.addEventListener('scroll', handleUserInteraction, { passive: true });
+    document.addEventListener('mousemove', handleUserInteraction, { passive: true });
+    
+    return () => {
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('scroll', handleUserInteraction);
+      document.removeEventListener('mousemove', handleUserInteraction);
+    };
+  }, []);
+  
+  return shouldLoadRive;
+};
+
 const RiveAnimation = ({
   src,
   index,
@@ -22,10 +50,12 @@ const RiveAnimation = ({
   tablet,
   mobile,
   onRiveInit,
+  shouldLoad = true,
 }) => {
   const shouldAutoplay = tablet || mobile || index === 0;
   const [isInViewport, setIsInViewport] = useState(false);
   const containerRef = useRef(null);
+  const conditionalRive = useConditionalRive();
 
   // Use Intersection Observer to load animations when they come into view
   useEffect(() => {
@@ -44,12 +74,12 @@ const RiveAnimation = ({
     return () => observer.disconnect();
   }, []);
 
-  // Only load when in viewport or active
-  const shouldLoad = isInViewport || isActive;
+  // Only load when in viewport, active, explicitly requested, and user has interacted
+  const shouldLoadRive = (isInViewport || isActive) && shouldLoad && conditionalRive;
   
   const { rive, RiveComponent } = useRive({
-    src: shouldLoad ? src : null,
-    autoplay: shouldAutoplay && shouldLoad,
+    src: shouldLoadRive ? src : null,
+    autoplay: shouldAutoplay && shouldLoadRive,
     // Performance optimizations
     fitCanvasToArtboardHeight: true,
     shouldResizeCanvasToArtboardHeight: true,
@@ -71,7 +101,7 @@ const RiveAnimation = ({
 
   return (
     <RiveContainer ref={containerRef}>
-      {shouldLoad ? <RiveComponent /> : null}
+      {shouldLoadRive ? <RiveComponent /> : null}
     </RiveContainer>
   );
 };
@@ -80,12 +110,13 @@ const StackedCards = ({ blok }) => {
   // console.log(blok);
   const { mobile, tablet } = useContext(ScreenContext);
   
-  // Performance optimization: Since Rive animations are above-the-fold,
-  // we load them immediately without lazy loading to improve LCP
+  // Performance optimization: Only load Rive animations when they're actually needed
   const stackedCardsRef = useRef(null);
   const riveInstancesRef = useRef([]);
   const [active, setActive] = useState(0);
   const [lastCard, setLastCard] = useState({});
+  const [riveLoaded, setRiveLoaded] = useState(false);
+  
   useEffect(() => {
     riveInstancesRef.current = Array(3).fill(null);
     return () => {
@@ -96,6 +127,9 @@ const StackedCards = ({ blok }) => {
   const handleRiveInit = useMemo(() => {
     return (riveInstance, index) => {
       riveInstancesRef.current[index] = riveInstance;
+      if (index === 0) {
+        setRiveLoaded(true);
+      }
     };
   }, []);
 
@@ -164,6 +198,7 @@ const StackedCards = ({ blok }) => {
                 tablet={tablet}
                 mobile={mobile}
                 onRiveInit={handleRiveInit}
+                shouldLoad={riveLoaded || index === 0}
               />
             )}
           </CardContainer>

@@ -67,14 +67,7 @@ export default async function RootLayout({ children }) {
           fetchPriority="high"
         />
 
-        {/* Preload Rive WASM to improve LCP - largest payload at 512KB */}
-        <link
-          rel="preload"
-          href="https://unpkg.com/@rive-app/canvas@2.30.1/rive.wasm"
-          as="fetch"
-          crossOrigin="anonymous"
-          fetchPriority="low"
-        />
+        {/* Rive WASM will be loaded on-demand when animations are needed */}
 
         {/* Google Tag Manager */}
         <Script
