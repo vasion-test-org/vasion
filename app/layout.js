@@ -41,38 +41,40 @@ export default async function RootLayout({ children }) {
         <link rel="preconnect" href="https://www.google.com" />
         <link rel="dns-prefetch" href="https://js.intercomcdn.com" />
         <link rel="dns-prefetch" href="https://static.hotjar.com" />
-        <link rel="dns-prefetch" href="https://dev.visualwebsiteoptimizer.com" />
+        <link
+          rel="dns-prefetch"
+          href="https://dev.visualwebsiteoptimizer.com"
+        />
         <link rel="dns-prefetch" href="https://www.gstatic.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
         {/* Preload critical fonts */}
-        <link 
-          rel="preload" 
-          href="/fonts/Archivo-Regular.woff2" 
-          as="font" 
-          type="font/woff2" 
-          crossOrigin="anonymous" 
+        <link
+          rel="preload"
+          href="/fonts/Archivo-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
         />
-        <link 
-          rel="preload" 
-          href="/fonts/Archivo-Bold.woff2" 
-          as="font" 
-          type="font/woff2" 
-          crossOrigin="anonymous" 
+        <link
+          rel="preload"
+          href="/fonts/Archivo-Bold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
         />
-        
+
         {/* Preload Rive WASM to improve LCP - largest payload at 512KB */}
-        <link 
-          rel="preload" 
-          href="https://unpkg.com/@rive-app/canvas@2.30.1/rive.wasm" 
-          as="fetch" 
-          crossOrigin="anonymous" 
+        <link
+          rel="preload"
+          href="https://unpkg.com/@rive-app/canvas@2.30.1/rive.wasm"
+          as="fetch"
+          crossOrigin="anonymous"
         />
 
         {/* Google Tag Manager */}
         <Script
           id="gtm"
-          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
         // Optimize GTM loading to reduce payload and prevent multiple loads
@@ -292,3 +294,4 @@ export default async function RootLayout({ children }) {
     </html>
   );
 }
+
