@@ -24,10 +24,35 @@ const RiveAnimation = ({
   onRiveInit,
 }) => {
   const shouldAutoplay = tablet || mobile || index === 0;
+  const [isInViewport, setIsInViewport] = useState(false);
+  const containerRef = useRef(null);
 
+  // Use Intersection Observer to load animations when they come into view
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInViewport(true);
+        }
+      },
+      { threshold: 0.1, rootMargin: '50px' }
+    );
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Only load when in viewport or active
+  const shouldLoad = isInViewport || isActive;
+  
   const { rive, RiveComponent } = useRive({
-    src,
-    autoplay: shouldAutoplay,
+    src: shouldLoad ? src : null,
+    autoplay: shouldAutoplay && shouldLoad,
+    // Performance optimizations
+    fitCanvasToArtboardHeight: true,
+    shouldResizeCanvasToArtboardHeight: true,
   });
 
   useEffect(() => {
@@ -45,8 +70,8 @@ const RiveAnimation = ({
   }, [isActive]);
 
   return (
-    <RiveContainer>
-      <RiveComponent />
+    <RiveContainer ref={containerRef}>
+      {shouldLoad ? <RiveComponent /> : null}
     </RiveContainer>
   );
 };
@@ -54,6 +79,9 @@ const RiveAnimation = ({
 const StackedCards = ({ blok }) => {
   // console.log(blok);
   const { mobile, tablet } = useContext(ScreenContext);
+  
+  // Performance optimization: Since Rive animations are above-the-fold,
+  // we load them immediately without lazy loading to improve LCP
   const stackedCardsRef = useRef(null);
   const riveInstancesRef = useRef([]);
   const [active, setActive] = useState(0);
