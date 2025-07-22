@@ -1,23 +1,27 @@
-'use client'
-import React from 'react';
+"use client";
+import React from "react";
 
-import styled from 'styled-components';
-import StatItem from '@/components/globalComponents/StatItem';
-import media from '@/styles/media';
-// import colors from 'styles/colors';
+import styled from "styled-components";
+import StatItem from "@/components/globalComponents/StatItem";
+import media from "@/styles/media";
+import colors from "styles/colors";
 // import text from 'styles/text';
-const Stats = ({statsData, alignment}) => {
-  // console.log(gridData)
-return (
-<StatsContainer>
-  {statsData.map((statItem, index) => 
-    <StatItem key={`stat-item-${index}`} statItem={statItem} alignment={alignment}/>
-  )}
-</StatsContainer>
-)
-}
+const Stats = ({ statsData, toggle_card_style, alignment }) => {
+  console.log(statsData);
+  return (
+    <StatsContainer card_style={toggle_card_style}>
+      {statsData.map((statItem, index) => (
+        <StatItem
+          key={`stat-item-${index}`}
+          statItem={statItem}
+          alignment={alignment}
+        />
+      ))}
+    </StatsContainer>
+  );
+};
 
-export default Stats
+export default Stats;
 
 const StatsContainer = styled.div`
   display: flex;
@@ -26,19 +30,27 @@ const StatsContainer = styled.div`
   justify-content: center;
   width: 81.5vw;
   gap: 3.75vw;
-
+  background: ${(props) =>
+    props.card_style ? colors.lightPurpleGrey : "unset"};
+  padding: 1.625vw 6vw;
+  border-radius: 1.25vw;
   ${media.fullWidth} {
     width: 1304px;
     gap: 60px;
+    padding: 26px 96px;
+    border-radius: 20px;
   }
-  
+
   ${media.tablet} {
     width: 92.188vw;
     gap: 2.344vw;
+    border-radius: 1.953vw;
   }
-  
+
   ${media.mobile} {
     width: 89.167vw;
     gap: 8.333vw;
+    border-radius: 4.167vw;
   }
-`
+`;
+

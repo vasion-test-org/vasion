@@ -1,13 +1,13 @@
-'use client';
-import React from 'react';
+"use client";
+import React from "react";
 
-import styled from 'styled-components';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import media from 'styles/media';
-import text from '@/styles/text';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import colors from '@/styles/colors';
-import Button from '@/components/globalComponents/Button';
+import styled from "styled-components";
+import { storyblokEditable } from "@storyblok/react/rsc";
+import media from "styles/media";
+import text from "@/styles/text";
+import RichTextRenderer from "@/components/renderers/RichTextRenderer";
+import colors from "@/styles/colors";
+import Button from "@/components/globalComponents/Button";
 const StatItem = ({ statItem }) => {
   return (
     <StatContainer {...storyblokEditable(statItem)}>
@@ -33,20 +33,21 @@ const StatContainer = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  width: 24.625vw;
+  width: 14.563vw;
   gap: 1.5vw;
 
   ${media.fullWidth} {
     width: 394px;
+    width: 233px;
     gap: 24px;
   }
 
   ${media.tablet} {
-    width: 29.102vw;
+    width: 13.965vw;
   }
 
   ${media.mobile} {
-    width: 89.167vw;
+    width: 66.667vw;
   }
 `;
 export default StatItem;

@@ -90,7 +90,11 @@ const CenteredSection = ({ blok }) => {
               <Grid gridData={blok.grid} alignment={blok.grid_alignment} />
             )}
             {blok.component_type === "stats" && blok.stats && (
-              <Stats statsData={blok.stats} alignment={blok.stats_alignment} />
+              <Stats
+                statsData={blok.stats}
+                toggle_card_style={blok.card_style}
+                alignment={blok.stats_alignment}
+              />
             )}
             {blok.component_type === "accordion" && blok.accordion && (
               <Accordion accordionData={blok.accordion} />
