@@ -39,6 +39,8 @@ export default async function RootLayout({ children }) {
         <link rel="preconnect" href="https://a-us.storyblok.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google.com" />
+        <link rel="preconnect" href="https://munchkin.marketo.net" />
+        <link rel="preconnect" href="https://cdn-cookieyes.com" />
         <link rel="dns-prefetch" href="https://js.intercomcdn.com" />
         <link rel="dns-prefetch" href="https://static.hotjar.com" />
         <link
@@ -47,6 +49,7 @@ export default async function RootLayout({ children }) {
         />
         <link rel="dns-prefetch" href="https://www.gstatic.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://info.printerlogic.com" />
 
         {/* Preload critical fonts */}
         <link
@@ -101,7 +104,7 @@ export default async function RootLayout({ children }) {
         <Script
           id="recaptcha"
           strategy="lazyOnload"
-          src="https://www.google.com/recaptcha/api.js"
+          src="https://www.google.com/recaptcha/api.js?render=explicit"
         />
 
         {/* Marketo Munchkin - Load after page is interactive */}
@@ -121,6 +124,7 @@ export default async function RootLayout({ children }) {
         var s = document.createElement('script');
         s.type = 'text/javascript';
         s.async = true;
+        s.defer = true;
         s.src = '//munchkin.marketo.net/munchkin.js';
         s.onreadystatechange = function() {
           if (this.readyState == 'complete' || this.readyState == 'loaded') {
