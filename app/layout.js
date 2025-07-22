@@ -39,8 +39,6 @@ export default async function RootLayout({ children }) {
         <link rel="preconnect" href="https://a-us.storyblok.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google.com" />
-        <link rel="preconnect" href="https://munchkin.marketo.net" />
-        <link rel="preconnect" href="https://cdn-cookieyes.com" />
         <link rel="dns-prefetch" href="https://js.intercomcdn.com" />
         <link rel="dns-prefetch" href="https://static.hotjar.com" />
         <link
@@ -49,7 +47,6 @@ export default async function RootLayout({ children }) {
         />
         <link rel="dns-prefetch" href="https://www.gstatic.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        <link rel="dns-prefetch" href="https://info.printerlogic.com" />
 
         {/* Preload critical fonts */}
         <link
