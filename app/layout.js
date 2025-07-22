@@ -93,12 +93,7 @@ export default async function RootLayout({ children }) {
           }}
         />
 
-        {/* Google reCAPTCHA - Load only when forms are present */}
-        <Script
-          id="recaptcha"
-          strategy="lazyOnload"
-          src="https://www.google.com/recaptcha/api.js"
-        />
+        {/* reCAPTCHA will be loaded dynamically by FormTracking when forms are detected */}
 
         {/* Marketo Munchkin - Load after page is interactive */}
         <Script
