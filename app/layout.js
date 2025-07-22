@@ -39,6 +39,7 @@ export default async function RootLayout({ children }) {
         <link rel="preconnect" href="https://a-us.storyblok.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google.com" />
+        <link rel="preconnect" href="https://unpkg.com" />
         <link rel="dns-prefetch" href="https://js.intercomcdn.com" />
         <link rel="dns-prefetch" href="https://static.hotjar.com" />
         <link
@@ -55,6 +56,7 @@ export default async function RootLayout({ children }) {
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
+          fetchPriority="high"
         />
         <link
           rel="preload"
@@ -62,6 +64,7 @@ export default async function RootLayout({ children }) {
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
+          fetchPriority="high"
         />
 
         {/* Preload Rive WASM to improve LCP - largest payload at 512KB */}
@@ -70,6 +73,7 @@ export default async function RootLayout({ children }) {
           href="https://unpkg.com/@rive-app/canvas@2.30.1/rive.wasm"
           as="fetch"
           crossOrigin="anonymous"
+          fetchPriority="low"
         />
 
         {/* Google Tag Manager */}
