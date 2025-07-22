@@ -15,28 +15,38 @@ import { storyblokEditable } from "@storyblok/react/rsc";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Module-level state for user interaction detection
+let didUserInteract = false;
+const subscribers = new Set();
+
+if (typeof window !== 'undefined') {
+  const onInteraction = () => {
+    if (didUserInteract) return;
+    didUserInteract = true;
+    subscribers.forEach(callback => callback());
+    subscribers.clear();
+  };
+
+  document.addEventListener('click', onInteraction, { once: true, passive: true });
+  document.addEventListener('scroll', onInteraction, { once: true, passive: true });
+  document.addEventListener('mousemove', onInteraction, { once: true, passive: true });
+}
+
 // Custom hook to conditionally load Rive based on user interaction
 const useConditionalRive = () => {
-  const [shouldLoadRive, setShouldLoadRive] = useState(false);
+  const [shouldLoadRive, setShouldLoadRive] = useState(didUserInteract);
   
   useEffect(() => {
-    const handleUserInteraction = () => {
+    if (didUserInteract) {
       setShouldLoadRive(true);
-      // Remove listeners after first interaction
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('scroll', handleUserInteraction);
-      document.removeEventListener('mousemove', handleUserInteraction);
-    };
+      return;
+    }
     
-    // Only load Rive after user interaction to reduce initial payload
-    document.addEventListener('click', handleUserInteraction, { passive: true });
-    document.addEventListener('scroll', handleUserInteraction, { passive: true });
-    document.addEventListener('mousemove', handleUserInteraction, { passive: true });
+    const callback = () => setShouldLoadRive(true);
+    subscribers.add(callback);
     
     return () => {
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('scroll', handleUserInteraction);
-      document.removeEventListener('mousemove', handleUserInteraction);
+      subscribers.delete(callback);
     };
   }, []);
   
