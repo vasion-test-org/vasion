@@ -75,6 +75,8 @@ export default async function RootLayout({ children }) {
         {/* Google Tag Manager */}
         <Script
           id="gtm"
+          strategy="beforeInteractive"
+          g
           dangerouslySetInnerHTML={{
             __html: `
         // Optimize GTM loading to reduce payload and prevent multiple loads
@@ -187,6 +189,7 @@ export default async function RootLayout({ children }) {
         {/* VWO - Load after page is interactive */}
         <Script
           id="vwo"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
         window._vwo_code || (function() {
@@ -294,4 +297,3 @@ export default async function RootLayout({ children }) {
     </html>
   );
 }
-
