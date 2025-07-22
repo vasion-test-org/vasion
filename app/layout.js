@@ -104,7 +104,7 @@ export default async function RootLayout({ children }) {
         <Script
           id="recaptcha"
           strategy="lazyOnload"
-          src="https://www.google.com/recaptcha/api.js?render=explicit"
+          src="https://www.google.com/recaptcha/api.js"
         />
 
         {/* Marketo Munchkin - Load after page is interactive */}
@@ -124,7 +124,6 @@ export default async function RootLayout({ children }) {
         var s = document.createElement('script');
         s.type = 'text/javascript';
         s.async = true;
-        s.defer = true;
         s.src = '//munchkin.marketo.net/munchkin.js';
         s.onreadystatechange = function() {
           if (this.readyState == 'complete' || this.readyState == 'loaded') {
