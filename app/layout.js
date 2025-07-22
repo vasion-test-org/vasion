@@ -192,7 +192,7 @@ export default async function RootLayout({ children }) {
         {/* VWO - Load before page is interactive */}
         <link rel="preconnect" href="https://dev.visualwebsiteoptimizer.com" />
         <Script
-          id="vwo-script"
+          id="vwoCode"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
