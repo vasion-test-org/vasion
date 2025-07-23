@@ -9,7 +9,7 @@ import DemoStar from 'assets/svg/demostar.svg';
 import colors from '@/styles/colors';
 import media from '@/styles/media';
 import text from '@/styles/text';
-import gsap from 'gsap';
+import { to, from, set, timeline } from '@/lib/gsap-utils';
 import { ScreenContext } from '@/components/providers/Screen';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Chevron from 'assets/svg/WhiteChevron.svg';

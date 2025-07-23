@@ -8,20 +8,64 @@ import {
 import React from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
-import Header from '@/components/copyComponents/Header';
-import BodyCopy from '@/components/copyComponents/BodyCopy';
-import Eyebrow from '@/components/copyComponents/Eyebrow';
 import useMedia from '@/functions/useMedia';
-import CTA from '@/components/CTA';
-import SmallQuote from '../SmallQuote';
-import LogoCube from '../LogoCube';
-import SideBySide from '../SideBySide';
-import dynamic from 'next/dynamic';
-import NumberBlock from '../NumberBlock';
-import TwoColumnList from '@/components/TwoColumnList';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
-import GradientText from '@/components/globalComponents/GradientText';
+import dynamic from 'next/dynamic';
+
+// Dynamic imports for better bundle optimization
+const Header = dynamic(() => import('@/components/copyComponents/Header'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const BodyCopy = dynamic(() => import('@/components/copyComponents/BodyCopy'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Eyebrow = dynamic(() => import('@/components/copyComponents/Eyebrow'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const CTA = dynamic(() => import('@/components/CTA'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const SmallQuote = dynamic(() => import('../SmallQuote'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const LogoCube = dynamic(() => import('../LogoCube'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const SideBySide = dynamic(() => import('../SideBySide'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const NumberBlock = dynamic(() => import('../NumberBlock'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const TwoColumnList = dynamic(() => import('@/components/TwoColumnList'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const GradientText = dynamic(
+  () => import('@/components/globalComponents/GradientText'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
 
 // Dynamic import for CenteredSection
 const CenteredSection = dynamic(() => import('../CenteredSection'), {

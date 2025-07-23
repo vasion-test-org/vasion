@@ -2,18 +2,55 @@
 
 import React from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
-import Image from '@/components/globalComponents/Image';
+import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import media from '@/styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import LogoCube from '@/components/LogoCube';
-import Video from '@/components/globalComponents/Video';
 import { usePathname } from 'next/navigation';
-import Button from '../globalComponents/Button';
-import Form from '../Form';
-import ContactCard from '../globalComponents/ContactCard';
-import OverviewController from '../overview/OverviewController';
-import SmallQuote from 'components/SmallQuote';
+
+// Dynamic imports for better bundle optimization
+const Image = dynamic(() => import('@/components/globalComponents/Image'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const LogoCube = dynamic(() => import('@/components/LogoCube'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Video = dynamic(() => import('@/components/globalComponents/Video'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Button = dynamic(() => import('../globalComponents/Button'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Form = dynamic(() => import('../Form'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const ContactCard = dynamic(() => import('../globalComponents/ContactCard'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const OverviewController = dynamic(
+  () => import('../overview/OverviewController'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
+
+const SmallQuote = dynamic(() => import('components/SmallQuote'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
 
 const ComponentRenderer = ({
   blok,
