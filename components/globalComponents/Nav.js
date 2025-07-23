@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import gsap from 'gsap';
 import { useRouter, usePathname } from 'next/navigation';
 import NextLink from 'next/link';
 import styled, { ThemeProvider } from 'styled-components';
@@ -15,13 +14,11 @@ import Icons from '@/components/renderers/Icons';
 import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
-import ScrollTrigger from 'gsap/ScrollTrigger';
+import { to, set, timeline, ScrollTrigger, utils } from '@/lib/gsap-utils';
 import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 import VasionNavLogo from '@/assets/svg/vasion-nav-logo.svg';
 import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const Nav = ({ blok }) => {
   const copycomponents = [
@@ -250,7 +247,7 @@ const Nav = ({ blok }) => {
 
     const footerOffset = footer.offsetTop + footer.offsetHeight;
 
-    const anchorTl = gsap.timeline({
+    const anchorTl = timeline({
       scrollTrigger: {
         start: '2% 1%',
         end: '10% 90%',
@@ -272,10 +269,10 @@ const Nav = ({ blok }) => {
   useEffect(() => {
     if (!navReady) return;
 
-    gsap.set('.dropdowns', { autoAlpha: 0, display: 'flex' });
+    set('.dropdowns', { autoAlpha: 0, display: 'flex' });
 
-    const allTabs = gsap.utils.toArray('.tabs');
-    const allDropdowns = gsap.utils.toArray('.dropdowns');
+    const allTabs = utils.toArray('.tabs');
+    const allDropdowns = utils.toArray('.dropdowns');
     const navWrapper = document.querySelector('.mainNavWrapper');
 
     let isAnimating = false;
@@ -283,7 +280,7 @@ const Nav = ({ blok }) => {
 
     const closeDropdown = () => {
       isAnimating = true;
-      return gsap.to('.dropdowns', {
+      return to('.dropdowns', {
         autoAlpha: 0,
         duration: 0.35,
         onComplete: () => {
@@ -302,7 +299,7 @@ const Nav = ({ blok }) => {
         queuedIndex = index;
         return;
       }
-      gsap.to(`#dropdown-${index}`, {
+      to(`#dropdown-${index}`, {
         autoAlpha: 1,
         duration: 0.35,
       });
@@ -341,7 +338,7 @@ const Nav = ({ blok }) => {
     if (!navReady) return;
 
     const closeDropdownsOnRouteChange = () => {
-      gsap.to('.dropdowns', {
+      to('.dropdowns', {
         autoAlpha: 0,
         duration: 0.35,
       });
@@ -365,11 +362,11 @@ const Nav = ({ blok }) => {
 
   useEffect(() => {
     const handleGlobeHover = () => {
-      gsap.to('#languageItemsContainer', { width: '100%' });
+      to('#languageItemsContainer', { width: '100%' });
     };
 
     const handleGlobeExit = () => {
-      gsap.to('#languageItemsContainer', { width: '0%' });
+      to('#languageItemsContainer', { width: '0%' });
     };
 
     const globe = document.querySelector('#globe');
@@ -394,7 +391,7 @@ const Nav = ({ blok }) => {
 
     const handleMouseEnter = () => {
       setIsHoveringNav(true);
-      gsap.to(backdrop, {
+      to(backdrop, {
         opacity: 1,
         duration: 0.3,
         ease: 'power2.out',
@@ -403,7 +400,7 @@ const Nav = ({ blok }) => {
 
     const handleMouseLeave = () => {
       setIsHoveringNav(false);
-      gsap.to(backdrop, {
+      to(backdrop, {
         opacity: 0,
         duration: 0.3,
         ease: 'power2.in',

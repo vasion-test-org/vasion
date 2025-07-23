@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from 'react';
 
-import gsap from "gsap";
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
+import gsap from 'gsap';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
 
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import getMedia from "@/functions/getMedia";
-import Button from "./globalComponents/Button";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { storyblokEditable } from "@storyblok/react/rsc";
+import media from '@/styles/media';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import getMedia from '@/functions/getMedia';
+import Button from './globalComponents/Button';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { storyblokEditable } from '@storyblok/react/rsc';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,7 +32,7 @@ const CustomerLogos = ({ blok }) => {
     <Logo
       key={logo.filename}
       alt={logo?.alt}
-      loading="lazy"
+      loading='lazy'
       className={`${blok?.logos_category}-logos`}
       src={logo.filename}
     />
@@ -41,7 +41,7 @@ const CustomerLogos = ({ blok }) => {
   const logoOverflow = remainingLogos?.map((logo) => (
     <Logo
       key={logo.filename}
-      loading="lazy"
+      loading='lazy'
       className={`${blok?.logos_category}-logos`}
       src={logo.filename}
       alt={logo?.alt}
@@ -52,8 +52,8 @@ const CustomerLogos = ({ blok }) => {
     const logoTl = gsap.timeline({
       scrollTrigger: {
         trigger: categoryRef.current,
-        start: "top 40%",
-        end: "bottom bottom",
+        start: 'top 40%',
+        end: 'bottom bottom',
         // markers: true,
       },
     });
@@ -63,10 +63,10 @@ const CustomerLogos = ({ blok }) => {
         y: 500,
         duration: 1.25,
         stagger: 0.1,
-        ease: "power4",
+        ease: 'power4',
       })
-      .from(mainCardRef.current, { autoAlpha: 0, duration: 2.25 }, ">-.75")
-      .from(logosRef.current, { autoAlpha: 0, duration: 1.75 }, "<");
+      .from(mainCardRef.current, { autoAlpha: 0, duration: 2.25 }, '>-.75')
+      .from(logosRef.current, { autoAlpha: 0, duration: 1.75 }, '<');
   }, []);
 
   return (
@@ -79,7 +79,7 @@ const CustomerLogos = ({ blok }) => {
         <CardsDiv main_side={blok?.main_side} {...storyblokEditable(blok)}>
           <MainCard className={`${blok?.logos_category}-cards`}>
             <MainLogo
-              loading="lazy"
+              loading='lazy'
               className={`${blok?.logos_category}-mainContent`}
               src={blok?.main_logo?.filename}
               alt={blok?.main_logo?.alt}
@@ -343,7 +343,7 @@ const RemainingLogos = styled.div`
 `;
 const CardsDiv = styled.div`
   display: flex;
-  flex-direction: ${(props) => (props.main_side ? "row" : "row-reverse")};
+  flex-direction: ${(props) => (props.main_side ? 'row' : 'row-reverse')};
   justify-content: center;
   align-items: center;
   overflow: hidden;
@@ -372,96 +372,96 @@ const Wrapper = styled.div`
   background: ${(props) => props.theme.customer_logos.bg};
 
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
-          ? `${props.spacing}px 0 0`
-          : "3.75vw 0 0";
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : "0 0 3.75vw";
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
-        ? `${props.spacing}px 0`
-        : "3.75vw 0";
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "60px 0";
+        ? `${props.spacing}px 0`
+        : '60px 0';
     }};
   }
 
   ${media.tablet} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.859vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "5.859vw 0 0";
+          ? `${props.spacing}px 0 0`
+          : '5.859vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 5.859vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 5.859vw";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 5.859vw';
       }
-      return props.spacing === "default"
-        ? "5.859vw 0"
+      return props.spacing === 'default'
+        ? '5.859vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "5.859vw 0";
+        ? `${props.spacing}px 0`
+        : '5.859vw 0';
     }};
   }
 
   ${media.mobile} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "12.5vw 0 0";
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 12.5vw";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
       }
-      return props.spacing === "default"
-        ? "12.5vw 0"
+      return props.spacing === 'default'
+        ? '12.5vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "12.5vw 0";
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
     }};
   }
 `;

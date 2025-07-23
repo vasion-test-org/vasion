@@ -1,20 +1,21 @@
-import React, { useEffect, useContext, useRef } from "react";
-
-import gsap from "gsap";
-import styled from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import text from "styles/text";
-import { ScreenContext } from "@/components/providers/Screen";
-
-import { horizontalLoop } from "@/functions/horizontalLoop";
-import RichTextRenderer from "../renderers/RichTextRenderer";
+'use client';
+import React, { useEffect, useRef, useContext } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import media from '@/styles/media';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import { timeline, utils } from '@/lib/gsap-utils';
+import { horizontalLoop } from '@/functions/horizontalLoop';
+import { ScreenContext } from '@/components/providers/Screen';
+import RichTextRenderer from '../renderers/RichTextRenderer';
 
 const G2BadgesMobile = ({ badges }) => {
   const { mobile } = useContext(ScreenContext);
   const countRef = useRef(1);
   const allBadges = badges.badge_cards.map((badges, index) => (
-    <BadgeDiv className="badges">
+    <BadgeDiv className='badges'>
       <BadgeImage
         src={badges.badge_image.filename}
         alt={badges?.badge_image?.alt}
@@ -27,13 +28,13 @@ const G2BadgesMobile = ({ badges }) => {
   ));
 
   useEffect(() => {
-    const badges = gsap.utils.toArray(".badges");
-    const badgeCounter = document.querySelector("#badgeCounter");
+    const badges = utils.toArray('.badges');
+    const badgeCounter = document.querySelector('#badgeCounter');
 
     const loop = horizontalLoop(badges, { paused: true });
 
     function NextLoop() {
-      loop.next({ duration: 2, ease: "slow" });
+      loop.next({ duration: 2, ease: 'slow' });
 
       if (countRef.current >= badges.length) {
         countRef.current = 1;
@@ -43,7 +44,7 @@ const G2BadgesMobile = ({ badges }) => {
       }
     }
 
-    const loopTL = gsap.timeline({});
+    const loopTL = timeline({});
     loopTL.set(NextLoop, {
       delay: 7,
       onRepeat: NextLoop,
@@ -51,16 +52,16 @@ const G2BadgesMobile = ({ badges }) => {
       repeatDelay: 7,
     });
 
-    const progressTL = gsap.timeline({
+    const progressTL = timeline({
       defaults: {
         duration: 7,
       },
     });
 
-    progressTL.to(".pro-bar", {
+    progressTL.to('.pro-bar', {
       delay: 0.75,
       stagger: 7,
-      width: "100%",
+      width: '100%',
       repeat: -1,
     });
 
@@ -80,15 +81,14 @@ const G2BadgesMobile = ({ badges }) => {
       <BadgesDiv>{allBadges}</BadgesDiv>
       <ProgessBarsDiv>
         <ProgressBar>
-          <ProgressValue className="pro-bar" />
+          <ProgressValue className='pro-bar' />
         </ProgressBar>
       </ProgessBarsDiv>
 
-        <BadgeCounterDiv>
-          <BadgeCounter id="badgeCounter">{countRef.current}</BadgeCounter>/
-          {badges.badge_cards.length}
-        </BadgeCounterDiv>
-   
+      <BadgeCounterDiv>
+        <BadgeCounter id='badgeCounter'>{countRef.current}</BadgeCounter>/
+        {badges.badge_cards.length}
+      </BadgeCounterDiv>
     </Wrapper>
   );
 };

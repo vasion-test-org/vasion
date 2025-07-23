@@ -7,11 +7,7 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 import text from '@/styles/text';
 import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
 import media from '@/styles/media';
-import { gsap } from 'gsap';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
-
-// Register the ScrollToPlugin
-gsap.registerPlugin(ScrollToPlugin);
+import { to } from '@/lib/gsap-utils';
 
 const Button = ({ $buttonData, stretch }) => {
   const themes = useAvailableThemes();
@@ -83,7 +79,7 @@ const Button = ({ $buttonData, stretch }) => {
         // Only prevent default if we found the element and can scroll to it
         e.preventDefault();
 
-        gsap.to(window, {
+        to(window, {
           duration: 1,
           scrollTo: {
             y: anchorElement,

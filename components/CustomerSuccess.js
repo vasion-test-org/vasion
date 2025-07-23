@@ -6,7 +6,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import media from '@/styles/media';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
-import gsap from 'gsap';
+import { set, timeline } from '@/lib/gsap-utils';
 import dynamic from 'next/dynamic';
 
 // Dynamic imports for child components
@@ -46,10 +46,10 @@ const FeaturedTestimonials = ({ blok }) => {
     if (timelineRef.current) timelineRef.current.kill();
 
     const items = itemsRef.current;
-    gsap.set(items, { autoAlpha: 0 });
-    gsap.set(items[0], { autoAlpha: 1, display: 'flex' });
+    set(items, { autoAlpha: 0 });
+    set(items[0], { autoAlpha: 1, display: 'flex' });
 
-    const masterTimeline = gsap.timeline({
+    const masterTimeline = timeline({
       repeat: -1,
       onRepeat: () => {
         setCurrentIndex(0);
@@ -65,7 +65,7 @@ const FeaturedTestimonials = ({ blok }) => {
       progress: { width: '100%', duration: 3, ease: 'none' },
     };
     items.forEach((item, i) => {
-      const slideTimeline = gsap.timeline();
+      const slideTimeline = timeline();
 
       slideTimeline
         .set(progressBarsRef.current[i], { width: '0%' })

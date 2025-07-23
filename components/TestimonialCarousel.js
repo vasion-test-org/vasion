@@ -1,16 +1,16 @@
 'use client';
-import React, { useEffect } from 'react';
-
-import gsap from 'gsap';
+import React, { useEffect, useRef } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
-import media from 'styles/media';
+import media from '@/styles/media';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import { to, timeline, utils } from '@/lib/gsap-utils';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Testimonial from './Testimonial';
 
 import { horizontalLoop } from '@/functions/horizontalLoop';
-import colors from '@/styles/colors';
 import SideArrow from '@/assets/svg/side-arrow.svg';
 
 const TestimonialCarousel = ({ blok }) => {
@@ -24,9 +24,12 @@ const TestimonialCarousel = ({ blok }) => {
   ));
 
   useEffect(() => {
-    const testimonialsArr = gsap.utils.toArray('.testimonials');
-    const testimonialLoop = horizontalLoop(testimonialsArr, {centered: true, paused: true });
-  
+    const testimonialsArr = utils.toArray('.testimonials');
+    const testimonialLoop = horizontalLoop(testimonialsArr, {
+      centered: true,
+      paused: true,
+    });
+
     document
       .querySelector('.next')
       .addEventListener('click', () =>
@@ -107,9 +110,7 @@ const Buttons = styled.div`
     gap: 4.167vw;
   }
 `;
-const TestimonialWrapper = styled.div`
-
-`;
+const TestimonialWrapper = styled.div``;
 const Testimonials = styled.div`
   display: flex;
   overflow: hidden;

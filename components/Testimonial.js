@@ -1,6 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
-import gsap from 'gsap';
+import React, { useEffect, useRef } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import media from '@/styles/media';

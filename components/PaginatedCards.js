@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
@@ -12,6 +11,7 @@ import colors from '@/styles/colors';
 import text from '@/styles/text';
 import ChrevronDown from '@/assets/svg/selectDownChevron.svg';
 import { usePathname } from 'next/navigation';
+import { utils, timeline } from '@/lib/gsap-utils';
 
 // Dynamic imports for child components
 const RichTextRenderer = dynamic(
@@ -322,7 +322,7 @@ const PaginatedCards = ({ blok }) => {
     setCurrentPage(0);
 
     // Get new card chunks
-    const cardChunks = gsap.utils.toArray('.cardChunks');
+    const cardChunks = utils.toArray('.cardChunks');
     const totalItems = cardChunks.length;
 
     // Initialize new animation if we have cards
@@ -368,8 +368,7 @@ const PaginatedCards = ({ blok }) => {
   }, [filteredCards.length]); // Only depend on the length of filtered cards
 
   useEffect(() => {
-    const manuDropDownTL = gsap
-      .timeline({ paused: true })
+    const manuDropDownTL = timeline({ paused: true })
       .set('#solutionsOptions', { display: 'flex', height: 0 })
       .fromTo(
         '#solutionsOptions',
@@ -377,8 +376,7 @@ const PaginatedCards = ({ blok }) => {
         { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
       );
 
-    const platformDropDownTL = gsap
-      .timeline({ paused: true })
+    const platformDropDownTL = timeline({ paused: true })
       .set('#productOptions', { display: 'flex', height: 0 })
       .fromTo(
         '#productOptions',
@@ -386,8 +384,7 @@ const PaginatedCards = ({ blok }) => {
         { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
       );
 
-    const featureDropDownTL = gsap
-      .timeline({ paused: true })
+    const featureDropDownTL = timeline({ paused: true })
       .set('#contentTypesOptions', { display: 'flex', height: 0 })
       .fromTo(
         '#contentTypesOptions',
@@ -395,8 +392,7 @@ const PaginatedCards = ({ blok }) => {
         { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
       );
 
-    const industryDropDownTL = gsap
-      .timeline({ paused: true })
+    const industryDropDownTL = timeline({ paused: true })
       .set('#industryTypesOptions', { display: 'flex', height: 0 })
       .fromTo(
         '#industryTypesOptions',
@@ -404,8 +400,7 @@ const PaginatedCards = ({ blok }) => {
         { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
       );
 
-    const newsTypeDropDownTL = gsap
-      .timeline({ paused: true })
+    const newsTypeDropDownTL = timeline({ paused: true })
       .set('#newsTypeTagsOptions', { display: 'flex', height: 0 })
       .fromTo(
         '#newsTypeTagsOptions',

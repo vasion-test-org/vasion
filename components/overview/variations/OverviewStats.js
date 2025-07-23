@@ -1,27 +1,30 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import text from "styles/text";
-import gsap from "gsap";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import { storyblokEditable } from "@storyblok/react/rsc";
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import media from '@/styles/media';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import { to, from, set } from '@/lib/gsap-utils';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+
 const OverviewStats = ({ blok }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleMobileClick = () => {
     if (isOpen) {
       setIsOpen(false);
-      gsap.to(".stats-overview-visibility", {
+      to('.stats-overview-visibility', {
         autoAlpha: 0,
         height: 0,
         duration: 0.5,
       });
     } else {
       setIsOpen(true);
-      gsap.to(".stats-overview-visibility", {
+      to('.stats-overview-visibility', {
         autoAlpha: 1,
-        height: "auto",
+        height: 'auto',
         duration: 0.5,
       });
     }
@@ -68,22 +71,22 @@ const OverviewStats = ({ blok }) => {
           <ExpandCollapseIcon
             src={
               isOpen
-                ? "/images/uiElements/closeVector.webp"
-                : "/images/uiElements/OpenBtn.webp"
+                ? '/images/uiElements/closeVector.webp'
+                : '/images/uiElements/OpenBtn.webp'
             }
-            alt={isOpen ? "close-btn" : "open-btn"}
+            alt={isOpen ? 'close-btn' : 'open-btn'}
             $isopen={isOpen}
-            className={"stats-overview-close"}
+            className={'stats-overview-close'}
             onClick={handleMobileClick}
           />
         </HeaderDiv>
 
-        <StatItemsContainer className="stats-overview-visibility">
+        <StatItemsContainer className='stats-overview-visibility'>
           {statlist}
         </StatItemsContainer>
       </ContentWrapper>
       {calloutList && calloutList.length > 0 && (
-        <CalloutWrapper className="stats-overview-visibility" $isopen={isOpen}>
+        <CalloutWrapper className='stats-overview-visibility' $isopen={isOpen}>
           <ImageHeadline
             src={blok?.callout_logo_header?.filename}
             alt={blok?.callout_logo_header?.alt}
@@ -186,7 +189,7 @@ const CalloutWrapper = styled.div`
     background-color: unset;
     opacity: 0;
     width: 100%;
-    padding: ${(props) => (props.$isopen ? "5.14vw 4.673vw" : "unset")};
+    padding: ${(props) => (props.$isopen ? '5.14vw 4.673vw' : 'unset')};
     height: 0;
   }
 `;
@@ -265,8 +268,8 @@ const ExpandCollapseIcon = styled.img`
     position: relative;
     display: inline-flex;
     left: -25px;
-    width: ${(props) => (props.$isopen ? "4.297vw" : "6vw")};
-    width: ${(props) => (props.$isopen ? "4.297vw" : "6vw")};
+    width: ${(props) => (props.$isopen ? '4.297vw' : '6vw')};
+    width: ${(props) => (props.$isopen ? '4.297vw' : '6vw')};
   }
 `;
 const HeaderDiv = styled.div`
@@ -317,7 +320,7 @@ const ContentWrapper = styled.div`
     padding: unset;
     gap: 4.673vw;
     background-color: ${(props) =>
-      props.$isopen ? `${colors.white}` : "transparent"};
+      props.$isopen ? `${colors.white}` : 'transparent'};
   }
 `;
 
@@ -342,7 +345,7 @@ const Wrapper = styled.div`
 
   ${media.mobile} {
     width: 100vw;
-    gap: ${(props) => (props.$isopen ? "5.374vw" : "unset")};
+    gap: ${(props) => (props.$isopen ? '5.374vw' : 'unset')};
     flex-direction: column;
     padding: 0vw 4.439vw;
     background-color: ${(props) =>

@@ -1,12 +1,14 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { storyblokEditable } from '@storyblok/react/rsc';
 import media from '@/styles/media';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
+import { to, timeline } from '@/lib/gsap-utils';
 import useMedia from '@/functions/useMedia';
 import ReactPlayer from 'react-player';
-import gsap from 'gsap';
 import RichTextRenderer from './renderers/RichTextRenderer';
 
 const ComparisonSelect = ({ blok }) => {
@@ -20,8 +22,8 @@ const ComparisonSelect = ({ blok }) => {
   const object2Ref = useRef(null);
 
   useEffect(() => {
-    const tl1 = gsap.timeline({ paused: true });
-    const tl2 = gsap.timeline({ paused: true });
+    const tl1 = timeline({ paused: true });
+    const tl2 = timeline({ paused: true });
 
     tl1
       .to(object1Ref.current, {
@@ -92,9 +94,9 @@ const ComparisonSelect = ({ blok }) => {
 
     const handleMouseEnter1 = () => {
       if (activeTl === null) {
-        gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
+        to(object2Ref.current, { opacity: 1, duration: 0.2 });
       } else if (activeTl !== 'tl1') {
-        gsap.to(object1Ref.current, {
+        to(object1Ref.current, {
           duration: 0.2,
           opacity: 0.7,
           scale: 1.01,
@@ -104,9 +106,9 @@ const ComparisonSelect = ({ blok }) => {
 
     const handleMouseLeave1 = () => {
       if (activeTl === null) {
-        gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
+        to(object2Ref.current, { opacity: 1, duration: 0.2 });
       } else if (activeTl !== 'tl1') {
-        gsap.to(object1Ref.current, {
+        to(object1Ref.current, {
           duration: 0.2,
           opacity: 0.5,
           scale: 1,
@@ -116,9 +118,9 @@ const ComparisonSelect = ({ blok }) => {
 
     const handleMouseEnter2 = () => {
       if (activeTl === null) {
-        gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
+        to(object2Ref.current, { opacity: 1, duration: 0.2 });
       } else if (activeTl !== 'tl2') {
-        gsap.to(object2Ref.current, {
+        to(object2Ref.current, {
           duration: 0.2,
           opacity: 0.7,
           scale: 1.01,
@@ -128,9 +130,9 @@ const ComparisonSelect = ({ blok }) => {
 
     const handleMouseLeave2 = () => {
       if (activeTl === null) {
-        gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
+        to(object2Ref.current, { opacity: 1, duration: 0.2 });
       } else if (activeTl !== 'tl2') {
-        gsap.to(object2Ref.current, {
+        to(object2Ref.current, {
           duration: 0.2,
           opacity: 0.5,
           scale: 1,
