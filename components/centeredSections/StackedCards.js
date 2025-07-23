@@ -2,18 +2,15 @@
 import React, { useContext, useRef, useState, useEffect, useMemo } from "react";
 import { useRive } from "@rive-app/react-canvas";
 import { ScreenContext } from "../providers/Screen";
-import gsap from "gsap";
 import styled from "styled-components";
 import media from "@/styles/media";
 import colors from "@/styles/colors";
 import text from "@/styles/text";
 import getMedia from "@/functions/getMedia";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import gsap, { ScrollTrigger } from "@/lib/gsap";
 import RichTextRenderer from "../renderers/RichTextRenderer";
 import Button from "@/components/globalComponents/Button";
 import { storyblokEditable } from "@storyblok/react/rsc";
-
-gsap.registerPlugin(ScrollTrigger);
 
 // Module-level state for user interaction detection
 let didUserInteract = false;
