@@ -5,16 +5,37 @@ import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import media from 'styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import Card from './globalComponents/Card';
-import EventCard from './globalComponents/EventCard';
+import dynamic from 'next/dynamic';
 import { horizontalLoop } from '@/functions/horizontalLoop';
 import SideArrow from '@/assets/svg/side-arrow.svg';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
-import ResourceCard from './globalComponents/ResourceCard';
 import ChrevronDown from '@/assets/svg/selectDownChevron.svg';
 import { usePathname } from 'next/navigation';
+
+// Dynamic imports for child components
+const RichTextRenderer = dynamic(
+  () => import('@/components/renderers/RichTextRenderer'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
+
+const Card = dynamic(() => import('./globalComponents/Card'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const EventCard = dynamic(() => import('./globalComponents/EventCard'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const ResourceCard = dynamic(() => import('./globalComponents/ResourceCard'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
 
 const PaginatedCards = ({ blok }) => {
   const themes = useAvailableThemes();

@@ -1,15 +1,27 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import Button from "./globalComponents/Button";
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import media from '@/styles/media';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import gsap from 'gsap';
+import dynamic from 'next/dynamic';
 
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import gsap from "gsap";
+// Dynamic imports for child components
+const Button = dynamic(() => import('./globalComponents/Button'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const RichTextRenderer = dynamic(
+  () => import('@/components/renderers/RichTextRenderer'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
 
 const FeaturedTestimonials = ({ blok }) => {
   // console.log(blok);
@@ -35,7 +47,7 @@ const FeaturedTestimonials = ({ blok }) => {
 
     const items = itemsRef.current;
     gsap.set(items, { autoAlpha: 0 });
-    gsap.set(items[0], { autoAlpha: 1, display: "flex" });
+    gsap.set(items[0], { autoAlpha: 1, display: 'flex' });
 
     const masterTimeline = gsap.timeline({
       repeat: -1,
@@ -47,22 +59,22 @@ const FeaturedTestimonials = ({ blok }) => {
       fadeIn: {
         autoAlpha: 1,
         duration: 1,
-        ease: "power2.inOut",
+        ease: 'power2.inOut',
       },
-      fadeOut: { autoAlpha: 0, duration: 1, ease: "power2.inOut" },
-      progress: { width: "100%", duration: 3, ease: "none" },
+      fadeOut: { autoAlpha: 0, duration: 1, ease: 'power2.inOut' },
+      progress: { width: '100%', duration: 3, ease: 'none' },
     };
     items.forEach((item, i) => {
       const slideTimeline = gsap.timeline();
 
       slideTimeline
-        .set(progressBarsRef.current[i], { width: "0%" })
+        .set(progressBarsRef.current[i], { width: '0%' })
         .to(item, {
           ...animationConfig.fadeIn,
           onStart: () => setCurrentIndex(i),
         })
-        .to(progressBarsRef.current[i], animationConfig.progress, "<")
-        .to(item, animationConfig.fadeOut, "+=2");
+        .to(progressBarsRef.current[i], animationConfig.progress, '<')
+        .to(item, animationConfig.fadeOut, '+=2');
 
       masterTimeline.add(slideTimeline, i * 4);
     });
@@ -109,9 +121,9 @@ const FeaturedTestimonials = ({ blok }) => {
         />
       </BlocksDiv>
       <GoTo
-        className="goto-arrow"
-        src={"/images/uiElements/GoToActive.webp"}
-        alt={"Arrow To Link"}
+        className='goto-arrow'
+        src={'/images/uiElements/GoToActive.webp'}
+        alt={'Arrow To Link'}
       />
     </FeaturedItem>
   ));
@@ -133,14 +145,14 @@ const FeaturedTestimonials = ({ blok }) => {
         </div>
       </StatAndBodyDiv>
       <StatBlokBottomContainer>
-        <LogoStat src={item?.company_logo.filename} alt={"company-logo"} />
+        <LogoStat src={item?.company_logo.filename} alt={'company-logo'} />
         <ArrowButton
           src={
             hoveredBlockIndex === index
-              ? "/images/uiElements/HoveredArrow.webp"
-              : "/images/uiElements/arrowButtonStat.webp"
+              ? '/images/uiElements/HoveredArrow.webp'
+              : '/images/uiElements/arrowButtonStat.webp'
           }
-          alt={"go-to-arrow-prompt"}
+          alt={'go-to-arrow-prompt'}
         />
       </StatBlokBottomContainer>
     </BlockItem>
@@ -148,7 +160,7 @@ const FeaturedTestimonials = ({ blok }) => {
   const progressBars = blok?.testimonials?.map((_, index) => (
     <ProgressBar key={index} $isActive={currentIndex === index}>
       <ProgressValue
-        className="pro-bar"
+        className='pro-bar'
         ref={(el) => (progressBarsRef.current[index] = el)}
       />
     </ProgressBar>
@@ -208,18 +220,18 @@ const ProgressBarsContainer = styled.div`
 const ProgressBar = styled.div`
   background-color: ${colors.orange100};
   overflow: hidden;
-  width: ${(props) => (props.$isActive ? "1.625vw" : "0.563vw")};
+  width: ${(props) => (props.$isActive ? '1.625vw' : '0.563vw')};
   height: 0.375vw;
   border-radius: 0.25vw;
   transition: width 0.9s ease;
 
   ${media.fullWidth} {
-    width: ${(props) => (props.$isActive ? "26px" : "9px")};
+    width: ${(props) => (props.$isActive ? '26px' : '9px')};
     height: 6px;
     border-radius: 4px;
   }
   ${media.tablet} {
-    width: ${(props) => (props.$isActive ? "2.539vw" : "0.879vw")};
+    width: ${(props) => (props.$isActive ? '2.539vw' : '0.879vw')};
     height: 0.586vw;
     border-radius: 0.391vw;
   }

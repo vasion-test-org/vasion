@@ -6,10 +6,27 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import media from '@/styles/media';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { horizontalLoop } from '@/functions/horizontalLoop';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import Image from '@/components/globalComponents/Image';
+import dynamic from 'next/dynamic';
 import text from '@/styles/text';
-import Button from './globalComponents/Button';
+
+// Dynamic imports for child components
+const RichTextRenderer = dynamic(
+  () => import('@/components/renderers/RichTextRenderer'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
+
+const Image = dynamic(() => import('@/components/globalComponents/Image'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Button = dynamic(() => import('./globalComponents/Button'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
 
 const Testimonial = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -21,7 +38,9 @@ const Testimonial = ({ blok }) => {
       <TestimonialWrapper layout={blok.layout} spacing={blok.section_spacing}>
         <TestimonialCard>
           <TestimonialContent>
-            <TestimonialEyebrow>{blok?.eyebrow || Testimonial}</TestimonialEyebrow>
+            <TestimonialEyebrow>
+              {blok?.eyebrow || Testimonial}
+            </TestimonialEyebrow>
             {blok.quote.map((copy) => (
               <div {...storyblokEditable(copy)} key={copy.component}>
                 <RichTextRenderer document={copy.copy} />
@@ -63,18 +82,18 @@ const Testimonial = ({ blok }) => {
 
 const ButtonWrapper = styled.div`
   margin-top: 1.25vw;
- ${media.fullWidth} {
-  margin-top: 20px;
- }
- 
- ${media.tablet} {
-  margin-top: 1.953vw;
- }
- 
- ${media.mobile} {
-  margin-top: 4.167vw;
- }
-`
+  ${media.fullWidth} {
+    margin-top: 20px;
+  }
+
+  ${media.tablet} {
+    margin-top: 1.953vw;
+  }
+
+  ${media.mobile} {
+    margin-top: 4.167vw;
+  }
+`;
 const SourceWrapper = styled.div`
   margin-top: 3.75vw;
 

@@ -12,6 +12,7 @@
     "dev:proxy": "concurrently \"npm run dev\" \"sleep 2 && npm run proxy\""
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^15.4.3",
     "@rive-app/react-canvas": "^4.21.4",
     "@storyblok/react": "^5.1.1",
     "@storyblok/richtext": "^3.4.0",

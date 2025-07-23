@@ -3,15 +3,40 @@ import React from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
 import media from '@/styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import dynamic from 'next/dynamic';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { ScreenContext } from '@/components/providers/Screen';
-import Button from '@/components/globalComponents/Button';
-import Image from '@/components/globalComponents/Image';
-import LogoCube from './LogoCube';
-import LightboxBtn from '@/components/LightboxButton';
 import { useRouter } from 'next/navigation';
 import useMedia from '@/functions/useMedia';
+
+// Dynamic imports for child components
+const RichTextRenderer = dynamic(
+  () => import('@/components/renderers/RichTextRenderer'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
+
+const Button = dynamic(() => import('@/components/globalComponents/Button'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Image = dynamic(() => import('@/components/globalComponents/Image'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const LogoCube = dynamic(() => import('./LogoCube'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const LightboxBtn = dynamic(() => import('@/components/LightboxButton'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
 
 const Hero = ({ blok }) => {
   const router = useRouter();

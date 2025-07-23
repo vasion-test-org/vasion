@@ -4,11 +4,28 @@ import React, { useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { getStoryblokApi, storyblokEditable } from '@storyblok/react/rsc';
-import Card from '@/components/globalComponents/Card';
 import media from '@/styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import PaginatedCards from './PaginatedCards';
 import { usePathname } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+// Dynamic imports for child components
+const Card = dynamic(() => import('@/components/globalComponents/Card'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const RichTextRenderer = dynamic(
+  () => import('@/components/renderers/RichTextRenderer'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
+
+const PaginatedCards = dynamic(() => import('./PaginatedCards'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
 
 const BlogCards = ({ blok }) => {
   const [blogs, setBlogs] = useState([]);

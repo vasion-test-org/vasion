@@ -1,24 +1,49 @@
-"use client";
-import React, { useEffect, useContext, useRef } from "react";
-import styled from "styled-components";
-import DemoPrint from "assets/svg/demoprint.svg";
-import AI from "assets/svg/ai.svg";
-import Tune from "assets/svg/tune.svg";
-import DemoStar from "assets/svg/demostar.svg";
+'use client';
+import React, { useEffect, useContext, useRef } from 'react';
+import styled from 'styled-components';
+import DemoPrint from 'assets/svg/demoprint.svg';
+import AI from 'assets/svg/ai.svg';
+import Tune from 'assets/svg/tune.svg';
+import DemoStar from 'assets/svg/demostar.svg';
 
-import Form from "@/components/Form";
-import colors from "@/styles/colors";
-import media from "@/styles/media";
-import text from "@/styles/text";
-import gsap from "gsap";
-import { ScreenContext } from "@/components/providers/Screen";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import Chevron from "assets/svg/WhiteChevron.svg";
-import getMedia from "@/functions/getMedia";
-import RichTextRenderer from "./renderers/RichTextRenderer";
-import Icons from "@/components/renderers/Icons";
-import ComponentRenderer from "./renderers/ComponentRenderer";
-import TestForm from "./TestForm";
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
+import gsap from 'gsap';
+import { ScreenContext } from '@/components/providers/Screen';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import Chevron from 'assets/svg/WhiteChevron.svg';
+import getMedia from '@/functions/getMedia';
+import dynamic from 'next/dynamic';
+
+// Dynamic imports for child components
+const Form = dynamic(() => import('@/components/Form'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const RichTextRenderer = dynamic(() => import('./renderers/RichTextRenderer'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Icons = dynamic(() => import('@/components/renderers/Icons'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const ComponentRenderer = dynamic(
+  () => import('./renderers/ComponentRenderer'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
+
+const TestForm = dynamic(() => import('./TestForm'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
 
 const Demo = ({ blok }) => {
   const { mobile } = useContext(ScreenContext);
@@ -28,15 +53,15 @@ const Demo = ({ blok }) => {
   const iconRefs = useRef([]);
   const handlersRef = useRef([]);
   const prevIndex = useRef(0);
-  const demoExperienceRef = useRef("");
+  const demoExperienceRef = useRef('');
   const copycomponents = [
-    "body_copy",
-    "header",
-    "eyebrow",
-    "long_form_text",
-    "copy_block",
-    "overview_controller",
-    "small_quote",
+    'body_copy',
+    'header',
+    'eyebrow',
+    'long_form_text',
+    'copy_block',
+    'overview_controller',
+    'small_quote',
   ];
   // useEffect(() => {
   //   const tl = gsap.timeline({});
@@ -328,29 +353,27 @@ const Demo = ({ blok }) => {
   ));
 
   const mappedOptions = blok.cards.map((option, index) => {
-    const formattedIconString = option.icon.replace(/\s+/g, "");
+    const formattedIconString = option.icon.replace(/\s+/g, '');
 
     let IconComponent = Icons[formattedIconString] || null;
     // console.log(option);
     return (
       <div {...storyblokEditable(option)}>
         <OptionDiv
-          className="options preformContent"
+          className='options preformContent'
           ref={(el) => (optionRefs.current[index] = el)}
           key={option.header}
         >
-            {IconComponent && (
-              <OptionIconWrapper classname="icons">
-                {IconComponent && <IconComponent />}
-              </OptionIconWrapper>
-            )}
+          {IconComponent && (
+            <OptionIconWrapper classname='icons'>
+              {IconComponent && <IconComponent />}
+            </OptionIconWrapper>
+          )}
           <OptionContentContainer
-            className="content"
+            className='content'
             ref={(el) => (contentRefs.current[index] = el)}
-            >
-          <OptionHeader>
-            {option.header}
-          </OptionHeader>
+          >
+            <OptionHeader>{option.header}</OptionHeader>
             <OptionSubheader>{option.sub_header}</OptionSubheader>
             <div {...storyblokEditable(option)}>
               <RichTextRenderer document={option.body_copy} />
@@ -364,25 +387,25 @@ const Demo = ({ blok }) => {
   return (
     <BackgroundWrapper>
       <Wrapper>
-        <Content className="preformContent">
+        <Content className='preformContent'>
           {!mobile && <Header>{blok.header}</Header>}
           <AllOptionsContainer>{mappedOptions}</AllOptionsContainer>
           <BadgesContainer>{mappedBadges}</BadgesContainer>
         </Content>
 
-        {blok.demo_form[0].component === "form" && (
-          <FormPositionContainer id="formPos">
+        {blok.demo_form[0].component === 'form' && (
+          <FormPositionContainer id='formPos'>
             <Form blok={blok.demo_form[0]} />
           </FormPositionContainer>
         )}
-        {blok.demo_form[0].component === "test_form" && (
-          <FormPositionContainer id="formPos">
+        {blok.demo_form[0].component === 'test_form' && (
+          <FormPositionContainer id='formPos'>
             <TestForm blok={blok.demo_form[0]} />
           </FormPositionContainer>
         )}
-        
+
         {mobile && <Header>{blok.header}</Header>}
-        {blok.demo_form[0].component === "demo_thank_you" && (
+        {blok.demo_form[0].component === 'demo_thank_you' && (
           <FormThankYouContainer>
             {blok.demo_form[0]?.copy?.map((item, index) => (
               <div key={index} {...storyblokEditable(item)}>
@@ -414,16 +437,14 @@ const FormThankYouContainer = styled.div`
   padding: 2vw;
   width: 35.25vw;
   height: 80vh;
-  box-shadow:
-    0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
+  box-shadow: 0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.25vw 0.5vw 0vw rgba(25, 29, 30, 0.16);
 
   ${media.fullWidth} {
     border-radius: 32px;
     padding: 32px;
     width: 564px;
-    box-shadow:
-      0px 0px 2px 0px rgba(25, 29, 30, 0.04),
+    box-shadow: 0px 0px 2px 0px rgba(25, 29, 30, 0.04),
       0px 4px 8px 0px rgba(25, 29, 30, 0.16);
   }
 
@@ -431,8 +452,7 @@ const FormThankYouContainer = styled.div`
     border-radius: 3.125vw;
     padding: 3.125vw;
     width: 45.313vw;
-    box-shadow:
-      0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow: 0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.391vw 0.781vw 0vw rgba(25, 29, 30, 0.16);
   }
 
@@ -440,30 +460,29 @@ const FormThankYouContainer = styled.div`
     border-radius: 6.667vw;
     padding: 6.667vw;
     width: 89.167vw;
-    box-shadow:
-      0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow: 0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.833vw 1.667vw 0vw rgba(25, 29, 30, 0.16);
   }
 `;
 
 const OptionIconWrapper = styled.div`
-    min-width: 2.375vw;
-    min-height: 2.375vw;
+  min-width: 2.375vw;
+  min-height: 2.375vw;
 
-    ${media.fullWidth} {
-      min-width: 38px;
-      min-height: 38px;
-    }
+  ${media.fullWidth} {
+    min-width: 38px;
+    min-height: 38px;
+  }
 
-    ${media.tablet} {
-      min-width: 3.711vw;
-      min-height: 3.711vw;
-    }
+  ${media.tablet} {
+    min-width: 3.711vw;
+    min-height: 3.711vw;
+  }
 
-    ${media.mobile} {
-      min-width: 7.917vw;
-      min-height: 7.917vw;
-    }
+  ${media.mobile} {
+    min-width: 7.917vw;
+    min-height: 7.917vw;
+  }
 `;
 const OptionIcon = styled.img`
   filter: brightness(1) grayscale(0%);
@@ -586,7 +605,7 @@ const OptionDiv = styled.div`
     gap: 1.953vw;
     margin-bottom: 3.516vw;
   }
-  
+
   ${media.mobile} {
     gap: 4.167vw;
     margin-bottom: 7.5vw;

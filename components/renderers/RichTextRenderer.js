@@ -1,27 +1,33 @@
-"use client";
+'use client';
 import {
   render,
   MARK_STYLED,
   NODE_HEADING,
   NODE_PARAGRAPH,
-} from "storyblok-rich-text-react-renderer";
-import React from "react";
-import styled from "styled-components";
-import media from "@/styles/media";
-import Header from "@/components/copyComponents/Header";
-import BodyCopy from "@/components/copyComponents/BodyCopy";
-import Eyebrow from "@/components/copyComponents/Eyebrow";
-import useMedia from "@/functions/useMedia";
-import CTA from "@/components/CTA";
-import SmallQuote from "../SmallQuote";
-import LogoCube from "../LogoCube";
-import SideBySide from "../SideBySide";
-import CenteredSection from "../CenteredSection";
-import NumberBlock from "../NumberBlock";
-import TwoColumnList from "@/components/TwoColumnList";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import GradientText from "@/components/globalComponents/GradientText";
+} from 'storyblok-rich-text-react-renderer';
+import React from 'react';
+import styled from 'styled-components';
+import media from '@/styles/media';
+import Header from '@/components/copyComponents/Header';
+import BodyCopy from '@/components/copyComponents/BodyCopy';
+import Eyebrow from '@/components/copyComponents/Eyebrow';
+import useMedia from '@/functions/useMedia';
+import CTA from '@/components/CTA';
+import SmallQuote from '../SmallQuote';
+import LogoCube from '../LogoCube';
+import SideBySide from '../SideBySide';
+import dynamic from 'next/dynamic';
+import NumberBlock from '../NumberBlock';
+import TwoColumnList from '@/components/TwoColumnList';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import GradientText from '@/components/globalComponents/GradientText';
+
+// Dynamic import for CenteredSection
+const CenteredSection = dynamic(() => import('../CenteredSection'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
 
 const RichTextRenderer = ({
   document,
@@ -31,47 +37,47 @@ const RichTextRenderer = ({
 }) => {
   if (!document) return null;
   const extractText = (contentArray) => {
-    if (!Array.isArray(contentArray)) return "";
-    return contentArray.map((node) => node.text || "").join(" ");
+    if (!Array.isArray(contentArray)) return '';
+    return contentArray.map((node) => node.text || '').join(' ');
   };
   const blokResolvers = {
     two_column_list: (props) => (
-      <div className="component-wrapper">
+      <div className='component-wrapper'>
         <TwoColumnList blok={props} />
       </div>
     ),
     cta: (props) => (
-      <div className="component-wrapper">
+      <div className='component-wrapper'>
         <CTA blok={props} />
       </div>
     ),
     small_quote: (props) => (
-      <div className="component-wrapper">
+      <div className='component-wrapper'>
         <SmallQuote blok={props} />
       </div>
     ),
     logo_cube: (props) => (
-      <div className="component-wrapper">
+      <div className='component-wrapper'>
         <LogoCube blok={props} />
       </div>
     ),
     side_by_side: (props) => (
-      <div className="component-wrapper">
+      <div className='component-wrapper'>
         <SideBySide blok={props} />
       </div>
     ),
     centered_section: (props) => (
-      <div className="component-wrapper">
+      <div className='component-wrapper'>
         <CenteredSection blok={props} />
       </div>
     ),
     number_block: (props) => (
-      <div className="component-wrapper">
+      <div className='component-wrapper'>
         <NumberBlock blok={props} />
       </div>
     ),
     infographic_pill: (props) => (
-      <div className="component-wrapper">
+      <div className='component-wrapper'>
         <InfographicPill blok={props} />
       </div>
     ),
@@ -95,7 +101,7 @@ const RichTextRenderer = ({
         `h${level}`,
         `h${level}`,
         tabletStyle,
-        mobileStyle,
+        mobileStyle
       );
 
       const headerContent = (
@@ -118,7 +124,7 @@ const RichTextRenderer = ({
         className,
         className,
         responsiveTextStyles[0],
-        responsiveTextStyles[1],
+        responsiveTextStyles[1]
       );
       // console.log('selectedClassName', selectedClassName)
       return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
@@ -290,9 +296,9 @@ const RichWrapper = styled.div`
       }
     }
     li::before {
-      content: "";
+      content: '';
       position: absolute;
-      background-image: url("/images/icons/orange-check-icon.webp");
+      background-image: url('/images/icons/orange-check-icon.webp');
       background-size: contain;
       background-repeat: no-repeat;
       left: 0;

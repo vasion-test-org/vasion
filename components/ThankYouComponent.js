@@ -3,8 +3,24 @@ import React, { useEffect, useState } from 'react';
 import { useThankYou } from '@/context/ThankYouContext';
 import styled from 'styled-components';
 import colors from '@/styles/colors';
-import ComponentRenderer from '@/components/renderers/ComponentRenderer';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import dynamic from 'next/dynamic';
+
+// Dynamic imports for child components
+const ComponentRenderer = dynamic(
+  () => import('@/components/renderers/ComponentRenderer'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
+
+const RichTextRenderer = dynamic(
+  () => import('@/components/renderers/RichTextRenderer'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
 
 const ThankYouComponent = ({ className }) => {
   const copycomponents = [
