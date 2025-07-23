@@ -2,7 +2,11 @@
 
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import gsap, { ScrollSmoother, ScrollTrigger } from '@/lib/gsap';
+import gsap from 'gsap';
+import ScrollSmoother from 'gsap/ScrollSmoother';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 let smootherInstance = null; // <-- add this at the top
 
