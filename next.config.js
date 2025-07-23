@@ -13,6 +13,8 @@ const nextConfig = {
   poweredByHeader: false,
   generateEtags: false,
   experimental: {
+    // Reduce JavaScript execution time
+    optimizeCss: true,
     optimizePackageImports: ['@rive-app/react-canvas', 'gsap'],
   },
   
@@ -30,13 +32,40 @@ const nextConfig = {
   //   }
   //   return config;
   // },
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
     // Optimize WebAssembly loading for Rive
     if (!isServer) {
       config.experiments = {
         ...config.experiments,
         asyncWebAssembly: true,
       };
+      
+      // Bundle splitting for better performance
+      if (!dev) {
+        config.optimization.splitChunks = {
+          chunks: 'all',
+          cacheGroups: {
+            gsap: {
+              test: /[\\/]node_modules[\\/]gsap[\\/]/,
+              name: 'gsap',
+              chunks: 'all',
+              priority: 10,
+            },
+            rive: {
+              test: /[\\/]node_modules[\\/]@rive-app[\\/]/,
+              name: 'rive',
+              chunks: 'all',
+              priority: 10,
+            },
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendor',
+              chunks: 'all',
+              priority: 5,
+            },
+          },
+        };
+      }
     }
 
     const fileLoaderRule = config.module.rules.find((rule) =>
