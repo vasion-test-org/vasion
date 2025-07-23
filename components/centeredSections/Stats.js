@@ -24,9 +24,10 @@ const Stats = ({ statsData, toggle_card_style, alignment }) => {
 export default Stats;
 
 const StatsContainer = styled.div`
+  position: relative;
   display: flex;
   flex-flow: row wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 81.5vw;
   gap: 3.75vw;
@@ -43,14 +44,15 @@ const StatsContainer = styled.div`
 
   ${media.tablet} {
     width: 92.188vw;
-    gap: 2.344vw;
+    gap: 5.859vw;
     border-radius: 1.953vw;
+    padding: 2.539vw 9.375vw;
   }
 
   ${media.mobile} {
     width: 89.167vw;
     gap: 8.333vw;
     border-radius: 4.167vw;
+    padding: 5.417vw 11.25vw;
   }
 `;
-
