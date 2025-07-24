@@ -1,49 +1,104 @@
-import StoryblokProvider from '@/components/StoryblokProvider';
-import { ThemeProviderWrapper } from '@/context/ThemeContext';
-import { ThankYouProvider } from '@/context/ThankYouContext';
-import { PageDataProvider } from '@/context/PageDataContext';
-import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
-import FormTracking from '@/components/FormTracking';
-import Script from 'next/script';
-import './globals.css';
-import ScrollSmootherWrapper from '@/components/ScrollSmoothWrapper';
-import Providers from '@/components/providers';
-import Config from '@/components/Config';
-import { getStoryblokApi } from '@/lib/storyblok';
-import { Metadata } from 'next';
-import { Analytics } from '@vercel/analytics/next';
+import StoryblokProvider from "@/components/StoryblokProvider";
+import { ThemeProviderWrapper } from "@/context/ThemeContext";
+import { ThankYouProvider } from "@/context/ThankYouContext";
+import { PageDataProvider } from "@/context/PageDataContext";
+import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
+import FormTracking from "@/components/FormTracking";
+import Script from "next/script";
+import "./globals.css";
+import ScrollSmootherWrapper from "@/components/ScrollSmoothWrapper";
+import Providers from "@/components/providers";
+import Config from "@/components/Config";
+import { getStoryblokApi } from "@/lib/storyblok";
+import { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
-  metadataBase: new URL('https://vasion.com'),
+  metadataBase: new URL("https://vasion.com"),
   title: {
-    template: '%s | Vasion',
-    default: 'Vasion',
+    template: "%s | Vasion",
+    default: "Vasion",
   },
-  description: 'Vasion site',
+  description: "Vasion site",
 };
 
 export default async function RootLayout({ children }) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
         <meta
-          name='google-site-verification'
-          content='9aTxhC978Sh5yhlRXic1mj23gCh4RcexRTfgiwMKbks'
+          name="google-site-verification"
+          content="9aTxhC978Sh5yhlRXic1mj23gCh4RcexRTfgiwMKbks"
         />
         <meta
-          name='facebook-domain-verification'
-          content='vw5hfzh0aj764x59srftw18eksj8nq'
+          name="facebook-domain-verification"
+          content="vw5hfzh0aj764x59srftw18eksj8nq"
         />
-        {/* Google reCAPTCHA */}
-        <Script
-          id='recaptcha'
-          strategy='afterInteractive'
-          src='https://www.google.com/recaptcha/api.js'
+
+        {/* Resource hints for performance optimization */}
+        <link rel="preconnect" href="https://a-us.storyblok.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google.com" />
+        <link rel="preconnect" href="https://unpkg.com" />
+        <link rel="dns-prefetch" href="https://js.intercomcdn.com" />
+        <link rel="dns-prefetch" href="https://static.hotjar.com" />
+        <link
+          rel="dns-prefetch"
+          href="https://dev.visualwebsiteoptimizer.com"
         />
-        {/* Marketo Munchkin */}
+        <link rel="dns-prefetch" href="https://www.gstatic.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+        {/* Preload critical fonts */}
+        <link
+          rel="preload"
+          href="/fonts/Archivo-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          href="/fonts/Archivo-Bold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+          fetchPriority="high"
+        />
+
+        {/* Rive WASM will be loaded on-demand when animations are needed */}
+
+        {/* Google Tag Manager */}
         <Script
-          id='marketo-munchkin'
-          strategy='afterInteractive'
+          id="gtm"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+        // Optimize GTM loading to reduce payload and prevent multiple loads
+        if (!window.gtmLoaded) {
+          window.gtmLoaded = true;
+          (function(w,d,s,l,i){
+            w[l]=w[l]||[];
+            w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+            var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+            j.async=true;
+            j.defer=true;
+            j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+            f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-WMKX59W');
+        }
+      `,
+          }}
+        />
+
+        {/* reCAPTCHA will be loaded dynamically by FormTracking when forms are detected */}
+
+        {/* Marketo Munchkin - Load after page is interactive */}
+        <Script
+          id="marketo-munchkin"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
       (function() {
@@ -70,57 +125,62 @@ export default async function RootLayout({ children }) {
           }}
         />
 
-        {/* CookieYes */}
+        {/* CookieYes - Load after page is interactive */}
         <Script
-          id='cookieyes'
-          strategy='afterInteractive'
-          src='https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js'
+          id="cookieyes"
+          strategy="afterInteractive"
+          src="https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js"
         />
 
-        {/* Marketo Forms2
+        {/* Intercom - Load with conditional loading based on user interaction */}
         <Script
-          id='marketo-forms'
-          strategy='afterInteractive'
-          defer
-          src='https://info.printerlogic.com/js/forms2/js/forms2.min.js'
-        /> */}
-
-        {/* Intercom */}
-        <Script
-          id='intercom'
-          strategy='afterInteractive'
+          id="intercom"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
-      window.intercomSettings = {
-        api_base: "https://api-iam.intercom.io",
-        app_id: "h87qerzy"
-      };
-      (function(){var w=window;var ic=w.Intercom;
-      if(typeof ic==="function"){
-        ic('reattach_activator');
-        ic('update',w.intercomSettings);
-      }else{
-        var d=document;var i=function(){i.c(arguments);};
-        i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;
-        var l=function(){
-          var s=d.createElement('script');
-          s.type='text/javascript';s.async=true;
-          s.src='https://widget.intercom.io/widget/h87qerzy';
-          var x=d.getElementsByTagName('script')[0];
-          x.parentNode.insertBefore(s,x);
+      // Only load Intercom after user interaction to improve initial page performance
+      let intercomLoaded = false;
+      
+      function loadIntercom() {
+        if (intercomLoaded) return;
+        intercomLoaded = true;
+        
+        window.intercomSettings = {
+          api_base: "https://api-iam.intercom.io",
+          app_id: "h87qerzy"
         };
-        if(document.readyState==='complete'){l();}
-        else if(w.attachEvent){w.attachEvent('onload',l);}
-        else{w.addEventListener('load',l,false);}
-      }})();
+        (function(){var w=window;var ic=w.Intercom;
+        if(typeof ic==="function"){
+          ic('reattach_activator');
+          ic('update',w.intercomSettings);
+        }else{
+          var d=document;var i=function(){i.c(arguments);};
+          i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;
+          var l=function(){
+            var s=d.createElement('script');
+            s.type='text/javascript';s.async=true;
+            s.src='https://widget.intercom.io/widget/h87qerzy';
+            var x=d.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s,x);
+          };
+          if(document.readyState==='complete'){l();}
+          else if(w.attachEvent){w.attachEvent('onload',l);}
+          else{w.addEventListener('load',l,false);}
+        }})();
+      }
+      
+      // Load Intercom on first user interaction
+      ['click', 'scroll', 'mousemove'].forEach(event => {
+        document.addEventListener(event, loadIntercom, { once: true, passive: true });
+      });
     `,
           }}
         />
 
-        {/* VWO */}
+        {/* VWO - Load after page is interactive */}
         <Script
-          id='vwo'
-          strategy='afterInteractive'
+          id="vwo"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
         window._vwo_code || (function() {
@@ -172,35 +232,33 @@ export default async function RootLayout({ children }) {
           }}
         />
 
-        {/* Google Tag Manager */}
+        {/* Hotjar - Load only after user interaction to improve initial performance */}
         <Script
-          id='gtm'
-          async
+          id="hotjar"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-WMKX59W');
-      `,
-          }}
-        />
-
-        {/* Hotjar */}
-        <Script
-          id='hotjar'
-          async
-          dangerouslySetInnerHTML={{
-            __html: `
-        (function(h,o,t,j,a,r){
-            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-            h._hjSettings={hjid:2119079,hjsv:6};
-            a=o.getElementsByTagName('head')[0];
-            r=o.createElement('script');r.async=1;
-            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+        // Only load Hotjar after user interaction to improve initial page performance
+        let hotjarLoaded = false;
+        
+        function loadHotjar() {
+          if (hotjarLoaded) return;
+          hotjarLoaded = true;
+          
+          (function(h,o,t,j,a,r){
+              h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+              h._hjSettings={hjid:2119079,hjsv:6};
+              a=o.getElementsByTagName('head')[0];
+              r=o.createElement('script');r.async=1;
+              r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+              a.appendChild(r);
+          })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+        }
+        
+        // Load Hotjar on first user interaction
+        ['click', 'scroll', 'mousemove'].forEach(event => {
+          document.addEventListener(event, loadHotjar, { once: true, passive: true });
+        });
       `,
           }}
         />
