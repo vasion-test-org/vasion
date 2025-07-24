@@ -1132,6 +1132,7 @@ const Tabs = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  color: ${colors.txtPrimary};
   gap: 1vw;
 
   ${media.fullWidth} {
