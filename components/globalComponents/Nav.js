@@ -227,12 +227,8 @@ const Nav = ({ blok }) => {
               </Column>
             ))}
           </ColumnsWrapper>
-          {item.cta && (
+          {item.cta && item.cta?.[0]?.media?.[0]?.media?.[0]?.filename && (
             <>
-              {/* {console.log('CTA Data:', {
-              cta: item.cta,
-              copySections: item.cta?.[0]?.copy_sections,
-            })} */}
               <DropDownCTA
                 bgimg={item.cta?.[0]?.media?.[0]?.media?.[0]?.filename}
               >
@@ -1045,35 +1041,45 @@ const ColumnsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-
   ${Column}:not(:last-child) {
     padding-right: 2vw;
     border-right: 1px solid ${colors.grey50};
 
+    gap: 1.25vw;
     ${media.fullWidth} {
       padding-right: 32px;
+      gap: 20px;
     }
 
     ${media.tablet} {
       padding-right: 3.125vw;
+      gap: 1.953vw;
     }
 
     ${media.mobile} {
+      gap: 4.167vw;
+    }
+  }
+
+  ${Column}:first-child {
+    gap: 1.5vw;
+
+    ${media.fullWidth} {
+      gap: 24px;
+    }
+    ${media.tablet} {
+      gap: 2.344vw;
     }
   }
 
   ${Column}:not(:first-child) {
-    padding: 0 2vw;
-
+    gap: 1.5vw;
     ${media.fullWidth} {
-      padding: 0 32px;
+      gap: 24px;
     }
 
     ${media.tablet} {
-      padding: 0 3.125vw;
-    }
-
-    ${media.mobile} {
+      gap: 2.344vw;
     }
   }
 
