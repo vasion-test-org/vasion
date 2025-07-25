@@ -10,7 +10,7 @@ import ScrollSmootherWrapper from "@/components/ScrollSmoothWrapper";
 import Providers from "@/components/providers";
 import Config from "@/components/Config";
 import { getStoryblokApi } from "@/lib/storyblok";
-import { Metadata } from "next";
+
 import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {

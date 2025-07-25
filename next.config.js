@@ -87,6 +87,8 @@ const nextConfig = {
 
       // Optimize bundle size
       config.optimization.minimize = true;
+
+
     }
 
     return config;
