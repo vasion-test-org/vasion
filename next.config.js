@@ -14,6 +14,7 @@ const nextConfig = {
   generateEtags: false,
   experimental: {
     optimizePackageImports: ['@rive-app/react-canvas', 'gsap'],
+    optimizeCss: true,
   },
   
  
@@ -78,6 +79,8 @@ const nextConfig = {
     );
 
     fileLoaderRule.exclude = /\.svg$/i;
+
+
 
     return config;
   },
