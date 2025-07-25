@@ -10,7 +10,7 @@ import ScrollSmootherWrapper from "@/components/ScrollSmoothWrapper";
 import Providers from "@/components/providers";
 import Config from "@/components/Config";
 import { getStoryblokApi } from "@/lib/storyblok";
-import { Metadata } from "next";
+
 import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
@@ -68,6 +68,8 @@ export default async function RootLayout({ children }) {
         />
 
         {/* Rive WASM will be loaded on-demand when animations are needed */}
+
+
 
         {/* Google Tag Manager */}
         <Script
