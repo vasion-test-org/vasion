@@ -1,12 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
-import gsap from 'gsap';
-
 import styled from 'styled-components';
 import media from 'styles/media';
 import colors from 'styles/colors';
 import text from 'styles/text';
-import ScrollTrigger from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from '@/lib/gsap-utils';
 
 import CoverPage from 'components/BusinessCaseTool/PDFPages/CoverPage';
 import PDFIntro from './PDFPages/PDFIntro';
@@ -26,25 +24,24 @@ import PDFPage15 from './PDFPages/PDFPage15';
 import PDFPage16 from './PDFPages/PDFPage16';
 import PDFPage17 from './PDFPages/PDFPage17';
 
-gsap.registerPlugin(ScrollTrigger);
-
 const BCTPDF = ({ contactFormData, savingsFormData, currency }) => {
   const handlePrint = () => {
     // Kill all ScrollTriggers and ScrollSmoother before print
     if (ScrollTrigger) {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     }
-  
-    if (gsap.core.globals().ScrollSmoother?.get()) {
-      gsap.core.globals().ScrollSmoother.get().kill();
-    }
-  
+
+    // Note: ScrollSmoother functionality removed for bundle optimization
+    // if (gsap.core.globals().ScrollSmoother?.get()) {
+    //   gsap.core.globals().ScrollSmoother.get().kill();
+    // }
+
     // Wait a tick to let layout stabilize
     setTimeout(() => {
       window.print();
     }, 100); // slight delay to make sure DOM updates
   };
-  
+
   // useEffect(() => {
   //   ScrollTrigger.create({
   //     trigger: '#pdfPrint',

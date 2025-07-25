@@ -1,12 +1,14 @@
-"use client";
-import React, { useEffect } from "react";
-import gsap from "gsap";
-import styled from "styled-components";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import { horizontalLoop } from "@/functions/horizontalLoop";
-import RichTextRenderer from "../renderers/RichTextRenderer";
+'use client';
+import React, { useEffect, useRef } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import media from '@/styles/media';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import { timeline, utils } from '@/lib/gsap-utils';
+import { horizontalLoop } from '@/functions/horizontalLoop';
+import RichTextRenderer from '../renderers/RichTextRenderer';
 
 const G2Badges = ({ badges }) => {
   function splitBadges(badges, n) {
@@ -21,11 +23,11 @@ const G2Badges = ({ badges }) => {
 
   const badgesArrays = splitBadges(badges?.badge_cards, 3);
   const allBadges = badgesArrays.map((badge, index) => (
-    <BadgesInnerDiv key={index} className="badgeGroup">
+    <BadgesInnerDiv key={index} className='badgeGroup'>
       {badge.map((badge, badge_index) => (
         <BadgeDiv key={badge_index}>
           <BadgeImage
-            className="badges"
+            className='badges'
             src={badge.badge_image.filename}
             alt={badge?.badge_image.alt}
           />
@@ -42,20 +44,20 @@ const G2Badges = ({ badges }) => {
 
   const progressBars = badgesArrays.map((_, index) => (
     <ProgressBar key={index}>
-      <ProgressValue className="pro-bar" />
+      <ProgressValue className='pro-bar' />
     </ProgressBar>
   ));
 
   useEffect(() => {
-    const badgeGroups = gsap.utils.toArray(".badgeGroup");
+    const badgeGroups = utils.toArray('.badgeGroup');
 
     const loop = horizontalLoop(badgeGroups, { deep: false, paused: true });
 
     function NextLoop() {
-      loop.next({ duration: 2, ease: "slow" });
+      loop.next({ duration: 2, ease: 'slow' });
     }
 
-    const loopTL = gsap.timeline({});
+    const loopTL = timeline({});
     loopTL.set(NextLoop, {
       delay: 7,
       onRepeat: NextLoop,
@@ -63,16 +65,16 @@ const G2Badges = ({ badges }) => {
       repeatDelay: 7,
     });
 
-    const progressTL = gsap.timeline({
+    const progressTL = timeline({
       defaults: {
         duration: 7,
       },
     });
 
-    progressTL.to(".pro-bar", {
+    progressTL.to('.pro-bar', {
       delay: 0.75,
       stagger: 7,
-      width: "100%",
+      width: '100%',
       repeat: -1,
     });
   }, []);

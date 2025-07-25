@@ -1,26 +1,28 @@
-"use client";
-import React, { useEffect } from "react";
-import gsap from "gsap";
-import styled from "styled-components";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import CarouselArrow from "@/assets/svg/CarouselArrow.svg";
+'use client';
+import React, { useEffect, useRef } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import media from '@/styles/media';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import { to, utils } from '@/lib/gsap-utils';
+import CarouselArrow from '@/assets/svg/CarouselArrow.svg';
 
-import { horizontalLoop } from "@/functions/horizontalLoop";
+import { horizontalLoop } from '@/functions/horizontalLoop';
 
 const ImageCarousel = ({ blok }) => {
   const Images = blok.carousel_assets[0].images.map((image, index) => (
     <CarouselImage
       key={image.filename}
-      className={"carouselImages"}
+      className={'carouselImages'}
       id={`img-${index}`}
       src={image.filename}
     />
   ));
 
   useEffect(() => {
-    const imgArray = gsap.utils.toArray(".carouselImages");
+    const imgArray = utils.toArray('.carouselImages');
 
     const loop = horizontalLoop(imgArray, {
       deep: true,
@@ -29,20 +31,20 @@ const ImageCarousel = ({ blok }) => {
     });
 
     imgArray.forEach((img, i) =>
-      img.addEventListener("click", () =>
-        loop.toIndex(i, { duration: 0.8, ease: "power1.inOut" }),
-      ),
+      img.addEventListener('click', () =>
+        loop.toIndex(i, { duration: 0.8, ease: 'power1.inOut' })
+      )
     );
 
     document
-      .querySelector("#rightArrow")
-      .addEventListener("click", () =>
-        loop.next({ duration: 0.4, ease: "power1.inOut" }),
+      .querySelector('#rightArrow')
+      .addEventListener('click', () =>
+        loop.next({ duration: 0.4, ease: 'power1.inOut' })
       );
     document
-      .querySelector("#leftArrow")
-      .addEventListener("click", () =>
-        loop.previous({ duration: 0.4, ease: "power1.inOut" }),
+      .querySelector('#leftArrow')
+      .addEventListener('click', () =>
+        loop.previous({ duration: 0.4, ease: 'power1.inOut' })
       );
   }, []);
 
@@ -50,11 +52,11 @@ const ImageCarousel = ({ blok }) => {
     <Wrapper>
       <Header>{blok.header}</Header>
       <Carousel>
-        <LeftArrow id="leftArrow" />
+        <LeftArrow id='leftArrow' />
         <CarouselImageContainer>
           <Slides>{Images}</Slides>
         </CarouselImageContainer>
-        <RightArrow id="rightArrow" />
+        <RightArrow id='rightArrow' />
       </Carousel>
     </Wrapper>
   );

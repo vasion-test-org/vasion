@@ -1,25 +1,26 @@
-"use client";
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import media from "styles/media";
-import gsap from "gsap";
-import AccordionItem from "@/components/globalComponents/AccordionItem";
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { timeline, utils } from '@/lib/gsap-utils';
+import media from 'styles/media';
+import AccordionItem from '@/components/globalComponents/AccordionItem';
 
 const Accordion = ({ accordionData }) => {
   // console.log(accordionData)
 
   useEffect(() => {
-    const accordionItems = gsap.utils.toArray(".accordionItem");
+    const accordionItems = utils.toArray('.accordionItem');
 
     accordionItems.forEach((item) => {
-      const tl = gsap.timeline({ paused: true, reversed: true });
+      const tl = timeline({ paused: true, reversed: true });
       tl.to(item, {
-        height: "auto",
+        height: 'auto',
         duration: 0.3,
-        ease: "power2.inOut",
+        ease: 'power2.inOut',
       });
 
-      item.addEventListener("click", function () {
+      item.addEventListener('click', function () {
         if (tl.reversed()) {
           tl.play();
         } else {
@@ -27,7 +28,7 @@ const Accordion = ({ accordionData }) => {
         }
       });
     });
-  }, []);
+  }, [accordionData]);
 
   return (
     <AccordionContainer>
@@ -59,4 +60,3 @@ const AccordionContainer = styled.div`
   }
 `;
 export default Accordion;
-

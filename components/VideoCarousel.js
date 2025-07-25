@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import media from 'styles/media';
 import colors from 'styles/colors';
@@ -12,12 +11,10 @@ import Button from '@/components/globalComponents/Button';
 import useMedia from '@/functions/useMedia';
 import { horizontalLoop } from '@/functions/horizontalLoop';
 import { useAvailableThemes } from '@/context/ThemeContext';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import getMedia from '@/functions/getMedia';
 import RichTextRenderer from './renderers/RichTextRenderer';
 import { storyblokEditable } from '@storyblok/react/rsc';
-
-gsap.registerPlugin(ScrollToPlugin);
+import { to, timeline, utils } from '@/lib/gsap-utils';
 
 const VideoCarousel = ({ blok }) => {
   // console.log(blok);
@@ -92,8 +89,8 @@ const VideoCarousel = ({ blok }) => {
   });
 
   useEffect(() => {
-    const videoArray = gsap.utils.toArray('.videos');
-    const popups = gsap.utils.toArray('.video-popup');
+    const videoArray = utils.toArray('.videos');
+    const popups = utils.toArray('.video-popup');
     const body = document.body;
     let activeElement;
 

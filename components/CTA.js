@@ -5,10 +5,27 @@ import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import media from '@/styles/media';
 import { storyblokEditable } from '@storyblok/react/rsc';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import Button from '@/components/globalComponents/Button';
-import LightboxBtn from '@/components/LightboxButton';
+import dynamic from 'next/dynamic';
 import useMedia from '@/functions/useMedia';
+
+// Dynamic imports for child components
+const RichTextRenderer = dynamic(
+  () => import('@/components/renderers/RichTextRenderer'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
+
+const Button = dynamic(() => import('@/components/globalComponents/Button'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const LightboxBtn = dynamic(() => import('@/components/LightboxButton'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
 
 const CTA = ({ blok }) => {
   const themes = useAvailableThemes();

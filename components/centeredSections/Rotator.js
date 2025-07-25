@@ -1,45 +1,46 @@
-"use client";
-import React, { useEffect } from "react";
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
 
-import styled from "styled-components";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import media from "styles/media";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import colors from "@/styles/colors";
-import ComponentRenderer from "../renderers/ComponentRenderer";
-import gsap from "gsap";
-import useMedia from "@/functions/useMedia";
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import media from 'styles/media';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import colors from '@/styles/colors';
+import ComponentRenderer from '../renderers/ComponentRenderer';
+import useMedia from '@/functions/useMedia';
+import { set, timeline, utils } from '@/lib/gsap-utils';
 
 const Rotator = ({ rotatorData }) => {
   // console.log(rotatorData)
   const copycomponents = [
-    "body_copy",
-    "header",
-    "eyebrow",
-    "long_form_text",
-    "copy_block",
+    'body_copy',
+    'header',
+    'eyebrow',
+    'long_form_text',
+    'copy_block',
   ];
 
   useEffect(() => {
-    gsap.set(".rotator", { autoAlpha: 0 });
-    gsap.set("#rotator-0", { autoAlpha: 1 });
+    set('.rotator', { autoAlpha: 0 });
+    set('#rotator-0', { autoAlpha: 1 });
 
-    const tabs = gsap.utils.toArray(".rotator-tabs");
+    const tabs = utils.toArray('.rotator-tabs');
 
     tabs.forEach((tab, index) => {
-      const tl = gsap.timeline({});
-      tab.addEventListener("click", () => {
-        tl.to(".rotator", { autoAlpha: 0, filter: "blur(2px)", duration: 0.45 })
-          .to(`.rotator-tabs`, { background: "transparent", duration: 0.25 })
+      const tl = timeline({});
+      tab.addEventListener('click', () => {
+        tl.to('.rotator', { autoAlpha: 0, filter: 'blur(2px)', duration: 0.45 })
+          .to(`.rotator-tabs`, { background: 'transparent', duration: 0.25 })
           .to(
             `#rotator-tab-${index}`,
-            { background: "linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%)" },
-            "<",
+            { background: 'linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%)' },
+            '<'
           )
           .to(
             `#rotator-${index}`,
-            { autoAlpha: 1, filter: "blur(0px)", duration: 0.25 },
-            "<",
+            { autoAlpha: 1, filter: 'blur(0px)', duration: 0.25 },
+            '<'
           );
       });
     });
@@ -47,7 +48,7 @@ const Rotator = ({ rotatorData }) => {
 
   const tabMap = rotatorData.map((tab, index) => (
     <Tab
-      className="rotator-tabs"
+      className='rotator-tabs'
       id={`rotator-tab-${index}`}
       key={`${tab.tab_icon.filename}-${index}`}
     >
@@ -64,13 +65,13 @@ const Rotator = ({ rotatorData }) => {
       card.background_images[0],
       card.background_images[0],
       card?.background_images[1],
-      card?.background_images[2] || "unset",
+      card?.background_images[2] || 'unset'
     );
 
     return (
       <BackgroundImage
         id={`rotator-${index}`}
-        className="rotator"
+        className='rotator'
         key={`${card.component}-${index}`}
         backgroundImage={cardBg.filename}
       >
@@ -84,7 +85,7 @@ const Rotator = ({ rotatorData }) => {
               />
             ) : (
               <ComponentRenderer key={`component-${index}`} blok={item} />
-            ),
+            )
           )}
         </ContentContainer>
       </BackgroundImage>

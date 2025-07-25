@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 
-import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
@@ -11,6 +10,7 @@ import colors from '@/styles/colors';
 import text from '@/styles/text';
 import { useThankYou } from '@/context/ThankYouContext';
 import { useRouter } from 'next/navigation';
+import { to, from, set, timeline } from '@/lib/gsap-utils';
 
 const Form = ({ blok }) => {
   // console.log(blok.redirect_link)
@@ -122,8 +122,8 @@ const Form = ({ blok }) => {
 
   //loads script for bookit form and gsap animations for form
   useEffect(() => {
-    demoTl.current = gsap.timeline({ paused: true });
-    gsap.set('.bookit-content-container', { display: 'none', opacity: 0 });
+    demoTl.current = timeline({ paused: true });
+    set('.bookit-content-container', { display: 'none', opacity: 0 });
 
     if (blok.animated) {
       // Add event listener for LeanData messages

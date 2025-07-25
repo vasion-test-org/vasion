@@ -1,24 +1,29 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
-import { useRouter, usePathname } from 'next/navigation';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
-import media from 'styles/media';
+import media from '@/styles/media';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import {
+  to,
+  from,
+  set,
+  timeline,
+  utils,
+  ScrollTrigger,
+} from '@/lib/gsap-utils';
+import { useRouter, usePathname } from 'next/navigation';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Button from './Button';
-import text from '@/styles/text';
-import colors from '@/styles/colors';
 import Icons from '@/components/renderers/Icons';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 import { getStoryblokApi } from '@/lib/storyblok';
 
-gsap.registerPlugin(ScrollTrigger);
 const MobileNav = ({ blok }) => {
   const router = useRouter();
   const path = usePathname();
@@ -176,7 +181,7 @@ const MobileNav = ({ blok }) => {
   ));
 
   useEffect(() => {
-    const mobileAnchorTl = gsap.timeline({
+    const mobileAnchorTl = timeline({
       scrollTrigger: {
         start: '2% 1%',
         end: '10% 90%',
@@ -198,17 +203,16 @@ const MobileNav = ({ blok }) => {
   }, []);
 
   useEffect(() => {
-    gsap.set('.tabDropdowns', { height: 0, display: 'none' });
-    gsap.set('.mobileDropdown', { height: 0, display: 'none' });
+    set('.tabDropdowns', { height: 0, display: 'none' });
+    set('.mobileDropdown', { height: 0, display: 'none' });
 
-    const allTabs = gsap.utils.toArray('.tabHeader');
+    const allTabs = utils.toArray('.tabHeader');
     const hamburger = document.querySelector('.hamburger');
 
-    let tl = gsap.timeline({ paused: true });
+    let tl = timeline({ paused: true });
     let mobileOpen = false; // <- track open state
 
-    const hamburgerTl = gsap
-      .timeline({ paused: true, reversed: true })
+    const hamburgerTl = timeline({ paused: true, reversed: true })
       .set('#mainDrop', { padding: '4.673vw 0' })
       .to('#mainDrop', { height: 'auto', duration: 0.5 })
       .to('#slice-0', { top: '1.95vw', rotate: 45 }, '<')
@@ -220,15 +224,15 @@ const MobileNav = ({ blok }) => {
       if (!dropdown) return;
 
       if (mobileOpen) {
-        gsap.to(dropdown, {
+        to(dropdown, {
           height: 0,
           duration: 0.4,
           ease: 'power2.inOut',
-          onComplete: () => gsap.set(dropdown, { display: 'none' }),
+          onComplete: () => set(dropdown, { display: 'none' }),
         });
       } else {
-        gsap.set(dropdown, { display: 'flex' });
-        gsap.to(dropdown, {
+        set(dropdown, { display: 'flex' });
+        to(dropdown, {
           height: '100vh',
           duration: 0.4,
           ease: 'power2.inOut',

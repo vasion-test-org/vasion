@@ -1,26 +1,96 @@
-"use client";
-import React, { useContext } from "react";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import media from "@/styles/media";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
+'use client';
+import React, { useContext } from 'react';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import media from '@/styles/media';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import dynamic from 'next/dynamic';
 
-import Cards from "@/components/centeredSections/Cards";
-import IconCards from "@/components/IconCards";
-import Grid from "@/components/centeredSections/Grid";
-import Image from "@/components/globalComponents/Image";
-import Video from "@/components/globalComponents/Video";
-import Button from "@/components/globalComponents/Button";
-import Accordion from "@/components/centeredSections/Accordion";
-import Stats from "@/components/centeredSections/Stats";
-import Form from "./Form";
-import Rotator from "@/components/centeredSections/Rotator";
-import StackedCards from "@/components/centeredSections/StackedCards";
-import Badges from "@/components/centeredSections/Badges";
-import BadgesMobile from "@/components/centeredSections/BadgesMobile";
-import { ScreenContext } from "@/components/providers/Screen";
-import LogosGallery from "@/components/centeredSections/LogosGallery";
+// Dynamic imports for child components
+const Cards = dynamic(() => import('@/components/centeredSections/Cards'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const IconCards = dynamic(() => import('@/components/IconCards'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Grid = dynamic(() => import('@/components/centeredSections/Grid'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Image = dynamic(() => import('@/components/globalComponents/Image'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Video = dynamic(() => import('@/components/globalComponents/Video'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Button = dynamic(() => import('@/components/globalComponents/Button'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Accordion = dynamic(
+  () => import('@/components/centeredSections/Accordion'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
+
+const Stats = dynamic(() => import('@/components/centeredSections/Stats'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Form = dynamic(() => import('./Form'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const Rotator = dynamic(() => import('@/components/centeredSections/Rotator'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const StackedCards = dynamic(
+  () => import('@/components/centeredSections/StackedCards'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
+
+const Badges = dynamic(() => import('@/components/centeredSections/Badges'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true,
+});
+
+const BadgesMobile = dynamic(
+  () => import('@/components/centeredSections/BadgesMobile'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
+
+const LogosGallery = dynamic(
+  () => import('@/components/centeredSections/LogosGallery'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: true,
+  }
+);
+
+import { ScreenContext } from '@/components/providers/Screen';
 
 const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -46,7 +116,7 @@ const CenteredSection = ({ blok }) => {
                 />
               </div>
             ))}
-          {blok.button_position === "above" &&
+          {blok.button_position === 'above' &&
             blok?.button_group?.map(($buttonData) => (
               <div
                 {...storyblokEditable($buttonData)}
@@ -56,10 +126,10 @@ const CenteredSection = ({ blok }) => {
               </div>
             ))}
         </ContentWrapper>
-        {blok.component_type !== "" && (
+        {blok.component_type !== '' && (
           <AttachedComponent>
-            {blok.component_type === "media" &&
-              blok?.media[0].component === "assets" && (
+            {blok.component_type === 'media' &&
+              blok?.media[0].component === 'assets' && (
                 <CustomSizing custom_size={blok.smaller_assets}>
                   <MediaWrapper {...storyblokEditable(blok.media)}>
                     <Image
@@ -70,8 +140,8 @@ const CenteredSection = ({ blok }) => {
                 </CustomSizing>
               )}
 
-            {blok.component_type === "media" &&
-              blok?.media[0].component === "video_assets" && (
+            {blok.component_type === 'media' &&
+              blok?.media[0].component === 'video_assets' && (
                 <MediaWrapper {...storyblokEditable(blok.media)}>
                   <Video
                     videos={blok.media?.[0]?.media}
@@ -80,34 +150,34 @@ const CenteredSection = ({ blok }) => {
                   />
                 </MediaWrapper>
               )}
-            {blok.component_type === "icon_cards" && blok.icon_cards && (
+            {blok.component_type === 'icon_cards' && blok.icon_cards && (
               <IconCards blok={blok.icon_cards} />
             )}
-            {blok.component_type === "card" && blok.cards && (
+            {blok.component_type === 'card' && blok.cards && (
               <Cards cardData={blok.cards} />
             )}
-            {blok.component_type === "grid" && blok.grid && (
+            {blok.component_type === 'grid' && blok.grid && (
               <Grid gridData={blok.grid} alignment={blok.grid_alignment} />
             )}
-            {blok.component_type === "stats" && blok.stats && (
+            {blok.component_type === 'stats' && blok.stats && (
               <Stats statsData={blok.stats} alignment={blok.stats_alignment} />
             )}
-            {blok.component_type === "accordion" && blok.accordion && (
+            {blok.component_type === 'accordion' && blok.accordion && (
               <Accordion accordionData={blok.accordion} />
             )}
-            {blok.component_type === "rotator" && blok.rotator && (
+            {blok.component_type === 'rotator' && blok.rotator && (
               <Rotator rotatorData={blok.rotator} />
             )}
-            {blok.component_type === "form" && blok.form && (
+            {blok.component_type === 'form' && blok.form && (
               <Form blok={blok.form[0]} />
             )}
-            {blok.component_type === "logo_gallery" && blok.logo_gallery && (
+            {blok.component_type === 'logo_gallery' && blok.logo_gallery && (
               <LogosGallery logoData={blok.logo_gallery} />
             )}
-            {blok.component_type === "stacked_cards" && blok.stacked_cards && (
+            {blok.component_type === 'stacked_cards' && blok.stacked_cards && (
               <StackedCards blok={blok.stacked_cards} />
             )}
-            {blok.component_type === "badges" && blok.badges && (
+            {blok.component_type === 'badges' && blok.badges && (
               <>
                 {mobile ? (
                   <BadgesMobile badges={blok?.badges?.[0]} />
@@ -118,7 +188,7 @@ const CenteredSection = ({ blok }) => {
             )}
           </AttachedComponent>
         )}
-        {blok.button_position === "below" &&
+        {blok.button_position === 'below' &&
           blok?.button_group?.map(($buttonData) => (
             <div
               {...storyblokEditable($buttonData)}
@@ -153,17 +223,17 @@ const AttachedComponent = styled.div`
 `;
 const CustomSizing = styled.div`
   display: flex;
-  width: ${(props) => (props.custom_size ? "38.875vw " : "unset")};
+  width: ${(props) => (props.custom_size ? '38.875vw ' : 'unset')};
   height: auto;
 
   ${media.fullWidth} {
-    width: ${(props) => (props.custom_size ? "622px " : "unset")};
+    width: ${(props) => (props.custom_size ? '622px ' : 'unset')};
   }
   ${media.tablet} {
-    width: ${(props) => (props.custom_size ? "49.609vw " : "unset")};
+    width: ${(props) => (props.custom_size ? '49.609vw ' : 'unset')};
   }
   ${media.mobile} {
-    width: ${(props) => (props.custom_size ? "89.167vw " : "unset")};
+    width: ${(props) => (props.custom_size ? '89.167vw ' : 'unset')};
   }
 `;
 const MediaWrapper = styled.div`
@@ -225,98 +295,98 @@ const CenteredWrapper = styled.div`
   }
 
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
-          ? `${props.spacing}px 0 0`
-          : "3.75vw 0 0";
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : "0 0 3.75vw";
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
-        ? `${props.spacing}px 0`
-        : "3.75vw 0";
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
     gap: 16px;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "60px 0";
+        ? `${props.spacing}px 0`
+        : '60px 0';
     }};
   }
 
   ${media.tablet} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.859vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "5.859vw 0 0";
+          ? `${props.spacing}px 0 0`
+          : '5.859vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 5.859vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 5.859vw";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 5.859vw';
       }
-      return props.spacing === "default"
-        ? "5.859vw 0"
+      return props.spacing === 'default'
+        ? '5.859vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "5.859vw 0";
+        ? `${props.spacing}px 0`
+        : '5.859vw 0';
     }};
     gap: 1.563vw;
   }
 
   ${media.mobile} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "12.5vw 0 0";
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 12.5vw";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
       }
-      return props.spacing === "default"
-        ? "12.5vw 0"
+      return props.spacing === 'default'
+        ? '12.5vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "12.5vw 0";
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
     }};
     gap: 3.333vw;
   }
