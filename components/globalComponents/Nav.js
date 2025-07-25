@@ -868,7 +868,7 @@ const NavItem = styled.div`
     props.card_size === "small"
       ? "1.25vw"
       : props.card_size === "medium"
-        ? "0.875vw"
+        ? "0.875vw" //UPDATE
         : "0.313vw"};
 
   width: ${(props) =>
@@ -900,7 +900,7 @@ const NavItem = styled.div`
       props.card_size === "small"
         ? "20px"
         : props.card_size === "medium"
-          ? "14px"
+          ? "14px" //UPDATE
           : "5px"};
 
     width: ${(props) =>
@@ -929,7 +929,7 @@ const NavItem = styled.div`
       props.card_size === "small"
         ? "1.953vw"
         : props.card_size === "medium"
-          ? "1.367vw"
+          ? "1.367vw" //UPDATE
           : "5px"};
 
     width: ${(props) =>
