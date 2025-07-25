@@ -19,6 +19,7 @@
     "autoprefixer": "10.4.21",
     "axios": "^1.10.0",
     "clone-deep": "^4.0.1",
+    "critters": "^0.0.25",
     "gsap": "npm:@gsap/business@^3.13.0",
     "next": "^15.3.4",
     "next-sitemap": "^4.2.3",
