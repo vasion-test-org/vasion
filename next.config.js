@@ -14,7 +14,6 @@ const nextConfig = {
   generateEtags: false,
   experimental: {
     optimizePackageImports: ['@rive-app/react-canvas', 'gsap', '@storyblok/react'],
-    optimizeCss: true,
   },
   // Image optimization
   images: {
