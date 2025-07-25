@@ -137,10 +137,16 @@ const Nav = ({ blok }) => {
                   <ColumnHeader>{column.column_header}</ColumnHeader>
                 )}
                 {column.nav_items.map((navItem) => {
-                  const formattedIconString = navItem.icon.replace(/\s+/g, "");
-                  const IconComponent = ({ ...props }) => (
-                    <IconRenderer iconName={formattedIconString} {...props} />
-                  );
+                  const formattedIconString =
+                    navItem.icon?.replace(/\s+/g, "") || "";
+                  const IconComponent = formattedIconString
+                    ? ({ ...props }) => (
+                        <IconRenderer
+                          iconName={formattedIconString}
+                          {...props}
+                        />
+                      )
+                    : null;
 
                   const rawUrl = navItem?.item_link?.cached_url || "#";
                   const isExternal =
@@ -868,7 +874,7 @@ const NavItem = styled.div`
     props.card_size === "small"
       ? "1.25vw"
       : props.card_size === "medium"
-        ? "0.875vw" //UPDATE
+        ? "0.875vw"
         : "0.313vw"};
 
   width: ${(props) =>
@@ -900,7 +906,7 @@ const NavItem = styled.div`
       props.card_size === "small"
         ? "20px"
         : props.card_size === "medium"
-          ? "14px" //UPDATE
+          ? "14px"
           : "5px"};
 
     width: ${(props) =>
@@ -929,7 +935,7 @@ const NavItem = styled.div`
       props.card_size === "small"
         ? "1.953vw"
         : props.card_size === "medium"
-          ? "1.367vw" //UPDATE
+          ? "1.367vw"
           : "5px"};
 
     width: ${(props) =>
@@ -1074,12 +1080,15 @@ const ColumnsWrapper = styled.div`
 
   ${Column}:not(:first-child) {
     gap: 1.5vw;
+    padding: 0 2vw;
     ${media.fullWidth} {
       gap: 24px;
+      padding: 0 32px;
     }
 
     ${media.tablet} {
       gap: 2.344vw;
+      padding: 0 3.125vw;
     }
   }
 
