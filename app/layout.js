@@ -69,6 +69,8 @@ export default async function RootLayout({ children }) {
 
         {/* Rive WASM will be loaded on-demand when animations are needed */}
 
+
+
         {/* Google Tag Manager */}
         <Script
           id="gtm"

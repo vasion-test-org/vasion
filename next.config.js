@@ -13,24 +13,20 @@ const nextConfig = {
   poweredByHeader: false,
   generateEtags: false,
   experimental: {
-    optimizePackageImports: ['@rive-app/react-canvas', 'gsap'],
+    optimizePackageImports: ['@rive-app/react-canvas', 'gsap', '@storyblok/react'],
+    optimizeCss: true,
+  },
+  // Image optimization
+  images: {
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60,
   },
   
  
-  // Bundle analyzer (uncomment for analysis)
-  // webpack: (config, { isServer, dev }) => {
-  //   if (!isServer && !dev) {
-  //     const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-  //     config.plugins.push(
-  //       new BundleAnalyzerPlugin({
-  //         analyzerMode: 'static',
-  //         openAnalyzer: false,
-  //       })
-  //     );
-  //   }
-  //   return config;
-  // },
-  webpack: (config, { isServer }) => {
+
+  webpack: (config, { isServer, dev }) => {
     // Optimize WebAssembly loading for Rive
     if (!isServer) {
       config.experiments = {
@@ -78,6 +74,20 @@ const nextConfig = {
     );
 
     fileLoaderRule.exclude = /\.svg$/i;
+
+    // Performance optimizations for production
+    if (!dev && !isServer) {
+      // Split GSAP into separate chunks
+      config.optimization.splitChunks.cacheGroups.gsap = {
+        test: /[\\/]node_modules[\\/]gsap[\\/]/,
+        name: 'gsap',
+        chunks: 'all',
+        priority: 10,
+      };
+
+      // Optimize bundle size
+      config.optimization.minimize = true;
+    }
 
     return config;
   },
