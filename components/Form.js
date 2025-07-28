@@ -1,16 +1,16 @@
-'use client';
-import React, { useState, useEffect, useRef } from 'react';
+"use client";
+import React, { useState, useEffect, useRef } from "react";
 
-import gsap from 'gsap';
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import media from '@/styles/media';
-import getMedia from '@/functions/getMedia';
-import colors from '@/styles/colors';
-import text from '@/styles/text';
-import { useThankYou } from '@/context/ThankYouContext';
-import { useRouter } from 'next/navigation';
+import gsap from "gsap";
+import styled, { ThemeProvider } from "styled-components";
+import { useAvailableThemes } from "@/context/ThemeContext";
+import { storyblokEditable } from "@storyblok/react/rsc";
+import media from "@/styles/media";
+import getMedia from "@/functions/getMedia";
+import colors from "@/styles/colors";
+import text from "@/styles/text";
+import { useThankYou } from "@/context/ThankYouContext";
+import { useRouter } from "next/navigation";
 
 const Form = ({ blok }) => {
   // console.log(blok.redirect_link)
@@ -20,14 +20,14 @@ const Form = ({ blok }) => {
   const selectedTheme = themes[blok.theme] || themes.default;
   const [isLoaded, setIsLoaded] = useState(false);
   const [stepDone, setStepDone] = useState(false);
-  const formWidth = getMedia('1096px', '76.111vw', '90.82vw', '87.85vw');
-  const formHeight = getMedia('733px', '50.875vw', '77.137vw', '288.084vw');
-  const lineWidth = getMedia('220px', '15.278vw', '19.531vw', '7.187vw');
+  const formWidth = getMedia("1096px", "76.111vw", "90.82vw", "87.85vw");
+  const formHeight = getMedia("733px", "50.875vw", "77.137vw", "288.084vw");
+  const lineWidth = getMedia("220px", "15.278vw", "19.531vw", "7.187vw");
   const xFormPosition = getMedia(0, 0, -27, 0);
   // const yFormPosition = getMedia(-277, -277, -27, 0);
   const contentVisibility = getMedia(0, 0, 0, 1);
-  const languageRef = useRef('en');
-  const routingLang = useRef('Demo Request - EN');
+  const languageRef = useRef("en");
+  const routingLang = useRef("Demo Request - EN");
   const demoTl = useRef(null);
 
   // Add handler for LeanData events
@@ -35,42 +35,42 @@ const Form = ({ blok }) => {
     // Only process messages from LeanData
     // if (event.origin !== 'https://cdn.leandata.com') return;
 
-    console.log('Full event data:', event);
-    console.log('Event origin:', event.origin);
-    console.log('Event data:', event.data);
+    console.log("Full event data:", event);
+    console.log("Event origin:", event.origin);
+    console.log("Event data:", event.data);
 
     switch (event.data.message) {
-      case 'LD_ROUTING_RESPONSE':
-        console.log('Routing response received:', event.data.responseData);
+      case "LD_ROUTING_RESPONSE":
+        console.log("Routing response received:", event.data.responseData);
         dataLayer.push({
-          event: 'lean_data_routing_response',
+          event: "lean_data_routing_response",
           form_id: blok.form_id,
           routing_response_date: new Date().toISOString(),
           routing_data: event.data.responseData,
         });
         break;
-      case 'LD_ROUTING_TIMED_OUT':
-        console.log('Routing timed out:', event.data.responseData);
+      case "LD_ROUTING_TIMED_OUT":
+        console.log("Routing timed out:", event.data.responseData);
         dataLayer.push({
-          event: 'lean_data_routing_timeout',
+          event: "lean_data_routing_timeout",
           form_id: blok.form_id,
           timeout_date: new Date().toISOString(),
           timeout_data: event.data.responseData,
         });
         break;
-      case 'LD_POST_BOOKING_IMMEDIATE':
-        console.log('Booking completed:', event.data.responseData);
+      case "LD_POST_BOOKING_IMMEDIATE":
+        console.log("Booking completed:", event.data.responseData);
         dataLayer.push({
-          event: 'lean_data_booking_completed',
+          event: "lean_data_booking_completed",
           form_id: blok.form_id,
           booking_date: new Date().toISOString(),
           booking_data: event.data.responseData,
         });
         break;
-      case 'LD_POPUP_CLOSED':
-        console.log('Popup closed:', event.data.responseData);
+      case "LD_POPUP_CLOSED":
+        console.log("Popup closed:", event.data.responseData);
         dataLayer.push({
-          event: 'lean_data_popup_closed',
+          event: "lean_data_popup_closed",
           form_id: blok.form_id,
           popup_close_date: new Date().toISOString(),
           popup_data: event.data.responseData,
@@ -91,21 +91,21 @@ const Form = ({ blok }) => {
 
   //checking for pathname to set routing language and path
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const pathname = window.location.pathname;
-      const pathLocale = pathname.split('/')[1];
+      const pathLocale = pathname.split("/")[1];
 
-      if (['de', 'fr'].includes(pathLocale)) {
+      if (["de", "fr"].includes(pathLocale)) {
         languageRef.current = pathLocale;
-        if (pathLocale === 'de') {
-          routingLang.current = 'Demo Request - DE';
-        } else if (pathLocale === 'fr') {
-          routingLang.current = 'Demo Request - FR';
+        if (pathLocale === "de") {
+          routingLang.current = "Demo Request - DE";
+        } else if (pathLocale === "fr") {
+          routingLang.current = "Demo Request - FR";
         } else {
-          routingLang.current = 'Demo Request - EN';
+          routingLang.current = "Demo Request - EN";
         }
       } else {
-        languageRef.current = 'en';
+        languageRef.current = "en";
       }
     }
     console.log(routingLang.current);
@@ -113,7 +113,7 @@ const Form = ({ blok }) => {
 
   //checks script is loadedfor marketo form
   useEffect(() => {
-    if (!document.getElementById('mktoForms')) {
+    if (!document.getElementById("mktoForms")) {
       loadScript();
     } else {
       setIsLoaded(true);
@@ -123,54 +123,54 @@ const Form = ({ blok }) => {
   //loads script for bookit form and gsap animations for form
   useEffect(() => {
     demoTl.current = gsap.timeline({ paused: true });
-    gsap.set('.bookit-content-container', { display: 'none', opacity: 0 });
+    gsap.set(".bookit-content-container", { display: "none", opacity: 0 });
 
     if (blok.animated) {
       // Add event listener for LeanData messages
-      window.addEventListener('message', handleLeanDataMessage);
+      window.addEventListener("message", handleLeanDataMessage);
 
       demoTl.current
-        .to('.preformContent', { opacity: contentVisibility })
-        .to('.preformContent', { display: 'none' }, '<')
-        .to('.marketoForm', { opacity: 0 }, '<')
-        .to('#formPos', { xPercent: xFormPosition, duration: 1.25 })
+        .to(".preformContent", { opacity: contentVisibility })
+        .to(".preformContent", { display: "none" }, "<")
+        .to(".marketoForm", { opacity: 0 }, "<")
+        .to("#formPos", { xPercent: xFormPosition, duration: 1.25 })
         .to(
-          '#formContainer',
+          "#formContainer",
           { width: formWidth, height: formHeight, duration: 1.25 },
-          '<'
+          "<",
         )
-        .to('.lines', { width: lineWidth, duration: 1.25 }, '<')
-        .from('.second', { duration: 1.25, background: 'unset' }, '<')
-        .to('.marketoForm', { display: 'none' }, '<')
-        .set('.bookit-content-container', { display: 'block' })
-        .to('.bookit-content-container', { opacity: 1 });
+        .to(".lines", { width: lineWidth, duration: 1.25 }, "<")
+        .from(".second", { duration: 1.25, background: "unset" }, "<")
+        .to(".marketoForm", { display: "none" }, "<")
+        .set(".bookit-content-container", { display: "block" })
+        .to(".bookit-content-container", { opacity: 1 });
 
-      const script = document.createElement('script');
-      script.src = 'https://cdn.leandata.com/js-snippet/ld-book-v2.js';
+      const script = document.createElement("script");
+      script.src = "https://cdn.leandata.com/js-snippet/ld-book-v2.js";
       script.async = false;
 
-      script.addEventListener('load', () => {
-        console.log('timeoutLang', languageRef.current);
+      script.addEventListener("load", () => {
+        console.log("timeoutLang", languageRef.current);
 
         const initConfig = {
           calendarTimeoutLength: 900,
           beforeRouting: (formTarget, formData) => {
-            console.log('lean data language:', languageRef.current);
-            formData['thank_you_language'] = languageRef.current;
-            formData['routing_node_trigger'] = routingLang.current;
+            console.log("lean data language:", languageRef.current);
+            formData["thank_you_language"] = languageRef.current;
+            formData["routing_node_trigger"] = routingLang.current;
           },
           defaultLanguage: languageRef.current,
           useIframe: blok.animated,
         };
 
         window.LDBookItV2.initialize(
-          '00DE0000000bt64MAA',
+          "00DE0000000bt64MAA",
           routingLang.current,
-          'LD_BookIt_Log_ID__c',
-          initConfig
+          "LD_BookIt_Log_ID__c",
+          initConfig,
         );
 
-        window.LDBookItV2.setFormProvider('marketo');
+        window.LDBookItV2.setFormProvider("marketo");
       });
 
       document.body.appendChild(script);
@@ -178,7 +178,7 @@ const Form = ({ blok }) => {
       return () => {
         document.body.removeChild(script);
         // Clean up the event listener when component unmounts
-        window.removeEventListener('message', handleLeanDataMessage);
+        window.removeEventListener("message", handleLeanDataMessage);
       };
     }
   }, []);
@@ -186,8 +186,8 @@ const Form = ({ blok }) => {
   useEffect(() => {
     isLoaded &&
       window?.MktoForms2?.loadForm(
-        'https://info.printerlogic.com',
-        '338-HTA-134',
+        "https://info.printerlogic.com",
+        "338-HTA-134",
         blok.form_id,
         (form) => {
           form.onSuccess(function (submittedValues) {
@@ -196,26 +196,26 @@ const Form = ({ blok }) => {
                 window.LDBookItV2.saveFormData(submittedValues);
                 window.LDBookItV2.submit({
                   formData: submittedValues,
-                  cb: window.LDBookItV2.getIframeFn('100%', '100%', '300'),
+                  cb: window.LDBookItV2.getIframeFn("100%", "100%", "300"),
                 });
                 demoTl.current.play();
                 setStepDone(true);
                 dataLayer.push({
-                  event: 'marketo_form_submission_success',
+                  event: "marketo_form_submission_success",
                   form_id: blok.form_id,
                   form_submission_date: new Date().toISOString(),
                 });
 
-                console.log('Thank You');
-                console.log('Form submitted successfully:', submittedValues);
+                console.log("Thank You");
+                console.log("Form submitted successfully:", submittedValues);
                 return false;
               } else {
-                console.error('LDBookItV2 not available, booking may fail');
+                console.error("LDBookItV2 not available, booking may fail");
                 alert(
-                  'There was a problem connecting to our scheduling system. Please contact support.'
+                  "There was a problem connecting to our scheduling system. Please contact support.",
                 );
                 dataLayer.push({
-                  event: 'marketo_form_submission_failed',
+                  event: "marketo_form_submission_failed",
                   form_id: blok.form_id,
                   form_submission_date: new Date().toISOString(),
                 });
@@ -226,13 +226,13 @@ const Form = ({ blok }) => {
               const isExternal = (url) => /^https?:\/\//.test(url);
 
               let redirectUrl =
-                typeof blok.redirect_link === 'string'
+                typeof blok.redirect_link === "string"
                   ? blok.redirect_link
-                  : blok.redirect_link?.cached_url || '/thank-you';
+                  : blok.redirect_link?.cached_url || "/thank-you";
 
               // 👇 Ensure root-relative if internal
-              if (!isExternal(redirectUrl) && !redirectUrl.startsWith('/')) {
-                redirectUrl = '/' + redirectUrl;
+              if (!isExternal(redirectUrl) && !redirectUrl.startsWith("/")) {
+                redirectUrl = "/" + redirectUrl;
               }
 
               if (isExternal(redirectUrl)) {
@@ -244,48 +244,48 @@ const Form = ({ blok }) => {
               return false;
             }
           });
-        }
+        },
       );
   }, [isLoaded, blok.form_id, blok.redirectLink]);
 
   const loadScript = () => {
-    var s = document.createElement('script');
-    s.id = 'mktoForms';
-    s.type = 'text/javascript';
+    var s = document.createElement("script");
+    s.id = "mktoForms";
+    s.type = "text/javascript";
     s.async = true;
-    s.src = 'https://info.printerlogic.com/js/forms2/js/forms2.min.js';
+    s.src = "https://info.printerlogic.com/js/forms2/js/forms2.min.js";
     s.onreadystatechange = function () {
-      if (this.readyState === 'complete' || this.readyState === 'loaded') {
+      if (this.readyState === "complete" || this.readyState === "loaded") {
         setIsLoaded(true);
       }
     };
     s.onload = () => setIsLoaded(true);
-    document.getElementsByTagName('head')[0].appendChild(s);
+    document.getElementsByTagName("head")[0].appendChild(s);
   };
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <FormContainer id='formContainer'>
+      <FormContainer id="formContainer">
         {blok.header && <FormHeader>{blok.header}</FormHeader>}
         {blok.animated && (
           <>
-            <CalendarContainer className='bookit-content-container' />
+            <CalendarContainer className="bookit-content-container" />
             <StepsContainer>
               <Step>
-                <Circle>{stepDone ? '✔' : 1}</Circle>
+                <Circle>{stepDone ? "✔" : 1}</Circle>
                 <StepText>Fill Out Form</StepText>
               </Step>
-              <Line className='lines' />
-              <Line className='lines second' />
+              <Line className="lines" />
+              <Line className="lines second" />
               <Step>
-                <Circle className='second'> 2</Circle>
-                <StepText id='stepTwo'>Pick Your Time</StepText>
+                <Circle className="second"> 2</Circle>
+                <StepText id="stepTwo">Pick Your Time</StepText>
               </Step>
             </StepsContainer>
           </>
         )}
         <MarketoForm
-          className='marketoForm'
+          className="marketoForm"
           id={`mktoForm_${blok.form_id}`}
         ></MarketoForm>
       </FormContainer>
@@ -479,14 +479,16 @@ const FormContainer = styled.div`
   border-radius: 2vw;
   padding: 2vw;
   width: 35.25vw;
-  box-shadow: 0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
+  box-shadow:
+    0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.25vw 0.5vw 0vw rgba(25, 29, 30, 0.16);
 
   ${media.fullWidth} {
     border-radius: 32px;
     padding: 32px;
     width: 564px;
-    box-shadow: 0px 0px 2px 0px rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0px 0px 2px 0px rgba(25, 29, 30, 0.04),
       0px 4px 8px 0px rgba(25, 29, 30, 0.16);
   }
 
@@ -494,7 +496,8 @@ const FormContainer = styled.div`
     border-radius: 3.125vw;
     padding: 3.125vw;
     width: 45.313vw;
-    box-shadow: 0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.391vw 0.781vw 0vw rgba(25, 29, 30, 0.16);
   }
 
@@ -502,7 +505,8 @@ const FormContainer = styled.div`
     border-radius: 6.667vw;
     padding: 6.667vw;
     width: 89.167vw;
-    box-shadow: 0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.833vw 1.667vw 0vw rgba(25, 29, 30, 0.16);
   }
 
@@ -546,7 +550,7 @@ const FormContainer = styled.div`
     display: none;
   }
 
-  .mktoFormRow:has(a[href*='vasion.com/privacy-policy']) span {
+  .mktoFormRow:has(a[href*="vasion.com/privacy-policy"]) span {
     ${text.bodySm};
     text-align: center;
     color: ${(props) => props.theme.form.textColor};
@@ -557,7 +561,7 @@ const FormContainer = styled.div`
     }
   }
 
-  .mktoFormRow:has(> input[type='hidden']) {
+  .mktoFormRow:has(> input[type="hidden"]) {
     display: none;
   }
 
@@ -601,7 +605,7 @@ const FormContainer = styled.div`
     }
   }
 
-  .mktoCheckboxList input[type='checkbox'] {
+  .mktoCheckboxList input[type="checkbox"] {
     height: auto !important;
     margin-right: 0vw !important;
     border-radius: 0.25vw !important;
@@ -622,7 +626,7 @@ const FormContainer = styled.div`
     }
 
     &:checked::after {
-      content: '✓' !important;
+      content: "✓" !important;
       position: absolute !important;
       color: white !important;
       font-size: 0.75vw !important;
@@ -880,7 +884,7 @@ const FormContainer = styled.div`
   }
   .mktoFieldWrap {
     display: flex !important;
-
+    color: ${colors.purple200};
     ${media.fullWidth} {
     }
     ${media.tablet} {
@@ -896,19 +900,20 @@ const FormContainer = styled.div`
 
     #LblformFriendlyProductofInterest {
       width: 100% !important;
+      color: white;
     }
 
     label {
       #formFriendlyProductofInterest {
         margin-bottom: 0.75vw !important;
+        color: ${colors.white};
       }
     }
-
     &:has(> label) {
       flex-direction: column !important;
     }
 
-    &:has(label[id='LblemailOptIn']) {
+    &:has(label[id="LblemailOptIn"]) {
       flex-direction: row !important;
       width: max-content !important;
     }
