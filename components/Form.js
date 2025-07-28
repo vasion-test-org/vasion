@@ -583,6 +583,7 @@ const FormContainer = styled.div`
     }
 
     label {
+
       margin: 0 1vw 0 0.25vw !important;
       width: max-content !important;
 
@@ -744,6 +745,7 @@ const FormContainer = styled.div`
   }
 
   label {
+    color: ${(props) => props.theme.form.textColor};
     ${text.bodyMd};
     width: max-content !important;
   }
