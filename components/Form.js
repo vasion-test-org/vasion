@@ -396,7 +396,7 @@ const CalendarContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: ${colors.white};
   justify-self: center;
   align-self: center;
   overflow: hidden;
@@ -587,7 +587,6 @@ const FormContainer = styled.div`
     }
 
     label {
-
       margin: 0 1vw 0 0.25vw !important;
       width: max-content !important;
 
@@ -628,7 +627,7 @@ const FormContainer = styled.div`
     &:checked::after {
       content: "✓" !important;
       position: absolute !important;
-      color: white !important;
+      color: ${colors.white} !important;
       font-size: 0.75vw !important;
       top: 50% !important;
       left: 50% !important;
@@ -721,7 +720,7 @@ const FormContainer = styled.div`
     justify-content: center;
     align-items: center;
     background: ${colors.primaryOrange};
-    color: white;
+    color: ${colors.white};
     width: 100%;
     padding: 0.75vw 0;
     border-radius: 2.375vw;
@@ -900,7 +899,7 @@ const FormContainer = styled.div`
 
     #LblformFriendlyProductofInterest {
       width: 100% !important;
-      color: white;
+      color: ${colors.white};
     }
 
     label {
