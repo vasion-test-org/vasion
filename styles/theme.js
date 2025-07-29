@@ -99,7 +99,7 @@ export const darkTheme = {
   },
   centered: {
     textColor: "#ffffff",
-    bg: "#3D2562",
+    bg: "linear-gradient(180deg, #190C30 -0.27%, #3D2562 126.67%)",
   },
   testimonial: {
     textColor: "#ffffff",
