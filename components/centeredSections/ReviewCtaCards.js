@@ -6,7 +6,7 @@ import Button from '@/components/globalComponents/Button';
 import media from '@/styles/media';
 
 const ReviewCtaCards = ({ blok }) => {
-  console.log(blok);
+
   return (
     <ReviewCardWrapper>
       {blok.map((card) => (

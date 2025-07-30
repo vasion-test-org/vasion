@@ -86,6 +86,13 @@ const Hero = ({ blok }) => {
                 />
               </div>
             ))}
+            {blok.badges && (
+              <div>
+                {blok.badges.map((badge) => (
+                  console.log(badge)
+                ))}
+              </div>
+            )}
             {!blok?.socials && (
               <ButtonRow>
                 {blok?.button_group?.map(($buttonData) => (
