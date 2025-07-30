@@ -6,7 +6,7 @@ import colors from '@/styles/colors';
 import media from '@/styles/media';
 
 const ReviewBadgeCta = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   return (
     <Wrapper spacingOffset={blok.offset_spacing} spacing={blok.section_spacing}>
       <CardWrapper>
@@ -142,7 +142,6 @@ const CardWrapper = styled.div`
     border-radius: 24px;
     width: 1304px;
     padding: 40px 60px;
-
   }
 
   ${media.tablet} {

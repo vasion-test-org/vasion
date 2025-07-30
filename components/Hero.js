@@ -86,13 +86,20 @@ const Hero = ({ blok }) => {
                 />
               </div>
             ))}
-            {/* {blok.badges && (
-              <div>
-                {blok.badges.map((badge) => (
-                  console.log(badge)
+            {blok.badges && (
+              <BadgesContainer>
+                {blok.badges.map((badge, index) => (
+                  <BadgeLink 
+                    key={index} 
+                    href={badge.link?.url || '#'} 
+                    target={badge.link?.target || '_self'}
+                    rel="noopener noreferrer"
+                  >
+                    <BadgeImage src={badge.logo?.filename} alt={badge.logo?.alt || 'Badge'} />
+                  </BadgeLink>
                 ))}
-              </div>
-            )} */}
+              </BadgesContainer>
+            )}
             {!blok?.socials && (
               <ButtonRow>
                 {blok?.button_group?.map(($buttonData) => (
@@ -594,6 +601,39 @@ const HeroBGWrapper = styled.div`
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
+`;
+
+const BadgesContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.75vw;
+  margin-top: 1.25vw;
+
+  ${media.fullWidth} {
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  ${media.tablet} {
+    gap: 1.172vw;
+    margin-top: 2.5vw;
+  }
+
+  ${media.mobile} {
+    gap: 2.5vw;
+    margin-top: 6.667vw;
+  }
+`;
+
+const BadgeLink = styled.a`
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const BadgeImage = styled.img`
+  width: 100%;
 `;
 
 export default Hero;
