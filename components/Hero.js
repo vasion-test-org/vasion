@@ -86,6 +86,23 @@ const Hero = ({ blok }) => {
                 />
               </div>
             ))}
+            {blok.badges && (
+              <BadgesContainer>
+                {blok.badges.map((badge, index) => (
+                  <BadgeLink
+                    key={index}
+                    href={badge.link?.url || '#'}
+                    target={badge.link?.target || '_self'}
+                    rel='noopener noreferrer'
+                  >
+                    <BadgeImage
+                      src={badge.logo?.filename}
+                      alt={badge.logo?.alt || 'Badge'}
+                    />
+                  </BadgeLink>
+                ))}
+              </BadgesContainer>
+            )}
             {!blok?.socials && (
               <ButtonRow>
                 {blok?.button_group?.map(($buttonData) => (
@@ -587,6 +604,39 @@ const HeroBGWrapper = styled.div`
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
+`;
+
+const BadgesContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1vw;
+  margin-top: 2.5vw;
+
+  ${media.fullWidth} {
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  ${media.tablet} {
+    gap: 1.563vw;
+    margin-top: 3.906vw;
+  }
+
+  ${media.mobile} {
+    gap: 3.333vw;
+    margin-top: 8.333vw;
+  }
+`;
+
+const BadgeLink = styled.a`
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const BadgeImage = styled.img`
+  width: 100%;
 `;
 
 export default Hero;

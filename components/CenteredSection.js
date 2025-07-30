@@ -21,6 +21,7 @@ import Badges from "@/components/centeredSections/Badges";
 import BadgesMobile from "@/components/centeredSections/BadgesMobile";
 import { ScreenContext } from "@/components/providers/Screen";
 import LogosGallery from "@/components/centeredSections/LogosGallery";
+import ReviewCtaCards from "@/components/centeredSections/ReviewCtaCards";
 
 const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -119,6 +120,9 @@ const CenteredSection = ({ blok }) => {
                   <Badges badges={blok?.badges?.[0]} />
                 )}
               </>
+            )}
+            {blok.component_type === "review_cta" && blok.review_cta && (
+              <ReviewCtaCards blok={blok.review_cta} />
             )}
           </AttachedComponent>
         )}

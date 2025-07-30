@@ -93,8 +93,6 @@ export default async function RootLayout({ children }) {
           }}
         />
 
-        {/* reCAPTCHA will be loaded dynamically by FormTracking when forms are detected */}
-
         {/* Marketo Munchkin - Load after page is interactive */}
         <Script
           id="marketo-munchkin"
