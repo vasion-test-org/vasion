@@ -20,7 +20,7 @@ const StyledHeader = styled.div`
     $level === "h1" &&
     `
     font-weight: 800;
-   font-size: 2.875vw;
+    font-size: 2.875vw;
     line-height: 3.5vw;
 
     ${media.fullWidth} {
