@@ -6,7 +6,6 @@ import Button from '@/components/globalComponents/Button';
 import media from '@/styles/media';
 
 const ReviewCtaCards = ({ blok }) => {
-
   return (
     <ReviewCardWrapper>
       {blok.map((card) => (
@@ -89,6 +88,19 @@ const ReviewCard = styled.div`
   min-height: 8.25vw;
   transition: background 0.3s ease;
   background-blend-mode: hard-light, hard-light, normal;
+
+  &:hover {
+    a {
+      color: ${colors.white} !important;
+      text-decoration: underline !important;
+    }
+
+    svg {
+      path {
+        fill: ${colors.white} !important;
+      }
+    }
+  }
 
   ${media.fullWidth} {
     width: 413px;
