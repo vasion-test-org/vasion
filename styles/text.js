@@ -86,25 +86,25 @@ line-height: 40px;
   font-style: normal;
   font-weight: 800;
 
-    ${media.fullWidth} {
-      font-size: 46px;
-      line-height: 56px;
-    }
-    
-    ${media.desktop} {
-     font-size: 3.194vw;
-      line-height: 3.889vw;
-    }
+  ${media.fullWidth} {
+    font-size: 46px;
+    line-height: 56px;
+  }
+  
+  ${media.desktop} {
+   font-size: 3.194vw;
+    line-height: 3.889vw;
+  }
 
-    ${media.tablet} {
-      font-size: 4.492vw;
-      line-height: 5.469vw;
-    }
+  ${media.tablet} {
+    font-size: 4.492vw;
+    line-height: 5.469vw;
+  }
 
-    ${media.mobile} {
-      font-size: 7.477vw;
-      line-height: 9.346vw;
-    }
+  ${media.mobile} {
+    font-size: 7.477vw;
+    line-height: 9.346vw;
+  }
     `,
   h2: `
   font-family: 'Archivo';

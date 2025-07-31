@@ -20,22 +20,22 @@ const StyledHeader = styled.div`
     $level === "h1" &&
     `
     font-weight: 800;
-    font-size: 3.625vw;
-      line-height: 4vw;
-    
+    font-size: 2.875vw;
+    line-height: 3.5vw;
+
     ${media.fullWidth} {
-      font-size: 58px;
-      line-height: 64px;
+    font-size: 46px;
+    line-height: 56px;
     }
 
     ${media.tablet} {
-   font-size: 5.664vw;
-    line-height: 6.25vw;
+      font-size: 4.492vw;
+    line-height: 5.469vw;
     }
 
     ${media.mobile} {
-      font-size: 10.748vw;
-      line-height: 12.617vw;
+      font-size: 7.477vw;
+      line-height: 9.346vw;
     }
   `}
 
