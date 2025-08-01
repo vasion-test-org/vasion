@@ -194,19 +194,19 @@ const Wrapper = styled.div`
   justify-content: center;
   text-align: center;
   gap: 1.5vw;
-  padding: 5.556vw 0;
+  padding: 3.75vw 0;
   ${media.fullWidth} {
     gap: 24px;
-    padding: 80px 0;
+    padding: 60px 0;
   }
 
   ${media.tablet} {
     gap: 2.344vw;
-    padding: 7.813vw 0;
+    padding: 5.859vw 0;
   }
 
   ${media.mobile} {
     gap: 5vw;
-    padding: 14.019vw 0;
+    padding: 12.5vw 0;
   }
 `;
