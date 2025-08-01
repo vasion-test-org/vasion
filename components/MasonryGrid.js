@@ -9,7 +9,7 @@ import Form from './Form';
 const MasonryGrid = ({ blok }) => {
   const [columns, setColumns] = useState([]);
   const [numColumns, setNumColumns] = useState(3); // Default to 3 columns
-
+  console.log(blok);
   useEffect(() => {
     if (blok?.gallery?.length) {
       // Determine number of columns based on screen size
@@ -62,17 +62,51 @@ const MasonryGrid = ({ blok }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, [blok.gallery]);
 
+  const renderImage = (image, imageIndex, columnIndex) => {
+    // Handle the logo_with_link component structure
+    const logo = image?.logo;
+    const link = image?.link;
+
+    const rawUrl = link?.cached_url || link?.url;
+    const isExternal =
+      rawUrl?.startsWith('http://') || rawUrl?.startsWith('https://');
+    const href = isExternal ? rawUrl : `/${rawUrl}`.replace(/\/+/g, '/');
+
+    if (rawUrl) {
+      return (
+        <ImageLink
+          key={`${columnIndex}-${imageIndex}`}
+          href={href}
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+        >
+          <Image
+            src={logo?.filename}
+            alt={logo?.alt}
+            loading='lazy'
+            $clickable={true}
+          />
+        </ImageLink>
+      );
+    } else {
+      return (
+        <Image
+          key={`${columnIndex}-${imageIndex}`}
+          src={logo?.filename}
+          alt={logo?.alt}
+          loading='lazy'
+          $clickable={false}
+        />
+      );
+    }
+  };
+
   const renderColumns = () => {
     return columns.map((column, columnIndex) => (
       <Column key={columnIndex}>
-        {column.map((image, imageIndex) => (
-          <Image
-            key={`${columnIndex}-${imageIndex}`}
-            src={image?.filename}
-            alt={image?.alt}
-            loading='lazy'
-          />
-        ))}
+        {column.map((image, imageIndex) =>
+          renderImage(image, imageIndex, columnIndex)
+        )}
       </Column>
     ));
   };
@@ -96,12 +130,18 @@ const MasonryGrid = ({ blok }) => {
 
 export default MasonryGrid;
 
+const ImageLink = styled.a`
+  text-decoration: none;
+  display: block;
+`;
+
 const Image = styled.img`
   width: 100%;
   height: auto;
   border-radius: 0.556vw;
   display: block;
   margin-bottom: 2vw;
+  cursor: ${(props) => (props.$clickable ? 'pointer' : 'default')};
 
   ${media.fullWidth} {
     border-radius: 8px;
