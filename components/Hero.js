@@ -15,7 +15,6 @@ import useMedia from '@/functions/useMedia';
 import text from '@/styles/text';
 
 const Hero = ({ blok }) => {
-  console.log(blok.badges_header);
   const router = useRouter();
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
