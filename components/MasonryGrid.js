@@ -1,38 +1,115 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import media from "@/styles/media";
-import text from "@/styles/text";
-import RichTextRenderer from "./renderers/RichTextRenderer";
-import Form from "./Form";
-const MasonryGrid = ({ blok }) => {
-  const [pairs, setPairs] = useState([]);
-  const imageData = pairs?.map((item, index) => {
-    return (
-      <Column key={index}>
-        <Image
-          src={item?.image1?.filename}
-          alt={item?.image1?.alt}
-          $item={index}
-        />
-        <Image src={item?.image2?.filename} alt={item?.image2?.alt} />
-      </Column>
-    );
-  });
+'use client';
+import React, { useState, useEffect } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import media from '@/styles/media';
+import text from '@/styles/text';
+import RichTextRenderer from './renderers/RichTextRenderer';
+import Form from './Form';
 
+const MasonryGrid = ({ blok }) => {
+  const [columns, setColumns] = useState([]);
+  const [numColumns, setNumColumns] = useState(3); // Default to 3 columns
+  console.log(blok);
   useEffect(() => {
-    if (blok?.gallery.length) {
-      const tempPairs = [];
-      for (let i = 0; i < blok?.gallery?.length; i += 2) {
-        let createPair = {
-          image1: blok?.gallery[i],
-          image2: blok?.gallery[i + 1] || null,
-        };
-        tempPairs.push(createPair);
-      }
-      setPairs(tempPairs);
+    if (blok?.gallery?.length) {
+      // Determine number of columns based on screen size
+      const determineColumns = () => {
+        if (window.innerWidth <= 768) return 1; // Mobile: 1 column
+        if (window.innerWidth <= 1024) return 2; // Tablet: 2 columns
+        return 3; // Desktop: 3 columns
+      };
+
+      const currentNumColumns = determineColumns();
+      setNumColumns(currentNumColumns);
+
+      // Distribute images across columns for masonry effect
+      const tempColumns = Array.from({ length: currentNumColumns }, () => []);
+
+      blok.gallery.forEach((image, index) => {
+        const columnIndex = index % currentNumColumns;
+        tempColumns[columnIndex].push(image);
+      });
+
+      setColumns(tempColumns);
     }
   }, [blok.gallery]);
+
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (blok?.gallery?.length) {
+        const determineColumns = () => {
+          if (window.innerWidth <= 768) return 1;
+          if (window.innerWidth <= 1024) return 2;
+          return 3;
+        };
+
+        const currentNumColumns = determineColumns();
+        setNumColumns(currentNumColumns);
+
+        const tempColumns = Array.from({ length: currentNumColumns }, () => []);
+
+        blok.gallery.forEach((image, index) => {
+          const columnIndex = index % currentNumColumns;
+          tempColumns[columnIndex].push(image);
+        });
+
+        setColumns(tempColumns);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [blok.gallery]);
+
+  const renderImage = (image, imageIndex, columnIndex) => {
+    // Handle the logo_with_link component structure
+    const logo = image?.logo;
+    const link = image?.link;
+
+    const rawUrl = link?.cached_url || link?.url;
+    const isExternal =
+      rawUrl?.startsWith('http://') || rawUrl?.startsWith('https://');
+    const href = isExternal ? rawUrl : `/${rawUrl}`.replace(/\/+/g, '/');
+
+    if (rawUrl) {
+      return (
+        <ImageLink
+          key={`${columnIndex}-${imageIndex}`}
+          href={href}
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+        >
+          <Image
+            src={logo?.filename}
+            alt={logo?.alt}
+            loading='lazy'
+            $clickable={true}
+          />
+        </ImageLink>
+      );
+    } else {
+      return (
+        <Image
+          key={`${columnIndex}-${imageIndex}`}
+          src={logo?.filename}
+          alt={logo?.alt}
+          loading='lazy'
+          $clickable={false}
+        />
+      );
+    }
+  };
+
+  const renderColumns = () => {
+    return columns.map((column, columnIndex) => (
+      <Column key={columnIndex}>
+        {column.map((image, imageIndex) =>
+          renderImage(image, imageIndex, columnIndex)
+        )}
+      </Column>
+    ));
+  };
 
   return (
     <Wrapper>
@@ -44,7 +121,7 @@ const MasonryGrid = ({ blok }) => {
           <RichTextRenderer document={blok.body_copy} />
         </Body>
       )}
-      <Gallery $isOdd={pairs.length % 2 !== 0}>{imageData}</Gallery>
+      <Gallery $numColumns={numColumns}>{renderColumns()}</Gallery>
       {/* {blok?.form && <Form blok={blok.form[0]} />} */}
       {/* TODO: @Bubba */}
     </Wrapper>
@@ -53,55 +130,52 @@ const MasonryGrid = ({ blok }) => {
 
 export default MasonryGrid;
 
+const ImageLink = styled.a`
+  text-decoration: none;
+  display: block;
+`;
+
 const Image = styled.img`
-  width: 25.625vw;
-  height: max-content;
+  width: 100%;
+  height: auto;
   border-radius: 0.556vw;
+  display: block;
+  margin-bottom: 2vw;
+  cursor: ${(props) => (props.$clickable ? 'pointer' : 'default')};
 
   ${media.fullWidth} {
-    width: 369px;
     border-radius: 8px;
+    margin-bottom: 32px;
   }
 
   ${media.tablet} {
-    width: 44.922vw;
     border-radius: 0.781vw;
+    margin-bottom: 2.344vw;
   }
 
   ${media.mobile} {
-    flex: auto;
-    display: ${(props) => (props?.$item >= 3 ? "none" : "flex")};
-    width: 89.792vw;
+    width: 89.167vw;
     border-radius: 1.869vw;
-    object-fit: cover;
+    margin-bottom: 4.167vw;
   }
 `;
+
 const Column = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2vw;
-
-  ${media.fullWidth} {
-    gap: 32px;
-  }
-
-  ${media.tablet} {
-    gap: 2.344vw;
-  }
+  flex: 1;
+  min-width: 0;
 
   ${media.mobile} {
-    gap: 4.167vw;
     align-items: center;
-    justify-content: center;
   }
 `;
+
 const Gallery = styled.div`
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  gap: 2vw;
   width: 80.888vw;
   height: auto;
-  gap: 2vw;
   padding-top: 1.389vw;
 
   ${media.fullWidth} {
@@ -112,20 +186,15 @@ const Gallery = styled.div`
 
   ${media.tablet} {
     width: 93.188vw;
-    padding: 0vw;
     gap: 2.344vw;
     padding-top: 1.953vw;
-    & :last-child {
-      flex-direction: ${(props) => (props?.$isOdd ? "row" : "column")};
-    }
   }
 
   ${media.mobile} {
-    overflow: hidden;
-    flex-direction: column;
     width: 99.766vw;
-    padding-top: 4.167vw;
     gap: 4.167vw;
+    padding-top: 4.167vw;
+    flex-direction: column;
   }
 `;
 
@@ -165,19 +234,19 @@ const Wrapper = styled.div`
   justify-content: center;
   text-align: center;
   gap: 1.5vw;
-  padding: 5.556vw 0;
+  padding: 3.75vw 0;
   ${media.fullWidth} {
     gap: 24px;
-    padding: 80px 0;
+    padding: 60px 0;
   }
 
   ${media.tablet} {
     gap: 2.344vw;
-    padding: 7.813vw 0;
+    padding: 5.859vw 0;
   }
 
   ${media.mobile} {
     gap: 5vw;
-    padding: 14.019vw 0;
+    padding: 12.5vw 0;
   }
 `;

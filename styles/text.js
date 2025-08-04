@@ -1,4 +1,4 @@
-import media from "@/styles/media";
+import media from '@/styles/media';
 
 const text = {
   pdfH1: `
@@ -82,29 +82,29 @@ line-height: 40px;
   }
   `,
   h1: `
-  font-family: 'Archivo';
+ font-family: 'Archivo';
   font-style: normal;
-  font-weight: 700;
+  font-weight: 800;
 
-    ${media.fullWidth} {
-      font-size: 58px;
-      line-height: 64px;
-    }
+  ${media.fullWidth} {
+    font-size: 46px;
+    line-height: 56px;
+  }
+  
+  ${media.desktop} {
+   font-size: 3.194vw;
+    line-height: 3.889vw;
+  }
 
-    ${media.desktop} {
-      font-size: 3.9vw;
-      line-height: 4.444vw;
-    }
+  ${media.tablet} {
+    font-size: 4.492vw;
+    line-height: 5.469vw;
+  }
 
-    ${media.tablet} {
-      font-size: 5.664vw;
-      line-height: 6.25vw;
-    }
-
-    ${media.mobile} {
-      font-size: 10.748vw;
-      line-height: 12.617vw;
-    }
+  ${media.mobile} {
+    font-size: 7.477vw;
+    line-height: 9.346vw;
+  }
     `,
   h2: `
   font-family: 'Archivo';
