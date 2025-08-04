@@ -273,13 +273,20 @@ const Form = ({ blok }) => {
             <StepsContainer>
               <Step>
                 <Circle>{stepDone ? "✔" : 1}</Circle>
-                <StepText>Fill Out Form</StepText>
+                <StepText>
+                  {blok.step_text ? blok.step_text : "Fill Out Form"}
+                </StepText>
               </Step>
               <Line className="lines" />
-              <Line className="lines second" />
+
+              {languageRef.current != "fr" && languageRef != "de" && (
+                <Line className="lines second" />
+              )}
               <Step>
                 <Circle className="second"> 2</Circle>
-                <StepText id="stepTwo">Pick Your Time</StepText>
+                <StepText id="stepTwo">
+                  {blok.step_text_next ? blok.step_text_next : "Pick Your Time"}
+                </StepText>
               </Step>
             </StepsContainer>
           </>
