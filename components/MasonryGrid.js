@@ -9,7 +9,7 @@ import Form from './Form';
 const MasonryGrid = ({ blok }) => {
   const [columns, setColumns] = useState([]);
   const [numColumns, setNumColumns] = useState(3); // Default to 3 columns
-  console.log(blok);
+  // console.log(blok);
   useEffect(() => {
     if (blok?.gallery?.length) {
       // Determine number of columns based on screen size
