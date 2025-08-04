@@ -137,7 +137,7 @@ const Form = ({ blok }) => {
         .to(
           '#formContainer',
           { width: formWidth, height: formHeight, duration: 1.25 },
-          '<'
+          '<',
         )
         .to('.lines', { width: lineWidth, duration: 1.25 }, '<')
         .from('.second', { duration: 1.25, background: 'unset' }, '<')
@@ -167,7 +167,7 @@ const Form = ({ blok }) => {
           '00DE0000000bt64MAA',
           routingLang.current,
           'LD_BookIt_Log_ID__c',
-          initConfig
+          initConfig,
         );
 
         window.LDBookItV2.setFormProvider('marketo');
@@ -212,7 +212,7 @@ const Form = ({ blok }) => {
               } else {
                 console.error('LDBookItV2 not available, booking may fail');
                 alert(
-                  'There was a problem connecting to our scheduling system. Please contact support.'
+                  'There was a problem connecting to our scheduling system. Please contact support.',
                 );
                 dataLayer.push({
                   event: 'marketo_form_submission_failed',
@@ -244,7 +244,7 @@ const Form = ({ blok }) => {
               return false;
             }
           });
-        }
+        },
       );
   }, [isLoaded, blok.form_id, blok.redirectLink]);
 
@@ -265,27 +265,31 @@ const Form = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <FormContainer id='formContainer'>
+      <FormContainer id="formContainer">
         {blok.header && <FormHeader>{blok.header}</FormHeader>}
         {blok.animated && (
           <>
-            <CalendarContainer className='bookit-content-container' />
+            <CalendarContainer className="bookit-content-container" />
             <StepsContainer>
               <Step>
                 <Circle>{stepDone ? '✔' : 1}</Circle>
-                <StepText>Fill Out Form</StepText>
+                <StepText>
+                  {blok.step_text ? blok.step_text : 'Fill Out Form'}
+                </StepText>
               </Step>
-              <Line className='lines' />
-              <Line className='lines second' />
+              <Line className="lines" />
+              <Line className="lines second" />
               <Step>
-                <Circle className='second'> 2</Circle>
-                <StepText id='stepTwo'>Pick Your Time</StepText>
+                <Circle className="second"> 2</Circle>
+                <StepText id="stepTwo">
+                  {blok.step_text_next ? blok.step_text_next : 'Pick Your Time'}
+                </StepText>
               </Step>
             </StepsContainer>
           </>
         )}
         <MarketoForm
-          className='marketoForm'
+          className="marketoForm"
           id={`mktoForm_${blok.form_id}`}
         ></MarketoForm>
       </FormContainer>
@@ -396,7 +400,7 @@ const CalendarContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: ${colors.white};
   justify-self: center;
   align-self: center;
   overflow: hidden;
@@ -479,14 +483,16 @@ const FormContainer = styled.div`
   border-radius: 2vw;
   padding: 2vw;
   width: 35.25vw;
-  box-shadow: 0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
+  box-shadow:
+    0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.25vw 0.5vw 0vw rgba(25, 29, 30, 0.16);
 
   ${media.fullWidth} {
     border-radius: 32px;
     padding: 32px;
     width: 564px;
-    box-shadow: 0px 0px 2px 0px rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0px 0px 2px 0px rgba(25, 29, 30, 0.04),
       0px 4px 8px 0px rgba(25, 29, 30, 0.16);
   }
 
@@ -494,7 +500,8 @@ const FormContainer = styled.div`
     border-radius: 3.125vw;
     padding: 3.125vw;
     width: 45.313vw;
-    box-shadow: 0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.391vw 0.781vw 0vw rgba(25, 29, 30, 0.16);
   }
 
@@ -502,7 +509,8 @@ const FormContainer = styled.div`
     border-radius: 6.667vw;
     padding: 6.667vw;
     width: 89.167vw;
-    box-shadow: 0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.833vw 1.667vw 0vw rgba(25, 29, 30, 0.16);
   }
 
@@ -583,7 +591,6 @@ const FormContainer = styled.div`
     }
 
     label {
-
       margin: 0 1vw 0 0.25vw !important;
       width: max-content !important;
 
@@ -624,7 +631,7 @@ const FormContainer = styled.div`
     &:checked::after {
       content: '✓' !important;
       position: absolute !important;
-      color: white !important;
+      color: ${colors.white} !important;
       font-size: 0.75vw !important;
       top: 50% !important;
       left: 50% !important;
@@ -717,7 +724,7 @@ const FormContainer = styled.div`
     justify-content: center;
     align-items: center;
     background: ${colors.primaryOrange};
-    color: white;
+    color: ${colors.white};
     width: 100%;
     padding: 0.75vw 0;
     border-radius: 2.375vw;
@@ -880,7 +887,6 @@ const FormContainer = styled.div`
   }
   .mktoFieldWrap {
     display: flex !important;
-
     ${media.fullWidth} {
     }
     ${media.tablet} {
@@ -903,7 +909,6 @@ const FormContainer = styled.div`
         margin-bottom: 0.75vw !important;
       }
     }
-
     &:has(> label) {
       flex-direction: column !important;
     }
