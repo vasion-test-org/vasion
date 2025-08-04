@@ -8,7 +8,7 @@ const SchemaMarkup = () => {
   const { pageData } = usePageData();
 
   useEffect(() => {
-    if (!pageData?.code) {
+    if (!pageData?.content?.code) {
       return;
     }
 
@@ -18,7 +18,7 @@ const SchemaMarkup = () => {
     );
     existingScripts.forEach((script) => script.remove());
 
-    const validatedSchema = validateSchemaMarkup(pageData.code);
+    const validatedSchema = validateSchemaMarkup(pageData.content.code);
 
     if (!validatedSchema) {
       return;
@@ -40,7 +40,7 @@ const SchemaMarkup = () => {
       );
       scriptsToRemove.forEach((script) => script.remove());
     };
-  }, [pageData?.code]);
+  }, [pageData?.content?.code]);
 
   return null;
 };

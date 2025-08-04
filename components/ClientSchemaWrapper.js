@@ -6,7 +6,7 @@ import ServerSchemaMarkup from './ServerSchemaMarkup';
 const ClientSchemaWrapper = () => {
   const { pageData } = usePageData();
 
-  return <ServerSchemaMarkup schemaData={pageData?.code} />;
+  return <ServerSchemaMarkup schemaData={pageData?.content?.code} />;
 };
 
 export default ClientSchemaWrapper;
