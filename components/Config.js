@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import Footer from './globalComponents/Footer';
 import Nav from './globalComponents/Nav';
 import MobileNav from './globalComponents/MobileNav';
-import SchemaMarkup from './SchemaMarkup';
 import styled from 'styled-components';
 import media from '@/styles/media';
 import { usePathname } from 'next/navigation';
@@ -166,7 +165,6 @@ const Config = ({ blok, children }) => {
 
   return (
     <>
-      <SchemaMarkup />
       {shouldShowNav && (
         <NavWrapper>
           <Nav blok={configData?.nav?.[0] || getFallbackNavData().nav[0]} />

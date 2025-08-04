@@ -12,23 +12,23 @@ The schema markup system allows you to dynamically inject structured data into y
 
 - Storyblok content includes a `code` field containing JSON schema markup
 - The `PageDataUpdater` component updates the page data context
-- The `SchemaMarkup` component (client-side) and `ServerSchemaMarkup` component (server-side) inject the schema into the page
+- The `ClientSchemaWrapper` component accesses page data and renders `ServerSchemaMarkup`
+- The `ServerSchemaMarkup` component injects the schema into the page using Next.js Script
 
 ### 2. Components
 
-#### Client-Side Schema Markup (`components/SchemaMarkup.js`)
+#### Client Schema Wrapper (`components/ClientSchemaWrapper.js`)
 
-- Runs in the browser after page load
-- Uses the `usePageData` hook to access page data
-- Dynamically injects schema scripts into the document head
-- Automatically cleans up when component unmounts
+- Client-side component that accesses page data from context
+- Conditionally renders server schema markup only when schema data exists
+- Provides a bridge between page data context and server-side schema rendering
 
 #### Server-Side Schema Markup (`components/ServerSchemaMarkup.js`)
 
-- Runs on the server for better SEO
-- Uses Next.js `Script` component
+- Uses Next.js `Script` component for optimal SEO
 - Validates schema before rendering
-- Used in dynamic pages for immediate schema availability
+- Renders schema markup in the initial HTML for search engine crawlers
+- Handles both string and object schema data
 
 #### Validation Utility (`lib/schemaUtils.js`)
 
@@ -139,8 +139,8 @@ The system automatically:
 
 The schema markup is automatically integrated into:
 
-1. **Config Component**: Client-side schema injection for all pages
-2. **Dynamic Pages**: Server-side schema injection for better SEO
+1. **Dynamic Pages**: Server-side schema injection using Next.js Script for optimal SEO
+2. **Conditional Rendering**: Only renders when schema data is available
 
 ### Error Handling
 
@@ -151,10 +151,10 @@ The schema markup is automatically integrated into:
 
 ### Performance
 
-- Server-side rendering for immediate SEO benefits
-- Client-side fallback for dynamic content
-- Automatic cleanup to prevent memory leaks
+- Server-side rendering using Next.js Script for immediate SEO benefits
+- Conditional rendering to avoid unnecessary processing
 - Validation to prevent invalid schema injection
+- No client-side JavaScript execution for schema injection
 
 ## Testing
 
