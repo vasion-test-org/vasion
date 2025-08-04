@@ -107,10 +107,10 @@ const Hero = ({ blok }) => {
             {blok.badges && (
               <BadgesSectionContainer>
                 {blok.badges_header &&
-                  blok.badges_header.map((headerItem, index) => (
+                  blok.badges_header.map((headerItem) => (
                     <BadgeEyebrow
                       {...storyblokEditable(headerItem)}
-                      key={`${headerItem.component}-${index}`}
+                      key={headerItem._uid}
                     >
                       <RichTextRenderer
                         document={headerItem?.copy}
@@ -121,9 +121,9 @@ const Hero = ({ blok }) => {
                     </BadgeEyebrow>
                   ))}
                 <BadgesContainer>
-                  {blok.badges.map((badge, index) => (
+                  {blok.badges.map((badge) => (
                     <BadgeLink
-                      key={index}
+                      key={badge._uid}
                       href={badge.link?.url || '#'}
                       target={badge.link?.target || '_self'}
                       rel="noopener noreferrer"
