@@ -278,10 +278,7 @@ const Form = ({ blok }) => {
                 </StepText>
               </Step>
               <Line className="lines" />
-
-              {languageRef.current != 'fr' && languageRef != 'de' && (
-                <Line className="lines second" />
-              )}
+              <Line className="lines second" />
               <Step>
                 <Circle className="second"> 2</Circle>
                 <StepText id="stepTwo">
