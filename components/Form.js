@@ -887,7 +887,6 @@ const FormContainer = styled.div`
   }
   .mktoFieldWrap {
     display: flex !important;
-    color: ${colors.purple200};
     ${media.fullWidth} {
     }
     ${media.tablet} {
@@ -903,13 +902,11 @@ const FormContainer = styled.div`
 
     #LblformFriendlyProductofInterest {
       width: 100% !important;
-      color: ${colors.white};
     }
 
     label {
       #formFriendlyProductofInterest {
         margin-bottom: 0.75vw !important;
-        color: ${colors.white};
       }
     }
     &:has(> label) {
