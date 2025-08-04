@@ -642,11 +642,6 @@ const BadgesSectionContainer = styled.div`
 const BadgeEyebrow = styled.div`
   margin-bottom: 0.5vw;
 
-  ${media.fullWidth} {
-    margin-bottom: 8px;
-
-  ${media.fullWidth} {
-  }
   ${media.tablet} {
     margin-bottom: 1.563vw;
   }
