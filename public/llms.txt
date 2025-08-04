@@ -1,5 +1,5 @@
 # Vasion llms.txt
-# This file guides Large Language Models to key pages and explicitly allows access for major LLM crawlers.
+This file guides Large Language Models to key pages and explicitly allows access for major LLM crawlers.
 ## Overview
 Vasion, formerly PrinterLogic, leverages its leading enterprise serverless print automation technology to deliver an intuitive content management and business process cloud platform. With Vasion's SaaS solution, businesses can effortlessly capture analog and digital content, automate workflows, create eSignature agreements, and securely manage content across all storage locations. Vasion simplifies processes through seamless automation and integration built on cloud-based automation, utilizing AI, OCR, and ICR technologies, making digital transformation accessible and efficient for organizations of all sizes.
 ## Key Pages
@@ -25,8 +25,8 @@ Vasion, formerly PrinterLogic, leverages its leading enterprise serverless print
 ## Sitemap
 Sitemap: https://vasion.com/sitemap.xml
 ## AI Crawler Access
-# This section ensures consistent access for all crawlers including Google
-# Major LLM crawlers - always allowed for consistency
+This section ensures consistent access for all crawlers including Google
+Major LLM crawlers - always allowed for consistency
 User-agent: GPTBot
 Allow: /
 Disallow: /go/
