@@ -106,16 +106,16 @@ const Hero = ({ blok }) => {
 
             {blok.badges && (
               <BadgesSectionContainer>
-                {blok.badges_header &&
-                  blok.badges_header.map((headerItem) => (
+                {blok.badge_section_text &&
+                  blok.badge_section_text.map((badge_text) => (
                     <BadgeEyebrow
-                      {...storyblokEditable(headerItem)}
-                      key={headerItem._uid}
+                      {...storyblokEditable(badge_text)}
+                      key={badge_text._uid}
                     >
                       <RichTextRenderer
-                        document={headerItem?.copy}
+                        document={badge_text?.copy}
                         responsiveTextStyles={
-                          headerItem?.responsive_text_styles
+                          badge_text?.responsive_text_styles
                         }
                       />
                     </BadgeEyebrow>
