@@ -26,6 +26,7 @@ const LongFormTextContainer = styled.div`
     width: 100%;
 
     > *:not(.component-wrapper) {
+    
       /* margin-bottom: 1.875vw;
 
       ${media.fullWidth} {
@@ -47,7 +48,7 @@ const LongFormTextContainer = styled.div`
   }
 
   div:empty {
-    height: 20px;
+    height: 1.25vw;
 
     ${media.fullWidth} {
       height: 20px;
