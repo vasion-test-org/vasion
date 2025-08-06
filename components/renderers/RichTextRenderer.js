@@ -177,24 +177,24 @@ const RichWrapper = styled.div`
     list-style: none;
     counter-reset: list-number;
     margin-left: 3.472vw;
-    margin-top: 2.5vw;
+    /* margin-top: 2.5vw; */
     margin-bottom: 2.5vw;
 
     ${media.fullWidth} {
       margin-left: 50px;
-      margin-top: 40px;
+      /* margin-top: 40px; */
       margin-bottom: 40px;
     }
 
     ${media.tablet} {
       margin-left: 4.883vw;
-      margin-top: 3.906vw;
+      /* margin-top: 3.906vw; */
       margin-bottom: 3.906vw;
     }
 
     ${media.mobile} {
       margin-left: 11.682vw;
-      margin-top: 9.346vw;
+      /* margin-top: 9.346vw; */
       margin-bottom: 9.346vw;
     }
     li:last-child {
