@@ -470,26 +470,26 @@ const HeroWrapper = styled.div`
   color: ${(props) =>
     props.theme.customtheme?.text_color?.value || props.theme.hero.textColor};
 
-    padding: ${(props) => {
+  padding: ${(props) => {
     if (props.spacingOffset === 'top') {
       return props.spacing === 'default'
         ? '6vw 9.25vw 0 9.25vw'
         : props.spacing
-          ? `${props.spacing}px 9.25vw 0 9.25vw`
-          : '6vw 9.25vw 0 9.25vw';
+        ? `${props.spacing}px 9.25vw 0 9.25vw`
+        : '6vw 9.25vw 0 9.25vw';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 9.25vw 6vw 9.25vw'
         : props.spacing
-          ? `0 9.25vw ${props.spacing}px 9.25vw`
-          : '0 9.25vw 6vw 9.25vw';
+        ? `0 9.25vw ${props.spacing}px 9.25vw`
+        : '0 9.25vw 6vw 9.25vw';
     }
     return props.spacing === 'default'
       ? '6vw 9.25vw 6vw 9.25vw'
       : props.spacing
-        ? `${props.spacing}px 9.25vw ${props.spacing}px 9.25vw`
-        : '6vw 9.25vw 6vw 9.25vw';
+      ? `${props.spacing}px 9.25vw ${props.spacing}px 9.25vw`
+      : '6vw 9.25vw 6vw 9.25vw';
   }};
 
   gap: ${(props) =>
@@ -503,26 +503,26 @@ const HeroWrapper = styled.div`
 
   ${media.fullWidth} {
     max-width: 1600px;
-        padding: ${(props) => {
+    padding: ${(props) => {
       if (props.spacingOffset === 'top') {
         return props.spacing === 'default'
           ? '96px 148px 0 148px'
           : props.spacing
-            ? `${props.spacing}px 148px 0 148px`
-            : '96px 148px 0 148px';
+          ? `${props.spacing}px 148px 0 148px`
+          : '96px 148px 0 148px';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 148px 96px 148px'
           : props.spacing
-            ? `0 148px ${props.spacing}px 148px`
-            : '0 148px 96px 148px';
+          ? `0 148px ${props.spacing}px 148px`
+          : '0 148px 96px 148px';
       }
       return props.spacing === 'default'
         ? '96px 148px 96px 148px'
         : props.spacing
-          ? `${props.spacing}px 148px ${props.spacing}px 148px`
-          : '96px 148px 96px 148px';
+        ? `${props.spacing}px 148px ${props.spacing}px 148px`
+        : '96px 148px 96px 148px';
     }};
     gap: ${(props) =>
       props.socials
@@ -536,26 +536,26 @@ const HeroWrapper = styled.div`
 
   ${media.tablet} {
     max-width: 100%;
-        padding: ${(props) => {
+    padding: ${(props) => {
       if (props.spacingOffset === 'top') {
         return props.spacing === 'default'
           ? '5.859vw 3.906vw 0 3.906vw'
           : props.spacing
-            ? `${props.spacing}px 3.906vw 0 3.906vw`
-            : '5.859vw 3.906vw 0 3.906vw';
+          ? `${props.spacing}px 3.906vw 0 3.906vw`
+          : '5.859vw 3.906vw 0 3.906vw';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 3.906vw 5.859vw 3.906vw'
           : props.spacing
-            ? `0 3.906vw ${props.spacing}px 3.906vw`
-            : '0 3.906vw 5.859vw 3.906vw';
+          ? `0 3.906vw ${props.spacing}px 3.906vw`
+          : '0 3.906vw 5.859vw 3.906vw';
       }
       return props.spacing === 'default'
         ? '5.859vw 3.906vw 5.859vw 3.906vw'
         : props.spacing
-          ? `${props.spacing}px 3.906vw ${props.spacing}px 3.906vw`
-          : '5.859vw 3.906vw 5.859vw 3.906vw';
+        ? `${props.spacing}px 3.906vw ${props.spacing}px 3.906vw`
+        : '5.859vw 3.906vw 5.859vw 3.906vw';
     }};
     gap: ${(props) =>
       props.socials
@@ -571,26 +571,26 @@ const HeroWrapper = styled.div`
     flex-direction: ${(props) => (props.socials ? 'column' : 'column-reverse')};
     align-items: ${(props) => (props.socials ? 'flex-start' : 'center')};
     max-width: 100%;
-        padding: ${(props) => {
+    padding: ${(props) => {
       if (props.spacingOffset === 'top') {
         return props.spacing === 'default'
           ? '12.5vw 5.417vw 0 5.417vw'
           : props.spacing
-            ? `${props.spacing}px 5.417vw 0 5.417vw`
-            : '12.5vw 5.417vw 0 5.417vw';
+          ? `${props.spacing}px 5.417vw 0 5.417vw`
+          : '12.5vw 5.417vw 0 5.417vw';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 5.417vw 12.5vw 5.417vw'
           : props.spacing
-            ? `0 5.417vw ${props.spacing}px 5.417vw`
-            : '0 5.417vw 12.5vw 5.417vw';
+          ? `0 5.417vw ${props.spacing}px 5.417vw`
+          : '0 5.417vw 12.5vw 5.417vw';
       }
       return props.spacing === 'default'
         ? '12.5vw 5.417vw 12.5vw 5.417vw'
         : props.spacing
-          ? `${props.spacing}px 5.417vw ${props.spacing}px 5.417vw`
-          : '12.5vw 5.417vw 12.5vw 5.417vw';
+        ? `${props.spacing}px 5.417vw ${props.spacing}px 5.417vw`
+        : '12.5vw 5.417vw 12.5vw 5.417vw';
     }};
     gap: ${(props) =>
       props.socials
