@@ -25,11 +25,12 @@ const MobileNav = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const dropdownIndex = useRef(null);
-  let currentNavItems = blok.english_nav_items;
+  let currentNavItems = blok?.english_nav_items || [];
   const isOpen = useRef(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipMessage, setTooltipMessage] = useState('');
   const [activeLanguage, setActiveLanguage] = useState('en');
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
   const slugParts = path.split('/').filter(Boolean);
   const currentLocale = ['de', 'fr'].includes(slugParts[0])
@@ -49,11 +50,35 @@ const MobileNav = ({ blok }) => {
     }
   }, [path]);
 
+  // Close language dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const languageSelector = document.querySelector('.language-selector');
+      if (languageSelector && !languageSelector.contains(event.target)) {
+        setShowLanguageDropdown(false);
+      }
+    };
+
+    if (showLanguageDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showLanguageDropdown]);
+
   if (path.startsWith('/de')) {
-    currentNavItems = blok.german_nav_items;
+    currentNavItems = blok?.german_nav_items || [];
   } else if (path.startsWith('/fr')) {
-    currentNavItems = blok.french_nav_items;
+    currentNavItems = blok?.french_nav_items || [];
   }
+
+  // Debug logging
+  console.log('MobileNav currentNavItems:', currentNavItems);
+  console.log('MobileNav blok:', blok);
+  console.log('MobileNav path:', path);
+  console.log('MobileNav currentLocale:', currentLocale);
 
   const handleNavigate = async (locale) => {
     const basePath = locale === 'en' ? '' : `/${locale}`;
@@ -72,6 +97,7 @@ const MobileNav = ({ blok }) => {
 
       if (data.story) {
         setActiveLanguage(locale);
+        setShowLanguageDropdown(false);
         router.push(newPath);
       } else {
         setTooltipMessage(
@@ -91,6 +117,10 @@ const MobileNav = ({ blok }) => {
         setShowTooltip(false);
       }, 3000);
     }
+  };
+
+  const toggleLanguageDropdown = () => {
+    setShowLanguageDropdown(!showLanguageDropdown);
   };
   const mappedNav = currentNavItems.map((item, index) => (
     <Tab key={`tab-${index}`}>
@@ -190,34 +220,154 @@ const MobileNav = ({ blok }) => {
     </Tab>
   ));
 
-  useEffect(() => {
-    const mobileAnchorTl = gsap.timeline({
-      scrollTrigger: {
-        start: '2% 1%',
-        end: '10% 90%',
-        // markers: true,
-        scrub: true,
+  // If no navigation data, show a fallback
+  if (!currentNavItems || currentNavItems.length === 0) {
+    console.log('No navigation data available, showing fallback');
+    const fallbackNav = [
+      {
+        tab_name: 'Test Tab',
+        tab_columns: [
+          {
+            column_header: 'Test Column',
+            nav_items: [
+              {
+                _uid: 'test-item',
+                item_copy: {
+                  content: [
+                    { type: 'paragraph', content: [{ text: 'Test Item' }] },
+                  ],
+                },
+                item_link: { cached_url: '#' },
+                icon: 'home',
+              },
+            ],
+          },
+        ],
       },
-    });
+    ];
 
-    mobileAnchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
+    const fallbackMappedNav = fallbackNav.map((item, index) => (
+      <Tab key={`fallback-tab-${index}`}>
+        <TabHeader className="tabHeader">{item.tab_name}</TabHeader>
+        <TabDropdown className="tabDropdowns" id={`tabHeader-${index}`}>
+          {item.tab_columns.map((column, colIndex) => (
+            <NavItemsDiv key={`fallback-column-${colIndex}`}>
+              {column?.column_header && (
+                <ColumnHeader>{column.column_header}</ColumnHeader>
+              )}
+              <NavItemsContainer>
+                {column.nav_items.map((item, itemIndex) => (
+                  <NavItem
+                    key={`fallback-item-${item._uid}`}
+                    onClick={() => console.log('Test item clicked')}
+                    role="link"
+                    tabIndex={0}
+                  >
+                    <NavCopy>
+                      <NavItemCopy>
+                        <RichTextRenderer document={item.item_copy} />
+                      </NavItemCopy>
+                    </NavCopy>
+                  </NavItem>
+                ))}
+              </NavItemsContainer>
+            </NavItemsDiv>
+          ))}
+        </TabDropdown>
+      </Tab>
+    ));
 
-    ScrollTrigger.create({
-      trigger: '.mobileNav',
-      start: 'top top',
-      end: () => `${document.body.scrollHeight - window.innerHeight}px`,
-      pin: true,
-      pinSpacing: false,
-      // markers: true,
-    });
-  }, []);
+    return (
+      <>
+        <TopNav>
+          <Banner>
+            <BannerMessage>{blok?.banner || 'Test Banner'}</BannerMessage>
+            <BannerLink>
+              {blok?.banner_link?.map(($buttonData) => (
+                <div
+                  {...storyblokEditable($buttonData)}
+                  key={$buttonData?.link_text}
+                >
+                  <Button
+                    key={$buttonData?.link_text}
+                    $buttonData={$buttonData}
+                  />
+                </div>
+              ))}
+            </BannerLink>
+          </Banner>
+        </TopNav>
+        <MainWrapper className="mainNavWrapper mobileNav">
+          <a href="/">
+            <VasionLogo src="/images/logos/vasion-logo-purple.webp" />
+          </a>
+          <HamburgerContainer className="hamburger">
+            <HamSlice id="slice-0" />
+            <ShortHamSlice id="slice-1" />
+            <HamSlice id="slice-2" />
+          </HamburgerContainer>
+          <Dropdown className="mobileDropdown">
+            {fallbackMappedNav}
+            <ButtonContainer>
+              <LanguageSelectorContainer>
+                <LanguageSelector
+                  className="language-selector"
+                  onClick={toggleLanguageDropdown}
+                >
+                  <LanguageIcon />
+                  {showLanguageDropdown && (
+                    <LanguageDropdown>
+                      <LanguageItem
+                        onClick={() => handleNavigate('en')}
+                        isActive={activeLanguage === 'en'}
+                      >
+                        English
+                      </LanguageItem>
+                      <LanguageItem
+                        onClick={() => handleNavigate('fr')}
+                        isActive={activeLanguage === 'fr'}
+                      >
+                        French
+                      </LanguageItem>
+                      <LanguageItem
+                        onClick={() => handleNavigate('de')}
+                        isActive={activeLanguage === 'de'}
+                      >
+                        German
+                      </LanguageItem>
+                    </LanguageDropdown>
+                  )}
+                  {showTooltip && <Tooltip>{tooltipMessage}</Tooltip>}
+                </LanguageSelector>
+              </LanguageSelectorContainer>
+              {blok?.button?.map(($buttonData) => (
+                <div
+                  {...storyblokEditable($buttonData)}
+                  key={$buttonData?.link_text}
+                >
+                  <Button $buttonData={$buttonData} stretch />
+                </div>
+              ))}
+            </ButtonContainer>
+          </Dropdown>
+          <AnchorNavigator />
+        </MainWrapper>
+      </>
+    );
+  }
 
   useEffect(() => {
+    console.log('MobileNav useEffect - setting up dropdowns');
+    console.log('GSAP available:', typeof gsap !== 'undefined');
+
     gsap.set('.tabDropdowns', { height: 0, display: 'none' });
     gsap.set('.mobileDropdown', { height: 0, display: 'none' });
 
     const allTabs = gsap.utils.toArray('.tabHeader');
     const hamburger = document.querySelector('.hamburger');
+
+    console.log('Found tabs:', allTabs.length);
+    console.log('Found hamburger:', !!hamburger);
 
     let tl = gsap.timeline({ paused: true });
     let mobileOpen = false; // <- track open state
@@ -226,13 +376,18 @@ const MobileNav = ({ blok }) => {
       .timeline({ paused: true, reversed: true })
       .set('#mainDrop', { padding: '4.673vw 0' })
       .to('#mainDrop', { height: 'auto', duration: 0.5 })
+
       .to('#slice-0', { top: '1.95vw', rotate: 45 }, '<')
       .to('#slice-1', { opacity: 0 }, '<')
       .to('#slice-2', { top: '-1.075vw', rotate: -45 }, '<');
 
     const toggleMobileDropdown = () => {
+      console.log('Toggle mobile dropdown clicked');
       const dropdown = document.querySelector('.mobileDropdown');
-      if (!dropdown) return;
+      if (!dropdown) {
+        console.error('Mobile dropdown element not found');
+        return;
+      }
 
       if (mobileOpen) {
         gsap.to(dropdown, {
@@ -244,7 +399,7 @@ const MobileNav = ({ blok }) => {
       } else {
         gsap.set(dropdown, { display: 'flex' });
         gsap.to(dropdown, {
-          height: '100vh',
+          height: '91vh',
           duration: 0.4,
           ease: 'power2.inOut',
         });
@@ -264,9 +419,11 @@ const MobileNav = ({ blok }) => {
     }
 
     const openDropdown = (index) => {
+      console.log('Opening dropdown for index:', index);
       tl.clear();
 
       if (dropdownIndex.current === index && isOpen.current) {
+        console.log('Closing dropdown for index:', index);
         tl.to(`#tabHeader-${index}`, { height: 0 }).set(`#tabHeader-${index}`, {
           display: 'none',
         });
@@ -287,19 +444,48 @@ const MobileNav = ({ blok }) => {
       tl.play();
     };
 
-    allTabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => openDropdown(index));
+    // Store event listener functions for proper cleanup
+    const tabClickHandlers = allTabs.map((tab, index) => {
+      const handler = () => openDropdown(index);
+      tab.addEventListener('click', handler);
+      console.log(`Added click handler for tab ${index}`);
+      return { tab, handler };
     });
 
     return () => {
-      allTabs.forEach((tab, index) => {
-        tab.removeEventListener('click', () => openDropdown(index));
+      console.log('Cleaning up MobileNav event listeners');
+      // Clean up tab event listeners
+      tabClickHandlers.forEach(({ tab, handler }) => {
+        tab.removeEventListener('click', handler);
       });
 
+      // Clean up hamburger event listener
       if (hamburger) {
         hamburger.removeEventListener('click', toggleMobileDropdown);
       }
     };
+  }, []);
+
+  useEffect(() => {
+    const mobileAnchorTl = gsap.timeline({
+      scrollTrigger: {
+        start: '2% 1%',
+        end: '10% 90%',
+        // markers: true,
+        scrub: true,
+      },
+    });
+
+    mobileAnchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
+
+    ScrollTrigger.create({
+      trigger: '.mobileNav',
+      start: 'top top',
+      end: () => `${document.body.scrollHeight - window.innerHeight}px`,
+      pin: true,
+      pinSpacing: false,
+      // markers: true,
+    });
   }, []);
 
   return (
@@ -334,28 +520,37 @@ const MobileNav = ({ blok }) => {
         <Dropdown className="mobileDropdown">
           {mappedNav}
           <ButtonContainer>
-            <LanguageItems>
-              <LanguageItem
-                onClick={() => handleNavigate('en')}
-                isActive={activeLanguage === 'en'}
+            <LanguageSelectorContainer>
+              <LanguageSelector
+                className="language-selector"
+                onClick={toggleLanguageDropdown}
               >
-                English
-              </LanguageItem>
-              <LanguageItem
-                onClick={() => handleNavigate('fr')}
-                isActive={activeLanguage === 'fr'}
-              >
-                French
-              </LanguageItem>
-              <LanguageItem
-                onClick={() => handleNavigate('de')}
-                isActive={activeLanguage === 'de'}
-              >
-                German
-              </LanguageItem>
-            </LanguageItems>
-            {/* <LanguageIcon /> */}
-            {showTooltip && <Tooltip>{tooltipMessage}</Tooltip>}
+                <LanguageIcon />
+                {showLanguageDropdown && (
+                  <LanguageDropdown>
+                    <LanguageItem
+                      onClick={() => handleNavigate('en')}
+                      isActive={activeLanguage === 'en'}
+                    >
+                      English
+                    </LanguageItem>
+                    <LanguageItem
+                      onClick={() => handleNavigate('fr')}
+                      isActive={activeLanguage === 'fr'}
+                    >
+                      French
+                    </LanguageItem>
+                    <LanguageItem
+                      onClick={() => handleNavigate('de')}
+                      isActive={activeLanguage === 'de'}
+                    >
+                      German
+                    </LanguageItem>
+                  </LanguageDropdown>
+                )}
+                {showTooltip && <Tooltip>{tooltipMessage}</Tooltip>}
+              </LanguageSelector>
+            </LanguageSelectorContainer>
             {blok?.button?.map(($buttonData) => (
               <div
                 {...storyblokEditable($buttonData)}
@@ -382,9 +577,11 @@ const ButtonContainer = styled.div`
   ${media.mobile} {
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
     background: ${colors.white};
     width: 100%;
     padding: 4.167vw 3.333vw;
+    flex: 1;
     gap: 3.333vw;
   }
 `;
@@ -564,7 +761,7 @@ const NavItem = styled.div`
 
 const ColumnHeader = styled.p`
   ${media.mobile} {
-    margin-bottom: 3.333vw;
+    margin: 3.333vw 2.2vw;
   }
   ${text.bodySm};
   color: ${colors.txtSubtle};
@@ -588,6 +785,12 @@ const NavItemsDiv = styled.div`
   }
 `;
 const TabDropdown = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1.667vw 1.667vw 5vw 1.667vw;
+  gap: 3.333vw;
+  /* overflow: hidden; */ /* Temporarily removed for testing */
+
   ${media.mobile} {
     display: flex;
     flex-direction: column;
@@ -597,6 +800,14 @@ const TabDropdown = styled.div`
   }
 `;
 const TabHeader = styled.div`
+  ${text.bodySm};
+  padding: 3.542vw 3.333vw;
+  height: 10.833vw;
+  /* margin-bottom: 3.333vw; */
+  width: 100%;
+  background: rgba(61, 37, 98, 0.05);
+  cursor: pointer; /* Add cursor pointer for better UX */
+
   ${media.mobile} {
     ${text.bodySm};
     padding: 3.542vw 3.333vw;
@@ -620,7 +831,7 @@ const Dropdown = styled.div`
     position: absolute;
     display: none;
     flex-direction: column;
-    height: 100vh;
+    height: 91vh;
     width: 100%;
     top: 12.708vw;
     left: 0;
@@ -642,6 +853,20 @@ const VasionLogo = styled.img`
   }
 `;
 const MainWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  background: ${colors.white};
+  width: 100%;
+  max-width: 100%;
+  z-index: 10;
+  height: 12.821vw;
+  padding: 0 3.333vw;
+  /* border: 1px solid blue; */
+
   ${media.mobile} {
     position: relative;
     display: flex;
@@ -663,6 +888,7 @@ const LanguageIcon = styled(LanguageGlobe)`
   ${media.mobile} {
     width: 4.673vw;
     height: 4.673vw;
+    cursor: pointer;
   }
 `;
 
@@ -674,11 +900,50 @@ const LanguageItem = styled.div`
     padding: 1.667vw;
     border-radius: 0.417vw;
     cursor: pointer;
+    white-space: nowrap;
 
     &:hover {
       background-color: ${colors.primaryOrange};
       color: ${colors.white};
     }
+  }
+`;
+
+const LanguageSelectorContainer = styled.div`
+  ${media.mobile} {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 3.333vw;
+  }
+`;
+
+const LanguageSelector = styled.div`
+  ${media.mobile} {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+`;
+
+const LanguageDropdown = styled.div`
+  ${media.mobile} {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: ${colors.white};
+    border: 1px solid ${colors.ghostGrey};
+    border-radius: 0.417vw;
+    padding: 1.667vw;
+    box-shadow: 0 0.417vw 0.833vw rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 20.833vw;
+    display: flex;
+    flex-direction: column;
+    gap: 1.667vw;
   }
 `;
 
