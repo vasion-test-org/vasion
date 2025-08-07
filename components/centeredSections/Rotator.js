@@ -39,6 +39,7 @@ const Rotator = ({ rotatorData }) => {
 
       <--------------------------------------> 
    */
+
   useEffect(() => {
     const imagePromises = backgroundImages.map((bg) => {
       return new Promise((resolve, reject) => {
@@ -61,7 +62,15 @@ const Rotator = ({ rotatorData }) => {
 
   const handleTabClick = (index) => {
     if (mobile) {
-      setActiveCardIndex(index);
+      gsap.to('#mobile-active-card', {
+        autoAlpha: 0,
+        duration: 0.2,
+        onComplete: () => {
+          setActiveCardIndex(index);
+          gsap.to('#mobile-active-card', { autoAlpha: 1, duration: 0.3 });
+        },
+      });
+
       gsap.to(`.rotator-tabs`, { background: 'transparent', duration: 0.25 });
       gsap.to(`#rotator-tab-${index}`, {
         background: 'linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%)',
@@ -142,7 +151,7 @@ const Rotator = ({ rotatorData }) => {
     : [];
 
   const mobileActiveCard = mobile && rotatorData[activeCardIndex] && (
-    <MobileContainer key={`mobile-${activeCardIndex}`}>
+    <MobileContainer key={`mobile-${activeCardIndex}`} id="mobile-active-card">
       <ContentContainer>
         {rotatorData[activeCardIndex].copy.map((item) =>
           copycomponents.includes(item.component) ? (
