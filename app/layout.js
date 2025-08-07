@@ -1,25 +1,25 @@
-import StoryblokProvider from "@/components/StoryblokProvider";
-import { ThemeProviderWrapper } from "@/context/ThemeContext";
-import { ThankYouProvider } from "@/context/ThankYouContext";
-import { PageDataProvider } from "@/context/PageDataContext";
-import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
-import FormTracking from "@/components/FormTracking";
-import Script from "next/script";
-import "./globals.css";
-import ScrollSmootherWrapper from "@/components/ScrollSmoothWrapper";
-import Providers from "@/components/providers";
-import Config from "@/components/Config";
-import { getStoryblokApi } from "@/lib/storyblok";
-import { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/next";
+import StoryblokProvider from '@/components/StoryblokProvider';
+import { ThemeProviderWrapper } from '@/context/ThemeContext';
+import { ThankYouProvider } from '@/context/ThankYouContext';
+import { PageDataProvider } from '@/context/PageDataContext';
+import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
+import FormTracking from '@/components/FormTracking';
+import Script from 'next/script';
+import './globals.css';
+import ScrollSmootherWrapper from '@/components/ScrollSmoothWrapper';
+import Providers from '@/components/providers';
+import Config from '@/components/Config';
+import { getStoryblokApi } from '@/lib/storyblok';
+import { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
-  metadataBase: new URL("https://vasion.com"),
+  metadataBase: new URL('https://vasion.com'),
   title: {
-    template: "%s | Vasion",
-    default: "Vasion",
+    template: '%s | Vasion',
+    default: 'Vasion',
   },
-  description: "Vasion site",
+  description: 'Vasion site',
 };
 
 export default async function RootLayout({ children }) {
