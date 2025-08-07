@@ -737,7 +737,7 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value:
-              "frame-ancestors 'self' https://app.storyblok.com https://editor.storyblok.com https://m.storyblok.com;",
+              "frame-ancestors 'self' https://app.storyblok.com https://editor.storyblok.com https://m.storyblok.com https://app.zoominfo.com;",
           },
         ],
       },
