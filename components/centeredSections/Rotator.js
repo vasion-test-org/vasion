@@ -30,12 +30,14 @@ const Rotator = ({ rotatorData }) => {
       card?.background_images[2] || 'unset',
     ),
   );
+
   /*
-    <--------------------------------------> 
       ImagesLoaded is never actually used but this imagesPromise PreRenders
       the images making them available/accessible in the browsers cache. 
       Tested with and without and without this there is a noticable glitch 
       when react trys to access background: url(${props.backgroundImage})
+
+      <--------------------------------------> 
    */
   useEffect(() => {
     const imagePromises = backgroundImages.map((bg) => {
@@ -46,17 +48,25 @@ const Rotator = ({ rotatorData }) => {
         img.src = bg.filename;
       });
     });
-
+    /*
+      <--------------------------------------> 
+   */
     Promise.all(imagePromises)
       .then(() => setImagesLoaded(true))
-      .catch(() => setImagesLoaded(true));
+      .catch((error) => {
+        console.error('Failed to preload one or more rotator images:', error);
+        setImagesLoaded(true);
+      });
   }, [backgroundImages]);
-  /*  <--------------------------------------->*/
 
   const handleTabClick = (index) => {
     if (mobile) {
-      // Mobile: just update state
       setActiveCardIndex(index);
+      gsap.to(`.rotator-tabs`, { background: 'transparent', duration: 0.25 });
+      gsap.to(`#rotator-tab-${index}`, {
+        background: 'linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%)',
+        duration: 0.25,
+      });
     } else {
       const tl = gsap.timeline({});
       tl.to('.rotator', { autoAlpha: 0, filter: 'blur(2px)', duration: 0.45 })
@@ -72,11 +82,6 @@ const Rotator = ({ rotatorData }) => {
           '<',
         );
     }
-
-    gsap.to(`.rotator-tabs`, { background: 'transparent', duration: 0.25 });
-    gsap.to(`#rotator-tab-${index}`, {
-      background: 'linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%)',
-    });
   };
 
   useEffect(() => {
@@ -104,40 +109,38 @@ const Rotator = ({ rotatorData }) => {
     </Tab>
   ));
 
-  const cardMap = rotatorData.map((card, index) => {
-    const cardBg = backgroundImages[index];
-    return (
-      //<------------Desktop----------------->
-      <React.Fragment key={`${card.component}-${index}`}>
-        {!mobile && (
-          <BackgroundImage
-            id={`rotator-${index}`}
-            className="rotator"
-            backgroundImage={cardBg.filename}
-          >
-            <ContentContainer>
-              {card.copy.map((item, itemIndex) =>
-                copycomponents.includes(item.component) ? (
-                  <RichTextRenderer
-                    key={`card-richtext-${itemIndex}`}
-                    document={item.copy}
-                    blok={item}
-                  />
-                ) : (
-                  <ComponentRenderer
-                    key={`component-${itemIndex}`}
-                    blok={item}
-                  />
-                ),
-              )}
-            </ContentContainer>
-          </BackgroundImage>
-        )}
-      </React.Fragment>
-    );
-  });
+  const cardMap = !mobile
+    ? rotatorData.map((card, index) => {
+        const cardBg = backgroundImages[index];
+        return (
+          <React.Fragment key={`${card.component}-${index}`}>
+            <BackgroundImage
+              id={`rotator-${index}`}
+              className="rotator"
+              backgroundImage={cardBg.filename}
+            >
+              <ContentContainer>
+                {card.copy.map((item, itemIndex) =>
+                  copycomponents.includes(item.component) ? (
+                    <RichTextRenderer
+                      key={`card-richtext-${itemIndex}`}
+                      document={item.copy}
+                      blok={item}
+                    />
+                  ) : (
+                    <ComponentRenderer
+                      key={`component-${itemIndex}`}
+                      blok={item}
+                    />
+                  ),
+                )}
+              </ContentContainer>
+            </BackgroundImage>
+          </React.Fragment>
+        );
+      })
+    : [];
 
-  // <----------------Mobile------------------>
   const mobileActiveCard = mobile && rotatorData[activeCardIndex] && (
     <MobileContainer key={`mobile-${activeCardIndex}`}>
       <ContentContainer>
@@ -243,29 +246,27 @@ const CardBackground = styled.div`
   background: ${colors.purple100};
   width: 81.5vw;
   border-radius: 1.25vw;
-
-  /* Dynamic height for mobile, fixed for desktop */
-  ${(props) =>
-    props.mobile ? 'height: auto; min-height: 50vw;' : 'height: 38.875vw;'}
+  height: ${(props) => (props.mobile ? 'auto' : '38.875vw')};
+  min-height: ${(props) => (props.mobile ? '50vw' : 'unset')};
 
   ${media.fullWidth} {
     width: 1304px;
     border-radius: 20px;
-    ${(props) =>
-      props.mobile ? 'height: auto; min-height: 400px;' : 'height: 622px;'}
+    height: ${(props) => (props.mobile ? 'auto' : '622px')};
+    min-height: ${(props) => (props.mobile ? '400px' : 'unset')};
   }
 
   ${media.tablet} {
     width: 84.375vw;
     border-radius: 1.953vw;
-    ${(props) =>
-      props.mobile ? 'height: auto; min-height: 60vw;' : 'height: 60.742vw;'}
+    height: ${(props) => (props.mobile ? 'auto' : '60.742vw')};
+    min-height: ${(props) => (props.mobile ? '60vw' : 'unset')};
   }
 
   ${media.mobile} {
     width: 89.167vw;
     border-radius: 4.167vw;
-    height: auto; /* Always auto height on mobile */
+    height: auto;
     min-height: 80vw;
   }
 `;
