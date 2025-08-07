@@ -1,7 +1,7 @@
-'use client'
-import { useCallback, useEffect, useState } from "react"
-import { desktop, tablet, mobile } from "@/styles/media"
-import { isBrowser } from "./functions"
+'use client';
+import { useCallback, useEffect, useState } from 'react';
+import { desktop, tablet, mobile } from '@/styles/media';
+import { isBrowser } from './functions';
 
 export default function useMedia(fw, d, t, m) {
   const [current, setCurrent] = useState(() => {
@@ -32,8 +32,8 @@ export default function useMedia(fw, d, t, m) {
 
   useEffect(() => {
     if (isBrowser()) {
-      window.addEventListener("resize", handleUpdate);
-      return () => window.removeEventListener("resize", handleUpdate);
+      window.addEventListener('resize', handleUpdate);
+      return () => window.removeEventListener('resize', handleUpdate);
     }
   }, [handleUpdate]);
 
