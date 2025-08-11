@@ -201,21 +201,21 @@ const RichWrapper = styled.div`
       margin-bottom: 0;
     }
     li {
-      min-height: 2.5vw;
+      /* min-height: 2.5vw; */
       margin-bottom: 1.667vw;
 
       ${media.fullWidth} {
-        min-height: 36px;
+        /* min-height: 36px; */
         margin-bottom: 24px;
       }
 
       ${media.tablet} {
-        min-height: 3.516vw;
+        /* min-height: 3.516vw; */
         margin-bottom: 2.344vw;
       }
 
       ${media.mobile} {
-        min-height: 8.411vw;
+        /* min-height: 8.411vw; */
         margin-bottom: 5.607vw;
       }
     }
