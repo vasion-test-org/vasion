@@ -925,5 +925,19 @@ const FormContainer = styled.div`
   .mktoAsterix {
     display: none !important;
   }
+
+  p[class*='LegalStatement'] {
+    padding-top: 0.625vw;
+
+    ${media.fullWidth} {
+      padding-top: 10px;
+    }
+    ${media.tablet} {
+      padding-top: 0.977vw;
+    }
+    ${media.mobile} {
+      padding-top: 8.083vw;
+    }
+  }
 `;
 export default Form;
