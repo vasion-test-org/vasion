@@ -52,7 +52,7 @@ const TwoColumnList = ({ blok }) => {
     >
       <ThemeProvider theme={selectedTheme}>
         <Wrapper {...storyblokEditable(blok)}>
-          <IntroContent alignment={blok.alignment}>{introMap}</IntroContent>
+          {blok.intro_content && <IntroContent alignment={blok.alignment}>{introMap}</IntroContent>}
           <ColumnContainer comparison={blok.comparison}>
             <Column doublecolumn={column2.length < 0}>{column1}</Column>
             {column2.length > 0 && <Column>{column2}</Column>}
@@ -202,67 +202,67 @@ const Wrapper = styled.div`
   justify-content: center;
   gap: 2.5vw;
   color: ${(props) => props.theme.two_column_list.textColor};
-  padding: 5vw 0vw;
+  /* padding: 5vw 0vw; */
 
   ${media.fullWidth} {
     gap: 40px;
-    padding: 80px 0px;
+    /* padding: 80px 0px; */
   }
 
   ${media.tablet} {
     gap: 3.906vw;
-    padding: 5.859vw 0vw;
+    /* padding: 5.859vw 0vw; */
   }
 
   ${media.mobile} {
     gap: 8.333vw;
-    padding: 8.333vw 0vw;
+    /* padding: 8.333vw 0vw; */
   }
 `;
 const ComponentWrapper = styled.div`
   padding: ${(props) => {
     if (props.spacingOffset === 'top') {
       return props.spacing === 'default'
-        ? '3.75vw 0 0'
+        ? '3.75vw 0 0 0'
         : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '3.75vw 0 0';
+        ? `${props.spacing}px 0 0 0`
+        : '3.75vw 0 0 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
-        ? '0 0 3.75vw'
+        ? '0 0 3.75vw 0'
         : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 3.75vw';
+        ? `0 0 ${props.spacing}px 0`
+        : '0 0 3.75vw 0';
     }
     return props.spacing === 'default'
-      ? '3.75vw 0'
+      ? '3.75vw 0 3.75vw 0'
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0';
+      ? `${props.spacing}px 0 ${props.spacing}px 0`
+      : '3.75vw 0 3.75vw 0';
   }};
 
   ${media.fullWidth} {
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
         return props.spacing === 'default'
-          ? '60px 0 0'
+          ? '60px 0 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+          ? `${props.spacing}px 0 0 0`
+          : '60px 0 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
-          ? '0 0 60px'
+          ? '0 0 60px 0'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+          ? `0 0 ${props.spacing}px 0`
+          : '0 0 60px 0';
       }
       return props.spacing === 'default'
-        ? '60px 0'
+        ? '60px 0 60px 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+        ? `${props.spacing}px 0 ${props.spacing}px 0`
+        : '60px 0 60px 0';
     }};
   }
 
@@ -270,23 +270,23 @@ const ComponentWrapper = styled.div`
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
         return props.spacing === 'default'
-          ? '5.859vw 0 0'
+          ? '5.859vw 0 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '5.859vw 0 0';
+          ? `${props.spacing}px 0 0 0`
+          : '5.859vw 0 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
-          ? '0 0 5.859vw'
+          ? '0 0 5.859vw 0'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 5.859vw';
+          ? `0 0 ${props.spacing}px 0`
+          : '0 0 5.859vw 0';
       }
       return props.spacing === 'default'
-        ? '5.859vw 0'
+        ? '5.859vw 0 5.859vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '5.859vw 0';
+        ? `${props.spacing}px 0 ${props.spacing}px 0`
+        : '5.859vw 0 5.859vw 0';
     }};
   }
 
@@ -294,24 +294,24 @@ const ComponentWrapper = styled.div`
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
         return props.spacing === 'default'
-          ? '12.5vw 0 0'
+          ? '12.5vw 0 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '12.5vw 0 0';
+          ? `${props.spacing}px 0 0 0`
+          : '12.5vw 0 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
-          ? '0 0 12.5vw'
+          ? '0 0 12.5vw 0'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 12.5vw';
+          ? `0 0 ${props.spacing}px 0`
+          : '0 0 12.5vw 0';
       }
       return props.spacing === 'default'
-        ? '12.5vw 0'
+        ? '12.5vw 0 12.5vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0';
+        ? `${props.spacing}px 0 ${props.spacing}px 0`
+        : '12.5vw 0 12.5vw 0';
     }};
-
+  }
 `;
 export default TwoColumnList;
