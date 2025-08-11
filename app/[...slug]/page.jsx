@@ -37,6 +37,12 @@ export async function generateMetadata({ params, searchParams }) {
   if (currentLocale === 'en') {
     canonicalPath = canonicalPath.replace(/^en\//, '');
   }
+
+  // For localized homepages, remove /home/ from the canonical URL
+  if (currentLocale !== 'en' && slugArray.length === 1) {
+    canonicalPath = currentLocale;
+  }
+
   const canonicalUrl = `${basePath}/${canonicalPath}`.replace(/\/+$/, '');
 
   // Build alternate links including self-referencing
@@ -46,8 +52,12 @@ export async function generateMetadata({ params, searchParams }) {
   if (currentLocale === 'en') {
     alternateLinks['en'] = canonicalUrl;
   } else {
-    alternateLinks[currentLocale] =
-      `${basePath}/${currentLocale}/${storySlug}`.replace(/\/+$/, '');
+    // For localized homepages, don't include /home/ in the URL
+    const localizedUrl =
+      slugArray.length === 1
+        ? `${basePath}/${currentLocale}`
+        : `${basePath}/${currentLocale}/${storySlug}`;
+    alternateLinks[currentLocale] = localizedUrl.replace(/\/+$/, '');
   }
 
   // Add other language versions if they exist
@@ -60,22 +70,59 @@ export async function generateMetadata({ params, searchParams }) {
       );
 
       if (translatedStory) {
-        const translatedUrl =
-          translation.lang === 'en'
-            ? `${basePath}/${translation.path}`.replace(/\/+$/, '')
-            : `${basePath}/${translation.lang}/${translation.path}`.replace(
-                /\/+$/,
-                ''
-              );
+        let translatedUrl;
+        if (translation.lang === 'en') {
+          // For English translations, remove /home/ if it's a homepage
+          const path = translation.path === 'home' ? '' : translation.path;
+          translatedUrl = `${basePath}/${path}`.replace(/\/+$/, '');
+        } else {
+          // For other languages, handle homepages correctly
+          const path =
+            translation.path === 'home'
+              ? translation.lang
+              : `${translation.lang}/${translation.path}`;
+          translatedUrl = `${basePath}/${path}`.replace(/\/+$/, '');
+        }
 
         alternateLinks[translation.lang] = translatedUrl;
       }
     }
   }
 
-  // Add x-default pointing to English version (or current if English doesn't exist)
-  const englishVersion = alternateLinks['en'] || canonicalUrl;
-  alternateLinks['x-default'] = englishVersion;
+  // Always ensure English version is included for non-English pages
+  if (currentLocale !== 'en') {
+    // Try to get the English version from translated_slugs first
+    let englishUrl = null;
+    if (story.translated_slugs) {
+      const englishTranslation = story.translated_slugs.find(
+        (t) => t.lang === 'en'
+      );
+      if (englishTranslation) {
+        // For English translations, remove /home/ if it's a homepage
+        const path =
+          englishTranslation.path === 'home' ? '' : englishTranslation.path;
+        englishUrl = `${basePath}/${path}`.replace(/\/+$/, '');
+      }
+    }
+
+    // If no English translation found, construct the English URL
+    if (!englishUrl) {
+      // For localized homepages, the English version should point to root
+      if (slugArray.length === 1) {
+        englishUrl = basePath;
+      } else {
+        englishUrl = `${basePath}/${storySlug}`.replace(/\/+$/, '');
+      }
+    }
+
+    alternateLinks['en'] = englishUrl;
+  }
+
+  // Always set x-default to point to the English version
+  const englishVersion = alternateLinks['en'];
+  if (englishVersion) {
+    alternateLinks['x-default'] = englishVersion;
+  }
 
   // Check if page should be no-index, no-follow
   const shouldNoIndex = content.index === false;

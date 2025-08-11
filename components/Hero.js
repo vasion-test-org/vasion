@@ -12,6 +12,7 @@ import LogoCube from './LogoCube';
 import LightboxBtn from '@/components/LightboxButton';
 import { useRouter } from 'next/navigation';
 import useMedia from '@/functions/useMedia';
+import text from '@/styles/text';
 
 const Hero = ({ blok }) => {
   const router = useRouter();
@@ -32,7 +33,7 @@ const Hero = ({ blok }) => {
           customTheme?.background_media?.[1]?.filename ||
             customTheme?.background_media?.[0]?.filename,
           customTheme?.background_media?.[2]?.filename ||
-            customTheme?.background_media?.[0]?.filename
+            customTheme?.background_media?.[0]?.filename,
         )
       : null;
   const bg_color =
@@ -86,23 +87,7 @@ const Hero = ({ blok }) => {
                 />
               </div>
             ))}
-            {blok.badges && (
-              <BadgesContainer>
-                {blok.badges.map((badge, index) => (
-                  <BadgeLink
-                    key={index}
-                    href={badge.link?.url || '#'}
-                    target={badge.link?.target || '_self'}
-                    rel='noopener noreferrer'
-                  >
-                    <BadgeImage
-                      src={badge.logo?.filename}
-                      alt={badge.logo?.alt || 'Badge'}
-                    />
-                  </BadgeLink>
-                ))}
-              </BadgesContainer>
-            )}
+
             {!blok?.socials && (
               <ButtonRow>
                 {blok?.button_group?.map(($buttonData) => (
@@ -117,6 +102,40 @@ const Hero = ({ blok }) => {
                   </div>
                 ))}
               </ButtonRow>
+            )}
+
+            {blok.badges && (
+              <BadgesSectionContainer>
+                {blok.badge_section_text &&
+                  blok.badge_section_text.map((badge_text) => (
+                    <BadgeEyebrow
+                      {...storyblokEditable(badge_text)}
+                      key={badge_text._uid}
+                    >
+                      <RichTextRenderer
+                        document={badge_text?.copy}
+                        responsiveTextStyles={
+                          badge_text?.responsive_text_styles
+                        }
+                      />
+                    </BadgeEyebrow>
+                  ))}
+                <BadgesContainer>
+                  {blok.badges.map((badge) => (
+                    <BadgeLink
+                      key={badge._uid}
+                      href={badge.link?.url || '#'}
+                      target={badge.link?.target || '_self'}
+                      rel="noopener noreferrer"
+                    >
+                      <BadgeImage
+                        src={badge.logo?.filename}
+                        alt={badge.logo?.alt || 'Badge'}
+                      />
+                    </BadgeLink>
+                  ))}
+                </BadgesContainer>
+              </BadgesSectionContainer>
             )}
             {blok?.light_box_button &&
               blok?.light_box_button[0]?.lightbox_text && (
@@ -136,25 +155,25 @@ const Hero = ({ blok }) => {
               <SocialLogoContainer>
                 <SocialLink href={'https://www.facebook.com/VasionSoftware'}>
                   <SocailLogo
-                    loading='lazy'
-                    src='/images/icons/Facebook.webp'
-                    alt='facebook-logo'
+                    loading="lazy"
+                    src="/images/icons/Facebook.webp"
+                    alt="facebook-logo"
                   />
                 </SocialLink>
                 <SocialLink
                   href={'https://www.linkedin.com/company/printerlogic/'}
                 >
                   <SocailLogo
-                    loading='lazy'
-                    src='/images/icons/LinkedIn.webp'
-                    alt='linkedin-logo'
+                    loading="lazy"
+                    src="/images/icons/LinkedIn.webp"
+                    alt="linkedin-logo"
                   />
                 </SocialLink>
                 <SocialLink href={'https://x.com/VasionSoftware'}>
                   <SocailLogo
-                    loading='lazy'
-                    src='/images/icons/Twitter.webp'
-                    alt='twitter-logo'
+                    loading="lazy"
+                    src="/images/icons/Twitter.webp"
+                    alt="twitter-logo"
                   />
                 </SocialLink>
               </SocialLogoContainer>
@@ -178,25 +197,25 @@ const Hero = ({ blok }) => {
               <ReviewButton
                 src={'/images/reviewButton.webp'}
                 alt={'review-us'}
-                width='164'
-                height='62'
+                width="164"
+                height="62"
                 onClick={() => handleNavigate('/review-us')}
               />
               <ReviewButton
                 src={'/images/reviewButton-1.webp'}
                 alt={'G2 Reviews'}
-                width='164'
-                height='62'
+                width="164"
+                height="62"
                 onClick={() => handleNavigate('/review-us')}
               />
               <ReviewButton
                 src={'/images/reviewButton-2.webp'}
                 alt={'Review Us'}
-                width='164'
-                height='62'
+                width="164"
+                height="62"
                 onClick={() => handleNavigate('/review-us')}
               />
-              <AnchorButton href='#reddit-reviews'>
+              <AnchorButton href="#reddit-reviews">
                 <ReviewButton
                   src={'/images/ReviewButton-4.webp'}
                   alt={'Reviews'}
@@ -262,7 +281,7 @@ const ReviewButtons = styled.div`
   }
 
   ${media.mobile} {
-    top: 40.84vw;
+    top: 65.84vw;
     right: 8.191vw;
   }
 `;
@@ -389,8 +408,8 @@ const ContentWrapper = styled.div`
     return props.centered_image
       ? 'center'
       : props.centered
-      ? 'center'
-      : 'start';
+        ? 'center'
+        : 'start';
   }};
 
   width: ${(props) =>
@@ -456,31 +475,31 @@ const HeroWrapper = styled.div`
       return props.spacing === 'default'
         ? '6vw 9.25vw 0'
         : props.spacing
-        ? `calc(${props.spacing} / 1600 * 100vw) 9.25vw 0`
-        : '6vw 9.25vw 0';
+          ? `calc(${props.spacing} / 1600 * 100vw) 9.25vw 0`
+          : '6vw 9.25vw 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 9.25vw 6vw'
         : props.spacing
-        ? `0 9.25vw calc(${props.spacing} / 1600 * 100vw)`
-        : '0 9.25vw 6vw';
+          ? `0 9.25vw calc(${props.spacing} / 1600 * 100vw)`
+          : '0 9.25vw 6vw';
     }
     return props.spacing === 'default'
       ? '6vw 9.25vw'
       : props.spacing
-      ? `calc(${props.spacing} / 1600 * 100vw) 9.25vw`
-      : '6vw 9.25vw';
+        ? `calc(${props.spacing} / 1600 * 100vw) 9.25vw`
+        : '6vw 9.25vw';
   }};
 
   gap: ${(props) =>
     props.socials
       ? '46vw'
       : props.gap === 'default'
-      ? '3.75vw'
-      : props.gap
-      ? `calc(${props.gap} / 1600 * 100vw)`
-      : '3.75vw'};
+        ? '3.75vw'
+        : props.gap
+          ? `calc(${props.gap} / 1600 * 100vw)`
+          : '3.75vw'};
 
   ${media.fullWidth} {
     max-width: 1600px;
@@ -489,30 +508,30 @@ const HeroWrapper = styled.div`
         return props.spacing === 'default'
           ? '96px 148px 0'
           : props.spacing
-          ? `${props.spacing}px 148px 0`
-          : '96px 148px 0';
+            ? `${props.spacing}px 148px 0`
+            : '96px 148px 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 148px 96px'
           : props.spacing
-          ? `0 148px ${props.spacing}px`
-          : '0 148px 96px';
+            ? `0 148px ${props.spacing}px`
+            : '0 148px 96px';
       }
       return props.spacing === 'default'
         ? '96px 148px'
         : props.spacing
-        ? `${props.spacing}px 148px`
-        : '96px 148px';
+          ? `${props.spacing}px 148px`
+          : '96px 148px';
     }};
     gap: ${(props) =>
       props.socials
         ? '736px'
         : props.gap === 'default'
-        ? '60px'
-        : props.gap
-        ? `${props.gap}px`
-        : '60px'};
+          ? '60px'
+          : props.gap
+            ? `${props.gap}px`
+            : '60px'};
   }
 
   ${media.tablet} {
@@ -522,30 +541,30 @@ const HeroWrapper = styled.div`
         return props.spacing === 'default'
           ? '5.859vw 3.906vw 0'
           : props.spacing
-          ? `calc(${props.spacing} / 1024 * 100vw) 3.906vw 0`
-          : '5.859vw 3.906vw 0';
+            ? `calc(${props.spacing} / 1024 * 100vw) 3.906vw 0`
+            : '5.859vw 3.906vw 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 3.906vw 5.859vw'
           : props.spacing
-          ? `0 3.906vw calc(${props.spacing} / 1024 * 100vw)`
-          : '0 3.906vw 5.859vw';
+            ? `0 3.906vw calc(${props.spacing} / 1024 * 100vw)`
+            : '0 3.906vw 5.859vw';
       }
       return props.spacing === 'default'
         ? '5.859vw 3.906vw'
         : props.spacing
-        ? `calc(${props.spacing} / 1024 * 100vw) 3.906vw`
-        : '5.859vw 3.906vw';
+          ? `calc(${props.spacing} / 1024 * 100vw) 3.906vw`
+          : '5.859vw 3.906vw';
     }};
     gap: ${(props) =>
       props.socials
         ? '45.996vw'
         : props.gap === 'default'
-        ? '3.906vw'
-        : props.gap
-        ? `calc(${props.gap}/ 1024 * 100vw) `
-        : '3.906vw'};
+          ? '3.906vw'
+          : props.gap
+            ? `calc(${props.gap}/ 1024 * 100vw) `
+            : '3.906vw'};
   }
 
   ${media.mobile} {
@@ -557,30 +576,30 @@ const HeroWrapper = styled.div`
         return props.spacing === 'default'
           ? '12.5vw 5.417vw 0'
           : props.spacing
-          ? `calc(${props.spacing} / 480 * 100vw) 5.417vw 0`
-          : '12.5vw 5.417vw 0';
+            ? `calc(${props.spacing} / 480 * 100vw) 5.417vw 0`
+            : '12.5vw 5.417vw 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 5.417vw 12.5vw'
           : props.spacing
-          ? `0 5.417vw calc(${props.spacing} / 480 * 100vw)`
-          : '0 5.417vw 12.5vw';
+            ? `0 5.417vw calc(${props.spacing} / 480 * 100vw)`
+            : '0 5.417vw 12.5vw';
       }
       return props.spacing === 'default'
         ? '5.417vw 5.417vw'
         : props.spacing
-        ? `calc(${props.spacing} / 480 * 100vw) 5.417vw`
-        : '5.417vw 5.417vw';
+          ? `calc(${props.spacing} / 480 * 100vw) 5.417vw`
+          : '5.417vw 5.417vw';
     }};
     gap: ${(props) =>
       props.socials
         ? '8.333vw'
         : props.gap === 'default'
-        ? '5.417vw'
-        : props.gap
-        ? `calc(${props.gap}/ 480 * 100vw) `
-        : '5.417vw'};
+          ? '5.417vw'
+          : props.gap
+            ? `calc(${props.gap}/ 480 * 100vw) `
+            : '5.417vw'};
   }
 `;
 
@@ -605,26 +624,44 @@ const HeroBGWrapper = styled.div`
   background-size: 100% 100%;
   background-position: center;
 `;
+const BadgesSectionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 2.5vw;
+  ${media.fullWidth} {
+    margin-top: 40px;
+  }
+  ${media.tablet} {
+    margin-top: 3.906vw;
+  }
+  ${media.mobile} {
+    margin-top: 8.333vw;
+  }
+`;
+
+const BadgeEyebrow = styled.div`
+  margin-bottom: 0.5vw;
+
+  ${media.tablet} {
+    margin-bottom: 1.563vw;
+  }
+  ${media.mobile} {
+    margin-bottom: 3.333vw;
+  }
+`;
 
 const BadgesContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1vw;
-  margin-top: 2.5vw;
-
   ${media.fullWidth} {
     gap: 16px;
-    margin-top: 40px;
   }
-
   ${media.tablet} {
     gap: 1.563vw;
-    margin-top: 3.906vw;
   }
-
   ${media.mobile} {
     gap: 3.333vw;
-    margin-top: 8.333vw;
   }
 `;
 

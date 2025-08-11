@@ -54,7 +54,7 @@ const BlogCards = ({ blok }) => {
       }
 
       setBlogs(allBlogs);
-      // console.log('Fetched ALL blogs:', allBlogs.length);
+      
     };
 
     fetchAllBlogs();

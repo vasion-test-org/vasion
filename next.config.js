@@ -475,11 +475,11 @@ const nextConfig = {
         destination: '/industries/government/',
         permanent: true,
       },
-      {
-        source: '/home/',
-        destination: '/',
-        permanent: true,
-      },
+      // {
+      //   source: '/home/',
+      //   destination: '/',
+      //   permanent: true,
+      // },
       {
         source: '/launches/eliminate-print-servers/',
         destination: '/whats-new/',
@@ -640,21 +640,21 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
-      {
-        source: '/home',
-        destination: '/',
-        permanent: true,
-      },
-      {
-        source: '/de/home/',
-        destination: '/de',
-        permanent: true,
-      },
-      {
-        source: '/fr/home/',
-        destination: '/fr',
-        permanent: true,
-      },
+      // {
+      //   source: '/home',
+      //   destination: '/',
+      //   permanent: true,
+      // },
+      // {
+      //   source: '/de/home/',
+      //   destination: '/de',
+      //   permanent: true,
+      // },
+      // {
+      //   source: '/fr/home/',
+      //   destination: '/fr',
+      //   permanent: true,
+      // },
       {
         source: '/spring-launch-2025/',
         destination: '/launches/spring-launch-2025/',
@@ -737,7 +737,7 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value:
-              "frame-ancestors 'self' https://app.storyblok.com https://editor.storyblok.com https://m.storyblok.com;",
+              "frame-ancestors 'self' https://app.storyblok.com https://editor.storyblok.com https://m.storyblok.com https://app.zoominfo.com;",
           },
         ],
       },
