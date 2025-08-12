@@ -25,8 +25,9 @@ const LongFormTextContainer = styled.div`
   & > div {
     width: 100%;
 
-    /* > *:not(.component-wrapper) {
-      margin-bottom: 1.875vw;
+    > *:not(.component-wrapper) {
+    
+      /* margin-bottom: 1.875vw;
 
       ${media.fullWidth} {
         margin-bottom: 30px;
@@ -38,17 +39,28 @@ const LongFormTextContainer = styled.div`
 
       ${media.mobile} {
         margin-bottom: 6.25vw;
-      }
+      } */
     }
 
     .component-wrapper * {
       margin-bottom: 0 !important;
-    } */
+    } 
   }
 
   div:empty {
     height: 1.25vw;
-    /* display: none; */
+
+    ${media.fullWidth} {
+      height: 20px;
+    }
+
+    ${media.tablet} {
+      height: 1.953vw;
+    }
+
+    ${media.mobile} {
+      height: 4.167vw;
+    }
   }
 
   ${media.fullWidth} {

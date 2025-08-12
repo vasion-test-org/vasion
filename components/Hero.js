@@ -281,7 +281,7 @@ const ReviewButtons = styled.div`
   }
 
   ${media.mobile} {
-    top: 40.84vw;
+    top: 65.84vw;
     right: 8.191vw;
   }
 `;

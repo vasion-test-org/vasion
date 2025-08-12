@@ -31,6 +31,7 @@ export async function generateMetadata({ searchParams }) {
   // Build alternate links for all locales
   const alternateLinks = {};
   for (const loc of locales) {
+    // For homepage, we don't want /home/ in the URL
     const path = loc === 'en' ? '' : `/${loc}`;
     alternateLinks[loc] = `${basePath}${path}`;
   }
