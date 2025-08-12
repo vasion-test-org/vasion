@@ -30,10 +30,7 @@ const MobileNav = ({ blok }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipMessage, setTooltipMessage] = useState('');
   const [activeLanguage, setActiveLanguage] = useState('en');
-<<<<<<< HEAD
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
-=======
->>>>>>> 07a51e3a256ecf36ab18c62757afbfa60c7a0d3b
 
   const slugParts = path.split('/').filter(Boolean);
   const currentLocale = ['de', 'fr'].includes(slugParts[0])
