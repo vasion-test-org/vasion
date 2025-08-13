@@ -68,6 +68,7 @@ const StyledBodyCopy = styled.div`
   }
 
   /* Handle bold text */
+  .bold,
   b,
   strong {
     display: inline-block;
