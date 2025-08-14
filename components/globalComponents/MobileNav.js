@@ -17,6 +17,7 @@ import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 import { getStoryblokApi } from '@/lib/storyblok';
+import ComponentRenderer from '@/components/renderers/ComponentRenderer';
 
 gsap.registerPlugin(ScrollTrigger);
 const MobileNav = ({ blok }) => {
@@ -27,6 +28,13 @@ const MobileNav = ({ blok }) => {
   const dropdownIndex = useRef(null);
   let currentNavItems = blok?.english_nav_items || [];
   const isOpen = useRef(false);
+  const copycomponents = [
+    'body_copy',
+    'header',
+    'eyebrow',
+    'long_form_text',
+    'copy_block',
+  ];
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipMessage, setTooltipMessage] = useState('');
   const [activeLanguage, setActiveLanguage] = useState('en');
@@ -75,10 +83,10 @@ const MobileNav = ({ blok }) => {
   }
 
   // Debug logging
-  console.log('MobileNav currentNavItems:', currentNavItems);
+  // console.log('MobileNav currentNavItems:', currentNavItems);
   console.log('MobileNav blok:', blok);
-  console.log('MobileNav path:', path);
-  console.log('MobileNav currentLocale:', currentLocale);
+  // console.log('MobileNav path:', path);
+  // console.log('MobileNav currentLocale:', currentLocale);
 
   const handleNavigate = async (locale) => {
     const basePath = locale === 'en' ? '' : `/${locale}`;
@@ -101,7 +109,7 @@ const MobileNav = ({ blok }) => {
         router.push(newPath);
       } else {
         setTooltipMessage(
-          'This page is not yet available in the selected language'
+          'This page is not yet available in the selected language',
         );
         setShowTooltip(true);
         setTimeout(() => {
@@ -110,7 +118,7 @@ const MobileNav = ({ blok }) => {
       }
     } catch (error) {
       setTooltipMessage(
-        'This page is not yet available in the selected language'
+        'This page is not yet available in the selected language',
       );
       setShowTooltip(true);
       setTimeout(() => {
@@ -122,103 +130,170 @@ const MobileNav = ({ blok }) => {
   const toggleLanguageDropdown = () => {
     setShowLanguageDropdown(!showLanguageDropdown);
   };
-  const mappedNav = currentNavItems.map((item, index) => (
-    <Tab key={`tab-${index}`}>
-      <TabHeader className="tabHeader">{item.tab_name}</TabHeader>
-      <TabDropdown className="tabDropdowns" id={`tabHeader-${index}`}>
-        {item.tab_columns.map((column, colIndex) => (
-          <NavItemsDiv key={`column-${colIndex}`}>
-            {column?.column_header && (
-              <ColumnHeader>{column.column_header}</ColumnHeader>
-            )}
-            <NavItemsContainer>
-              {column.nav_items.map((item, itemIndex) => {
-                const formattedIconString = item.icon.replace(/\s+/g, '');
-                const IconComponent = ({ ...props }) => (
-                  <IconRenderer iconName={formattedIconString} {...props} />
-                );
-                const rawUrl = item.item_link?.cached_url || '#';
-                const isExternal =
-                  rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
-                const normalizedUrl = isExternal
-                  ? rawUrl
-                  : rawUrl.startsWith('/')
-                  ? rawUrl
-                  : `/${rawUrl}`;
 
-                const handleClick = () => {
-                  if (normalizedUrl === '#') return;
-                  if (isExternal) {
-                    window.open(normalizedUrl, '_blank', 'noopener,noreferrer');
-                  } else {
-                    window.location.href = normalizedUrl;
-                  }
-                };
+  const mappedNav = currentNavItems.map((item, index) => {
+    let navItemCount = 0;
+    let ctaRendered = false;
 
-                return (
-                  <NavItem
-                    key={`item-${item._uid}`}
-                    card={item.card}
-                    card_size={item.card_size}
-                    onClick={handleClick}
-                    role="link"
-                    tabIndex={0}
-                  >
-                    {item.card &&
-                      item.card_size &&
-                      item.card_size !== 'small' && (
-                        <ImageWrapper card_size={item.card_size}>
-                          <Image images={item?.card_image?.[0].media} />
-                        </ImageWrapper>
-                      )}
-                    {IconComponent && (
-                      <NavIconWrapper
-                        card={item.card}
-                        card_size={item.card_size}
+    return (
+      <Tab key={`tab-${index}`}>
+        <TabHeader className="tabHeader">{item.tab_name}</TabHeader>
+        <TabDropdown className="tabDropdowns" id={`tabHeader-${index}`}>
+          {item.tab_columns.map((column, colIndex) => (
+            <NavItemsDiv key={`column-${colIndex}`}>
+              {column?.column_header && (
+                <ColumnHeader>{column.column_header}</ColumnHeader>
+              )}
+              <NavItemsContainer>
+                {column.nav_items.map((navItem, itemIndex) => {
+                  navItemCount++;
+                  const formattedIconString = navItem.icon.replace(/\s+/g, '');
+                  const IconComponent = ({ ...props }) => (
+                    <IconRenderer iconName={formattedIconString} {...props} />
+                  );
+                  const rawUrl = navItem.item_link?.cached_url || '#';
+                  const isExternal =
+                    rawUrl.startsWith('http://') ||
+                    rawUrl.startsWith('https://');
+                  const normalizedUrl = isExternal
+                    ? rawUrl
+                    : rawUrl.startsWith('/')
+                      ? rawUrl
+                      : `/${rawUrl}`;
+
+                  const handleClick = () => {
+                    if (normalizedUrl === '#') return;
+                    if (isExternal) {
+                      window.open(
+                        normalizedUrl,
+                        '_blank',
+                        'noopener,noreferrer',
+                      );
+                    } else {
+                      window.location.href = normalizedUrl;
+                    }
+                  };
+
+                  return (
+                    <React.Fragment key={`item-${navItem._uid}`}>
+                      <NavItem
+                        card={navItem.card}
+                        card_size={navItem.card_size}
+                        onClick={handleClick}
+                        role="link"
+                        tabIndex={0}
                       >
-                        <IconComponent />
-                      </NavIconWrapper>
-                    )}
-                    <NavCopy>
-                      <NavItemCopy card_size={item.card_size}>
-                        <RichTextRenderer document={item.item_copy} />
-                        {item.add_chevron_arrow &&
-                          (item.orange_chevron ? (
-                            <ChevronArrow
-                              src="/images/uiElements/open-link-orange.webp"
-                              alt={'chevron-link'}
-                              orangearrow
-                            />
-                          ) : (
-                            <ChevronArrow
-                              src="/images/uiElements/chevron-arrow-label.webp"
-                              alt={'chevron-orange-link'}
-                            />
-                          ))}
-                      </NavItemCopy>
-                      {item.card_size === 'medium' && (
-                        <Link
-                          href={normalizedUrl}
-                          target={isExternal ? '_blank' : '_self'}
-                          rel={isExternal ? 'noopener noreferrer' : undefined}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          Learn More
-                        </Link>
-                      )}
-                      {item.sub_copy && item.card && (
-                        <NavItemSubCopy>{item.sub_copy}</NavItemSubCopy>
-                      )}
-                    </NavCopy>
-                  </NavItem>
-                );
-              })}
-            </NavItemsContainer>
-          </NavItemsDiv>
-        ))}
-      </TabDropdown>
-    </Tab>
-  ));
+                        {navItem.card &&
+                          navItem.card_size &&
+                          navItem.card_size !== 'small' && (
+                            <ImageWrapper card_size={navItem.card_size}>
+                              <Image images={navItem?.card_image?.[0].media} />
+                            </ImageWrapper>
+                          )}
+                        {formattedIconString && (
+                          <NavIconWrapper
+                            card={navItem.card}
+                            card_size={navItem.card_size}
+                          >
+                            <IconComponent />
+                          </NavIconWrapper>
+                        )}
+                        <NavCopy>
+                          <NavItemCopy card_size={navItem.card_size}>
+                            <div
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: '8px',
+                              }}
+                            >
+                              <RichTextRenderer document={navItem.item_copy} />
+                              {navItem.add_chevron_arrow &&
+                                !navItem.orange_chevron && (
+                                  <ChevronArrow
+                                    src="/images/uiElements/chevron-arrow-label.webp"
+                                    alt={'chevron-orange-link'}
+                                  />
+                                )}
+                            </div>
+                            {navItem?.button_group?.map(($buttonData) => {
+                              return (
+                                <CardButtonContainer
+                                  {...storyblokEditable($buttonData)}
+                                  key={$buttonData.link_text}
+                                >
+                                  <Button
+                                    key={$buttonData.link_text}
+                                    $buttonData={$buttonData}
+                                  />
+                                </CardButtonContainer>
+                              );
+                            })}
+                          </NavItemCopy>
+                          {navItem.card_size === 'medium' && (
+                            <Link
+                              href={normalizedUrl}
+                              target={isExternal ? '_blank' : '_self'}
+                              rel={
+                                isExternal ? 'noopener noreferrer' : undefined
+                              }
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              Learn More
+                            </Link>
+                          )}
+                          {navItem.sub_copy && navItem.card && (
+                            <NavItemSubCopy>{navItem.sub_copy}</NavItemSubCopy>
+                          )}
+                        </NavCopy>
+                      </NavItem>
+
+                      {/* INSERT CTA AFTER THE 3RD NAV ITEM OVERALL, ONLY ONCE */}
+                      {navItemCount === 3 &&
+                        !ctaRendered &&
+                        item.cta &&
+                        item.cta?.[0]?.media?.[0]?.media?.[0]?.filename &&
+                        (() => {
+                          ctaRendered = true;
+                          return (
+                            <DropDownCTA
+                              bgimg={
+                                item.cta?.[0]?.media?.[0]?.media?.[0]?.filename
+                              }
+                            >
+                              {item.cta?.[0]?.copy_sections.map(
+                                (ctaItem, ctaIndex) => (
+                                  <div
+                                    key={`cta-item-${ctaIndex}`}
+                                    {...storyblokEditable(ctaItem)}
+                                  >
+                                    {copycomponents.includes(
+                                      ctaItem.component,
+                                    ) ? (
+                                      <RichTextRenderer
+                                        document={ctaItem.copy}
+                                        blok={ctaItem}
+                                      />
+                                    ) : (
+                                      <ComponentRenderer blok={ctaItem} />
+                                    )}
+                                  </div>
+                                ),
+                              )}
+                            </DropDownCTA>
+                          );
+                        })()}
+                    </React.Fragment>
+                  );
+                })}
+              </NavItemsContainer>
+            </NavItemsDiv>
+          ))}
+        </TabDropdown>
+      </Tab>
+    );
+  });
 
   // If no navigation data, show a fallback
   if (!currentNavItems || currentNavItems.length === 0) {
@@ -565,6 +640,28 @@ const MobileNav = ({ blok }) => {
     </>
   );
 };
+const DropDownCTA = styled.div`
+  ${media.mobile} {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 93.333vw;
+    height: 15vw;
+    border-radius: 0.833vw;
+    margin: 3.333vw 3.333vw 0vw 3.333vw;
+    padding: 2.5vw;
+    background-image: url(${(props) => props.bgimg});
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+`;
+const CardButtonContainer = styled.div`
+  margin-top: 12px;
+
+  ${media.mobile} {
+  }
+`;
 const ChevronArrow = styled.img`
   ${media.mobile} {
     width: ${(props) => (props?.orangearrow ? '5vw' : '2.5vw')};
@@ -654,7 +751,6 @@ const ImageWrapper = styled.div`
       props.card_size === 'large' ? '32.292vw' : 'unset'};
   }
 `;
-const KeyDiv = styled.div``;
 const NavItemSubCopy = styled.div`
   ${text.bodySm};
   color: ${colors.txtSubtle};
@@ -662,9 +758,8 @@ const NavItemSubCopy = styled.div`
 const NavItemCopy = styled.div`
   ${media.mobile} {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-
+    flex-direction: column;
+    align-items: flex-start;
     margin-left: ${(props) =>
       props.card_size === 'large' ? '3.333vw' : 'unset'};
   }
@@ -672,6 +767,7 @@ const NavItemCopy = styled.div`
 const NavCopy = styled.div`
   display: flex;
   flex-direction: column;
+  align-self: center;
   ${media.mobile} {
     gap: 2.083vw;
   }
@@ -680,16 +776,22 @@ const NavIconWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-self: ${(props) => (props.card ? 'start' : 'unset')};
+  flex-shrink: 0;
 
   ${media.mobile} {
-    width: ${(props) => (props.card && props.card_size ? '54px' : '20px')};
-    height: ${(props) => (props.card && props.card_size ? 'unset' : '20px')};
+    width: ${(props) => (props.card && props.card_size ? '14.4vw' : '5.33vw')};
+    height: ${(props) => (props.card && props.card_size ? '14.4vw' : '5.33vw')};
+    min-width: ${(props) =>
+      props.card && props.card_size ? '14.4vw' : '5.33vw'};
+    min-height: ${(props) =>
+      props.card && props.card_size ? '14.4vw' : '5.33vw'};
   }
 
   svg {
     align-self: ${(props) => (props.card ? 'start' : 'unset')};
     width: 100%;
     height: 100%;
+    flex-shrink: 0;
   }
 `;
 const NavItem = styled.div`
@@ -701,44 +803,49 @@ const NavItem = styled.div`
       props.card_size === 'large' ? 'start' : 'center'};
     background: ${(props) =>
       props.card_size === 'medium' ? colors.lightPurpleGrey : 'unset'};
+
+    box-shadow: ${(props) =>
+      props.card && props.card_size === 'large'
+        ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
+        : 'unset'};
     gap: ${(props) =>
       props.card_size === 'small'
         ? '3.333vw'
         : props.card_size === 'medium'
-        ? '3.333vw'
-        : props.card_size === 'large'
-        ? '3.333vw'
-        : '0.833vw'};
+          ? '3.333vw'
+          : props.card_size === 'large'
+            ? '3.333vw'
+            : '0.833vw'};
 
     width: ${(props) =>
       props.card_size === 'small'
         ? '100%'
         : props.card_size === 'medium'
-        ? '93.333vw'
-        : props.card_size === 'large'
-        ? '93.333vw'
-        : '50%'};
+          ? '93.333vw'
+          : props.card_size === 'large'
+            ? '93.333vw'
+            : '50%'};
 
     padding: ${(props) =>
       props.card_size === 'small'
         ? '1.667vw 2.5vw'
         : props.card_size === 'medium'
-        ? '0.833vw 5vw 0.833vw 0.833vw'
-        : props.card_size === 'large'
-        ? '1.667vw 3.333vw 1.667vw 1.667vw'
-        : '1.667vw 3.333vw 1.667vw 1.667vw'};
+          ? '0.833vw 5vw 0.833vw 0.833vw'
+          : props.card_size === 'large'
+            ? '1.667vw 3.333vw 1.667vw 1.667vw'
+            : '1.667vw 3.333vw 1.667vw 1.667vw'};
     border-radius: 0.391vw;
     height: ${(props) =>
       props.card_size === 'large'
-        ? '20.417vw'
+        ? 'fit-content'
         : props.card_size === 'medium'
-        ? '18.75vw'
-        : 'auto'};
+          ? '18.75vw'
+          : 'auto'};
   }
   &:hover {
     background: ${colors.lightPurpleGrey};
     box-shadow: ${(props) =>
-      props.card
+      props.card && props.card_size === 'large'
         ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
         : 'unset'};
     path {
@@ -794,7 +901,7 @@ const TabDropdown = styled.div`
     display: flex;
     flex-direction: column;
     padding: 1.667vw 1.667vw 5vw 1.667vw;
-    gap: 3.333vw;
+    gap: 6.667vw;
     overflow: hidden;
   }
 `;
