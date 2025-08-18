@@ -740,17 +740,56 @@ const Link = styled.a`
 `;
 const ImageWrapper = styled.div`
   overflow: hidden;
+  position: relative; // Add for better control
 
   ${media.mobile} {
     border-radius: 0.417vw;
-    min-height: ${(props) =>
-      props.card_size === 'large' ? '17.083vw' : '7.617vw'};
-    min-width: ${(props) =>
-      props.card_size === 'large' ? '32.292vw' : '8.496vw'};
-    max-width: ${(props) =>
-      props.card_size === 'large' ? '32.292vw' : 'unset'};
+
+    // For large cards - fixed dimensions
+    ${(props) =>
+      props.card_size === 'large' &&
+      `
+      width: 32.292vw;
+      height: 17.083vw;
+    `}
+
+    // For small cards - square aspect ratio
+    ${(props) =>
+      props.card_size === 'small' &&
+      `
+      width: 8.496vw;
+      height: 8.496vw;
+    `}
+        // For medium cards - matches your 16:9 design
+    ${(props) =>
+      props.card_size === 'medium' &&
+      `
+      flex-shrink: 0;
+      align-self: stretch;
+       height: 17.188vw;
+    `}
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; // This prevents stretching
+      object-position: center; // Centers the image
+    }
   }
 `;
+// const ImageWrapper = styled.div`
+//   overflow: hidden;
+
+//   ${media.mobile} {
+//     border-radius: 0.417vw;
+//     min-height: ${(props) =>
+//       props.card_size === 'large' ? '17.083vw' : '7.617vw'};
+//     min-width: ${(props) =>
+//       props.card_size === 'large' ? '32.292vw' : '8.496vw'};
+//     max-width: ${(props) =>
+//       props.card_size === 'large' ? '32.292vw' : 'unset'};
+//   }
+// `;
 const NavItemSubCopy = styled.div`
   ${text.bodySm};
   color: ${colors.txtSubtle};
