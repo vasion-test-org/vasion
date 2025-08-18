@@ -743,7 +743,7 @@ const ImageWrapper = styled.div`
   position: relative; // Add for better control
 
   ${media.mobile} {
-    border-radius: 0.417vw;
+    border-radius: 0.833vw;
 
     // For large cards - fixed dimensions
     ${(props) =>
@@ -869,7 +869,7 @@ const NavItem = styled.div`
       props.card_size === 'small'
         ? '1.667vw 2.5vw'
         : props.card_size === 'medium'
-          ? '0.833vw 5vw 0.833vw 0.833vw'
+          ? '0.877vw 3.333vw 0.877vw 0.877vw'
           : props.card_size === 'large'
             ? '1.667vw 3.333vw 1.667vw 1.667vw'
             : '1.667vw 3.333vw 1.667vw 1.667vw'};
