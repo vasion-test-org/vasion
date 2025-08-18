@@ -758,7 +758,7 @@ const ImageWrapper = styled.div`
       props.card_size === 'small' &&
       `
       width: 8.496vw;
-      height: 8.496vw;
+      aspect-ratio:1;
     `}
         // For medium cards - matches your 16:9 design
     ${(props) =>
