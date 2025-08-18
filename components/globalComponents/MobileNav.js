@@ -867,7 +867,7 @@ const NavItem = styled.div`
 
 const ColumnHeader = styled.p`
   ${media.mobile} {
-    margin: 3.333vw 2.2vw;
+    margin: 3.125vw 1.667vw;
   }
   ${text.bodySm};
   color: ${colors.txtSubtle};
