@@ -1,13 +1,13 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
-import styled from "styled-components";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import media from "styles/media";
-import text from "@/styles/text";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import colors from "@/styles/colors";
-import Button from "@/components/globalComponents/Button";
+import styled from 'styled-components';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import media from 'styles/media';
+import text from '@/styles/text';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import colors from '@/styles/colors';
+import Button from '@/components/globalComponents/Button';
 const StatItem = ({ statItem }) => {
   return (
     <StatItemContainer {...storyblokEditable(statItem)}>
