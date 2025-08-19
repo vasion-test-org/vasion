@@ -82,12 +82,6 @@ const MobileNav = ({ blok }) => {
     currentNavItems = blok?.french_nav_items || [];
   }
 
-  // Debug logging
-  // console.log('MobileNav currentNavItems:', currentNavItems);
-  console.log('MobileNav blok:', blok);
-  // console.log('MobileNav path:', path);
-  // console.log('MobileNav currentLocale:', currentLocale);
-
   const handleNavigate = async (locale) => {
     const basePath = locale === 'en' ? '' : `/${locale}`;
     const newPath = nonHomeSlug
