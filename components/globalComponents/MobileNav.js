@@ -39,6 +39,7 @@ const MobileNav = ({ blok }) => {
   const [tooltipMessage, setTooltipMessage] = useState('');
   const [activeLanguage, setActiveLanguage] = useState('en');
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const [openTabIndex, setOpenTabIndex] = useState(null);
 
   const slugParts = path.split('/').filter(Boolean);
   const currentLocale = ['de', 'fr'].includes(slugParts[0])
@@ -58,12 +59,14 @@ const MobileNav = ({ blok }) => {
     }
   }, [path]);
 
-  // Close language dropdown when clicking outside
+  // Add click-based language selector for mobile with GSAP animations
   useEffect(() => {
     const handleClickOutside = (event) => {
       const languageSelector = document.querySelector('.language-selector');
       if (languageSelector && !languageSelector.contains(event.target)) {
         setShowLanguageDropdown(false);
+        // Animate language items container closing
+        gsap.to('#languageItemsContainer', { width: '0%', duration: 0.35 });
       }
     };
 
@@ -75,6 +78,17 @@ const MobileNav = ({ blok }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showLanguageDropdown]);
+
+  const toggleLanguageDropdown = () => {
+    if (showLanguageDropdown) {
+      // Animate language items container closing
+      gsap.to('#languageItemsContainer', { width: '0%', duration: 1 });
+    } else {
+      // Animate language items container opening
+      gsap.to('#languageItemsContainer', { width: '100%', duration: 2 });
+    }
+    setShowLanguageDropdown(!showLanguageDropdown);
+  };
 
   if (path.startsWith('/de')) {
     currentNavItems = blok?.german_nav_items || [];
@@ -100,10 +114,12 @@ const MobileNav = ({ blok }) => {
       if (data.story) {
         setActiveLanguage(locale);
         setShowLanguageDropdown(false);
+        // Animate language items container closing
+        gsap.to('#languageItemsContainer', { width: '0%', duration: 0.35 });
         router.push(newPath);
       } else {
         setTooltipMessage(
-          'This page is not yet available in the selected language',
+          'This page is not yet available in the selected language'
         );
         setShowTooltip(true);
         setTimeout(() => {
@@ -112,7 +128,7 @@ const MobileNav = ({ blok }) => {
       }
     } catch (error) {
       setTooltipMessage(
-        'This page is not yet available in the selected language',
+        'This page is not yet available in the selected language'
       );
       setShowTooltip(true);
       setTimeout(() => {
@@ -121,17 +137,15 @@ const MobileNav = ({ blok }) => {
     }
   };
 
-  const toggleLanguageDropdown = () => {
-    setShowLanguageDropdown(!showLanguageDropdown);
-  };
-
   const mappedNav = currentNavItems.map((item, index) => {
     let navItemCount = 0;
     let ctaRendered = false;
 
     return (
       <Tab key={`tab-${index}`}>
-        <TabHeader className="tabHeader">{item.tab_name}</TabHeader>
+        <TabHeader className="tabHeader" isOpen={openTabIndex === index}>
+          {item.tab_name}
+        </TabHeader>
         <TabDropdown className="tabDropdowns" id={`tabHeader-${index}`}>
           {item.tab_columns.map((column, colIndex) => (
             <NavItemsDiv key={`column-${colIndex}`}>
@@ -152,8 +166,8 @@ const MobileNav = ({ blok }) => {
                   const normalizedUrl = isExternal
                     ? rawUrl
                     : rawUrl.startsWith('/')
-                      ? rawUrl
-                      : `/${rawUrl}`;
+                    ? rawUrl
+                    : `/${rawUrl}`;
 
                   const handleClick = () => {
                     if (normalizedUrl === '#') return;
@@ -161,7 +175,7 @@ const MobileNav = ({ blok }) => {
                       window.open(
                         normalizedUrl,
                         '_blank',
-                        'noopener,noreferrer',
+                        'noopener,noreferrer'
                       );
                     } else {
                       window.location.href = normalizedUrl;
@@ -256,7 +270,7 @@ const MobileNav = ({ blok }) => {
                                     {...storyblokEditable(ctaItem)}
                                   >
                                     {copycomponents.includes(
-                                      ctaItem.component,
+                                      ctaItem.component
                                     ) ? (
                                       <RichTextRenderer
                                         document={ctaItem.copy}
@@ -266,7 +280,7 @@ const MobileNav = ({ blok }) => {
                                       <ComponentRenderer blok={ctaItem} />
                                     )}
                                   </div>
-                                ),
+                                )
                               )}
                             </DropDownCTA>
                           );
@@ -284,7 +298,6 @@ const MobileNav = ({ blok }) => {
 
   // If no navigation data, show a fallback
   if (!currentNavItems || currentNavItems.length === 0) {
-    console.log('No navigation data available, showing fallback');
     const fallbackNav = [
       {
         tab_name: 'Test Tab',
@@ -310,7 +323,9 @@ const MobileNav = ({ blok }) => {
 
     const fallbackMappedNav = fallbackNav.map((item, index) => (
       <Tab key={`fallback-tab-${index}`}>
-        <TabHeader className="tabHeader">{item.tab_name}</TabHeader>
+        <TabHeader className="tabHeader" isOpen={false}>
+          {item.tab_name}
+        </TabHeader>
         <TabDropdown className="tabDropdowns" id={`tabHeader-${index}`}>
           {item.tab_columns.map((column, colIndex) => (
             <NavItemsDiv key={`fallback-column-${colIndex}`}>
@@ -321,7 +336,7 @@ const MobileNav = ({ blok }) => {
                 {column.nav_items.map((item, itemIndex) => (
                   <NavItem
                     key={`fallback-item-${item._uid}`}
-                    onClick={() => console.log('Test item clicked')}
+                    onClick={() => {}}
                     role="link"
                     tabIndex={0}
                   >
@@ -373,32 +388,33 @@ const MobileNav = ({ blok }) => {
             <ButtonContainer>
               <LanguageSelectorContainer>
                 <LanguageSelector
+                  id="languageSelector"
                   className="language-selector"
-                  onClick={toggleLanguageDropdown}
                 >
-                  <LanguageIcon />
-                  {showLanguageDropdown && (
-                    <LanguageDropdown>
-                      <LanguageItem
-                        onClick={() => handleNavigate('en')}
-                        isActive={activeLanguage === 'en'}
-                      >
-                        English
-                      </LanguageItem>
-                      <LanguageItem
-                        onClick={() => handleNavigate('fr')}
-                        isActive={activeLanguage === 'fr'}
-                      >
-                        French
-                      </LanguageItem>
-                      <LanguageItem
-                        onClick={() => handleNavigate('de')}
-                        isActive={activeLanguage === 'de'}
-                      >
-                        German
-                      </LanguageItem>
-                    </LanguageDropdown>
-                  )}
+                  <LanguageItems
+                    id="languageItemsContainer"
+                    show={showLanguageDropdown}
+                  >
+                    <LanguageItem
+                      onClick={() => handleNavigate('en')}
+                      isActive={activeLanguage === 'en'}
+                    >
+                      English
+                    </LanguageItem>
+                    <LanguageItem
+                      onClick={() => handleNavigate('fr')}
+                      isActive={activeLanguage === 'fr'}
+                    >
+                      French
+                    </LanguageItem>
+                    <LanguageItem
+                      onClick={() => handleNavigate('de')}
+                      isActive={activeLanguage === 'de'}
+                    >
+                      German
+                    </LanguageItem>
+                  </LanguageItems>
+                  <LanguageIcon id="globe" onClick={toggleLanguageDropdown} />
                   {showTooltip && <Tooltip>{tooltipMessage}</Tooltip>}
                 </LanguageSelector>
               </LanguageSelectorContainer>
@@ -424,6 +440,7 @@ const MobileNav = ({ blok }) => {
 
     gsap.set('.tabDropdowns', { height: 0, display: 'none' });
     gsap.set('.mobileDropdown', { height: 0, display: 'none' });
+    gsap.set('#languageItemsContainer', { width: '0%' });
 
     const allTabs = gsap.utils.toArray('.tabHeader');
     const hamburger = document.querySelector('.hamburger');
@@ -460,7 +477,7 @@ const MobileNav = ({ blok }) => {
       } else {
         gsap.set(dropdown, { display: 'flex' });
         gsap.to(dropdown, {
-          height: '91vh',
+          height: '89vh',
           duration: 0.4,
           ease: 'power2.inOut',
         });
@@ -490,12 +507,14 @@ const MobileNav = ({ blok }) => {
         });
         isOpen.current = false;
         dropdownIndex.current = null;
+        setOpenTabIndex(null);
         tl.play();
         return;
       }
 
       dropdownIndex.current = index;
       isOpen.current = true;
+      setOpenTabIndex(index);
 
       tl.to('.tabDropdowns', { height: 0 })
         .set('.tabDropdowns', { display: 'none' }, '>-0.15')
@@ -583,32 +602,33 @@ const MobileNav = ({ blok }) => {
           <ButtonContainer>
             <LanguageSelectorContainer>
               <LanguageSelector
+                id="languageSelector"
                 className="language-selector"
-                onClick={toggleLanguageDropdown}
               >
-                <LanguageIcon />
-                {showLanguageDropdown && (
-                  <LanguageDropdown>
-                    <LanguageItem
-                      onClick={() => handleNavigate('en')}
-                      isActive={activeLanguage === 'en'}
-                    >
-                      English
-                    </LanguageItem>
-                    <LanguageItem
-                      onClick={() => handleNavigate('fr')}
-                      isActive={activeLanguage === 'fr'}
-                    >
-                      French
-                    </LanguageItem>
-                    <LanguageItem
-                      onClick={() => handleNavigate('de')}
-                      isActive={activeLanguage === 'de'}
-                    >
-                      German
-                    </LanguageItem>
-                  </LanguageDropdown>
-                )}
+                <LanguageItems
+                  id="languageItemsContainer"
+                  show={showLanguageDropdown}
+                >
+                  <LanguageItem
+                    onClick={() => handleNavigate('en')}
+                    isActive={activeLanguage === 'en'}
+                  >
+                    English
+                  </LanguageItem>
+                  <LanguageItem
+                    onClick={() => handleNavigate('fr')}
+                    isActive={activeLanguage === 'fr'}
+                  >
+                    French
+                  </LanguageItem>
+                  <LanguageItem
+                    onClick={() => handleNavigate('de')}
+                    isActive={activeLanguage === 'de'}
+                  >
+                    German
+                  </LanguageItem>
+                </LanguageItems>
+                <LanguageIcon id="globe" onClick={toggleLanguageDropdown} />
                 {showTooltip && <Tooltip>{tooltipMessage}</Tooltip>}
               </LanguageSelector>
             </LanguageSelectorContainer>
@@ -845,35 +865,35 @@ const NavItem = styled.div`
       props.card_size === 'small'
         ? '3.399vw'
         : props.card_size === 'medium'
-          ? '3.333vw'
-          : props.card_size === 'large'
-            ? '3.333vw'
-            : '1.667vw'};
+        ? '3.333vw'
+        : props.card_size === 'large'
+        ? '3.333vw'
+        : '1.667vw'};
 
     width: ${(props) =>
       props.card_size === 'small'
         ? '100%'
         : props.card_size === 'medium'
-          ? '93.333vw'
-          : props.card_size === 'large'
-            ? '93.333vw'
-            : '50%'};
+        ? '93.333vw'
+        : props.card_size === 'large'
+        ? '93.333vw'
+        : '50%'};
 
     padding: ${(props) =>
       props.card_size === 'small'
         ? '2.5vw 1.667vw'
         : props.card_size === 'medium'
-          ? '0.877vw 3.333vw 0.877vw 0.877vw'
-          : props.card_size === 'large'
-            ? '1.667vw 3.333vw 1.667vw 1.667vw'
-            : '1.667vw 3.333vw 1.667vw 1.667vw'};
+        ? '0.877vw 3.333vw 0.877vw 0.877vw'
+        : props.card_size === 'large'
+        ? '1.667vw 3.333vw 1.667vw 1.667vw'
+        : '1.667vw 3.333vw 1.667vw 1.667vw'};
     border-radius: 0.391vw;
     height: ${(props) =>
       props.card_size === 'large'
         ? 'fit-content'
         : props.card_size === 'medium'
-          ? '18.75vw'
-          : 'auto'};
+        ? '18.75vw'
+        : 'auto'};
   }
   &:hover {
     background: ${colors.lightPurpleGrey};
@@ -944,7 +964,8 @@ const TabHeader = styled.div`
   height: 10.833vw;
   /* margin-bottom: 3.333vw; */
   width: 100%;
-  background: rgba(61, 37, 98, 0.05);
+  background: ${(props) =>
+    props.isOpen ? 'rgba(61, 37, 98, 0.05)' : colors.white};
   cursor: pointer; /* Add cursor pointer for better UX */
 
   ${media.mobile} {
@@ -953,7 +974,8 @@ const TabHeader = styled.div`
     height: 10.833vw;
     /* margin-bottom: 3.333vw; */
     width: 100%;
-    background: rgba(61, 37, 98, 0.05);
+    background: ${(props) =>
+      props.isOpen ? 'rgba(61, 37, 98, 0.05)' : colors.white};
   }
 `;
 const Tab = styled.div`
@@ -970,7 +992,7 @@ const Dropdown = styled.div`
     position: absolute;
     display: none;
     flex-direction: column;
-    height: 91vh;
+    height: 89vh;
     width: 100%;
     top: 12.708vw;
     left: 0;
@@ -1028,6 +1050,20 @@ const LanguageIcon = styled(LanguageGlobe)`
     width: 4.673vw;
     height: 4.673vw;
     cursor: pointer;
+    margin-left: 0.694vw;
+    filter: grayscale(100%) contrast(0.7) brightness(0.8); /* Make the globe icon grey */
+
+    ${media.fullWidth} {
+      width: 24px;
+      height: 24px;
+      margin-left: 10px;
+    }
+
+    ${media.tablet} {
+      width: 2.344vw;
+      height: 2.344vw;
+      margin-left: 0.977vw;
+    }
   }
 `;
 
@@ -1036,10 +1072,20 @@ const LanguageItem = styled.div`
     ${text.bodySm};
     color: ${(props) =>
       props.isActive ? colors.primaryOrange : colors.txtSubtle};
-    padding: 1.667vw;
-    border-radius: 0.417vw;
+    padding: 0.208vw;
+    border-radius: 0.139vw;
     cursor: pointer;
     white-space: nowrap;
+
+    ${media.fullWidth} {
+      padding: 3px;
+      border-radius: 2px;
+    }
+
+    ${media.tablet} {
+      padding: 0.293vw;
+      border-radius: 0.195vw;
+    }
 
     &:hover {
       background-color: ${colors.primaryOrange};
@@ -1054,6 +1100,7 @@ const LanguageSelectorContainer = styled.div`
     display: flex;
     justify-content: flex-end;
     margin-bottom: 3.333vw;
+    width: 98%;
   }
 `;
 
@@ -1063,34 +1110,31 @@ const LanguageSelector = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     position: relative;
-  }
-`;
-
-const LanguageDropdown = styled.div`
-  ${media.mobile} {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: ${colors.white};
-    border: 1px solid ${colors.ghostGrey};
-    border-radius: 0.417vw;
-    padding: 1.667vw;
-    box-shadow: 0 0.417vw 0.833vw rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    min-width: 20.833vw;
-    display: flex;
-    flex-direction: column;
-    gap: 1.667vw;
+    width: 100%;
   }
 `;
 
 const LanguageItems = styled.div`
   ${media.mobile} {
+    ${text.bodySm};
+    color: ${colors.txtSubtle};
     display: flex;
-    flex-direction: column;
-    gap: 1.667vw;
+    flex-direction: row;
+    align-items: center;
+    overflow: hidden;
+    width: 0%;
+    gap: 1.042vw;
+    justify-content: flex-end;
+
+    ${media.fullWidth} {
+      gap: 15px;
+    }
+
+    ${media.tablet} {
+      gap: 1.465vw;
+    }
   }
 `;
 
