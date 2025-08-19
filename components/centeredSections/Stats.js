@@ -7,7 +7,7 @@ import media from "@/styles/media";
 import colors from "styles/colors";
 // import text from 'styles/text';
 const Stats = ({ statsData, toggle_card_style, alignment }) => {
-  console.log(statsData);
+    
   return (
     <StatsContainer card_style={toggle_card_style}>
       {statsData.map((statItem, index) => (

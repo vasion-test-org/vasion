@@ -27,6 +27,7 @@ const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { mobile } = useContext(ScreenContext);
+  console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper
@@ -36,7 +37,7 @@ const CenteredSection = ({ blok }) => {
         backgroundImage={blok.background_image?.[0]?.filename}
         {...storyblokEditable(blok)}
       >
-        {(blok.centered_copy || blok.button_group) && (
+        {(blok.centered_copy.length > 0 || blok.button_group.length > 0) && (
           <ContentWrapper>
             {blok.centered_copy &&
               blok.centered_copy.map((copy) => (
@@ -63,7 +64,7 @@ const CenteredSection = ({ blok }) => {
           </ContentWrapper>
         )}
         {blok.component_type !== '' && (
-          <AttachedComponent>
+          <AttachedComponent hasCenteredCopy={!!blok.centered_copy}>
             {blok.component_type === 'media' &&
               blok?.media[0].component === 'assets' && (
                 <CustomSizing custom_size={blok.smaller_assets}>
@@ -150,18 +151,20 @@ const AttachedComponent = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 40px 0;
+  margin: ${(props) => (props.hasCenteredCopy ? '1.25vw 0 2.5vw' : '2.5vw 0')};
 
   ${media.fullWidth} {
-    margin: 2.5vw 0;
+    margin: ${(props) => (props.hasCenteredCopy ? '20px 0 40px' : '40px 0')};
   }
 
   ${media.tablet} {
-    margin: 3.906vw 0;
+    margin: ${(props) =>
+      props.hasCenteredCopy ? '1.953vw 0 3.906vw' : '3.906vw 0'};
   }
 
   ${media.mobile} {
-    margin: 8.333vw 0;
+    margin: ${(props) =>
+      props.hasCenteredCopy ? '4.167vw 0 8.333vw' : '8.333vw 0'};
   }
 `;
 const CustomSizing = styled.div`
