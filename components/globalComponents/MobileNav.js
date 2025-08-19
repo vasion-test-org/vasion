@@ -200,14 +200,7 @@ const MobileNav = ({ blok }) => {
                         )}
                         <NavCopy>
                           <NavItemCopy card_size={navItem.card_size}>
-                            <div
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                gap: '8px',
-                              }}
-                            >
+                            <NavItemTitleWrapper>
                               <RichTextRenderer document={navItem.item_copy} />
                               {navItem.add_chevron_arrow &&
                                 !navItem.orange_chevron && (
@@ -216,7 +209,7 @@ const MobileNav = ({ blok }) => {
                                     alt={'chevron-orange-link'}
                                   />
                                 )}
-                            </div>
+                            </NavItemTitleWrapper>
                             {navItem?.button_group?.map(($buttonData) => {
                               return (
                                 <CardButtonContainer
@@ -647,9 +640,9 @@ const DropDownCTA = styled.div`
     justify-content: center;
     width: 93.333vw;
     height: 15vw;
-    border-radius: 0.833vw;
-    margin: 3.333vw 3.333vw 0vw 3.333vw;
-    padding: 2.5vw;
+    border-radius: 1.042vw;
+    margin: 0vw 1.667vw;
+    padding: 0vw 1.667vw;
     background-image: url(${(props) => props.bgimg});
     background-size: cover;
     background-position: center;
@@ -740,12 +733,12 @@ const Link = styled.a`
 `;
 const ImageWrapper = styled.div`
   overflow: hidden;
-  position: relative; // Add for better control
+  position: relative;
 
   ${media.mobile} {
     border-radius: 0.833vw;
 
-    // For large cards - fixed dimensions
+    // Large Cards
     ${(props) =>
       props.card_size === 'large' &&
       `
@@ -753,20 +746,21 @@ const ImageWrapper = styled.div`
       height: 17.083vw;
     `}
 
-    // For small cards - square aspect ratio
+    // Small Cards
     ${(props) =>
       props.card_size === 'small' &&
       `
       width: 8.496vw;
       aspect-ratio:1;
     `}
-        // For medium cards - matches your 16:9 design
+        // Medium Cards 
     ${(props) =>
       props.card_size === 'medium' &&
       `
       flex-shrink: 0;
       align-self: stretch;
-       height: 17.188vw;
+      width:17.188vw;
+      aspect-ratio:1;
     `}
     
     img {
@@ -794,6 +788,12 @@ const NavItemSubCopy = styled.div`
   ${text.bodySm};
   color: ${colors.txtSubtle};
 `;
+const NavItemTitleWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+`;
 const NavItemCopy = styled.div`
   ${media.mobile} {
     display: flex;
@@ -808,7 +808,7 @@ const NavCopy = styled.div`
   flex-direction: column;
   align-self: center;
   ${media.mobile} {
-    gap: 2.083vw;
+    gap: 0.899vw;
   }
 `;
 const NavIconWrapper = styled.div`
@@ -818,12 +818,12 @@ const NavIconWrapper = styled.div`
   flex-shrink: 0;
 
   ${media.mobile} {
-    width: ${(props) => (props.card && props.card_size ? '14.4vw' : '5.33vw')};
-    height: ${(props) => (props.card && props.card_size ? '14.4vw' : '5.33vw')};
+    width: ${(props) =>
+      props.card && props.card_size ? '8.998vw' : '5.208vw'};
     min-width: ${(props) =>
-      props.card && props.card_size ? '14.4vw' : '5.33vw'};
-    min-height: ${(props) =>
-      props.card && props.card_size ? '14.4vw' : '5.33vw'};
+      props.card && props.card_size ? '8.998vw' : '5.33vw'};
+
+    aspect-ratio: 1;
   }
 
   svg {
@@ -849,12 +849,12 @@ const NavItem = styled.div`
         : 'unset'};
     gap: ${(props) =>
       props.card_size === 'small'
-        ? '3.333vw'
+        ? '3.399vw'
         : props.card_size === 'medium'
           ? '3.333vw'
           : props.card_size === 'large'
             ? '3.333vw'
-            : '0.833vw'};
+            : '1.667vw'};
 
     width: ${(props) =>
       props.card_size === 'small'
@@ -867,7 +867,7 @@ const NavItem = styled.div`
 
     padding: ${(props) =>
       props.card_size === 'small'
-        ? '1.667vw 2.5vw'
+        ? '2.5vw 1.667vw'
         : props.card_size === 'medium'
           ? '0.877vw 3.333vw 0.877vw 0.877vw'
           : props.card_size === 'large'
