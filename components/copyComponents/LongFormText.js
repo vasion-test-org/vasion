@@ -44,7 +44,7 @@ const LongFormTextContainer = styled.div`
 
     .component-wrapper * {
       margin-bottom: 0 !important;
-    }
+    } 
   }
 
   div:empty {

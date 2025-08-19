@@ -1,27 +1,27 @@
-"use client";
+'use client';
 import {
   render,
   MARK_STYLED,
   NODE_HEADING,
   NODE_PARAGRAPH,
-} from "storyblok-rich-text-react-renderer";
-import React from "react";
-import styled from "styled-components";
-import media from "@/styles/media";
-import Header from "@/components/copyComponents/Header";
-import BodyCopy from "@/components/copyComponents/BodyCopy";
-import Eyebrow from "@/components/copyComponents/Eyebrow";
-import useMedia from "@/functions/useMedia";
-import CTA from "@/components/CTA";
-import SmallQuote from "../SmallQuote";
-import LogoCube from "../LogoCube";
-import SideBySide from "../SideBySide";
-import CenteredSection from "../CenteredSection";
-import NumberBlock from "../NumberBlock";
-import TwoColumnList from "@/components/TwoColumnList";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import GradientText from "@/components/globalComponents/GradientText";
+} from 'storyblok-rich-text-react-renderer';
+import React from 'react';
+import styled from 'styled-components';
+import media from '@/styles/media';
+import Header from '@/components/copyComponents/Header';
+import BodyCopy from '@/components/copyComponents/BodyCopy';
+import Eyebrow from '@/components/copyComponents/Eyebrow';
+import useMedia from '@/functions/useMedia';
+import CTA from '@/components/CTA';
+import SmallQuote from '../SmallQuote';
+import LogoCube from '../LogoCube';
+import SideBySide from '../SideBySide';
+import CenteredSection from '../CenteredSection';
+import NumberBlock from '../NumberBlock';
+import TwoColumnList from '@/components/TwoColumnList';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import GradientText from '@/components/globalComponents/GradientText';
 
 const RichTextRenderer = ({
   document,
@@ -31,8 +31,8 @@ const RichTextRenderer = ({
 }) => {
   if (!document) return null;
   const extractText = (contentArray) => {
-    if (!Array.isArray(contentArray)) return "";
-    return contentArray.map((node) => node.text || "").join(" ");
+    if (!Array.isArray(contentArray)) return '';
+    return contentArray.map((node) => node.text || '').join(' ');
   };
   const blokResolvers = {
     two_column_list: (props) => (
@@ -95,7 +95,7 @@ const RichTextRenderer = ({
         `h${level}`,
         `h${level}`,
         tabletStyle,
-        mobileStyle,
+        mobileStyle
       );
 
       const headerContent = (
@@ -118,7 +118,7 @@ const RichTextRenderer = ({
         className,
         className,
         responsiveTextStyles[0],
-        responsiveTextStyles[1],
+        responsiveTextStyles[1]
       );
       // console.log('selectedClassName', selectedClassName)
       return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
@@ -139,14 +139,14 @@ const RichTextRenderer = ({
 const RichWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.625vw;
+  gap: 1.25vw;
 
   ${media.fullWidth} {
-    gap: 10px;
+    gap: 20px;
   }
 
   ${media.tablet} {
-    gap: 0.977vw;
+    gap: 1.953vw;
   }
 
   ${media.mobile} {
@@ -275,24 +275,24 @@ const RichWrapper = styled.div`
     li {
       position: relative;
       padding-left: 1.563vw;
-      margin-bottom: 1.25vw;
+      /* margin-bottom: 1.25vw; */
       ${media.fullWidth} {
         padding-left: 25px;
-        margin-bottom: 20px;
+        /* margin-bottom: 20px; */
       }
       ${media.tablet} {
         padding-left: 2.441vw;
-        margin-bottom: 1.953vw;
+        /* margin-bottom: 1.953vw; */
       }
       ${media.mobile} {
         padding-left: 5.208vw;
-        margin-bottom: 4.167vw;
+        /* margin-bottom: 4.167vw; */
       }
     }
     li::before {
-      content: "";
+      content: '';
       position: absolute;
-      background-image: url("/images/icons/orange-check-icon.webp");
+      background-image: url('/images/icons/orange-check-icon.webp');
       background-size: contain;
       background-repeat: no-repeat;
       left: 0;

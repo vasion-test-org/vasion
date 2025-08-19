@@ -40,7 +40,7 @@ const ComparisonSelect = ({ blok }) => {
           opacity: 0.5,
           boxShadow: 'unset',
         },
-        0
+        0,
       );
 
     tl2
@@ -59,7 +59,7 @@ const ComparisonSelect = ({ blok }) => {
           y: -4,
           opacity: 0.5,
         },
-        0
+        0,
       );
 
     const handleClick1 = () => {
@@ -163,7 +163,7 @@ const ComparisonSelect = ({ blok }) => {
     mobile: blok?.backgrounds?.[2]?.filename,
   };
   return (
-    <Wrapper className='wrapper-div' $bg={background}>
+    <Wrapper className="wrapper-div" $bg={background}>
       {blok?.header && <Header>{blok?.header}</Header>}
       {
         <Comparison>
