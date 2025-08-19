@@ -419,8 +419,8 @@ const MobileNav = ({ blok }) => {
   }
 
   useEffect(() => {
-    console.log('MobileNav useEffect - setting up dropdowns');
-    console.log('GSAP available:', typeof gsap !== 'undefined');
+    // console.log('MobileNav useEffect - setting up dropdowns');
+    // console.log('GSAP available:', typeof gsap !== 'undefined');
 
     gsap.set('.tabDropdowns', { height: 0, display: 'none' });
     gsap.set('.mobileDropdown', { height: 0, display: 'none' });
@@ -428,8 +428,8 @@ const MobileNav = ({ blok }) => {
     const allTabs = gsap.utils.toArray('.tabHeader');
     const hamburger = document.querySelector('.hamburger');
 
-    console.log('Found tabs:', allTabs.length);
-    console.log('Found hamburger:', !!hamburger);
+    // console.log('Found tabs:', allTabs.length);
+    // console.log('Found hamburger:', !!hamburger);
 
     let tl = gsap.timeline({ paused: true });
     let mobileOpen = false; // <- track open state
@@ -443,7 +443,7 @@ const MobileNav = ({ blok }) => {
       .to('#slice-2', { top: '-1.075vw', rotate: -45 }, '<');
 
     const toggleMobileDropdown = () => {
-      console.log('Toggle mobile dropdown clicked');
+      // console.log('Toggle mobile dropdown clicked');
       const dropdown = document.querySelector('.mobileDropdown');
       if (!dropdown) {
         console.error('Mobile dropdown element not found');
@@ -480,11 +480,11 @@ const MobileNav = ({ blok }) => {
     }
 
     const openDropdown = (index) => {
-      console.log('Opening dropdown for index:', index);
+      // console.log('Opening dropdown for index:', index);
       tl.clear();
 
       if (dropdownIndex.current === index && isOpen.current) {
-        console.log('Closing dropdown for index:', index);
+        // console.log('Closing dropdown for index:', index);
         tl.to(`#tabHeader-${index}`, { height: 0 }).set(`#tabHeader-${index}`, {
           display: 'none',
         });
@@ -509,12 +509,12 @@ const MobileNav = ({ blok }) => {
     const tabClickHandlers = allTabs.map((tab, index) => {
       const handler = () => openDropdown(index);
       tab.addEventListener('click', handler);
-      console.log(`Added click handler for tab ${index}`);
+      // console.log(`Added click handler for tab ${index}`);
       return { tab, handler };
     });
 
     return () => {
-      console.log('Cleaning up MobileNav event listeners');
+      // console.log('Cleaning up MobileNav event listeners');
       // Clean up tab event listeners
       tabClickHandlers.forEach(({ tab, handler }) => {
         tab.removeEventListener('click', handler);
