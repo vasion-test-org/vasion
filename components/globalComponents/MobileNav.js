@@ -683,7 +683,7 @@ const ButtonContainer = styled.div`
     justify-content: flex-end;
     background: ${colors.white};
     width: 100%;
-    padding: 4.167vw 3.333vw;
+    padding: 15.167vw 3.333vw;
     flex: 1;
     gap: 3.333vw;
   }
