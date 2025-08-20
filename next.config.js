@@ -42,7 +42,7 @@ const nextConfig = {
     }
 
     const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.('.svg')
+      rule.test?.test?.('.svg'),
     );
 
     config.module.rules.push(
@@ -76,7 +76,7 @@ const nextConfig = {
             },
           },
         ],
-      }
+      },
     );
 
     fileLoaderRule.exclude = /\.svg$/i;
@@ -687,6 +687,11 @@ const nextConfig = {
         ],
         destination: 'https://vasion.com/fr/:path*',
         permanent: false,
+      },
+      {
+        source: '/resources/experience-the-printerlogic-platform/',
+        destination: '/resources/experience-vasion-print/',
+        permanent: true,
       },
     ];
   },
