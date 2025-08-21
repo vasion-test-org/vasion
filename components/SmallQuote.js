@@ -1,23 +1,23 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import media from "styles/media";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import Image from "./globalComponents/Image";
-import ComponentRenderer from "./renderers/ComponentRenderer";
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import media from 'styles/media';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import Image from './globalComponents/Image';
+import ComponentRenderer from './renderers/ComponentRenderer';
 
 const SmallQuote = ({ blok, short }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const copycomponents = [
-    "body_copy",
-    "header",
-    "eyebrow",
-    "long_form_text",
-    "copy_block",
+    'body_copy',
+    'header',
+    'eyebrow',
+    'long_form_text',
+    'copy_block',
   ];
   // console.log(blok);
   return (
@@ -34,7 +34,7 @@ const SmallQuote = ({ blok, short }) => {
             <ImageWrapper>
               <Image
                 {...storyblokEditable(blok)}
-                alt={blok?.quote_image[0]?.media[0]?.alt || "Default Image"}
+                alt={blok?.quote_image[0]?.media[0]?.alt || 'Default Image'}
                 images={blok?.quote_image[0]?.media}
               />
             </ImageWrapper>
@@ -121,6 +121,7 @@ const SmallQuoteContent = styled.div`
     gap: 5vw;
   }
 `;
+
 const SmallQuoteContainer = styled.div`
   position: relative;
   display: flex;
@@ -128,20 +129,20 @@ const SmallQuoteContainer = styled.div`
   border-radius: 1.5vw;
   gap: 1.5vw;
   width: 81.5vw;
-  width: ${(props) => (props?.$short ? "30vw" : "81.5vw")};
+  width: ${(props) => (props?.$short ? '30vw' : '81.5vw')};
   padding: 2vw;
   background: ${(props) => props.theme.small_quote.bg};
   color: ${(props) => props.theme.small_quote.textColor};
 
   ${media.fullWidth} {
-    width: ${(props) => (props?.$short ? "480px" : "1304px")};
+    width: ${(props) => (props?.$short ? '480px' : '1304px')};
     padding: 32px;
     border-radius: 24px;
     gap: 24px;
   }
 
   ${media.tablet} {
-    width: ${(props) => (props?.$short ? "35.5vw" : "92.188vw")};
+    width: ${(props) => (props?.$short ? '35.5vw' : '92.188vw')};
     padding: 3.125vw;
     border-radius: 2.344vw;
     gap: 2.344vw;
@@ -159,101 +160,101 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: ${(props) => (props?.$short ? "35%" : "100%")};
+  width: ${(props) => (props?.$short ? '35%' : '100%')};
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
           ? `${props.spacing}px 0 0`
-          : "3.75vw 0 0";
+          : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
           ? `0 0 ${props.spacing}px`
-          : "0 0 3.75vw";
+          : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
         ? `${props.spacing}px 0`
-        : "3.75vw 0";
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
-    width: ${(props) => (props?.$short ? "20%" : "100%")};
+    width: ${(props) => (props?.$short ? '20%' : '100%')};
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+            : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+            : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "60px 0";
+          : '60px 0';
     }};
   }
 
   ${media.tablet} {
-    width: ${(props) => (props?.$short ? "45%" : "100%")};
+    width: ${(props) => (props?.$short ? '45%' : '100%')};
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "3.906vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '3.906vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "3.906vw 0 0";
+            : '3.906vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 3.906vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 3.906vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 3.906vw";
+            : '0 0 3.906vw';
       }
-      return props.spacing === "default"
-        ? "3.906vw 0"
+      return props.spacing === 'default'
+        ? '3.906vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "3.906vw 0";
+          : '3.906vw 0';
     }};
   }
 
   ${media.mobile} {
     width: 100%;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "12.5vw 0 0";
+            : '12.5vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 12.5vw";
+            : '0 0 12.5vw';
       }
-      return props.spacing === "default"
-        ? "12.5vw 0"
+      return props.spacing === 'default'
+        ? '12.5vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "12.5vw 0";
+          : '12.5vw 0';
     }};
   }
 `;
