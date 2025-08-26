@@ -17,10 +17,10 @@ const richTextClasses = {
   'Body Large': 'bodyLg',
   'Body XL': 'bodyXl',
   'Body XL Bold': 'bodyXl bold',
-  'Tag': 'tag',
+  Tag: 'tag',
   'Tag Bold': 'tag bold',
   'Tag Light': 'tagLight',
-  'Eyebrow': 'eyebrow',
+  Eyebrow: 'eyebrow',
 };
 
 const applyRichTextClasses = async () => {

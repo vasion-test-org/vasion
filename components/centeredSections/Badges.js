@@ -1,12 +1,12 @@
-"use client";
-import React, { useEffect } from "react";
-import gsap from "gsap";
-import styled from "styled-components";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import { horizontalLoop } from "@/functions/horizontalLoop";
-import RichTextRenderer from "../renderers/RichTextRenderer";
+'use client';
+import React, { useEffect } from 'react';
+import gsap from 'gsap';
+import styled from 'styled-components';
+import media from '@/styles/media';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import { horizontalLoop } from '@/functions/horizontalLoop';
+import RichTextRenderer from '../renderers/RichTextRenderer';
 
 const G2Badges = ({ badges }) => {
   function splitBadges(badges, n) {
@@ -21,18 +21,18 @@ const G2Badges = ({ badges }) => {
 
   const badgesArrays = splitBadges(badges?.badge_cards, 3);
   const allBadges = badgesArrays.map((badge, index) => (
-    <BadgesInnerDiv key={index} className="badgeGroup">
-      {badge.map((badge, badge_index) => (
-        <BadgeDiv key={badge_index}>
+    <BadgesInnerDiv key={`badge-group-${index}`} className="badgeGroup">
+      {badge.map((badgeItem, badge_index) => (
+        <BadgeDiv key={`badge-${badgeItem._uid || badge_index}`}>
           <BadgeImage
             className="badges"
-            src={badge.badge_image.filename}
-            alt={badge?.badge_image.alt}
+            src={badgeItem.badge_image.filename}
+            alt={badgeItem?.badge_image.alt}
           />
           <BadgeContent>
-            <BadgeTitle>{badge.badge_name}</BadgeTitle>
+            <BadgeTitle>{badgeItem.badge_name}</BadgeTitle>
             <BadgeCopy>
-              <RichTextRenderer document={badge.body_copy} />
+              <RichTextRenderer document={badgeItem.body_copy} />
             </BadgeCopy>
           </BadgeContent>
         </BadgeDiv>
@@ -41,18 +41,18 @@ const G2Badges = ({ badges }) => {
   ));
 
   const progressBars = badgesArrays.map((_, index) => (
-    <ProgressBar key={index}>
+    <ProgressBar key={`progress-${index}`}>
       <ProgressValue className="pro-bar" />
     </ProgressBar>
   ));
 
   useEffect(() => {
-    const badgeGroups = gsap.utils.toArray(".badgeGroup");
+    const badgeGroups = gsap.utils.toArray('.badgeGroup');
 
     const loop = horizontalLoop(badgeGroups, { deep: false, paused: true });
 
     function NextLoop() {
-      loop.next({ duration: 2, ease: "slow" });
+      loop.next({ duration: 2, ease: 'slow' });
     }
 
     const loopTL = gsap.timeline({});
@@ -69,10 +69,10 @@ const G2Badges = ({ badges }) => {
       },
     });
 
-    progressTL.to(".pro-bar", {
+    progressTL.to('.pro-bar', {
       delay: 0.75,
       stagger: 7,
-      width: "100%",
+      width: '100%',
       repeat: -1,
     });
   }, []);

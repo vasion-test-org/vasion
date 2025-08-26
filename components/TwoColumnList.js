@@ -12,31 +12,37 @@ const TwoColumnList = ({ blok }) => {
   const selectedTheme = themes[blok.theme] || themes.default;
 
   const introMap = blok?.intro_content?.map((item, index) => (
-    <RichTextRenderer document={item.copy} key={index} />
+    <RichTextRenderer
+      document={item.copy}
+      key={`intro-${item._uid || index}`}
+    />
   ));
 
   const column1 = blok?.column_1?.map((item, index) => (
-    <ColumnItem key={`col1-item-${index}`}>
+    <ColumnItem key={`col1-item-${item._uid || index}`}>
       {item?.icon?.filename && (
         <ItemIcon small_icons={blok.small_icons} src={item.icon.filename} />
       )}
       <ColumnCopy>
-        {item?.copy?.map((item, columnIndex) => (
-          <RichTextRenderer document={item.copy} key={columnIndex} />
+        {item?.copy?.map((copyItem, columnIndex) => (
+          <RichTextRenderer
+            document={copyItem.copy}
+            key={`col1-copy-${copyItem._uid || columnIndex}`}
+          />
         ))}
       </ColumnCopy>
     </ColumnItem>
   ));
 
   const column2 = blok?.column_2?.map((item, index) => (
-    <ColumnItem key={`col2-item-${index}`}>
+    <ColumnItem key={`col2-item-${item._uid || index}`}>
       {item?.icon?.filename && (
         <ItemIcon small_icons={blok?.small_icons} src={item?.icon?.filename} />
       )}
       <ColumnCopy>
         {item?.copy?.map((copyItem, copyIndex) => (
           <RichTextRenderer
-            key={`col2-copy-${index}-${copyIndex}`}
+            key={`col2-copy-${copyItem._uid || copyIndex}`}
             document={copyItem.copy}
           />
         ))}
@@ -52,7 +58,9 @@ const TwoColumnList = ({ blok }) => {
     >
       <ThemeProvider theme={selectedTheme}>
         <Wrapper {...storyblokEditable(blok)}>
-          {blok.intro_content && <IntroContent alignment={blok.alignment}>{introMap}</IntroContent>}
+          {blok.intro_content && (
+            <IntroContent alignment={blok.alignment}>{introMap}</IntroContent>
+          )}
           <ColumnContainer comparison={blok.comparison}>
             <Column doublecolumn={column2.length < 0}>{column1}</Column>
             {column2.length > 0 && <Column>{column2}</Column>}

@@ -12,14 +12,20 @@ const ReviewBadgeCta = ({ blok }) => {
       <CardWrapper>
         <CopyDiv>
           {blok.copy.map((item, index) => (
-            <RichTextRenderer key={index} document={item.copy} />
+            <RichTextRenderer
+              key={`copy-${item._uid || index}`}
+              document={item.copy}
+            />
           ))}
         </CopyDiv>
         <Badges>
           {blok.badges.map((item, index) => (
-            <BadgeArray key={index}>
-              {item.media.map((media, index) => (
-                <Badge key={index} src={media.filename} />
+            <BadgeArray key={`badge-${item._uid || index}`}>
+              {item.media.map((mediaItem, mediaIndex) => (
+                <Badge
+                  key={`media-${mediaItem._uid || mediaIndex}`}
+                  src={mediaItem.filename}
+                />
               ))}
             </BadgeArray>
           ))}

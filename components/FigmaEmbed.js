@@ -12,6 +12,7 @@ const FigmaEmbed = ({ blok }) => {
   };
   const allButtons = blok.buttons.map((button) => (
     <ButtonImage
+      key={button.button_image.filename}
       loading="lazy"
       src={button.button_image.filename}
       alt={button.button_image.filename}

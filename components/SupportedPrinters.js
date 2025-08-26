@@ -195,14 +195,14 @@ const SupportedPrinters = ({ blok }) => {
   const featuresList = ['CPA 1', 'CPA 2', 'Off-Network Cloud Printing'];
 
   const manufacturers = manuList.map((value) => (
-    <Option onClick={handleManufacturerChange}>{value}</Option>
+    <Option key={value} onClick={handleManufacturerChange}>{value}</Option>
   ));
 
   const platformVersions = platformList.map((value) => (
-    <Option onClick={handlePlatformChange}>{value}</Option>
+    <Option key={value} onClick={handlePlatformChange}>{value}</Option>
   ));
   const features = featuresList.map((value) => (
-    <Option onClick={handleFeatureChange}>{value}</Option>
+    <Option key={value} onClick={handleFeatureChange}>{value}</Option>
   ));
 
   const resetFilters = () => {
@@ -237,7 +237,7 @@ const SupportedPrinters = ({ blok }) => {
 
   const tableRows = filteredTableData.map((dataPoint) => {
     return (
-      <TableBodyRow>
+      <TableBodyRow key={dataPoint[0]}>
         <TableData>{dataPoint[0]}</TableData>
         <TableData>{dataPoint[1]}</TableData>
         <TableData>{dataPoint[2]}</TableData>
