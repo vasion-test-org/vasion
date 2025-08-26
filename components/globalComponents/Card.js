@@ -51,7 +51,10 @@ const Card = ({ content, paginated, borderradius }) => {
       )}
       <ContentWrapper>
         {content.content.map((copy, index) => (
-          <div key={`card-copy-${copy._uid || index}`} {...storyblokEditable(copy)}>
+          <div
+            key={`card-copy-${copy._uid || index}`}
+            {...storyblokEditable(copy)}
+          >
             <RichTextRenderer className={copy.component} document={copy.copy} />
           </div>
         ))}
@@ -67,18 +70,17 @@ const Card = ({ content, paginated, borderradius }) => {
   // Only wrap in Link if there's a valid URL and target is not "_blank"
   if (hasValidUrl && target !== '_blank') {
     return (
-      <Link href={normalizedUrl} passHref legacyBehavior>
-        <CardWrapper
-          as='a'
-          {...storyblokEditable(content)}
-          paginated={paginated}
-          blur={content?.blur_card}
-          $canhover={content?.has_hover}
-          $clickable={true}
-        >
-          {WrapperContent}
-        </CardWrapper>
-      </Link>
+      <CardWrapper
+        as={Link}
+        href={normalizedUrl}
+        {...storyblokEditable(content)}
+        paginated={paginated}
+        blur={content?.blur_card}
+        $canhover={content?.has_hover}
+        $clickable={true}
+      >
+        {WrapperContent}
+      </CardWrapper>
     );
   } else if (hasValidUrl && target === '_blank') {
     return (

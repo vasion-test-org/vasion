@@ -35,13 +35,13 @@ const Form = ({ blok }) => {
     // Only process messages from LeanData
     // if (event.origin !== 'https://cdn.leandata.com') return;
 
-    console.log('Full event data:', event);
-    console.log('Event origin:', event.origin);
-    console.log('Event data:', event.data);
+    // console.log('Full event data:', event);
+    // console.log('Event origin:', event.origin);
+    // console.log('Event data:', event.data);
 
     switch (event.data.message) {
       case 'LD_ROUTING_RESPONSE':
-        console.log('Routing response received:', event.data.responseData);
+        // console.log('Routing response received:', event.data.responseData);
         dataLayer.push({
           event: 'lean_data_routing_response',
           form_id: blok.form_id,
@@ -50,7 +50,7 @@ const Form = ({ blok }) => {
         });
         break;
       case 'LD_ROUTING_TIMED_OUT':
-        console.log('Routing timed out:', event.data.responseData);
+        // console.log('Routing timed out:', event.data.responseData);
         dataLayer.push({
           event: 'lean_data_routing_timeout',
           form_id: blok.form_id,
@@ -59,7 +59,7 @@ const Form = ({ blok }) => {
         });
         break;
       case 'LD_POST_BOOKING_IMMEDIATE':
-        console.log('Booking completed:', event.data.responseData);
+        // console.log('Booking completed:', event.data.responseData);
         dataLayer.push({
           event: 'lean_data_booking_completed',
           form_id: blok.form_id,
@@ -68,7 +68,7 @@ const Form = ({ blok }) => {
         });
         break;
       case 'LD_POPUP_CLOSED':
-        console.log('Popup closed:', event.data.responseData);
+        // console.log('Popup closed:', event.data.responseData);
         dataLayer.push({
           event: 'lean_data_popup_closed',
           form_id: blok.form_id,
@@ -108,7 +108,7 @@ const Form = ({ blok }) => {
         languageRef.current = 'en';
       }
     }
-    console.log(routingLang.current);
+    // console.log(routingLang.current);
   }, []);
 
   //checks script is loadedfor marketo form
@@ -150,12 +150,12 @@ const Form = ({ blok }) => {
       script.async = false;
 
       script.addEventListener('load', () => {
-        console.log('timeoutLang', languageRef.current);
+        // console.log('timeoutLang', languageRef.current);
 
         const initConfig = {
           calendarTimeoutLength: 900,
           beforeRouting: (formTarget, formData) => {
-            console.log('lean data language:', languageRef.current);
+            // console.log('lean data language:', languageRef.current);
             formData['thank_you_language'] = languageRef.current;
             formData['routing_node_trigger'] = routingLang.current;
           },
@@ -206,8 +206,8 @@ const Form = ({ blok }) => {
                   form_submission_date: new Date().toISOString(),
                 });
 
-                console.log('Thank You');
-                console.log('Form submitted successfully:', submittedValues);
+                // console.log('Thank You');
+                // console.log('Form submitted successfully:', submittedValues);
                 return false;
               } else {
                 console.error('LDBookItV2 not available, booking may fail');
