@@ -181,7 +181,8 @@ export default async function DynamicPage({ params }) {
 
 async function fetchData(slug, locale) {
   const storyblokApi = getStoryblokApi();
-  const host = headers().get('host');
+  const headersList = await headers();
+  const host = headersList.get('host');
   const isPreview =
     host === 'localhost:3010' ||
     host === 'vasion-ten.vercel.app' ||

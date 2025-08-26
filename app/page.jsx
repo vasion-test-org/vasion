@@ -4,7 +4,7 @@ import StoryRenderer from '@/components/renderers/StoryRenderer';
 import PageDataUpdater from '@/components/PageDataUpdater';
 
 export default async function Home() {
-  const { isEnabled } = draftMode();
+  const { isEnabled } = await draftMode();
   const story = await fetchStory('home', isEnabled);
 
   return (
@@ -57,7 +57,8 @@ import { headers } from 'next/headers';
 
 async function fetchStory(slug, locale = 'en') {
   const storyblokApi = getStoryblokApi();
-  const host = headers().get('host');
+  const headersList = await headers();
+  const host = headersList.get('host');
   const isPreview = host === 'localhost:3000' || host?.includes('vercel.app');
 
   const sbParams = {
