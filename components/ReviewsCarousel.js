@@ -35,7 +35,7 @@ const ReviewsCarousel = ({ blok }) => {
           rel: "noopener noreferrer",
         })}
         haslink={hasValidLink}
-        key={index}
+        key={`review-${rev._uid || index}`}
         className="reviewItems"
       >
         {<Stars src="/images/HomepageStars.webp" alt={"Five Star Rating"} />}
@@ -68,7 +68,7 @@ const ReviewsCarousel = ({ blok }) => {
   const dragStats = hasStats
     ? clonedStats.map((statItem, index) => {
         return (
-          <StatDiv key={index} className={"statsDraggable"}>
+          <StatDiv key={`stat-${statItem._uid || index}`} className={"statsDraggable"}>
             <StyledStat>{statItem?.stat}</StyledStat>
             <div {...storyblokEditable(statItem)}>
               <RichTextRenderer document={statItem.copy[0].copy} />

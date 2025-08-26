@@ -12,7 +12,7 @@ const IntegrationBloks = ({ types, isMobile }) => {
     return icons?.map((icon, index) => (
       <Logo
         {...storyblokEditable(icon?.filename)}
-        key={index}
+        key={`icon-${icon._uid || index}`}
         src={icon?.filename}
         alt={icon?.alt || ""}
       />
@@ -27,7 +27,7 @@ const IntegrationBloks = ({ types, isMobile }) => {
       titleContent = item?.title;
     }
     return (
-      <div>
+      <div key={`type-${item._uid || index}`}>
         <IntegrationItem $columns={index}>
           <Title>{titleContent}</Title>
           <ImagesContainer>{imageList(item?.icons)}</ImagesContainer>

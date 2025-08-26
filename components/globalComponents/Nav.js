@@ -42,6 +42,7 @@ const Nav = ({ blok }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipMessage, setTooltipMessage] = useState('');
   const [isHoveringNav, setIsHoveringNav] = useState(false);
+  const [anchorNavReady, setAnchorNavReady] = useState(false);
 
   useEffect(() => {
     function checkPathLocale(url) {
@@ -68,6 +69,12 @@ const Nav = ({ blok }) => {
       checkPathLocale(path);
     }
   }, [path, blok]);
+
+  // Check if anchorNav exists and set ready state
+  useEffect(() => {
+    const anchorNavElement = document.querySelector('.anchorNav');
+    setAnchorNavReady(!!anchorNavElement);
+  }, []);
 
   const slugParts = path.split('/').filter(Boolean);
   const currentLocale = ['de', 'fr'].includes(slugParts[0])
@@ -104,7 +111,7 @@ const Nav = ({ blok }) => {
       } else {
         // console.log('Story does not exist, showing tooltip');
         setTooltipMessage(
-          'This page is not yet available in the selected language',
+          'This page is not yet available in the selected language'
         );
         setShowTooltip(true);
 
@@ -114,7 +121,7 @@ const Nav = ({ blok }) => {
       }
     } catch (error) {
       setTooltipMessage(
-        'This page is not yet available in the selected language',
+        'This page is not yet available in the selected language'
       );
       setShowTooltip(true);
       // console.log('Tooltip state updated after error:', { showTooltip: true, message: tooltipMessage });
@@ -132,7 +139,7 @@ const Nav = ({ blok }) => {
         <Dropdown className="dropdowns" id={`dropdown-${index}`}>
           <ColumnsWrapper>
             {item.tab_columns.map((column, colIdx) => (
-              <Column key={`column.column_header-${colIdx}`}>
+              <Column key={`column-${column._uid || colIdx}`}>
                 {column?.column_header && (
                   <ColumnHeader>{column.column_header}</ColumnHeader>
                 )}
@@ -155,13 +162,13 @@ const Nav = ({ blok }) => {
                   const supportedLocales = ['en', 'fr', 'de'];
                   const rawPathParts = rawUrl.split('/').filter(Boolean);
                   const alreadyHasLocale = supportedLocales.includes(
-                    rawPathParts[0],
+                    rawPathParts[0]
                   );
 
                   const normalizedUrl = isExternal
                     ? rawUrl
                     : `/${
-                        alreadyHasLocale ? '' : (currentLocale ?? '')
+                        alreadyHasLocale ? '' : currentLocale ?? ''
                       }/${rawUrl}`.replace(/\/+/g, '/');
 
                   return (
@@ -240,7 +247,7 @@ const Nav = ({ blok }) => {
               >
                 {item.cta?.[0]?.copy_sections.map((item, index) => (
                   <div
-                    key={`item.component_${index}`}
+                    key={`cta-copy-${item._uid || index}`}
                     {...storyblokEditable(item)}
                   >
                     {copycomponents.includes(item.component) ? (
@@ -261,7 +268,7 @@ const Nav = ({ blok }) => {
   const navReady = navItems && navItems.length > 0;
 
   useEffect(() => {
-    if (!navReady) return;
+    if (!navReady || !anchorNavReady) return;
 
     const footer = document.querySelector('.footer');
     if (!footer) return;
@@ -285,7 +292,7 @@ const Nav = ({ blok }) => {
       pin: true,
       pinSpacing: false,
     });
-  }, [navReady]);
+  }, [navReady, anchorNavReady]);
 
   useEffect(() => {
     if (!navReady) return;
@@ -320,6 +327,7 @@ const Nav = ({ blok }) => {
         queuedIndex = index;
         return;
       }
+
       gsap.to(`#dropdown-${index}`, {
         autoAlpha: 1,
         duration: 0.35,
@@ -714,8 +722,7 @@ const Banner = styled.div`
 `;
 
 const TopNav = styled.nav`
-  background:
-    linear-gradient(
+  background: linear-gradient(
       90deg,
       #cc4800 0.11%,
       #5f47a8 38.75%,
@@ -874,26 +881,26 @@ const NavItem = styled.div`
     props.card_size === 'small'
       ? '1.25vw'
       : props.card_size === 'medium'
-        ? '0.875vw'
-        : '0.313vw'};
+      ? '0.875vw'
+      : '0.313vw'};
 
   width: ${(props) =>
     props.card_size === 'small'
       ? '17.5vw'
       : props.card_size === 'medium'
-        ? '19.563vw'
-        : props.card_size === 'large'
-          ? '19.563vw'
-          : 'auto'};
+      ? '19.563vw'
+      : props.card_size === 'large'
+      ? '19.563vw'
+      : 'auto'};
 
   padding: ${(props) =>
     props.card_size === 'small'
       ? '0.75vw'
       : props.card_size === 'medium'
-        ? '0.25vw 0.75vw 0.25vw 0.25vw'
-        : props.card_size === 'large'
-          ? 'unset'
-          : '0.25vw 0.75vw'};
+      ? '0.25vw 0.75vw 0.25vw 0.25vw'
+      : props.card_size === 'large'
+      ? 'unset'
+      : '0.25vw 0.75vw'};
   border-radius: 0.25vw;
   height: ${(props) => (props.card_size === 'large' ? '13.875vw' : 'auto')};
   box-shadow: ${(props) =>
@@ -906,26 +913,26 @@ const NavItem = styled.div`
       props.card_size === 'small'
         ? '20px'
         : props.card_size === 'medium'
-          ? '14px'
-          : '5px'};
+        ? '14px'
+        : '5px'};
 
     width: ${(props) =>
       props.card_size === 'small'
         ? '280px'
         : props.card_size === 'medium'
-          ? '313px'
-          : props.card_size === 'large'
-            ? '313px'
-            : 'auto'};
+        ? '313px'
+        : props.card_size === 'large'
+        ? '313px'
+        : 'auto'};
 
     padding: ${(props) =>
       props.card_size === 'small'
         ? '12px'
         : props.card_size === 'medium'
-          ? '4px 12px 4px 4px'
-          : props.card_size === 'large'
-            ? 'unset'
-            : '4px'};
+        ? '4px 12px 4px 4px'
+        : props.card_size === 'large'
+        ? 'unset'
+        : '4px'};
     border-radius: 4px;
     height: ${(props) => (props.card_size === 'large' ? '222px' : 'auto')};
   }
@@ -935,26 +942,26 @@ const NavItem = styled.div`
       props.card_size === 'small'
         ? '1.953vw'
         : props.card_size === 'medium'
-          ? '1.367vw'
-          : '5px'};
+        ? '1.367vw'
+        : '5px'};
 
     width: ${(props) =>
       props.card_size === 'small'
         ? '27.344vw'
         : props.card_size === 'medium'
-          ? '30.566vw'
-          : props.card_size === 'large'
-            ? '30.566vw'
-            : 'auto'};
+        ? '30.566vw'
+        : props.card_size === 'large'
+        ? '30.566vw'
+        : 'auto'};
 
     padding: ${(props) =>
       props.card_size === 'small'
         ? '1.172vw'
         : props.card_size === 'medium'
-          ? '0.391vw 1.172vw 0.391vw 0.391vw'
-          : props.card_size === 'large'
-            ? 'unset'
-            : '0.391vw 1.172vw'};
+        ? '0.391vw 1.172vw 0.391vw 0.391vw'
+        : props.card_size === 'large'
+        ? 'unset'
+        : '0.391vw 1.172vw'};
     border-radius: 0.391vw;
     height: ${(props) => (props.card_size === 'large' ? '21.68vw' : 'auto')};
   }
@@ -964,16 +971,16 @@ const NavItem = styled.div`
       props.card_size === 'large'
         ? '1px solid ${colors.textSubtle}'
         : props.card_size === 'medium'
-          ? '1px solid ${colors.txtSubtle}'
-          : 'unset'};
+        ? '1px solid ${colors.txtSubtle}'
+        : 'unset'};
     background: ${(props) =>
       props.card_size === 'large' ? 'unset' : colors.lightPurpleGrey};
     box-shadow: ${(props) =>
       props.card_size === 'large'
         ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
         : props.card_size === 'medium'
-          ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
-          : 'unset'};
+        ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
+        : 'unset'};
     path {
       fill: ${(props) =>
         props.card ? colors.lightPurple : colors.primaryOrange};
@@ -1266,8 +1273,11 @@ const NavBackdrop = styled.div`
   right: -50px;
   bottom: -50px;
   margin: 0;
-  background:
-    linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%),
+  background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0.5) 100%
+    ),
     linear-gradient(180deg, #3d2562 0%, rgba(61, 37, 98, 0) 25.72%);
   filter: blur(25px);
   -webkit-filter: blur(25px);

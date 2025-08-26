@@ -66,7 +66,7 @@ const AccordionItem = ({ accordionItem }) => {
       <ContentWrapper ref={contentRef}>
         <ContentInner ref={contentInnerRef}>
           {contentBlocks.map((copy, idx) => (
-            <div key={`${copy.component}-${idx}`} {...storyblokEditable(copy)}>
+            <div key={`${copy.component}-${copy._uid || idx}`} {...storyblokEditable(copy)}>
               <RichTextRenderer
                 className={copy.component}
                 document={copy.copy}

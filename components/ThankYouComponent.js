@@ -36,7 +36,7 @@ const ThankYouComponent = ({ className }) => {
     <Wrapper className={className}>
       <Content>
         {thankYouCopy?.map((item, index) => (
-          <div key={`item.component_${index}`}>
+          <div key={`${item.component}-${item._uid || index}`}>
             {copycomponents.includes(item.component) ? (
               <RichTextRenderer document={item.copy} blok={item} />
             ) : (

@@ -51,7 +51,7 @@ const Card = ({ content, paginated, borderradius }) => {
       )}
       <ContentWrapper>
         {content.content.map((copy, index) => (
-          <div key={`card-copy-${index}`} {...storyblokEditable(copy)}>
+          <div key={`card-copy-${copy._uid || index}`} {...storyblokEditable(copy)}>
             <RichTextRenderer className={copy.component} document={copy.copy} />
           </div>
         ))}

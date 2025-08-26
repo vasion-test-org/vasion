@@ -17,7 +17,7 @@ const Bio = ({ blok }) => {
           <Content>
             {blok.bio &&
               blok.bio.map((copy) => (
-                <div {...storyblokEditable(copy)} key={copy.component}>
+                <div {...storyblokEditable(copy)} key={copy._uid || copy.component}>
                   <RichTextRenderer document={copy?.copy} />
                 </div>
               ))}

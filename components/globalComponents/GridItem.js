@@ -19,7 +19,7 @@ const GridItem = ({ content, alignment }) => {
         </div>
       )}
       {content.content.map((copy) => (
-        <div key={copy.component} {...storyblokEditable(copy)}>
+        <div key={copy._uid || copy.component} {...storyblokEditable(copy)}>
           <RichTextRenderer
             className={copy.component}
             document={copy.copy}

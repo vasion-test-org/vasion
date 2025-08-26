@@ -22,7 +22,7 @@ const InfographicSideBySide = ({ blok }) => {
         gap={blok.gap}
       >
         {blok.components.map((component) => (
-          <React.Fragment key={component.id}>
+          <React.Fragment key={component._uid || component.id || component.component}>
             {component.component === 'assets' ? (
               <SideContainer {...storyblokEditable(component)}>
                 <Image

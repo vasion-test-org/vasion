@@ -40,6 +40,7 @@ const MobileNav = ({ blok }) => {
   const [activeLanguage, setActiveLanguage] = useState('en');
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [openTabIndex, setOpenTabIndex] = useState(null);
+  const [anchorNavReady, setAnchorNavReady] = useState(false);
 
   const slugParts = path.split('/').filter(Boolean);
   const currentLocale = ['de', 'fr'].includes(slugParts[0])
@@ -58,6 +59,12 @@ const MobileNav = ({ blok }) => {
       setActiveLanguage('en');
     }
   }, [path]);
+
+  // Check if anchorNav exists and set ready state
+  useEffect(() => {
+    const anchorNavElement = document.querySelector('.anchorNav');
+    setAnchorNavReady(!!anchorNavElement);
+  }, []);
 
   // Add click-based language selector for mobile with GSAP animations
   useEffect(() => {
@@ -148,7 +155,7 @@ const MobileNav = ({ blok }) => {
         </TabHeader>
         <TabDropdown className="tabDropdowns" id={`tabHeader-${index}`}>
           {item.tab_columns.map((column, colIndex) => (
-            <NavItemsDiv key={`column-${colIndex}`}>
+            <NavItemsDiv key={`column-${column._uid || colIndex}`}>
               {column?.column_header && (
                 <ColumnHeader>{column.column_header}</ColumnHeader>
               )}
@@ -453,8 +460,6 @@ const MobileNav = ({ blok }) => {
 
     const hamburgerTl = gsap
       .timeline({ paused: true, reversed: true })
-      .set('#mainDrop', { padding: '4.673vw 0' })
-      .to('#mainDrop', { height: 'auto', duration: 0.5 })
       .to('#slice-0', { top: '1.95vw', rotate: 45 }, '<')
       .to('#slice-1', { opacity: 0 }, '<')
       .to('#slice-2', { top: '-1.075vw', rotate: -45 }, '<');
@@ -547,6 +552,8 @@ const MobileNav = ({ blok }) => {
   }, []);
 
   useEffect(() => {
+    if (!anchorNavReady) return;
+
     const mobileAnchorTl = gsap.timeline({
       scrollTrigger: {
         start: '2% 1%',
@@ -566,7 +573,7 @@ const MobileNav = ({ blok }) => {
       pinSpacing: false,
       // markers: true,
     });
-  }, []);
+  }, [anchorNavReady]);
 
   return (
     <>
