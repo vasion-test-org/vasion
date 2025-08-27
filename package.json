@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@rive-app/react-canvas": "^4.21.4",
+    "@sentry/nextjs": "^10.7.0",
     "@storyblok/react": "^5.1.1",
     "@storyblok/richtext": "^3.4.0",
     "@vercel/analytics": "^1.5.0",
