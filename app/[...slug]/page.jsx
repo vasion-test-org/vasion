@@ -4,6 +4,8 @@ import { getStoryblokApi } from '@/lib/storyblok';
 import { headers } from 'next/headers';
 import PageDataUpdater from '@/components/PageDataUpdater';
 import ClientSchemaWrapper from '@/components/ClientSchemaWrapper';
+import SentryRouteTracker from '@/components/SentryRouteTracker';
+import SentryServerWrapper from '@/components/SentryServerWrapper';
 export const revalidate = 60;
 
 export async function generateMetadata({ params, searchParams }) {
@@ -171,11 +173,14 @@ export default async function DynamicPage({ params }) {
   }
 
   return (
-    <div>
-      <PageDataUpdater story={story} />
-      <ClientSchemaWrapper />
-      <StoryblokStory story={story} />
-    </div>
+    <SentryServerWrapper params={params}>
+      <div>
+        <SentryRouteTracker />
+        <PageDataUpdater story={story} />
+        <ClientSchemaWrapper />
+        <StoryblokStory story={story} />
+      </div>
+    </SentryServerWrapper>
   );
 }
 
