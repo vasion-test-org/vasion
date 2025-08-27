@@ -3,6 +3,7 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from '@sentry/nextjs';
+import { extractActualPath, updateSentryEvent } from '@/lib/sentryUtils';
 
 Sentry.init({
   dsn: 'https://09f9acc311b7fa710a017a9d751987c5@o4509917808885760.ingest.us.sentry.io/4509917809737728',
@@ -18,4 +19,34 @@ Sentry.init({
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
+
+  // Add beforeSend to properly name transactions for dynamic routes
+  beforeSend(event, hint) {
+    // Handle dynamic route naming for catch-all routes
+    if (event.transaction && event.transaction.includes('[...slug]')) {
+      console.log('[Sentry Server] Processing dynamic route event:', {
+        originalTransaction: event.transaction,
+        eventType: event.type,
+        hasHint: !!hint,
+      });
+
+      const actualPath = extractActualPath(event, hint);
+      if (actualPath) {
+        console.log(
+          '[Sentry Server] Updating transaction from',
+          event.transaction,
+          'to',
+          actualPath
+        );
+        updateSentryEvent(event, actualPath);
+      } else {
+        console.log(
+          '[Sentry Server] Could not extract actual path for transaction:',
+          event.transaction
+        );
+      }
+    }
+
+    return event;
+  },
 });
