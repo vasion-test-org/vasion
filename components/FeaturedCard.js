@@ -31,7 +31,10 @@ const FeaturedCard = ({ blok }) => {
         <RichTextRenderer document={blok?.featured_title} />
         <CardInnerWrapper>
           <ImageWrapper>
-            <Image images={blok.event_image[0].media} />
+            <Image
+              images={blok.event_image[0].media}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
           </ImageWrapper>
           <Content>
             <HeaderAndTag>
@@ -42,11 +45,11 @@ const FeaturedCard = ({ blok }) => {
             </HeaderAndTag>
             <DateAndTime>
               <IconAndText>
-                <Icon src='/images/locationOn.webp' alt={'Nav Pin'} />
+                <Icon src="/images/locationOn.webp" alt={'Nav Pin'} />
                 <RichTextRenderer document={blok?.location} />
               </IconAndText>
               <IconAndText>
-                <Icon src='/images/calendarClock.webp' alt={'Calendar'} />
+                <Icon src="/images/calendarClock.webp" alt={'Calendar'} />
                 <RichTextRenderer document={blok?.date} />
               </IconAndText>
             </DateAndTime>
