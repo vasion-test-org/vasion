@@ -12,8 +12,8 @@ class SentryExampleAPIError extends Error {
 // A faulty API route to test Sentry's error monitoring
 export async function GET() {
   // Simulate some work
-  await new Promise(resolve => setTimeout(resolve, 100));
-  
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
   // Throw an error to test error monitoring
   throw new SentryExampleAPIError(
     'This error is raised on the backend called by the example page.'
