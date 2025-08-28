@@ -4,7 +4,7 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from '@sentry/nextjs';
-import { extractActualPath, updateSentryEvent } from '@/lib/sentryUtils';
+import { extractActualPath, updateSentryEvent } from './lib/sentryUtils';
 
 Sentry.init({
   dsn: 'https://09f9acc311b7fa710a017a9d751987c5@o4509917808885760.ingest.us.sentry.io/4509917809737728',
@@ -43,6 +43,62 @@ Sentry.init({
       } else {
         console.log(
           '[Sentry Edge] Could not extract actual path for transaction:',
+          event.transaction
+        );
+      }
+    }
+
+    return event;
+  },
+
+  // Add beforeSendTransaction to handle performance transactions
+  beforeSendTransaction(event) {
+    console.log('[Sentry Edge] beforeSendTransaction called with event:', {
+      type: event.type,
+      transaction: event.transaction,
+      op: event.contexts?.trace?.op,
+      description: event.contexts?.trace?.description,
+    });
+
+    // Handle dynamic route naming for catch-all routes in performance transactions
+    if (event.transaction && event.transaction.includes('[...slug]')) {
+      console.log('[Sentry Edge] Processing performance transaction:', {
+        originalTransaction: event.transaction,
+        eventType: event.type,
+        op: event.contexts?.trace?.op,
+      });
+
+      // For performance transactions, we need to extract path differently
+      let actualPath: string | null = null;
+
+      // Try to get from event contexts
+      if (event.contexts?.trace?.data?.url) {
+        try {
+          const url = new URL(event.contexts.trace.data.url);
+          actualPath = url.pathname;
+          console.log(
+            '[Sentry Edge] Found path from trace context:',
+            actualPath
+          );
+        } catch (error) {
+          console.warn('Failed to parse trace URL for Sentry:', error);
+        }
+      }
+
+      if (actualPath) {
+        console.log(
+          '[Sentry Edge] Updating performance transaction from',
+          event.transaction,
+          'to',
+          actualPath
+        );
+        event.transaction = actualPath;
+        if (event.contexts?.trace) {
+          event.contexts.trace.description = actualPath;
+        }
+      } else {
+        console.log(
+          '[Sentry Edge] Could not extract actual path for performance transaction:',
           event.transaction
         );
       }

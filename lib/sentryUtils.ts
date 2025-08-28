@@ -7,7 +7,8 @@ export function createDynamicRouteIntegration() {
   return {
     name: 'DynamicRouteIntegration',
     setupOnce() {
-      // We'll use beforeSend instead since setupOnce doesn't have access to the right context
+      // We'll use the global event processor approach instead
+      // This will be handled by the beforeSend hooks
     },
   };
 }
