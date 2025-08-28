@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import media from '@/styles/media';
 import useMedia from '@/functions/useMedia';
 
-const Image = ({
+const OptimizedImage = ({
   images,
   borderradius,
   filename,
@@ -96,5 +96,5 @@ const ImageContainer = styled.div`
   }
 `;
 
-export default Image;
-
+export default OptimizedImage;
+export { OptimizedImage as Image };
