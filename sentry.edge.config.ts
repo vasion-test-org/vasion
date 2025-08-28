@@ -68,38 +68,52 @@ Sentry.init({
         op: event.contexts?.trace?.op,
       });
 
-      // For performance transactions, we need to extract path differently
-      let actualPath: string | null = null;
+      // Get the trace data
+      const data = event.contexts?.trace?.data || {};
 
-      // Try to get from event contexts
-      if (event.contexts?.trace?.data?.url) {
-        try {
-          const url = new URL(event.contexts.trace.data.url);
-          actualPath = url.pathname;
-          console.log(
-            '[Sentry Edge] Found path from trace context:',
-            actualPath
-          );
-        } catch (error) {
-          console.warn('Failed to parse trace URL for Sentry:', error);
-        }
-      }
+      const method = data['http.method'];
+      const target = data['http.target']; // e.g. "/demo/"
+      const route = data['http.route']; // e.g. "/[...slug]"
 
-      if (actualPath) {
+      console.log('[Sentry Edge] Route data:', { method, target, route });
+
+      // If route is generic ([...slug]), use target instead
+      if (route?.includes('[...slug]') && target) {
+        const newTransaction = `${method} ${target}`;
         console.log(
-          '[Sentry Edge] Updating performance transaction from',
+          '[Sentry Edge] Updating transaction from',
           event.transaction,
           'to',
-          actualPath
+          newTransaction
         );
-        event.transaction = actualPath;
+        event.transaction = newTransaction;
+
+        // Also update the description
         if (event.contexts?.trace) {
-          event.contexts.trace.description = actualPath;
+          event.contexts.trace.description = target;
         }
       } else {
         console.log(
           '[Sentry Edge] Could not extract actual path for performance transaction:',
           event.transaction
+        );
+        console.log('[Sentry Edge] Available data:', { method, target, route });
+      }
+    }
+
+    // Always populate description if missing for better readability
+    if (!event.contexts?.trace?.description) {
+      const data = event.contexts?.trace?.data || {};
+      const method = data['http.method'];
+      const target = data['http.target'];
+      const route = data['http.route'];
+
+      if (event.contexts?.trace) {
+        event.contexts.trace.description =
+          target || route || event.transaction || 'transaction';
+        console.log(
+          '[Sentry Edge] Set trace description to:',
+          event.contexts.trace.description
         );
       }
     }

@@ -52,15 +52,6 @@ Sentry.init({
 
   // Add beforeSendTransaction to handle performance transactions
   beforeSendTransaction(event) {
-    console.log('[Sentry Server] beforeSendTransaction called with event:', {
-      type: event.type,
-      transaction: event.transaction,
-      op: event.contexts?.trace?.op,
-      description: event.contexts?.trace?.description,
-      timestamp: event.timestamp,
-      event_id: event.event_id,
-    });
-
     // Handle dynamic route naming for catch-all routes in performance transactions
     if (event.transaction && event.transaction.includes('[...slug]')) {
       console.log('[Sentry Server] Processing performance transaction:', {
@@ -69,63 +60,56 @@ Sentry.init({
         op: event.contexts?.trace?.op,
       });
 
-      // For performance transactions, we need to extract path differently
-      let actualPath: string | null = null;
+      // Get the trace data
+      const data = event.contexts?.trace?.data || {};
 
-      // Try to get from event contexts
-      if (event.contexts?.trace?.data?.url) {
-        try {
-          const url = new URL(event.contexts.trace.data.url);
-          actualPath = url.pathname;
-          console.log(
-            '[Sentry Server] Found path from trace context:',
-            actualPath
-          );
-        } catch (error) {
-          console.warn('Failed to parse trace URL for Sentry:', error);
-        }
-      }
+      const method = data['http.method'];
+      const target = data['http.target']; // e.g. "/demo/"
+      const route = data['http.route']; // e.g. "/[...slug]"
 
-      // Also check for custom headers in the trace data
-      if (!actualPath && event.contexts?.trace?.data?.headers) {
-        const headers = event.contexts.trace.data.headers;
-        console.log('[Sentry Server] Checking headers for path:', headers);
+      console.log('[Sentry Server] Route data:', { method, target, route });
 
-        if (headers['x-sentry-route']) {
-          actualPath = headers['x-sentry-route'];
-          console.log(
-            '[Sentry Server] Found path from x-sentry-route header:',
-            actualPath
-          );
-        } else if (headers['x-sentry-transaction']) {
-          actualPath = headers['x-sentry-transaction'];
-          console.log(
-            '[Sentry Server] Found path from x-sentry-transaction header:',
-            actualPath
-          );
-        }
-      }
-
-      if (actualPath) {
+      // If route is generic ([...slug]), use target instead
+      if (route?.includes('[...slug]') && target) {
+        const newTransaction = `${method} ${target}`;
         console.log(
-          '[Sentry Server] Updating performance transaction from',
+          '[Sentry Server] Updating transaction from',
           event.transaction,
           'to',
-          actualPath
+          newTransaction
         );
-        event.transaction = actualPath;
+        event.transaction = newTransaction;
+
+        // Also update the description
         if (event.contexts?.trace) {
-          event.contexts.trace.description = actualPath;
+          event.contexts.trace.description = target;
         }
       } else {
         console.log(
           '[Sentry Server] Could not extract actual path for performance transaction:',
           event.transaction
         );
-        // Log all available data for debugging
+        console.log('[Sentry Server] Available data:', {
+          method,
+          target,
+          route,
+        });
+      }
+    }
+
+    // Always populate description if missing for better readability
+    if (!event.contexts?.trace?.description) {
+      const data = event.contexts?.trace?.data || {};
+      const method = data['http.method'];
+      const target = data['http.target'];
+      const route = data['http.route'];
+
+      if (event.contexts?.trace) {
+        event.contexts.trace.description =
+          target || route || event.transaction || 'transaction';
         console.log(
-          '[Sentry Server] Full event context:',
-          JSON.stringify(event.contexts, null, 2)
+          '[Sentry Server] Set trace description to:',
+          event.contexts.trace.description
         );
       }
     }
