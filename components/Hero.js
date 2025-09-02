@@ -15,7 +15,6 @@ import useMedia from '@/functions/useMedia';
 import text from '@/styles/text';
 
 const Hero = ({ blok }) => {
-  console.log('Blog_hero => ', blok.blog_hero);
   const router = useRouter();
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
@@ -154,6 +153,7 @@ const Hero = ({ blok }) => {
             >
               <Image
                 images={blok.hero_asset}
+                priority={true}
                 // borderRadius={blok.hero_asset?.[0]?.border_radius}
               />
             </ImageWrapper>
@@ -392,6 +392,7 @@ const ImageWrapper = styled.div`
     ${(props) =>
       props.blog_hero &&
       `
+      max-width: 89.167vw;
       width: 89.167vw;
       height: 50.208vw;
       min-width: unset;
