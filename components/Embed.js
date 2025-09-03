@@ -6,7 +6,7 @@ import media from '@/styles/media';
 const Embed = ({ blok }) => {
   return (
     <Wrapper>
-      <StyledIframe alt='styled iframe' src={blok.embed_link} allowFullScreen />
+      <StyledIframe data-anchor-id={blok.anchor_id} alt='styled iframe' src={blok.embed_link} allowFullScreen />
     </Wrapper>
   );
 };
