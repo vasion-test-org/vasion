@@ -73,7 +73,7 @@ export default async function RootLayout({ children }) {
         {/* Google Tag Manager */}
         <Script
           id="gtm"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
         // Optimize GTM loading to reduce payload and prevent multiple loads
