@@ -40,7 +40,7 @@ export async function generateMetadata({ searchParams }) {
   const alternateLinks = {};
   for (const loc of locales) {
     // For homepage, we don't want /home/ in the URL
-    const path = loc === 'en' ? '' : `/${loc}`;
+    const path = loc === 'en' ? '' : loc;
     alternateLinks[loc] = buildCanonicalUrl(basePath, path);
   }
 
