@@ -56,7 +56,7 @@ export async function generateMetadata({ params, searchParams }) {
     shouldIncludeSelfReferencingHreflang(searchParams);
 
   // Build alternate links using utility function
-  const alternateLinks = buildAlternateLanguageUrls(
+  const alternateLinks = await buildAlternateLanguageUrls(
     basePath,
     currentLocale,
     storySlug,
