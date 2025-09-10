@@ -33,7 +33,9 @@ const nextConfig = {
   generateEtags: false,
   experimental: {
     optimizePackageImports: ['@rive-app/react-canvas', 'gsap'],
-    optimizeCss: true,
+    optimizeCss: {
+      inlineFonts: true,
+    },
     scrollRestoration: true,
   },
 

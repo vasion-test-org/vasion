@@ -193,6 +193,7 @@ export const revalidate = 3600; // Revalidate every hour
 **Dependencies Added:**
 
 - `web-vitals` package for comprehensive performance tracking
+- `critters` package for CSS optimization and inlining
 
 ## 📊 Expected Performance Improvements
 
@@ -228,7 +229,9 @@ export const revalidate = 3600; // Revalidate every hour
   },
   experimental: {
     optimizePackageImports: ['@rive-app/react-canvas', 'gsap'],
-    optimizeCss: true,
+    optimizeCss: {
+      inlineFonts: true,
+    },
     scrollRestoration: true,
   },
   compress: true,
