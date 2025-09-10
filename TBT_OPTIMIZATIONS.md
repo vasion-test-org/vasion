@@ -189,21 +189,25 @@ Monitor your performance improvements using:
 ## 🔧 Critical Fixes Applied
 
 ### Google Ads Optimization:
+
 - **Before**: Loading 3 separate gtag.js scripts (inefficient)
 - **After**: Load gtag.js once with primary ID, configure others with `gtag('config', 'ID')`
 - **Impact**: Reduced network requests from 3 to 1, improved loading efficiency
 
 ### Function Idempotency:
+
 - **Before**: `loadAdsScripts` could be called multiple times
 - **After**: Added `window.googleAdsLoaded` check to prevent duplicate loading
 - **Impact**: Prevents duplicate script injection and memory leaks
 
 ### Resource Cleanup:
+
 - **Before**: Performance observers and dataLayer modifications not cleaned up
 - **After**: Proper cleanup in useEffect return function
 - **Impact**: Prevents memory leaks in Next.js fast refresh and navigation
 
 ### Function Naming:
+
 - **Before**: `monitorGTMSize` was actually monitoring load time
 - **After**: Split into `monitorGTMLoadTime` and `monitorGTMSize` with correct implementations
 - **Impact**: Clear separation of concerns and accurate monitoring
