@@ -26,12 +26,15 @@ This document outlines the comprehensive optimizations implemented to reduce Tot
 
 ### 3. Third-Party Script Optimization
 
-- **Strategic Loading**: Already optimized in layout.js:
-  - GTM: `afterInteractive` strategy
-  - Marketo: `afterInteractive` strategy
-  - Intercom: `lazyOnload` with user interaction triggers
-  - Hotjar: `lazyOnload` with user interaction triggers
-  - VWO: Optimized loading
+- **Strategic Loading**: Optimized in layout.js:
+  - **GTM**: `lazyOnload` strategy with performance optimizations
+  - **Google Analytics**: `afterInteractive` strategy with optimized loading
+  - **Google Ads**: Conditional loading (immediate on conversion pages, deferred on others)
+  - **Marketo**: `afterInteractive` strategy
+  - **Intercom**: `lazyOnload` with user interaction triggers
+  - **Hotjar**: `lazyOnload` with user interaction triggers
+  - **VWO**: Optimized loading
+- **GTM Performance Monitoring**: Real-time monitoring of GTM script load times and container size
 - **User Interaction Triggers**: Scripts load only after user interaction to improve initial performance
 
 ### 4. Performance Configuration
@@ -144,34 +147,58 @@ Monitor your performance improvements using:
 ## 🔧 Script Optimization Improvements
 
 ### Fixed Issues:
+
 - **Multiple Script Loading**: Fixed `deferScriptsOnInteraction` to prevent scripts from loading multiple times
 - **Event Listener Cleanup**: All event listeners are properly removed after first interaction
 - **Memory Leaks Prevention**: Added proper cleanup and timeout handling
 
 ### New Features:
+
 - **Intersection Observer Loading**: Load scripts when specific elements become visible
 - **Idle Callback Loading**: Load non-critical scripts when browser is idle
 - **Timeout Handling**: Prevent hanging script loads with 10-second timeout
 - **Better Error Handling**: Improved error reporting and fallback strategies
 
+## 🎯 GTM Performance Optimizations
+
+### Implemented Optimizations:
+
+- **Lazy Loading Strategy**: Changed GTM from `afterInteractive` to `lazyOnload` to reduce initial TBT
+- **Conditional Google Ads Loading**: Google Ads scripts load immediately on conversion pages, deferred on others
+- **Optimized Script Attributes**: Added `crossOrigin="anonymous"` and performance attributes
+- **Performance Monitoring**: Real-time monitoring of GTM script load times and container size
+- **DataLayer Optimization**: Early initialization to prevent blocking
+
+### Expected TBT Improvements:
+
+- **GTM Script**: Reduced from 155ms to ~50-80ms (lazy loading)
+- **Google Analytics**: Optimized loading with better error handling
+- **Google Ads**: Conditional loading reduces unnecessary script execution
+- **Overall Impact**: Estimated 100-150ms TBT reduction
+
+### Monitoring Features:
+
+- **Load Time Tracking**: Console logging of GTM script performance
+- **Size Monitoring**: Warnings when GTM container exceeds 200KB
+- **DataLayer Monitoring**: Tracking of dataLayer push frequency
+- **Performance Alerts**: Automatic warnings for slow script loads
+
 ### Usage Examples:
+
 ```javascript
 // Load scripts on first user interaction (optimized)
 deferScriptsOnInteraction([
-  { src: '/analytics.js', options: { strategy: 'afterInteractive' } }
+  { src: '/analytics.js', options: { strategy: 'afterInteractive' } },
 ]);
 
 // Load scripts when element becomes visible
-loadScriptsOnIntersection(
-  [{ src: '/heavy-component.js' }],
-  '.lazy-component',
-  { threshold: 0.1, rootMargin: '50px' }
-);
+loadScriptsOnIntersection([{ src: '/heavy-component.js' }], '.lazy-component', {
+  threshold: 0.1,
+  rootMargin: '50px',
+});
 
 // Load scripts when browser is idle
-loadScriptsOnIdle([
-  { src: '/non-critical.js' }
-], { timeout: 2000 });
+loadScriptsOnIdle([{ src: '/non-critical.js' }], { timeout: 2000 });
 ```
 
 ## 📝 Notes
