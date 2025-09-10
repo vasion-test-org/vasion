@@ -7,6 +7,9 @@ import { useEffect } from 'react';
  */
 const GTMPerformanceMonitor = () => {
   useEffect(() => {
+    let performanceObserver = null;
+    let originalDataLayerPush = null;
+
     // Monitor GTM script loading performance
     const monitorGTMPerformance = () => {
       if (typeof window === 'undefined' || !window.performance) return;
@@ -37,6 +40,7 @@ const GTMPerformanceMonitor = () => {
 
       try {
         observer.observe({ entryTypes: ['resource'] });
+        performanceObserver = observer;
       } catch (error) {
         console.log('Performance Observer not supported');
       }
@@ -48,28 +52,31 @@ const GTMPerformanceMonitor = () => {
         'script[src*="googletagmanager.com"]'
       );
       let totalSize = 0;
+      let completedRequests = 0;
 
       gtmScripts.forEach((script) => {
         if (script.src) {
-          // Estimate script size (this is approximate)
           fetch(script.src, { method: 'HEAD' })
             .then((response) => {
               const contentLength = response.headers.get('content-length');
               if (contentLength) {
                 totalSize += parseInt(contentLength);
                 console.log(`GTM Script Size: ${contentLength} bytes`);
-
-                // Warn if total size is too large
+              }
+            })
+            .catch((error) => {
+              console.log('Could not fetch GTM script size');
+            })
+            .finally(() => {
+              completedRequests++;
+              if (completedRequests === gtmScripts.length) {
+                console.log(`Total GTM Container Size: ${totalSize} bytes`);
                 if (totalSize > 200000) {
-                  // 200KB limit
                   console.warn(
                     'GTM container size is large, consider optimization'
                   );
                 }
               }
-            })
-            .catch((error) => {
-              console.log('Could not fetch GTM script size');
             });
         }
       });
@@ -78,7 +85,7 @@ const GTMPerformanceMonitor = () => {
     // Monitor dataLayer performance
     const monitorDataLayer = () => {
       if (window.dataLayer) {
-        const originalPush = window.dataLayer.push;
+        originalDataLayerPush = window.dataLayer.push;
         let pushCount = 0;
 
         window.dataLayer.push = function (...args) {
@@ -90,7 +97,7 @@ const GTMPerformanceMonitor = () => {
             console.warn('High number of dataLayer pushes detected');
           }
 
-          return originalPush.apply(this, args);
+          return originalDataLayerPush.apply(this, args);
         };
       }
     };
@@ -100,9 +107,17 @@ const GTMPerformanceMonitor = () => {
     monitorGTMSize();
     monitorDataLayer();
 
-    // Cleanup
+    // Cleanup function
     return () => {
-      // Cleanup if needed
+      // Disconnect performance observer
+      if (performanceObserver) {
+        performanceObserver.disconnect();
+      }
+
+      // Restore original dataLayer.push function
+      if (originalDataLayerPush && window.dataLayer) {
+        window.dataLayer.push = originalDataLayerPush;
+      }
     };
   }, []);
 

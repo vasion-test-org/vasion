@@ -238,26 +238,33 @@ export default async function RootLayout({ children }) {
           strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
-        // Optimized Google Ads loading
+        // Optimized Google Ads loading - single script with multiple configs
         (function() {
           if (window.googleAdsLoaded) return;
           
-          const adsScripts = [
-            'https://www.googletagmanager.com/gtag/js?id=AW-977173538&cx=c&gtm=4e5981',
-            'https://www.googletagmanager.com/gtag/js?id=AW-11184646465&cx=c&gtm=4e5981',
-            'https://www.googletagmanager.com/gtag/js?id=AW-11184713828&cx=c&gtm=4e5981'
-          ];
+          const primaryAdsId = 'AW-977173538';
+          const additionalAdsIds = ['AW-11184646465', 'AW-11184713828'];
           
           const loadAdsScripts = () => {
-            adsScripts.forEach(src => {
-              const script = document.createElement('script');
-              script.async = true;
-              script.defer = true;
-              script.src = src;
-              script.crossOrigin = 'anonymous';
-              document.head.appendChild(script);
-            });
+            if (window.googleAdsLoaded) return;
             window.googleAdsLoaded = true;
+            
+            // Load gtag.js once with primary ID
+            const script = document.createElement('script');
+            script.async = true;
+            script.defer = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=' + primaryAdsId + '&cx=c&gtm=4e5981';
+            script.crossOrigin = 'anonymous';
+            document.head.appendChild(script);
+            
+            // Configure additional ad accounts using gtag config
+            script.onload = function() {
+              additionalAdsIds.forEach(function(id) {
+                if (window.gtag) {
+                  window.gtag('config', id);
+                }
+              });
+            };
           };
           
           // Load on conversion pages immediately
@@ -270,7 +277,7 @@ export default async function RootLayout({ children }) {
           } else {
             // Defer until user interaction
             const events = ['click', 'scroll', 'mousemove'];
-            events.forEach(event => {
+            events.forEach(function(event) {
               document.addEventListener(event, loadAdsScripts, { once: true, passive: true });
             });
           }

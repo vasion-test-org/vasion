@@ -151,6 +151,9 @@ Monitor your performance improvements using:
 - **Multiple Script Loading**: Fixed `deferScriptsOnInteraction` to prevent scripts from loading multiple times
 - **Event Listener Cleanup**: All event listeners are properly removed after first interaction
 - **Memory Leaks Prevention**: Added proper cleanup and timeout handling
+- **Google Ads Duplicate Loading**: Fixed to load gtag.js once and configure multiple ad accounts
+- **Function Idempotency**: Added proper checks to prevent duplicate script loading
+- **Resource Cleanup**: Fixed memory leaks in performance monitoring components
 
 ### New Features:
 
@@ -182,6 +185,28 @@ Monitor your performance improvements using:
 - **Size Monitoring**: Warnings when GTM container exceeds 200KB
 - **DataLayer Monitoring**: Tracking of dataLayer push frequency
 - **Performance Alerts**: Automatic warnings for slow script loads
+
+## 🔧 Critical Fixes Applied
+
+### Google Ads Optimization:
+- **Before**: Loading 3 separate gtag.js scripts (inefficient)
+- **After**: Load gtag.js once with primary ID, configure others with `gtag('config', 'ID')`
+- **Impact**: Reduced network requests from 3 to 1, improved loading efficiency
+
+### Function Idempotency:
+- **Before**: `loadAdsScripts` could be called multiple times
+- **After**: Added `window.googleAdsLoaded` check to prevent duplicate loading
+- **Impact**: Prevents duplicate script injection and memory leaks
+
+### Resource Cleanup:
+- **Before**: Performance observers and dataLayer modifications not cleaned up
+- **After**: Proper cleanup in useEffect return function
+- **Impact**: Prevents memory leaks in Next.js fast refresh and navigation
+
+### Function Naming:
+- **Before**: `monitorGTMSize` was actually monitoring load time
+- **After**: Split into `monitorGTMLoadTime` and `monitorGTMSize` with correct implementations
+- **Impact**: Clear separation of concerns and accurate monitoring
 
 ### Usage Examples:
 
