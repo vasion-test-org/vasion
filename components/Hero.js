@@ -8,7 +8,12 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 import { ScreenContext } from '@/components/providers/Screen';
 import Button from '@/components/globalComponents/Button';
 import Image from '@/components/globalComponents/Image';
-import LogoCube from './LogoCube';
+import dynamic from 'next/dynamic';
+
+const LogoCube = dynamic(() => import('./LogoCube'), {
+  loading: () => <div style={{ height: '200px' }} />, // Placeholder height
+  ssr: false, // Disable SSR for this component since it uses GSAP
+});
 import LightboxBtn from '@/components/LightboxButton';
 import LazySection from '@/components/LazySection';
 import { useRouter } from 'next/navigation';
