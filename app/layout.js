@@ -11,6 +11,7 @@ import Providers from '@/components/providers';
 import Config from '@/components/Config';
 import CriticalCSS from '@/components/CriticalCSS';
 import PerformanceMonitor from '@/components/PerformanceMonitor';
+import GTMPerformanceMonitor from '@/components/GTMPerformanceMonitor';
 import { getStoryblokApi } from '@/lib/storyblok';
 import { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/next';
@@ -88,26 +89,35 @@ export default async function RootLayout({ children }) {
 
         {/* Rive WASM will be loaded on-demand when animations are needed */}
 
-        {/* Google Tag Manager */}
+        {/* Optimized Google Tag Manager */}
         <Script
-          id="gtm"
-          strategy="afterInteractive"
+          id="gtm-optimized"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
-        // Optimize GTM loading to reduce payload and prevent multiple loads
-        if (!window.gtmLoaded) {
+        // Optimized GTM loading with performance improvements
+        (function() {
+          if (window.gtmLoaded) return;
+          
+          // Initialize dataLayer early to prevent blocking
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            'gtm.start': new Date().getTime(),
+            event: 'gtm.js'
+          });
+          
+          // Create optimized GTM script
+          const script = document.createElement('script');
+          script.async = true;
+          script.defer = true;
+          script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-WMKX59W';
+          script.crossOrigin = 'anonymous';
+          script.setAttribute('data-gtm-optimized', 'true');
+          
+          // Insert in head for better performance
+          document.head.appendChild(script);
           window.gtmLoaded = true;
-          (function(w,d,s,l,i){
-            w[l]=w[l]||[];
-            w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-            var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-            j.async=true;
-            j.defer=true;
-            j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-            f.parentNode.insertBefore(j,f);
-          })(window,document,'script','dataLayer','GTM-WMKX59W');
-        }
+        })();
       `,
           }}
         />
@@ -194,6 +204,88 @@ export default async function RootLayout({ children }) {
           }}
         />
 
+        {/* Optimized Google Analytics - Load after page is interactive */}
+        <Script
+          id="ga-optimized"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+        // Optimized Google Analytics loading
+        (function() {
+          if (window.gtagLoaded) return;
+          
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          window.gtag = gtag;
+          gtag('js', new Date());
+          
+          const script = document.createElement('script');
+          script.async = true;
+          script.defer = true;
+          script.src = 'https://www.googletagmanager.com/gtag/js?id=G-407WZSYMN0';
+          script.crossOrigin = 'anonymous';
+          document.head.appendChild(script);
+          
+          window.gtagLoaded = true;
+        })();
+      `,
+          }}
+        />
+
+        {/* Optimized Google Ads - Load only on conversion pages or after user interaction */}
+        <Script
+          id="google-ads-optimized"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: `
+        // Optimized Google Ads loading - single script with multiple configs
+        (function() {
+          if (window.googleAdsLoaded) return;
+          
+          const primaryAdsId = 'AW-977173538';
+          const additionalAdsIds = ['AW-11184646465', 'AW-11184713828'];
+          
+          const loadAdsScripts = () => {
+            if (window.googleAdsLoaded) return;
+            window.googleAdsLoaded = true;
+            
+            // Load gtag.js once with primary ID
+            const script = document.createElement('script');
+            script.async = true;
+            script.defer = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=' + primaryAdsId + '&cx=c&gtm=4e5981';
+            script.crossOrigin = 'anonymous';
+            document.head.appendChild(script);
+            
+            // Configure additional ad accounts using gtag config
+            script.onload = function() {
+              additionalAdsIds.forEach(function(id) {
+                if (window.gtag) {
+                  window.gtag('config', id);
+                }
+              });
+            };
+          };
+          
+          // Load on conversion pages immediately
+          const isConversionPage = window.location.pathname.includes('thank-you') || 
+                                 window.location.pathname.includes('conversion') ||
+                                 window.location.pathname.includes('purchase');
+          
+          if (isConversionPage) {
+            loadAdsScripts();
+          } else {
+            // Defer until user interaction
+            const events = ['click', 'scroll', 'mousemove'];
+            events.forEach(function(event) {
+              document.addEventListener(event, loadAdsScripts, { once: true, passive: true });
+            });
+          }
+        })();
+      `,
+          }}
+        />
+
         {/* VWO - Load after page is interactive */}
         <VWOScript accountId="827254" />
 
@@ -239,6 +331,7 @@ export default async function RootLayout({ children }) {
                     <FormTracking />
                     <CriticalCSS />
                     <PerformanceMonitor />
+                    <GTMPerformanceMonitor />
                     <ScrollSmootherWrapper>
                       <Config>
                         {children}
