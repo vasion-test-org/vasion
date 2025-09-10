@@ -10,7 +10,7 @@ import {
   buildCanonicalUrl,
   buildAlternateLanguageUrls,
 } from '@/lib/seoUtils';
-export const revalidate = 60;
+export const revalidate = 3600; // Revalidate every hour for better performance
 
 export async function generateMetadata({ params, searchParams }) {
   const slugArray = params.slug || [];

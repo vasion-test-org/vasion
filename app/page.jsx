@@ -19,7 +19,9 @@ export default async function Home() {
   );
 }
 
-export const dynamic = 'force-dynamic';
+// Use static generation for better performance
+export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every hour
 
 export async function generateMetadata({ searchParams }) {
   const story = await fetchStory('home');

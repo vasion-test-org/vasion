@@ -23,6 +23,9 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   // Performance optimizations
   compress: true,
@@ -30,6 +33,10 @@ const nextConfig = {
   generateEtags: false,
   experimental: {
     optimizePackageImports: ['@rive-app/react-canvas', 'gsap'],
+    optimizeCss: {
+      inlineFonts: true,
+    },
+    scrollRestoration: true,
   },
 
   // Bundle analyzer (uncomment for analysis)
@@ -765,6 +772,43 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'no-store, max-age=0, must-revalidate',
+          },
+        ],
+      },
+      // Aggressive caching for static assets
+      {
+        source: '/fonts/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/images/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/image(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
           },
         ],
       },
