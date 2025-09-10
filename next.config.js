@@ -43,6 +43,11 @@ const nextConfig = {
       'gsap',
       'styled-components',
       '@storyblok/react',
+      '@storyblok/richtext',
+      '@sentry/nextjs',
+      'react-player',
+      'axios',
+      'clone-deep',
     ],
     optimizeCss: {
       inlineFonts: true,
@@ -74,38 +79,114 @@ const nextConfig = {
       };
     }
 
-    // Chunk optimization for better TBT
+    // Ultra-aggressive chunk optimization for better TBT
     if (!isServer && !dev) {
       config.optimization = {
         ...config.optimization,
         splitChunks: {
           chunks: 'all',
+          minSize: 10000,
+          maxSize: 150000, // ~150KB max per chunk
+          minChunks: 1,
+          maxAsyncRequests: 30,
+          maxInitialRequests: 30,
           cacheGroups: {
-            // Separate vendor chunks for better caching
+            // React and core libraries - highest priority
+            react: {
+              test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+              name: 'react',
+              chunks: 'all',
+              priority: 40,
+              enforce: true,
+            },
+            // Next.js framework
+            nextjs: {
+              test: /[\\/]node_modules[\\/]next[\\/]/,
+              name: 'nextjs',
+              chunks: 'all',
+              priority: 35,
+              enforce: true,
+            },
+            // GSAP - separate chunk for animations
+            gsap: {
+              test: /[\\/]node_modules[\\/](gsap|@gsap)[\\/]/,
+              name: 'gsap',
+              chunks: 'all',
+              priority: 30,
+              enforce: true,
+            },
+            // Rive - separate chunk for animations
+            rive: {
+              test: /[\\/]node_modules[\\/]@rive-app[\\/]/,
+              name: 'rive',
+              chunks: 'all',
+              priority: 30,
+              enforce: true,
+            },
+            // Storyblok CMS
+            storyblok: {
+              test: /[\\/]node_modules[\\/]@storyblok[\\/]/,
+              name: 'storyblok',
+              chunks: 'all',
+              priority: 30,
+              enforce: true,
+            },
+            // Styled Components
+            styled: {
+              test: /[\\/]node_modules[\\/]styled-components[\\/]/,
+              name: 'styled-components',
+              chunks: 'all',
+              priority: 30,
+              enforce: true,
+            },
+            // Sentry monitoring
+            sentry: {
+              test: /[\\/]node_modules[\\/]@sentry[\\/]/,
+              name: 'sentry',
+              chunks: 'all',
+              priority: 30,
+              enforce: true,
+            },
+            // React Player
+            reactPlayer: {
+              test: /[\\/]node_modules[\\/]react-player[\\/]/,
+              name: 'react-player',
+              chunks: 'all',
+              priority: 25,
+              enforce: true,
+            },
+            // Utility libraries
+            utils: {
+              test: /[\\/]node_modules[\\/](axios|clone-deep)[\\/]/,
+              name: 'utils',
+              chunks: 'all',
+              priority: 25,
+              enforce: true,
+            },
+            // VWO
+            vwo: {
+              test: /[\\/]node_modules[\\/]vwo-smartcode-nextjs[\\/]/,
+              name: 'vwo',
+              chunks: 'all',
+              priority: 25,
+              enforce: true,
+            },
+            // Web Vitals
+            webVitals: {
+              test: /[\\/]node_modules[\\/]web-vitals[\\/]/,
+              name: 'web-vitals',
+              chunks: 'all',
+              priority: 25,
+              enforce: true,
+            },
+            // Remaining vendor libraries - split into smaller chunks
             vendor: {
               test: /[\\/]node_modules[\\/]/,
               name: 'vendors',
               chunks: 'all',
               priority: 10,
-            },
-            // Separate large libraries
-            gsap: {
-              test: /[\\/]node_modules[\\/](gsap|@gsap)[\\/]/,
-              name: 'gsap',
-              chunks: 'all',
-              priority: 20,
-            },
-            rive: {
-              test: /[\\/]node_modules[\\/]@rive-app[\\/]/,
-              name: 'rive',
-              chunks: 'all',
-              priority: 20,
-            },
-            storyblok: {
-              test: /[\\/]node_modules[\\/]@storyblok[\\/]/,
-              name: 'storyblok',
-              chunks: 'all',
-              priority: 20,
+              minChunks: 1,
+              maxSize: 100000, // Smaller vendor chunks
             },
             // Default chunk optimization
             default: {
