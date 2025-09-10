@@ -9,6 +9,8 @@ import './globals.css';
 import ScrollSmootherWrapper from '@/components/ScrollSmoothWrapper';
 import Providers from '@/components/providers';
 import Config from '@/components/Config';
+import CriticalCSS from '@/components/CriticalCSS';
+import PerformanceMonitor from '@/components/PerformanceMonitor';
 import { getStoryblokApi } from '@/lib/storyblok';
 import { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/next';
@@ -65,6 +67,22 @@ export default async function RootLayout({ children }) {
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          href="/fonts/Archivo-SemiBold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+          fetchPriority="high"
+        />
+
+        {/* Preload critical CSS */}
+        <link
+          rel="preload"
+          href="/globals.css"
+          as="style"
           fetchPriority="high"
         />
 
@@ -219,6 +237,8 @@ export default async function RootLayout({ children }) {
                 <ThankYouProvider>
                   <PageDataProvider>
                     <FormTracking />
+                    <CriticalCSS />
+                    <PerformanceMonitor />
                     <ScrollSmootherWrapper>
                       <Config>
                         {children}
