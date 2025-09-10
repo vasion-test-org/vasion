@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const nextConfig = {
   trailingSlash: true,
   compiler: {
@@ -31,12 +35,24 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
+  // Enable SWC minification for better performance
+  swcMinify: true,
+  // Optimize bundle size
+  output: 'standalone',
   experimental: {
-    optimizePackageImports: ['@rive-app/react-canvas', 'gsap'],
+    optimizePackageImports: [
+      '@rive-app/react-canvas',
+      'gsap',
+      'styled-components',
+      '@storyblok/react',
+    ],
     optimizeCss: {
       inlineFonts: true,
     },
     scrollRestoration: true,
+    // Enable modern bundling optimizations
+    esmExternals: true,
+    serverComponentsExternalPackages: ['@rive-app/react-canvas'],
   },
 
   // Bundle analyzer (uncomment for analysis)
@@ -52,12 +68,56 @@ const nextConfig = {
   //   }
   //   return config;
   // },
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
     // Optimize WebAssembly loading for Rive
     if (!isServer) {
       config.experiments = {
         ...config.experiments,
         asyncWebAssembly: true,
+      };
+    }
+
+    // Chunk optimization for better TBT
+    if (!isServer && !dev) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            // Separate vendor chunks for better caching
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+              priority: 10,
+            },
+            // Separate large libraries
+            gsap: {
+              test: /[\\/]node_modules[\\/](gsap|@gsap)[\\/]/,
+              name: 'gsap',
+              chunks: 'all',
+              priority: 20,
+            },
+            rive: {
+              test: /[\\/]node_modules[\\/]@rive-app[\\/]/,
+              name: 'rive',
+              chunks: 'all',
+              priority: 20,
+            },
+            storyblok: {
+              test: /[\\/]node_modules[\\/]@storyblok[\\/]/,
+              name: 'storyblok',
+              chunks: 'all',
+              priority: 20,
+            },
+            // Default chunk optimization
+            default: {
+              minChunks: 2,
+              priority: -20,
+              reuseExistingChunk: true,
+            },
+          },
+        },
       };
     }
 
@@ -816,7 +876,7 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);
 
 // Injected content via Sentry wizard below
 
