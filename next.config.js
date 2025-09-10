@@ -35,8 +35,6 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
-  // Enable SWC minification for better performance
-  swcMinify: true,
   // Optimize bundle size
   output: 'standalone',
   experimental: {
@@ -52,7 +50,6 @@ const nextConfig = {
     scrollRestoration: true,
     // Enable modern bundling optimizations
     esmExternals: true,
-    serverComponentsExternalPackages: ['@rive-app/react-canvas'],
   },
 
   // Bundle analyzer (uncomment for analysis)
