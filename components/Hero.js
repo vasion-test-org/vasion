@@ -369,14 +369,14 @@ const SocialCTA = styled.div`
 `;
 
 const ImageWrapper = styled.div`
-  max-width: 37.5vw;
+  min-width: 37.5vw;
 
   ${media.fullWidth} {
-    max-width: 600px;
+    min-width: 600px;
   }
 
   ${media.tablet} {
-    max-width: 58.594vw;
+    min-width: 58.594vw;
   }
 
   ${media.mobile} {
