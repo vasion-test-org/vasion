@@ -18,8 +18,6 @@ const OptimizedImage = ({
   className,
   style,
   quality = 85,
-  placeholder = 'blur',
-  blurDataURL,
 }) => {
   // console.log(borderradius)
   let imageSrc = filename
@@ -51,8 +49,6 @@ const OptimizedImage = ({
           priority={priority}
           sizes={sizes}
           quality={quality}
-          placeholder={placeholder}
-          blurDataURL={blurDataURL}
           style={{
             objectFit: 'contain',
             borderRadius: `${borderradius || 0}px`,
@@ -72,8 +68,6 @@ const OptimizedImage = ({
       priority={priority}
       sizes={sizes}
       quality={quality}
-      placeholder={placeholder}
-      blurDataURL={blurDataURL}
       className={className}
       style={{
         width: '100%',

@@ -9,8 +9,6 @@ const LazyImage = ({
   priority = false,
   sizes = '100vw',
   quality = 85,
-  placeholder = 'blur',
-  blurDataURL,
   className = '',
   style = {},
   ...props
@@ -24,8 +22,6 @@ const LazyImage = ({
         priority={priority}
         sizes={sizes}
         quality={quality}
-        placeholder={placeholder}
-        blurDataURL={blurDataURL}
         className={className}
         style={style}
         {...props}
@@ -62,8 +58,6 @@ const LazyImage = ({
         priority={false}
         sizes={sizes}
         quality={quality}
-        placeholder={placeholder}
-        blurDataURL={blurDataURL}
         className={className}
         style={style}
         {...props}
