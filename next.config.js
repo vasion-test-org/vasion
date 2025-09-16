@@ -39,8 +39,6 @@ const nextConfig = {
   output: 'standalone',
   experimental: {
     optimizePackageImports: [
-      '@rive-app/react-canvas',
-      'gsap',
       'styled-components',
       '@storyblok/react',
       '@storyblok/richtext',
@@ -57,8 +55,6 @@ const nextConfig = {
     esmExternals: true,
     // Enable React 19 concurrent features for better scheduler performance
     reactCompiler: true,
-    // Enable concurrent rendering optimizations
-    serverComponentsExternalPackages: ['gsap', '@rive-app/react-canvas'],
   },
 
   // Bundle analyzer (uncomment for analysis)
