@@ -401,7 +401,6 @@ const ImageWrapper = styled.div`
       height: 22.363vw;
     `}
   }
-
   ${media.mobile} {
     min-width: ${(props) => (props.blog_hero ? '89.167vw' : '100%')};
     ${(props) =>
