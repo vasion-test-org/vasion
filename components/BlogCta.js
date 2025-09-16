@@ -10,6 +10,7 @@ import { ScreenContext } from '@/components/providers/Screen';
 import useMedia from '@/functions/useMedia';
 
 const BlogCta = ({ blok }) => {
+  console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { mobile } = useContext(ScreenContext);
@@ -169,7 +170,7 @@ const BlogCtaWrapper = styled.div`
   }
   ${media.mobile} {
     width: 89.167vw;
-    pading: 3.333vw 4.167vw;
+    padding: 3.333vw 4.167vw;
 
     border-radius: 3.333vw;
   }

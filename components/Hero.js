@@ -375,7 +375,6 @@ const SocialCTA = styled.div`
   }
 `;
 const ImageWrapper = styled.div`
-<<<<<<< HEAD
   max-width: ${(props) => (props.blog_hero ? '25.438vw' : '37.5vw')};
   align-self: ${(props) => (props.blog_hero ? 'flex-start' : 'unset')};
   ${(props) =>
@@ -384,10 +383,8 @@ const ImageWrapper = styled.div`
     width: 25.438vw;
     height: 14.313vw;
   `}
-
   ${media.fullWidth} {
     max-width: ${(props) => (props.blog_hero ? '407px' : '600px')};
-
     ${(props) =>
       props.blog_hero &&
       `
@@ -395,31 +392,17 @@ const ImageWrapper = styled.div`
       height: 229px;
     `}
   }
-
   ${media.tablet} {
     max-width: ${(props) => (props.blog_hero ? '39.746vw' : '58.594vw')};
-
     ${(props) =>
       props.blog_hero &&
       `
       width: 39.746vw;
       height: 22.363vw;
     `}
-=======
-  min-width: 37.5vw;
-
-  ${media.fullWidth} {
-    min-width: 600px;
   }
-
-  ${media.tablet} {
-    min-width: 58.594vw;
->>>>>>> fa80b82b265e3c8840921e06e20de9a1b76c8792
-  }
-
   ${media.mobile} {
     min-width: ${(props) => (props.blog_hero ? '89.167vw' : '100%')};
-
     ${(props) =>
       props.blog_hero &&
       `
