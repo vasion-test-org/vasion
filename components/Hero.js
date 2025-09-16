@@ -8,8 +8,14 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 import { ScreenContext } from '@/components/providers/Screen';
 import Button from '@/components/globalComponents/Button';
 import Image from '@/components/globalComponents/Image';
-import LogoCube from './LogoCube';
+import dynamic from 'next/dynamic';
+
+const LogoCube = dynamic(() => import('./LogoCube'), {
+  loading: () => <div style={{ height: '200px' }} />, // Placeholder height
+  ssr: false, // Disable SSR for this component since it uses GSAP
+});
 import LightboxBtn from '@/components/LightboxButton';
+import LazySection from '@/components/LazySection';
 import { useRouter } from 'next/navigation';
 import useMedia from '@/functions/useMedia';
 import text from '@/styles/text';
@@ -79,6 +85,9 @@ const Hero = ({ blok }) => {
               >
                 <Image
                   images={blok.hero_asset}
+                  priority={true}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  quality={90}
                   // borderRadius={blok.hero_asset?.[0]?.border_radius}
                 />
               </ImageWrapper>
@@ -109,37 +118,40 @@ const Hero = ({ blok }) => {
             )}
 
             {blok.badges && (
-              <BadgesSectionContainer>
-                {blok.badge_section_text &&
-                  blok.badge_section_text.map((badge_text) => (
-                    <BadgeEyebrow
-                      {...storyblokEditable(badge_text)}
-                      key={badge_text._uid}
-                    >
-                      <RichTextRenderer
-                        document={badge_text?.copy}
-                        responsiveTextStyles={
-                          badge_text?.responsive_text_styles
-                        }
-                      />
-                    </BadgeEyebrow>
-                  ))}
-                <BadgesContainer>
-                  {blok.badges.map((badge) => (
-                    <BadgeLink
-                      key={badge._uid}
-                      href={badge.link?.url || '#'}
-                      target={badge.link?.target || '_self'}
-                      rel="noopener noreferrer"
-                    >
-                      <BadgeImage
-                        src={badge.logo?.filename}
-                        alt={badge.logo?.alt || 'Badge'}
-                      />
-                    </BadgeLink>
-                  ))}
-                </BadgesContainer>
-              </BadgesSectionContainer>
+              <LazySection threshold={0.2} rootMargin="100px">
+                <BadgesSectionContainer>
+                  {blok.badge_section_text &&
+                    blok.badge_section_text.map((badge_text) => (
+                      <BadgeEyebrow
+                        {...storyblokEditable(badge_text)}
+                        key={badge_text._uid}
+                      >
+                        <RichTextRenderer
+                          document={badge_text?.copy}
+                          responsiveTextStyles={
+                            badge_text?.responsive_text_styles
+                          }
+                        />
+                      </BadgeEyebrow>
+                    ))}
+                  <BadgesContainer>
+                    {blok.badges.map((badge) => (
+                      <BadgeLink
+                        key={badge._uid}
+                        href={badge.link?.url || '#'}
+                        target={badge.link?.target || '_self'}
+                        rel="noopener noreferrer"
+                      >
+                        <BadgeImage
+                          src={badge.logo?.filename}
+                          alt={badge.logo?.alt || 'Badge'}
+                          loading="lazy"
+                        />
+                      </BadgeLink>
+                    ))}
+                  </BadgesContainer>
+                </BadgesSectionContainer>
+              </LazySection>
             )}
             {blok?.light_box_button &&
               blok?.light_box_button[0]?.lightbox_text && (
@@ -154,6 +166,8 @@ const Hero = ({ blok }) => {
               <Image
                 images={blok.hero_asset}
                 priority={true}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                quality={90}
                 // borderRadius={blok.hero_asset?.[0]?.border_radius}
               />
             </ImageWrapper>
@@ -201,35 +215,41 @@ const Hero = ({ blok }) => {
             </SocialCTA>
           )}
           {blok.review_buttons && (
-            <ReviewButtons>
-              <ReviewButton
-                src={'/images/reviewButton.webp'}
-                alt={'review-us'}
-                width="164"
-                height="62"
-                onClick={() => handleNavigate('/review-us')}
-              />
-              <ReviewButton
-                src={'/images/reviewButton-1.webp'}
-                alt={'G2 Reviews'}
-                width="164"
-                height="62"
-                onClick={() => handleNavigate('/review-us')}
-              />
-              <ReviewButton
-                src={'/images/reviewButton-2.webp'}
-                alt={'Review Us'}
-                width="164"
-                height="62"
-                onClick={() => handleNavigate('/review-us')}
-              />
-              <AnchorButton href="#reddit-reviews">
+            <LazySection threshold={0.2} rootMargin="100px">
+              <ReviewButtons>
                 <ReviewButton
-                  src={'/images/ReviewButton-4.webp'}
-                  alt={'Reviews'}
+                  src={'/images/reviewButton.webp'}
+                  alt={'review-us'}
+                  width="164"
+                  height="62"
+                  loading="lazy"
+                  onClick={() => handleNavigate('/review-us')}
                 />
-              </AnchorButton>
-            </ReviewButtons>
+                <ReviewButton
+                  src={'/images/reviewButton-1.webp'}
+                  alt={'G2 Reviews'}
+                  width="164"
+                  height="62"
+                  loading="lazy"
+                  onClick={() => handleNavigate('/review-us')}
+                />
+                <ReviewButton
+                  src={'/images/reviewButton-2.webp'}
+                  alt={'Review Us'}
+                  width="164"
+                  height="62"
+                  loading="lazy"
+                  onClick={() => handleNavigate('/review-us')}
+                />
+                <AnchorButton href="#reddit-reviews">
+                  <ReviewButton
+                    src={'/images/ReviewButton-4.webp'}
+                    alt={'Reviews'}
+                    loading="lazy"
+                  />
+                </AnchorButton>
+              </ReviewButtons>
+            </LazySection>
           )}
         </HeroWrapper>
         {blok.attached_logo_cube && <LogoCube blok={blok.logo_cube[0]} />}
@@ -355,6 +375,7 @@ const SocialCTA = styled.div`
   }
 `;
 const ImageWrapper = styled.div`
+<<<<<<< HEAD
   max-width: ${(props) => (props.blog_hero ? '25.438vw' : '37.5vw')};
   align-self: ${(props) => (props.blog_hero ? 'flex-start' : 'unset')};
   ${(props) =>
@@ -384,6 +405,16 @@ const ImageWrapper = styled.div`
       width: 39.746vw;
       height: 22.363vw;
     `}
+=======
+  min-width: 37.5vw;
+
+  ${media.fullWidth} {
+    min-width: 600px;
+  }
+
+  ${media.tablet} {
+    min-width: 58.594vw;
+>>>>>>> fa80b82b265e3c8840921e06e20de9a1b76c8792
   }
 
   ${media.mobile} {
