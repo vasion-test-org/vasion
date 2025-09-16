@@ -42,7 +42,7 @@ const nextConfig = {
       'styled-components',
       '@storyblok/react',
       '@storyblok/richtext',
-      '@sentry/nextjs',
+      // '@sentry/nextjs', // Commented out to disable Sentry during build
       'react-player',
       'axios',
       'clone-deep',
