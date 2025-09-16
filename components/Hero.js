@@ -383,10 +383,8 @@ const ImageWrapper = styled.div`
     width: 25.438vw;
     height: 14.313vw;
   `}
-
   ${media.fullWidth} {
     max-width: ${(props) => (props.blog_hero ? '407px' : '600px')};
-
     ${(props) =>
       props.blog_hero &&
       `
@@ -394,10 +392,8 @@ const ImageWrapper = styled.div`
       height: 229px;
     `}
   }
-
   ${media.tablet} {
     max-width: ${(props) => (props.blog_hero ? '39.746vw' : '58.594vw')};
-
     ${(props) =>
       props.blog_hero &&
       `
@@ -408,7 +404,6 @@ const ImageWrapper = styled.div`
 
   ${media.mobile} {
     min-width: ${(props) => (props.blog_hero ? '89.167vw' : '100%')};
-
     ${(props) =>
       props.blog_hero &&
       `
