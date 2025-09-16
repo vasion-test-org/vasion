@@ -55,6 +55,10 @@ const nextConfig = {
     scrollRestoration: true,
     // Enable modern bundling optimizations
     esmExternals: true,
+    // Enable React 19 concurrent features for better scheduler performance
+    reactCompiler: true,
+    // Enable concurrent rendering optimizations
+    serverComponentsExternalPackages: ['gsap', '@rive-app/react-canvas'],
   },
 
   // Bundle analyzer (uncomment for analysis)

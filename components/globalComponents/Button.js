@@ -53,7 +53,7 @@ const Button = ({ $buttonData, stretch }) => {
   const checkPageExists = async (slug, locale) => {
     try {
       const response = await fetch(
-        `/api/storyblok-check?slug=${encodeURIComponent(slug)}&locale=${locale}`,
+        `/api/storyblok-check?slug=${encodeURIComponent(slug)}&locale=${locale}`
       );
       const data = await response.json();
       return data.exists;
@@ -75,7 +75,7 @@ const Button = ({ $buttonData, stretch }) => {
       // If not found by ID, try to find by data-anchor-id attribute
       if (!anchorElement) {
         anchorElement = document.querySelector(
-          `[data-anchor-id="${$buttonData.link_url.anchor}"]`,
+          `[data-anchor-id="${$buttonData.link_url.anchor}"]`
         );
       }
 
@@ -121,7 +121,7 @@ const Button = ({ $buttonData, stretch }) => {
             const englishStorySlug = storySlug === 'home' ? 'home' : storySlug;
             const englishPageExists = await checkPageExists(
               englishStorySlug,
-              'en',
+              'en'
             );
 
             if (englishPageExists) {
@@ -287,10 +287,10 @@ const ButtonWrapper = styled.div`
     props.size === 'small'
       ? text.bodySm
       : props.size === 'large'
-        ? text.bodyLg
-        : props.size === 'tiny'
-          ? text.tagLight
-          : text.bodyMd};
+      ? text.bodyLg
+      : props.size === 'tiny'
+      ? text.tagLight
+      : text.bodyMd};
 
   width: ${(props) => (props.stretch ? '100%' : 'max-content')};
 `;
