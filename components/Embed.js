@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
@@ -6,7 +6,12 @@ import media from '@/styles/media';
 const Embed = ({ blok }) => {
   return (
     <Wrapper>
-      <StyledIframe data-anchor-id={blok.anchor_id} alt='styled iframe' src={blok.embed_link} allowFullScreen />
+      <StyledIframe
+        data-anchor-id={blok.anchor_id}
+        alt="styled iframe"
+        src={blok.embed_link}
+        allowFullScreen
+      />
     </Wrapper>
   );
 };
@@ -16,14 +21,12 @@ const StyledIframe = styled.iframe`
   width: 81.5vw;
   height: 100%;
   border: none;
- 
+
   ${media.fullWidth} {
     width: 1304px;
-    
   }
   ${media.tablet} {
     width: 87.891vw;
-   
   }
   ${media.mobile} {
     /* width: 90vw; */
@@ -48,10 +51,10 @@ const Wrapper = styled.div`
     padding: 5.859vw;
     height: 75vw;
   }
-  
+
   ${media.mobile} {
     /* padding: 12.5vw;
     height: 95vw; */
     display: none;
   }
-`
+`;

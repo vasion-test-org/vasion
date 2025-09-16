@@ -192,14 +192,14 @@ const PaginatedCards = ({ blok }) => {
       <CardChunk
         key={`chunk-${i / 6}`}
         card_type={blok.card_type}
-        className='cardChunks'
+        className="cardChunks"
       >
         {chunk.map((card, index) => {
           if (blok.card_type === 'default') {
             return (
               <Card
                 key={`card-${i + index}`}
-                borderradius='6'
+                borderradius="6"
                 paginated
                 content={card}
               />
@@ -219,7 +219,7 @@ const PaginatedCards = ({ blok }) => {
                 paginated
                 index={index}
                 content={card}
-                borderradius='6'
+                borderradius="6"
               />
             );
           }
@@ -276,7 +276,7 @@ const PaginatedCards = ({ blok }) => {
 
     return (
       <PageNumberBlock
-        className='pageNumberBlocks'
+        className="pageNumberBlocks"
         key={`block-${page}`}
         id={`block-${page}`}
         onClick={() => goToPage(page)}
@@ -290,60 +290,79 @@ const PaginatedCards = ({ blok }) => {
   });
 
   useEffect(() => {
-    // Clean up previous animation
-    if (cardsLoop.current) {
-      cardsLoop.current.kill();
-      cardsLoop.current = null;
-    }
-
-    // Reset state
-    currentIndex.current = 0;
-    setCurrentPage(0);
-
-    // Get new card chunks
-    const cardChunks = gsap.utils.toArray('.cardChunks');
-    const totalItems = cardChunks.length;
-
-    // Initialize new animation if we have cards
-    if (totalItems > 0) {
-      cardsLoop.current = horizontalLoop(cardChunks, {
-        paused: true,
-        center: true,
-      });
-    }
-
-    // Set up navigation handlers
-    const nextBtn = document.querySelector('.next');
-    const prevBtn = document.querySelector('.prev');
-
-    const handleNext = () => {
-      if (!cardsLoop.current || totalItems === 0) return;
-      cardsLoop.current.next({ duration: 0.4, ease: 'power1.inOut' });
-      currentIndex.current = (currentIndex.current + 1) % totalItems;
-      setCurrentPage(currentIndex.current);
-    };
-
-    const handlePrev = () => {
-      if (!cardsLoop.current || totalItems === 0) return;
-      cardsLoop.current.previous({ duration: 0.4, ease: 'power1.inOut' });
-      currentIndex.current =
-        (currentIndex.current - 1 + totalItems) % totalItems;
-      setCurrentPage(currentIndex.current);
-    };
-
-    // Add event listeners
-    if (nextBtn) nextBtn.addEventListener('click', handleNext);
-    if (prevBtn) prevBtn.addEventListener('click', handlePrev);
-
-    // Cleanup function
-    return () => {
+    // Use requestIdleCallback to defer heavy animation setup and reduce scheduler pressure
+    const setupAnimations = () => {
+      // Clean up previous animation
       if (cardsLoop.current) {
         cardsLoop.current.kill();
         cardsLoop.current = null;
       }
-      if (nextBtn) nextBtn.removeEventListener('click', handleNext);
-      if (prevBtn) prevBtn.removeEventListener('click', handlePrev);
+
+      // Reset state
+      currentIndex.current = 0;
+      setCurrentPage(0);
+
+      // Get new card chunks
+      const cardChunks = gsap.utils.toArray('.cardChunks');
+      const totalItems = cardChunks.length;
+
+      // Initialize new animation if we have cards
+      if (totalItems > 0) {
+        cardsLoop.current = horizontalLoop(cardChunks, {
+          paused: true,
+          center: true,
+        });
+      }
+
+      // Set up navigation handlers
+      const nextBtn = document.querySelector('.next');
+      const prevBtn = document.querySelector('.prev');
+
+      const handleNext = () => {
+        if (!cardsLoop.current || totalItems === 0) return;
+        // Batch state updates to reduce scheduler overhead
+        requestAnimationFrame(() => {
+          cardsLoop.current.next({ duration: 0.4, ease: 'power1.inOut' });
+          currentIndex.current = (currentIndex.current + 1) % totalItems;
+          setCurrentPage(currentIndex.current);
+        });
+      };
+
+      const handlePrev = () => {
+        if (!cardsLoop.current || totalItems === 0) return;
+        requestAnimationFrame(() => {
+          cardsLoop.current.previous({ duration: 0.4, ease: 'power1.inOut' });
+          currentIndex.current =
+            (currentIndex.current - 1 + totalItems) % totalItems;
+          setCurrentPage(currentIndex.current);
+        });
+      };
+
+      // Add event listeners
+      if (nextBtn) nextBtn.addEventListener('click', handleNext);
+      if (prevBtn) prevBtn.addEventListener('click', handlePrev);
+
+      // Cleanup function
+      return () => {
+        if (cardsLoop.current) {
+          cardsLoop.current.kill();
+          cardsLoop.current = null;
+        }
+        if (nextBtn) nextBtn.removeEventListener('click', handleNext);
+        if (prevBtn) prevBtn.removeEventListener('click', handlePrev);
+      };
     };
+
+    // Defer animation setup to reduce initial scheduler load
+    if (window.requestIdleCallback) {
+      const cleanup = window.requestIdleCallback(setupAnimations);
+      return () => {
+        if (cleanup) window.cancelIdleCallback(cleanup);
+      };
+    } else {
+      const timeoutId = setTimeout(setupAnimations, 0);
+      return () => clearTimeout(timeoutId);
+    }
   }, [filteredCards.length]); // Only depend on the length of filtered cards
 
   useEffect(() => {
@@ -540,11 +559,11 @@ const PaginatedCards = ({ blok }) => {
           <FiltersWrapper>
             <Filters>
               {availableTags.solutions.size > 0 && (
-                <StyledSelect id='solutionsDrop'>
+                <StyledSelect id="solutionsDrop">
                   <StyledSelectHeader>
-                    Solutions <ChrevronDown className='chevron' />
+                    Solutions <ChrevronDown className="chevron" />
                   </StyledSelectHeader>
-                  <OptionsContainer id='solutionsOptions'>
+                  <OptionsContainer id="solutionsOptions">
                     {[...availableTags.solutions].map((tag) => (
                       <Option
                         key={tag}
@@ -559,7 +578,7 @@ const PaginatedCards = ({ blok }) => {
                           }
                         }}
                       >
-                        <Circle src='/images/addCircle.webp' />{' '}
+                        <Circle src="/images/addCircle.webp" />{' '}
                         {capitalizeFirstLetter(tag)}{' '}
                         <TagCounter>{countTagOccurrences(tag)}</TagCounter>
                       </Option>
@@ -569,12 +588,12 @@ const PaginatedCards = ({ blok }) => {
               )}
 
               {availableTags.products.size > 0 && (
-                <StyledSelect id='productDrop'>
+                <StyledSelect id="productDrop">
                   <StyledSelectHeader>
                     Product
-                    <ChrevronDown className='chevron' />
+                    <ChrevronDown className="chevron" />
                   </StyledSelectHeader>
-                  <OptionsContainer id='productOptions'>
+                  <OptionsContainer id="productOptions">
                     {[...availableTags.products].map((tag) => (
                       <Option
                         key={tag}
@@ -589,7 +608,7 @@ const PaginatedCards = ({ blok }) => {
                           }
                         }}
                       >
-                        <Circle src='/images/addCircle.webp' />{' '}
+                        <Circle src="/images/addCircle.webp" />{' '}
                         {capitalizeFirstLetter(tag)}{' '}
                         <TagCounter>{countTagOccurrences(tag)}</TagCounter>
                       </Option>
@@ -599,12 +618,12 @@ const PaginatedCards = ({ blok }) => {
               )}
 
               {availableTags.contentTypes.size > 0 && (
-                <StyledSelect id='contentTypesDrop'>
+                <StyledSelect id="contentTypesDrop">
                   <StyledSelectHeader>
                     Content Types
-                    <ChrevronDown className='chevron' />
+                    <ChrevronDown className="chevron" />
                   </StyledSelectHeader>
-                  <OptionsContainer id='contentTypesOptions'>
+                  <OptionsContainer id="contentTypesOptions">
                     {[...availableTags.contentTypes].map((tag) => (
                       <Option
                         key={tag}
@@ -619,7 +638,7 @@ const PaginatedCards = ({ blok }) => {
                           }
                         }}
                       >
-                        <Circle src='/images/addCircle.webp' />{' '}
+                        <Circle src="/images/addCircle.webp" />{' '}
                         {capitalizeFirstLetter(tag)}{' '}
                         <TagCounter>{countTagOccurrences(tag)}</TagCounter>
                       </Option>
@@ -629,11 +648,11 @@ const PaginatedCards = ({ blok }) => {
               )}
 
               {availableTags.industryType.size > 0 && (
-                <StyledSelect id='industryTypesDrop'>
+                <StyledSelect id="industryTypesDrop">
                   <StyledSelectHeader>
-                    Industry Type <ChrevronDown className='chevron' />
+                    Industry Type <ChrevronDown className="chevron" />
                   </StyledSelectHeader>
-                  <OptionsContainer id='industryTypesOptions'>
+                  <OptionsContainer id="industryTypesOptions">
                     {[...availableTags.industryType].map((tag) => (
                       <Option
                         key={tag}
@@ -648,7 +667,7 @@ const PaginatedCards = ({ blok }) => {
                           }
                         }}
                       >
-                        <Circle src='/images/addCircle.webp' />{' '}
+                        <Circle src="/images/addCircle.webp" />{' '}
                         {capitalizeFirstLetter(tag)}{' '}
                         <TagCounter>{countTagOccurrences(tag)}</TagCounter>
                       </Option>
@@ -658,11 +677,11 @@ const PaginatedCards = ({ blok }) => {
               )}
 
               {availableTags.newsTypeTags.size > 0 && (
-                <StyledSelect id='newsTypeTagsDrop'>
+                <StyledSelect id="newsTypeTagsDrop">
                   <StyledSelectHeader>
-                    News Type <ChrevronDown className='chevron' />
+                    News Type <ChrevronDown className="chevron" />
                   </StyledSelectHeader>
-                  <OptionsContainer id='newsTypeTagsOptions'>
+                  <OptionsContainer id="newsTypeTagsOptions">
                     {[...availableTags.newsTypeTags].map((tag) => (
                       <Option
                         key={tag}
@@ -677,7 +696,7 @@ const PaginatedCards = ({ blok }) => {
                           }
                         }}
                       >
-                        <Circle src='/images/addCircle.webp' />{' '}
+                        <Circle src="/images/addCircle.webp" />{' '}
                         {capitalizeFirstLetter(tag)}{' '}
                         <TagCounter>{countTagOccurrences(tag)}</TagCounter>
                       </Option>
@@ -688,7 +707,7 @@ const PaginatedCards = ({ blok }) => {
             </Filters>
             <SearchBar>
               <SearchInput
-                type='text'
+                type="text"
                 placeholder={searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -705,7 +724,7 @@ const PaginatedCards = ({ blok }) => {
                     )
                   }
                 >
-                  <Circle src='/images/minusCircle.webp' />{' '}
+                  <Circle src="/images/minusCircle.webp" />{' '}
                   {capitalizeFirstLetter(filter)}{' '}
                   <TagCounter>{countTagOccurrences(filter)}</TagCounter>
                 </SelectedFilterTag>
@@ -733,9 +752,9 @@ const PaginatedCards = ({ blok }) => {
 
         {filteredCards.length > 0 && (
           <PaginationDiv>
-            <PageNavigation className='prev'>{previousText}</PageNavigation>
+            <PageNavigation className="prev">{previousText}</PageNavigation>
             {mappedPages}
-            <PageNavigation className='next'>{nextText}</PageNavigation>
+            <PageNavigation className="next">{nextText}</PageNavigation>
           </PaginationDiv>
         )}
       </Wrapper>

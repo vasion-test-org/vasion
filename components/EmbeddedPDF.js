@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
@@ -6,7 +6,7 @@ import media from '@/styles/media';
 const EmbeddedPDF = ({ blok }) => {
   return (
     <Wrapper>
-      <StyledIframe alt='styled iframe' src={blok.pdf_link} allowFullScreen />
+      <StyledIframe alt="styled iframe" src={blok.pdf_link} allowFullScreen />
     </Wrapper>
   );
 };
@@ -37,4 +37,4 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding: 3.125vw;
-`
+`;

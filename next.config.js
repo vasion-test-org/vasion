@@ -39,12 +39,10 @@ const nextConfig = {
   output: 'standalone',
   experimental: {
     optimizePackageImports: [
-      '@rive-app/react-canvas',
-      'gsap',
       'styled-components',
       '@storyblok/react',
       '@storyblok/richtext',
-      '@sentry/nextjs',
+      // '@sentry/nextjs', // Commented out to disable Sentry during build
       'react-player',
       'axios',
       'clone-deep',
@@ -55,6 +53,8 @@ const nextConfig = {
     scrollRestoration: true,
     // Enable modern bundling optimizations
     esmExternals: true,
+    // Enable React 19 concurrent features for better scheduler performance
+    reactCompiler: true,
   },
 
   // Bundle analyzer (uncomment for analysis)
