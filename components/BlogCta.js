@@ -10,7 +10,7 @@ import { ScreenContext } from '@/components/providers/Screen';
 import useMedia from '@/functions/useMedia';
 
 const BlogCta = ({ blok }) => {
-  console.log(blok);
+  // console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { mobile } = useContext(ScreenContext);
@@ -276,5 +276,6 @@ const BlogCtaBGWrapper = styled.div`
           ? `${props.spacing}px 0`
           : '12.5vw 0';
     }};
+  }
 `;
 export default BlogCta;

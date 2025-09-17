@@ -65,7 +65,7 @@ const Button = ({ $buttonData, stretch }) => {
 
   // Handle anchor scrolling with GSAP
   const handleClick = async (e) => {
-    console.log(normalizedUrl);
+    // console.log(normalizedUrl);
 
     // Handle anchor scrolling
     if ($buttonData?.link_url?.anchor) {
