@@ -17,7 +17,8 @@ A	hooks/useOptimizedState.js
 M	instrumentation-client.ts
 M	instrumentation.ts
 A	lib/performanceUtils.js
-M	lib/storyblok.js
-M	next.config.js
-M	package-lock.json
-M	package.json
+M	lib/storyblok.js 
+
+M	next.config.js CHECKED
+M	package-lock.json CHECKED
+M	package.json CHECKED
