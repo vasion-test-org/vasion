@@ -18,7 +18,10 @@ const ResourceInlineQuote = ({ blok }) => {
         spacing={blok.section_spacing}
         {...storyblokEditable(blok)}
       >
-        <QuoteContainer>
+        <QuoteContainer
+          bg={blok.custom_theme[0].background_color?.value}
+          bordercolor={blok.custom_theme[0]?.text_color?.value}
+        >
           {blok?.copy_sections?.map((copy, index) => (
             <CopyWrapper
               key={copy._uid || index}
@@ -53,31 +56,28 @@ const QuoteContainer = styled.div`
   max-width: 81.5vw;
   gap: 0.5vw;
   padding-left: 1.5vw;
-  border-left: 0.35vw solid
-    ${(props) => props.theme?.resource_inline_quote?.accent || '#7E5FDD'};
+  background: ${(props) => props.bg || 'unset'};
+  border-left: 0.35vw solid ${(props) => props.bordercolor || '#7E5FDD'};
 
   ${media.fullWidth} {
     max-width: 722px;
     padding-left: 24px;
     gap: 8px;
-    border-left: 5px solid
-      ${(props) => props.theme?.resource_inline_quote?.accent || '#7E5FDD'};
+    border-left: 5px solid ${(props) => props.bordercolor || '#7E5FDD'};
   }
 
   ${media.tablet} {
     width: 66.797vw;
     padding-left: 2.344vw;
     gap: 0.781vw;
-    border-left: 0.488vw solid
-      ${(props) => props.theme?.resource_inline_quote?.accent || '#7E5FDD'};
+    border-left: 0.488vw solid ${(props) => props.bordercolor || '#7E5FDD'};
   }
 
   ${media.mobile} {
     width: 89.167vw;
     padding-left: 5vw;
     gap: 1.667vw;
-    border-left: 1.042vw solid
-      ${(props) => props.theme?.resource_inline_quote?.accent || '#7E5FDD'};
+    border-left: 1.042vw solid ${(props) => props.bordercolor || '#7E5FDD'};
   }
 `;
 
