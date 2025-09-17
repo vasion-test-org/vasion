@@ -9,6 +9,7 @@
     "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "proxy": "mkcert -install && mkcert localhost && local-ssl-proxy --source 3010 --target 3000 --cert localhost.pem --key localhost-key.pem",
     "dev:proxy": "concurrently \"npm run dev\" \"sleep 2 && npm run proxy\""
   },
@@ -42,6 +43,8 @@
     "@types/react": "19.1.8",
     "babel-plugin-react-compiler": "^19.1.0-rc.3",
     "concurrently": "^9.2.0",
+    "eslint": "^9.35.0",
+    "eslint-config-next": "^15.5.3",
     "rimraf": "^6.0.1",
     "typescript": "5.8.3"
   }
