@@ -14,11 +14,13 @@ M	components/centeredSections/StackedCards.js
 M	components/globalComponents/Button.js
 M	components/globalComponents/Nav.js
 A	hooks/useOptimizedState.js
-M	instrumentation-client.ts
-M	instrumentation.ts
 
+M	instrumentation.ts CHECKED
 A	lib/performanceUtils.js CHECKED
 M	lib/storyblok.js  CHECKED
 M	next.config.js CHECKED
 M	package-lock.json CHECKED
 M	package.json CHECKED
+
+
+M	instrumentation-client.ts CHECKED REVERTED BECAUSE BREAKS
