@@ -1,19 +1,17 @@
 'use client';
-import React, { useContext } from 'react';
+import React from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import media from '@/styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Button from '@/components/globalComponents/Button';
-import { ScreenContext } from '@/components/providers/Screen';
 import useMedia from '@/functions/useMedia';
 
 const BlogCta = ({ blok }) => {
   console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  const { mobile } = useContext(ScreenContext);
 
   let customTheme = blok.custom_theme?.[0] || {};
   if (!blok.custom_theme_builder) {
