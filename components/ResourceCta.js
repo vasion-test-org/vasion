@@ -81,6 +81,8 @@ const ResourceCta = ({ blok }) => {
   );
 };
 
+export default ResourceCta;
+
 const ContentContainer = styled.div`
   display: flex;
   align-self: flex-start;
@@ -277,4 +279,3 @@ const BlogCtaBGWrapper = styled.div`
           : '12.5vw 0';
     }};
 `;
-export default ResourceCta;
