@@ -8,7 +8,7 @@ import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Button from '@/components/globalComponents/Button';
 import useMedia from '@/functions/useMedia';
 
-const BlogCta = ({ blok }) => {
+const ResourceCta = ({ blok }) => {
   console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
@@ -277,4 +277,4 @@ const BlogCtaBGWrapper = styled.div`
           : '12.5vw 0';
     }};
 `;
-export default BlogCta;
+export default ResourceCta;
