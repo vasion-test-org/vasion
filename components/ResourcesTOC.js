@@ -30,7 +30,30 @@ const TableOfContent = ({ copy }) => {
               .join('')
           : '';
 
-        if (text && typeof text === 'string' && text.trim()) {
+        // Check if any content within the heading has the "ignore" class
+        const hasIgnoreClass =
+          node.content &&
+          node.content.some(
+            (item) =>
+              item &&
+              typeof item === 'object' &&
+              item.marks &&
+              item.marks.some(
+                (mark) =>
+                  mark &&
+                  mark.type === 'styled' &&
+                  mark.attrs &&
+                  mark.attrs.class &&
+                  mark.attrs.class.includes('ignore')
+              )
+          );
+
+        if (
+          text &&
+          typeof text === 'string' &&
+          text.trim() &&
+          !hasIgnoreClass
+        ) {
           const id = text
             .toLowerCase()
             .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
