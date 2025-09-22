@@ -26,8 +26,8 @@ const ResourceAuthor = ({ blok }) => {
                 images={blok.assets}
                 borderradius={50}
                 sizes="(max-width: 480px) 60px, (max-width: 1024px) 80px, 96px"
-                width={96}
-                height={96}
+                width={80}
+                height={80}
                 priority={false}
                 quality={90}
               />
@@ -93,12 +93,16 @@ const AuthorContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 1.25vw;
+  border-top: 0.5px solid #c8c9ce;
+  border-bottom: 0.5px solid #c8c9ce;
+  padding: 0vw 8.333vw;
   width: 100%;
-  max-width: 50vw;
+  max-width: 46.875vw;
 
   ${media.fullWidth} {
     gap: 20px;
-    max-width: 800px;
+    max-width: 750px;
+    padding: 40px 0px;
   }
 
   ${media.tablet} {
