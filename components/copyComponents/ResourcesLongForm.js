@@ -7,6 +7,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import media from 'styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import colors from '@/styles/colors';
+import ResourcesTOC from '@/components/ResourcesTOC';
 
 const ResourcesLongForm = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -14,9 +15,12 @@ const ResourcesLongForm = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
+      <Wrapper>
       <ResourcesLongFormContainer>
-        <RichTextRenderer key={`copy-`} document={blok.copy} blok={blok} />
+          <RichTextRenderer key={`copy-`} document={blok.copy} blok={blok} />
       </ResourcesLongFormContainer>
+          <ResourcesTOC copy={blok.copy}/>
+      </Wrapper>
     </ThemeProvider>
   );
 };
@@ -26,7 +30,7 @@ const ResourcesLongFormContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 46.875vw;
-  margin: 2.5vw auto;
+  margin: 2.5vw 0;
 
   h1,
   h2,
@@ -74,5 +78,14 @@ const ResourcesLongFormContainer = styled.div`
     }
   }
 `;
-
+const Wrapper = styled.div`
+position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  justify-self: center;
+  height: auto;
+  width: 63.125vw;
+`;
 export default ResourcesLongForm;
