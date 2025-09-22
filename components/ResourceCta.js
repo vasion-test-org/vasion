@@ -278,4 +278,5 @@ const BlogCtaBGWrapper = styled.div`
           ? `${props.spacing}px 0`
           : '12.5vw 0';
     }};
+  }
 `;

@@ -8,10 +8,6 @@ export function middleware(request: NextRequest) {
   // Create a response
   const response = NextResponse.next();
 
-  // Add custom headers that Sentry can use to identify the actual route
-  response.headers.set('x-sentry-route', pathname);
-  response.headers.set('x-sentry-transaction', pathname);
-
   return response;
 }
 
@@ -24,8 +20,7 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - monitoring (Sentry tunnel)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|monitoring).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 };
