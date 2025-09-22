@@ -30,7 +30,30 @@ const TableOfContent = ({ copy }) => {
               .join('')
           : '';
 
-        if (text && typeof text === 'string' && text.trim()) {
+        // Check if any content within the heading has the "ignore" class
+        const hasIgnoreClass =
+          node.content &&
+          node.content.some(
+            (item) =>
+              item &&
+              typeof item === 'object' &&
+              item.marks &&
+              item.marks.some(
+                (mark) =>
+                  mark &&
+                  mark.type === 'styled' &&
+                  mark.attrs &&
+                  mark.attrs.class &&
+                  mark.attrs.class.includes('ignore')
+              )
+          );
+
+        if (
+          text &&
+          typeof text === 'string' &&
+          text.trim() &&
+          !hasIgnoreClass
+        ) {
           const id = text
             .toLowerCase()
             .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
@@ -154,6 +177,12 @@ const TOCItemLinkText = styled.p`
   color: inherit;
   margin: 0;
   font-size: ${(props) => (props.level > 2 ? '0.9em' : '1em')};
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
 `;
 const BlogLink = styled.button`
   ${text.bodySm};
