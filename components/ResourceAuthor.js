@@ -6,9 +6,9 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 import media from '@/styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Image from '@/components/globalComponents/Image';
+import Button from '@/components/globalComponents/Button';
 
 const ResourceAuthor = ({ blok }) => {
-  console.log('resourceAuthor', blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok?.theme] || themes.default;
 
@@ -25,11 +25,9 @@ const ResourceAuthor = ({ blok }) => {
               <Image
                 images={blok.assets}
                 borderradius={50}
-                sizes="(max-width: 480px) 60px, (max-width: 1024px) 80px, 96px"
                 width={80}
                 height={80}
                 priority={false}
-                quality={90}
               />
             </AuthorImageWrapper>
           )}
@@ -47,6 +45,33 @@ const ResourceAuthor = ({ blok }) => {
             ))}
           </AuthorTextWrapper>
         </AuthorContainer>
+
+        {/* Buttons moved outside AuthorContainer */}
+
+        {blok?.button_group && blok.button_group.length > 0 && (
+          <ButtonContainer>
+            {blok.button_group.map(($buttonData) => {
+              console.log('Button data in ResourceAuthor:', $buttonData);
+              console.log('Has link_img?:', !!$buttonData?.link_img);
+              console.log('link_img object:', $buttonData?.link_img);
+              console.log(
+                'link_img filename:',
+                $buttonData?.link_img?.filename,
+              );
+              return (
+                <div
+                  {...storyblokEditable($buttonData)}
+                  key={$buttonData._uid || $buttonData.link_text}
+                >
+                  <Button
+                    key={$buttonData._uid || $buttonData.link_text}
+                    $buttonData={$buttonData}
+                  />
+                </div>
+              );
+            })}
+          </ButtonContainer>
+        )}
       </Wrapper>
     </ThemeProvider>
   );
@@ -61,24 +86,24 @@ const CopyWrapper = styled.div`
 
 const AuthorImageWrapper = styled.div`
   flex-shrink: 0;
-  width: 6vw;
-  height: 6vw;
+  width: 5vw;
+  height: 5vw;
   border-radius: 50%;
   overflow: hidden;
 
   ${media.fullWidth} {
-    width: 96px;
-    height: 96px;
+    width: 80px;
+    height: 80px;
   }
 
   ${media.tablet} {
-    width: 5vw;
-    height: 5vw;
+    width: 7.813vw;
+    height: 7.813vw;
   }
 
   ${media.mobile} {
-    width: 12.5vw;
-    height: 12.5vw;
+    width: 16.667vw;
+    height: 16.667vw;
   }
 `;
 
@@ -89,30 +114,66 @@ const AuthorTextWrapper = styled.div`
   flex: 1;
 `;
 
-const AuthorContainer = styled.div`
+const ButtonContainer = styled.div`
   display: flex;
-  align-items: center;
-  gap: 1.25vw;
-  border-top: 0.5px solid #c8c9ce;
-  border-bottom: 0.5px solid #c8c9ce;
-  padding: 0vw 8.333vw;
+  gap: 1vw;
+  margin-top: 1.5vw;
   width: 100%;
   max-width: 46.875vw;
 
   ${media.fullWidth} {
+    gap: 16px;
+    margin-top: 24px;
+    max-width: 750px;
+  }
+
+  ${media.tablet} {
+    gap: 1.563vw;
+    margin-top: 1.953vw;
+    max-width: 66.797vw;
+  }
+
+  ${media.mobile} {
+    gap: 3.333vw;
+    margin-top: 4.167vw;
+    max-width: 89.167vw;
+    flex-direction: column;
+  }
+`;
+
+const AuthorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 46.875vw;
+  gap: 1.25vw;
+  border-top: 0.063vw solid #c8c9ce;
+  border-bottom: 0.063vw solid #c8c9ce;
+  padding: 2.5vw 0vw !important;
+  box-sizing: border-box;
+
+  ${media.fullWidth} {
     gap: 20px;
     max-width: 750px;
-    padding: 40px 0px;
+    padding: 40px 0px !important;
+    border-top: 1px solid #c8c9ce;
+    border-bottom: 1px solid #c8c9ce;
   }
 
   ${media.tablet} {
     gap: 1.953vw;
     max-width: 66.797vw;
+    padding: 2.441vw 0vw;
+    border-top: 0.098vw solid #c8c9ce;
+    border-bottom: 0.098vw solid #c8c9ce;
   }
 
   ${media.mobile} {
     gap: 4.167vw;
     max-width: 89.167vw;
+    border-top: 0.5px solid #c8c9ce;
+    border-bottom: 0.5px solid #c8c9ce;
+    padding: 8.333vw 0vw !important;
   }
 `;
 
