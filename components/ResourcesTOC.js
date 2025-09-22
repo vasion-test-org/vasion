@@ -177,6 +177,12 @@ const TOCItemLinkText = styled.p`
   color: inherit;
   margin: 0;
   font-size: ${(props) => (props.level > 2 ? '0.9em' : '1em')};
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
 `;
 const BlogLink = styled.button`
   ${text.bodySm};
