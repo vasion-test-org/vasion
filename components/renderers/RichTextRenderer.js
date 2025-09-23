@@ -270,47 +270,45 @@ const RichWrapper = styled.div`
   }
   ul {
     list-style: none;
-    margin-left: 0;
+    display: flex;
+    flex-direction: column;
 
     li {
       position: relative;
-      padding-left: 1.563vw;
-      /* margin-bottom: 1.25vw; */
-      ${media.fullWidth} {
-        padding-left: 25px;
-        /* margin-bottom: 20px; */
-      }
-      ${media.tablet} {
-        padding-left: 2.441vw;
-        /* margin-bottom: 1.953vw; */
-      }
-      ${media.mobile} {
-        padding-left: 5.208vw;
-        /* margin-bottom: 4.167vw; */
-      }
     }
-    li::before {
+
+    li:before {
+      background-image: unset;
       content: '';
       position: absolute;
-      background-image: url('/images/icons/orange-check-icon.webp');
-      background-size: contain;
-      background-repeat: no-repeat;
-      left: 0;
-      top: 0;
+      left: -1vw;
+      top: 0.4vw;
+      width: 0.35vw;
+      height: 0.35vw;
+      border-radius: 50%;
+      background: ${colors.txtPrimary};
+
+      ${media.fullWidth} {
+        left: -16px;
+      top: 6px;
+      width: 6px;
+      height: 6px;
+      }
+
+      ${media.tablet} {
+        left: -1.563vw;
+      top: 0.586vw;
+      width: 0.586vw;
+      height: 0.586vw;
+      }
+
+      ${media.mobile} {
+        left: -3.333vw;
+      top: 1.25vw;
       width: 1.25vw;
       height: 1.25vw;
-      ${media.fullWidth} {
-        width: 20px;
-        height: 20px;
       }
-      ${media.tablet} {
-        width: 1.953vw;
-        height: 1.953vw;
-      }
-      ${media.mobile} {
-        width: 4.167vw;
-        height: 4.167vw;
-      }
+      
     }
   }
 `;

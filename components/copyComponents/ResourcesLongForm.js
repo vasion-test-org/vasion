@@ -16,10 +16,10 @@ const ResourcesLongForm = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       <Wrapper>
-      <ResourcesLongFormContainer>
+        <ResourcesLongFormContainer>
           <RichTextRenderer key={`copy-`} document={blok.copy} blok={blok} />
-      </ResourcesLongFormContainer>
-          <ResourcesTOC copy={blok.copy}/>
+        </ResourcesLongFormContainer>
+        <ResourcesTOC copy={blok.copy} />
       </Wrapper>
     </ThemeProvider>
   );
@@ -59,27 +59,9 @@ const ResourcesLongFormContainer = styled.div`
       height: 4.167vw;
     }
   }
-
-  ul {
-    list-style: none;
-    padding-left: .65vw;
-    display: flex;
-    flex-direction: column;
-
-    li:before {
-      background-image: unset;
-      content: '';
-      left: 0;
-      top: .6vw;
-      width: .35vw;
-      height: .35vw;
-      border-radius: 50%;
-      background: ${colors.txtPrimary};
-    }
-  }
 `;
 const Wrapper = styled.div`
-position: relative;
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
