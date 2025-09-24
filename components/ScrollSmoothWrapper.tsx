@@ -38,8 +38,8 @@ export default function ScrollSmootherWrapper({
   }, [pathname]);
 
   return (
-    <div id='smooth-wrapper'>
-      <div id='smooth-content'>{children}</div>
+    <div id="smooth-wrapper">
+      <div id="smooth-content">{children}</div>
     </div>
   );
 }

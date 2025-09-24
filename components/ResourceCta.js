@@ -155,6 +155,7 @@ const BlogCtaWrapper = styled.div`
   background-position: center;
   object-fit: contain;
   border-radius: 1vw;
+  
   ${media.fullWidth} {
     width: 750px;
     min-height: 200px;

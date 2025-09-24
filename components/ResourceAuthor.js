@@ -87,23 +87,19 @@ const CopyWrapper = styled.div`
 const AuthorImageWrapper = styled.div`
   flex-shrink: 0;
   width: 5vw;
-  height: 5vw;
   border-radius: 50%;
   overflow: hidden;
 
   ${media.fullWidth} {
     width: 80px;
-    height: 80px;
   }
 
   ${media.tablet} {
     width: 7.813vw;
-    height: 7.813vw;
   }
 
   ${media.mobile} {
     width: 16.667vw;
-    height: 16.667vw;
   }
 `;
 

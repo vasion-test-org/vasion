@@ -22,6 +22,9 @@ import TwoColumnList from '@/components/TwoColumnList';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
 import GradientText from '@/components/globalComponents/GradientText';
+import ResourceCta from '@/components/ResourceCta';
+import ResourceInlineQuote from '@/components/ResourceInlineQuote';
+import ResourceAuthor from '@/components/ResourceAuthor';
 
 const RichTextRenderer = ({
   document,
@@ -75,6 +78,21 @@ const RichTextRenderer = ({
         <InfographicPill blok={props} />
       </div>
     ),
+    resource_cta: (props) => (
+      <div className="component-wrapper">
+        <ResourceCta blok={props} />
+      </div>
+    ),
+    resource_inline_quote: (props) => (
+      <div className="component-wrapper">
+        <ResourceInlineQuote blok={props} />
+      </div>
+    ),
+    resource_author: (props) => (
+      <div className="component-wrapper">
+        <ResourceAuthor blok={props} />
+      </div>
+    ),
   };
 
   const customMarkResolvers = {
@@ -120,7 +138,7 @@ const RichTextRenderer = ({
         responsiveTextStyles[0],
         responsiveTextStyles[1]
       );
-      // console.log('selectedClassName', selectedClassName)
+      console.log('selectedClassName', selectedClassName)
       return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
     },
   };
@@ -290,25 +308,24 @@ const RichWrapper = styled.div`
 
       ${media.fullWidth} {
         left: -16px;
-      top: 6px;
-      width: 6px;
-      height: 6px;
+        top: 6px;
+        width: 6px;
+        height: 6px;
       }
 
       ${media.tablet} {
         left: -1.563vw;
-      top: 0.586vw;
-      width: 0.586vw;
-      height: 0.586vw;
+        top: 0.586vw;
+        width: 0.586vw;
+        height: 0.586vw;
       }
 
       ${media.mobile} {
         left: -3.333vw;
-      top: 1.25vw;
-      width: 1.25vw;
-      height: 1.25vw;
+        top: 1.25vw;
+        width: 1.25vw;
+        height: 1.25vw;
       }
-      
     }
   }
 `;

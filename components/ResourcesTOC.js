@@ -240,6 +240,18 @@ const Wrapper = styled.div`
   position: absolute;
   top: 2.5vw;
   right: 0;
+
+  ${media.fullWidth} {
+    top: 40px;
+  }
+
+  ${media.tablet} {
+    top: 3.906vw;
+  }
+
+  ${media.mobile} {
+    display: none;
+  }
 `;
 
 export default TableOfContent;

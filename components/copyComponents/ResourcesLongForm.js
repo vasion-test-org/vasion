@@ -17,7 +17,12 @@ const ResourcesLongForm = ({ blok }) => {
     <ThemeProvider theme={selectedTheme}>
       <Wrapper>
         <ResourcesLongFormContainer>
-          <RichTextRenderer key={`copy-`} document={blok.copy} blok={blok} />
+          <RichTextRenderer
+            key={`copy-`}
+            document={blok.copy}
+            blok={blok}
+            responsiveTextStyles={blok?.responsive_text_styles}
+          />
         </ResourcesLongFormContainer>
         <ResourcesTOC copy={blok.copy} />
       </Wrapper>
@@ -69,5 +74,17 @@ const Wrapper = styled.div`
   justify-self: center;
   height: auto;
   width: 63.125vw;
+
+  ${media.fullWidth} {
+    width: 1010px;
+  }
+
+  ${media.tablet} {
+    width: 92.188vw;
+  }
+
+  ${media.mobile} {
+    width: unset;
+  }
 `;
 export default ResourcesLongForm;

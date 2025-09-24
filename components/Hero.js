@@ -101,7 +101,7 @@ const Hero = ({ blok }) => {
               </div>
             ))}
 
-            {!blok?.socials && (
+            {!blok?.socials && blok?.button_group.length > 0 && (
               <ButtonRow>
                 {blok?.button_group?.map(($buttonData) => (
                   <div
@@ -116,8 +116,7 @@ const Hero = ({ blok }) => {
                 ))}
               </ButtonRow>
             )}
-
-            {blok.badges && (
+                {blok.badges.length > 0 &&
               <LazySection threshold={0.2} rootMargin="100px">
                 <BadgesSectionContainer>
                   {blok.badge_section_text &&
@@ -134,7 +133,7 @@ const Hero = ({ blok }) => {
                         />
                       </BadgeEyebrow>
                     ))}
-                  <BadgesContainer>
+                <BadgesContainer>
                     {blok.badges.map((badge) => (
                       <BadgeLink
                         key={badge._uid}
@@ -152,7 +151,7 @@ const Hero = ({ blok }) => {
                   </BadgesContainer>
                 </BadgesSectionContainer>
               </LazySection>
-            )}
+                  }
             {blok?.light_box_button &&
               blok?.light_box_button[0]?.lightbox_text && (
                 <LightboxBtn blok={blok?.light_box_button[0]} />
@@ -199,7 +198,7 @@ const Hero = ({ blok }) => {
                   />
                 </SocialLink>
               </SocialLogoContainer>
-              <ButtonRow socials>
+             {blok?.button_group.length > 0 && <ButtonRow socials>
                 {blok?.button_group?.map(($buttonData) => (
                   <div
                     {...storyblokEditable($buttonData)}
@@ -212,6 +211,7 @@ const Hero = ({ blok }) => {
                   </div>
                 ))}
               </ButtonRow>
+}
             </SocialCTA>
           )}
           {blok.review_buttons && (
