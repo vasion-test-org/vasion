@@ -7,10 +7,16 @@ import media from '@/styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Image from '@/components/globalComponents/Image';
 import Button from '@/components/globalComponents/Button';
+import Schedule from 'assets/svg/schedule.svg';
 
 const ResourceAuthor = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok?.theme] || themes.default;
+
+  const line_seperators = {
+    top: blok?.top_divider,
+    bottom: blok?.lower_divider,
+  };
 
   return (
     <ThemeProvider theme={selectedTheme}>
@@ -19,66 +25,127 @@ const ResourceAuthor = ({ blok }) => {
         spacing={blok.section_spacing}
         {...storyblokEditable(blok)}
       >
-        <AuthorContainer>
-          {blok?.assets && blok.assets.length > 0 && (
-            <AuthorImageWrapper>
-              <Image
-                images={blok.assets}
-                borderradius={50}
-                width={80}
-                height={80}
-                priority={false}
-              />
-            </AuthorImageWrapper>
-          )}
-          <AuthorTextWrapper>
-            {blok?.copy_sections?.map((copy, index) => (
-              <CopyWrapper
-                key={copy._uid || index}
-                {...storyblokEditable(copy)}
-              >
-                <RichTextRenderer
-                  document={copy?.copy}
-                  responsiveTextStyles={copy?.responsive_text_styles}
+        <Division divider={line_seperators}>
+          <AuthorContainer isblogend={blok.blog_end}>
+            {blok?.assets && blok.assets.length > 0 && !blok.blog_end && (
+              <AuthorImageWrapper isblogend={blok?.blog_end}>
+                <Image
+                  images={blok.assets}
+                  borderradius={50}
+                  width={80}
+                  height={80}
+                  priority={false}
                 />
-              </CopyWrapper>
-            ))}
-          </AuthorTextWrapper>
-        </AuthorContainer>
+              </AuthorImageWrapper>
+            )}
 
-        {/* Buttons moved outside AuthorContainer */}
-
-        {blok?.button_group && blok.button_group.length > 0 && (
-          <ButtonContainer>
-            {blok.button_group.map(($buttonData) => {
-              console.log('Button data in ResourceAuthor:', $buttonData);
-              console.log('Has link_img?:', !!$buttonData?.link_img);
-              console.log('link_img object:', $buttonData?.link_img);
-              console.log(
-                'link_img filename:',
-                $buttonData?.link_img?.filename,
-              );
-              return (
-                <div
-                  {...storyblokEditable($buttonData)}
-                  key={$buttonData._uid || $buttonData.link_text}
+            {blok?.assets && blok.assets.length > 0 && blok.blog_end && (
+              <AuthorImageWrapper isblogend={blok.blog_end}>
+                <Image
+                  images={blok.assets}
+                  borderradius={50}
+                  width={40}
+                  height={40}
+                  priority={false}
+                />
+              </AuthorImageWrapper>
+            )}
+            <AuthorTextWrapper>
+              {blok?.copy_sections?.map((copy, index) => (
+                <CopyWrapper
+                  key={copy._uid || index}
+                  {...storyblokEditable(copy)}
                 >
-                  <Button
-                    key={$buttonData._uid || $buttonData.link_text}
-                    $buttonData={$buttonData}
+                  <RichTextRenderer
+                    document={copy?.copy}
+                    responsiveTextStyles={copy?.responsive_text_styles}
                   />
-                </div>
-              );
-            })}
-          </ButtonContainer>
-        )}
+                </CopyWrapper>
+              ))}
+            </AuthorTextWrapper>
+            {!blok.blog_end && (
+              <AuthorTextWrapperBlogTop>
+                <Schedule width={20} height={20} />
+                {blok?.extended_copy?.map((copy, index) => (
+                  <CopyWrapper
+                    key={copy._uid || index}
+                    {...storyblokEditable(copy)}
+                  >
+                    <RichTextRenderer
+                      document={copy?.copy}
+                      responsiveTextStyles={copy?.responsive_text_styles}
+                    />
+                  </CopyWrapper>
+                ))}
+              </AuthorTextWrapperBlogTop>
+            )}
+          </AuthorContainer>
+
+          {/* Buttons moved outside AuthorContainer */}
+
+          {blok?.button_group && blok.button_group.length > 0 && (
+            <ButtonContainer>
+              {blok.button_group.map(($buttonData) => {
+                console.log('Button data in ResourceAuthor:', $buttonData);
+                console.log('Has link_img?:', !!$buttonData?.link_img);
+                console.log('link_img object:', $buttonData?.link_img);
+                console.log(
+                  'link_img filename:',
+                  $buttonData?.link_img?.filename,
+                );
+                return (
+                  <div
+                    {...storyblokEditable($buttonData)}
+                    key={$buttonData._uid || $buttonData.link_text}
+                  >
+                    <Button
+                      key={$buttonData._uid || $buttonData.link_text}
+                      $buttonData={$buttonData}
+                    />
+                  </div>
+                );
+              })}
+            </ButtonContainer>
+          )}
+        </Division>
       </Wrapper>
     </ThemeProvider>
   );
 };
 
 export default ResourceAuthor;
+const TimeIcon = styled.img`
+  width: 1.25vw;
+  height: 1.25vw;
 
+  ${media.fullWidth} {
+    width: 20px;
+    height: 20px;
+  }
+  ${media.tablet} {
+    width: 1.953vw;
+    height: 1.953vw;
+  }
+  ${media.mobile} {
+    width: 4.167vw;
+    height: 4.167vw;
+  }
+`;
+const AuthorTextWrapperBlogTop = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.25vw;
+
+  ${media.fullWidth} {
+    gap: 4px;
+  }
+  ${media.tablet} {
+    gap: 0.391vw;
+  }
+  ${media.mobile} {
+    gap: 0.833vw;
+  }
+`;
 const CopyWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -86,20 +153,20 @@ const CopyWrapper = styled.div`
 
 const AuthorImageWrapper = styled.div`
   flex-shrink: 0;
-  width: 5vw;
+  width: ${(props) => (props?.isblogend ? '5vw' : '2.5vw')};
   border-radius: 50%;
   overflow: hidden;
 
   ${media.fullWidth} {
-    width: 80px;
+    width: ${(props) => (props?.isblogend ? '80px' : '40px')};
   }
 
   ${media.tablet} {
-    width: 7.813vw;
+    width: ${(props) => (props?.isblogend ? '3.613vw' : '3.906vw')};
   }
 
   ${media.mobile} {
-    width: 16.667vw;
+    width: ${(props) => (props?.isblogend ? '16.667vw' : '8.333vw')};
   }
 `;
 
@@ -136,47 +203,72 @@ const ButtonContainer = styled.div`
     flex-direction: column;
   }
 `;
-
 const AuthorContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 46.875vw;
-  gap: 1.25vw;
-  border-top: 0.063vw solid #c8c9ce;
-  border-bottom: 0.063vw solid #c8c9ce;
-  padding: 2.5vw 0vw !important;
   box-sizing: border-box;
+  max-width: 46.875vw;
+  gap: ${(props) => (props.isblogend ? '1.25vw' : '0.5vw')};
+  padding: ${(props) =>
+    props.isblogend ? '2.5vw 0vw' : '0 0 1.5vw 0'} !important;
 
   ${media.fullWidth} {
-    gap: 20px;
+    gap: ${(props) => (props.isblogend ? '20px' : '8px')};
     max-width: 750px;
-    padding: 40px 0px !important;
-    border-top: 1px solid #c8c9ce;
-    border-bottom: 1px solid #c8c9ce;
+    padding: ${(props) =>
+      props.isblogend ? '40px 0px' : '0 0 24px 0'} !important;
   }
 
   ${media.tablet} {
-    gap: 1.953vw;
+    gap: ${(props) => (props.isblogend ? '1.855vw' : '0.781vw')};
     max-width: 66.797vw;
-    padding: 2.441vw 0vw;
-    border-top: 0.098vw solid #c8c9ce;
-    border-bottom: 0.098vw solid #c8c9ce;
+    padding: ${(props) => (props.isblogend ? '2.344vw 0vw' : '0 0 2.344vw 0')};
   }
 
   ${media.mobile} {
-    gap: 4.167vw;
+    gap: ${(props) => (props.isblogend ? '4.167vw' : '1.667vw')};
     max-width: 89.167vw;
-    border-top: 0.5px solid #c8c9ce;
-    border-bottom: 0.5px solid #c8c9ce;
-    padding: 8.333vw 0vw !important;
+    padding: ${(props) =>
+      props.isblogend ? '8.125vw 0vw' : '0 0 5vw 0'} !important;
   }
 `;
+const Division = styled.div`
+  display: flex;
+  flex-direction: space-between;
 
+  width: 100%;
+
+  border-top: ${(props) =>
+    props.divider.top ? '0.063vw solid #c8c9ce' : 'unset'};
+  border-bottom: ${(props) =>
+    props.divider.bottom ? '0.063vw solid #c8c9ce' : 'unset'};
+
+  ${media.fullWidth} {
+    border-top: ${(props) =>
+      props.divider.top ? '1px solid #c8c9ce' : 'unset'};
+    border-bottom: ${(props) =>
+      props.divider.bottom ? '1px solid #c8c9ce' : 'unset'};
+  }
+
+  ${media.tablet} {
+    border-top: ${(props) =>
+      props.divider.top ? '0.098vw solid #c8c9ce' : 'unset'};
+    border-bottom: ${(props) =>
+      props.divider.bottom ? '0.098vw solid #c8c9ce' : 'unset'};
+  }
+
+  ${media.mobile} {
+    border-top: ${(props) =>
+      props.divider.top ? '0.5px solid #c8c9ce' : 'unset'};
+    border-bottom: ${(props) =>
+      props.divider.bottom ? '0.5px solid #c8c9ce' : 'unset'};
+  }
+`;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 100%;
   padding: ${(props) => {
