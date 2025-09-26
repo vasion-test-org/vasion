@@ -63,8 +63,8 @@ const ResourceAuthor = ({ blok }) => {
                 </CopyWrapper>
               ))}
             </AuthorTextWrapper>
-            {!blok.blog_end && (
-              <AuthorTextWrapperBlogTop>
+            {!blok.blog_end /** Only applies when Author is at the intro of the blog*/ && (
+              <AuthorIsOnTopTextWrapper>
                 <Schedule width={20} height={20} />
                 {blok?.extended_copy?.map((copy, index) => (
                   <CopyWrapper
@@ -77,22 +77,13 @@ const ResourceAuthor = ({ blok }) => {
                     />
                   </CopyWrapper>
                 ))}
-              </AuthorTextWrapperBlogTop>
+              </AuthorIsOnTopTextWrapper>
             )}
           </AuthorContainer>
-
-          {/* Buttons moved outside AuthorContainer */}
 
           {blok?.button_group && blok.button_group.length > 0 && (
             <ButtonContainer>
               {blok.button_group.map(($buttonData) => {
-                console.log('Button data in ResourceAuthor:', $buttonData);
-                console.log('Has link_img?:', !!$buttonData?.link_img);
-                console.log('link_img object:', $buttonData?.link_img);
-                console.log(
-                  'link_img filename:',
-                  $buttonData?.link_img?.filename,
-                );
                 return (
                   <div
                     {...storyblokEditable($buttonData)}
@@ -114,24 +105,8 @@ const ResourceAuthor = ({ blok }) => {
 };
 
 export default ResourceAuthor;
-const TimeIcon = styled.img`
-  width: 1.25vw;
-  height: 1.25vw;
 
-  ${media.fullWidth} {
-    width: 20px;
-    height: 20px;
-  }
-  ${media.tablet} {
-    width: 1.953vw;
-    height: 1.953vw;
-  }
-  ${media.mobile} {
-    width: 4.167vw;
-    height: 4.167vw;
-  }
-`;
-const AuthorTextWrapperBlogTop = styled.div`
+const AuthorIsOnTopTextWrapper = styled.div`
   display: flex;
   flex-direction: row;
   gap: 0.25vw;
