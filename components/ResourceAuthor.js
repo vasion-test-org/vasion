@@ -28,7 +28,10 @@ const ResourceAuthor = ({ blok }) => {
         <Division divider={line_seperators}>
           <AuthorContainer isblogend={blok.blog_end}>
             {blok?.assets && blok.assets.length > 0 && !blok.blog_end && (
-              <AuthorImageWrapper isblogend={blok?.blog_end}>
+              <AuthorImageWrapper
+                isblogend={blok?.blog_end}
+                buttons={blok.button_group.length > 0}
+              >
                 <Image
                   images={blok.assets}
                   borderradius={50}
@@ -40,7 +43,10 @@ const ResourceAuthor = ({ blok }) => {
             )}
 
             {blok?.assets && blok.assets.length > 0 && blok.blog_end && (
-              <AuthorImageWrapper isblogend={blok.blog_end}>
+              <AuthorImageWrapper
+                isblogend={blok.blog_end}
+                buttons={blok.button_group.length > 0}
+              >
                 <Image
                   images={blok.assets}
                   borderradius={50}
@@ -62,6 +68,24 @@ const ResourceAuthor = ({ blok }) => {
                   />
                 </CopyWrapper>
               ))}
+
+              {blok?.button_group && blok.button_group.length > 0 && (
+                <ButtonContainer>
+                  {blok.button_group.map(($buttonData) => {
+                    return (
+                      <div
+                        {...storyblokEditable($buttonData)}
+                        key={$buttonData._uid || $buttonData.link_text}
+                      >
+                        <Button
+                          key={$buttonData._uid || $buttonData.link_text}
+                          $buttonData={$buttonData}
+                        />
+                      </div>
+                    );
+                  })}
+                </ButtonContainer>
+              )}
             </AuthorTextWrapper>
             {!blok.blog_end /** Only applies when Author is at the intro of the blog*/ && (
               <AuthorIsOnTopTextWrapper>
@@ -80,24 +104,6 @@ const ResourceAuthor = ({ blok }) => {
               </AuthorIsOnTopTextWrapper>
             )}
           </AuthorContainer>
-
-          {blok?.button_group && blok.button_group.length > 0 && (
-            <ButtonContainer>
-              {blok.button_group.map(($buttonData) => {
-                return (
-                  <div
-                    {...storyblokEditable($buttonData)}
-                    key={$buttonData._uid || $buttonData.link_text}
-                  >
-                    <Button
-                      key={$buttonData._uid || $buttonData.link_text}
-                      $buttonData={$buttonData}
-                    />
-                  </div>
-                );
-              })}
-            </ButtonContainer>
-          )}
         </Division>
       </Wrapper>
     </ThemeProvider>
@@ -125,23 +131,31 @@ const CopyWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
 const AuthorImageWrapper = styled.div`
   flex-shrink: 0;
   width: ${(props) => (props?.isblogend ? '5vw' : '2.5vw')};
   border-radius: 50%;
   overflow: hidden;
-
+  img {
+    padding: 0px !important;
+  }
   ${media.fullWidth} {
     width: ${(props) => (props?.isblogend ? '80px' : '40px')};
+    img {
+      padding: 0px !important;
+    }
   }
-
   ${media.tablet} {
     width: ${(props) => (props?.isblogend ? '3.613vw' : '3.906vw')};
+    img {
+      padding: 0vw !important;
+    }
   }
-
   ${media.mobile} {
     width: ${(props) => (props?.isblogend ? '16.667vw' : '8.333vw')};
+    img {
+      padding: 0vw !important;
+    }
   }
 `;
 
@@ -178,31 +192,35 @@ const ButtonContainer = styled.div`
     flex-direction: column;
   }
 `;
+
 const AuthorContainer = styled.div`
   display: flex;
-  align-items: center;
+  align-items: ${(props) => (props.isblogend ? 'flex-start' : 'center')};
   width: 100%;
   box-sizing: border-box;
   max-width: 46.875vw;
   gap: ${(props) => (props.isblogend ? '1.25vw' : '0.5vw')};
-  padding: ${(props) => (props.isblogend ? '2.5vw 0vw' : '0vw')} !important;
+  padding: ${(props) =>
+    props.isblogend ? '2.5vw 0vw' : '1.25vw 0vw'} !important;
 
   ${media.fullWidth} {
     gap: ${(props) => (props.isblogend ? '20px' : '8px')};
     max-width: 750px;
-    padding: ${(props) => (props.isblogend ? '40px 0px' : '0px ')} !important;
+    padding: ${(props) =>
+      props.isblogend ? '40px 0px' : '20px 0px'} !important;
   }
 
   ${media.tablet} {
     gap: ${(props) => (props.isblogend ? '1.855vw' : '0.781vw')};
     max-width: 66.797vw;
-    padding: ${(props) => (props.isblogend ? '2.344vw 0vw' : '0vw')};
+    padding: ${(props) => (props.isblogend ? '2.344vw 0vw' : '2.344vw 0vw')};
   }
 
   ${media.mobile} {
     gap: ${(props) => (props.isblogend ? '4.167vw' : '0vw')};
     max-width: 89.167vw;
-    padding: ${(props) => (props.isblogend ? '8.125vw 0vw' : '0vw')} !important;
+    padding: ${(props) =>
+      props.isblogend ? '8.125vw 0vw' : '4.167vw 0vw'} !important;
   }
 `;
 const Division = styled.div`
