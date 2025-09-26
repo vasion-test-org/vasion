@@ -210,27 +210,24 @@ const AuthorContainer = styled.div`
   box-sizing: border-box;
   max-width: 46.875vw;
   gap: ${(props) => (props.isblogend ? '1.25vw' : '0.5vw')};
-  padding: ${(props) =>
-    props.isblogend ? '2.5vw 0vw' : '0 0 1.5vw 0'} !important;
+  padding: ${(props) => (props.isblogend ? '2.5vw 0vw' : '0vw')} !important;
 
   ${media.fullWidth} {
     gap: ${(props) => (props.isblogend ? '20px' : '8px')};
     max-width: 750px;
-    padding: ${(props) =>
-      props.isblogend ? '40px 0px' : '0 0 24px 0'} !important;
+    padding: ${(props) => (props.isblogend ? '40px 0px' : '0px ')} !important;
   }
 
   ${media.tablet} {
     gap: ${(props) => (props.isblogend ? '1.855vw' : '0.781vw')};
     max-width: 66.797vw;
-    padding: ${(props) => (props.isblogend ? '2.344vw 0vw' : '0 0 2.344vw 0')};
+    padding: ${(props) => (props.isblogend ? '2.344vw 0vw' : '0vw')};
   }
 
   ${media.mobile} {
-    gap: ${(props) => (props.isblogend ? '4.167vw' : '1.667vw')};
+    gap: ${(props) => (props.isblogend ? '4.167vw' : '0vw')};
     max-width: 89.167vw;
-    padding: ${(props) =>
-      props.isblogend ? '8.125vw 0vw' : '0 0 5vw 0'} !important;
+    padding: ${(props) => (props.isblogend ? '8.125vw 0vw' : '0vw')} !important;
   }
 `;
 const Division = styled.div`
