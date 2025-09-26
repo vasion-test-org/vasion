@@ -189,7 +189,7 @@ const ButtonContainer = styled.div`
     gap: 3.333vw;
     margin-top: 4.167vw;
     max-width: 89.167vw;
-    flex-direction: column;
+    flex-direction: row;
   }
 `;
 

@@ -25,6 +25,7 @@ import GradientText from '@/components/globalComponents/GradientText';
 import ResourceCta from '@/components/ResourceCta';
 import ResourceInlineQuote from '@/components/ResourceInlineQuote';
 import ResourceAuthor from '@/components/ResourceAuthor';
+import ResourceArticle from '@/components/ResourceArticle';
 
 const RichTextRenderer = ({
   document,
@@ -91,6 +92,11 @@ const RichTextRenderer = ({
     resource_author: (props) => (
       <div className="component-wrapper">
         <ResourceAuthor blok={props} />
+      </div>
+    ),
+    resource_article: (props) => (
+      <div className="component-wrapper">
+        <ResourceArticle blok={props} />
       </div>
     ),
   };

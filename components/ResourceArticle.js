@@ -1,85 +1,80 @@
 'use client';
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { storyblokEditable } from '@storyblok/react/rsc';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import media from '@/styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import colors from '@/styles/colors';
 
-const ResourceInlineQuote = ({ blok }) => {
+const ResourceArticle = ({ blok }) => {
+  console.log('RESOURCE_ARTICLE', blok);
   const themes = useAvailableThemes();
-  const selectedTheme = themes[blok?.theme] || themes.default;
+  const selectedTheme = themes[blok.theme] || themes.default;
 
+  let customTheme = blok.custom_theme?.[0] || {};
+  if (!blok.custom_theme_builder) {
+    customTheme = undefined;
+  }
+
+  const backgroundType = customTheme?.background_type;
+  const bg_color =
+    backgroundType === 'color' ? customTheme?.background_color?.value : null;
+
+  const text_color = customTheme?.text_color?.value;
   return (
-    <ThemeProvider theme={selectedTheme}>
+    <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
       <Wrapper
-        spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
-        {...storyblokEditable(blok)}
+        spacingOffset={blok.offset_spacing}
       >
-        <QuoteContainer
-          bg={blok.custom_theme[0].background_color?.value}
-          bordercolor={blok.custom_theme[0]?.text_color?.value}
+        <CopyWrapper
+          bg_color={bg_color}
+          background_type={backgroundType}
+          text_color={text_color}
         >
-          {blok?.copy_sections?.map((copy, index) => (
-            <CopyWrapper
-              key={copy._uid || index}
-              {...storyblokEditable(copy)}
-              textcolor={blok.custom_theme[0]?.text_color?.value}
-            >
-              <RichTextRenderer
-                document={copy?.copy}
-                responsiveTextStyles={copy?.responsive_text_styles}
-              />
-            </CopyWrapper>
-          ))}
-        </QuoteContainer>
+          {(blok?.copy_sections[0]?.copy || blok?.copy) && (
+            <RichTextRenderer
+              document={blok.copy_sections[0]?.copy || blok.copy}
+              blok={blok}
+              responsiveTextStyles={blok?.responsive_text_styles}
+            />
+          )}
+        </CopyWrapper>
       </Wrapper>
     </ThemeProvider>
   );
 };
 
-export default ResourceInlineQuote;
+export default ResourceArticle;
 
 const CopyWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  color: ${(props) => props.textcolor || 'unset'};
-`;
-
-const QuoteContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  gap: 0.5vw;
-  padding-left: 1.5vw;
-  background: ${(props) => props.bg || 'unset'};
-  border-left: 0.35vw solid ${(props) => props.bordercolor || '#7E5FDD'};
-
+  background-color: ${(props) => {
+    if (props.background_type === 'color' && props.bg_color) {
+      return props.bg_color;
+    }
+    return colors.lightPurpleGrey;
+  }};
+  color: ${(props) => (props.text_color ? props.text_color : 'unset')};
+  padding: 2.5vw;
+  border-radius: 1vw;
   ${media.fullWidth} {
-    padding-left: 24px;
-    gap: 8px;
-    border-left: 5px solid ${(props) => props.bordercolor || '#7E5FDD'};
+    padding: 40px;
+    border-radius: 16px;
   }
-
   ${media.tablet} {
-    padding-left: 2.344vw;
-    gap: 0.781vw;
-    border-left: 0.488vw solid ${(props) => props.bordercolor || '#7E5FDD'};
+    padding: 3.906vw;
+    border-radius: 1.563vw;
   }
-
   ${media.mobile} {
-    padding-left: 5vw;
-    gap: 1.667vw;
-    border-left: 1.042vw solid ${(props) => props.bordercolor || '#7E5FDD'};
+    padding: 8.333vw;
+    border-radius: 3.333vw;
   }
 `;
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   width: 100%;
   padding: ${(props) => {
@@ -103,7 +98,6 @@ const Wrapper = styled.div`
         ? `${props.spacing}px 0`
         : '3.75vw 0';
   }};
-
   ${media.fullWidth} {
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
@@ -127,31 +121,29 @@ const Wrapper = styled.div`
           : '60px 0';
     }};
   }
-
   ${media.tablet} {
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
         return props.spacing === 'default'
-          ? '3.906vw 0 0'
+          ? '5.859vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : '3.906vw 0 0';
+            : '5.859vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
-          ? '0 0 3.906vw'
+          ? '0 0 5.859vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : '0 0 3.906vw';
+            : '0 0 5.859vw';
       }
       return props.spacing === 'default'
-        ? '3.906vw 0'
+        ? '5.859vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : '3.906vw 0';
+          : '5.859vw 0';
     }};
   }
-
   ${media.mobile} {
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
