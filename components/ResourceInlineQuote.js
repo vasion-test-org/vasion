@@ -52,29 +52,25 @@ const QuoteContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 45.125vw;
-  max-width: 81.5vw;
+  width: 100%;
   gap: 0.5vw;
   padding-left: 1.5vw;
   background: ${(props) => props.bg || 'unset'};
   border-left: 0.35vw solid ${(props) => props.bordercolor || '#7E5FDD'};
 
   ${media.fullWidth} {
-    max-width: 722px;
     padding-left: 24px;
     gap: 8px;
     border-left: 5px solid ${(props) => props.bordercolor || '#7E5FDD'};
   }
 
   ${media.tablet} {
-    width: 66.797vw;
     padding-left: 2.344vw;
     gap: 0.781vw;
     border-left: 0.488vw solid ${(props) => props.bordercolor || '#7E5FDD'};
   }
 
   ${media.mobile} {
-    width: 89.167vw;
     padding-left: 5vw;
     gap: 1.667vw;
     border-left: 1.042vw solid ${(props) => props.bordercolor || '#7E5FDD'};
@@ -84,7 +80,7 @@ const QuoteContainer = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 100%;
   padding: ${(props) => {
