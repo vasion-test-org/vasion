@@ -7,7 +7,6 @@ import media from '@/styles/media';
 import colors from '@/styles/colors';
 
 const ResourceArticle = ({ blok }) => {
-  console.log('RESOURCE_ARTICLE', blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
