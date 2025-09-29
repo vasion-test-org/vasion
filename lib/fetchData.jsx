@@ -24,14 +24,14 @@ export async function fetchData(slug, isPreview) {
     });
 
     if (!data.story) {
-      console.error(`[❌ Error] Story not found: ${slug} [${version}]`);
+      // console.error(`[❌ Error] Story not found: ${slug} [${version}]`);
       return null;
     }
 
-    console.log(`[✅ Success] FetchData Story fetched: ${data.story.full_slug} [${version}]`);
+    // console.log(`[✅ Success] FetchData Story fetched: ${data.story.full_slug} [${version}]`);
     return data.story;
   } catch (error) {
-    console.error(`[❌ Error] FetchData Failed to fetch Storyblok data:`, error);
+    // console.error(`[❌ Error] FetchData Failed to fetch Storyblok data:`, error);
     return null;
   }
 }

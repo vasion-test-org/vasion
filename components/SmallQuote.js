@@ -44,7 +44,11 @@ const SmallQuote = ({ blok, short }) => {
               // console.log(item)
               <div key={`item.component_${index}`} {...storyblokEditable(item)}>
                 {copycomponents.includes(item.component) ? (
-                  <RichTextRenderer document={item.copy} blok={item} />
+                  <RichTextRenderer
+                    document={item.copy}
+                    blok={item}
+                    responsiveTextStyles={item?.responsive_text_styles}
+                  />
                 ) : (
                   <ComponentRenderer blok={item} />
                 )}
@@ -166,21 +170,21 @@ const Wrapper = styled.div`
       return props.spacing === 'default'
         ? '3.75vw 0 0'
         : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '3.75vw 0 0';
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 0 3.75vw'
         : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 3.75vw';
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
     }
     return props.spacing === 'default'
       ? '3.75vw 0'
       : props.spacing
-        ? `${props.spacing}px 0`
-        : '3.75vw 0';
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
@@ -190,21 +194,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '60px 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : '60px 0 0';
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 60px'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : '0 0 60px';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
       }
       return props.spacing === 'default'
         ? '60px 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : '60px 0';
+        ? `${props.spacing}px 0`
+        : '60px 0';
     }};
   }
 
@@ -215,21 +219,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '3.906vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : '3.906vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : '3.906vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 3.906vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : '0 0 3.906vw';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 3.906vw';
       }
       return props.spacing === 'default'
         ? '3.906vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : '3.906vw 0';
+        ? `${props.spacing}px 0`
+        : '3.906vw 0';
     }};
   }
 
@@ -240,21 +244,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '12.5vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : '12.5vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 12.5vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : '0 0 12.5vw';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
       }
       return props.spacing === 'default'
         ? '12.5vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : '12.5vw 0';
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
     }};
   }
 `;

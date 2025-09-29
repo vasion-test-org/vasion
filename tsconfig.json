@@ -5,11 +5,7 @@
       "@/*": ["./*"]
     },
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -31,9 +27,9 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "app/[...slug]/page.jsx", "app/page.jsx", "app/api/draft/route.js", "components/ClientStory.js", "Middleware.ts", "components/Hero.js"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx"
+  ],
+  "exclude": ["node_modules"]
 }

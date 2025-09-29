@@ -9,7 +9,12 @@ const LongFormText = ({ blok }) => {
   // console.log(blok)
   return (
     <LongFormTextContainer {...storyblokEditable(blok.copy)}>
-      <RichTextRenderer key={`copy-`} document={blok.copy} blok={blok} />
+      <RichTextRenderer
+        key={`copy-`}
+        document={blok.copy}
+        blok={blok}
+        responsiveTextStyles={blok?.responsive_text_styles}
+      />
     </LongFormTextContainer>
   );
 };
@@ -26,7 +31,6 @@ const LongFormTextContainer = styled.div`
     width: 100%;
 
     > *:not(.component-wrapper) {
-    
       /* margin-bottom: 1.875vw;
 
       ${media.fullWidth} {
@@ -44,7 +48,7 @@ const LongFormTextContainer = styled.div`
 
     .component-wrapper * {
       margin-bottom: 0 !important;
-    } 
+    }
   }
 
   div:empty {

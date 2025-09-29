@@ -39,7 +39,7 @@ const Hero = ({ blok }) => {
           customTheme?.background_media?.[1]?.filename ||
             customTheme?.background_media?.[0]?.filename,
           customTheme?.background_media?.[2]?.filename ||
-            customTheme?.background_media?.[0]?.filename
+            customTheme?.background_media?.[0]?.filename,
         )
       : null;
   const bg_color =
@@ -75,10 +75,14 @@ const Hero = ({ blok }) => {
             socials={blok.socials}
             centered={!blok?.hero_asset[0] && !blok.socials}
             centered_image={blok.centered_image}
+            blog_hero={blok.blog_hero}
             // text_alignment={blok.text_alignment}
           >
             {blok?.hero_asset[0] && blok.centered_image && (
-              <ImageWrapper {...storyblokEditable(blok)}>
+              <ImageWrapper
+                {...storyblokEditable(blok)}
+                blog_hero={blok.blog_hero}
+              >
                 <Image
                   images={blok.hero_asset}
                   priority={true}
@@ -97,7 +101,7 @@ const Hero = ({ blok }) => {
               </div>
             ))}
 
-            {!blok?.socials && (
+            {!blok?.socials && blok?.button_group.length > 0 && (
               <ButtonRow>
                 {blok?.button_group?.map(($buttonData) => (
                   <div
@@ -112,8 +116,7 @@ const Hero = ({ blok }) => {
                 ))}
               </ButtonRow>
             )}
-
-            {blok.badges && (
+                {blok.badges.length > 0 &&
               <LazySection threshold={0.2} rootMargin="100px">
                 <BadgesSectionContainer>
                   {blok.badge_section_text &&
@@ -130,7 +133,7 @@ const Hero = ({ blok }) => {
                         />
                       </BadgeEyebrow>
                     ))}
-                  <BadgesContainer>
+                <BadgesContainer>
                     {blok.badges.map((badge) => (
                       <BadgeLink
                         key={badge._uid}
@@ -148,14 +151,17 @@ const Hero = ({ blok }) => {
                   </BadgesContainer>
                 </BadgesSectionContainer>
               </LazySection>
-            )}
+                  }
             {blok?.light_box_button &&
               blok?.light_box_button[0]?.lightbox_text && (
                 <LightboxBtn blok={blok?.light_box_button[0]} />
               )}
           </ContentWrapper>
           {blok?.hero_asset[0] && !blok.centered_image && (
-            <ImageWrapper {...storyblokEditable(blok)}>
+            <ImageWrapper
+              {...storyblokEditable(blok)}
+              blog_hero={blok.blog_hero}
+            >
               <Image
                 images={blok.hero_asset}
                 priority={true}
@@ -192,7 +198,7 @@ const Hero = ({ blok }) => {
                   />
                 </SocialLink>
               </SocialLogoContainer>
-              <ButtonRow socials>
+             {blok?.button_group.length > 0 && <ButtonRow socials>
                 {blok?.button_group?.map(($buttonData) => (
                   <div
                     {...storyblokEditable($buttonData)}
@@ -205,6 +211,7 @@ const Hero = ({ blok }) => {
                   </div>
                 ))}
               </ButtonRow>
+}
             </SocialCTA>
           )}
           {blok.review_buttons && (
@@ -367,20 +374,43 @@ const SocialCTA = styled.div`
     gap: 4.167vw;
   }
 `;
-
 const ImageWrapper = styled.div`
-  min-width: 37.5vw;
-
+  max-width: ${(props) => (props.blog_hero ? '25.438vw' : '37.5vw')};
+  align-self: ${(props) => (props.blog_hero ? 'flex-start' : 'unset')};
+  ${(props) =>
+    props.blog_hero &&
+    `
+    width: 25.438vw;
+    height: 14.313vw;
+  `}
   ${media.fullWidth} {
-    min-width: 600px;
+    max-width: ${(props) => (props.blog_hero ? '407px' : '600px')};
+    ${(props) =>
+      props.blog_hero &&
+      `
+      width: 407px;
+      height: 229px;
+    `}
   }
-
   ${media.tablet} {
-    min-width: 58.594vw;
+    max-width: ${(props) => (props.blog_hero ? '39.746vw' : '58.594vw')};
+    ${(props) =>
+      props.blog_hero &&
+      `
+      width: 39.746vw;
+      height: 22.363vw;
+    `}
   }
-
   ${media.mobile} {
-    min-width: 100%;
+    min-width: ${(props) => (props.blog_hero ? '89.167vw' : '100%')};
+    ${(props) =>
+      props.blog_hero &&
+      `
+      max-width: 89.167vw;
+      width: 89.167vw;
+      height: 50.208vw;
+      min-width: unset;
+    `}
   }
 `;
 
@@ -407,7 +437,6 @@ const ButtonRow = styled.div`
     margin-top: ${(props) => (props.socials ? 'unset' : '6.667vw')};
   }
 `;
-
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -429,16 +458,20 @@ const ContentWrapper = styled.div`
     return props.centered_image
       ? 'center'
       : props.centered
-      ? 'center'
-      : 'start';
+        ? 'center'
+        : 'start';
   }};
 
-  width: ${(props) =>
-    props.socials
+  width: ${(props) => {
+    if (props.blog_hero) {
+      return '33.938vw';
+    }
+    return props.socials
       ? 'clamp(27.75vw, 100%, 26.5vw)'
       : // : props.text_alignment
         // ? '40.25vw'
-        'clamp(27.75vw, 100%, 54.75vw)'};
+        'clamp(27.75vw, 100%, 54.75vw)';
+  }};
 
   h1,
   h2,
@@ -454,22 +487,35 @@ const ContentWrapper = styled.div`
   }
 
   ${media.fullWidth} {
-    width: ${(props) =>
-      props.socials
+    width: ${(props) => {
+      if (props.blog_hero) {
+        return '543px';
+      }
+      return props.socials
         ? 'clamp(444px, 100%, 424px)'
         : // : props.text_alignment
           // ? '644px'
-          'clamp(444px, 100%, 876px)'};
+          'clamp(444px, 100%, 876px)';
+    }};
   }
 
   ${media.tablet} {
-    width: ${(props) =>
+    width: ${(props) => {
+      if (props.blog_hero) {
+        return '46.582vw';
+      }
+      return 'clamp(39.355vw, 100%, 58.887vw)';
       // props.text_alignment ? '39.453vw' :
-      'clamp(39.355vw, 100%, 58.887vw)'};
+    }};
   }
 
   ${media.mobile} {
-    width: 89.167vw;
+    width: ${(props) => {
+      if (props.blog_hero) {
+        return '89.167vw';
+      }
+      return '89.167vw';
+    }};
   }
 `;
 
@@ -479,13 +525,6 @@ const HeroWrapper = styled.div`
   flex-direction: ${(props) => `${props.layout || 'row'}`};
   align-items: center;
   justify-content: ${(props) => {
-    // if (props.text_alignment) {
-    //   return props.text_alignment === 'center'
-    //     ? 'center'
-    //     : props.text_alignment === 'right'
-    //     ? 'flex-end'
-    //     : 'flex-start';
-    // }
     return props.centered ? 'center' : 'space-between';
   }};
   color: ${(props) =>
@@ -496,31 +535,31 @@ const HeroWrapper = styled.div`
       return props.spacing === 'default'
         ? '6vw 9.25vw 0 9.25vw'
         : props.spacing
-        ? `${props.spacing}px 9.25vw 0 9.25vw`
-        : '6vw 9.25vw 0 9.25vw';
+          ? `${props.spacing}px 9.25vw 0 9.25vw`
+          : '6vw 9.25vw 0 9.25vw';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 9.25vw 6vw 9.25vw'
         : props.spacing
-        ? `0 9.25vw ${props.spacing}px 9.25vw`
-        : '0 9.25vw 6vw 9.25vw';
+          ? `0 9.25vw ${props.spacing}px 9.25vw`
+          : '0 9.25vw 6vw 9.25vw';
     }
     return props.spacing === 'default'
       ? '6vw 9.25vw 6vw 9.25vw'
       : props.spacing
-      ? `${props.spacing}px 9.25vw ${props.spacing}px 9.25vw`
-      : '6vw 9.25vw 6vw 9.25vw';
+        ? `${props.spacing}px 9.25vw ${props.spacing}px 9.25vw`
+        : '6vw 9.25vw 6vw 9.25vw';
   }};
 
   gap: ${(props) =>
     props.socials
       ? '46vw'
       : props.gap === 'default'
-      ? '3.75vw'
-      : props.gap
-      ? `calc(${props.gap} / 1600 * 100vw)`
-      : '3.75vw'};
+        ? '3.75vw'
+        : props.gap
+          ? `calc(${props.gap} / 1600 * 100vw)`
+          : '3.75vw'};
 
   ${media.fullWidth} {
     max-width: 1600px;
@@ -529,30 +568,30 @@ const HeroWrapper = styled.div`
         return props.spacing === 'default'
           ? '96px 148px 0 148px'
           : props.spacing
-          ? `${props.spacing}px 148px 0 148px`
-          : '96px 148px 0 148px';
+            ? `${props.spacing}px 148px 0 148px`
+            : '96px 148px 0 148px';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 148px 96px 148px'
           : props.spacing
-          ? `0 148px ${props.spacing}px 148px`
-          : '0 148px 96px 148px';
+            ? `0 148px ${props.spacing}px 148px`
+            : '0 148px 96px 148px';
       }
       return props.spacing === 'default'
         ? '96px 148px 96px 148px'
         : props.spacing
-        ? `${props.spacing}px 148px ${props.spacing}px 148px`
-        : '96px 148px 96px 148px';
+          ? `${props.spacing}px 148px ${props.spacing}px 148px`
+          : '96px 148px 96px 148px';
     }};
     gap: ${(props) =>
       props.socials
         ? '736px'
         : props.gap === 'default'
-        ? '60px'
-        : props.gap
-        ? `${props.gap}px`
-        : '60px'};
+          ? '60px'
+          : props.gap
+            ? `${props.gap}px`
+            : '60px'};
   }
 
   ${media.tablet} {
@@ -562,30 +601,30 @@ const HeroWrapper = styled.div`
         return props.spacing === 'default'
           ? '5.859vw 3.906vw 0 3.906vw'
           : props.spacing
-          ? `${props.spacing}px 3.906vw 0 3.906vw`
-          : '5.859vw 3.906vw 0 3.906vw';
+            ? `${props.spacing}px 3.906vw 0 3.906vw`
+            : '5.859vw 3.906vw 0 3.906vw';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 3.906vw 5.859vw 3.906vw'
           : props.spacing
-          ? `0 3.906vw ${props.spacing}px 3.906vw`
-          : '0 3.906vw 5.859vw 3.906vw';
+            ? `0 3.906vw ${props.spacing}px 3.906vw`
+            : '0 3.906vw 5.859vw 3.906vw';
       }
       return props.spacing === 'default'
         ? '5.859vw 3.906vw 5.859vw 3.906vw'
         : props.spacing
-        ? `${props.spacing}px 3.906vw ${props.spacing}px 3.906vw`
-        : '5.859vw 3.906vw 5.859vw 3.906vw';
+          ? `${props.spacing}px 3.906vw ${props.spacing}px 3.906vw`
+          : '5.859vw 3.906vw 5.859vw 3.906vw';
     }};
     gap: ${(props) =>
       props.socials
         ? '45.996vw'
         : props.gap === 'default'
-        ? '3.906vw'
-        : props.gap
-        ? `calc(${props.gap}/ 1024 * 100vw) `
-        : '3.906vw'};
+          ? '3.906vw'
+          : props.gap
+            ? `calc(${props.gap}/ 1024 * 100vw) `
+            : '3.906vw'};
   }
 
   ${media.mobile} {
@@ -597,30 +636,30 @@ const HeroWrapper = styled.div`
         return props.spacing === 'default'
           ? '12.5vw 5.417vw 0 5.417vw'
           : props.spacing
-          ? `${props.spacing}px 5.417vw 0 5.417vw`
-          : '12.5vw 5.417vw 0 5.417vw';
+            ? `${props.spacing}px 5.417vw 0 5.417vw`
+            : '12.5vw 5.417vw 0 5.417vw';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 5.417vw 12.5vw 5.417vw'
           : props.spacing
-          ? `0 5.417vw ${props.spacing}px 5.417vw`
-          : '0 5.417vw 12.5vw 5.417vw';
+            ? `0 5.417vw ${props.spacing}px 5.417vw`
+            : '0 5.417vw 12.5vw 5.417vw';
       }
       return props.spacing === 'default'
         ? '12.5vw 5.417vw 12.5vw 5.417vw'
         : props.spacing
-        ? `${props.spacing}px 5.417vw ${props.spacing}px 5.417vw`
-        : '12.5vw 5.417vw 12.5vw 5.417vw';
+          ? `${props.spacing}px 5.417vw ${props.spacing}px 5.417vw`
+          : '12.5vw 5.417vw 12.5vw 5.417vw';
     }};
     gap: ${(props) =>
       props.socials
         ? '8.333vw'
         : props.gap === 'default'
-        ? '5.417vw'
-        : props.gap
-        ? `calc(${props.gap}/ 480 * 100vw) `
-        : '5.417vw'};
+          ? '5.417vw'
+          : props.gap
+            ? `calc(${props.gap}/ 480 * 100vw) `
+            : '5.417vw'};
   }
 `;
 

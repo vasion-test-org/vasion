@@ -22,6 +22,10 @@ import TwoColumnList from '@/components/TwoColumnList';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
 import GradientText from '@/components/globalComponents/GradientText';
+import ResourceCta from '@/components/ResourceCta';
+import ResourceInlineQuote from '@/components/ResourceInlineQuote';
+import ResourceAuthor from '@/components/ResourceAuthor';
+import ResourceArticle from '@/components/ResourceArticle';
 
 const RichTextRenderer = ({
   document,
@@ -75,6 +79,26 @@ const RichTextRenderer = ({
         <InfographicPill blok={props} />
       </div>
     ),
+    resource_cta: (props) => (
+      <div className="component-wrapper">
+        <ResourceCta blok={props} />
+      </div>
+    ),
+    resource_inline_quote: (props) => (
+      <div className="component-wrapper">
+        <ResourceInlineQuote blok={props} />
+      </div>
+    ),
+    resource_author: (props) => (
+      <div className="component-wrapper">
+        <ResourceAuthor blok={props} />
+      </div>
+    ),
+    resource_article: (props) => (
+      <div className="component-wrapper">
+        <ResourceArticle blok={props} />
+      </div>
+    ),
   };
 
   const customMarkResolvers = {
@@ -120,7 +144,7 @@ const RichTextRenderer = ({
         responsiveTextStyles[0],
         responsiveTextStyles[1]
       );
-      // console.log('selectedClassName', selectedClassName)
+      console.log('selectedClassName', selectedClassName)
       return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
     },
   };
@@ -270,46 +294,43 @@ const RichWrapper = styled.div`
   }
   ul {
     list-style: none;
-    margin-left: 0;
+    display: flex;
+    flex-direction: column;
 
     li {
       position: relative;
-      padding-left: 1.563vw;
-      /* margin-bottom: 1.25vw; */
-      ${media.fullWidth} {
-        padding-left: 25px;
-        /* margin-bottom: 20px; */
-      }
-      ${media.tablet} {
-        padding-left: 2.441vw;
-        /* margin-bottom: 1.953vw; */
-      }
-      ${media.mobile} {
-        padding-left: 5.208vw;
-        /* margin-bottom: 4.167vw; */
-      }
     }
-    li::before {
+
+    li:before {
+      background-image: unset;
       content: '';
       position: absolute;
-      background-image: url('/images/icons/orange-check-icon.webp');
-      background-size: contain;
-      background-repeat: no-repeat;
-      left: 0;
-      top: 0;
-      width: 1.25vw;
-      height: 1.25vw;
+      left: -1vw;
+      top: 0.4vw;
+      width: 0.35vw;
+      height: 0.35vw;
+      border-radius: 50%;
+      background: ${colors.txtPrimary};
+
       ${media.fullWidth} {
-        width: 20px;
-        height: 20px;
+        left: -16px;
+        top: 6px;
+        width: 6px;
+        height: 6px;
       }
+
       ${media.tablet} {
-        width: 1.953vw;
-        height: 1.953vw;
+        left: -1.563vw;
+        top: 0.586vw;
+        width: 0.586vw;
+        height: 0.586vw;
       }
+
       ${media.mobile} {
-        width: 4.167vw;
-        height: 4.167vw;
+        left: -3.333vw;
+        top: 1.25vw;
+        width: 1.25vw;
+        height: 1.25vw;
       }
     }
   }

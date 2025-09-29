@@ -244,7 +244,11 @@ const Nav = ({ blok }) => {
                     {...storyblokEditable(item)}
                   >
                     {copycomponents.includes(item.component) ? (
-                      <RichTextRenderer document={item.copy} blok={item} />
+                      <RichTextRenderer
+                        document={item.copy}
+                        blok={item}
+                        responsiveTextStyles={item?.responsive_text_styles}
+                      />
                     ) : (
                       <ComponentRenderer blok={item} />
                     )}

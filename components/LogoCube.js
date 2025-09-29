@@ -58,7 +58,11 @@ const LogoCube = ({ blok }) => {
       >
         <CardContainer transparent={blok.transparent_background}>
           {blok.header && (
-            <RichTextRenderer document={blok.header} blok={blok} />
+            <RichTextRenderer
+              document={blok.header}
+              blok={blok}
+              responsiveTextStyles={blok?.responsive_text_styles}
+            />
           )}
           <LogoContainer
             transparent={blok.transparent_background}

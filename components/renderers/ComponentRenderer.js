@@ -101,7 +101,11 @@ const ComponentRenderer = ({
               {extra_copy?.copy_block_sections?.map((item, index) => (
                 <BlockWrapper key={index} {...storyblokEditable(item)}>
                   {copycomponents.includes(item.component) ? (
-                    <RichTextRenderer document={item.copy} blok={item} />
+                    <RichTextRenderer
+                      document={item.copy}
+                      blok={item}
+                      responsiveTextStyles={item?.responsive_text_styles}
+                    />
                   ) : (
                     <ComponentRenderer blok={item} />
                   )}
@@ -126,7 +130,11 @@ const ComponentRenderer = ({
           {blok?.copy_block_sections?.map((item, index) => (
             <BlockWrapper key={index} {...storyblokEditable(item)}>
               {copycomponents.includes(item.component) ? (
-                <RichTextRenderer document={item.copy} blok={item} />
+                <RichTextRenderer
+                  document={item.copy}
+                  blok={item}
+                  responsiveTextStyles={item?.responsive_text_styles}
+                />
               ) : (
                 <ComponentRenderer blok={item} />
               )}
