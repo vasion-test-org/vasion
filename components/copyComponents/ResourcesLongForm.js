@@ -7,7 +7,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import media from 'styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import colors from '@/styles/colors';
-import ResourcesTOC from '@/components/ResourcesTOC';
+// import ResourcesTOC from '@/components/ResourcesTOC';
 
 const ResourcesLongForm = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -24,7 +24,7 @@ const ResourcesLongForm = ({ blok }) => {
             responsiveTextStyles={blok?.responsive_text_styles}
           />
         </ResourcesLongFormContainer>
-        <ResourcesTOC copy={blok.copy} />
+        {/* <ResourcesTOC copy={blok.copy} /> */}
       </Wrapper>
     </ThemeProvider>
   );
@@ -70,7 +70,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: start;
+  justify-content: center;
   justify-self: center;
   height: auto;
   width: 63.125vw;

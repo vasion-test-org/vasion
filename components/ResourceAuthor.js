@@ -217,7 +217,7 @@ const AuthorContainer = styled.div`
   }
 
   ${media.mobile} {
-    gap: ${(props) => (props.isblogend ? '4.167vw' : '0vw')};
+    gap: ${(props) => (props.isblogend ? '4.167vw' : '1.667vw')};
     max-width: 89.167vw;
     padding: ${(props) =>
       props.isblogend ? '8.125vw 0vw' : '4.167vw 0vw'} !important;
