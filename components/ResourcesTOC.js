@@ -111,7 +111,7 @@ const TableOfContent = ({ copy }) => {
       <TOCContainer>
         <TOCHeader>Table of Contents</TOCHeader>
         <TOCList>
-          {headers.length > 0 ? (
+          {headers?.length > 0 ? (
             headers.map((header, index) => (
               <TOCItem key={index} level={header.level}>
                 <TOCItemLink

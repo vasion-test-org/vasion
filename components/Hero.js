@@ -101,7 +101,7 @@ const Hero = ({ blok }) => {
               </div>
             ))}
 
-            {!blok?.socials && blok?.button_group.length > 0 && (
+            {!blok?.socials && blok?.button_group?.length > 0 && (
               <ButtonRow>
                 {blok?.button_group?.map(($buttonData) => (
                   <div
@@ -116,7 +116,7 @@ const Hero = ({ blok }) => {
                 ))}
               </ButtonRow>
             )}
-            {blok.badges.length > 0 && (
+            {blok.badges?.length > 0 && (
               <LazySection threshold={0.2} rootMargin="100px">
                 <BadgesSectionContainer>
                   {blok.badge_section_text &&
@@ -198,7 +198,7 @@ const Hero = ({ blok }) => {
                   />
                 </SocialLink>
               </SocialLogoContainer>
-              {blok?.button_group.length > 0 && (
+              {blok?.button_group?.length > 0 && (
                 <ButtonRow socials>
                   {blok?.button_group?.map(($buttonData) => (
                     <div

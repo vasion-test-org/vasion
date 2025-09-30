@@ -127,7 +127,7 @@ const CardModal = ({ data, setShowModal }) => {
                 <RichTextRenderer document={data.bio[0].copy} />
               )}
 
-              {hasBio && data?.asset.length > 1 && (
+              {hasBio && data?.asset?.length > 1 && (
                 <VideoContainer hasbio={hasBio}>
                   {data?.asset?.[0]?.thumbnails ? (
                     <Video

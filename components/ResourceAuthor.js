@@ -27,10 +27,10 @@ const ResourceAuthor = ({ blok }) => {
       >
         <Division divider={line_seperators}>
           <AuthorContainer isblogend={blok.blog_end}>
-            {blok?.assets && blok.assets.length > 0 && !blok.blog_end && (
+            {blok?.assets && blok.assets?.length > 0 && !blok.blog_end && (
               <AuthorImageWrapper
                 isblogend={blok?.blog_end}
-                buttons={blok.button_group.length > 0}
+                buttons={blok.button_group?.length > 0}
               >
                 <Image
                   images={blok.assets}
@@ -42,10 +42,10 @@ const ResourceAuthor = ({ blok }) => {
               </AuthorImageWrapper>
             )}
 
-            {blok?.assets && blok.assets.length > 0 && blok.blog_end && (
+            {blok?.assets && blok.assets?.length > 0 && blok.blog_end && (
               <AuthorImageWrapper
                 isblogend={blok.blog_end}
-                buttons={blok.button_group.length > 0}
+                buttons={blok.button_group?.length > 0}
               >
                 <Image
                   images={blok.assets}
@@ -69,7 +69,7 @@ const ResourceAuthor = ({ blok }) => {
                 </CopyWrapper>
               ))}
 
-              {blok?.button_group && blok.button_group.length > 0 && (
+              {blok?.button_group && blok.button_group?.length > 0 && (
                 <ButtonContainer>
                   {blok.button_group.map(($buttonData) => {
                     return (

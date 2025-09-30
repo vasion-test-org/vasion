@@ -18,7 +18,7 @@ const ReviewsCarousel = ({ blok }) => {
   const redditReviews = blok?.reviews;
   const statsList = blok?.stats;
 
-  const hasStats = statsList && statsList.length > 0;
+  const hasStats = statsList && statsList?.length > 0;
 
   const clonedReviews = [...redditReviews, ...redditReviews, ...redditReviews];
   const clonedStats = hasStats

@@ -21,7 +21,7 @@ export const useOptimizedState = (initialState, options = {}) => {
 
   const optimizedSetState = useCallback(
     (newState) => {
-      if (batchUpdates && pendingUpdates.current.length > 0) {
+      if (batchUpdates && pendingUpdates.current?.length > 0) {
         pendingUpdates.current.push(newState);
         return;
       }
@@ -75,7 +75,7 @@ export const useBatchedState = (initialStates) => {
 
     // Batch updates on next tick
     requestAnimationFrame(() => {
-      if (Object.keys(pendingUpdates.current).length > 0) {
+      if (Object.keys(pendingUpdates.current)?.length > 0) {
         setState((prevState) => ({
           ...prevState,
           ...pendingUpdates.current,
@@ -89,7 +89,7 @@ export const useBatchedState = (initialStates) => {
     Object.assign(pendingUpdates.current, updates);
 
     requestAnimationFrame(() => {
-      if (Object.keys(pendingUpdates.current).length > 0) {
+      if (Object.keys(pendingUpdates.current)?.length > 0) {
         setState((prevState) => ({
           ...prevState,
           ...pendingUpdates.current,

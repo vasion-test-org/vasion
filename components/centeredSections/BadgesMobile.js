@@ -35,7 +35,7 @@ const G2BadgesMobile = ({ badges }) => {
     function NextLoop() {
       loop.next({ duration: 2, ease: "slow" });
 
-      if (countRef.current >= badges.length) {
+      if (countRef.current >= badges?.length) {
         countRef.current = 1;
       } else {
         countRef.current += 1;
@@ -86,7 +86,7 @@ const G2BadgesMobile = ({ badges }) => {
 
         <BadgeCounterDiv>
           <BadgeCounter id="badgeCounter">{countRef.current}</BadgeCounter>/
-          {badges.badge_cards.length}
+          {badges.badge_cards?.length}
         </BadgeCounterDiv>
    
     </Wrapper>

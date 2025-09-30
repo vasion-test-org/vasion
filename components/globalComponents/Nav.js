@@ -262,7 +262,7 @@ const Nav = ({ blok }) => {
     );
   });
 
-  const navReady = navItems && navItems.length > 0;
+  const navReady = navItems && navItems?.length > 0;
 
   useEffect(() => {
     if (!navReady) return;

@@ -168,7 +168,7 @@ const StackedCards = React.memo(({ blok }) => {
   return (
     <Wrapper ref={stackedCardsRef}>
       {blok.map((card, index) => {
-        const isLastCard = index === blok.length - 1;
+        const isLastCard = index === blok?.length - 1;
         const cardImage = getMedia(
           card?.background_image[0]?.filename,
           card?.background_image[0]?.filename,

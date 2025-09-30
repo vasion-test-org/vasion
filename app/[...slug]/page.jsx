@@ -16,7 +16,7 @@ export async function generateMetadata({ params, searchParams }) {
   const isLocalized = ['fr', 'de'].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : 'en';
   const storySlug = isLocalized
-    ? slugArray.length === 1
+    ? slugArray?.length === 1
       ? 'home'
       : slugArray.slice(1).join('/')
     : slugArray.join('/');
@@ -44,7 +44,7 @@ export async function generateMetadata({ params, searchParams }) {
   }
 
   // For localized homepages, remove /home/ from the canonical URL
-  if (currentLocale !== 'en' && slugArray.length === 1) {
+  if (currentLocale !== 'en' && slugArray?.length === 1) {
     canonicalPath = currentLocale;
   }
 
@@ -103,7 +103,7 @@ export default async function DynamicPage({ params }) {
   const isLocalized = ['fr', 'de'].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : 'en';
   const storySlug = isLocalized
-    ? slugArray.length === 1
+    ? slugArray?.length === 1
       ? 'home'
       : slugArray.slice(1).join('/')
     : slugArray.join('/');
