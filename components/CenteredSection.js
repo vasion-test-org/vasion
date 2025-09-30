@@ -88,7 +88,7 @@ const CenteredSection = ({ blok }) => {
         backgroundImage={blok.background_image?.[0]?.filename}
         {...storyblokEditable(blok)}
       >
-        {(blok.centered_copy.length > 0 || blok.button_group.length > 0) && (
+        {(blok.centered_copy?.length > 0 || blok.button_group?.length > 0) && (
           <ContentWrapper>
             {blok.centered_copy &&
               blok.centered_copy.map((copy) => (

@@ -34,11 +34,11 @@ const LogoCube = ({ blok }) => {
   }, []);
 
   useEffect(() => {
-    if (gsapLoaded && logosToDisplay.length >= 7) {
+    if (gsapLoaded && logosToDisplay?.length >= 7) {
       const logosArr = window.gsap.utils.toArray('.cubeLogos');
       horizontalLoop(logosArr, { deep: false, repeat: -1 });
     }
-  }, [logosToDisplay.length, gsapLoaded]);
+  }, [logosToDisplay?.length, gsapLoaded]);
 
   const allLogos = logosToDisplay.map((logo, index) => (
     <LogosDiv key={logo.filename || logo.alt || index} className="cubeLogos">
@@ -66,7 +66,7 @@ const LogoCube = ({ blok }) => {
           )}
           <LogoContainer
             transparent={blok.transparent_background}
-            shouldCenter={logosToDisplay.length < 6}
+            shouldCenter={logosToDisplay?.length < 6}
           >
             {allLogos}
           </LogoContainer>

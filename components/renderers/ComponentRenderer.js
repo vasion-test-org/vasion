@@ -67,13 +67,13 @@ const ComponentRenderer = ({
   if (blok.component === 'personalized_section') {
     let contentBlocks = [];
 
-    if (isEnglish && blok.english_blocks.length > 0) {
+    if (isEnglish && blok.english_blocks?.length > 0) {
       contentBlocks = blok.english_blocks;
     }
-    if (isFrench && blok.french_blocks.length > 0) {
+    if (isFrench && blok.french_blocks?.length > 0) {
       contentBlocks = blok.french_blocks;
     }
-    if (isGerman && blok.german_blocks.length > 0) {
+    if (isGerman && blok.german_blocks?.length > 0) {
       contentBlocks = blok.german_blocks;
     }
 
