@@ -1,6 +1,6 @@
 {
   "extends": ["next/core-web-vitals"],
   "rules": {
-    "quotes": ["error", "single"]
+    "prettier/prettier": ["error", { "singleQuoe": true }]
   }
 }
