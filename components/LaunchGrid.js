@@ -1,15 +1,15 @@
-"use client";
-import React, { useContext } from "react";
-import Button from "@/components/globalComponents/Button";
-import { ScreenContext } from "@/components/providers/Screen";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import Card from "./globalComponents/Card";
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import useMedia from "@/functions/useMedia";
+'use client';
+import React, { useContext } from 'react';
+import Button from '@/components/globalComponents/Button';
+import { ScreenContext } from '@/components/providers/Screen';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import Card from './globalComponents/Card';
+import styled, { ThemeProvider } from 'styled-components';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import media from '@/styles/media';
+import colors from '@/styles/colors';
+import useMedia from '@/functions/useMedia';
 
 const LaunchGrid = ({ blok }) => {
   const { mobile } = useContext(ScreenContext);
@@ -19,7 +19,7 @@ const LaunchGrid = ({ blok }) => {
     blok?.launch_cta?.[0]?.assets?.[1]?.filename,
     blok?.launch_cta?.[0]?.assets?.[1]?.filename,
     blok?.launch_cta?.[0]?.assets?.[2]?.filename,
-    blok?.launch_cta?.[0]?.assets?.[3]?.filename,
+    blok?.launch_cta?.[0]?.assets?.[3]?.filename
   );
 
   const ctaCopy = blok.launch_cta[0].copy_section.map((copy, index) => {
@@ -110,7 +110,7 @@ const BottomMobile = styled.div`
 const TopMobile = styled.div`
   height: 63.75vw;
   width: 89.167vw;
-  background: ${(props) => (props?.bg ? `url(${props?.bg})` : "unset")};
+  background: ${(props) => (props?.bg ? `url(${props?.bg})` : 'unset')};
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 5vw 5vw 0 0;
@@ -274,7 +274,7 @@ const Cta = styled.div`
   min-height: 24.5vw;
   border-radius: 0.5vw;
   padding-right: 3.75vw;
-  background: ${(props) => (props?.bg ? `url(${props.bg})` : "unset")};
+  background: ${(props) => (props?.bg ? `url(${props.bg})` : 'unset')};
   background-size: cover;
   background-repeat: no-repeat;
 
@@ -323,96 +323,96 @@ const Wrapper = styled.div`
   gap: 2.5vw;
   background: ${colors.lightPurpleGrey};
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
-          ? `${props.spacing}px 0 0`
-          : "3.75vw 0 0";
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : "0 0 3.75vw";
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
-        ? `${props.spacing}px 0`
-        : "3.75vw 0";
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
   }};
   ${media.fullWidth} {
     gap: 40px;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "60px 0";
+        ? `${props.spacing}px 0`
+        : '60px 0';
     }};
   }
   ${media.tablet} {
     gap: 3.906vw;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.859vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "5.859vw 0 0";
+          ? `${props.spacing}px 0 0`
+          : '5.859vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 5.859vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 5.859vw";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 5.859vw';
       }
-      return props.spacing === "default"
-        ? "5.859vw 0"
+      return props.spacing === 'default'
+        ? '5.859vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "5.859vw 0";
+        ? `${props.spacing}px 0`
+        : '5.859vw 0';
     }};
   }
   ${media.mobile} {
     gap: 8.333vw;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : "12.5vw 0 0";
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : "0 0 12.5vw";
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
       }
-      return props.spacing === "default"
-        ? "12.5vw 0"
+      return props.spacing === 'default'
+        ? '12.5vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : "12.5vw 0";
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
     }};
   }
 `;
