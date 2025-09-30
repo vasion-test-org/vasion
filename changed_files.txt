@@ -1,0 +1,12 @@
+assets/svg/schedule.svg
+assets/svg/schedule.svg:Zone.Identifier
+components/ResourceArticle.js
+components/ResourceAuthor.js
+components/ResourceInlineQuote.js
+components/copyComponents/ResourcesLongForm.js
+components/renderers/RichTextRenderer.js
+lib/storyblok.js
+public/images/icons/schedule.png
+public/images/icons/schedule.png:Zone.Identifier
+public/images/schedule.png
+public/images/schedule.png:Zone.Identifier
