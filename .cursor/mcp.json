@@ -1,7 +1,3 @@
 {
-  "mcpServers": {
-    "Sentry": {
-      "url": "https://mcp.sentry.dev/mcp/vasion-hl/javascript-nextjs"
-    }
-  }
+  "mcpServers": {}
 }
