@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
@@ -8,9 +8,16 @@ import media from 'styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+import Tools from '@/assets/svg/tools.svg';
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
-const TableOfContent = ({ copy }) => {
+const TableOfContent = ({ copy, toc }) => {
   const [isCopied, setIsCopied] = useState(false);
+  const tocRef = useRef(null);
+  const scrollTriggerRef = useRef(null);
 
   // Extract headers from the copy document
   const extractHeaders = (document) => {
@@ -80,6 +87,42 @@ const TableOfContent = ({ copy }) => {
 
   const headers = useMemo(() => extractHeaders(copy), [copy]);
 
+  // Set up sticky pinning with ScrollTrigger
+  useEffect(() => {
+    if (!toc || !tocRef.current) return;
+
+    const resourcesLongForm = document.getElementById('resources-long-form');
+    if (!resourcesLongForm) {
+      console.warn(
+        'resources-long-form element not found for TOC sticky behavior'
+      );
+      return;
+    }
+
+    // Create ScrollTrigger for sticky pinning
+    const trigger = ScrollTrigger.create({
+      trigger: tocRef.current,
+      start: 'top top',
+      end: () => `+=${resourcesLongForm.offsetHeight}`,
+      pin: true,
+      pinSpacing: false,
+      onRefresh: () => {
+        // Recalculate when content changes
+        ScrollTrigger.refresh();
+      },
+    });
+
+    scrollTriggerRef.current = trigger;
+
+    // Cleanup function
+    return () => {
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+        scrollTriggerRef.current = null;
+      }
+    };
+  }, [toc, headers]); // Include headers in dependency array as content changes affect layout
+
   const scrollToHeader = (headerId) => {
     const element = document.getElementById(headerId);
     if (element) {
@@ -107,7 +150,7 @@ const TableOfContent = ({ copy }) => {
   // const selectedTheme = themes[blok.theme] || themes.default;
   return (
     // <ThemeProvider theme={selectedTheme}>
-    <Wrapper>
+    <Wrapper ref={tocRef} toc={toc}>
       <TOCContainer>
         <TOCHeader>Table of Contents</TOCHeader>
         <TOCList>
@@ -135,6 +178,7 @@ const TableOfContent = ({ copy }) => {
         </TOCList>
       </TOCContainer>
       <BlogLink onClick={copyUrlToClipboard}>
+        <Tools />
         {isCopied ? 'Link copied!' : 'Copy blog link'}
       </BlogLink>
     </Wrapper>
@@ -185,6 +229,11 @@ const TOCItemLinkText = styled.p`
   line-height: 1.4;
 `;
 const BlogLink = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  gap: 0.5vw;
   ${text.bodySm};
   color: ${colors.txtSubtle};
   margin-top: 1.25vw;
@@ -193,10 +242,16 @@ const BlogLink = styled.button`
   cursor: pointer;
   padding: 0;
   text-decoration: none;
-  transition: opacity 0.2s ease;
+  transition: color 0.2s ease;
 
   &:hover {
-    opacity: 0.8;
+    color: ${colors.primaryOrange};
+
+    svg {
+      path {
+        fill: ${colors.primaryOrange};
+      }
+    }
   }
 `;
 
@@ -233,7 +288,7 @@ const TOCContainer = styled.div`
 `;
 
 const Wrapper = styled.div`
-  display: flex;
+  display: ${(props) => (props.toc ? 'flex' : 'none')};
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -246,7 +301,8 @@ const Wrapper = styled.div`
   }
 
   ${media.tablet} {
-    top: 3.906vw;
+    /* top: 3.906vw; */
+    display: none;
   }
 
   ${media.mobile} {
