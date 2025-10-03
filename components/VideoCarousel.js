@@ -7,7 +7,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import media from 'styles/media';
 import colors from 'styles/colors';
 import text from 'styles/text';
-import ReactPlayer from 'react-player/youtube';
+import ReactPlayer from 'react-player'; // Change back to generic import
 import Button from '@/components/globalComponents/Button';
 import useMedia from '@/functions/useMedia';
 import { horizontalLoop } from '@/functions/horizontalLoop';
@@ -87,20 +87,22 @@ const VideoCarousel = ({ blok }) => {
             playsinline
             width={videoWidth}
             height={videoHeight}
-            // v3.3.3 changes:
             config={{
-              file: {
-                attributes: {
-                  crossOrigin: 'anonymous',
+              youtube: {
+                playerVars: {
+                  showinfo: 1,
+                  controls: 0,
+                  modestbranding: 1,
+                  autoplay: 1,
+                  mute: 1,
                 },
               },
             }}
             onError={(error) => {
               console.error('Main video error:', error);
-              console.error('Main video URL:', video?.video.filename);
             }}
             onReady={() => {
-              console.log('Main video ready:', video?.video.filename);
+              console.log('Main video ready');
             }}
           />
         </Video>
@@ -168,10 +170,10 @@ const VideoCarousel = ({ blok }) => {
               },
             }}
             onError={(error) => {
-              console.error('YouTube video error:', error);
+              console.error('Modal video error:', error);
             }}
             onReady={() => {
-              console.log('YouTube video ready');
+              console.log('Modal video ready');
             }}
             onLoadStart={() => {
               console.log('Video loading started:', video?.video.filename);
