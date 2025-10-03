@@ -55,6 +55,13 @@ const VideoCarousel = ({ blok }) => {
             playsinline
             width={videoWidth}
             height={videoHeight}
+            onError={(error) => {
+              console.error('Main video error:', error);
+              console.error('Video URL:', video?.video.filename);
+            }}
+            onReady={() => {
+              console.log('Main video ready:', video?.video.filename);
+            }}
           />
         </Video>
         <ContentContainer>
@@ -81,10 +88,23 @@ const VideoCarousel = ({ blok }) => {
             url={video?.video.filename}
             controls={true}
             playing={isModalActive}
-            // volume={1}
             muted={!isModalActive && modalActiveClick}
             width={getMedia(800, 800, 700, 325)}
             height={getMedia(400, 400, 400, 250)}
+            onError={(error) => {
+              console.error('Video playback error:', error);
+              console.error('Video URL:', video?.video.filename);
+            }}
+            onReady={() => {
+              console.log('Video ready:', video?.video.filename);
+            }}
+            onLoadStart={() => {
+              console.log('Video loading started:', video?.video.filename);
+            }}
+            onBuffer={() => {
+              console.log('Video buffering:', video?.video.filename);
+            }}
+            fallback={<div style={{padding: '20px', textAlign: 'center', color: 'white'}}>Video failed to load</div>}
           />
         </PopupVideo>
       </VideoModal>
