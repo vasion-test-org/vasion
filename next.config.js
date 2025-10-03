@@ -890,8 +890,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value:
-              "frame-ancestors 'self' https://app.storyblok.com https://editor.storyblok.com https://m.storyblok.com https://app.zoominfo.com;",
+            value: "frame-ancestors 'self' https://app.storyblok.com https://editor.storyblok.com https://m.storyblok.com https://app.zoominfo.com https://www.youtube.com https://youtube.com;",
           },
         ],
       },

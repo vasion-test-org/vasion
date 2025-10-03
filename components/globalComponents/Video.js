@@ -29,27 +29,20 @@ const Video = ({
       isSideBySideVideo={isSideBySideVideo}
     >
       <ReactPlayer
-        url={videoSrc}
         width='100%'
         height='100%'
         controls={true}
-        light={thumbnails?.[0]?.filename}
-        playsinline={true}
-        // v3.3.3 changes:
-        config={{
-          file: {
-            attributes: {
-              crossOrigin: 'anonymous',
-            },
-          },
-        }}
+        playsInline={true}
+        poster={thumbnails?.[0]?.filename}
         onError={(error) => {
           console.error('Video error:', error);
         }}
-        onReady={() => {
+        onLoad={() => {
           console.log('Video ready');
         }}
-      />
+      >
+        <source src={videoSrc} type="video/mp4" />
+      </ReactPlayer>
     </VideoWrapper>
   );
 };

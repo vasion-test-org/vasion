@@ -136,25 +136,19 @@ const CardModal = ({ data, setShowModal }) => {
                     />
                   ) : (
                     <ReactPlayer
-                      url={videoSrc}
                       controls={true}
-                      playing={false}
+                      autoPlay={false}
                       volume={1}
                       muted={false}
-                      playsinline={true}
+                      playsInline={true}
                       width={'100%'}
                       height={combinedStyledHeight}
-                      config={{
-                        file: {
-                          attributes: {
-                            crossOrigin: 'anonymous',
-                          },
-                        },
-                      }}
                       onError={(error) => {
                         console.error('CardModal video error:', error);
                       }}
-                    />
+                    >
+                      <source src={videoSrc} type="video/mp4" />
+                    </ReactPlayer>
                   )}
                 </VideoContainer>
               )}
@@ -164,25 +158,19 @@ const CardModal = ({ data, setShowModal }) => {
         {!data?.position?.[0]?.copy && (
           <VideoContainer>
             <ReactPlayer
-              url={videoSrc}
               controls={true}
-              playing={false}
+              autoPlay={false}
               volume={1}
               muted={false}
-              playsinline={true}
+              playsInline={true}
               width={videoWidth}
               height={videoHeight}
-              config={{
-                file: {
-                  attributes: {
-                    crossOrigin: 'anonymous',
-                  },
-                },
-              }}
               onError={(error) => {
                 console.error('CardModal video error:', error);
               }}
-            />
+            >
+              <source src={videoSrc} type="video/mp4" />
+            </ReactPlayer>
           </VideoContainer>
         )}
       </Modal>

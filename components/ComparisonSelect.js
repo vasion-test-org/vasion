@@ -212,27 +212,19 @@ const ComparisonSelect = ({ blok }) => {
         </Comparison>
       }
       <ReactPlayer
-        url={blok?.video_url?.url}
         controls={true}
-        light={blok?.video_thumbnail?.filename}
-        playing={true}
+        poster={blok?.video_thumbnail?.filename}
+        autoPlay={true}
         volume={1}
         muted={false}
-        playIcon={<></>}
         width={videoWidth}
         height={videoHeight}
-        // v3.3.3 changes:
-        config={{
-          file: {
-            attributes: {
-              crossOrigin: 'anonymous',
-            },
-          },
-        }}
         onError={(error) => {
           console.error('ComparisonSelect video error:', error);
         }}
-      />
+      >
+        <source src={blok?.video_url?.url} type="video/mp4" />
+      </ReactPlayer>
 
       <BottomCopy>
         <RichTextRenderer document={blok.bottom_text} />
