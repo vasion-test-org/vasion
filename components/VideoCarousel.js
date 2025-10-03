@@ -7,7 +7,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import media from 'styles/media';
 import colors from 'styles/colors';
 import text from 'styles/text';
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/youtube';
 import Button from '@/components/globalComponents/Button';
 import useMedia from '@/functions/useMedia';
 import { horizontalLoop } from '@/functions/horizontalLoop';
@@ -53,8 +53,14 @@ const VideoCarousel = ({ blok }) => {
   const allVideos = blok.videos.map((video, index) => {
     const isActive = index === activeIndex;
     
+    // Fix YouTube detection for main videos too
+    const videoUrl = video?.video?.filename;
+    const hasYouTube = /youtube|youtu\.be/.test(videoUrl);
+    
     // Debug main videos too
     console.log(`=== Main Video ${index} Debug ===`);
+    console.log('Main video URL:', videoUrl);
+    console.log('Is YouTube:', hasYouTube);
     console.log('Main video filename:', video?.video?.filename);
     console.log('Thumbnail sourceUrl:', video?.thumbnail?.sourceUrl);
     console.log('Thumbnail filename:', video?.thumbnail?.filename);
@@ -110,18 +116,13 @@ const VideoCarousel = ({ blok }) => {
   const popups = blok.videos.map((video, index) => {
     const isModalActive = index === modalActive;
     
-    // Add YouTube detection
-    const hasYouTube = /youtube|youtu\.be/.test(video?.asset?.[0]?.media?.[0]?.filename);
-    console.log(`Video ${index} is YouTube:`, hasYouTube);
+    // Fix YouTube detection - check the actual video URL
+    const videoUrl = video?.video?.filename;
+    const hasYouTube = /youtube|youtu\.be/.test(videoUrl);
     
-    // Add comprehensive debugging
     console.log(`=== Video ${index} Debug ===`);
-    console.log('Full video object:', video);
-    console.log('Video filename:', video?.video?.filename);
-    console.log('Video URL:', video?.video?.filename);
-    console.log('Thumbnail filename:', video?.thumbnail?.filename);
-    console.log('Is modal active:', isModalActive);
-    console.log('Modal active click:', modalActiveClick);
+    console.log('Video URL:', videoUrl);
+    console.log('Is YouTube:', hasYouTube);
     
     // Check if URL is valid
     if (!video?.video?.filename) {
@@ -157,19 +158,20 @@ const VideoCarousel = ({ blok }) => {
             muted={!isModalActive && modalActiveClick}
             width={getMedia(800, 800, 700, 325)}
             height={getMedia(400, 400, 400, 250)}
-            // v3.3.3 changes:
             config={{
-              file: {
-                attributes: {
-                  crossOrigin: 'anonymous',
+              youtube: {
+                playerVars: {
+                  showinfo: 1,
+                  controls: 1,
+                  modestbranding: 1,
                 },
               },
             }}
             onError={(error) => {
-              console.error('Modal video error:', error);
+              console.error('YouTube video error:', error);
             }}
             onReady={() => {
-              console.log('Video ready:', video?.video.filename);
+              console.log('YouTube video ready');
             }}
             onLoadStart={() => {
               console.log('Video loading started:', video?.video.filename);
