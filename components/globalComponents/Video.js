@@ -35,6 +35,20 @@ const Video = ({
         controls={true}
         light={thumbnails?.[0]?.filename}
         playsinline={true}
+        // v3.3.3 changes:
+        config={{
+          file: {
+            attributes: {
+              crossOrigin: 'anonymous',
+            },
+          },
+        }}
+        onError={(error) => {
+          console.error('Video error:', error);
+        }}
+        onReady={() => {
+          console.log('Video ready');
+        }}
       />
     </VideoWrapper>
   );
