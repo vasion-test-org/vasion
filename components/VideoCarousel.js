@@ -20,7 +20,11 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 gsap.registerPlugin(ScrollToPlugin);
 
 const VideoCarousel = ({ blok }) => {
-  // console.log(blok);
+  // Add this debugging at the top
+  console.log('=== VideoCarousel Debug ===');
+  console.log('Full blok object:', blok);
+  console.log('Videos array:', blok.videos);
+  console.log('Number of videos:', blok.videos?.length);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const videoWidth = useMedia('100%', '100%', '100%', '83.645vw');
@@ -32,6 +36,12 @@ const VideoCarousel = ({ blok }) => {
 
   const allVideos = blok.videos.map((video, index) => {
     const isActive = index === activeIndex;
+    
+    // Debug main videos too
+    console.log(`=== Main Video ${index} Debug ===`);
+    console.log('Main video filename:', video?.video?.filename);
+    console.log('Thumbnail sourceUrl:', video?.thumbnail?.sourceUrl);
+    console.log('Thumbnail filename:', video?.thumbnail?.filename);
 
     return (
       <VideoContainer className={`videos`} id={`video-${index}`} key={index}>
@@ -57,7 +67,7 @@ const VideoCarousel = ({ blok }) => {
             height={videoHeight}
             onError={(error) => {
               console.error('Main video error:', error);
-              console.error('Video URL:', video?.video.filename);
+              console.error('Main video URL:', video?.video.filename);
             }}
             onReady={() => {
               console.log('Main video ready:', video?.video.filename);
@@ -75,6 +85,34 @@ const VideoCarousel = ({ blok }) => {
 
   const popups = blok.videos.map((video, index) => {
     const isModalActive = index === modalActive;
+    
+    // Add comprehensive debugging
+    console.log(`=== Video ${index} Debug ===`);
+    console.log('Full video object:', video);
+    console.log('Video filename:', video?.video?.filename);
+    console.log('Video URL:', video?.video?.filename);
+    console.log('Thumbnail filename:', video?.thumbnail?.filename);
+    console.log('Is modal active:', isModalActive);
+    console.log('Modal active click:', modalActiveClick);
+    
+    // Check if URL is valid
+    if (!video?.video?.filename) {
+      console.error(`Video ${index} has no filename!`);
+      return (
+        <VideoModal
+          className={`video-popup`}
+          id={`popup-${index}`}
+          key={index}
+          onClick={() => setModalActiveClick(true)}
+        >
+          <PopupVideo>
+            <div style={{padding: '20px', textAlign: 'center', color: 'white', backgroundColor: 'red'}}>
+              ERROR: No video URL for video {index}
+            </div>
+          </PopupVideo>
+        </VideoModal>
+      );
+    }
 
     return (
       <VideoModal
@@ -94,6 +132,7 @@ const VideoCarousel = ({ blok }) => {
             onError={(error) => {
               console.error('Video playback error:', error);
               console.error('Video URL:', video?.video.filename);
+              console.error('Error details:', error);
             }}
             onReady={() => {
               console.log('Video ready:', video?.video.filename);
@@ -103,6 +142,12 @@ const VideoCarousel = ({ blok }) => {
             }}
             onBuffer={() => {
               console.log('Video buffering:', video?.video.filename);
+            }}
+            onProgress={(state) => {
+              console.log('Video progress:', state);
+            }}
+            onDuration={(duration) => {
+              console.log('Video duration:', duration);
             }}
             fallback={<div style={{padding: '20px', textAlign: 'center', color: 'white'}}>Video failed to load</div>}
           />
