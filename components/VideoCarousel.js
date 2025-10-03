@@ -20,6 +20,10 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 gsap.registerPlugin(ScrollToPlugin);
 
 const VideoCarousel = ({ blok }) => {
+  // Add this simple test at the very top
+  console.log('🚀 VideoCarousel component is loading!');
+  console.log('🚀 VideoCarousel blok:', blok);
+  
   // Add this debugging at the top
   console.log('=== VideoCarousel Debug ===');
   console.log('Full blok object:', blok);
@@ -77,6 +81,14 @@ const VideoCarousel = ({ blok }) => {
             playsinline
             width={videoWidth}
             height={videoHeight}
+            // v3.3.3 changes:
+            config={{
+              file: {
+                attributes: {
+                  crossOrigin: 'anonymous',
+                },
+              },
+            }}
             onError={(error) => {
               console.error('Main video error:', error);
               console.error('Main video URL:', video?.video.filename);
@@ -139,16 +151,22 @@ const VideoCarousel = ({ blok }) => {
       >
         <PopupVideo>
           <ReactPlayer
-            url={video?.asset?.[0]?.media?.[0]?.filename}
+            url={video?.video.filename}
             controls={true}
             playing={isModalActive}
             muted={!isModalActive && modalActiveClick}
             width={getMedia(800, 800, 700, 325)}
             height={getMedia(400, 400, 400, 250)}
+            // v3.3.3 changes:
+            config={{
+              file: {
+                attributes: {
+                  crossOrigin: 'anonymous',
+                },
+              },
+            }}
             onError={(error) => {
-              console.error('Video playback error:', error);
-              console.error('Video URL:', video?.video.filename);
-              console.error('Error details:', error);
+              console.error('Modal video error:', error);
             }}
             onReady={() => {
               console.log('Video ready:', video?.video.filename);
@@ -238,8 +256,15 @@ const VideoCarousel = ({ blok }) => {
       <Wrapper
         spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
+        // Add this style to make it visible
+        style={{border: '5px solid red', backgroundColor: 'yellow'}}
         // {...storyblokEditable(blok)}
       >
+        {/* Add this debug div */}
+        <div style={{padding: '20px', backgroundColor: 'red', color: 'white', fontSize: '20px'}}>
+          🚀 VideoCarousel is rendering! Videos: {blok.videos?.length || 0}
+        </div>
+        
         <IntroDiv>
           {blok.header && <RichTextRenderer document={blok.header} />}
           {blok.intro_copy && <RichTextRenderer document={blok.intro_copy} />}

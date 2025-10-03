@@ -221,6 +221,17 @@ const ComparisonSelect = ({ blok }) => {
         playIcon={<></>}
         width={videoWidth}
         height={videoHeight}
+        // v3.3.3 changes:
+        config={{
+          file: {
+            attributes: {
+              crossOrigin: 'anonymous',
+            },
+          },
+        }}
+        onError={(error) => {
+          console.error('ComparisonSelect video error:', error);
+        }}
       />
 
       <BottomCopy>

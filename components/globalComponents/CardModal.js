@@ -144,6 +144,16 @@ const CardModal = ({ data, setShowModal }) => {
                       playsinline={true}
                       width={'100%'}
                       height={combinedStyledHeight}
+                      config={{
+                        file: {
+                          attributes: {
+                            crossOrigin: 'anonymous',
+                          },
+                        },
+                      }}
+                      onError={(error) => {
+                        console.error('CardModal video error:', error);
+                      }}
                     />
                   )}
                 </VideoContainer>
@@ -162,6 +172,16 @@ const CardModal = ({ data, setShowModal }) => {
               playsinline={true}
               width={videoWidth}
               height={videoHeight}
+              config={{
+                file: {
+                  attributes: {
+                    crossOrigin: 'anonymous',
+                  },
+                },
+              }}
+              onError={(error) => {
+                console.error('CardModal video error:', error);
+              }}
             />
           </VideoContainer>
         )}
