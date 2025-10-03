@@ -12,6 +12,8 @@ const Video = ({
   thumbnails,
   isSideBySideVideo = false,
 }) => {
+  console.log('Video component props:', { videos, filename, thumbnails, isSideBySideVideo });
+  
   let videoSrc = filename
     ? filename
     : useMedia(
@@ -21,43 +23,73 @@ const Video = ({
         videos?.[2]?.filename || videos?.[0]?.filename
       );
 
-  if (!videoSrc) return null;
-
   console.log('Video component - videoSrc:', videoSrc);
   console.log('Video component - thumbnails:', thumbnails);
+
+  if (!videoSrc) {
+    console.log('Video component - No videoSrc, returning null');
+    return <div style={{ padding: '20px', backgroundColor: '#f0f0f0', border: '2px solid red' }}>
+      DEBUG: No video source found
+    </div>;
+  }
 
   return (
     <VideoWrapper
       borderradius={borderradius}
       isSideBySideVideo={isSideBySideVideo}
     >
-      <ReactPlayer
-        url={videoSrc}
+      {/* Test with native HTML video first */}
+      <video
+        src={videoSrc}
         width='100%'
         height='100%'
-        controls={true}
-        playsinline={true}
-        fileConfig={{
-          attributes: {
-            crossOrigin: 'anonymous',
-            preload: 'metadata'
-          }
-        }}
-        onError={(error) => {
-          console.error('Video error:', error);
-          console.error('Video URL that failed:', videoSrc);
-        }}
-        onReady={() => {
-          console.log('Video ready');
+        controls
+        style={{ backgroundColor: '#000' }}
+        onError={(e) => {
+          console.error('Native video error:', e);
+          console.error('Native video URL:', videoSrc);
         }}
         onLoadStart={() => {
-          console.log('Video load started');
+          console.log('Native video load started');
         }}
-        onLoad={() => {
-          console.log('Video loaded');
+        onLoadedData={() => {
+          console.log('Native video loaded');
         }}
-      />
-      {/* Fallback for debugging */}
+      >
+        Your browser does not support the video tag.
+      </video>
+      
+      {/* ReactPlayer fallback */}
+      <div style={{ display: 'none' }}>
+        <ReactPlayer
+          url={videoSrc}
+          width='100%'
+          height='100%'
+          controls={true}
+          playsinline={true}
+          fileConfig={{
+            attributes: {
+              crossOrigin: 'anonymous',
+              preload: 'metadata'
+            }
+          }}
+          onError={(error) => {
+            console.error('ReactPlayer error:', error);
+            console.error('ReactPlayer URL that failed:', videoSrc);
+          }}
+          onReady={() => {
+            console.log('ReactPlayer ready');
+          }}
+          onLoadStart={() => {
+            console.log('ReactPlayer load started');
+          }}
+          onLoad={() => {
+            console.log('ReactPlayer loaded');
+          }}
+        />
+      </div>
+      
+      {/* Debug info */}
       <div style={{ 
         position: 'absolute', 
         top: 0, 
@@ -66,9 +98,12 @@ const Video = ({
         height: '100%', 
         backgroundColor: 'rgba(255,0,0,0.1)', 
         pointerEvents: 'none',
-        zIndex: 1
+        zIndex: 1,
+        fontSize: '12px',
+        color: 'white',
+        padding: '5px'
       }}>
-        Debug: {videoSrc ? 'URL exists' : 'No URL'}
+        DEBUG: {videoSrc ? `URL: ${videoSrc}` : 'No URL'}
       </div>
     </VideoWrapper>
   );
