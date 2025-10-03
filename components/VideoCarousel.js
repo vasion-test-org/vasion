@@ -25,6 +25,18 @@ const VideoCarousel = ({ blok }) => {
   console.log('Full blok object:', blok);
   console.log('Videos array:', blok.videos);
   console.log('Number of videos:', blok.videos?.length);
+  
+  // Debug the first video's structure
+  if (blok.videos && blok.videos.length > 0) {
+    console.log('First video structure:', blok.videos[0]);
+    console.log('First video keys:', Object.keys(blok.videos[0]));
+    
+    // Check different possible paths
+    console.log('video.video.filename:', blok.videos[0]?.video?.filename);
+    console.log('video.asset[0].media[0].filename:', blok.videos[0]?.asset?.[0]?.media?.[0]?.filename);
+    console.log('video.media[0].filename:', blok.videos[0]?.media?.[0]?.filename);
+  }
+  
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const videoWidth = useMedia('100%', '100%', '100%', '83.645vw');
@@ -86,6 +98,10 @@ const VideoCarousel = ({ blok }) => {
   const popups = blok.videos.map((video, index) => {
     const isModalActive = index === modalActive;
     
+    // Add YouTube detection
+    const hasYouTube = /youtube|youtu\.be/.test(video?.asset?.[0]?.media?.[0]?.filename);
+    console.log(`Video ${index} is YouTube:`, hasYouTube);
+    
     // Add comprehensive debugging
     console.log(`=== Video ${index} Debug ===`);
     console.log('Full video object:', video);
@@ -123,7 +139,7 @@ const VideoCarousel = ({ blok }) => {
       >
         <PopupVideo>
           <ReactPlayer
-            url={video?.video.filename}
+            url={video?.asset?.[0]?.media?.[0]?.filename}
             controls={true}
             playing={isModalActive}
             muted={!isModalActive && modalActiveClick}
