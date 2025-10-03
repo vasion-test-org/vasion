@@ -212,9 +212,10 @@ const ComparisonSelect = ({ blok }) => {
         </Comparison>
       }
       <ReactPlayer
+        url={blok?.video_url?.url}
         controls={true}
-        poster={blok?.video_thumbnail?.filename}
-        autoPlay={true}
+        light={blok?.video_thumbnail?.filename}
+        playing={true}
         volume={1}
         muted={false}
         width={videoWidth}
@@ -222,9 +223,7 @@ const ComparisonSelect = ({ blok }) => {
         onError={(error) => {
           console.error('ComparisonSelect video error:', error);
         }}
-      >
-        <source src={blok?.video_url?.url} type="video/mp4" />
-      </ReactPlayer>
+      />
 
       <BottomCopy>
         <RichTextRenderer document={blok.bottom_text} />

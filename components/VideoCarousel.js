@@ -45,17 +45,16 @@ const VideoCarousel = ({ blok }) => {
         <Video>
           <ReactPlayer
             loop
-            poster={!isActive && video?.thumbnail?.filename}
-            autoPlay={true}
+            url={video?.video.filename}
+            light={!isActive && video?.thumbnail?.filename}
+            playing={true}
             volume={1}
             muted={true}
             controls={false}
-            playsInline
+            playsinline
             width={videoWidth}
             height={videoHeight}
-          >
-            <source src={video?.video.filename} type="video/mp4" />
-          </ReactPlayer>
+          />
         </Video>
         <ContentContainer>
           {video.header && <RichTextRenderer document={video.header} />}
@@ -78,14 +77,13 @@ const VideoCarousel = ({ blok }) => {
       >
         <PopupVideo>
           <ReactPlayer
+            url={video?.video.filename}
             controls={true}
-            autoPlay={isModalActive}
+            playing={isModalActive}
             muted={!isModalActive && modalActiveClick}
             width={getMedia(800, 800, 700, 325)}
             height={getMedia(400, 400, 400, 250)}
-          >
-            <source src={video?.video.filename} type="video/mp4" />
-          </ReactPlayer>
+          />
         </PopupVideo>
       </VideoModal>
     );

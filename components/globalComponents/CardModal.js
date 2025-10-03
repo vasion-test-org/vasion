@@ -136,19 +136,18 @@ const CardModal = ({ data, setShowModal }) => {
                     />
                   ) : (
                     <ReactPlayer
+                      url={videoSrc}
                       controls={true}
-                      autoPlay={false}
+                      playing={false}
                       volume={1}
                       muted={false}
-                      playsInline={true}
+                      playsinline={true}
                       width={'100%'}
                       height={combinedStyledHeight}
                       onError={(error) => {
                         console.error('CardModal video error:', error);
                       }}
-                    >
-                      <source src={videoSrc} type="video/mp4" />
-                    </ReactPlayer>
+                    />
                   )}
                 </VideoContainer>
               )}
@@ -158,19 +157,18 @@ const CardModal = ({ data, setShowModal }) => {
         {!data?.position?.[0]?.copy && (
           <VideoContainer>
             <ReactPlayer
+              url={videoSrc}
               controls={true}
-              autoPlay={false}
+              playing={false}
               volume={1}
               muted={false}
-              playsInline={true}
+              playsinline={true}
               width={videoWidth}
               height={videoHeight}
               onError={(error) => {
                 console.error('CardModal video error:', error);
               }}
-            >
-              <source src={videoSrc} type="video/mp4" />
-            </ReactPlayer>
+            />
           </VideoContainer>
         )}
       </Modal>
