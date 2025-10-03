@@ -28,7 +28,7 @@
     "npm-check-updates": "^19.0.0",
     "react": "19.1.1",
     "react-dom": "19.1.1",
-    "react-player": "^3.3.3",
+    "react-player": "^2.16.1",
     "storyblok-js-client": "^7.1.5",
     "storyblok-rich-text-react-renderer": "^3.0.1",
     "styled-components": "^6.1.19",
