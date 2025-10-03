@@ -23,6 +23,9 @@ const Video = ({
 
   if (!videoSrc) return null;
 
+  console.log('Video component - videoSrc:', videoSrc);
+  console.log('Video component - thumbnails:', thumbnails);
+
   return (
     <VideoWrapper
       borderradius={borderradius}
@@ -33,15 +36,40 @@ const Video = ({
         width='100%'
         height='100%'
         controls={true}
-        light={thumbnails?.[0]?.filename}
         playsinline={true}
+        fileConfig={{
+          attributes: {
+            crossOrigin: 'anonymous',
+            preload: 'metadata'
+          }
+        }}
         onError={(error) => {
           console.error('Video error:', error);
+          console.error('Video URL that failed:', videoSrc);
         }}
         onReady={() => {
           console.log('Video ready');
         }}
+        onLoadStart={() => {
+          console.log('Video load started');
+        }}
+        onLoad={() => {
+          console.log('Video loaded');
+        }}
       />
+      {/* Fallback for debugging */}
+      <div style={{ 
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        width: '100%', 
+        height: '100%', 
+        backgroundColor: 'rgba(255,0,0,0.1)', 
+        pointerEvents: 'none',
+        zIndex: 1
+      }}>
+        Debug: {videoSrc ? 'URL exists' : 'No URL'}
+      </div>
     </VideoWrapper>
   );
 };
@@ -49,9 +77,11 @@ const Video = ({
 const VideoWrapper = styled.div`
   width: ${(props) => (props.isSideBySideVideo ? '32vw' : '67.75vw')};
   height: ${(props) => (props.isSideBySideVideo ? '24vw' : '38vw')};
+  min-height: 200px;
   max-width: 100%;
   border-radius: ${(props) => `${props.borderradius || 0}px`};
   overflow: hidden;
+  background-color: #000;
   ${media.fullWidth} {
     width: ${(props) => (props.isSideBySideVideo ? '512px' : '1084px')};
     height: ${(props) => (props.isSideBySideVideo ? '384px' : '608px')};

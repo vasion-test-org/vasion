@@ -215,7 +215,6 @@ const ComparisonSelect = ({ blok }) => {
         url={blok?.video_url?.url}
         controls={true}
         light={blok?.video_thumbnail?.filename}
-        playing={true}
         volume={1}
         muted={false}
         width={videoWidth}
