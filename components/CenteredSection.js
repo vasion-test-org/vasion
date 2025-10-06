@@ -6,28 +6,79 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 import media from '@/styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
-import Cards from '@/components/centeredSections/Cards';
-import IconCards from '@/components/IconCards';
-import Grid from '@/components/centeredSections/Grid';
+import dynamic from 'next/dynamic';
 import Image from '@/components/globalComponents/Image';
 import Video from '@/components/globalComponents/Video';
 import Button from '@/components/globalComponents/Button';
-import Accordion from '@/components/centeredSections/Accordion';
-import Stats from '@/components/centeredSections/Stats';
 import Form from './Form';
-import Rotator from '@/components/centeredSections/Rotator';
-import StackedCards from '@/components/centeredSections/StackedCards';
-import Badges from '@/components/centeredSections/Badges';
-import BadgesMobile from '@/components/centeredSections/BadgesMobile';
 import { ScreenContext } from '@/components/providers/Screen';
-import LogosGallery from '@/components/centeredSections/LogosGallery';
-import ReviewCtaCards from '@/components/centeredSections/ReviewCtaCards';
+
+// Dynamic imports for heavy components
+const Cards = dynamic(() => import('@/components/centeredSections/Cards'), {
+  loading: () => <div style={{ height: '200px' }} />,
+});
+
+const IconCards = dynamic(() => import('@/components/IconCards'), {
+  loading: () => <div style={{ height: '200px' }} />,
+});
+
+const Grid = dynamic(() => import('@/components/centeredSections/Grid'), {
+  loading: () => <div style={{ height: '200px' }} />,
+});
+
+const Accordion = dynamic(
+  () => import('@/components/centeredSections/Accordion'),
+  {
+    loading: () => <div style={{ height: '100px' }} />,
+  }
+);
+
+const Stats = dynamic(() => import('@/components/centeredSections/Stats'), {
+  loading: () => <div style={{ height: '150px' }} />,
+});
+
+const Rotator = dynamic(() => import('@/components/centeredSections/Rotator'), {
+  loading: () => <div style={{ height: '200px' }} />,
+  ssr: false, // Disable SSR for animations
+});
+
+const StackedCards = dynamic(
+  () => import('@/components/centeredSections/StackedCards'),
+  {
+    loading: () => <div style={{ height: '200px' }} />,
+  }
+);
+
+const Badges = dynamic(() => import('@/components/centeredSections/Badges'), {
+  loading: () => <div style={{ height: '100px' }} />,
+});
+
+const BadgesMobile = dynamic(
+  () => import('@/components/centeredSections/BadgesMobile'),
+  {
+    loading: () => <div style={{ height: '100px' }} />,
+  }
+);
+
+const LogosGallery = dynamic(
+  () => import('@/components/centeredSections/LogosGallery'),
+  {
+    loading: () => <div style={{ height: '150px' }} />,
+  }
+);
+
+const ReviewCtaCards = dynamic(
+  () => import('@/components/centeredSections/ReviewCtaCards'),
+  {
+    loading: () => <div style={{ height: '200px' }} />,
+  }
+);
 
 const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { mobile } = useContext(ScreenContext);
-  console.log(blok);
+  // console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper
@@ -37,7 +88,7 @@ const CenteredSection = ({ blok }) => {
         backgroundImage={blok.background_image?.[0]?.filename}
         {...storyblokEditable(blok)}
       >
-        {(blok.centered_copy.length > 0 || blok.button_group.length > 0) && (
+        {(blok.centered_copy?.length > 0 || blok.button_group?.length > 0) && (
           <ContentWrapper>
             {blok.centered_copy &&
               blok.centered_copy.map((copy) => (

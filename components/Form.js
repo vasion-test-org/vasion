@@ -137,7 +137,7 @@ const Form = ({ blok }) => {
         .to(
           '#formContainer',
           { width: formWidth, height: formHeight, duration: 1.25 },
-          '<',
+          '<'
         )
         .to('.lines', { width: lineWidth, duration: 1.25 }, '<')
         .from('.second', { duration: 1.25, background: 'unset' }, '<')
@@ -167,7 +167,7 @@ const Form = ({ blok }) => {
           '00DE0000000bt64MAA',
           routingLang.current,
           'LD_BookIt_Log_ID__c',
-          initConfig,
+          initConfig
         );
 
         window.LDBookItV2.setFormProvider('marketo');
@@ -212,7 +212,7 @@ const Form = ({ blok }) => {
               } else {
                 console.error('LDBookItV2 not available, booking may fail');
                 alert(
-                  'There was a problem connecting to our scheduling system. Please contact support.',
+                  'There was a problem connecting to our scheduling system. Please contact support.'
                 );
                 dataLayer.push({
                   event: 'marketo_form_submission_failed',
@@ -244,7 +244,7 @@ const Form = ({ blok }) => {
               return false;
             }
           });
-        },
+        }
       );
   }, [isLoaded, blok.form_id, blok.redirectLink]);
 
@@ -483,16 +483,14 @@ const FormContainer = styled.div`
   border-radius: 2vw;
   padding: 2vw;
   width: 35.25vw;
-  box-shadow:
-    0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
+  box-shadow: 0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.25vw 0.5vw 0vw rgba(25, 29, 30, 0.16);
 
   ${media.fullWidth} {
     border-radius: 32px;
     padding: 32px;
     width: 564px;
-    box-shadow:
-      0px 0px 2px 0px rgba(25, 29, 30, 0.04),
+    box-shadow: 0px 0px 2px 0px rgba(25, 29, 30, 0.04),
       0px 4px 8px 0px rgba(25, 29, 30, 0.16);
   }
 
@@ -500,8 +498,7 @@ const FormContainer = styled.div`
     border-radius: 3.125vw;
     padding: 3.125vw;
     width: 45.313vw;
-    box-shadow:
-      0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow: 0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.391vw 0.781vw 0vw rgba(25, 29, 30, 0.16);
   }
 
@@ -509,8 +506,7 @@ const FormContainer = styled.div`
     border-radius: 6.667vw;
     padding: 6.667vw;
     width: 89.167vw;
-    box-shadow:
-      0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow: 0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.833vw 1.667vw 0vw rgba(25, 29, 30, 0.16);
   }
 

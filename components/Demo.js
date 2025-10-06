@@ -338,21 +338,18 @@ const Demo = ({ blok }) => {
     return (
       <div {...storyblokEditable(option)}>
         <OptionDiv
-          className='options preformContent'
+          className="options preformContent"
           ref={(el) => (optionRefs.current[index] = el)}
           key={option.header}
         >
-          <OptionIconWrapper classname='icons'>
+          <OptionIconWrapper classname="icons">
             {IconComponent && <IconComponent />}
           </OptionIconWrapper>
           <OptionContentContainer
-            className='content'
+            className="content"
             ref={(el) => (contentRefs.current[index] = el)}
           >
-            <OptionHeader>
-
-              {option.header}
-            </OptionHeader>
+            <OptionHeader>{option.header}</OptionHeader>
             <OptionSubheader>{option.sub_header}</OptionSubheader>
             <div {...storyblokEditable(option)}>
               <RichTextRenderer document={option.body_copy} />
@@ -366,19 +363,19 @@ const Demo = ({ blok }) => {
   return (
     <BackgroundWrapper>
       <Wrapper>
-        <Content className='preformContent'>
+        <Content className="preformContent">
           {!mobile && <Header>{blok.header}</Header>}
           <AllOptionsContainer>{mappedOptions}</AllOptionsContainer>
           <BadgesContainer>{mappedBadges}</BadgesContainer>
         </Content>
 
         {blok.demo_form[0].component === 'form' && (
-          <FormPositionContainer id='formPos'>
+          <FormPositionContainer id="formPos">
             <Form blok={blok.demo_form[0]} />
           </FormPositionContainer>
         )}
         {blok.demo_form[0].component === 'test_form' && (
-          <FormPositionContainer id='formPos'>
+          <FormPositionContainer id="formPos">
             <TestForm blok={blok.demo_form[0]} />
           </FormPositionContainer>
         )}
@@ -389,7 +386,11 @@ const Demo = ({ blok }) => {
             {blok.demo_form[0]?.copy?.map((item, index) => (
               <div key={index} {...storyblokEditable(item)}>
                 {copycomponents.includes(item.component) ? (
-                  <RichTextRenderer document={item.copy} blok={item} />
+                  <RichTextRenderer
+                    document={item.copy}
+                    blok={item}
+                    responsiveTextStyles={item?.responsive_text_styles}
+                  />
                 ) : (
                   <ComponentRenderer blok={item} />
                 )}

@@ -6,14 +6,27 @@ import Image from '@/components/globalComponents/Image';
 import styled from 'styled-components';
 import media from '@/styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import LogoCube from '@/components/LogoCube';
+import dynamic from 'next/dynamic';
 import Video from '@/components/globalComponents/Video';
 import { usePathname } from 'next/navigation';
 import Button from '../globalComponents/Button';
 import Form from '../Form';
 import ContactCard from '../globalComponents/ContactCard';
-import OverviewController from '../overview/OverviewController';
 import SmallQuote from 'components/SmallQuote';
+
+// Dynamic imports for heavy components
+const LogoCube = dynamic(() => import('@/components/LogoCube'), {
+  loading: () => <div style={{ height: '200px' }} />,
+  ssr: false,
+});
+
+const OverviewController = dynamic(
+  () => import('../overview/OverviewController'),
+  {
+    loading: () => <div style={{ height: '300px' }} />,
+    ssr: false,
+  }
+);
 
 const ComponentRenderer = ({
   blok,
@@ -54,13 +67,13 @@ const ComponentRenderer = ({
   if (blok.component === 'personalized_section') {
     let contentBlocks = [];
 
-    if (isEnglish && blok.english_blocks.length > 0) {
+    if (isEnglish && blok.english_blocks?.length > 0) {
       contentBlocks = blok.english_blocks;
     }
-    if (isFrench && blok.french_blocks.length > 0) {
+    if (isFrench && blok.french_blocks?.length > 0) {
       contentBlocks = blok.french_blocks;
     }
-    if (isGerman && blok.german_blocks.length > 0) {
+    if (isGerman && blok.german_blocks?.length > 0) {
       contentBlocks = blok.german_blocks;
     }
 
@@ -88,7 +101,11 @@ const ComponentRenderer = ({
               {extra_copy?.copy_block_sections?.map((item, index) => (
                 <BlockWrapper key={index} {...storyblokEditable(item)}>
                   {copycomponents.includes(item.component) ? (
-                    <RichTextRenderer document={item.copy} blok={item} />
+                    <RichTextRenderer
+                      document={item.copy}
+                      blok={item}
+                      responsiveTextStyles={item?.responsive_text_styles}
+                    />
                   ) : (
                     <ComponentRenderer blok={item} />
                   )}
@@ -113,7 +130,11 @@ const ComponentRenderer = ({
           {blok?.copy_block_sections?.map((item, index) => (
             <BlockWrapper key={index} {...storyblokEditable(item)}>
               {copycomponents.includes(item.component) ? (
-                <RichTextRenderer document={item.copy} blok={item} />
+                <RichTextRenderer
+                  document={item.copy}
+                  blok={item}
+                  responsiveTextStyles={item?.responsive_text_styles}
+                />
               ) : (
                 <ComponentRenderer blok={item} />
               )}
@@ -125,7 +146,7 @@ const ComponentRenderer = ({
       return <LogoCube blok={blok} />;
     case 'form':
       return (
-        <div className='form-component'>
+        <div className="form-component">
           <Form blok={blok} />
         </div>
       );

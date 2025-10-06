@@ -4,15 +4,19 @@ import { getStoryblokApi } from '@/lib/storyblok';
 import { headers } from 'next/headers';
 import PageDataUpdater from '@/components/PageDataUpdater';
 import ClientSchemaWrapper from '@/components/ClientSchemaWrapper';
-import SentryRouteTracker from '@/components/SentryRouteTracker';
-export const revalidate = 60;
+import {
+  shouldIncludeSelfReferencingHreflang,
+  buildCanonicalUrl,
+  buildAlternateLanguageUrls,
+} from '@/lib/seoUtils';
+export const revalidate = 3600; // Revalidate every hour for better performance
 
 export async function generateMetadata({ params, searchParams }) {
   const slugArray = params.slug || [];
   const isLocalized = ['fr', 'de'].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : 'en';
   const storySlug = isLocalized
-    ? slugArray.length === 1
+    ? slugArray?.length === 1
       ? 'home'
       : slugArray.slice(1).join('/')
     : slugArray.join('/');
@@ -40,89 +44,28 @@ export async function generateMetadata({ params, searchParams }) {
   }
 
   // For localized homepages, remove /home/ from the canonical URL
-  if (currentLocale !== 'en' && slugArray.length === 1) {
+  if (currentLocale !== 'en' && slugArray?.length === 1) {
     canonicalPath = currentLocale;
   }
 
-  const canonicalUrl = `${basePath}/${canonicalPath}`.replace(/\/+$/, '');
+  const canonicalUrl = buildCanonicalUrl(basePath, canonicalPath);
 
-  // Build alternate links including self-referencing
-  const alternateLinks = {};
+  // Check if we should include self-referencing hreflang
+  const includeSelfReferencing =
+    shouldIncludeSelfReferencingHreflang(searchParams);
 
-  // Add self-referencing hreflang for current page
-  if (currentLocale === 'en') {
-    alternateLinks['en'] = canonicalUrl;
-  } else {
-    // For localized homepages, don't include /home/ in the URL
-    const localizedUrl =
-      slugArray.length === 1
-        ? `${basePath}/${currentLocale}`
-        : `${basePath}/${currentLocale}/${storySlug}`;
-    alternateLinks[currentLocale] = localizedUrl.replace(/\/+$/, '');
-  }
+  // Build alternate links using utility function
+  const alternateLinks = await buildAlternateLanguageUrls(
+    basePath,
+    currentLocale,
+    storySlug,
+    slugArray,
+    story.translated_slugs
+  );
 
-  // Add other language versions if they exist
-  if (story.translated_slugs) {
-    for (const translation of story.translated_slugs) {
-      // Check if the translation is published
-      const translatedStory = await fetchStory(
-        translation.path,
-        translation.lang
-      );
-
-      if (translatedStory) {
-        let translatedUrl;
-        if (translation.lang === 'en') {
-          // For English translations, remove /home/ if it's a homepage
-          const path = translation.path === 'home' ? '' : translation.path;
-          translatedUrl = `${basePath}/${path}`.replace(/\/+$/, '');
-        } else {
-          // For other languages, handle homepages correctly
-          const path =
-            translation.path === 'home'
-              ? translation.lang
-              : `${translation.lang}/${translation.path}`;
-          translatedUrl = `${basePath}/${path}`.replace(/\/+$/, '');
-        }
-
-        alternateLinks[translation.lang] = translatedUrl;
-      }
-    }
-  }
-
-  // Always ensure English version is included for non-English pages
-  if (currentLocale !== 'en') {
-    // Try to get the English version from translated_slugs first
-    let englishUrl = null;
-    if (story.translated_slugs) {
-      const englishTranslation = story.translated_slugs.find(
-        (t) => t.lang === 'en'
-      );
-      if (englishTranslation) {
-        // For English translations, remove /home/ if it's a homepage
-        const path =
-          englishTranslation.path === 'home' ? '' : englishTranslation.path;
-        englishUrl = `${basePath}/${path}`.replace(/\/+$/, '');
-      }
-    }
-
-    // If no English translation found, construct the English URL
-    if (!englishUrl) {
-      // For localized homepages, the English version should point to root
-      if (slugArray.length === 1) {
-        englishUrl = basePath;
-      } else {
-        englishUrl = `${basePath}/${storySlug}`.replace(/\/+$/, '');
-      }
-    }
-
-    alternateLinks['en'] = englishUrl;
-  }
-
-  // Always set x-default to point to the English version
-  const englishVersion = alternateLinks['en'];
-  if (englishVersion) {
-    alternateLinks['x-default'] = englishVersion;
+  // Remove self-referencing hreflang if UTM parameters are present
+  if (!includeSelfReferencing) {
+    delete alternateLinks[currentLocale];
   }
 
   // Check if page should be no-index, no-follow
@@ -160,7 +103,7 @@ export default async function DynamicPage({ params }) {
   const isLocalized = ['fr', 'de'].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : 'en';
   const storySlug = isLocalized
-    ? slugArray.length === 1
+    ? slugArray?.length === 1
       ? 'home'
       : slugArray.slice(1).join('/')
     : slugArray.join('/');
@@ -173,7 +116,6 @@ export default async function DynamicPage({ params }) {
 
   return (
     <div>
-      <SentryRouteTracker />
       <PageDataUpdater story={story} />
       <ClientSchemaWrapper />
       <StoryblokStory story={story} />

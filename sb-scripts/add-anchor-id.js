@@ -13,9 +13,9 @@ const addAnchorIdField = async () => {
     for (const component of res.data.components) {
       // Skip if component already has anchor_id field
       if (component.schema.anchor_id) {
-        console.log(
-          `⏭️  Skipping component ${component.name} - already has anchor_id field`
-        );
+        // console.log(
+        //   `⏭️  Skipping component ${component.name} - already has anchor_id field`
+        // );
         continue;
       }
 
@@ -39,15 +39,15 @@ const addAnchorIdField = async () => {
           component,
         }
       );
-      console.log(`✅ Added anchor_id field to component: ${component.name}`);
+      // console.log(`✅ Added anchor_id field to component: ${component.name}`);
     }
 
-    console.log('✨ Finished adding anchor_id field to all components');
+    // console.log('✨ Finished adding anchor_id field to all components');
   } catch (err) {
-    console.error(
-      '❌ Error adding anchor_id field:',
-      err.response?.statusText || err.message
-    );
+    // console.error(
+    //   '❌ Error adding anchor_id field:',
+    //   err.response?.statusText || err.message
+    // );
   }
 };
 

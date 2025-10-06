@@ -8,8 +8,14 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 import { ScreenContext } from '@/components/providers/Screen';
 import Button from '@/components/globalComponents/Button';
 import Image from '@/components/globalComponents/Image';
-import LogoCube from './LogoCube';
+import dynamic from 'next/dynamic';
+
+const LogoCube = dynamic(() => import('./LogoCube'), {
+  loading: () => <div style={{ height: '200px' }} />, // Placeholder height
+  ssr: false, // Disable SSR for this component since it uses GSAP
+});
 import LightboxBtn from '@/components/LightboxButton';
+import LazySection from '@/components/LazySection';
 import { useRouter } from 'next/navigation';
 import useMedia from '@/functions/useMedia';
 import text from '@/styles/text';
@@ -69,12 +75,19 @@ const Hero = ({ blok }) => {
             socials={blok.socials}
             centered={!blok?.hero_asset[0] && !blok.socials}
             centered_image={blok.centered_image}
+            blog_hero={blok.blog_hero}
             // text_alignment={blok.text_alignment}
           >
             {blok?.hero_asset[0] && blok.centered_image && (
-              <ImageWrapper {...storyblokEditable(blok)}>
+              <ImageWrapper
+                {...storyblokEditable(blok)}
+                blog_hero={blok.blog_hero}
+              >
                 <Image
                   images={blok.hero_asset}
+                  priority={true}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  quality={90}
                   // borderRadius={blok.hero_asset?.[0]?.border_radius}
                 />
               </ImageWrapper>
@@ -88,7 +101,7 @@ const Hero = ({ blok }) => {
               </div>
             ))}
 
-            {!blok?.socials && (
+            {!blok?.socials && blok?.button_group?.length > 0 && (
               <ButtonRow>
                 {blok?.button_group?.map(($buttonData) => (
                   <div
@@ -103,39 +116,41 @@ const Hero = ({ blok }) => {
                 ))}
               </ButtonRow>
             )}
-
-            {blok.badges && (
-              <BadgesSectionContainer>
-                {blok.badge_section_text &&
-                  blok.badge_section_text.map((badge_text) => (
-                    <BadgeEyebrow
-                      {...storyblokEditable(badge_text)}
-                      key={badge_text._uid}
-                    >
-                      <RichTextRenderer
-                        document={badge_text?.copy}
-                        responsiveTextStyles={
-                          badge_text?.responsive_text_styles
-                        }
-                      />
-                    </BadgeEyebrow>
-                  ))}
-                <BadgesContainer>
-                  {blok.badges.map((badge) => (
-                    <BadgeLink
-                      key={badge._uid}
-                      href={badge.link?.url || '#'}
-                      target={badge.link?.target || '_self'}
-                      rel="noopener noreferrer"
-                    >
-                      <BadgeImage
-                        src={badge.logo?.filename}
-                        alt={badge.logo?.alt || 'Badge'}
-                      />
-                    </BadgeLink>
-                  ))}
-                </BadgesContainer>
-              </BadgesSectionContainer>
+            {blok.badges?.length > 0 && (
+              <LazySection threshold={0.2} rootMargin="100px">
+                <BadgesSectionContainer>
+                  {blok.badge_section_text &&
+                    blok.badge_section_text.map((badge_text) => (
+                      <BadgeEyebrow
+                        {...storyblokEditable(badge_text)}
+                        key={badge_text._uid}
+                      >
+                        <RichTextRenderer
+                          document={badge_text?.copy}
+                          responsiveTextStyles={
+                            badge_text?.responsive_text_styles
+                          }
+                        />
+                      </BadgeEyebrow>
+                    ))}
+                  <BadgesContainer>
+                    {blok.badges.map((badge) => (
+                      <BadgeLink
+                        key={badge._uid}
+                        href={badge.link?.url || '#'}
+                        target={badge.link?.target || '_self'}
+                        rel="noopener noreferrer"
+                      >
+                        <BadgeImage
+                          src={badge.logo?.filename}
+                          alt={badge.logo?.alt || 'Badge'}
+                          loading="lazy"
+                        />
+                      </BadgeLink>
+                    ))}
+                  </BadgesContainer>
+                </BadgesSectionContainer>
+              </LazySection>
             )}
             {blok?.light_box_button &&
               blok?.light_box_button[0]?.lightbox_text && (
@@ -143,9 +158,15 @@ const Hero = ({ blok }) => {
               )}
           </ContentWrapper>
           {blok?.hero_asset[0] && !blok.centered_image && (
-            <ImageWrapper {...storyblokEditable(blok)}>
+            <ImageWrapper
+              {...storyblokEditable(blok)}
+              blog_hero={blok.blog_hero}
+            >
               <Image
                 images={blok.hero_asset}
+                priority={true}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                quality={90}
                 // borderRadius={blok.hero_asset?.[0]?.border_radius}
               />
             </ImageWrapper>
@@ -177,51 +198,59 @@ const Hero = ({ blok }) => {
                   />
                 </SocialLink>
               </SocialLogoContainer>
-              <ButtonRow socials>
-                {blok?.button_group?.map(($buttonData) => (
-                  <div
-                    {...storyblokEditable($buttonData)}
-                    key={$buttonData?.link_text}
-                  >
-                    <Button
+              {blok?.button_group?.length > 0 && (
+                <ButtonRow socials>
+                  {blok?.button_group?.map(($buttonData) => (
+                    <div
+                      {...storyblokEditable($buttonData)}
                       key={$buttonData?.link_text}
-                      $buttonData={$buttonData}
-                    />
-                  </div>
-                ))}
-              </ButtonRow>
+                    >
+                      <Button
+                        key={$buttonData?.link_text}
+                        $buttonData={$buttonData}
+                      />
+                    </div>
+                  ))}
+                </ButtonRow>
+              )}
             </SocialCTA>
           )}
           {blok.review_buttons && (
-            <ReviewButtons>
-              <ReviewButton
-                src={'/images/reviewButton.webp'}
-                alt={'review-us'}
-                width="164"
-                height="62"
-                onClick={() => handleNavigate('/review-us')}
-              />
-              <ReviewButton
-                src={'/images/reviewButton-1.webp'}
-                alt={'G2 Reviews'}
-                width="164"
-                height="62"
-                onClick={() => handleNavigate('/review-us')}
-              />
-              <ReviewButton
-                src={'/images/reviewButton-2.webp'}
-                alt={'Review Us'}
-                width="164"
-                height="62"
-                onClick={() => handleNavigate('/review-us')}
-              />
-              <AnchorButton href="#reddit-reviews">
+            <LazySection threshold={0.2} rootMargin="100px">
+              <ReviewButtons>
                 <ReviewButton
-                  src={'/images/ReviewButton-4.webp'}
-                  alt={'Reviews'}
+                  src={'/images/reviewButton.webp'}
+                  alt={'review-us'}
+                  width="164"
+                  height="62"
+                  loading="lazy"
+                  onClick={() => handleNavigate('/review-us')}
                 />
-              </AnchorButton>
-            </ReviewButtons>
+                <ReviewButton
+                  src={'/images/reviewButton-1.webp'}
+                  alt={'G2 Reviews'}
+                  width="164"
+                  height="62"
+                  loading="lazy"
+                  onClick={() => handleNavigate('/review-us')}
+                />
+                <ReviewButton
+                  src={'/images/reviewButton-2.webp'}
+                  alt={'Review Us'}
+                  width="164"
+                  height="62"
+                  loading="lazy"
+                  onClick={() => handleNavigate('/review-us')}
+                />
+                <AnchorButton href="#reddit-reviews">
+                  <ReviewButton
+                    src={'/images/ReviewButton-4.webp'}
+                    alt={'Reviews'}
+                    loading="lazy"
+                  />
+                </AnchorButton>
+              </ReviewButtons>
+            </LazySection>
           )}
         </HeroWrapper>
         {blok.attached_logo_cube && <LogoCube blok={blok.logo_cube[0]} />}
@@ -346,20 +375,43 @@ const SocialCTA = styled.div`
     gap: 4.167vw;
   }
 `;
-
 const ImageWrapper = styled.div`
-  max-width: 37.5vw;
-
+  max-width: ${(props) => (props.blog_hero ? '25.438vw' : '37.5vw')};
+  align-self: ${(props) => (props.blog_hero ? 'flex-start' : 'unset')};
+  ${(props) =>
+    props.blog_hero &&
+    `
+    width: 25.438vw;
+    height: 14.313vw;
+  `}
   ${media.fullWidth} {
-    max-width: 600px;
+    max-width: ${(props) => (props.blog_hero ? '407px' : '600px')};
+    ${(props) =>
+      props.blog_hero &&
+      `
+      width: 407px;
+      height: 229px;
+    `}
   }
-
   ${media.tablet} {
-    max-width: 58.594vw;
+    max-width: ${(props) => (props.blog_hero ? '39.746vw' : '58.594vw')};
+    ${(props) =>
+      props.blog_hero &&
+      `
+      width: 39.746vw;
+      height: 22.363vw;
+    `}
   }
-
   ${media.mobile} {
-    min-width: 100%;
+    min-width: ${(props) => (props.blog_hero ? '89.167vw' : '100%')};
+    ${(props) =>
+      props.blog_hero &&
+      `
+      max-width: 89.167vw;
+      width: 89.167vw;
+      height: 50.208vw;
+      min-width: unset;
+    `}
   }
 `;
 
@@ -386,7 +438,6 @@ const ButtonRow = styled.div`
     margin-top: ${(props) => (props.socials ? 'unset' : '6.667vw')};
   }
 `;
-
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -412,12 +463,16 @@ const ContentWrapper = styled.div`
       : 'start';
   }};
 
-  width: ${(props) =>
-    props.socials
+  width: ${(props) => {
+    if (props.blog_hero) {
+      return '33.938vw';
+    }
+    return props.socials
       ? 'clamp(27.75vw, 100%, 26.5vw)'
       : // : props.text_alignment
         // ? '40.25vw'
-        'clamp(27.75vw, 100%, 54.75vw)'};
+        'clamp(27.75vw, 100%, 54.75vw)';
+  }};
 
   h1,
   h2,
@@ -433,22 +488,35 @@ const ContentWrapper = styled.div`
   }
 
   ${media.fullWidth} {
-    width: ${(props) =>
-      props.socials
+    width: ${(props) => {
+      if (props.blog_hero) {
+        return '543px';
+      }
+      return props.socials
         ? 'clamp(444px, 100%, 424px)'
         : // : props.text_alignment
           // ? '644px'
-          'clamp(444px, 100%, 876px)'};
+          'clamp(444px, 100%, 876px)';
+    }};
   }
 
   ${media.tablet} {
-    width: ${(props) =>
+    width: ${(props) => {
+      if (props.blog_hero) {
+        return '46.582vw';
+      }
+      return 'clamp(39.355vw, 100%, 58.887vw)';
       // props.text_alignment ? '39.453vw' :
-      'clamp(39.355vw, 100%, 58.887vw)'};
+    }};
   }
 
   ${media.mobile} {
-    width: 89.167vw;
+    width: ${(props) => {
+      if (props.blog_hero) {
+        return '89.167vw';
+      }
+      return '89.167vw';
+    }};
   }
 `;
 
@@ -458,13 +526,6 @@ const HeroWrapper = styled.div`
   flex-direction: ${(props) => `${props.layout || 'row'}`};
   align-items: center;
   justify-content: ${(props) => {
-    // if (props.text_alignment) {
-    //   return props.text_alignment === 'center'
-    //     ? 'center'
-    //     : props.text_alignment === 'right'
-    //     ? 'flex-end'
-    //     : 'flex-start';
-    // }
     return props.centered ? 'center' : 'space-between';
   }};
   color: ${(props) =>

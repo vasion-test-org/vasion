@@ -1,16 +1,17 @@
 'use client';
-import React, { useEffect } from 'react';
-import gsap from 'gsap';
+import React, { useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import media from '@/styles/media';
 import { horizontalLoop } from '@/functions/horizontalLoop';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { optimizeGSAP } from '@/lib/scriptOptimization';
 
 const LogoCube = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
+  const [gsapLoaded, setGsapLoaded] = useState(false);
 
   const defaultLogos = [
     { alt: 'nascar logo', image: '/images/icons/nascar.png' },
@@ -26,14 +27,21 @@ const LogoCube = ({ blok }) => {
   const logosToDisplay = blok.logos?.length > 0 ? blok.logos : defaultLogos;
 
   useEffect(() => {
-    if (logosToDisplay.length >= 7) {
-      const logosArr = gsap.utils.toArray(".cubeLogos");
+    // Load GSAP only when needed
+    optimizeGSAP().then(() => {
+      setGsapLoaded(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (gsapLoaded && logosToDisplay?.length >= 7) {
+      const logosArr = window.gsap.utils.toArray('.cubeLogos');
       horizontalLoop(logosArr, { deep: false, repeat: -1 });
     }
-  }, [logosToDisplay.length]);
+  }, [logosToDisplay?.length, gsapLoaded]);
 
   const allLogos = logosToDisplay.map((logo, index) => (
-    <LogosDiv key={logo.filename || logo.alt || index} className='cubeLogos'>
+    <LogosDiv key={logo.filename || logo.alt || index} className="cubeLogos">
       <Logo
         alt={logo.alt || 'Default Logo'}
         src={logo.filename || logo.image}
@@ -50,11 +58,15 @@ const LogoCube = ({ blok }) => {
       >
         <CardContainer transparent={blok.transparent_background}>
           {blok.header && (
-            <RichTextRenderer document={blok.header} blok={blok} />
+            <RichTextRenderer
+              document={blok.header}
+              blok={blok}
+              responsiveTextStyles={blok?.responsive_text_styles}
+            />
           )}
           <LogoContainer
             transparent={blok.transparent_background}
-            shouldCenter={logosToDisplay.length < 6}
+            shouldCenter={logosToDisplay?.length < 6}
           >
             {allLogos}
           </LogoContainer>
@@ -92,12 +104,12 @@ const Logo = styled.img`
 const LogoContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: ${(props) => (props.shouldCenter ? "center" : "flex-start")};
+  justify-content: ${(props) => (props.shouldCenter ? 'center' : 'flex-start')};
   align-items: center;
   height: auto;
   overflow: hidden;
   gap: 1.25vw;
-  width: ${(props) => (props.transparent ? "100%" : "77.188vw")};
+  width: ${(props) => (props.transparent ? '100%' : '77.188vw')};
 
   ${media.fullWidth} {
     width: ${(props) => (props.transparent ? '100%' : '1236px')};
@@ -120,7 +132,7 @@ const CardContainer = styled.div`
   align-items: center;
   text-align: center;
   background: ${(props) =>
-    props.transparent ? "transparent" : props.theme.logo_cube.cardBg};
+    props.transparent ? 'transparent' : props.theme.logo_cube.cardBg};
   color: ${(props) => props.theme.logo_cube.textColor};
   overflow: hidden;
   width: ${(props) => (props.transparent ? '100%' : '81.5vw')};

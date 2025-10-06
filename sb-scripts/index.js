@@ -2,7 +2,7 @@ const StoryblokClient = require('storyblok-js-client');
 require('dotenv').config();
 
 const Storyblok = new StoryblokClient({
-  oauthToken: process.env.STORYBLOK_OAUTH_TOKEN,
+  oauthToken: process.env.STORYBLOK_PERSONAL_ACCESS_TOKEN,
   endpoint: 'https://api-us.storyblok.com/v1',
 });
 
@@ -13,8 +13,8 @@ const richTextClasses = {
   'Body Medium Bold': 'bodyMd bold',
   'Body Small': 'bodySm',
   'Body Small Bold': 'bodySm bold',
-  'Body Large Bold': 'bodyLg bold',
-  'Body Large': 'bodyLg',
+  'Body Large Bold': 'bodyLrg bold',
+  'Body Large': 'bodyLrg',
   'Body XL': 'bodyXl',
   'Body XL Bold': 'bodyXl bold',
   'Tag': 'tag',
@@ -47,14 +47,14 @@ const applyRichTextClasses = async () => {
         await Storyblok.put(`spaces/${spaceId}/components/${component.id}`, {
           component,
         });
-        console.log(`✅ Updated component: ${component.name}`);
+        // console.log(`✅ Updated component: ${component.name}`);
       }
     }
   } catch (err) {
-    console.error(
-      '❌ Error applying rich text classes:',
-      err.response?.statusText || err.message
-    );
+    // console.error(
+    //   '❌ Error applying rich text classes:',
+    //   err.response?.statusText || err.message
+    // );
   }
 };
 
