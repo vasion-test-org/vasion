@@ -30,43 +30,51 @@ const CookieConsentVideo = ({
 
   useEffect(() => {
     const checkCookieConsent = () => {
-      // Check if CookieYes is available
-      if (typeof window !== 'undefined' && window.CookieYes) {
-        // CookieYes provides a method to check consent status
-        const consentStatus = window.CookieYes.getConsentStatus();
-        setCookiesAccepted(consentStatus === 'accepted' || consentStatus === true);
-        setIsChecking(false);
-      } else if (typeof window !== 'undefined' && window.cookieyes) {
-        // Alternative method to check CookieYes consent
-        const consentStatus = window.cookieyes.getConsentStatus();
-        setCookiesAccepted(consentStatus === 'accepted' || consentStatus === true);
-        setIsChecking(false);
+      // Check if CookieYes is available using the correct API
+      if (typeof window !== 'undefined' && typeof window.getCkyConsent === 'function') {
+        try {
+          const consentData = window.getCkyConsent();
+          // Check if user has completed consent action and accepted cookies
+          setCookiesAccepted(
+            consentData.isUserActionCompleted && 
+            (consentData.categories?.analytics || consentData.categories?.marketing || consentData.categories?.functional)
+          );
+          setIsChecking(false);
+        } catch (error) {
+          console.warn('Error getting CookieYes consent:', error);
+          // Fallback to cookie check
+          checkCookieFallback();
+        }
       } else {
         // Fallback: check for CookieYes consent cookie directly
-        const cookieValue = getCookie('cookieyes-consent');
-        if (cookieValue) {
-          try {
-            const consentData = JSON.parse(cookieValue);
-            setCookiesAccepted(consentData.consent === true || consentData.accepted === true);
-          } catch (e) {
-            // If parsing fails, check for simple string values
-            setCookiesAccepted(cookieValue === 'accepted' || cookieValue === 'true');
-          }
-        } else {
-          // No consent cookie found, assume not accepted
-          setCookiesAccepted(false);
-        }
-        setIsChecking(false);
+        checkCookieFallback();
       }
+    };
+
+    const checkCookieFallback = () => {
+      const cookieValue = getCookie('cookieyes-consent');
+      if (cookieValue) {
+        try {
+          const consentData = JSON.parse(cookieValue);
+          setCookiesAccepted(consentData.consent === true || consentData.accepted === true);
+        } catch (e) {
+          // If parsing fails, check for simple string values
+          setCookiesAccepted(cookieValue === 'accepted' || cookieValue === 'true');
+        }
+      } else {
+        // No consent cookie found, assume not accepted
+        setCookiesAccepted(false);
+      }
+      setIsChecking(false);
     };
 
     // Check immediately
     checkCookieConsent();
 
     // Also check when CookieYes loads (if not already loaded)
-    if (typeof window !== 'undefined' && !window.CookieYes && !window.cookieyes) {
+    if (typeof window !== 'undefined' && typeof window.getCkyConsent !== 'function') {
       const checkInterval = setInterval(() => {
-        if (window.CookieYes || window.cookieyes) {
+        if (typeof window.getCkyConsent === 'function') {
           checkCookieConsent();
           clearInterval(checkInterval);
         }
@@ -87,14 +95,18 @@ const CookieConsentVideo = ({
     };
 
     if (typeof window !== 'undefined') {
+      // Listen for CookieYes consent changes
       window.addEventListener('cookieyes-consent', handleConsentChange);
       window.addEventListener('cookieconsent', handleConsentChange);
+      // Also listen for the specific CookieYes event
+      window.addEventListener('ckyConsentChanged', handleConsentChange);
     }
 
     return () => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('cookieyes-consent', handleConsentChange);
         window.removeEventListener('cookieconsent', handleConsentChange);
+        window.removeEventListener('ckyConsentChanged', handleConsentChange);
       }
     };
   }, []);
@@ -140,11 +152,19 @@ const CookieConsentVideo = ({
           </CookieMessage>
           <CookieButton 
             onClick={() => {
-              // Trigger CookieYes consent modal
-              if (window.CookieYes) {
-                window.CookieYes.showConsentModal();
-              } else if (window.cookieyes) {
-                window.cookieyes.showConsentModal();
+              // Trigger CookieYes consent modal using correct API
+              if (typeof window.getCkyConsent === 'function') {
+                // Try to show the consent modal
+                if (window.CookieYes && typeof window.CookieYes.showConsentModal === 'function') {
+                  window.CookieYes.showConsentModal();
+                } else if (window.cookieyes && typeof window.cookieyes.showConsentModal === 'function') {
+                  window.cookieyes.showConsentModal();
+                } else {
+                  // Fallback: try to trigger the consent banner
+                  console.log('CookieYes consent modal not available, please accept cookies manually');
+                }
+              } else {
+                console.log('CookieYes not loaded, please accept cookies manually');
               }
             }}
           >

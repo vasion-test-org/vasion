@@ -9,9 +9,9 @@ The `CookieConsentVideo` component is a wrapper around `ReactPlayer` that checks
 ### Cookie Detection
 The component checks for cookie consent in multiple ways:
 
-1. **CookieYes API**: Checks `window.CookieYes.getConsentStatus()` or `window.cookieyes.getConsentStatus()`
+1. **CookieYes API**: Uses `window.getCkyConsent()` to get detailed consent data
 2. **CookieYes Cookie**: Falls back to checking the `cookieyes-consent` cookie directly
-3. **Event Listeners**: Listens for consent change events to update the UI dynamically
+3. **Event Listeners**: Listens for consent change events (`ckyConsentChanged`, `cookieyes-consent`, `cookieconsent`)
 
 ### States
 - **Loading**: Shows while checking cookie status
@@ -171,9 +171,10 @@ The component is designed to work with CookieYes (which is already loaded in you
 ## Troubleshooting
 
 ### Videos Not Showing
-1. Check if CookieYes is loaded: `window.CookieYes` should exist
+1. Check if CookieYes is loaded: `window.getCkyConsent` should be a function
 2. Check cookie value: Look for `cookieyes-consent` cookie in browser dev tools
 3. Check console for any JavaScript errors
+4. Verify consent data: `window.getCkyConsent()` should return an object with `isUserActionCompleted` and `categories`
 
 ### Cookie Consent Not Updating
 1. Ensure CookieYes events are firing
