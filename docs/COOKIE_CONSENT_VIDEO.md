@@ -17,6 +17,7 @@ The component checks for cookie consent in multiple ways:
 - **Loading**: Shows while checking cookie status
 - **Cookie Consent Required**: Shows message when cookies not accepted
 - **Video Ready**: Shows video when cookies are accepted
+- **Test Environment**: Automatically allows videos in development/test environments
 
 ## Usage
 
@@ -69,6 +70,9 @@ import CookieConsentVideo from '@/components/CookieConsentVideo';
   // Styling
   borderradius={8}
   isSideBySideVideo={false}
+  
+  // Testing
+  forceConsentMessage={false} // Set to true to force consent message in test environments
   
   // Any other ReactPlayer props
   {...otherProps}
@@ -133,6 +137,23 @@ The cookie consent message uses your site's design system:
 
 ## Testing
 
+### Test Environments
+The component automatically detects test environments and allows videos by default:
+- **Development** (`NODE_ENV === 'development'`)
+- **Vercel previews** (hostname contains `vercel.app`)
+- **Local development** (hostname contains `localhost` or `127.0.0.1`)
+
+### Force Consent Message
+To test the consent message in test environments, use the `forceConsentMessage` prop:
+
+```jsx
+<CookieConsentVideo
+  url="https://example.com/video.mp4"
+  forceConsentMessage={true} // Forces consent message even in test environments
+/>
+```
+
+### Test Component
 Use the `CookieConsentTest` component to test the functionality:
 
 ```jsx

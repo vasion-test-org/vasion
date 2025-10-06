@@ -23,6 +23,7 @@ const CookieConsentVideo = ({
   muted = false,
   loop = false,
   playIcon,
+  forceConsentMessage = false, // For testing purposes
   ...otherProps
 }) => {
   const [cookiesAccepted, setCookiesAccepted] = useState(false);
@@ -30,6 +31,21 @@ const CookieConsentVideo = ({
 
   useEffect(() => {
     const checkCookieConsent = () => {
+      // Check if we're in a test/development environment
+      const isTestEnvironment = process.env.NODE_ENV === 'development' || 
+                               window.location.hostname.includes('vercel.app') ||
+                               window.location.hostname.includes('localhost') ||
+                               window.location.hostname.includes('127.0.0.1');
+      
+      // In test environments, allow videos by default (for testing purposes)
+      // Unless forceConsentMessage is true
+      if (isTestEnvironment && !forceConsentMessage) {
+        console.log('Test environment detected - allowing videos for testing');
+        setCookiesAccepted(true);
+        setIsChecking(false);
+        return;
+      }
+
       // Check if CookieYes is available using the correct API
       if (typeof window !== 'undefined' && typeof window.getCkyConsent === 'function') {
         try {

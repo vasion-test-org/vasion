@@ -41,6 +41,17 @@ const CookieConsentTest = () => {
         />
       </div>
       
+      <div style={{ marginBottom: '2rem' }}>
+        <h3>Test Video 4 - Force Consent Message (for testing)</h3>
+        <CookieConsentVideo
+          url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+          width="100%"
+          height="200px"
+          controls={true}
+          forceConsentMessage={true}
+        />
+      </div>
+      
       <div style={{ 
         backgroundColor: '#f5f5f5', 
         padding: '1rem', 
@@ -49,10 +60,11 @@ const CookieConsentTest = () => {
       }}>
         <h4>How it works:</h4>
         <ul>
-          <li>If cookies are accepted: Shows the video normally</li>
-          <li>If cookies are not accepted: Shows a message asking to accept cookies</li>
-          <li>If CookieYes is not loaded yet: Shows a loading state</li>
-          <li>Clicking "Accept Cookies" will open the CookieYes consent modal</li>
+          <li><strong>Production (vasion.com):</strong> Checks CookieYes consent and shows message if not accepted</li>
+          <li><strong>Test environments (vercel.app, localhost):</strong> Allows videos by default for testing</li>
+          <li><strong>Force consent message:</strong> Use <code>forceConsentMessage={true}</code> to test the consent UI</li>
+          <li><strong>CookieYes not loaded:</strong> Falls back to checking cookies directly</li>
+          <li><strong>Accept Cookies button:</strong> Opens CookieYes consent modal (when available)</li>
         </ul>
       </div>
     </div>
