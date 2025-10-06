@@ -10,13 +10,16 @@ const GTMPerformanceMonitor = () => {
     let performanceObserver = null;
     let originalDataLayerPush = null;
 
-    // Monitor GTM script loading performance
+    // Monitor GTM script loading performance (safer approach)
     const monitorGTMPerformance = () => {
       if (typeof window === 'undefined' || !window.performance) return;
 
+      // Use a more targeted approach that won't interfere with other resources
       const observer = new PerformanceObserver((list) => {
         list.getEntries().forEach((entry) => {
-          if (entry.name.includes('googletagmanager.com')) {
+          // Only monitor GTM-specific resources, not all resources
+          if (entry.name.includes('googletagmanager.com') && 
+              entry.initiatorType === 'script') {
             console.log(`GTM Script Load Time: ${entry.duration}ms`);
 
             // Warn if GTM takes too long
@@ -39,10 +42,16 @@ const GTMPerformanceMonitor = () => {
       });
 
       try {
-        observer.observe({ entryTypes: ['resource'] });
-        performanceObserver = observer;
+        // Only observe script entries to avoid conflicts with other resources
+        // Also check if React Player is present to avoid conflicts
+        if (!document.querySelector('[data-react-player]')) {
+          observer.observe({ entryTypes: ['resource'] });
+          performanceObserver = observer;
+        } else {
+          console.log('React Player detected, skipping GTM performance monitoring to avoid conflicts');
+        }
       } catch (error) {
-        console.log('Performance Observer not supported');
+        console.log('Performance Observer not supported or blocked');
       }
     };
 
@@ -102,10 +111,17 @@ const GTMPerformanceMonitor = () => {
       }
     };
 
-    // Run monitoring
-    monitorGTMPerformance();
-    monitorGTMSize();
-    monitorDataLayer();
+    // Run monitoring with delay to avoid conflicts with React Player
+    const runMonitoring = () => {
+      // Delay monitoring to ensure React Player can initialize first
+      setTimeout(() => {
+        monitorGTMPerformance();
+        monitorGTMSize();
+        monitorDataLayer();
+      }, 1000); // 1 second delay
+    };
+
+    runMonitoring();
 
     // Cleanup function
     return () => {
