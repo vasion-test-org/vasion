@@ -87,6 +87,15 @@ const nextConfig = {
         crypto: false,
         stream: false,
         buffer: false,
+        util: false,
+        url: false,
+        querystring: false,
+      };
+      
+      // Additional React Player v3 fixes
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'react-player/lazy': 'react-player',
       };
     }
 
@@ -150,13 +159,14 @@ const nextConfig = {
               priority: 30,
               enforce: true,
             },
-            // React Player
+            // React Player - separate chunk for better loading
             reactPlayer: {
               test: /[\\/]node_modules[\\/]react-player[\\/]/,
               name: 'react-player',
               chunks: 'all',
-              priority: 25,
+              priority: 35,
               enforce: true,
+              reuseExistingChunk: true,
             },
             // Utility libraries
             utils: {

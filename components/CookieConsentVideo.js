@@ -1,10 +1,12 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import ReactPlayer from 'react-player';
+import React, { useState, useEffect, Suspense } from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
+
+// Use lazy loading for React Player v3
+const ReactPlayer = React.lazy(() => import('react-player'));
 
 // Error boundary for video components
 class VideoErrorBoundary extends React.Component {
@@ -234,32 +236,52 @@ const CookieConsentVideo = ({
       isSideBySideVideo={isSideBySideVideo}
     >
       <VideoErrorBoundary borderradius={borderradius} isSideBySideVideo={isSideBySideVideo}>
-        <ReactPlayer
-          url={url || videoSrc}
-          width={width}
-          height={height}
-          controls={controls}
-          light={light || thumbnails?.[0]?.filename}
-          playsinline={playsinline}
-          playing={playing}
-          volume={volume}
-          muted={muted}
-          loop={loop}
-          playIcon={playIcon}
-          onReady={() => {
-            console.log('ReactPlayer v3 ready');
-          }}
-          onError={(error) => {
-            console.error('ReactPlayer v3 error:', error);
-          }}
-          onLoadStart={() => {
-            console.log('ReactPlayer v3 loading started');
-          }}
-          onLoad={() => {
-            console.log('ReactPlayer v3 load completed');
-          }}
-          {...otherProps}
-        />
+        <Suspense fallback={
+          <LoadingContainer>
+            <LoadingText>Loading video player...</LoadingText>
+          </LoadingContainer>
+        }>
+          <ReactPlayer
+            url={url || videoSrc}
+            width={width}
+            height={height}
+            controls={controls}
+            light={light || thumbnails?.[0]?.filename}
+            playsinline={playsinline}
+            playing={playing}
+            volume={volume}
+            muted={muted}
+            loop={loop}
+            playIcon={playIcon}
+            onReady={() => {
+              console.log('ReactPlayer v3 ready - URL:', url || videoSrc);
+            }}
+            onError={(error) => {
+              console.error('ReactPlayer v3 error:', error);
+              console.error('Error details:', {
+                url: url || videoSrc,
+                error: error,
+                userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : 'SSR'
+              });
+            }}
+            onLoadStart={() => {
+              console.log('ReactPlayer v3 loading started - URL:', url || videoSrc);
+            }}
+            onLoad={() => {
+              console.log('ReactPlayer v3 load completed - URL:', url || videoSrc);
+            }}
+            onStart={() => {
+              console.log('ReactPlayer v3 started playing');
+            }}
+            onPlay={() => {
+              console.log('ReactPlayer v3 playing');
+            }}
+            onPause={() => {
+              console.log('ReactPlayer v3 paused');
+            }}
+            {...otherProps}
+          />
+        </Suspense>
       </VideoErrorBoundary>
     </VideoWrapper>
   );
