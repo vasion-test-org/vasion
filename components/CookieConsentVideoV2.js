@@ -64,6 +64,7 @@ const CookieConsentVideo = ({
 }) => {
   const [cookiesAccepted, setCookiesAccepted] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
+  const [playerError, setPlayerError] = useState(false);
 
   useEffect(() => {
     const checkCookieConsent = () => {
@@ -247,19 +248,29 @@ const CookieConsentVideo = ({
           loop={loop}
           playIcon={playIcon}
           onReady={() => {
-            console.log('ReactPlayer v3 ready');
+            console.log('ReactPlayer ready');
+            setPlayerError(false);
           }}
           onError={(error) => {
-            console.error('ReactPlayer v3 error:', error);
+            console.error('ReactPlayer error:', error);
+            setPlayerError(true);
           }}
           onLoadStart={() => {
-            console.log('ReactPlayer v3 loading started');
+            console.log('ReactPlayer loading started');
           }}
           onLoad={() => {
-            console.log('ReactPlayer v3 load completed');
+            console.log('ReactPlayer load completed');
           }}
           {...otherProps}
         />
+        {playerError && (
+          <ErrorOverlay>
+            <ErrorText>Video failed to load. Please try again.</ErrorText>
+            <RetryButton onClick={() => setPlayerError(false)}>
+              Retry
+            </RetryButton>
+          </ErrorOverlay>
+        )}
       </VideoErrorBoundary>
     </VideoWrapper>
   );
@@ -274,6 +285,7 @@ const VideoWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   
   ${media.fullWidth} {
     width: ${(props) => (props.isSideBySideVideo ? '512px' : '1084px')};
@@ -408,6 +420,27 @@ const RetryButton = styled.button`
   &:hover {
     background: ${colors.primaryBlue};
   }
+`;
+
+const ErrorOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  gap: 1rem;
+`;
+
+const ErrorText = styled.p`
+  ${text.bodyMd};
+  margin: 0;
+  color: white;
 `;
 
 export default CookieConsentVideo;

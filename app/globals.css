@@ -1,4 +1,7 @@
 
+/* React Player v3 CSS */
+@import 'react-player/dist/ReactPlayer.css';
+
 @font-face {
   font-family: 'Archivo Bold';
   src: url('/fonts/Archivo-Bold.woff2') format('woff2'),

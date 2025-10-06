@@ -42,7 +42,7 @@ const nextConfig = {
       'styled-components',
       '@storyblok/react',
       '@storyblok/richtext',
-      'react-player',
+      // Removed 'react-player' - v3 doesn't work with this optimization
       'axios',
       'clone-deep',
     ],
@@ -75,6 +75,18 @@ const nextConfig = {
       config.experiments = {
         ...config.experiments,
         asyncWebAssembly: true,
+      };
+    }
+
+    // React Player v3 fixes
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        crypto: false,
+        stream: false,
+        buffer: false,
       };
     }
 

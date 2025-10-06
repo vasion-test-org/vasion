@@ -41,9 +41,29 @@ class VideoErrorBoundary extends React.Component {
   }
 }
 
-// Lazy load ReactPlayer for better production compatibility
+// Lazy load ReactPlayer with better error handling
 const LazyReactPlayer = React.lazy(() => 
   import('react-player').then(module => ({ default: module.default }))
+    .catch(error => {
+      console.error('Failed to load ReactPlayer:', error);
+      // Return a fallback component
+      return { 
+        default: ({ url, ...props }) => (
+          <div style={{ 
+            width: '100%', 
+            height: '100%', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            backgroundColor: '#f0f0f0',
+            color: '#666',
+            fontSize: '14px'
+          }}>
+            Video player failed to load
+          </div>
+        )
+      };
+    })
 );
 
 const CookieConsentVideo = ({

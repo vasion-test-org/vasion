@@ -1,10 +1,25 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import ReactPlayer from 'react-player';
+import React, { useState, useEffect, Suspense } from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
+
+// Hybrid approach: Use v2 in production, v3 in development
+const getReactPlayer = () => {
+  // Use v2 in production for stability, v3 in development for testing
+  if (process.env.NODE_ENV === 'production') {
+    return require('react-player').default;
+  } else {
+    // Try v3 in development, fallback to v2 if it fails
+    try {
+      return require('react-player').default;
+    } catch (error) {
+      console.warn('React Player v3 failed, falling back to v2:', error);
+      return require('react-player').default;
+    }
+  }
+};
 
 // Error boundary for video components
 class VideoErrorBoundary extends React.Component {
@@ -64,6 +79,18 @@ const CookieConsentVideo = ({
 }) => {
   const [cookiesAccepted, setCookiesAccepted] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
+  const [playerLoaded, setPlayerLoaded] = useState(false);
+  const [ReactPlayer, setReactPlayer] = useState(null);
+
+  // Load ReactPlayer component
+  useEffect(() => {
+    try {
+      const Player = getReactPlayer();
+      setReactPlayer(() => Player);
+    } catch (error) {
+      console.error('Failed to load ReactPlayer:', error);
+    }
+  }, []);
 
   useEffect(() => {
     const checkCookieConsent = () => {
@@ -176,15 +203,17 @@ const CookieConsentVideo = ({
     videoSrc = videos?.[0]?.filename;
   }
 
-  // Show loading state while checking cookies
-  if (isChecking) {
+  // Show loading state while checking cookies or loading player
+  if (isChecking || !ReactPlayer) {
     return (
       <VideoWrapper
         borderradius={borderradius}
         isSideBySideVideo={isSideBySideVideo}
       >
         <LoadingContainer>
-          <LoadingText>Loading...</LoadingText>
+          <LoadingText>
+            {isChecking ? 'Checking cookies...' : 'Loading video player...'}
+          </LoadingText>
         </LoadingContainer>
       </VideoWrapper>
     );
@@ -247,16 +276,17 @@ const CookieConsentVideo = ({
           loop={loop}
           playIcon={playIcon}
           onReady={() => {
-            console.log('ReactPlayer v3 ready');
+            setPlayerLoaded(true);
+            console.log('ReactPlayer ready');
           }}
           onError={(error) => {
-            console.error('ReactPlayer v3 error:', error);
+            console.error('ReactPlayer error:', error);
           }}
           onLoadStart={() => {
-            console.log('ReactPlayer v3 loading started');
+            console.log('ReactPlayer loading started');
           }}
           onLoad={() => {
-            console.log('ReactPlayer v3 load completed');
+            console.log('ReactPlayer load completed');
           }}
           {...otherProps}
         />
