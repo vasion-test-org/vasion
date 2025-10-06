@@ -71,7 +71,7 @@ const Wrapper = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  justify-self: center;
+  margin: 0 auto;
   height: auto;
   width: 63.125vw;
 
