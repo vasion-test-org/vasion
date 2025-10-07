@@ -10,22 +10,19 @@ const GTMPerformanceMonitor = () => {
     let performanceObserver = null;
     let originalDataLayerPush = null;
 
-    // Monitor GTM script loading performance (safer approach)
+    // Monitor GTM script loading performance
     const monitorGTMPerformance = () => {
       if (typeof window === 'undefined' || !window.performance) return;
 
-      // Use a more targeted approach that won't interfere with other resources
       const observer = new PerformanceObserver((list) => {
         list.getEntries().forEach((entry) => {
-          // Only monitor GTM-specific resources, not all resources
-          if (entry.name.includes('googletagmanager.com') && 
-              entry.initiatorType === 'script') {
+          if (entry.name.includes('googletagmanager.com')) {
             console.log(`GTM Script Load Time: ${entry.duration}ms`);
 
             // Warn if GTM takes too long
             if (entry.duration > 100) {
               console.warn(
-                'GTM script loading is slow, consider further optimization'
+                'GTM script loading is slow, consider further optimization',
               );
 
               // Send performance data to analytics if available
@@ -42,23 +39,17 @@ const GTMPerformanceMonitor = () => {
       });
 
       try {
-        // Only observe script entries to avoid conflicts with other resources
-        // Also check if React Player is present to avoid conflicts
-        if (!document.querySelector('[data-react-player]')) {
-          observer.observe({ entryTypes: ['resource'] });
-          performanceObserver = observer;
-        } else {
-          console.log('React Player detected, skipping GTM performance monitoring to avoid conflicts');
-        }
+        observer.observe({ entryTypes: ['resource'] });
+        performanceObserver = observer;
       } catch (error) {
-        console.log('Performance Observer not supported or blocked');
+        console.log('Performance Observer not supported');
       }
     };
 
     // Monitor GTM container size
     const monitorGTMSize = () => {
       const gtmScripts = document.querySelectorAll(
-        'script[src*="googletagmanager.com"]'
+        'script[src*="googletagmanager.com"]',
       );
       let totalSize = 0;
       let completedRequests = 0;
@@ -82,7 +73,7 @@ const GTMPerformanceMonitor = () => {
                 console.log(`Total GTM Container Size: ${totalSize} bytes`);
                 if (totalSize > 200000) {
                   console.warn(
-                    'GTM container size is large, consider optimization'
+                    'GTM container size is large, consider optimization',
                   );
                 }
               }
@@ -111,17 +102,10 @@ const GTMPerformanceMonitor = () => {
       }
     };
 
-    // Run monitoring with delay to avoid conflicts with React Player
-    const runMonitoring = () => {
-      // Delay monitoring to ensure React Player can initialize first
-      setTimeout(() => {
-        monitorGTMPerformance();
-        monitorGTMSize();
-        monitorDataLayer();
-      }, 1000); // 1 second delay
-    };
-
-    runMonitoring();
+    // Run monitoring
+    monitorGTMPerformance();
+    monitorGTMSize();
+    monitorDataLayer();
 
     // Cleanup function
     return () => {
