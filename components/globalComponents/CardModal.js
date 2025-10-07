@@ -144,6 +144,7 @@ const CardModal = ({ data, setShowModal }) => {
                       playsinline={true}
                       width={'100%'}
                       height={combinedStyledHeight}
+                      forceConsentMessage={true}
                     />
                   )}
                 </VideoContainer>
@@ -162,6 +163,7 @@ const CardModal = ({ data, setShowModal }) => {
               playsinline={true}
               width={videoWidth}
               height={videoHeight}
+              forceConsentMessage={true}
             />
           </VideoContainer>
         )}

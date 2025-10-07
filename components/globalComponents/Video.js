@@ -36,6 +36,7 @@ const Video = ({
       controls={true}
       light={thumbnails?.[0]?.filename}
       playsinline={true}
+      forceConsentMessage={true}
     />
   );
 };

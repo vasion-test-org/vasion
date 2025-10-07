@@ -31,7 +31,9 @@ class VideoErrorBoundary extends React.Component {
           <ErrorContainer>
             <ErrorIcon>⚠️</ErrorIcon>
             <ErrorMessage>Video failed to load</ErrorMessage>
-            <RetryButton onClick={() => this.setState({ hasError: false, error: null })}>
+            <RetryButton
+              onClick={() => this.setState({ hasError: false, error: null })}
+            >
               Retry
             </RetryButton>
           </ErrorContainer>
@@ -68,11 +70,12 @@ const CookieConsentVideo = ({
   useEffect(() => {
     const checkCookieConsent = () => {
       // Check if we're in a test/development environment
-      const isTestEnvironment = process.env.NODE_ENV === 'development' || 
-                               window.location.hostname.includes('vercel.app') ||
-                               window.location.hostname.includes('localhost') ||
-                               window.location.hostname.includes('127.0.0.1');
-      
+      const isTestEnvironment =
+        process.env.NODE_ENV === 'development' ||
+        window.location.hostname.includes('vercel.app') ||
+        window.location.hostname.includes('localhost') ||
+        window.location.hostname.includes('127.0.0.1');
+
       // In test environments, allow videos by default (for testing purposes)
       // Unless forceConsentMessage is true
       if (isTestEnvironment && !forceConsentMessage) {
@@ -83,13 +86,18 @@ const CookieConsentVideo = ({
       }
 
       // Check if CookieYes is available using the correct API
-      if (typeof window !== 'undefined' && typeof window.getCkyConsent === 'function') {
+      if (
+        typeof window !== 'undefined' &&
+        typeof window.getCkyConsent === 'function'
+      ) {
         try {
           const consentData = window.getCkyConsent();
           // Check if user has completed consent action and accepted cookies
           setCookiesAccepted(
-            consentData.isUserActionCompleted && 
-            (consentData.categories?.analytics || consentData.categories?.marketing || consentData.categories?.functional)
+            consentData.isUserActionCompleted &&
+              (consentData.categories?.analytics ||
+                consentData.categories?.marketing ||
+                consentData.categories?.functional),
           );
           setIsChecking(false);
         } catch (error) {
@@ -108,10 +116,14 @@ const CookieConsentVideo = ({
       if (cookieValue) {
         try {
           const consentData = JSON.parse(cookieValue);
-          setCookiesAccepted(consentData.consent === true || consentData.accepted === true);
+          setCookiesAccepted(
+            consentData.consent === true || consentData.accepted === true,
+          );
         } catch (e) {
           // If parsing fails, check for simple string values
-          setCookiesAccepted(cookieValue === 'accepted' || cookieValue === 'true');
+          setCookiesAccepted(
+            cookieValue === 'accepted' || cookieValue === 'true',
+          );
         }
       } else {
         // No consent cookie found, assume not accepted
@@ -124,7 +136,10 @@ const CookieConsentVideo = ({
     checkCookieConsent();
 
     // Also check when CookieYes loads (if not already loaded)
-    if (typeof window !== 'undefined' && typeof window.getCkyConsent !== 'function') {
+    if (
+      typeof window !== 'undefined' &&
+      typeof window.getCkyConsent !== 'function'
+    ) {
       const checkInterval = setInterval(() => {
         if (typeof window.getCkyConsent === 'function') {
           checkCookieConsent();
@@ -176,13 +191,13 @@ const CookieConsentVideo = ({
     videoSrc = videos?.[0]?.filename;
   }
 
-
   // Show loading state while checking cookies
   if (isChecking) {
     return (
       <VideoWrapper
         borderradius={borderradius}
         isSideBySideVideo={isSideBySideVideo}
+        height={height}
       >
         <LoadingContainer>
           <LoadingText>Loading...</LoadingText>
@@ -197,27 +212,41 @@ const CookieConsentVideo = ({
       <VideoWrapper
         borderradius={borderradius}
         isSideBySideVideo={isSideBySideVideo}
+        height={height}
       >
         <CookieConsentContainer>
-          <CookieIcon>🍪</CookieIcon>
+          <CookieIcon
+            src={'/images/logos/vasion-logo-purple.webp'}
+            alt={'accept cookie notification vasion'}
+          />
           <CookieMessage>
-            Please accept our site cookies to enjoy Media from Vasion.com
+            Please accept our site cookies to enjoy Media from Vasion.
           </CookieMessage>
-          <CookieButton 
+          <CookieButton
             onClick={() => {
               // Trigger CookieYes consent modal using correct API
               if (typeof window.getCkyConsent === 'function') {
                 // Try to show the consent modal
-                if (window.CookieYes && typeof window.CookieYes.showConsentModal === 'function') {
+                if (
+                  window.CookieYes &&
+                  typeof window.CookieYes.showConsentModal === 'function'
+                ) {
                   window.CookieYes.showConsentModal();
-                } else if (window.cookieyes && typeof window.cookieyes.showConsentModal === 'function') {
+                } else if (
+                  window.cookieyes &&
+                  typeof window.cookieyes.showConsentModal === 'function'
+                ) {
                   window.cookieyes.showConsentModal();
                 } else {
                   // Fallback: try to trigger the consent banner
-                  console.log('CookieYes consent modal not available, please accept cookies manually');
+                  console.log(
+                    'CookieYes consent modal not available, please accept cookies manually',
+                  );
                 }
               } else {
-                console.log('CookieYes not loaded, please accept cookies manually');
+                console.log(
+                  'CookieYes not loaded, please accept cookies manually',
+                );
               }
             }}
           >
@@ -229,13 +258,17 @@ const CookieConsentVideo = ({
   }
 
   // Show video if cookies are accepted
-  
+
   return (
     <VideoWrapper
       borderradius={borderradius}
       isSideBySideVideo={isSideBySideVideo}
+      height={height}
     >
-      <VideoErrorBoundary borderradius={borderradius} isSideBySideVideo={isSideBySideVideo}>
+      <VideoErrorBoundary
+        borderradius={borderradius}
+        isSideBySideVideo={isSideBySideVideo}
+      >
         <ReactPlayer
           url={url || videoSrc}
           width={width}
@@ -256,14 +289,23 @@ const CookieConsentVideo = ({
             console.error('Error details:', {
               url: url || videoSrc,
               error: error,
-              userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : 'SSR'
+              userAgent:
+                typeof window !== 'undefined'
+                  ? window.navigator.userAgent
+                  : 'SSR',
             });
           }}
           onLoadStart={() => {
-            console.log('ReactPlayer v3 loading started - URL:', url || videoSrc);
+            console.log(
+              'ReactPlayer v3 loading started - URL:',
+              url || videoSrc,
+            );
           }}
           onLoad={() => {
-            console.log('ReactPlayer v3 load completed - URL:', url || videoSrc);
+            console.log(
+              'ReactPlayer v3 load completed - URL:',
+              url || videoSrc,
+            );
           }}
           onStart={() => {
             console.log('ReactPlayer v3 started playing');
@@ -283,28 +325,23 @@ const CookieConsentVideo = ({
 
 const VideoWrapper = styled.div`
   width: ${(props) => (props.isSideBySideVideo ? '32vw' : '67.75vw')};
-  height: ${(props) => (props.isSideBySideVideo ? '24vw' : '38vw')};
+  height: ${(props) => props.height || '100%'};
   max-width: 100%;
   border-radius: ${(props) => `${props.borderradius || 0}px`};
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   ${media.fullWidth} {
     width: ${(props) => (props.isSideBySideVideo ? '512px' : '1084px')};
-    height: ${(props) => (props.isSideBySideVideo ? '384px' : '608px')};
-    border-radius: ${(props) => `${props.borderradius || 0}px`};
-  }
-  
+
   ${media.tablet} {
     width: ${(props) => (props.isSideBySideVideo ? '44.531vw' : '92.188vw')};
-    height: ${(props) => (props.isSideBySideVideo ? '33.398vw' : '51.758vw')};
   }
-  
+
   ${media.mobile} {
     width: 89.167vw;
-    height: 50vw;
   }
 `;
 
@@ -315,22 +352,26 @@ const CookieConsentContainer = styled.div`
   justify-content: center;
   text-align: center;
   padding: 2rem;
-  background: linear-gradient(135deg, ${colors.primaryPurple} 0%, ${colors.primaryBlue} 100%);
+  background: linear-gradient(
+    135deg,
+    ${colors.primaryPurple} 0%,
+    ${colors.primaryBlue} 100%
+  );
   color: ${colors.white};
   border-radius: ${(props) => `${props.borderradius || 8}px`};
-  min-height: 200px;
+  width: 100%;
+  height: 100%;
   gap: 1rem;
-  
+
   ${media.mobile} {
     padding: 1.5rem;
-    min-height: 150px;
   }
 `;
 
-const CookieIcon = styled.div`
+const CookieIcon = styled.img`
   font-size: 3rem;
   margin-bottom: 0.5rem;
-  
+
   ${media.mobile} {
     font-size: 2.5rem;
   }
@@ -341,7 +382,8 @@ const CookieMessage = styled.p`
   margin: 0;
   max-width: 400px;
   line-height: 1.5;
-  
+  color: ${colors.txtSubtle};
+
   ${media.mobile} {
     ${text.bodyMd};
   }
@@ -351,6 +393,7 @@ const CookieButton = styled.button`
   ${text.bodyMd};
   background: ${colors.white};
   color: ${colors.primaryPurple};
+  box-shadow: -12px 17px 43px 0px rgba(0, 0, 0, 0.1);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -358,16 +401,16 @@ const CookieButton = styled.button`
   font-weight: 600;
   transition: all 0.2s ease;
   margin-top: 0.5rem;
-  
+
   &:hover {
     background: ${colors.grey100};
     transform: translateY(-1px);
   }
-  
+
   &:active {
     transform: translateY(0);
   }
-  
+
   ${media.mobile} {
     padding: 0.625rem 1.25rem;
     font-size: 0.875rem;
@@ -420,7 +463,7 @@ const RetryButton = styled.button`
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
-  
+
   &:hover {
     background: ${colors.primaryBlue};
   }

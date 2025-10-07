@@ -55,6 +55,7 @@ const VideoCarousel = ({ blok }) => {
             playsinline
             width={videoWidth}
             height={videoHeight}
+            forceConsentMessage={true}
           />
         </Video>
         <ContentContainer>
@@ -85,6 +86,7 @@ const VideoCarousel = ({ blok }) => {
             muted={!isModalActive && modalActiveClick}
             width={getMedia(800, 800, 700, 325)}
             height={getMedia(400, 400, 400, 250)}
+            forceConsentMessage={true}
           />
         </PopupVideo>
       </VideoModal>

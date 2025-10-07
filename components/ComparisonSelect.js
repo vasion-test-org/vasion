@@ -221,6 +221,7 @@ const ComparisonSelect = ({ blok }) => {
         playIcon={<></>}
         width={videoWidth}
         height={videoHeight}
+        forceConsentMessage={true}
       />
 
       <BottomCopy>
