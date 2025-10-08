@@ -42,7 +42,7 @@ const nextConfig = {
       'styled-components',
       '@storyblok/react',
       '@storyblok/richtext',
-      // Removed 'react-player' - v3 doesn't work with this optimization
+      'react-player',
       'axios',
       'clone-deep',
     ],
@@ -78,26 +78,6 @@ const nextConfig = {
       };
     }
 
-    // React Player v3 fixes
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        path: false,
-        crypto: false,
-        stream: false,
-        buffer: false,
-        util: false,
-        url: false,
-        querystring: false,
-      };
-      
-      // Additional React Player v3 fixes
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        'react-player/lazy': 'react-player',
-      };
-    }
 
     // Ultra-aggressive chunk optimization for better TBT
     if (!isServer && !dev) {
