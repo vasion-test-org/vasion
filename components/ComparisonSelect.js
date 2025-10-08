@@ -5,7 +5,7 @@ import media from '@/styles/media';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
 import useMedia from '@/functions/useMedia';
-import ReactPlayer from 'react-player';
+import CookieConsentVideo from '@/components/CookieConsentVideo';
 import gsap from 'gsap';
 import RichTextRenderer from './renderers/RichTextRenderer';
 
@@ -211,7 +211,7 @@ const ComparisonSelect = ({ blok }) => {
           </Option>
         </Comparison>
       }
-      <ReactPlayer
+      <CookieConsentVideo
         url={blok?.video_url?.url}
         controls={true}
         light={blok?.video_thumbnail?.filename}

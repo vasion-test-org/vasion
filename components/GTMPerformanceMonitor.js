@@ -22,7 +22,7 @@ const GTMPerformanceMonitor = () => {
             // Warn if GTM takes too long
             if (entry.duration > 100) {
               console.warn(
-                'GTM script loading is slow, consider further optimization'
+                'GTM script loading is slow, consider further optimization',
               );
 
               // Send performance data to analytics if available
@@ -49,7 +49,7 @@ const GTMPerformanceMonitor = () => {
     // Monitor GTM container size
     const monitorGTMSize = () => {
       const gtmScripts = document.querySelectorAll(
-        'script[src*="googletagmanager.com"]'
+        'script[src*="googletagmanager.com"]',
       );
       let totalSize = 0;
       let completedRequests = 0;
@@ -73,7 +73,7 @@ const GTMPerformanceMonitor = () => {
                 console.log(`Total GTM Container Size: ${totalSize} bytes`);
                 if (totalSize > 200000) {
                   console.warn(
-                    'GTM container size is large, consider optimization'
+                    'GTM container size is large, consider optimization',
                   );
                 }
               }

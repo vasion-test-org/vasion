@@ -7,7 +7,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import media from 'styles/media';
 import colors from 'styles/colors';
 import text from 'styles/text';
-import ReactPlayer from 'react-player';
+import CookieConsentVideo from '@/components/CookieConsentVideo';
 import Button from '@/components/globalComponents/Button';
 import useMedia from '@/functions/useMedia';
 import { horizontalLoop } from '@/functions/horizontalLoop';
@@ -43,7 +43,7 @@ const VideoCarousel = ({ blok }) => {
           <VideoPlayButton src='/images/uiElements/PlayButton.webp' />
         </VideoCover>
         <Video>
-          <ReactPlayer
+          <CookieConsentVideo
             loop
             url={video?.video.filename}
             light={!isActive && video?.thumbnail?.filename}
@@ -77,7 +77,7 @@ const VideoCarousel = ({ blok }) => {
         onClick={() => setModalActiveClick(true)}
       >
         <PopupVideo>
-          <ReactPlayer
+          <CookieConsentVideo
             url={video?.video.filename}
             controls={true}
             playing={isModalActive}
