@@ -324,7 +324,7 @@ const CookieConsentVideo = ({
 };
 
 const VideoWrapper = styled.div`
-  width: ${(props) => (props.isSideBySideVideo ? '32vw' : '67.75vw')};
+  width: 100%;
   height: ${(props) => props.height || '100%'};
   max-width: 100%;
   border-radius: ${(props) => `${props.borderradius || 0}px`};
@@ -332,17 +332,6 @@ const VideoWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  ${media.fullWidth} {
-    width: ${(props) => (props.isSideBySideVideo ? '512px' : '1084px')};
-
-  ${media.tablet} {
-    width: ${(props) => (props.isSideBySideVideo ? '44.531vw' : '92.188vw')};
-  }
-
-  ${media.mobile} {
-    width: 89.167vw;
-  }
 `;
 
 const CookieConsentContainer = styled.div`
