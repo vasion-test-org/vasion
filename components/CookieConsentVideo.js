@@ -61,7 +61,7 @@ const CookieConsentVideo = ({
   muted = false,
   loop = false,
   playIcon,
-  forceConsentMessage = false, // For testing purposes
+  forceConsentMessage = false, // For Testing on localhost change to true
   ...otherProps
 }) => {
   const [cookiesAccepted, setCookiesAccepted] = useState(false);
