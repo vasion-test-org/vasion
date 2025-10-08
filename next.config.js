@@ -78,7 +78,6 @@ const nextConfig = {
       };
     }
 
-
     // Ultra-aggressive chunk optimization for better TBT
     if (!isServer && !dev) {
       config.optimization = {
@@ -139,14 +138,13 @@ const nextConfig = {
               priority: 30,
               enforce: true,
             },
-            // React Player - separate chunk for better loading
+            // React Player
             reactPlayer: {
               test: /[\\/]node_modules[\\/]react-player[\\/]/,
               name: 'react-player',
               chunks: 'all',
-              priority: 35,
+              priority: 25,
               enforce: true,
-              reuseExistingChunk: true,
             },
             // Utility libraries
             utils: {
@@ -193,7 +191,7 @@ const nextConfig = {
     }
 
     const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.('.svg')
+      rule.test?.test?.('.svg'),
     );
 
     config.module.rules.push(
@@ -227,7 +225,7 @@ const nextConfig = {
             },
           },
         ],
-      }
+      },
     );
 
     fileLoaderRule.exclude = /\.svg$/i;
