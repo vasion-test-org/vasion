@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "update-page-images-alt": "node update-page-images-alt.js",
+    "test-about-us": "node test-print-nightmare-page.js",
+    "update-all-pages": "node update-all-page-images-alt.js"
   },
   "dependencies": {
     "dotenv": "^16.4.7",

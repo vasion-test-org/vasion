@@ -31,9 +31,27 @@ const OptimizedImage = ({
 
   if (!imageSrc) return null;
 
-  // Extract alt text from imageSrc if it's an object, otherwise use a default
-  const altText = typeof imageSrc === 'object' ? imageSrc.imageAlt : 'Image';
+  // Extract alt text from the images array
+  const getAltText = () => {
+    if (!images || !Array.isArray(images) || images.length === 0) {
+      return 'Image';
+    }
 
+    // Find the image that matches the selected imageSrc
+    const selectedImage = images.find((img) => img.filename === imageSrc);
+    if (selectedImage && selectedImage.alt) {
+      return selectedImage.alt;
+    }
+
+    // Fallback to first image's alt if no match found
+    if (images[0] && images[0].alt) {
+      return images[0].alt;
+    }
+
+    return 'Image';
+  };
+
+  const altText = getAltText();
   // If fill is true, we need a container with relative positioning
   if (fill) {
     return (
