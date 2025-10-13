@@ -92,18 +92,23 @@ const Button = styled.div`
   color: white;
   border-radius: 1.75vw;
   padding: 0.75vw 1vw;
+  margin-top: 1vw;
+
   ${media.fullWidth} {
     border-radius: 28px;
     padding: 12px 16px;
+    margin-top: 16px;
   }
   ${media.tablet} {
     border-radius: 2.734vw;
     padding: 1.172vw 1.563vw;
+    margin-top: 1.563vw;
   }
   ${media.mobile} {
     border-radius: 5.833vw;
     padding: 2.5vw 3.333vw;
     margin-bottom: 4.673vw;
+    margin-top: 3.333vw;
   }
   ${media.hover} {
     &:hover {

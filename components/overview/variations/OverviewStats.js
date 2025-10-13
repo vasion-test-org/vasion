@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import text from "styles/text";
-import gsap from "gsap";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import { storyblokEditable } from "@storyblok/react/rsc";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import media from 'styles/media';
+import colors from 'styles/colors';
+import text from 'styles/text';
+import gsap from 'gsap';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { storyblokEditable } from '@storyblok/react/rsc';
 const OverviewStats = ({ blok }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleMobileClick = () => {
     if (isOpen) {
       setIsOpen(false);
-      gsap.to(".stats-overview-visibility", {
+      gsap.to('.stats-overview-visibility', {
         autoAlpha: 0,
         height: 0,
         duration: 0.5,
       });
     } else {
       setIsOpen(true);
-      gsap.to(".stats-overview-visibility", {
+      gsap.to('.stats-overview-visibility', {
         autoAlpha: 1,
-        height: "auto",
+        height: 'auto',
         duration: 0.5,
       });
     }
@@ -32,7 +32,10 @@ const OverviewStats = ({ blok }) => {
       <StatItem key={item._uid} {...storyblokEditable(item)}>
         <StatHeadline>{item?.headline}</StatHeadline>
         <StatBody>
-          <RichTextRenderer document={item?.body_copy} />
+          <RichTextRenderer
+            document={item?.body_copy}
+            responsiveTextStyles={item?.responsiveTextStyles}
+          />
         </StatBody>
       </StatItem>
     );
@@ -49,7 +52,10 @@ const OverviewStats = ({ blok }) => {
           />
         )}
         <CalloutBody>
-          <RichTextRenderer document={item?.body_copy} />
+          <RichTextRenderer
+            document={item?.body_copy}
+            responsiveTextStyles={item?.responsiveTextStyles}
+          />
         </CalloutBody>
       </CalloutItem>
     );
@@ -68,12 +74,12 @@ const OverviewStats = ({ blok }) => {
           <ExpandCollapseIcon
             src={
               isOpen
-                ? "/images/uiElements/closeVector.webp"
-                : "/images/uiElements/OpenBtn.webp"
+                ? '/images/uiElements/closeVector.webp'
+                : '/images/uiElements/OpenBtn.webp'
             }
-            alt={isOpen ? "close-btn" : "open-btn"}
+            alt={isOpen ? 'close-btn' : 'open-btn'}
             $isopen={isOpen}
-            className={"stats-overview-close"}
+            className={'stats-overview-close'}
             onClick={handleMobileClick}
           />
         </HeaderDiv>
@@ -186,7 +192,7 @@ const CalloutWrapper = styled.div`
     background-color: unset;
     opacity: 0;
     width: 100%;
-    padding: ${(props) => (props.$isopen ? "5.14vw 4.673vw" : "unset")};
+    padding: ${(props) => (props.$isopen ? '5.14vw 4.673vw' : 'unset')};
     height: 0;
   }
 `;
@@ -201,6 +207,15 @@ const StatBody = styled.div`
 const StatHeadline = styled.p`
   ${text.h3};
   color: ${colors.primaryOrange};
+
+  ${media.fullWidth} {
+    ${text.h3};
+  }
+  ${media.tablet} {
+    ${text.h4};
+  }
+  ${media.mobile} {
+  }
 `;
 const StatItem = styled.div`
   position: relative;
@@ -265,8 +280,8 @@ const ExpandCollapseIcon = styled.img`
     position: relative;
     display: inline-flex;
     left: -25px;
-    width: ${(props) => (props.$isopen ? "4.297vw" : "6vw")};
-    width: ${(props) => (props.$isopen ? "4.297vw" : "6vw")};
+    width: ${(props) => (props.$isopen ? '4.297vw' : '6vw')};
+    width: ${(props) => (props.$isopen ? '4.297vw' : '6vw')};
   }
 `;
 const HeaderDiv = styled.div`
@@ -282,7 +297,7 @@ const HeaderDiv = styled.div`
     height: 18.75vw;
     justify-content: space-between;
     background-color: #f5f4f7;
-    left: -17px;
+    left: 0px;
     overflow: hidden;
   }
 `;
@@ -306,18 +321,18 @@ const ContentWrapper = styled.div`
   }
 
   ${media.tablet} {
-    width: 92.188vw;
+    width: 66.188vw;
     border-radius: 0.781vw;
     padding: 3.125vw 1.953vw;
     gap: 1.953vw;
   }
 
   ${media.mobile} {
-    width: 89.167vw;
+    width: 91.167vw;
     padding: unset;
     gap: 4.673vw;
     background-color: ${(props) =>
-      props.$isopen ? `${colors.white}` : "transparent"};
+      props.$isopen ? `${colors.white}` : 'transparent'};
   }
 `;
 
@@ -342,7 +357,7 @@ const Wrapper = styled.div`
 
   ${media.mobile} {
     width: 100vw;
-    gap: ${(props) => (props.$isopen ? "5.374vw" : "unset")};
+    gap: ${(props) => (props.$isopen ? '5.374vw' : 'unset')};
     flex-direction: column;
     padding: 0vw 4.439vw;
     background-color: ${(props) =>
