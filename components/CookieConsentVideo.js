@@ -239,29 +239,82 @@ const CookieConsentVideo = ({
           </CookieMessage>
           <CookieButton
             onClick={() => {
-              // Trigger CookieYes consent modal using correct API
-              if (typeof window.getCkyConsent === 'function') {
-                // Try to show the consent modal
-                if (
-                  window.CookieYes &&
-                  typeof window.CookieYes.showConsentModal === 'function'
-                ) {
-                  window.CookieYes.showConsentModal();
-                } else if (
-                  window.cookieyes &&
-                  typeof window.cookieyes.showConsentModal === 'function'
-                ) {
-                  window.cookieyes.showConsentModal();
-                } else {
-                  // Fallback: try to trigger the consent banner
-                  console.log(
-                    'CookieYes consent modal not available, please accept cookies manually',
-                  );
+              console.log('Accept Cookies button clicked');
+              console.log('Available CookieYes methods:', {
+                getCkyConsent: typeof window.getCkyConsent,
+                CookieYes: typeof window.CookieYes,
+                cookieyes: typeof window.cookieyes,
+                ckyConsent: typeof window.ckyConsent,
+                CookieYesAPI: typeof window.CookieYesAPI
+              });
+              
+              // Debug: Log all window properties that might be CookieYes related
+              const cookieYesProps = Object.keys(window).filter(key => 
+                key.toLowerCase().includes('cookie') || 
+                key.toLowerCase().includes('cky') ||
+                key.toLowerCase().includes('consent')
+              );
+              console.log('Cookie-related window properties:', cookieYesProps);
+              
+              // Try multiple approaches to trigger CookieYes consent modal
+              let modalTriggered = false;
+              
+              // Method 1: Try CookieYes.showConsentModal()
+              if (window.CookieYes && typeof window.CookieYes.showConsentModal === 'function') {
+                console.log('Trying CookieYes.showConsentModal()');
+                window.CookieYes.showConsentModal();
+                modalTriggered = true;
+              }
+              
+              // Method 2: Try cookieyes.showConsentModal()
+              if (!modalTriggered && window.cookieyes && typeof window.cookieyes.showConsentModal === 'function') {
+                console.log('Trying cookieyes.showConsentModal()');
+                window.cookieyes.showConsentModal();
+                modalTriggered = true;
+              }
+              
+              // Method 3: Try ckyConsent.showConsentModal()
+              if (!modalTriggered && window.ckyConsent && typeof window.ckyConsent.showConsentModal === 'function') {
+                console.log('Trying ckyConsent.showConsentModal()');
+                window.ckyConsent.showConsentModal();
+                modalTriggered = true;
+              }
+              
+              // Method 4: Try CookieYesAPI.showConsentModal()
+              if (!modalTriggered && window.CookieYesAPI && typeof window.CookieYesAPI.showConsentModal === 'function') {
+                console.log('Trying CookieYesAPI.showConsentModal()');
+                window.CookieYesAPI.showConsentModal();
+                modalTriggered = true;
+              }
+              
+              // Method 5: Try to trigger consent banner by dispatching events
+              if (!modalTriggered) {
+                console.log('Trying to trigger consent events');
+                const events = ['cookieyes-consent', 'cookieconsent', 'ckyConsentChanged'];
+                events.forEach(eventName => {
+                  window.dispatchEvent(new CustomEvent(eventName, { detail: { action: 'show' } }));
+                });
+                modalTriggered = true;
+              }
+              
+              // Method 6: Try to find and click the actual CookieYes banner button
+              if (!modalTriggered) {
+                console.log('Trying to find CookieYes banner button');
+                const cookieYesBanner = document.querySelector('[id*="cookieyes"], [class*="cookieyes"], [id*="cky"], [class*="cky"]');
+                if (cookieYesBanner) {
+                  console.log('Found CookieYes banner:', cookieYesBanner);
+                  const acceptButton = cookieYesBanner.querySelector('button[class*="accept"], button[id*="accept"], a[class*="accept"], a[id*="accept"]');
+                  if (acceptButton) {
+                    console.log('Found accept button:', acceptButton);
+                    acceptButton.click();
+                    modalTriggered = true;
+                  }
                 }
-              } else {
-                console.log(
-                  'CookieYes not loaded, please accept cookies manually',
-                );
+              }
+              
+              if (!modalTriggered) {
+                console.log('Could not trigger CookieYes consent modal. Please accept cookies manually from the banner.');
+                alert('Please accept cookies using the cookie banner at the bottom of the page.');
               }
             }}
           >
