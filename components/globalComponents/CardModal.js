@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import media from 'styles/media';
 import colors from 'styles/colors';
 import text from 'styles/text';
-import ReactPlayer from 'react-player';
+import CookieConsentVideo from '@/components/CookieConsentVideo';
 import useMedia from '@/functions/useMedia';
 import RichTextRenderer from '../renderers/RichTextRenderer';
 import Video from './Video';
@@ -135,7 +135,7 @@ const CardModal = ({ data, setShowModal }) => {
                       thumbnails={data.asset[0].thumbnails}
                     />
                   ) : (
-                    <ReactPlayer
+                    <CookieConsentVideo
                       url={videoSrc}
                       controls={true}
                       playing={false}
@@ -153,7 +153,7 @@ const CardModal = ({ data, setShowModal }) => {
         )}
         {!data?.position?.[0]?.copy && (
           <VideoContainer>
-            <ReactPlayer
+            <CookieConsentVideo
               url={videoSrc}
               controls={true}
               playing={false}

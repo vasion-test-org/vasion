@@ -119,7 +119,7 @@ const RichTextRenderer = ({
         `h${level}`,
         `h${level}`,
         tabletStyle,
-        mobileStyle
+        mobileStyle,
       );
 
       const headerContent = (
@@ -142,7 +142,7 @@ const RichTextRenderer = ({
         className,
         className,
         responsiveTextStyles[0],
-        responsiveTextStyles[1]
+        responsiveTextStyles[1],
       );
       // console.log('selectedClassName', selectedClassName)
       return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
