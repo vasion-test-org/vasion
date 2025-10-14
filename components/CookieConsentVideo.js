@@ -229,8 +229,18 @@ const CookieConsentVideo = ({
         borderradius={borderradius}
         isSideBySideVideo={isSideBySideVideo}
         height={height}
+        data-cookie-consent="true"
+        onClick={(e) => {
+          // Prevent event bubbling to parent elements (like video carousel modals)
+          e.stopPropagation();
+        }}
       >
-        <CookieConsentContainer>
+        <CookieConsentContainer
+          onClick={(e) => {
+            // Prevent event bubbling to parent elements (like video carousel modals)
+            e.stopPropagation();
+          }}
+        >
           <CookieIcon
             src={'/images/logos/vasion-logo-purple.webp'}
             alt={'accept cookie notification vasion'}

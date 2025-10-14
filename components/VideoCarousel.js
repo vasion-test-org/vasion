@@ -114,7 +114,12 @@ const VideoCarousel = ({ blok }) => {
     const closeTl = gsap.timeline({});
 
     popups.forEach((popup, index) => {
-      popup.addEventListener('click', () => {
+      popup.addEventListener('click', (e) => {
+        // Don't close modal if clicking on cookie consent elements
+        if (e.target.closest('[data-cookie-consent]')) {
+          return;
+        }
+        
         closeTl
           .call(setModalActive(null))
           .to(`#popup-${index}`, { autoAlpha: 0 })
