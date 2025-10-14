@@ -293,7 +293,6 @@ const CookieConsentVideo = ({
   }
 
   // Show video if cookies are accepted
-
   return (
     <VideoWrapper
       borderradius={borderradius}

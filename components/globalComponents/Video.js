@@ -11,6 +11,8 @@ const Video = ({
   filename,
   thumbnails,
   isSideBySideVideo = false,
+  width,
+  height,
 }) => {
   let videoSrc = filename
     ? filename
@@ -31,8 +33,8 @@ const Video = ({
       thumbnails={thumbnails}
       isSideBySideVideo={isSideBySideVideo}
       url={videoSrc}
-      width='100%'
-      height='100%'
+      width={width || '100%'}
+      height={height || '100%'}
       controls={true}
       light={thumbnails?.[0]?.filename}
       playsinline={true}

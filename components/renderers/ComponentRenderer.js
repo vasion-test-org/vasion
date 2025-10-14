@@ -116,7 +116,16 @@ const ComponentRenderer = ({
         </AssetContainer>
       );
     case 'video_assets':
-      return (
+      return isSideBySideVideo ? (
+        <VideoContainer $isSideBySideVideo={isSideBySideVideo}>
+          <Video
+            videos={blok.media}
+            thumbnails={blok.thumbnails}
+            borderradius={blok.border_radius}
+            isSideBySideVideo={isSideBySideVideo}
+          />
+        </VideoContainer>
+      ) : (
         <Video
           videos={blok.media}
           thumbnails={blok.thumbnails}
@@ -254,5 +263,36 @@ const CopyDiv = styled.div`
 `;
 
 const BlockWrapper = styled.div``;
+
+const VideoContainer = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Ensure proper aspect ratio for side-by-side videos */
+  aspect-ratio: 16 / 9;
+  
+  /* Responsive sizing for different screen sizes */
+  ${media.mobile} {
+    aspect-ratio: 4 / 3;
+  }
+  
+  /* Match the width constraints of other side-by-side assets */
+  max-width: ${(props) => (props.$isSideBySideVideo ? '38.875vw' : '100%')};
+  
+  ${media.fullWidth} {
+    max-width: ${(props) => (props.$isSideBySideVideo ? '622px' : '100%')};
+  }
+  
+  ${media.tablet} {
+    max-width: ${(props) => (props.$isSideBySideVideo ? '44.141vw' : '100%')};
+  }
+  
+  ${media.mobile} {
+    max-width: 100%;
+  }
+`;
 
 export default ComponentRenderer;
