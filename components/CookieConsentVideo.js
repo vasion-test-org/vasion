@@ -242,7 +242,10 @@ const CookieConsentVideo = ({
             }
           </CookieMessage>
           <CookieButton
-            onClick={() => {
+            onClick={(e) => {
+              // Prevent event bubbling to parent elements (like video carousel modals)
+              e.stopPropagation();
+              
               if (consentButtonClicked) {
                 // Refresh the page to reload with new cookie settings
                 window.location.reload();
