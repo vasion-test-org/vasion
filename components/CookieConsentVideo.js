@@ -262,8 +262,22 @@ const CookieConsentVideo = ({
               } else {
                 // Trigger CookieYes consent modal using the correct API
                 if (typeof window.revisitCkyConsent === 'function') {
+                  // Prevent page scrolling when opening consent modal
+                  const currentScrollY = window.scrollY;
+                  document.body.style.position = 'fixed';
+                  document.body.style.top = `-${currentScrollY}px`;
+                  document.body.style.width = '100%';
+                  
                   window.revisitCkyConsent();
                   setConsentButtonClicked(true);
+                  
+                  // Restore scrolling after a short delay
+                  setTimeout(() => {
+                    document.body.style.position = '';
+                    document.body.style.top = '';
+                    document.body.style.width = '';
+                    window.scrollTo(0, currentScrollY);
+                  }, 100);
                 } else {
                   console.warn('CookieYes revisitCkyConsent function not available');
                   alert('Please accept cookies using the cookie banner at the bottom of the page.');
