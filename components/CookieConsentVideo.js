@@ -135,12 +135,15 @@ const CookieConsentVideo = ({
     // Check immediately
     checkCookieConsent();
 
+    let checkInterval = null;
+    let timeoutId = null;
+
     // Also check when CookieYes loads (if not already loaded)
     if (
       typeof window !== 'undefined' &&
       typeof window.getCkyConsent !== 'function'
     ) {
-      const checkInterval = setInterval(() => {
+      checkInterval = setInterval(() => {
         if (typeof window.getCkyConsent === 'function') {
           checkCookieConsent();
           clearInterval(checkInterval);
@@ -148,11 +151,15 @@ const CookieConsentVideo = ({
       }, 100);
 
       // Clean up interval after 10 seconds
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         clearInterval(checkInterval);
-        if (isChecking) {
-          setIsChecking(false);
-        }
+        // Use functional update to avoid stale closure
+        setIsChecking(prevIsChecking => {
+          if (prevIsChecking) {
+            return false;
+          }
+          return prevIsChecking;
+        });
       }, 10000);
     }
 
@@ -170,13 +177,21 @@ const CookieConsentVideo = ({
     }
 
     return () => {
+      // Clear timeout to prevent memory leak
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      // Clear interval to prevent memory leak
+      if (checkInterval) {
+        clearInterval(checkInterval);
+      }
       if (typeof window !== 'undefined') {
         window.removeEventListener('cookieyes-consent', handleConsentChange);
         window.removeEventListener('cookieconsent', handleConsentChange);
         window.removeEventListener('ckyConsentChanged', handleConsentChange);
       }
     };
-  }, []);
+  }, [forceConsentMessage]);
 
   const getCookie = (name) => {
     if (typeof document === 'undefined') return null;
