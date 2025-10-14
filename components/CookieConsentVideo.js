@@ -241,44 +241,52 @@ const CookieConsentVideo = ({
             onClick={() => {
               console.log('Accept Cookies button clicked');
               
-              // Debug: Log cookieyes object methods
-              if (window.cookieyes) {
-                console.log('cookieyes object methods:', Object.keys(window.cookieyes));
-                console.log('cookieyes object:', window.cookieyes);
-              }
+              // Debug: Check for CookieYes global objects
+              console.log('Checking for CookieYes globals:', {
+                CookieYes: typeof window.CookieYes,
+                cookieyes: typeof window.cookieyes,
+                ckyConsent: typeof window.ckyConsent,
+                getCkyConsent: typeof window.getCkyConsent,
+                revisitCkyConsent: typeof window.revisitCkyConsent
+              });
               
               // Try multiple approaches to trigger CookieYes consent modal
               let modalTriggered = false;
               
-              // Method 1: Try cookieyes.showConsentModal() - most likely to work
-              if (window.cookieyes && typeof window.cookieyes.showConsentModal === 'function') {
-                console.log('Trying cookieyes.showConsentModal()');
-                window.cookieyes.showConsentModal();
+              // Method 1: Try revisitCkyConsent() - this is likely the correct method
+              if (typeof window.revisitCkyConsent === 'function') {
+                console.log('Trying revisitCkyConsent()');
+                window.revisitCkyConsent();
                 modalTriggered = true;
               }
               
-              // Method 2: Try cookieyes.show() - alternative method
-              if (!modalTriggered && window.cookieyes && typeof window.cookieyes.show === 'function') {
-                console.log('Trying cookieyes.show()');
-                window.cookieyes.show();
-                modalTriggered = true;
+              // Method 2: Try CookieYes global object methods
+              if (!modalTriggered && window.CookieYes) {
+                const methods = ['showConsentModal', 'show', 'open', 'display', 'revisit'];
+                for (const method of methods) {
+                  if (typeof window.CookieYes[method] === 'function') {
+                    console.log(`Trying CookieYes.${method}()`);
+                    window.CookieYes[method]();
+                    modalTriggered = true;
+                    break;
+                  }
+                }
               }
               
-              // Method 3: Try cookieyes.open() - another alternative
-              if (!modalTriggered && window.cookieyes && typeof window.cookieyes.open === 'function') {
-                console.log('Trying cookieyes.open()');
-                window.cookieyes.open();
-                modalTriggered = true;
+              // Method 3: Try ckyConsent global object methods
+              if (!modalTriggered && window.ckyConsent) {
+                const methods = ['showConsentModal', 'show', 'open', 'display', 'revisit'];
+                for (const method of methods) {
+                  if (typeof window.ckyConsent[method] === 'function') {
+                    console.log(`Trying ckyConsent.${method}()`);
+                    window.ckyConsent[method]();
+                    modalTriggered = true;
+                    break;
+                  }
+                }
               }
               
-              // Method 4: Try cookieyes.display() - another alternative
-              if (!modalTriggered && window.cookieyes && typeof window.cookieyes.display === 'function') {
-                console.log('Trying cookieyes.display()');
-                window.cookieyes.display();
-                modalTriggered = true;
-              }
-              
-              // Method 5: Try to trigger consent banner by dispatching events
+              // Method 4: Try to trigger consent banner by dispatching events
               if (!modalTriggered) {
                 console.log('Trying to trigger consent events');
                 const events = ['cookieyes-consent', 'cookieconsent', 'ckyConsentChanged'];
@@ -288,7 +296,7 @@ const CookieConsentVideo = ({
                 modalTriggered = true;
               }
               
-              // Method 6: Try to find and click the actual CookieYes banner button
+              // Method 5: Try to find and click the actual CookieYes banner button
               if (!modalTriggered) {
                 console.log('Trying to find CookieYes banner button');
                 const cookieYesBanner = document.querySelector('[id*="cookieyes"], [class*="cookieyes"], [id*="cky"], [class*="cky"]');
@@ -300,6 +308,29 @@ const CookieConsentVideo = ({
                     acceptButton.click();
                     modalTriggered = true;
                   }
+                }
+              }
+              
+              // Method 6: Try to simulate clicking the CookieYes banner directly
+              if (!modalTriggered) {
+                console.log('Trying to find CookieYes banner in DOM');
+                const banners = document.querySelectorAll('[id*="cookieyes"], [class*="cookieyes"], [id*="cky"], [class*="cky"]');
+                console.log('Found CookieYes banners:', banners);
+                
+                for (const banner of banners) {
+                  const buttons = banner.querySelectorAll('button, a, [role="button"]');
+                  console.log('Found buttons in banner:', buttons);
+                  
+                  for (const button of buttons) {
+                    const text = button.textContent?.toLowerCase() || '';
+                    if (text.includes('accept') || text.includes('allow') || text.includes('ok')) {
+                      console.log('Clicking accept button:', button);
+                      button.click();
+                      modalTriggered = true;
+                      break;
+                    }
+                  }
+                  if (modalTriggered) break;
                 }
               }
               
