@@ -131,11 +131,15 @@ const CenteredSection = ({ blok }) => {
             {blok.component_type === 'media' &&
               blok?.media[0].component === 'video_assets' && (
                 <MediaWrapper {...storyblokEditable(blok.media)}>
-                  <Video
-                    videos={blok.media?.[0]?.media}
-                    borderradius={blok.media?.[0]?.border_radius}
-                    thumbnails={blok.media?.[0]?.thumbnails}
-                  />
+                  <CenteredVideoContainer>
+                    <Video
+                      videos={blok.media?.[0]?.media}
+                      borderradius={blok.media?.[0]?.border_radius}
+                      thumbnails={blok.media?.[0]?.thumbnails}
+                      width="1000px"
+                      height="560px"
+                    />
+                  </CenteredVideoContainer>
                 </MediaWrapper>
               )}
             {blok.component_type === 'icon_cards' && blok.icon_cards && (
@@ -234,20 +238,7 @@ const CustomSizing = styled.div`
   }
 `;
 const MediaWrapper = styled.div`
-  max-width: 67.75vw;
-
-  ${media.fullWidth} {
-    max-width: 1084px;
-  }
-
-  ${media.tablet} {
-    max-width: 92.188vw;
-  }
-
-  ${media.mobile} {
-    max-width: 89.167vw;
-    align-self: centered;
-  }
+  width: 100%;
 `;
 const ContentWrapper = styled.div`
   display: flex;
@@ -270,6 +261,14 @@ const ContentWrapper = styled.div`
     width: 89.167vw;
     gap: 3.333vw;
   }
+`;
+
+const CenteredVideoContainer = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const CenteredWrapper = styled.div`

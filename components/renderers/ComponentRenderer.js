@@ -116,21 +116,14 @@ const ComponentRenderer = ({
         </AssetContainer>
       );
     case 'video_assets':
-      return isSideBySideVideo ? (
-        <VideoContainer $isSideBySideVideo={isSideBySideVideo}>
-          <Video
-            videos={blok.media}
-            thumbnails={blok.thumbnails}
-            borderradius={blok.border_radius}
-            isSideBySideVideo={isSideBySideVideo}
-          />
-        </VideoContainer>
-      ) : (
+      return (
         <Video
           videos={blok.media}
           thumbnails={blok.thumbnails}
           borderradius={blok.border_radius}
           isSideBySideVideo={isSideBySideVideo}
+          width={isSideBySideVideo ? "400px" : undefined}
+          height={isSideBySideVideo ? "300px" : undefined}
         />
       );
     case 'copy_block':
@@ -270,29 +263,6 @@ const VideoContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  /* Ensure proper aspect ratio for side-by-side videos */
-  aspect-ratio: 16 / 9;
-  
-  /* Responsive sizing for different screen sizes */
-  ${media.mobile} {
-    aspect-ratio: 4 / 3;
-  }
-  
-  /* Match the width constraints of other side-by-side assets */
-  max-width: ${(props) => (props.$isSideBySideVideo ? '38.875vw' : '100%')};
-  
-  ${media.fullWidth} {
-    max-width: ${(props) => (props.$isSideBySideVideo ? '622px' : '100%')};
-  }
-  
-  ${media.tablet} {
-    max-width: ${(props) => (props.$isSideBySideVideo ? '44.141vw' : '100%')};
-  }
-  
-  ${media.mobile} {
-    max-width: 100%;
-  }
 `;
 
 export default ComponentRenderer;

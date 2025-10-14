@@ -358,7 +358,7 @@ const CookieConsentVideo = ({
 };
 
 const VideoWrapper = styled.div`
-  width: 100%;
+  width: ${(props) => props.isSideBySideVideo ? 'auto' : '100%'};
   height: ${(props) => props.height || '100%'};
   max-width: 100%;
   border-radius: ${(props) => `${props.borderradius || 0}px`};
