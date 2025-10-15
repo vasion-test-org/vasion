@@ -20,7 +20,6 @@ import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 import VasionNavLogo from '@/assets/svg/vasion-nav-logo.svg';
 import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
-import { getSmoother } from '@/components/ScrollSmoothWrapper';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -272,57 +271,24 @@ const Nav = ({ blok }) => {
     if (!footer) return;
 
     const footerOffset = footer.offsetTop + footer.offsetHeight;
-    const smoother = getSmoother();
 
     const anchorTl = gsap.timeline({
       scrollTrigger: {
         start: '2% 1%',
         end: '10% 90%',
         scrub: true,
-        scroller: smoother ? smoother.wrapper : window,
       },
     });
 
     anchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
 
-    const pinTrigger = ScrollTrigger.create({
+    ScrollTrigger.create({
       trigger: '.desktopNav',
       start: 'top top',
       end: `${footerOffset}px`,
       pin: true,
       pinSpacing: false,
-      scroller: smoother ? smoother.wrapper : window,
     });
-
-    // Pin the anchor navigator independently
-    const anchorPinTrigger = ScrollTrigger.create({
-      trigger: '.anchorNav',
-      start: 'top top',
-      end: `${footerOffset}px`,
-      pin: true,
-      pinSpacing: false,
-      scroller: smoother ? smoother.wrapper : window,
-    });
-
-    // Refresh ScrollTrigger after ScrollSmoother is ready
-    if (smoother) {
-      ScrollTrigger.refresh();
-    }
-
-    // Cleanup function
-    return () => {
-      anchorTl.kill();
-      pinTrigger.kill();
-      anchorPinTrigger.kill();
-      ScrollTrigger.getAll().forEach((trigger) => {
-        if (
-          trigger.trigger === '.desktopNav' ||
-          trigger.vars?.trigger === '.anchorNav'
-        ) {
-          trigger.kill();
-        }
-      });
-    };
   }, [navReady]);
 
   useEffect(() => {

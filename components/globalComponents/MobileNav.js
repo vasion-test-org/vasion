@@ -18,7 +18,6 @@ import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
-import { getSmoother } from '@/components/ScrollSmoothWrapper';
 
 gsap.registerPlugin(ScrollTrigger);
 const MobileNav = ({ blok }) => {
@@ -594,59 +593,25 @@ const MobileNav = ({ blok }) => {
   }, []);
 
   useEffect(() => {
-    const smoother = getSmoother();
-
     const mobileAnchorTl = gsap.timeline({
       scrollTrigger: {
         start: '2% 1%',
         end: '10% 90%',
         // markers: true,
         scrub: true,
-        scroller: smoother ? smoother.wrapper : window,
       },
     });
 
     mobileAnchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
 
-    const pinTrigger = ScrollTrigger.create({
+    ScrollTrigger.create({
       trigger: '.mobileNav',
       start: 'top top',
       end: () => `${document.body.scrollHeight - window.innerHeight}px`,
       pin: true,
       pinSpacing: false,
-      scroller: smoother ? smoother.wrapper : window,
       // markers: true,
     });
-
-    // Pin the anchor navigator independently
-    const anchorPinTrigger = ScrollTrigger.create({
-      trigger: '.anchorNav',
-      start: 'top top',
-      end: () => `${document.body.scrollHeight - window.innerHeight}px`,
-      pin: true,
-      pinSpacing: false,
-      scroller: smoother ? smoother.wrapper : window,
-    });
-
-    // Refresh ScrollTrigger after ScrollSmoother is ready
-    if (smoother) {
-      ScrollTrigger.refresh();
-    }
-
-    // Cleanup function
-    return () => {
-      mobileAnchorTl.kill();
-      pinTrigger.kill();
-      anchorPinTrigger.kill();
-      ScrollTrigger.getAll().forEach((trigger) => {
-        if (
-          trigger.trigger === '.mobileNav' ||
-          trigger.vars?.trigger === '.anchorNav'
-        ) {
-          trigger.kill();
-        }
-      });
-    };
   }, []);
 
   return (
