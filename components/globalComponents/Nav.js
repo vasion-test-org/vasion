@@ -277,6 +277,7 @@ const Nav = ({ blok }) => {
         start: '2% 1%',
         end: '10% 90%',
         scrub: true,
+        // markers: true,
       },
     });
 
