@@ -82,12 +82,18 @@ const nextConfig = {
     if (!isServer && !dev) {
       config.optimization = {
         ...config.optimization,
+        // Enable module concatenation (scope hoisting)
+        concatenateModules: true,
+        // Enable used exports optimization for better tree shaking
+        usedExports: true,
+        // Remove dev-only code in production
+        removeAvailableModules: true,
         splitChunks: {
           chunks: 'all',
           minSize: 10000,
-          maxSize: 150000, // ~150KB max per chunk
+          maxSize: 100000, // ~100KB max per chunk for more granular splitting
           minChunks: 1,
-          maxAsyncRequests: 30,
+          maxAsyncRequests: 50, // Allow more async chunks for better code splitting
           maxInitialRequests: 30,
           cacheGroups: {
             // React and core libraries - highest priority
@@ -177,7 +183,7 @@ const nextConfig = {
               chunks: 'all',
               priority: 10,
               minChunks: 1,
-              maxSize: 100000, // Smaller vendor chunks
+              maxSize: 80000, // Even smaller vendor chunks for better splitting
             },
             // Default chunk optimization
             default: {
@@ -191,7 +197,7 @@ const nextConfig = {
     }
 
     const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.('.svg'),
+      rule.test?.test?.('.svg')
     );
 
     config.module.rules.push(
@@ -225,7 +231,7 @@ const nextConfig = {
             },
           },
         ],
-      },
+      }
     );
 
     fileLoaderRule.exclude = /\.svg$/i;

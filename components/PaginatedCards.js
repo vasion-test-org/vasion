@@ -1,6 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
@@ -8,13 +7,19 @@ import media from 'styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Card from './globalComponents/Card';
 import EventCard from './globalComponents/EventCard';
-import { horizontalLoop } from '@/functions/horizontalLoop';
 import SideArrow from '@/assets/svg/side-arrow.svg';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
 import ResourceCard from './globalComponents/ResourceCard';
 import ChrevronDown from '@/assets/svg/selectDownChevron.svg';
 import { usePathname } from 'next/navigation';
+
+// Lazy load GSAP only when needed
+const loadGSAP = async () => {
+  const { default: gsap } = await import('gsap');
+  const { horizontalLoop } = await import('@/functions/horizontalLoop');
+  return { gsap, horizontalLoop };
+};
 
 const PaginatedCards = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -64,6 +69,12 @@ const PaginatedCards = ({ blok }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilters, setSelectedFilters] = useState([]);
+
+  // Virtual scrolling state
+  const [visibleRange, setVisibleRange] = useState({ start: 0, end: 20 });
+  const [containerHeight, setContainerHeight] = useState(0);
+  const containerRef = useRef(null);
+  const ITEMS_PER_VIEW = 20; // Number of items to render at once
   const solutionsTags = [
     'print automation',
     'serverless printing',
@@ -185,48 +196,60 @@ const PaginatedCards = ({ blok }) => {
     ).length;
   };
 
-  const mappedCards = [];
-  for (let i = 0; i < filteredCards.length; i += 6) {
-    const chunk = filteredCards.slice(i, i + 6);
-    mappedCards.push(
-      <CardChunk
-        key={`chunk-${i / 6}`}
-        card_type={blok.card_type}
-        className="cardChunks"
-      >
-        {chunk.map((card, index) => {
-          if (blok.card_type === 'default') {
-            return (
-              <Card
-                key={`card-${i + index}`}
-                borderradius="6"
-                paginated
-                content={card}
-              />
-            );
-          } else if (blok.card_type === 'event') {
-            return (
-              <EventCard
-                key={`card-${i + index}`}
-                even={index % 2 === 1}
-                content={card}
-              />
-            );
-          } else if (blok.card_type === 'resource') {
-            return (
-              <ResourceCard
-                key={`card-${i + index}`}
-                paginated
-                index={index}
-                content={card}
-                borderradius="6"
-              />
-            );
-          }
-        })}
-      </CardChunk>
-    );
-  }
+  // Virtual scrolling: only render visible cards
+  const mappedCards = useMemo(() => {
+    const cards = [];
+    const startIndex = Math.max(0, visibleRange.start);
+    const endIndex = Math.min(filteredCards.length, visibleRange.end);
+
+    for (let i = startIndex; i < endIndex; i += 6) {
+      const chunk = filteredCards.slice(i, i + 6);
+      cards.push(
+        <CardChunk
+          key={`chunk-${i / 6}`}
+          card_type={blok.card_type}
+          className="cardChunks"
+          style={{
+            position: 'absolute',
+            top: `${(i / 6) * 300}px`, // Approximate height per chunk
+            width: '100%',
+          }}
+        >
+          {chunk.map((card, index) => {
+            if (blok.card_type === 'default') {
+              return (
+                <Card
+                  key={`card-${i + index}`}
+                  borderradius="6"
+                  paginated
+                  content={card}
+                />
+              );
+            } else if (blok.card_type === 'event') {
+              return (
+                <EventCard
+                  key={`card-${i + index}`}
+                  even={index % 2 === 1}
+                  content={card}
+                />
+              );
+            } else if (blok.card_type === 'resource') {
+              return (
+                <ResourceCard
+                  key={`card-${i + index}`}
+                  paginated
+                  index={index}
+                  content={card}
+                  borderradius="6"
+                />
+              );
+            }
+          })}
+        </CardChunk>
+      );
+    }
+    return cards;
+  }, [filteredCards, visibleRange, blok.card_type]);
 
   const goToPage = (index) => {
     if (!cardsLoop.current) return;
@@ -289,9 +312,33 @@ const PaginatedCards = ({ blok }) => {
     );
   });
 
+  // Virtual scrolling scroll handler
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+
+      const scrollTop = containerRef.current.scrollTop;
+      const itemHeight = 300; // Approximate height per chunk
+      const start = Math.floor(scrollTop / itemHeight) * 6;
+      const end = start + ITEMS_PER_VIEW;
+
+      setVisibleRange({ start, end });
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll(); // Initial calculation
+
+      return () => {
+        container.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [filteredCards.length]);
+
   useEffect(() => {
     // Use requestIdleCallback to defer heavy animation setup and reduce scheduler pressure
-    const setupAnimations = () => {
+    const setupAnimations = async () => {
       // Clean up previous animation
       if (cardsLoop.current) {
         cardsLoop.current.kill();
@@ -301,6 +348,9 @@ const PaginatedCards = ({ blok }) => {
       // Reset state
       currentIndex.current = 0;
       setCurrentPage(0);
+
+      // Lazy load GSAP only when needed
+      const { gsap, horizontalLoop } = await loadGSAP();
 
       // Get new card chunks
       const cardChunks = gsap.utils.toArray('.cardChunks');
@@ -740,9 +790,23 @@ const PaginatedCards = ({ blok }) => {
           </EventHeaderContainer>
         )}
 
-        <CardsContainer card_type={blok.card_type}>
+        <CardsContainer
+          card_type={blok.card_type}
+          ref={containerRef}
+          style={{
+            height: '600px',
+            overflowY: 'auto',
+            position: 'relative',
+          }}
+        >
           {filteredCards.length > 0 ? (
-            mappedCards
+            <>
+              {/* Virtual scrolling spacer */}
+              <div
+                style={{ height: `${(filteredCards.length / 6) * 300}px` }}
+              />
+              {mappedCards}
+            </>
           ) : (
             <NoResults>
               No results found. Try adjusting your search or filters.
