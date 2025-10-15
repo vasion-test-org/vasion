@@ -213,14 +213,14 @@ const AnchorNavWrapper = styled.div`
 `;
 
 const AnchorWrapper = styled.div`
-  position: relative;
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   z-index: 10;
   top: 4.063vw;
-  /* opacity: 0; */
+  opacity: 0;
 
   ${media.fullWidth} {
     top: 65px;
