@@ -475,7 +475,7 @@ const MobileNav = ({ blok }) => {
               ))}
             </ButtonContainer>
           </Dropdown>
-          <AnchorNavigator />
+          {/* <AnchorNavigator /> */}
         </MainWrapper>
       </>
     );
@@ -593,16 +593,16 @@ const MobileNav = ({ blok }) => {
   }, []);
 
   useEffect(() => {
-    const mobileAnchorTl = gsap.timeline({
-      scrollTrigger: {
-        start: '2% 1%',
-        end: '10% 90%',
-        // markers: true,
-        scrub: true,
-      },
-    });
+    // const mobileAnchorTl = gsap.timeline({
+    //   scrollTrigger: {
+    //     start: '2% 1%',
+    //     end: '10% 90%',
+    //     // markers: true,
+    //     scrub: true,
+    //   },
+    // });
 
-    mobileAnchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
+    // mobileAnchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
 
     ScrollTrigger.create({
       trigger: '.mobileNav',
