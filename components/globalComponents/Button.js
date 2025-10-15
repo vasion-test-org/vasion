@@ -7,11 +7,14 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 import text from '@/styles/text';
 import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
 import media from '@/styles/media';
-import { gsap } from 'gsap';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
-// Register the ScrollToPlugin
-gsap.registerPlugin(ScrollToPlugin);
+// Lazy load GSAP only when needed
+const loadGSAP = async () => {
+  const { gsap } = await import('gsap');
+  const { ScrollToPlugin } = await import('gsap/ScrollToPlugin');
+  gsap.registerPlugin(ScrollToPlugin);
+  return gsap;
+};
 
 const Button = ({ $buttonData, stretch }) => {
   const themes = useAvailableThemes();
@@ -83,14 +86,17 @@ const Button = ({ $buttonData, stretch }) => {
         // Only prevent default if we found the element and can scroll to it
         e.preventDefault();
 
-        gsap.to(window, {
-          duration: 1,
-          scrollTo: {
-            y: anchorElement,
-            offsetY: 200,
-            center: true,
-          },
-          ease: 'power2.out',
+        // Lazy load GSAP and scroll to anchor
+        loadGSAP().then((gsap) => {
+          gsap.to(window, {
+            duration: 1,
+            scrollTo: {
+              y: anchorElement,
+              offsetY: 200,
+              center: true,
+            },
+            ease: 'power2.out',
+          });
         });
         return;
       }
