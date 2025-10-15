@@ -23,7 +23,7 @@ import ComponentRenderer from '@/components/renderers/ComponentRenderer';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Nav = ({ blok }) => {
+const Nav = ({ blok, configLoaded = true }) => {
   const copycomponents = [
     'body_copy',
     'header',
@@ -525,7 +525,7 @@ const Nav = ({ blok }) => {
               </div>
             ))}
           </MainInner>
-          <AnchorNavigator />
+          {configLoaded && <AnchorNavigator />}
         </MainNavWrapper>
       </>
     </ThemeProvider>

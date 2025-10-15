@@ -167,7 +167,10 @@ const Config = ({ blok, children }) => {
     <>
       {shouldShowNav && (
         <NavWrapper>
-          <Nav blok={configData?.nav?.[0] || getFallbackNavData().nav[0]} />
+          <Nav
+            blok={configData?.nav?.[0] || getFallbackNavData().nav[0]}
+            configLoaded={!!configData}
+          />
         </NavWrapper>
       )}
 
@@ -175,6 +178,7 @@ const Config = ({ blok, children }) => {
         <MobileNavWrapper>
           <MobileNav
             blok={configData?.nav?.[0] || getFallbackNavData().nav[0]}
+            configLoaded={!!configData}
           />
         </MobileNavWrapper>
       )}
