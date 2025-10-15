@@ -90,11 +90,11 @@ const nextConfig = {
         removeAvailableModules: true,
         splitChunks: {
           chunks: 'all',
-          minSize: 10000,
-          maxSize: 100000, // ~100KB max per chunk for more granular splitting
+          minSize: 5000, // Reduced from 10000
+          maxSize: 50000, // Reduced from 100000 - ~50KB max per chunk
           minChunks: 1,
-          maxAsyncRequests: 50, // Allow more async chunks for better code splitting
-          maxInitialRequests: 30,
+          maxAsyncRequests: 100, // Increased from 50
+          maxInitialRequests: 50, // Increased from 30
           cacheGroups: {
             // React and core libraries - highest priority
             react: {
@@ -104,21 +104,55 @@ const nextConfig = {
               priority: 40,
               enforce: true,
             },
-            // Next.js framework
-            nextjs: {
+            // Next.js framework - split into smaller chunks
+            nextjsCore: {
+              test: /[\\/]node_modules[\\/]next[\\/]dist[\\/]client[\\/]/,
+              name: 'nextjs-core',
+              chunks: 'all',
+              priority: 40,
+              enforce: true,
+              maxSize: 60000, // ~60KB max for Next.js core
+            },
+            nextjsRouter: {
+              test: /[\\/]node_modules[\\/]next[\\/]dist[\\/]shared[\\/]lib[\\/]router[\\/]/,
+              name: 'nextjs-router',
+              chunks: 'all',
+              priority: 39,
+              enforce: true,
+              maxSize: 40000, // ~40KB max for router
+            },
+            nextjsOther: {
               test: /[\\/]node_modules[\\/]next[\\/]/,
-              name: 'nextjs',
+              name: 'nextjs-other',
+              chunks: 'all',
+              priority: 38,
+              enforce: true,
+              maxSize: 50000, // ~50KB max for other Next.js files
+            },
+            // GSAP - split into smaller chunks for better performance
+            gsapCore: {
+              test: /[\\/]node_modules[\\/]gsap[\\/]dist[\\/]gsap\.min\.js$/,
+              name: 'gsap-core',
               chunks: 'all',
               priority: 35,
               enforce: true,
+              maxSize: 50000, // ~50KB max for core GSAP
             },
-            // GSAP - separate chunk for animations
-            gsap: {
-              test: /[\\/]node_modules[\\/](gsap|@gsap)[\\/]/,
-              name: 'gsap',
+            gsapPlugins: {
+              test: /[\\/]node_modules[\\/]gsap[\\/]dist[\\/](ScrollTrigger|ScrollSmoother|TextPlugin|SplitText)\.min\.js$/,
+              name: 'gsap-plugins',
               chunks: 'all',
-              priority: 30,
+              priority: 34,
               enforce: true,
+              maxSize: 30000, // ~30KB max for plugins
+            },
+            gsapOther: {
+              test: /[\\/]node_modules[\\/]gsap[\\/]/,
+              name: 'gsap-other',
+              chunks: 'all',
+              priority: 33,
+              enforce: true,
+              maxSize: 20000, // ~20KB max for other GSAP files
             },
             // Rive - separate chunk for animations
             rive: {
@@ -183,7 +217,7 @@ const nextConfig = {
               chunks: 'all',
               priority: 10,
               minChunks: 1,
-              maxSize: 80000, // Even smaller vendor chunks for better splitting
+              maxSize: 30000, // Reduced from 80000 - ~30KB max for vendor chunks
             },
             // Default chunk optimization
             default: {
