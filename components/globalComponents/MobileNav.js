@@ -18,6 +18,7 @@ import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
+import { getSmoother } from '@/components/ScrollSmoothWrapper';
 
 gsap.registerPlugin(ScrollTrigger);
 const MobileNav = ({ blok }) => {
@@ -593,12 +594,15 @@ const MobileNav = ({ blok }) => {
   }, []);
 
   useEffect(() => {
+    const smoother = getSmoother();
+
     const mobileAnchorTl = gsap.timeline({
       scrollTrigger: {
         start: '2% 1%',
         end: '10% 90%',
         // markers: true,
         scrub: true,
+        scroller: smoother ? smoother.wrapper : window,
       },
     });
 
@@ -610,6 +614,7 @@ const MobileNav = ({ blok }) => {
       end: () => `${document.body.scrollHeight - window.innerHeight}px`,
       pin: true,
       pinSpacing: false,
+      scroller: smoother ? smoother.wrapper : window,
       // markers: true,
     });
 
@@ -620,7 +625,13 @@ const MobileNav = ({ blok }) => {
       end: () => `${document.body.scrollHeight - window.innerHeight}px`,
       pin: true,
       pinSpacing: false,
+      scroller: smoother ? smoother.wrapper : window,
     });
+
+    // Refresh ScrollTrigger after ScrollSmoother is ready
+    if (smoother) {
+      ScrollTrigger.refresh();
+    }
 
     // Cleanup function
     return () => {
