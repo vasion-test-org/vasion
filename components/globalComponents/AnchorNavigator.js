@@ -213,25 +213,25 @@ const AnchorNavWrapper = styled.div`
 `;
 
 const AnchorWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   z-index: 10;
-  top: 4.063vw;
+  top: calc(4.063vw + 3.875vw);
   opacity: 0;
 
   ${media.fullWidth} {
-    top: 65px;
+    top: calc(65px + 62px);
   }
 
   ${media.tablet} {
-    top: 6.348vw;
+    top: calc(6.348vw + 6.055vw);
   }
 
   ${media.mobile} {
-    top: 13.542vw;
+    top: calc(13.542vw + 12.821vw);
   }
 `;
 
