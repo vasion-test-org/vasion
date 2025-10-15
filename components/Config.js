@@ -169,7 +169,7 @@ const Config = ({ blok, children }) => {
         <NavWrapper>
           <Nav
             blok={configData?.nav?.[0] || getFallbackNavData().nav[0]}
-            configLoaded={!!configData}
+            configLoaded={!isLoading}
           />
         </NavWrapper>
       )}
@@ -178,7 +178,7 @@ const Config = ({ blok, children }) => {
         <MobileNavWrapper>
           <MobileNav
             blok={configData?.nav?.[0] || getFallbackNavData().nav[0]}
-            configLoaded={!!configData}
+            configLoaded={!isLoading}
           />
         </MobileNavWrapper>
       )}
