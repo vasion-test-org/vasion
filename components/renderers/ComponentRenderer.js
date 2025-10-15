@@ -10,51 +10,9 @@ import dynamic from 'next/dynamic';
 import Video from '@/components/globalComponents/Video';
 import { usePathname } from 'next/navigation';
 import Button from '../globalComponents/Button';
+import Form from '../Form';
 import ContactCard from '../globalComponents/ContactCard';
-
-// Convert more components to dynamic imports
-const Form = dynamic(() => import('../Form'), {
-  loading: () => <div style={{ height: '300px' }} />,
-});
-
-const SmallQuote = dynamic(() => import('components/SmallQuote'), {
-  loading: () => <div style={{ height: '100px' }} />,
-});
-
-const SideBySide = dynamic(() => import('../SideBySide'), {
-  loading: () => <div style={{ height: '400px' }} />,
-});
-
-const CTA = dynamic(() => import('../CTA'), {
-  loading: () => <div style={{ height: '200px' }} />,
-});
-
-const ComparisonTable = dynamic(() => import('../ComparisonTable'), {
-  loading: () => <div style={{ height: '300px' }} />,
-});
-
-const CustomerLogos = dynamic(() => import('../CustomerLogos'), {
-  loading: () => <div style={{ height: '150px' }} />,
-});
-
-const LogoBanner = dynamic(() => import('../LogoBanner'), {
-  loading: () => <div style={{ height: '100px' }} />,
-});
-
-const NumberBlock = dynamic(() => import('../NumberBlock'), {
-  loading: () => <div style={{ height: '200px' }} />,
-});
-
-const InfographicPill = dynamic(() => import('../InfographicPill'), {
-  loading: () => <div style={{ height: '150px' }} />,
-});
-
-const InfographicSideBySide = dynamic(
-  () => import('../InfographicSideBySide'),
-  {
-    loading: () => <div style={{ height: '300px' }} />,
-  }
-);
+import SmallQuote from 'components/SmallQuote';
 
 // Dynamic imports for heavy components
 const LogoCube = dynamic(() => import('@/components/LogoCube'), {

@@ -1,21 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import gsap from 'gsap';
+import ScrollSmoother from 'gsap/ScrollSmoother';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
-let smootherInstance = null;
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-export const getSmoother = () => smootherInstance;
+let smootherInstance = null; // <-- add this at the top
 
-// Device detection utility
-const isMobileDevice = () => {
-  if (typeof window === 'undefined') return false;
-  return (
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    ) || window.innerWidth <= 768
-  );
-};
+export const getSmoother = () => smootherInstance; // <-- export a getter
 
 export default function ScrollSmootherWrapper({
   children,
@@ -23,82 +18,24 @@ export default function ScrollSmootherWrapper({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    setIsMobile(isMobileDevice());
-  }, []);
+    if (!ScrollTrigger.isTouch) {
+      smootherInstance = ScrollSmoother.create({
+        smooth: 1.2,
+        effects: true,
+        normalizeScroll: true,
+        ignoreMobileResize: true,
+      });
 
-  useEffect(() => {
-    // Skip GSAP initialization on mobile devices
-    if (isMobile) {
-      return;
+      smootherInstance.scrollTo(0, false);
+
+      return () => {
+        smootherInstance?.kill();
+        smootherInstance = null;
+      };
     }
-
-    // Lazy load GSAP only on desktop after page is interactive
-    const loadScrollSmoother = async () => {
-      try {
-        // Use requestIdleCallback to defer GSAP loading until browser is idle
-        if ('requestIdleCallback' in window) {
-          window.requestIdleCallback(async () => {
-            const { default: gsap } = await import('gsap');
-            const { default: ScrollSmoother } = await import(
-              'gsap/ScrollSmoother'
-            );
-            const { default: ScrollTrigger } = await import(
-              'gsap/ScrollTrigger'
-            );
-
-            gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
-
-            if (!ScrollTrigger.isTouch) {
-              smootherInstance = ScrollSmoother.create({
-                smooth: 1.2,
-                effects: true,
-                normalizeScroll: true,
-                ignoreMobileResize: true,
-              });
-
-              smootherInstance.scrollTo(0, false);
-            }
-          });
-        } else {
-          // Fallback for browsers without requestIdleCallback
-          setTimeout(async () => {
-            const { default: gsap } = await import('gsap');
-            const { default: ScrollSmoother } = await import(
-              'gsap/ScrollSmoother'
-            );
-            const { default: ScrollTrigger } = await import(
-              'gsap/ScrollTrigger'
-            );
-
-            gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
-
-            if (!ScrollTrigger.isTouch) {
-              smootherInstance = ScrollSmoother.create({
-                smooth: 1.2,
-                effects: true,
-                normalizeScroll: true,
-                ignoreMobileResize: true,
-              });
-
-              smootherInstance.scrollTo(0, false);
-            }
-          }, 100);
-        }
-      } catch (error) {
-        console.warn('Failed to load ScrollSmoother:', error);
-      }
-    };
-
-    loadScrollSmoother();
-
-    return () => {
-      smootherInstance?.kill();
-      smootherInstance = null;
-    };
-  }, [pathname, isMobile]);
+  }, [pathname]);
 
   return (
     <div id="smooth-wrapper">

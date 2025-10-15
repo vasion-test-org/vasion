@@ -7,16 +7,13 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 import text from '@/styles/text';
 import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
 import media from '@/styles/media';
+import { gsap } from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
-// Lazy load GSAP only when needed
-const loadGSAP = async () => {
-  const { gsap } = await import('gsap');
-  const { ScrollToPlugin } = await import('gsap/ScrollToPlugin');
-  gsap.registerPlugin(ScrollToPlugin);
-  return gsap;
-};
+// Register the ScrollToPlugin
+gsap.registerPlugin(ScrollToPlugin);
 
-const Button = ({ $buttonData, stretch }) => {
+const Button = ({ $buttonData, stretch, onNavigate }) => {
   const themes = useAvailableThemes();
   const pathname = usePathname();
   const router = useRouter();
@@ -86,17 +83,14 @@ const Button = ({ $buttonData, stretch }) => {
         // Only prevent default if we found the element and can scroll to it
         e.preventDefault();
 
-        // Lazy load GSAP and scroll to anchor
-        loadGSAP().then((gsap) => {
-          gsap.to(window, {
-            duration: 1,
-            scrollTo: {
-              y: anchorElement,
-              offsetY: 200,
-              center: true,
-            },
-            ease: 'power2.out',
-          });
+        gsap.to(window, {
+          duration: 1,
+          scrollTo: {
+            y: anchorElement,
+            offsetY: 200,
+            center: true,
+          },
+          ease: 'power2.out',
         });
         return;
       }
@@ -120,6 +114,7 @@ const Button = ({ $buttonData, stretch }) => {
 
         if (pageExists) {
           // Page exists in the target locale, navigate normally
+          if (onNavigate) onNavigate();
           router.push(normalizedUrl);
         } else {
           // Page doesn't exist in target locale, try English fallback
@@ -133,19 +128,23 @@ const Button = ({ $buttonData, stretch }) => {
             if (englishPageExists) {
               // English version exists, navigate to English URL
               const englishUrl = `/${rawHref}`.replace(/\/+/g, '/');
+              if (onNavigate) onNavigate();
               router.push(englishUrl);
             } else {
               // Neither localized nor English version exists, navigate to 404 or home
+              if (onNavigate) onNavigate();
               router.push('/');
             }
           } else {
             // Already trying English, page doesn't exist, navigate to home
+            if (onNavigate) onNavigate();
             router.push('/');
           }
         }
       } catch (error) {
         console.error('Error checking page existence:', error);
         // On error, try to navigate to the original URL
+        if (onNavigate) onNavigate();
         router.push(normalizedUrl);
       }
     }
