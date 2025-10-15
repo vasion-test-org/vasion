@@ -82,19 +82,13 @@ const nextConfig = {
     if (!isServer && !dev) {
       config.optimization = {
         ...config.optimization,
-        // Enable module concatenation (scope hoisting)
-        concatenateModules: true,
-        // Enable used exports optimization for better tree shaking
-        usedExports: true,
-        // Remove dev-only code in production
-        removeAvailableModules: true,
         splitChunks: {
           chunks: 'all',
-          minSize: 5000, // Reduced from 10000
-          maxSize: 50000, // Reduced from 100000 - ~50KB max per chunk
+          minSize: 10000,
+          maxSize: 150000, // ~150KB max per chunk
           minChunks: 1,
-          maxAsyncRequests: 100, // Increased from 50
-          maxInitialRequests: 50, // Increased from 30
+          maxAsyncRequests: 30,
+          maxInitialRequests: 30,
           cacheGroups: {
             // React and core libraries - highest priority
             react: {
@@ -104,55 +98,21 @@ const nextConfig = {
               priority: 40,
               enforce: true,
             },
-            // Next.js framework - split into smaller chunks
-            nextjsCore: {
-              test: /[\\/]node_modules[\\/]next[\\/]dist[\\/]client[\\/]/,
-              name: 'nextjs-core',
-              chunks: 'all',
-              priority: 40,
-              enforce: true,
-              maxSize: 60000, // ~60KB max for Next.js core
-            },
-            nextjsRouter: {
-              test: /[\\/]node_modules[\\/]next[\\/]dist[\\/]shared[\\/]lib[\\/]router[\\/]/,
-              name: 'nextjs-router',
-              chunks: 'all',
-              priority: 39,
-              enforce: true,
-              maxSize: 40000, // ~40KB max for router
-            },
-            nextjsOther: {
+            // Next.js framework
+            nextjs: {
               test: /[\\/]node_modules[\\/]next[\\/]/,
-              name: 'nextjs-other',
-              chunks: 'all',
-              priority: 38,
-              enforce: true,
-              maxSize: 50000, // ~50KB max for other Next.js files
-            },
-            // GSAP - split into smaller chunks for better performance
-            gsapCore: {
-              test: /[\\/]node_modules[\\/]gsap[\\/]dist[\\/]gsap\.min\.js$/,
-              name: 'gsap-core',
+              name: 'nextjs',
               chunks: 'all',
               priority: 35,
               enforce: true,
-              maxSize: 50000, // ~50KB max for core GSAP
             },
-            gsapPlugins: {
-              test: /[\\/]node_modules[\\/]gsap[\\/]dist[\\/](ScrollTrigger|ScrollSmoother|TextPlugin|SplitText)\.min\.js$/,
-              name: 'gsap-plugins',
+            // GSAP - separate chunk for animations
+            gsap: {
+              test: /[\\/]node_modules[\\/](gsap|@gsap)[\\/]/,
+              name: 'gsap',
               chunks: 'all',
-              priority: 34,
+              priority: 30,
               enforce: true,
-              maxSize: 30000, // ~30KB max for plugins
-            },
-            gsapOther: {
-              test: /[\\/]node_modules[\\/]gsap[\\/]/,
-              name: 'gsap-other',
-              chunks: 'all',
-              priority: 33,
-              enforce: true,
-              maxSize: 20000, // ~20KB max for other GSAP files
             },
             // Rive - separate chunk for animations
             rive: {
@@ -217,7 +177,7 @@ const nextConfig = {
               chunks: 'all',
               priority: 10,
               minChunks: 1,
-              maxSize: 30000, // Reduced from 80000 - ~30KB max for vendor chunks
+              maxSize: 100000, // Smaller vendor chunks
             },
             // Default chunk optimization
             default: {
@@ -231,7 +191,7 @@ const nextConfig = {
     }
 
     const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.('.svg')
+      rule.test?.test?.('.svg'),
     );
 
     config.module.rules.push(
@@ -265,7 +225,7 @@ const nextConfig = {
             },
           },
         ],
-      }
+      },
     );
 
     fileLoaderRule.exclude = /\.svg$/i;

@@ -71,7 +71,7 @@ const AnchorNavigator = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       {blok && anchorList.length > 0 && (
-        <AnchorWrapper className='anchorNav'>
+        <AnchorWrapper className="anchorNav">
           <AnchorNavWrapper>
             <PageInfoContainer>
               {blok?.page_title && <PageTitle>{blok.page_title}</PageTitle>}

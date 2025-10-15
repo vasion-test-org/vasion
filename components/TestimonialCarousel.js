@@ -1,12 +1,7 @@
 'use client';
 import React, { useEffect } from 'react';
 
-// Lazy load GSAP only when needed
-const loadGSAP = async () => {
-  const { default: gsap } = await import('gsap');
-  return gsap;
-};
-
+import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
@@ -23,41 +18,35 @@ const TestimonialCarousel = ({ blok }) => {
   const selectedTheme = themes[blok.theme] || themes.default;
 
   const mappedTestimonials = blok.testimonials.map((testimonial, i) => (
-    <TestimonialWrapper key={testimonial._uid || i} className="testimonials">
+    <TestimonialWrapper key={testimonial._uid || i} className='testimonials'>
       <Testimonial blok={testimonial} />
     </TestimonialWrapper>
   ));
 
   useEffect(() => {
-    // Lazy load GSAP and setup testimonial carousel
-    loadGSAP().then((gsap) => {
-      const testimonialsArr = gsap.utils.toArray('.testimonials');
-      const testimonialLoop = horizontalLoop(testimonialsArr, {
-        centered: true,
-        paused: true,
-      });
-
-      document
-        .querySelector('.next')
-        .addEventListener('click', () =>
-          testimonialLoop.next({ duration: 0.4, ease: 'power1.inOut' })
-        );
-      document
-        .querySelector('.prev')
-        .addEventListener('click', () =>
-          testimonialLoop.previous({ duration: 0.4, ease: 'power1.inOut' })
-        );
-    });
+    const testimonialsArr = gsap.utils.toArray('.testimonials');
+    const testimonialLoop = horizontalLoop(testimonialsArr, {centered: true, paused: true });
+  
+    document
+      .querySelector('.next')
+      .addEventListener('click', () =>
+        testimonialLoop.next({ duration: 0.4, ease: 'power1.inOut' })
+      );
+    document
+      .querySelector('.prev')
+      .addEventListener('click', () =>
+        testimonialLoop.previous({ duration: 0.4, ease: 'power1.inOut' })
+      );
   }, []);
 
   return (
     <ThemeProvider theme={selectedTheme}>
       <Wrapper>
         <Buttons>
-          <Button className="prev">
+          <Button className='prev'>
             <SideArrow />
           </Button>
-          <Button className="next">
+          <Button className='next'>
             <NextSideArrow />
           </Button>
         </Buttons>
@@ -118,7 +107,9 @@ const Buttons = styled.div`
     gap: 4.167vw;
   }
 `;
-const TestimonialWrapper = styled.div``;
+const TestimonialWrapper = styled.div`
+
+`;
 const Testimonials = styled.div`
   display: flex;
   overflow: hidden;
