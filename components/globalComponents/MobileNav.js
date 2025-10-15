@@ -613,10 +613,20 @@ const MobileNav = ({ blok }) => {
       // markers: true,
     });
 
+    // Pin the anchor navigator independently
+    const anchorPinTrigger = ScrollTrigger.create({
+      trigger: '.anchorNav',
+      start: 'top top',
+      end: () => `${document.body.scrollHeight - window.innerHeight}px`,
+      pin: true,
+      pinSpacing: false,
+    });
+
     // Cleanup function
     return () => {
       mobileAnchorTl.kill();
       pinTrigger.kill();
+      anchorPinTrigger.kill();
       ScrollTrigger.getAll().forEach((trigger) => {
         if (
           trigger.trigger === '.mobileNav' ||

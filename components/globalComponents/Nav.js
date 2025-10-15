@@ -290,10 +290,20 @@ const Nav = ({ blok }) => {
       pinSpacing: false,
     });
 
+    // Pin the anchor navigator independently
+    const anchorPinTrigger = ScrollTrigger.create({
+      trigger: '.anchorNav',
+      start: 'top top',
+      end: `${footerOffset}px`,
+      pin: true,
+      pinSpacing: false,
+    });
+
     // Cleanup function
     return () => {
       anchorTl.kill();
       pinTrigger.kill();
+      anchorPinTrigger.kill();
       ScrollTrigger.getAll().forEach((trigger) => {
         if (
           trigger.trigger === '.desktopNav' ||
