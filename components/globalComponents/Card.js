@@ -69,7 +69,7 @@ const Card = ({ content, paginated, borderradius }) => {
     return (
       <Link href={normalizedUrl} passHref legacyBehavior>
         <CardWrapper
-          as='a'
+          as="a"
           {...storyblokEditable(content)}
           paginated={paginated}
           blur={content?.blur_card}

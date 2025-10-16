@@ -122,8 +122,8 @@ const ComponentRenderer = ({
           thumbnails={blok.thumbnails}
           borderradius={blok.border_radius}
           isSideBySideVideo={isSideBySideVideo}
-          width={isSideBySideVideo ? "400px" : undefined}
-          height={isSideBySideVideo ? "300px" : undefined}
+          width={isSideBySideVideo ? '400px' : undefined}
+          height={isSideBySideVideo ? '300px' : undefined}
         />
       );
     case 'copy_block':

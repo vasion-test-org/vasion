@@ -265,27 +265,27 @@ const TestForm = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <FormContainer id='formContainer'>
+      <FormContainer id="formContainer">
         {blok.header && <FormHeader>{blok.header}</FormHeader>}
         {blok.animated && (
           <>
-            <CalendarContainer className='bookit-content-container' />
+            <CalendarContainer className="bookit-content-container" />
             <StepsContainer>
               <Step>
                 <Circle>{stepDone ? '✔' : 1}</Circle>
                 <StepText>Fill Out Form</StepText>
               </Step>
-              <Line className='lines' />
-              <Line className='lines second' />
+              <Line className="lines" />
+              <Line className="lines second" />
               <Step>
-                <Circle className='second'> 2</Circle>
-                <StepText id='stepTwo'>Pick Your Time</StepText>
+                <Circle className="second"> 2</Circle>
+                <StepText id="stepTwo">Pick Your Time</StepText>
               </Step>
             </StepsContainer>
           </>
         )}
         <MarketoForm
-          className='marketoForm'
+          className="marketoForm"
           id={`mktoForm_${blok.form_id}`}
         ></MarketoForm>
       </FormContainer>

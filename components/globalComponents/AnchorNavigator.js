@@ -71,7 +71,7 @@ const AnchorNavigator = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       {blok && anchorList.length > 0 && (
-        <AnchorWrapper className='anchorNav'>
+        <AnchorWrapper className="anchorNav">
           <AnchorNavWrapper>
             <PageInfoContainer>
               {blok?.page_title && <PageTitle>{blok.page_title}</PageTitle>}
@@ -220,7 +220,7 @@ const AnchorWrapper = styled.div`
   width: 100%;
   z-index: 10;
   top: 4.063vw;
-  opacity: 0;
+  /* opacity: 0; */
 
   ${media.fullWidth} {
     top: 65px;
