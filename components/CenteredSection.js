@@ -136,8 +136,8 @@ const CenteredSection = ({ blok }) => {
                       videos={blok.media?.[0]?.media}
                       borderradius={blok.media?.[0]?.border_radius}
                       thumbnails={blok.media?.[0]?.thumbnails}
-                      width="1000px"
-                      height="560px"
+                      width="100%"
+                      height="auto"
                     />
                   </CenteredVideoContainer>
                 </MediaWrapper>
@@ -269,6 +269,24 @@ const CenteredVideoContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  max-width: 100%;
+  overflow: hidden;
+  width: 67.75vw;
+  height: 38vw;
+  border-radius: 12px;
+  ${media.fullWidth} {
+    width: 1084px;
+    height: 608px;
+  }
+  ${media.tablet} {
+    width: 92.188vw;
+    height: 51.758vw;
+  }
+
+  ${media.mobile} {
+    width: 89.167vw;
+    height: 50vw;
+  }
 `;
 
 const CenteredWrapper = styled.div`
