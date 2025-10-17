@@ -17,7 +17,7 @@ const CTA = ({ blok }) => {
     blok?.image?.[0],
     blok?.image?.[0],
     blok?.image?.[1] || blok?.image?.[0],
-    blok?.image?.[2] || blok?.image?.[0]
+    blok?.image?.[2] || blok?.image?.[0],
   );
   const pillBgimg = useMedia(
     blok?.background_image?.[0],
@@ -25,7 +25,7 @@ const CTA = ({ blok }) => {
     blok?.background_image?.[1] || blok?.background_image?.[0],
     blok?.background_image?.[2] ||
       blok?.background_image?.[0] ||
-      blok?.background_image?.[0]
+      blok?.background_image?.[0],
   );
 
   // console.log(blok);
@@ -58,7 +58,7 @@ const CTA = ({ blok }) => {
           </ContentWrapper>
           {blok?.button_group?.map(($buttonData) =>
             $buttonData.component === 'light_box_button' ? (
-              <LightboxBtn key='lightbox' blok={$buttonData} />
+              <LightboxBtn key="lightbox" blok={$buttonData} />
             ) : (
               <div
                 {...storyblokEditable($buttonData)}
@@ -69,7 +69,7 @@ const CTA = ({ blok }) => {
                   $buttonData={$buttonData}
                 />
               </div>
-            )
+            ),
           )}
         </CtaWrapper>
       </PillContainer>
@@ -109,13 +109,14 @@ const CtaWrapper = styled.div`
   display: flex;
   align-items: ${(props) =>
     props.$ctastyle === 'pill' && props.$pillbgimg ? 'flex-start' : 'center'};
+  align-items: flex-start;
   overflow: hidden;
   background: ${(props) =>
     props.$ctastyle === 'image'
       ? `url(${props.$bgimg})`
       : props.$ctastyle === 'pill' && props.$pillbgimg
-      ? `url(${props.$pillbgimg})`
-      : props.theme.cta.cardBg};
+        ? `url(${props.$pillbgimg})`
+        : props.theme.cta.cardBg};
   background-size: ${(props) =>
     props.$ctastyle === 'pill' && props.$pillbgimg ? '100% 100%' : 'cover'};
   background-repeat: no-repeat;
@@ -128,38 +129,38 @@ const CtaWrapper = styled.div`
     props.$ctastyle === 'pill' && props.$pillbgimg
       ? 'column'
       : props.$ctastyle === 'pill'
-      ? 'row'
-      : 'column'};
+        ? 'row'
+        : 'column'};
   gap: ${(props) =>
     props.$ctastyle === 'pill' && props.$pillbgimg ? '2.5vw' : '3.75vw'};
   padding: ${(props) =>
     props.$ctastyle === 'pill'
       ? '3.75vw 6vw'
       : props.$ctastyle === 'image'
-      ? '6vw 3.75vw 9.25vw 56.25vw'
-      : props.$ctastyle === 'centered'
-      ? '6vw 9.25vw'
-      : '6vw 0'};
+        ? '6vw 3.75vw 9.25vw 56.25vw'
+        : props.$ctastyle === 'centered'
+          ? '6vw 9.25vw'
+          : '6vw 0'};
   width: ${(props) =>
     props.$ctastyle === 'image' && props.$fullwidth
       ? '100%'
       : props.$ctastyle === 'pill'
-      ? '81.5vw'
-      : props.$ctastyle === 'image'
-      ? '88vw'
-      : '100%'};
+        ? '81.5vw'
+        : props.$ctastyle === 'image'
+          ? '88vw'
+          : '100%'};
   min-height: ${(props) =>
     props.$ctastyle === 'pill' && props.$pillbgimg
       ? '18.875vw'
       : props.$ctastyle === 'image' && props.$fullwidth
-      ? '34.722vw'
-      : 'auto'};
+        ? '34.722vw'
+        : 'auto'};
   border-radius: ${(props) =>
     props.$ctastyle === 'image' && props.$fullwidth
       ? '0'
       : props.$ctastyle === 'pill' || props.$ctastyle === 'image'
-      ? '1.5vw'
-      : 'unset'};
+        ? '1.5vw'
+        : 'unset'};
   text-align: ${(props) =>
     ['pill', 'image'].includes(props.$ctastyle) ? 'left' : 'center'};
 
@@ -170,34 +171,34 @@ const CtaWrapper = styled.div`
       props.$ctastyle === 'pill' && props.$pillbgimg
         ? 'column'
         : props.$ctastyle === 'pill'
-        ? 'row'
-        : 'column'};
+          ? 'row'
+          : 'column'};
     padding: ${(props) =>
       props.$ctastyle === 'pill'
         ? '60px 96px'
         : props.$ctastyle === 'image'
-        ? '96px 60px 148px 900px'
-        : '96px 0'};
+          ? '96px 60px 148px 900px'
+          : '96px 0'};
     width: ${(props) =>
       props.$ctastyle === 'image' && props.$fullwidth
         ? '100%'
         : props.$ctastyle === 'pill'
-        ? '1304px'
-        : props.$ctastyle === 'image'
-        ? '1408px'
-        : '100%'};
+          ? '1304px'
+          : props.$ctastyle === 'image'
+            ? '1408px'
+            : '100%'};
     min-height: ${(props) =>
       props.$ctastyle === 'pill' && props.$pillbgimg
         ? '302px'
         : props.$ctastyle === 'image' && props.$fullwidth
-        ? '34.722vw'
-        : 'auto'};
+          ? '34.722vw'
+          : 'auto'};
     border-radius: ${(props) =>
       props.$ctastyle === 'image' && props.$fullwidth
         ? '0'
         : props.$ctastyle === 'pill' || props.$ctastyle === 'image'
-        ? '24px'
-        : 'unset'};
+          ? '24px'
+          : 'unset'};
   }
 
   ${media.tablet} {
@@ -207,26 +208,26 @@ const CtaWrapper = styled.div`
       props.$ctastyle === 'image' && props.$fullwidth
         ? '100%'
         : props.$ctastyle === 'centered'
-        ? '100%'
-        : '92.188vw'};
+          ? '100%'
+          : '92.188vw'};
     min-height: ${(props) =>
       props.$ctastyle === 'pill' && props.$pillbgimg
         ? '25.586vw'
         : props.$ctastyle === 'image' && props.$fullwidth
-        ? '34.722vw'
-        : 'auto'};
+          ? '34.722vw'
+          : 'auto'};
     border-radius: ${(props) =>
       props.$ctastyle === 'image' && props.$fullwidth
         ? '0'
         : props.$ctastyle === 'pill' || props.$ctastyle === 'image'
-        ? '2.344vw'
-        : 'unset'};
+          ? '2.344vw'
+          : 'unset'};
     padding: ${(props) =>
       props.$ctastyle === 'pill'
         ? '5.859vw 3.906vw'
         : props.$ctastyle === 'image'
-        ? '9.375vw 5.859vw 14.453vw 46.094vw'
-        : '5.859vw 3.906vw'};
+          ? '9.375vw 5.859vw 14.453vw 46.094vw'
+          : '5.859vw 3.906vw'};
   }
 
   ${media.mobile} {
@@ -238,20 +239,20 @@ const CtaWrapper = styled.div`
       props.$ctastyle === 'image' && props.$fullwidth
         ? '100%'
         : props.$ctastyle === 'centered'
-        ? '100%'
-        : '89.167vw'};
+          ? '100%'
+          : '89.167vw'};
     min-height: ${(props) =>
       props.$ctastyle === 'pill' && props.$pillbgimg
         ? '128.125vw'
         : props.$ctastyle === 'image' && props.$fullwidth
-        ? '34.722vw'
-        : 'auto'};
+          ? '34.722vw'
+          : 'auto'};
     border-radius: ${(props) =>
       props.$ctastyle === 'image' && props.$fullwidth
         ? '0'
         : props.$ctastyle === 'pill' || props.$ctastyle === 'image'
-        ? '5vw'
-        : 'unset'};
+          ? '5vw'
+          : 'unset'};
     justify-content: ${(props) =>
       props.$ctastyle === 'pill' && props.$pillbgimg
         ? 'flex-start'
@@ -272,21 +273,21 @@ const PillContainer = styled.div`
       return props.spacing === 'default'
         ? '3.75vw 0 0'
         : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '3.75vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : '3.75vw 0 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 0 3.75vw'
         : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 3.75vw';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 3.75vw';
     }
     return props.spacing === 'default'
       ? '3.75vw 0'
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0';
+        ? `${props.spacing}px 0`
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
@@ -295,21 +296,21 @@ const PillContainer = styled.div`
         return props.spacing === 'default'
           ? '60px 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+            ? `${props.spacing}px 0 0`
+            : '60px 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 60px'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 60px';
       }
       return props.spacing === 'default'
         ? '60px 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+          ? `${props.spacing}px 0`
+          : '60px 0';
     }};
   }
 
@@ -319,21 +320,21 @@ const PillContainer = styled.div`
         return props.spacing === 'default'
           ? '5.859vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '5.859vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '5.859vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 5.859vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 5.859vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 5.859vw';
       }
       return props.spacing === 'default'
         ? '5.859vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '5.859vw 0';
+          ? `${props.spacing}px 0`
+          : '5.859vw 0';
     }};
   }
 
@@ -343,21 +344,21 @@ const PillContainer = styled.div`
         return props.spacing === 'default'
           ? '12.5vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '12.5vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '12.5vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 12.5vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 12.5vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 12.5vw';
       }
       return props.spacing === 'default'
         ? '12.5vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0';
+          ? `${props.spacing}px 0`
+          : '12.5vw 0';
     }};
   }
 `;
