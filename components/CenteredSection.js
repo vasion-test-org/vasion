@@ -137,7 +137,6 @@ const CenteredSection = ({ blok }) => {
                       borderradius={blok.media?.[0]?.border_radius}
                       thumbnails={blok.media?.[0]?.thumbnails}
                       width="100%"
-                      height="auto"
                     />
                   </CenteredVideoContainer>
                 </MediaWrapper>
@@ -264,8 +263,6 @@ const ContentWrapper = styled.div`
 `;
 
 const CenteredVideoContainer = styled.div`
-  width: 100%;
-  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
