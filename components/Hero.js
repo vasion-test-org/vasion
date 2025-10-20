@@ -416,7 +416,7 @@ const ImageWrapper = styled.div`
 
   ${media.mobile} {
     width: 89.167vw;
-    height: 66.875vw;
+    height: 93.875vw;
 
     ${(props) =>
       props.blog_hero &&
