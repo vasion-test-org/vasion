@@ -377,7 +377,7 @@ const SocialCTA = styled.div`
 `;
 const ImageWrapper = styled.div`
   width: 37.5vw;
-  height: 27.125vw;
+  height: 27.155vw;
   align-self: flex-end;
 
   ${(props) =>
