@@ -377,7 +377,8 @@ const SocialCTA = styled.div`
 `;
 const ImageWrapper = styled.div`
   width: 37.5vw;
-  height: 28.125vw;
+  height: 27.125vw;
+  align-self: flex-end;
 
   ${(props) =>
     props.blog_hero &&
@@ -453,6 +454,7 @@ const ButtonRow = styled.div`
   }
 `;
 const ContentWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   text-align: ${(props) => {
