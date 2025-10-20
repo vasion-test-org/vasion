@@ -547,16 +547,17 @@ const MobileNav = ({ blok }) => {
   }, []);
 
   useEffect(() => {
-    const mobileAnchorTl = gsap.timeline({
-      scrollTrigger: {
-        start: '2% 1%',
-        end: '10% 90%',
-        // markers: true,
-        scrub: true,
-      },
-    });
+    // AnchorNavigator handles its own animation now
+    // const mobileAnchorTl = gsap.timeline({
+    //   scrollTrigger: {
+    //     start: '2% 1%',
+    //     end: '10% 90%',
+    //     // markers: true,
+    //     scrub: true,
+    //   },
+    // });
 
-    mobileAnchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
+    // mobileAnchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
 
     ScrollTrigger.create({
       trigger: '.mobileNav',

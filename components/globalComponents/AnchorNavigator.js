@@ -48,6 +48,43 @@ const AnchorNavigator = ({ blok }) => {
     };
   }, []);
 
+  // Handle GSAP animation when available, but don't depend on it for visibility
+  useEffect(() => {
+    const setupGSAPAnimation = async () => {
+      try {
+        // Try to get GSAP if it's already loaded
+        const gsap = await import('gsap');
+        const { default: ScrollTrigger } = await import('gsap/ScrollTrigger');
+
+        if (gsap && ScrollTrigger) {
+          // Set initial state for GSAP animation
+          gsap.set('.anchorNav', { autoAlpha: 0 });
+
+          // Create the animation timeline
+          const anchorTl = gsap.timeline({
+            scrollTrigger: {
+              start: '2% 1%',
+              end: '10% 90%',
+              scrub: true,
+            },
+          });
+
+          anchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
+        }
+      } catch (error) {
+        // GSAP not available, AnchorNavigator will remain visible with CSS transitions
+        console.log('GSAP not available for AnchorNavigator animation');
+      }
+    };
+
+    // Try to set up GSAP animation after a short delay to allow GSAP to load
+    const timeoutId = setTimeout(setupGSAPAnimation, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   const anchorMap = anchorList.map((anchor, i) => {
     const anchorText = anchor.dataset.anchorId
       .replace(/-/g, ' ')
@@ -239,7 +276,9 @@ const AnchorWrapper = styled.div`
   width: 100%;
   z-index: 10;
   top: 4.063vw;
-  opacity: 0;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 
   ${media.fullWidth} {
     top: 65px;
