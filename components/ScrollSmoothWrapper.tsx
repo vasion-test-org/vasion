@@ -4,8 +4,47 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 let smootherInstance = null;
+let smootherPromise = null;
 
 export const getSmoother = () => smootherInstance;
+
+// Function to ensure ScrollSmoother is loaded
+export const ensureScrollSmoother = async () => {
+  if (smootherInstance) {
+    return smootherInstance;
+  }
+
+  if (smootherPromise) {
+    return smootherPromise;
+  }
+
+  smootherPromise = new Promise(async (resolve) => {
+    try {
+      const { default: gsap } = await import('gsap');
+      const { default: ScrollSmoother } = await import('gsap/ScrollSmoother');
+      const { default: ScrollTrigger } = await import('gsap/ScrollTrigger');
+
+      gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+      if (!ScrollTrigger.isTouch) {
+        smootherInstance = ScrollSmoother.create({
+          smooth: 1.2,
+          effects: true,
+          normalizeScroll: true,
+          ignoreMobileResize: true,
+        });
+        smootherInstance.scrollTo(0, false);
+      }
+
+      resolve(smootherInstance);
+    } catch (error) {
+      console.warn('Failed to load ScrollSmoother:', error);
+      resolve(null);
+    }
+  });
+
+  return smootherPromise;
+};
 
 // Device detection utility
 const isMobileDevice = () => {
@@ -92,6 +131,7 @@ export default function ScrollSmootherWrapper({
       }
     };
 
+    // Load ScrollSmoother immediately on desktop, but still lazy load GSAP
     loadScrollSmoother();
 
     return () => {

@@ -8,7 +8,10 @@ import text from '@/styles/text';
 import media from '@/styles/media';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
-import { getSmoother } from '@/components/ScrollSmoothWrapper';
+import {
+  getSmoother,
+  ensureScrollSmoother,
+} from '@/components/ScrollSmoothWrapper';
 import { ScreenContext } from '@/components/providers/Screen';
 import Icons from '@/components/renderers/Icons';
 
@@ -55,11 +58,27 @@ const AnchorNavigator = ({ blok }) => {
     return (
       <AnchorButton
         key={i}
-        onClick={() => {
-          const smoother = getSmoother();
+        onClick={async () => {
+          if (!anchor) return;
 
-          if (smoother && anchor) {
+          // Try to get existing smoother first
+          let smoother = getSmoother();
+
+          // If no smoother exists, try to ensure it's loaded
+          if (!smoother) {
+            smoother = await ensureScrollSmoother();
+          }
+
+          if (smoother) {
+            // Use ScrollSmoother if available
             smoother.scrollTo(anchor, true, 'top top');
+          } else {
+            // Fallback to native smooth scrolling
+            anchor.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+              inline: 'nearest',
+            });
           }
         }}
       >
@@ -71,7 +90,7 @@ const AnchorNavigator = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       {blok && anchorList.length > 0 && (
-        <AnchorWrapper className='anchorNav'>
+        <AnchorWrapper className="anchorNav">
           <AnchorNavWrapper>
             <PageInfoContainer>
               {blok?.page_title && <PageTitle>{blok.page_title}</PageTitle>}
