@@ -20,7 +20,7 @@ import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
 
 gsap.registerPlugin(ScrollTrigger);
-const MobileNav = ({ blok }) => {
+const MobileNav = ({ blok, configLoaded = true }) => {
   const router = useRouter();
   const path = usePathname();
   const themes = useAvailableThemes();
@@ -692,7 +692,7 @@ const MobileNav = ({ blok }) => {
             ))}
           </ButtonContainer>
         </Dropdown>
-        <AnchorNavigator />
+        {configLoaded && <AnchorNavigator />}
       </MainWrapper>
     </>
   );
