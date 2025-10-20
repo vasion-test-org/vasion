@@ -391,8 +391,7 @@ const ImageWrapper = styled.div`
 
   ${media.fullWidth} {
     width: 600px;
-    height: 450px;
-
+    height: 445px;
     ${(props) =>
       props.blog_hero &&
       `
@@ -404,7 +403,7 @@ const ImageWrapper = styled.div`
 
   ${media.tablet} {
     width: 48.828vw;
-    height: 36.621vw;
+    height: 32.7vw;
 
     ${(props) =>
       props.blog_hero &&
