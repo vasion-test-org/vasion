@@ -16,7 +16,8 @@ import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
+import { getSmoother } from '@/components/ScrollSmoothWrapper';
+// AnchorNavigator merged inline below
 import VasionNavLogo from '@/assets/svg/vasion-nav-logo.svg';
 import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
@@ -472,6 +473,54 @@ const Nav = ({ blok }) => {
     };
   }, [navReady]);
 
+  // Anchor navigation (merged from AnchorNavigator)
+  const [anchorList, setAnchorList] = useState([]);
+
+  useEffect(() => {
+    const updateAnchors = () => {
+      const allAnchors = Array.from(
+        document.querySelectorAll('[data-anchor-id]')
+      );
+      setAnchorList(allAnchors);
+    };
+
+    updateAnchors();
+
+    const observer = new MutationObserver(() => {
+      updateAnchors();
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const AnchorButtons = anchorList.map((anchor, i) => {
+    const anchorText = anchor.dataset.anchorId
+      .replace(/-/g, ' ')
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+
+    return (
+      <AnchorButton
+        key={i}
+        onClick={() => {
+          const smoother = getSmoother?.();
+          if (smoother && anchor) {
+            smoother.scrollTo(anchor, true, 'top top');
+          } else if (anchor?.scrollIntoView) {
+            anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }}
+      >
+        {anchorText}
+      </AnchorButton>
+    );
+  });
+
   return (
     <ThemeProvider theme={selectedTheme}>
       <>
@@ -524,7 +573,16 @@ const Nav = ({ blok }) => {
               </div>
             ))}
           </MainInner>
-          <AnchorNavigator />
+          {anchorList.length > 0 && (
+            <AnchorWrapper className="anchorNav">
+              <AnchorNavWrapper>
+                <PageInfoContainer>
+                  {blok?.page_title && <PageTitle>{blok.page_title}</PageTitle>}
+                </PageInfoContainer>
+                <ButtonsDiv>{AnchorButtons}</ButtonsDiv>
+              </AnchorNavWrapper>
+            </AnchorWrapper>
+          )}
         </MainNavWrapper>
       </>
     </ThemeProvider>
@@ -1343,3 +1401,112 @@ const NavBackdrop = styled.div`
   }
 `;
 export default Nav;
+
+// ---- Anchor nav styles (merged) ----
+const PageTitle = styled.p`
+  ${text.bodyMdBold};
+  color: ${colors.primaryPurple};
+`;
+const PageInfoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5vw;
+
+  ${media.fullWidth} {
+    gap: 8px;
+  }
+
+  ${media.tablet} {
+    gap: 0.781vw;
+  }
+`;
+const AnchorButton = styled.div`
+  ${text.bodySm};
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 1.875vw;
+  padding: 0.25vw 0.5vw;
+  border-radius: 0.25vw;
+
+  ${media.fullWidth} {
+    height: 30px;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  ${media.tablet} {
+    height: 2.93vw;
+    padding: 0.391vw 0.781vw;
+    border-radius: 0.391vw;
+  }
+
+  &:hover {
+    ${text.bodyMdBold};
+    background: ${colors.purple200};
+    color: ${colors.primaryPurple};
+  }
+`;
+const ButtonsDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.5vw;
+
+  ${media.fullWidth} {
+    gap: 8px;
+  }
+
+  ${media.tablet} {
+    gap: 0.781vw;
+  }
+`;
+const AnchorNavWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background: ${colors.purple100};
+  margin: 0.5vw auto;
+  width: 76.875vw;
+  height: 3.375vw;
+  border-radius: 0.5vw;
+  padding: 0.75vw 3.75vw;
+
+  ${media.fullWidth} {
+    margin: 8px auto;
+    width: 1230px;
+    height: 54px;
+    border-radius: 8px;
+    padding: 12px 60px;
+  }
+
+  ${media.tablet} {
+    margin: 0.781vw auto;
+    width: 92.188vw;
+    height: 5.273vw;
+    border-radius: 0.781vw;
+    padding: 1.172vw 5.859vw;
+  }
+`;
+const AnchorWrapper = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  z-index: 10;
+  top: 4.063vw;
+
+  ${media.fullWidth} {
+    top: 65px;
+  }
+
+  ${media.tablet} {
+    top: 6.348vw;
+  }
+`;
