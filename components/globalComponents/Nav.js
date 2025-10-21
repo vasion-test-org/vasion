@@ -272,19 +272,15 @@ const Nav = ({ blok }) => {
 
     const footerOffset = footer.offsetTop + footer.offsetHeight;
 
-<<<<<<< HEAD
-      const footerOffset = footer.offsetTop + footer.offsetHeight;
+      const anchorTl = gsap.timeline({
+        scrollTrigger: {
+          start: '2% 1%',
+          end: '10% 90%',
+          scrub: true,
+        },
+      });
 
-      // AnchorNavigator handles its own animation now
-      // const anchorTl = gsap.timeline({
-      //   scrollTrigger: {
-      //     start: '2% 1%',
-      //     end: '10% 90%',
-      //     scrub: true,
-      //   },
-      // });
-
-      // anchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
+      anchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
 
       gsap.ScrollTrigger.create({
         trigger: '.desktopNav',
@@ -293,7 +289,7 @@ const Nav = ({ blok }) => {
         pin: true,
         pinSpacing: false,
       });
-    };
+    } );
 
     // Initialize GSAP on first user interaction
     const handleUserInteraction = () => {
@@ -305,14 +301,6 @@ const Nav = ({ blok }) => {
     document.addEventListener('click', handleUserInteraction, {
       once: true,
       passive: true,
-=======
-    const anchorTl = gsap.timeline({
-      scrollTrigger: {
-        start: '2% 1%',
-        end: '10% 90%',
-        scrub: true,
-      },
->>>>>>> 8862b72f8c921969dac1b9e4feb9302d4d291ba1
     });
 
     anchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
