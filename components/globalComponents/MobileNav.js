@@ -15,8 +15,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
-// AnchorNavigator merged inline below
-import { getSmoother } from '@/components/ScrollSmoothWrapper';
+import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
 
@@ -615,54 +614,6 @@ const MobileNav = ({ blok }) => {
     });
   }, []);
 
-  // Anchor navigation (merged from AnchorNavigator)
-  const [anchorList, setAnchorList] = useState([]);
-
-  useEffect(() => {
-    const updateAnchors = () => {
-      const allAnchors = Array.from(
-        document.querySelectorAll('[data-anchor-id]')
-      );
-      setAnchorList(allAnchors);
-    };
-
-    updateAnchors();
-
-    const observer = new MutationObserver(() => {
-      updateAnchors();
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  const AnchorButtons = anchorList.map((anchor, i) => {
-    const anchorText = anchor.dataset.anchorId
-      .replace(/-/g, ' ')
-      .split(' ')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-
-    return (
-      <AnchorButton
-        key={i}
-        onClick={() => {
-          const smoother = getSmoother?.();
-          if (smoother && anchor) {
-            smoother.scrollTo(anchor, true, 'top top');
-          } else if (anchor?.scrollIntoView) {
-            anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }}
-      >
-        {anchorText}
-      </AnchorButton>
-    );
-  });
-
   return (
     <>
       <TopNav>
@@ -741,13 +692,7 @@ const MobileNav = ({ blok }) => {
             ))}
           </ButtonContainer>
         </Dropdown>
-        {anchorList.length > 0 && (
-          <AnchorWrapper className="anchorNav">
-            <AnchorNavWrapper>
-              <ButtonsDiv>{AnchorButtons}</ButtonsDiv>
-            </AnchorNavWrapper>
-          </AnchorWrapper>
-        )}
+        <AnchorNavigator />
       </MainWrapper>
     </>
   );
@@ -1271,59 +1216,3 @@ const Tooltip = styled.div`
 `;
 
 export default MobileNav;
-
-// ---- Anchor nav styles (merged) ----
-const AnchorButton = styled.div`
-  ${text.bodySm};
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  ${media.mobile} {
-    height: 5.417vw;
-    padding: 0.833vw 1.667vw;
-    border-radius: 0.833vw;
-    width: max-content;
-    min-width: max-content;
-  }
-  &:hover {
-    ${text.bodyMdBold};
-    background: ${colors.purple200};
-    color: ${colors.primaryPurple};
-  }
-`;
-const ButtonsDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1.667vw;
-  width: 100%;
-`;
-const AnchorNavWrapper = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background: ${colors.purple100};
-  margin: 1.667vw auto;
-  width: 89.167vw;
-  height: 10.417vw;
-  border-radius: 1.667vw;
-  padding: 2.5vw 12.5vw;
-  overflow: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-const AnchorWrapper = styled.div`
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  z-index: 10;
-  top: 13.542vw;
-`;

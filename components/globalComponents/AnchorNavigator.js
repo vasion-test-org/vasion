@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
@@ -9,18 +9,13 @@ import media from '@/styles/media';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { getSmoother } from '@/components/ScrollSmoothWrapper';
-import { ScreenContext } from '@/components/providers/Screen';
-import Icons from '@/components/renderers/Icons';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-const AnchorNavigator = ({ blok }) => {
+const AnchorNavigator = () => {
   const themes = useAvailableThemes();
-  const selectedTheme = themes[blok?.theme] || themes.default;
+  const selectedTheme = themes.default;
   const [anchorList, setAnchorList] = useState([]);
-  const formattedIconString = blok?.page_icon?.replace(/\s+/g, '');
-  const IconComponent = Icons[formattedIconString] || null;
-  // console.log(IconComponent)
   useEffect(() => {
     const updateAnchors = () => {
       const allAnchors = Array.from(
@@ -70,48 +65,20 @@ const AnchorNavigator = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      {blok && anchorList.length > 0 && (
-        <AnchorWrapper className="anchorNav">
+      <AnchorWrapper
+        className="anchorNav"
+        data-has-anchors={anchorList.length > 0}
+        data-anchors-count={anchorList.length}
+      >
+        {anchorList.length > 0 ? (
           <AnchorNavWrapper>
-            <PageInfoContainer>
-              {blok?.page_title && <PageTitle>{blok.page_title}</PageTitle>}
-              {IconComponent && (
-                <IconWrapper>
-                  <IconComponent />
-                </IconWrapper>
-              )}
-            </PageInfoContainer>
             <ButtonsDiv>{anchorMap}</ButtonsDiv>
           </AnchorNavWrapper>
-        </AnchorWrapper>
-      )}
+        ) : null}
+      </AnchorWrapper>
     </ThemeProvider>
   );
 };
-
-const PageTitle = styled.p`
-  ${text.bodyMdBold};
-  color: ${colors.primaryPurple};
-`;
-const PageInfoContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5vw;
-
-  ${media.fullWidth} {
-    gap: 8px;
-  }
-
-  ${media.tablet} {
-    gap: 0.781vw;
-  }
-
-  ${media.mobile} {
-    gap: 1.667vw;
-  }
-`;
 
 const AnchorButton = styled.div`
   ${text.bodySm};
@@ -220,6 +187,7 @@ const AnchorWrapper = styled.div`
   width: 100%;
   z-index: 10;
   top: 4.063vw;
+  pointer-events: none; /* non-interactive until anchors exist */
   /* opacity: 0; */
 
   ${media.fullWidth} {
@@ -233,33 +201,9 @@ const AnchorWrapper = styled.div`
   ${media.mobile} {
     top: 13.542vw;
   }
-`;
 
-const IconWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.25vw;
-  height: 1.25vw;
-
-  ${media.fullWidth} {
-    width: 20px;
-    height: 20px;
-  }
-
-  ${media.tablet} {
-    width: 1.953vw;
-    height: 1.953vw;
-  }
-
-  ${media.mobile} {
-    width: 5.417vw;
-    height: 5.417vw;
-  }
-
-  svg {
-    width: 100%;
-    height: 100%;
+  &[data-has-anchors='true'] {
+    pointer-events: auto;
   }
 `;
 
