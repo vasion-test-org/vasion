@@ -376,10 +376,10 @@ const SocialCTA = styled.div`
   }
 `;
 const ImageWrapper = styled.div`
+  position: relative;
   width: 37.5vw;
-  align-self: flex-end;
-  height: 100%;
-
+  height: min-content;
+  top: 0.25vw;
   ${(props) =>
     props.blog_hero &&
     `
@@ -390,6 +390,7 @@ const ImageWrapper = styled.div`
 
   ${media.fullWidth} {
     width: 600px;
+    top: 4px;
     ${(props) =>
       props.blog_hero &&
       `
