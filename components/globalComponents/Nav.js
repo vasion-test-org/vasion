@@ -272,24 +272,23 @@ const Nav = ({ blok }) => {
 
     const footerOffset = footer.offsetTop + footer.offsetHeight;
 
-      const anchorTl = gsap.timeline({
-        scrollTrigger: {
-          start: '2% 1%',
-          end: '10% 90%',
-          scrub: true,
-        },
-      });
+    const anchorTl = gsap.timeline({
+      scrollTrigger: {
+        start: '2% 1%',
+        end: '10% 90%',
+        scrub: true,
+      },
+    });
 
-      anchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
+    anchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
 
-      gsap.ScrollTrigger.create({
-        trigger: '.desktopNav',
-        start: 'top top',
-        end: `${footerOffset}px`,
-        pin: true,
-        pinSpacing: false,
-      });
-    } );
+    gsap.ScrollTrigger.create({
+      trigger: '.desktopNav',
+      start: 'top top',
+      end: `${footerOffset}px`,
+      pin: true,
+      pinSpacing: false,
+    });
 
     // Initialize GSAP on first user interaction
     const handleUserInteraction = () => {
