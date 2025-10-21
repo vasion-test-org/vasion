@@ -26,7 +26,9 @@ const MobileNav = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const dropdownIndex = useRef(null);
-  let currentNavItems = blok?.english_nav_items || [];
+  const [currentNavItems, setCurrentNavItems] = useState(
+    blok?.english_nav_items || []
+  );
   const isOpen = useRef(false);
   const copycomponents = [
     'body_copy',
@@ -40,6 +42,7 @@ const MobileNav = ({ blok }) => {
   const [activeLanguage, setActiveLanguage] = useState('en');
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [openTabIndex, setOpenTabIndex] = useState(null);
+  const mobileOpenRef = useRef(false);
 
   const slugParts = path.split('/').filter(Boolean);
   const currentLocale = ['de', 'fr'].includes(slugParts[0])
@@ -50,13 +53,19 @@ const MobileNav = ({ blok }) => {
     : slugParts.join('/');
 
   useEffect(() => {
-    if (path.startsWith('/de')) {
-      setActiveLanguage('de');
-    } else if (path.startsWith('/fr')) {
-      setActiveLanguage('fr');
+    setActiveLanguage(currentLocale ?? 'en');
+    if (currentLocale === 'de') {
+      setCurrentNavItems(blok?.german_nav_items || []);
+    } else if (currentLocale === 'fr') {
+      setCurrentNavItems(blok?.french_nav_items || []);
     } else {
-      setActiveLanguage('en');
+      setCurrentNavItems(blok?.english_nav_items || []);
     }
+  }, [currentLocale, blok]);
+
+  // Close mobile dropdown when pathname changes
+  useEffect(() => {
+    closeMobileDropdown();
   }, [path]);
 
   // Add click-based language selector for mobile with GSAP animations
@@ -90,11 +99,34 @@ const MobileNav = ({ blok }) => {
     setShowLanguageDropdown(!showLanguageDropdown);
   };
 
-  if (path.startsWith('/de')) {
-    currentNavItems = blok?.german_nav_items || [];
-  } else if (path.startsWith('/fr')) {
-    currentNavItems = blok?.french_nav_items || [];
-  }
+  // Function to close mobile dropdown
+  const closeMobileDropdown = () => {
+    const dropdown = document.querySelector('.mobileDropdown');
+    const hamburger = document.querySelector('.hamburger');
+
+    if (!dropdown || !mobileOpenRef.current) return;
+
+    // Close dropdown with animation
+    gsap.to(dropdown, {
+      height: 0,
+      duration: 0.4,
+      ease: 'power2.inOut',
+      onComplete: () => gsap.set(dropdown, { display: 'none' }),
+    });
+
+    // Reset hamburger animation
+    if (hamburger) {
+      gsap.to('#slice-0', { top: '0', rotate: 0, duration: 0.3 });
+      gsap.to('#slice-1', { opacity: 1, duration: 0.3 });
+      gsap.to('#slice-2', { top: '0', rotate: 0, duration: 0.3 });
+    }
+
+    // Reset state
+    mobileOpenRef.current = false;
+    isOpen.current = false;
+    dropdownIndex.current = null;
+    setOpenTabIndex(null);
+  };
 
   const handleNavigate = async (locale) => {
     const basePath = locale === 'en' ? '' : `/${locale}`;
@@ -112,10 +144,21 @@ const MobileNav = ({ blok }) => {
       });
 
       if (data.story) {
+        // Update navigation items immediately based on selected language
+        if (locale === 'de') {
+          setCurrentNavItems(blok?.german_nav_items || []);
+        } else if (locale === 'fr') {
+          setCurrentNavItems(blok?.french_nav_items || []);
+        } else {
+          setCurrentNavItems(blok?.english_nav_items || []);
+        }
+
         setActiveLanguage(locale);
         setShowLanguageDropdown(false);
         // Animate language items container closing
         gsap.to('#languageItemsContainer', { width: '0%', duration: 0.35 });
+        // Close mobile dropdown before navigation
+        closeMobileDropdown();
         router.push(newPath);
       } else {
         setTooltipMessage(
@@ -171,6 +214,10 @@ const MobileNav = ({ blok }) => {
 
                   const handleClick = () => {
                     if (normalizedUrl === '#') return;
+
+                    // Close mobile dropdown before navigation
+                    closeMobileDropdown();
+
                     if (isExternal) {
                       window.open(
                         normalizedUrl,
@@ -449,7 +496,6 @@ const MobileNav = ({ blok }) => {
     // console.log('Found hamburger:', !!hamburger);
 
     let tl = gsap.timeline({ paused: true });
-    let mobileOpen = false; // <- track open state
 
     const hamburgerTl = gsap
       .timeline({ paused: true, reversed: true })
@@ -467,7 +513,7 @@ const MobileNav = ({ blok }) => {
         return;
       }
 
-      if (mobileOpen) {
+      if (mobileOpenRef.current) {
         gsap.to(dropdown, {
           height: 0,
           duration: 0.4,
@@ -483,7 +529,7 @@ const MobileNav = ({ blok }) => {
         });
       }
 
-      mobileOpen = !mobileOpen;
+      mobileOpenRef.current = !mobileOpenRef.current;
 
       if (hamburgerTl.reversed()) {
         hamburgerTl.play();
@@ -638,7 +684,11 @@ const MobileNav = ({ blok }) => {
                 {...storyblokEditable($buttonData)}
                 key={$buttonData?.link_text}
               >
-                <Button $buttonData={$buttonData} stretch />
+                <Button
+                  $buttonData={$buttonData}
+                  stretch
+                  onNavigate={closeMobileDropdown}
+                />
               </div>
             ))}
           </ButtonContainer>

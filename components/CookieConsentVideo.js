@@ -366,6 +366,12 @@ const VideoWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  ${media.mobile} {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
 `;
 
 const CookieConsentContainer = styled.div`

@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import gsap from 'gsap';
 import { useRouter, usePathname } from 'next/navigation';
 import NextLink from 'next/link';
 import styled, { ThemeProvider } from 'styled-components';
@@ -14,18 +15,13 @@ import IconRenderer from '@/components/renderers/Icons';
 import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 import VasionNavLogo from '@/assets/svg/vasion-nav-logo.svg';
 import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
 
-// Lazy load GSAP only when needed
-const loadGSAP = async () => {
-  const { default: gsap } = await import('gsap');
-  const { default: ScrollTrigger } = await import('gsap/ScrollTrigger');
-  gsap.registerPlugin(ScrollTrigger);
-  return gsap;
-};
+gsap.registerPlugin(ScrollTrigger);
 
 const Nav = ({ blok }) => {
   const copycomponents = [
@@ -271,13 +267,12 @@ const Nav = ({ blok }) => {
   useEffect(() => {
     if (!navReady) return;
 
-    // Lazy load GSAP only when needed
-    const initializeGSAP = async () => {
-      const gsap = await loadGSAP();
+    const footer = document.querySelector('.footer');
+    if (!footer) return;
 
-      const footer = document.querySelector('.footer');
-      if (!footer) return;
+    const footerOffset = footer.offsetTop + footer.offsetHeight;
 
+<<<<<<< HEAD
       const footerOffset = footer.offsetTop + footer.offsetHeight;
 
       // AnchorNavigator handles its own animation now
@@ -310,47 +305,53 @@ const Nav = ({ blok }) => {
     document.addEventListener('click', handleUserInteraction, {
       once: true,
       passive: true,
+=======
+    const anchorTl = gsap.timeline({
+      scrollTrigger: {
+        start: '2% 1%',
+        end: '10% 90%',
+        scrub: true,
+      },
+>>>>>>> 8862b72f8c921969dac1b9e4feb9302d4d291ba1
     });
-    document.addEventListener('scroll', handleUserInteraction, {
-      once: true,
-      passive: true,
+
+    anchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
+
+    ScrollTrigger.create({
+      trigger: '.desktopNav',
+      start: 'top top',
+      end: `${footerOffset}px`,
+      pin: true,
+      pinSpacing: false,
     });
   }, [navReady]);
 
   useEffect(() => {
     if (!navReady) return;
 
-    // Use CSS transitions instead of GSAP for dropdown animations
-    const allTabs = document.querySelectorAll('.tabs');
-    const allDropdowns = document.querySelectorAll('.dropdowns');
-    const navWrapper = document.querySelector('.mainNavWrapper');
+    gsap.set('.dropdowns', { autoAlpha: 0, display: 'flex' });
 
-    // Set initial state with CSS
-    allDropdowns.forEach((dropdown) => {
-      dropdown.style.opacity = '0';
-      dropdown.style.visibility = 'hidden';
-      dropdown.style.display = 'flex';
-      dropdown.style.transition = 'opacity 0.35s ease, visibility 0.35s ease';
-    });
+    const allTabs = gsap.utils.toArray('.tabs');
+    const allDropdowns = gsap.utils.toArray('.dropdowns');
+    const navWrapper = document.querySelector('.mainNavWrapper');
 
     let isAnimating = false;
     let queuedIndex = null;
 
     const closeDropdown = () => {
       isAnimating = true;
-      allDropdowns.forEach((dropdown) => {
-        dropdown.style.opacity = '0';
-        dropdown.style.visibility = 'hidden';
+      return gsap.to('.dropdowns', {
+        autoAlpha: 0,
+        duration: 0.35,
+        onComplete: () => {
+          isAnimating = false;
+          if (queuedIndex !== null) {
+            const indexToOpen = queuedIndex;
+            queuedIndex = null;
+            openDropdown(indexToOpen);
+          }
+        },
       });
-
-      setTimeout(() => {
-        isAnimating = false;
-        if (queuedIndex !== null) {
-          const indexToOpen = queuedIndex;
-          queuedIndex = null;
-          openDropdown(indexToOpen);
-        }
-      }, 350);
     };
 
     const openDropdown = (index) => {
@@ -358,16 +359,15 @@ const Nav = ({ blok }) => {
         queuedIndex = index;
         return;
       }
-      const dropdown = document.getElementById(`dropdown-${index}`);
-      if (dropdown) {
-        dropdown.style.opacity = '1';
-        dropdown.style.visibility = 'visible';
-      }
+      gsap.to(`#dropdown-${index}`, {
+        autoAlpha: 1,
+        duration: 0.35,
+      });
     };
 
     allTabs.forEach((tab, index) => {
       tab.addEventListener('mouseenter', () => {
-        closeDropdown();
+        closeDropdown().then(() => {});
         queuedIndex = index;
       });
     });

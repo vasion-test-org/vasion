@@ -276,9 +276,13 @@ const AnchorWrapper = styled.div`
   width: 100%;
   z-index: 10;
   top: 4.063vw;
+<<<<<<< HEAD
   opacity: 1;
   visibility: visible;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+=======
+  /* opacity: 0; */
+>>>>>>> 8862b72f8c921969dac1b9e4feb9302d4d291ba1
 
   ${media.fullWidth} {
     top: 65px;

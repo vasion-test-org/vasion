@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import gsap from 'gsap';
+import ScrollSmoother from 'gsap/ScrollSmoother';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 let smootherInstance = null;
 let smootherPromise = null;
-
-export const getSmoother = () => smootherInstance;
 
 // Function to ensure ScrollSmoother is loaded
 export const ensureScrollSmoother = async () => {
@@ -62,16 +63,40 @@ export default function ScrollSmootherWrapper({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(isMobileDevice());
 
   useEffect(() => {
-    setIsMobile(isMobileDevice());
+    const handleResize = () => setIsMobile(isMobileDevice());
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
+    };
   }, []);
 
   useEffect(() => {
-    // Skip GSAP initialization on mobile devices
     if (isMobile) {
+      smootherInstance?.kill();
+      smootherInstance = null;
       return;
+    }
+    if (!ScrollTrigger.isTouch) {
+      smootherInstance = ScrollSmoother.create({
+        smooth: 1.2,
+        effects: true,
+        normalizeScroll: true,
+        ignoreMobileResize: true,
+      });
+
+      smootherInstance.scrollTo(0, false);
+
+      return () => {
+        smootherInstance?.kill();
+        smootherInstance = null;
+      };
     }
 
     // Lazy load GSAP only on desktop after page is interactive
