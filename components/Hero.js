@@ -377,21 +377,19 @@ const SocialCTA = styled.div`
 `;
 const ImageWrapper = styled.div`
   width: 37.5vw;
-  height: 27.155vw;
   align-self: flex-end;
+  height: 100%;
 
   ${(props) =>
     props.blog_hero &&
     `
     max-width: 25.438vw;
     width: 25.438vw;
-    height: 14.313vw;
     align-self: flex-start;
   `}
 
   ${media.fullWidth} {
     width: 600px;
-    height: 445px;
     ${(props) =>
       props.blog_hero &&
       `
@@ -403,7 +401,6 @@ const ImageWrapper = styled.div`
 
   ${media.tablet} {
     width: 48.828vw;
-    height: 32.7vw;
 
     ${(props) =>
       props.blog_hero &&
@@ -416,7 +413,6 @@ const ImageWrapper = styled.div`
 
   ${media.mobile} {
     width: 89.167vw;
-    height: 93.875vw;
 
     ${(props) =>
       props.blog_hero &&
