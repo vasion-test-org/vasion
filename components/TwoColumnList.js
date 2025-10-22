@@ -147,6 +147,7 @@ const ColumnContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1.625vw;
+  align-self: flex-end;
   /* margin-left: 21.875vw; */
   width: ${(props) => (props.comparison ? 'max-content' : '81.5vw')};
 
