@@ -1,11 +1,11 @@
-"use client";
-import React from "react";
-import styled, { ThemeProvider } from "styled-components";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import media from "@/styles/media";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import Link from "next/link";
+'use client';
+import React from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+import media from '@/styles/media';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import Link from 'next/link';
 
 const IntegrationBloks = ({ types, isMobile }) => {
   const imageList = (icons) => {
@@ -14,15 +14,15 @@ const IntegrationBloks = ({ types, isMobile }) => {
         {...storyblokEditable(icon?.filename)}
         key={index}
         src={icon?.filename}
-        alt={icon?.alt || ""}
+        alt={icon?.alt || ''}
       />
     ));
   };
   //when links are added back add <Link href={item?.link_url.url} key={index}>
   const typeList = types?.map((item, index) => {
     let titleContent;
-    if (isMobile && item?.title.includes("Virtual Desktop Infrastructure")) {
-      titleContent = "VDI";
+    if (isMobile && item?.title.includes('Virtual Desktop Infrastructure')) {
+      titleContent = 'VDI';
     } else {
       titleContent = item?.title;
     }
@@ -111,15 +111,17 @@ const IntegrationItem = styled.div`
   background-color: ${colors.lightPurpleGrey};
   width: ${(props) => {
     if (props.$columns === 1 || props.$columns === 0) {
-      return "16.125vw";
-    } else if (props.$columns === 2 || props.$columns === 3) {
-      return "11.9vw";
+      return '16.125vw';
+    } else if (props.$columns === 2) {
+      return '11.9vw';
+    } else if (props.$columns === 3) {
+      return '256px';
     } else if (props.$columns === 4 || props.$columns === 6) {
-      return "20.75vw";
+      return '20.75vw';
     } else if (props.$columns === 5) {
-      return "16.063vw";
+      return '16.063vw';
     } else {
-      return "auto";
+      return 'auto';
     }
   }};
   gap: 0.625vw;
@@ -128,15 +130,17 @@ const IntegrationItem = styled.div`
   ${media.fullWidth} {
     width: ${(props) => {
       if (props.$columns === 1 || props.$columns === 0) {
-        return "258px";
-      } else if (props.$columns === 2 || props.$columns === 3) {
-        return "190px";
+        return '258px';
+      } else if (props.$columns === 2) {
+        return '190px';
+      } else if (props.$columns === 3) {
+        return '256px';
       } else if (props.$columns === 4 || props.$columns === 6) {
-        return "332px";
+        return '332px';
       } else if (props.$columns === 5) {
-        return "257px";
+        return '257px';
       } else {
-        return "auto";
+        return 'auto';
       }
     }};
     gap: 10px;
@@ -146,15 +150,17 @@ const IntegrationItem = styled.div`
   ${media.tablet} {
     width: ${(props) => {
       if (props.$columns === 1 || props.$columns === 0) {
-        return "23.633vw";
-      } else if (props.$columns === 2 || props.$columns === 3) {
-        return "16.602vw";
+        return '23.633vw';
+      } else if (props.$columns === 2) {
+        return '16.602vw';
+      } else if (props.$columns == 3) {
+        return '24.602vw';
       } else if (props.$columns === 4 || props.$columns === 6) {
-        return "30.859vw";
+        return '30.859vw';
       } else if (props.$columns === 5) {
-        return "22.484vw";
+        return '22.484vw';
       } else {
-        return "auto";
+        return 'auto';
       }
     }};
     gap: 0.977vw;
@@ -172,20 +178,22 @@ const IntegrationItem = styled.div`
         props?.$columns === 1 ||
         props?.$columns === 6
       ) {
-        return "88.542vw";
-      } else if (props.$columns === 2 || props.$columns === 3) {
-        return "44.167vw";
+        return '88.542vw';
+      } else if (props.$columns === 2) {
+        return '44.167vw';
+      } else if (props.$columns === 3) {
+        return '47.167vw';
       } else if (props.$columns === 4) {
-        return "52.25vw";
+        return '52.25vw';
       } else if (props.$columns === 5) {
-        return "35.208vw";
+        return '35.208vw';
       } else {
-        return "auto";
+        return 'auto';
       }
     }};
     overflow: hidden;
     flex-direction: row;
-    height: ${(props) => (props?.$columns === 4 ? "40.7vw" : "auto")};
+    height: ${(props) => (props?.$columns === 4 ? '40.7vw' : 'auto')};
     gap: 1.2vw 0.7vw;
     padding: 2.5vw 0.208vw;
     border-radius: 20px;
