@@ -85,22 +85,22 @@ const ColumnCopy = styled.div`
 `;
 const ItemIcon = styled.img`
   padding: unset !important;
-  width: ${(props) => (props.small_icons ? '1.25vw' : '3vw')};
-  height: ${(props) => (props.small_icons ? '1.25vw' : '3vw')};
+  width: ${(props) => (props.small_icon ? '1.25vw' : '3vw')};
+  height: ${(props) => (props.small_icon ? '1.25vw' : '3vw')};
 
   ${media.fullWidth} {
-    width: ${(props) => (props.small_icons ? '20px' : '48px')};
-    height: ${(props) => (props.small_icons ? '20px' : '48px')};
+    width: ${(props) => (props.small_icon ? '20px' : '48px')};
+    height: ${(props) => (props.small_icon ? '20px' : '48px')};
   }
 
   ${media.tablet} {
-    width: ${(props) => (props.small_icons ? '1.953vw' : '4.688vw')};
-    height: ${(props) => (props.small_icons ? '1.953vw' : '4.688vw')};
+    width: ${(props) => (props.small_icon ? '1.953vw' : '4.688vw')};
+    height: ${(props) => (props.small_icon ? '1.953vw' : '4.688vw')};
   }
 
   ${media.mobile} {
-    width: ${(props) => (props.small_icons ? '4.167vw' : '10vw')};
-    height: ${(props) => (props.small_icons ? '4.167vw' : '10vw')};
+    width: ${(props) => (props.small_icon ? '4.167vw' : '10vw')};
+    height: ${(props) => (props.small_icon ? '4.167vw' : '10vw')};
   }
 `;
 const ColumnItem = styled.div`
