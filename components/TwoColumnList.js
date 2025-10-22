@@ -8,6 +8,7 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 const TwoColumnList = ({ blok }) => {
+  console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
@@ -18,7 +19,7 @@ const TwoColumnList = ({ blok }) => {
   const column1 = blok?.column_1?.map((item, index) => (
     <ColumnItem key={`col1-item-${index}`}>
       {item?.icon?.filename && (
-        <ItemIcon small_icons={blok.small_icons} src={item.icon.filename} />
+        <ItemIcon small_icon={item.small_icon} src={item.icon.filename} />
       )}
       <ColumnCopy>
         {item?.copy?.map((item, columnIndex) => (
@@ -31,7 +32,7 @@ const TwoColumnList = ({ blok }) => {
   const column2 = blok?.column_2?.map((item, index) => (
     <ColumnItem key={`col2-item-${index}`}>
       {item?.icon?.filename && (
-        <ItemIcon small_icons={blok?.small_icons} src={item?.icon?.filename} />
+        <ItemIcon small_icon={item?.small_icon} src={item?.icon?.filename} />
       )}
       <ColumnCopy>
         {item?.copy?.map((copyItem, copyIndex) => (
@@ -85,22 +86,22 @@ const ColumnCopy = styled.div`
 `;
 const ItemIcon = styled.img`
   padding: unset !important;
-  width: ${(props) => (props.small_icon ? '1.25vw' : '3vw')};
-  height: ${(props) => (props.small_icon ? '1.25vw' : '3vw')};
+  width: ${(props) => (props.small_icon ? '2vw' : '3vw')};
+  height: ${(props) => (props.small_icon ? '2vw' : '3vw')};
 
   ${media.fullWidth} {
-    width: ${(props) => (props.small_icon ? '20px' : '48px')};
-    height: ${(props) => (props.small_icon ? '20px' : '48px')};
+    width: ${(props) => (props.small_icon ? '32px' : '48px')};
+    height: ${(props) => (props.small_icon ? '32px' : '48px')};
   }
 
   ${media.tablet} {
-    width: ${(props) => (props.small_icon ? '1.953vw' : '4.688vw')};
-    height: ${(props) => (props.small_icon ? '1.953vw' : '4.688vw')};
+    width: ${(props) => (props.small_icon ? '2.353vw' : '4.688vw')};
+    height: ${(props) => (props.small_icon ? '2.353vw' : '4.688vw')};
   }
 
   ${media.mobile} {
-    width: ${(props) => (props.small_icon ? '4.167vw' : '10vw')};
-    height: ${(props) => (props.small_icon ? '4.167vw' : '10vw')};
+    width: ${(props) => (props.small_icon ? '5vw' : '10vw')};
+    height: ${(props) => (props.small_icon ? '5vw' : '10vw')};
   }
 `;
 const ColumnItem = styled.div`
