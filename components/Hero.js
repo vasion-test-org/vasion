@@ -403,6 +403,7 @@ const ImageWrapper = styled.div`
   ${media.tablet} {
     width: 48.828vw;
 
+    top: unset;
     ${(props) =>
       props.blog_hero &&
       `
@@ -414,7 +415,7 @@ const ImageWrapper = styled.div`
 
   ${media.mobile} {
     width: 89.167vw;
-
+    top: unset;
     ${(props) =>
       props.blog_hero &&
       `

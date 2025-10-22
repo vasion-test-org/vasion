@@ -53,7 +53,7 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
   const checkPageExists = async (slug, locale) => {
     try {
       const response = await fetch(
-        `/api/storyblok-check?slug=${encodeURIComponent(slug)}&locale=${locale}`
+        `/api/storyblok-check?slug=${encodeURIComponent(slug)}&locale=${locale}`,
       );
       const data = await response.json();
       return data.exists;
@@ -75,7 +75,7 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
       // If not found by ID, try to find by data-anchor-id attribute
       if (!anchorElement) {
         anchorElement = document.querySelector(
-          `[data-anchor-id="${$buttonData.link_url.anchor}"]`
+          `[data-anchor-id="${$buttonData.link_url.anchor}"]`,
         );
       }
 
@@ -122,7 +122,7 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
             const englishStorySlug = storySlug === 'home' ? 'home' : storySlug;
             const englishPageExists = await checkPageExists(
               englishStorySlug,
-              'en'
+              'en',
             );
 
             if (englishPageExists) {
@@ -169,8 +169,12 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
             onClick={handleClick}
             stretch={stretch}
           >
-            <StyledSpan stretch={stretch}>{$buttonData?.link_text}</StyledSpan>
-            {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
+            <StyledSpan stretch={stretch}>
+              {$buttonData?.link_text}
+              {$buttonData?.theme.includes('link') && (
+                <StyledLinkArrow $themeName={$buttonData?.theme} />
+              )}
+            </StyledSpan>
           </NextLink>
         ) : (
           <StyledLink
@@ -181,7 +185,9 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
             stretch={stretch}
           >
             {$buttonData?.link_text}
-            {$buttonData?.theme.includes('link') && <StyledLinkArrow />}
+            {$buttonData?.theme.includes('link') && (
+              <StyledLinkArrow $themeName={$buttonData?.theme} />
+            )}
           </StyledLink>
         )}
       </ThemeProvider>
@@ -195,7 +201,6 @@ export default Button;
 const NextLink = styled(Link)`
   display: flex;
   align-items: center;
-  gap: 0.5vw;
   width: ${(props) => (props.stretch ? '100%' : 'auto')};
 `;
 
@@ -220,6 +225,12 @@ const StyledLinkArrow = styled(LinkArrowSVG)`
 
   path {
     fill: ${(props) => props.theme.textColor};
+    transition: fill 0.3s ease;
+  }
+
+  a:hover & path {
+    fill: ${(props) =>
+      props.$themeName === 'link_primary' ? 'orange' : props.theme.textColor};
   }
 `;
 
@@ -292,10 +303,10 @@ const ButtonWrapper = styled.div`
     props.size === 'small'
       ? text.bodySm
       : props.size === 'large'
-      ? text.bodyLg
-      : props.size === 'tiny'
-      ? text.tagLight
-      : text.bodyMd};
+        ? text.bodyLg
+        : props.size === 'tiny'
+          ? text.tagLight
+          : text.bodyMd};
 
   width: ${(props) => (props.stretch ? '100%' : 'max-content')};
 `;
