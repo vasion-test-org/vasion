@@ -16,7 +16,6 @@ import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 import VasionNavLogo from '@/assets/svg/vasion-nav-logo.svg';
 import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
@@ -272,16 +271,6 @@ const Nav = ({ blok }) => {
 
     const footerOffset = footer.offsetTop + footer.offsetHeight;
 
-    const anchorTl = gsap.timeline({
-      scrollTrigger: {
-        start: '2% 1%',
-        end: '10% 90%',
-        scrub: true,
-      },
-    });
-
-    anchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
-
     ScrollTrigger.create({
       trigger: '.desktopNav',
       start: 'top top',
@@ -524,7 +513,6 @@ const Nav = ({ blok }) => {
               </div>
             ))}
           </MainInner>
-          <AnchorNavigator />
         </MainNavWrapper>
       </>
     </ThemeProvider>

@@ -3,19 +3,80 @@ import React, { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
+import { usePageData } from '@/context/PageDataContext';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
 import media from '@/styles/media';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { getSmoother } from '@/components/ScrollSmoothWrapper';
+import IconRenderer from '@/components/renderers/Icons';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-const AnchorNavigator = () => {
+const AnchorNavigator = ({ blok }) => {
+  // Get page data from context
+
+  const { pageData } = usePageData();
+  console.log('pageData from context:', pageData);
+
+  // Find anchor navigator component in pageData.content.body
+  const anchorNavData = pageData?.content?.body?.find(
+    (item) => item.component === 'anchor_navigator'
+  );
+  console.log('anchor navigator data from pageData:', anchorNavData);
+
+  // Only render if we have anchor nav data from context
+  if (!anchorNavData) {
+    return null;
+  }
+
   const themes = useAvailableThemes();
   const selectedTheme = themes.default;
   const [anchorList, setAnchorList] = useState([]);
+
+  // GSAP animations for pinning and opacity
+  useEffect(() => {
+    if (!anchorNavData) return;
+
+    const footer = document.querySelector('.footer');
+    if (!footer) return;
+
+    const footerOffset = footer.offsetTop + footer.offsetHeight;
+
+    // Create opacity animation that starts at 100px scroll
+    const opacityTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: 'body',
+        start: '100px top',
+        end: '200px top',
+        scrub: true,
+      },
+    });
+
+    opacityTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
+
+    // Create pinning animation
+    ScrollTrigger.create({
+      trigger: '.anchorNav',
+      start: 'top 200px',
+      end: `${footerOffset}px`,
+      pin: true,
+      pinSpacing: false,
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (
+          trigger.trigger === document.querySelector('.anchorNav') ||
+          trigger.trigger === document.body
+        ) {
+          trigger.kill();
+        }
+      });
+    };
+  }, [anchorNavData]);
+
   useEffect(() => {
     const updateAnchors = () => {
       const allAnchors = Array.from(
@@ -72,6 +133,14 @@ const AnchorNavigator = () => {
       >
         {anchorList.length > 0 ? (
           <AnchorNavWrapper>
+            <PageInfo>
+              <PageIcon>
+                {anchorNavData?.page_icon && (
+                  <IconRenderer iconName={anchorNavData?.page_icon} />
+                )}
+              </PageIcon>
+              <PageTitle>{anchorNavData?.page_title}</PageTitle>
+            </PageInfo>
             <ButtonsDiv>{anchorMap}</ButtonsDiv>
           </AnchorNavWrapper>
         ) : null}
@@ -179,27 +248,71 @@ const AnchorNavWrapper = styled.div`
   }
 `;
 
-const AnchorWrapper = styled.div`
-  position: absolute;
+const PageInfo = styled.div`
   display: flex;
+  align-items: center;
+
+  ${media.fullWidth} {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  ${media.tablet} {
+    gap: 0.781vw;
+    margin-bottom: 0.781vw;
+  }
+
+  ${media.mobile} {
+    gap: 1.667vw;
+    margin-bottom: 1.667vw;
+  }
+`;
+
+const PageIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+
+  svg {
+    path {
+      fill: ${colors.lightPurple};
+    }
+  }
+`;
+
+const PageTitle = styled.h2`
+  ${text.bodyLgBold};
+  color: ${colors.txtPrimary};
+  margin: 0;
+
+  ${media.mobile} {
+    ${text.bodyMd};
+  }
+`;
+
+const AnchorWrapper = styled.div`
+  position: fixed;
+  display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   width: 100%;
   z-index: 10;
-  top: 4.063vw;
+  top: 100px;
   pointer-events: none; /* non-interactive until anchors exist */
-  /* opacity: 0; */
+  opacity: 0; /* Start with opacity 0, GSAP will animate this */
 
   ${media.fullWidth} {
-    top: 65px;
+    top: 100px;
   }
 
   ${media.tablet} {
-    top: 6.348vw;
+    top: 100px;
   }
 
   ${media.mobile} {
-    top: 13.542vw;
+    top: 100px;
   }
 
   &[data-has-anchors='true'] {
