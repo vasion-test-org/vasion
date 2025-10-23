@@ -79,11 +79,11 @@ const AnchorNavigator = ({ blok }) => {
       >
         <PageInfo>
           <PageIcon>
-            {blok.icon[0].icon && (
-              <Icon src={blok.icon[0].icon} alt={blok.icon[0].alt} />
+            {blok?.icon?.[0]?.icon && (
+              <Icon src={blok?.icon?.[0]?.icon} alt={blok?.icon?.[0]?.alt || ''} />
             )}
           </PageIcon>
-          <PageTitle>{blok.title}</PageTitle>
+          <PageTitle>{blok?.title}</PageTitle>
         </PageInfo>
         {anchorList.length > 0 ? (
           <AnchorNavWrapper>
