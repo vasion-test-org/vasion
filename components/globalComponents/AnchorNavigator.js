@@ -14,8 +14,9 @@ import IconRenderer from '@/components/renderers/Icons';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-const AnchorNavigator = () => {
+const AnchorNavigator = ({blok}) => {
   // Get page data from context
+  
   const { pageData } = usePageData();
   console.log('pageData from context:', pageData);
 
@@ -235,8 +236,6 @@ const PageIcon = styled.div`
       fill: ${colors.lightPurple};
     }
   }
-
-
 `;
 
 const PageTitle = styled.h2`

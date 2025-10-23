@@ -15,7 +15,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
-import AnchorNavigator from '@/components/globalComponents/AnchorNavigator';
 import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
 
@@ -475,7 +474,6 @@ const MobileNav = ({ blok }) => {
               ))}
             </ButtonContainer>
           </Dropdown>
-          <AnchorNavigator />
         </MainWrapper>
       </>
     );
@@ -692,7 +690,6 @@ const MobileNav = ({ blok }) => {
             ))}
           </ButtonContainer>
         </Dropdown>
-        <AnchorNavigator />
       </MainWrapper>
     </>
   );
