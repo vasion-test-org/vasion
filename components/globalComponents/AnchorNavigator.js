@@ -59,7 +59,7 @@ const AnchorNavigator = ({ blok }) => {
     // Create pinning animation
     ScrollTrigger.create({
       trigger: '.anchorNav',
-      start: 'top 400px',
+      start: 'top 100px',
       end: `${footerOffset}px`,
       pin: true,
       pinSpacing: false,
