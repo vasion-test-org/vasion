@@ -14,9 +14,9 @@ import IconRenderer from '@/components/renderers/Icons';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-const AnchorNavigator = ({blok}) => {
+const AnchorNavigator = ({ blok }) => {
   // Get page data from context
-  
+
   const { pageData } = usePageData();
   console.log('pageData from context:', pageData);
 
@@ -34,6 +34,49 @@ const AnchorNavigator = ({blok}) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes.default;
   const [anchorList, setAnchorList] = useState([]);
+
+  // GSAP animations for pinning and opacity
+  useEffect(() => {
+    if (!anchorNavData) return;
+
+    const footer = document.querySelector('.footer');
+    if (!footer) return;
+
+    const footerOffset = footer.offsetTop + footer.offsetHeight;
+
+    // Create opacity animation that starts at 100px scroll
+    const opacityTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: 'body',
+        start: '100px top',
+        end: '200px top',
+        scrub: true,
+      },
+    });
+
+    opacityTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
+
+    // Create pinning animation
+    ScrollTrigger.create({
+      trigger: '.anchorNav',
+      start: 'top 100px',
+      end: `${footerOffset}px`,
+      pin: true,
+      pinSpacing: false,
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (
+          trigger.trigger === document.querySelector('.anchorNav') ||
+          trigger.trigger === document.body
+        ) {
+          trigger.kill();
+        }
+      });
+    };
+  }, [anchorNavData]);
+
   useEffect(() => {
     const updateAnchors = () => {
       const allAnchors = Array.from(
@@ -249,27 +292,27 @@ const PageTitle = styled.h2`
 `;
 
 const AnchorWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   width: 100%;
   z-index: 10;
-  top: 4.063vw;
+  top: 100px;
   pointer-events: none; /* non-interactive until anchors exist */
-  /* opacity: 0; */
+  opacity: 0; /* Start with opacity 0, GSAP will animate this */
 
   ${media.fullWidth} {
-    top: 65px;
+    top: 100px;
   }
 
   ${media.tablet} {
-    top: 6.348vw;
+    top: 100px;
   }
 
   ${media.mobile} {
-    top: 13.542vw;
+    top: 100px;
   }
 
   &[data-has-anchors='true'] {

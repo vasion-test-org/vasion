@@ -266,33 +266,6 @@ const Nav = ({ blok }) => {
   useEffect(() => {
     if (!navReady) return;
 
-    const footer = document.querySelector('.footer');
-    if (!footer) return;
-
-    const footerOffset = footer.offsetTop + footer.offsetHeight;
-
-    const anchorTl = gsap.timeline({
-      scrollTrigger: {
-        start: '2% 1%',
-        end: '10% 90%',
-        scrub: true,
-      },
-    });
-
-    anchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
-
-    ScrollTrigger.create({
-      trigger: '.desktopNav',
-      start: 'top top',
-      end: `${footerOffset}px`,
-      pin: true,
-      pinSpacing: false,
-    });
-  }, [navReady]);
-
-  useEffect(() => {
-    if (!navReady) return;
-
     gsap.set('.dropdowns', { autoAlpha: 0, display: 'flex' });
 
     const allTabs = gsap.utils.toArray('.tabs');
