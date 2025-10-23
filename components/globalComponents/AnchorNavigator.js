@@ -12,7 +12,14 @@ import { getSmoother } from '@/components/ScrollSmoothWrapper';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-const AnchorNavigator = () => {
+const AnchorNavigator = ({ blok }) => {
+  console.log('blok anchor navigator', blok);
+
+  // Only render if blok exists
+  if (!blok) {
+    return null;
+  }
+
   const themes = useAvailableThemes();
   const selectedTheme = themes.default;
   const [anchorList, setAnchorList] = useState([]);
@@ -70,6 +77,14 @@ const AnchorNavigator = () => {
         data-has-anchors={anchorList.length > 0}
         data-anchors-count={anchorList.length}
       >
+        <PageInfo>
+          <PageIcon>
+            {blok.icon[0].icon && (
+              <Icon src={blok.icon[0].icon} alt={blok.icon[0].alt} />
+            )}
+          </PageIcon>
+          <PageTitle>{blok.title}</PageTitle>
+        </PageInfo>
         {anchorList.length > 0 ? (
           <AnchorNavWrapper>
             <ButtonsDiv>{anchorMap}</ButtonsDiv>
@@ -179,9 +194,68 @@ const AnchorNavWrapper = styled.div`
   }
 `;
 
+const PageInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+  margin-bottom: 0.5vw;
+
+  ${media.fullWidth} {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  ${media.tablet} {
+    gap: 0.781vw;
+    margin-bottom: 0.781vw;
+  }
+
+  ${media.mobile} {
+    gap: 1.667vw;
+    margin-bottom: 1.667vw;
+  }
+`;
+
+const PageIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Icon = styled.img`
+  width: 1.25vw;
+  height: 1.25vw;
+
+  ${media.fullWidth} {
+    width: 20px;
+    height: 20px;
+  }
+
+  ${media.tablet} {
+    width: 1.953vw;
+    height: 1.953vw;
+  }
+
+  ${media.mobile} {
+    width: 4.167vw;
+    height: 4.167vw;
+  }
+`;
+
+const PageTitle = styled.h2`
+  ${text.headingSm};
+  color: ${colors.gray900};
+  margin: 0;
+
+  ${media.mobile} {
+    ${text.bodyMd};
+  }
+`;
+
 const AnchorWrapper = styled.div`
   position: absolute;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
