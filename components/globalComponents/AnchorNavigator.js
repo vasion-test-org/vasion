@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
+import { usePageData } from '@/context/PageDataContext';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
 import media from '@/styles/media';
@@ -12,11 +13,19 @@ import { getSmoother } from '@/components/ScrollSmoothWrapper';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-const AnchorNavigator = ({ blok }) => {
-  console.log('blok anchor navigator', blok);
+const AnchorNavigator = () => {
+  // Get page data from context
+  const { pageData } = usePageData();
+  console.log('pageData from context:', pageData);
 
-  // Only render if blok exists
-  if (!blok) {
+  // Find anchor navigator component in pageData.content.body
+  const anchorNavData = pageData?.content?.body?.find(
+    (item) => item.component === 'anchor_navigator'
+  );
+  console.log('anchor navigator data from pageData:', anchorNavData);
+
+  // Only render if we have anchor nav data from context
+  if (!anchorNavData) {
     return null;
   }
 
@@ -79,11 +88,14 @@ const AnchorNavigator = ({ blok }) => {
       >
         <PageInfo>
           <PageIcon>
-            {blok?.icon?.[0]?.icon && (
-              <Icon src={blok?.icon?.[0]?.icon} alt={blok?.icon?.[0]?.alt || ''} />
+            {anchorNavData?.page_icon && (
+              <Icon
+                src={anchorNavData?.icon?.[0]?.icon}
+                alt={anchorNavData?.icon?.[0]?.alt || ''}
+              />
             )}
           </PageIcon>
-          <PageTitle>{blok?.title}</PageTitle>
+          <PageTitle>{anchorNavData?.page_title}</PageTitle>
         </PageInfo>
         {anchorList.length > 0 ? (
           <AnchorNavWrapper>
@@ -197,8 +209,6 @@ const AnchorNavWrapper = styled.div`
 const PageInfo = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5vw;
-  margin-bottom: 0.5vw;
 
   ${media.fullWidth} {
     gap: 8px;
@@ -255,7 +265,7 @@ const PageTitle = styled.h2`
 const AnchorWrapper = styled.div`
   position: absolute;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   width: 100%;
