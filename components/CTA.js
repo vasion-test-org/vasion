@@ -109,7 +109,6 @@ const CtaWrapper = styled.div`
   display: flex;
   align-items: ${(props) =>
     props.$ctastyle === 'pill' && props.$pillbgimg ? 'flex-start' : 'center'};
-  align-items: flex-start;
   overflow: hidden;
   background: ${(props) =>
     props.$ctastyle === 'image'
