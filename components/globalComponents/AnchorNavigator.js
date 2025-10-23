@@ -10,6 +10,7 @@ import media from '@/styles/media';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { getSmoother } from '@/components/ScrollSmoothWrapper';
+import IconRenderer from '@/components/renderers/Icons';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -86,19 +87,16 @@ const AnchorNavigator = () => {
         data-has-anchors={anchorList.length > 0}
         data-anchors-count={anchorList.length}
       >
-        <PageInfo>
-          <PageIcon>
-            {anchorNavData?.page_icon && (
-              <Icon
-                src={anchorNavData?.icon?.[0]?.icon}
-                alt={anchorNavData?.icon?.[0]?.alt || ''}
-              />
-            )}
-          </PageIcon>
-          <PageTitle>{anchorNavData?.page_title}</PageTitle>
-        </PageInfo>
         {anchorList.length > 0 ? (
           <AnchorNavWrapper>
+            <PageInfo>
+              <PageIcon>
+                {anchorNavData?.page_icon && (
+                  <IconRenderer iconName={anchorNavData?.page_icon} />
+                )}
+              </PageIcon>
+              <PageTitle>{anchorNavData?.page_title}</PageTitle>
+            </PageInfo>
             <ButtonsDiv>{anchorMap}</ButtonsDiv>
           </AnchorNavWrapper>
         ) : null}
@@ -230,31 +228,20 @@ const PageIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
+  margin-right: 10px;
 
-const Icon = styled.img`
-  width: 1.25vw;
-  height: 1.25vw;
-
-  ${media.fullWidth} {
-    width: 20px;
-    height: 20px;
+  svg {
+    path {
+      fill: ${colors.lightPurple};
+    }
   }
 
-  ${media.tablet} {
-    width: 1.953vw;
-    height: 1.953vw;
-  }
 
-  ${media.mobile} {
-    width: 4.167vw;
-    height: 4.167vw;
-  }
 `;
 
 const PageTitle = styled.h2`
-  ${text.headingSm};
-  color: ${colors.gray900};
+  ${text.bodyLgBold};
+  color: ${colors.txtPrimary};
   margin: 0;
 
   ${media.mobile} {
