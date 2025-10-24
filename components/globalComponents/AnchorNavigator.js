@@ -308,11 +308,12 @@ const AnchorWrapper = styled.div`
   }
 
   ${media.tablet} {
-    top: 100px;
+    top: 50px;
   }
 
   ${media.mobile} {
     top: 100px;
+    display: none;
   }
 
   &[data-has-anchors='true'] {
