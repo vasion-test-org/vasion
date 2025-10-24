@@ -313,6 +313,7 @@ const AnchorWrapper = styled.div`
 
   ${media.mobile} {
     top: 100px;
+    display: none;
   }
 
   &[data-has-anchors='true'] {
