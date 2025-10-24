@@ -308,7 +308,7 @@ const AnchorWrapper = styled.div`
   }
 
   ${media.tablet} {
-    top: 100px;
+    top: 50px;
   }
 
   ${media.mobile} {
