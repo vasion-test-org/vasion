@@ -50,7 +50,7 @@ const AnchorNavigator = ({ blok }) => {
       start: 'top 200px',
       end: `${footerOffset}px`,
       pin: true,
-      pinSpacing: false,
+      pinSpacing: true,
     });
 
     return () => {
