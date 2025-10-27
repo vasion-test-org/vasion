@@ -591,17 +591,6 @@ const MobileNav = ({ blok }) => {
   }, []);
 
   useEffect(() => {
-    const mobileAnchorTl = gsap.timeline({
-      scrollTrigger: {
-        start: '2% 1%',
-        end: '10% 90%',
-        // markers: true,
-        scrub: true,
-      },
-    });
-
-    mobileAnchorTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
-
     ScrollTrigger.create({
       trigger: '.mobileNav',
       start: 'top top',

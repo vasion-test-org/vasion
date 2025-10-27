@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
-import { usePageData } from '@/context/PageDataContext';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
 import media from '@/styles/media';
@@ -15,19 +14,8 @@ import IconRenderer from '@/components/renderers/Icons';
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const AnchorNavigator = ({ blok }) => {
-  // Get page data from context
-
-  const { pageData } = usePageData();
-  console.log('pageData from context:', pageData);
-
-  // Find anchor navigator component in pageData.content.body
-  const anchorNavData = pageData?.content?.body?.find(
-    (item) => item.component === 'anchor_navigator'
-  );
-  console.log('anchor navigator data from pageData:', anchorNavData);
-
-  // Only render if we have anchor nav data from context
-  if (!anchorNavData) {
+  // Only render if we have a blok prop
+  if (!blok) {
     return null;
   }
 
@@ -37,7 +25,7 @@ const AnchorNavigator = ({ blok }) => {
 
   // GSAP animations for pinning and opacity
   useEffect(() => {
-    if (!anchorNavData) return;
+    if (!blok) return;
 
     const footer = document.querySelector('.footer');
     if (!footer) return;
@@ -54,7 +42,8 @@ const AnchorNavigator = ({ blok }) => {
       },
     });
 
-    opacityTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
+    opacityTl.fromTo('.anchorNav', { autoAlpha: 0, dispaly: 'none', pointerEvents: 'none'}, { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' })
+    .from('.anchorNav', { height: 0 }, '<');
 
     // Create pinning animation
     ScrollTrigger.create({
@@ -75,7 +64,7 @@ const AnchorNavigator = ({ blok }) => {
         }
       });
     };
-  }, [anchorNavData]);
+  }, [blok]);
 
   useEffect(() => {
     const updateAnchors = () => {
@@ -102,11 +91,23 @@ const AnchorNavigator = ({ blok }) => {
   }, []);
 
   const anchorMap = anchorList.map((anchor, i) => {
-    const anchorText = anchor.dataset.anchorId
-      .replace(/-/g, ' ')
+    // Process anchor text: handle special symbols by preserving them
+    // but make it more readable
+    const anchorId = anchor.dataset.anchorId || '';
+
+    // For display, we can format it nicely but keep special characters readable
+    // Handle common patterns: camelCase, kebab-case, snake_case
+    let anchorText = anchorId
+      .replace(/([a-z])([A-Z])/g, '$1 $2') // Insert space between camelCase
+      .replace(/[-_]/g, ' ') // Replace dashes and underscores with spaces
       .split(' ')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
+
+    // If no transformation happened, use the original anchorId as display text
+    if (!anchorText || anchorText === anchorId) {
+      anchorText = anchorId;
+    }
 
     return (
       <AnchorButton
@@ -131,19 +132,15 @@ const AnchorNavigator = ({ blok }) => {
         data-has-anchors={anchorList.length > 0}
         data-anchors-count={anchorList.length}
       >
-        {anchorList.length > 0 ? (
-          <AnchorNavWrapper>
-            <PageInfo>
-              <PageIcon>
-                {anchorNavData?.page_icon && (
-                  <IconRenderer iconName={anchorNavData?.page_icon} />
-                )}
-              </PageIcon>
-              <PageTitle>{anchorNavData?.page_title}</PageTitle>
-            </PageInfo>
-            <ButtonsDiv>{anchorMap}</ButtonsDiv>
-          </AnchorNavWrapper>
-        ) : null}
+        <AnchorNavWrapper>
+          <PageInfo>
+            <PageIcon>
+              {blok?.page_icon && <IconRenderer iconName={blok?.page_icon} />}
+            </PageIcon>
+            <PageTitle>{blok?.page_title}</PageTitle>
+          </PageInfo>
+          {anchorList.length > 0 && <ButtonsDiv>{anchorMap}</ButtonsDiv>}
+        </AnchorNavWrapper>
       </AnchorWrapper>
     </ThemeProvider>
   );
@@ -300,8 +297,8 @@ const AnchorWrapper = styled.div`
   width: 100%;
   z-index: 10;
   top: 100px;
-  pointer-events: none; /* non-interactive until anchors exist */
-  opacity: 0; /* Start with opacity 0, GSAP will animate this */
+  pointer-events: none;
+  opacity: 0;
 
   ${media.fullWidth} {
     top: 100px;
@@ -314,10 +311,6 @@ const AnchorWrapper = styled.div`
   ${media.mobile} {
     top: 100px;
     display: none;
-  }
-
-  &[data-has-anchors='true'] {
-    pointer-events: auto;
   }
 `;
 
