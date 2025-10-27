@@ -45,10 +45,9 @@ const AnchorNavigator = ({ blok }) => {
     opacityTl
       .fromTo(
         '.anchorNav',
-        { autoAlpha: 0, display: 'none', pointerEvents: 'none' },
+        { autoAlpha: 0, pointerEvents: 'none', height: 0 },
         { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' }
       )
-      .from('.anchorNav', { height: 0 }, '<');
 
     // Create pinning animation
     ScrollTrigger.create({
