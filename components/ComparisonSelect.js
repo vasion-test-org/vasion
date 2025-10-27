@@ -22,7 +22,6 @@ const ComparisonSelect = ({ blok }) => {
   useEffect(() => {
     const tl1 = gsap.timeline({ paused: true });
     const tl2 = gsap.timeline({ paused: true });
-
     tl1
       .to(object1Ref.current, {
         duration: 0.2,
@@ -40,7 +39,7 @@ const ComparisonSelect = ({ blok }) => {
           opacity: 0.5,
           boxShadow: 'unset',
         },
-        0
+        0,
       );
 
     tl2
@@ -59,7 +58,7 @@ const ComparisonSelect = ({ blok }) => {
           y: -4,
           opacity: 0.5,
         },
-        0
+        0,
       );
 
     const handleClick1 = () => {
