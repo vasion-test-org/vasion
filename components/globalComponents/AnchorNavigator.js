@@ -27,32 +27,54 @@ const AnchorNavigator = ({ blok }) => {
   useEffect(() => {
     if (!blok) return;
 
-    const footer = document.querySelector('.footer');
-    if (!footer) return;
+    // Wait for footer to exist
+    const waitForFooter = () => {
+      return new Promise((resolve) => {
+        const checkFooter = () => {
+          const footer = document.querySelector('.footer');
+          if (footer) {
+            resolve(footer);
+          } else {
+            setTimeout(checkFooter, 50); // Check every 50ms
+          }
+        };
+        checkFooter();
+      });
+    };
 
-    const footerOffset = footer.offsetTop + footer.offsetHeight;
+    const initScrollTrigger = async () => {
+      const footer = await waitForFooter();
+      const footerOffset = footer.offsetTop + footer.offsetHeight;
 
-    // Create opacity animation that starts at 100px scroll
-    const opacityTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: 'body',
-        start: '100px top',
-        end: '200px top',
-        scrub: true,
-      },
-    });
+      // Create opacity animation that starts at 100px scroll
+      const opacityTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: 'body',
+          start: '100px top',
+          end: '200px top',
+          scrub: true,
+        },
+      });
 
-    opacityTl.fromTo('.anchorNav', { autoAlpha: 0, dispaly: 'none', pointerEvents: 'none'}, { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' })
-    .from('.anchorNav', { height: 0 }, '<');
+      opacityTl
+        .fromTo(
+          '.anchorNav',
+          { autoAlpha: 0, display: 'none', pointerEvents: 'none' },
+          { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' }
+        )
+        .from('.anchorNav', { height: 0 }, '<');
 
-    // Create pinning animation
-    ScrollTrigger.create({
-      trigger: '.anchorNav',
-      start: 'top 200px',
-      end: `${footerOffset}px`,
-      pin: true,
-      pinSpacing: false,
-    });
+      // Create pinning animation
+      ScrollTrigger.create({
+        trigger: '.anchorNav',
+        start: 'top 200px',
+        end: `${footerOffset}px`,
+        pin: true,
+        pinSpacing: false,
+      });
+    };
+
+    initScrollTrigger();
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => {
