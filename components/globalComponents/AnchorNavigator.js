@@ -30,7 +30,7 @@ const AnchorNavigator = ({ blok }) => {
     const footer = document.querySelector('.footer');
     // if (!footer) return;
 
-    const footerOffset = footer.offsetTop + footer.offsetHeight;
+    const footerOffset = footer?.offsetTop + footer?.offsetHeight;
 
     // Create opacity animation that starts at 100px scroll
     const opacityTl = gsap.timeline({
