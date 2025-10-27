@@ -27,24 +27,16 @@ const AnchorNavigator = ({ blok }) => {
   useEffect(() => {
     if (!blok) return;
 
-    // Wait for footer to exist
-    const waitForFooter = () => {
-      return new Promise((resolve) => {
-        const checkFooter = () => {
-          const footer = document.querySelector('.footer');
-          if (footer) {
-            resolve(footer);
-          } else {
-            setTimeout(checkFooter, 50); // Check every 50ms
-          }
-        };
-        checkFooter();
-      });
-    };
+    // Wait for DOM to be ready and footer to exist
+    const checkAndInit = () => {
+      const footer = document.querySelector('.footer');
 
-    const initScrollTrigger = async () => {
-      const footer = await waitForFooter();
-      const footerOffset = footer.offsetTop + footer.offsetHeight;
+      // Only proceed if footer exists
+      if (!footer) {
+        // Retry after a short delay if footer is not found
+        setTimeout(checkAndInit, 100);
+        return;
+      }
 
       // Create opacity animation that starts at 100px scroll
       const opacityTl = gsap.timeline({
@@ -64,17 +56,18 @@ const AnchorNavigator = ({ blok }) => {
         )
         .from('.anchorNav', { height: 0 }, '<');
 
-      // Create pinning animation
+      // Create pinning animation - pin to bottom of body
       ScrollTrigger.create({
         trigger: '.anchorNav',
         start: 'top 200px',
-        end: `${footerOffset}px`,
+        end: 'bottom bottom',
         pin: true,
         pinSpacing: false,
       });
     };
 
-    initScrollTrigger();
+    // Start checking
+    checkAndInit();
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => {
@@ -317,7 +310,7 @@ const AnchorWrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  z-index: 10;
+  z-index: 9;
   top: 100px;
   pointer-events: none;
   opacity: 0;
