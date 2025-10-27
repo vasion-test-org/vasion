@@ -42,7 +42,7 @@ const AnchorNavigator = ({ blok }) => {
       },
     });
 
-    opacityTl.fromTo('.anchorNav', { autoAlpha: 0 }, { autoAlpha: 1 });
+    opacityTl.fromTo('.anchorNav', { autoAlpha: 0, dispaly: 'none'}, { autoAlpha: 1, display: 'flex' });
 
     // Create pinning animation
     ScrollTrigger.create({
@@ -50,7 +50,7 @@ const AnchorNavigator = ({ blok }) => {
       start: 'top 200px',
       end: `${footerOffset}px`,
       pin: true,
-      pinSpacing: true,
+      pinSpacing: false,
     });
 
     return () => {
