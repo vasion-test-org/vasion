@@ -42,7 +42,7 @@ const AnchorNavigator = ({ blok }) => {
       },
     });
 
-    opacityTl.fromTo('.anchorNav', { autoAlpha: 0, dispaly: 'none'}, { autoAlpha: 1, display: 'flex' })
+    opacityTl.fromTo('.anchorNav', { autoAlpha: 0, dispaly: 'none', pointerEvents: 'none'}, { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' })
     .from('.anchorNav', { height: 0 }, '<');
 
     // Create pinning animation
@@ -311,10 +311,6 @@ const AnchorWrapper = styled.div`
   ${media.mobile} {
     top: 100px;
     display: none;
-  }
-
-  &[data-has-anchors='true'] {
-    pointer-events: auto;
   }
 `;
 
