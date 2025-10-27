@@ -42,7 +42,8 @@ const AnchorNavigator = ({ blok }) => {
       },
     });
 
-    opacityTl.fromTo('.anchorNav', { autoAlpha: 0, dispaly: 'none'}, { autoAlpha: 1, display: 'flex' });
+    opacityTl.fromTo('.anchorNav', { autoAlpha: 0, dispaly: 'none'}, { autoAlpha: 1, display: 'flex' })
+    .from('.anchorNav', { height: 0 }, '<');
 
     // Create pinning animation
     ScrollTrigger.create({
