@@ -27,47 +27,37 @@ const AnchorNavigator = ({ blok }) => {
   useEffect(() => {
     if (!blok) return;
 
-    // Wait for DOM to be ready and footer to exist
-    const checkAndInit = () => {
-      const footer = document.querySelector('.footer');
+    const footer = document.querySelector('.footer');
+    // if (!footer) return;
 
-      // Only proceed if footer exists
-      if (!footer) {
-        // Retry after a short delay if footer is not found
-        setTimeout(checkAndInit, 100);
-        return;
-      }
+    const footerOffset = footer.offsetTop + footer.offsetHeight;
 
-      // Create opacity animation that starts at 100px scroll
-      const opacityTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: 'body',
-          start: '100px top',
-          end: '200px top',
-          scrub: true,
-        },
-      });
+    // Create opacity animation that starts at 100px scroll
+    const opacityTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: 'body',
+        start: '100px top',
+        end: '200px top',
+        scrub: true,
+      },
+    });
 
-      opacityTl
-        .fromTo(
-          '.anchorNav',
-          { autoAlpha: 0, display: 'none', pointerEvents: 'none' },
-          { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' }
-        )
-        .from('.anchorNav', { height: 0 }, '<');
+    opacityTl
+      .fromTo(
+        '.anchorNav',
+        { autoAlpha: 0, display: 'none', pointerEvents: 'none' },
+        { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' }
+      )
+      .from('.anchorNav', { height: 0 }, '<');
 
-      // Create pinning animation - pin to bottom of body
-      ScrollTrigger.create({
-        trigger: '.anchorNav',
-        start: 'top 200px',
-        end: 'bottom bottom',
-        pin: true,
-        pinSpacing: false,
-      });
-    };
-
-    // Start checking
-    checkAndInit();
+    // Create pinning animation
+    ScrollTrigger.create({
+      trigger: '.anchorNav',
+      start: 'top 200px',
+      end: `${footerOffset}px`,
+      pin: true,
+      pinSpacing: false,
+    });
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => {
@@ -310,7 +300,7 @@ const AnchorWrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  z-index: 9;
+  z-index: 10;
   top: 100px;
   pointer-events: none;
   opacity: 0;
