@@ -1,41 +1,41 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useRouter, usePathname } from "next/navigation";
-import VasionStarSVG from "@/assets/svg/VasionStarBig.svg";
-import VasionSmall from "@/assets/svg/SmallVasion.svg";
-import colors from "@/styles/colors";
-import media from "@/styles/media";
-import text from "@/styles/text";
-import gsap from "gsap";
-import Button from "@/components/globalComponents/Button";
-import Facebook from "@/assets/svg/footer/Facebook.svg";
-import Twitter from "@/assets/svg/footer/Twitter.svg";
-import LinkedIn from "@/assets/svg/footer/LinkedIn.svg";
-import { storyblokEditable } from "@storyblok/react/rsc";
+'use client';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useRouter, usePathname } from 'next/navigation';
+import VasionStarSVG from '@/assets/svg/VasionStarBig.svg';
+import VasionSmall from '@/assets/svg/SmallVasion.svg';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
+import gsap from 'gsap';
+import Button from '@/components/globalComponents/Button';
+import Facebook from '@/assets/svg/footer/Facebook.svg';
+import Twitter from '@/assets/svg/footer/Twitter.svg';
+import LinkedIn from '@/assets/svg/footer/LinkedIn.svg';
+import { storyblokEditable } from '@storyblok/react/rsc';
 
 const Footer = ({ blok }) => {
   const router = useRouter();
   const path = usePathname();
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState('en');
   const [footerColumns, setFooterColumns] = useState(blok.footer_columns);
 
   useEffect(() => {
     function checkPathLocale(url) {
-      const { pathname } = new URL(url, "https://vasion.com");
-      const pathLocale = pathname.split("/")[1];
-      const supportedLocales = ["en", "fr", "de"];
-      const defaultLocale = "en";
+      const { pathname } = new URL(url, 'https://vasion.com');
+      const pathLocale = pathname.split('/')[1];
+      const supportedLocales = ['en', 'fr', 'de'];
+      const defaultLocale = 'en';
 
       const lang = supportedLocales.includes(pathLocale)
         ? pathLocale
         : defaultLocale;
       setLanguage(lang);
       // console.log("lang", lang);
-      if (lang === "de") {
+      if (lang === 'de') {
         setFooterColumns(blok.german_footer_columns);
         // console.log("blok.german_footer_columns", blok.german_footer_columns);
-      } else if (lang === "fr") {
+      } else if (lang === 'fr') {
         setFooterColumns(blok.french_footer_columns);
         // console.log("blok.french_footer_columns", blok.french_footer_columns);
       } else {
@@ -52,20 +52,20 @@ const Footer = ({ blok }) => {
   useEffect(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: ".footer",
-        start: "50% 50%",
+        trigger: '.footer',
+        start: '50% 50%',
       },
     });
 
-    tl.from("#vasionfootersvg", {
+    tl.from('#vasionfootersvg', {
       yPercent: 100,
       duration: 2,
-      ease: "back.out",
+      ease: 'back.out',
     });
   }, []);
 
   useEffect(() => {
-    const canvas = document.getElementById("gradientCanvas");
+    const canvas = document.getElementById('gradientCanvas');
 
     if (canvas) {
     }
@@ -76,25 +76,25 @@ const Footer = ({ blok }) => {
     footerColumns?.map((column) => (
       <LinkColumn key={column._uid}>
         <LinkColumnHeader>
-          {column.column_header?.content?.[0]?.content?.[0]?.text || ""}
+          {column.column_header?.content?.[0]?.content?.[0]?.text || ''}
         </LinkColumnHeader>
         {column.links?.map((link) => {
-          const url = link.link?.url || link.link?.cached_url || "";
+          const url = link.link?.url || link.link?.cached_url || '';
           const isExternal =
-            url.startsWith("http://") || url.startsWith("https://");
+            url.startsWith('http://') || url.startsWith('https://');
 
           const normalizedUrl = isExternal
             ? url
-            : url.startsWith("/")
-              ? url
-              : `/${url}`;
+            : url.startsWith('/')
+            ? url
+            : `/${url}`;
 
           return (
             <LinkName
               key={link._uid}
               href={normalizedUrl}
-              target={link.link?.target || (isExternal ? "_blank" : "_self")}
-              rel={isExternal ? "noopener noreferrer" : undefined}
+              target={link.link?.target || (isExternal ? '_blank' : '_self')}
+              rel={isExternal ? 'noopener noreferrer' : undefined}
             >
               {link.link_name}
             </LinkName>
@@ -104,9 +104,9 @@ const Footer = ({ blok }) => {
     )) || [];
 
   const handleNavigate = (link) => {
-    const isExternalLink = link.startsWith("http") || link.startsWith("https");
+    const isExternalLink = link.startsWith('http') || link.startsWith('https');
     if (isExternalLink) {
-      window.open(link, "_blank");
+      window.open(link, '_blank');
     } else {
       router.push(link);
     }
@@ -116,7 +116,7 @@ const Footer = ({ blok }) => {
     <Wrapper className="footer">
       <MainFooterContainer>
         <LogoContainer>
-          <Logo onClick={() => handleNavigate("/")} />
+          <Logo onClick={() => handleNavigate('/')} />
           <Address>432 S. Tech Ridge Drive, St. George, Utah 84770 USA</Address>
           <VasionStar />
         </LogoContainer>
@@ -126,7 +126,7 @@ const Footer = ({ blok }) => {
         <SocialsContainer>
           <SocialIcon
             onClick={() =>
-              handleNavigate("https://www.facebook.com/VasionSoftware")
+              handleNavigate('https://www.facebook.com/VasionSoftware')
             }
           >
             <Facebook />
@@ -134,7 +134,7 @@ const Footer = ({ blok }) => {
           <SocialIcon
             onClick={() =>
               handleNavigate(
-                "https://x.com/i/flow/login?redirect_after_login=%2FVasionSoftware",
+                'https://x.com/i/flow/login?redirect_after_login=%2FVasionSoftware'
               )
             }
           >
@@ -143,7 +143,7 @@ const Footer = ({ blok }) => {
           <SocialIcon
             onClick={() =>
               handleNavigate(
-                "https://www.linkedin.com/company/vasion-software/posts/?feedView=all",
+                'https://www.linkedin.com/company/vasion-software/posts/?feedView=all'
               )
             }
           >
@@ -158,24 +158,24 @@ const Footer = ({ blok }) => {
       </ButtonContainer>
       <LegalDiv>
         <LegalLinks>
-          <LegalLink onClick={() => handleNavigate("/privacy-policy/")}>
+          <LegalLink onClick={() => handleNavigate('/privacy-policy/')}>
             Privacy Policy
           </LegalLink>
           |
-          <LegalLink onClick={() => handleNavigate("/imprint/")}>
+          <LegalLink onClick={() => handleNavigate('/imprint/')}>
             Imprint
           </LegalLink>
           |
-          <LegalLink onClick={() => handleNavigate("/cookie-information/")}>
+          <LegalLink onClick={() => handleNavigate('/cookie-information/')}>
             Cookies
           </LegalLink>
           |
-          <LegalLink onClick={() => handleNavigate("/legal/")}>Legal</LegalLink>
+          <LegalLink onClick={() => handleNavigate('/legal/')}>Legal</LegalLink>
         </LegalLinks>
         © 2025 Vasion. All Rights Reserved
       </LegalDiv>
       <VasionFooter
-        src={"/images/uiElements/VasionFooterPNG.png"}
+        src={'/images/uiElements/VasionFooterPNG.png'}
         id="vasionfootersvg"
       />
     </Wrapper>
@@ -481,8 +481,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%),
+  background: linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%),
     linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
   height: 88.806vw;
   gap: 3.611vw;
