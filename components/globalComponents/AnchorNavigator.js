@@ -90,40 +90,49 @@ const AnchorNavigator = ({ blok }) => {
     };
   }, []);
 
-  const anchorMap = anchorList.map((anchor, i) => {
-    // Process anchor text: handle special symbols by preserving them
-    // but make it more readable
-    const anchorId = anchor.dataset.anchorId || '';
+  const anchorMap = anchorList
+    .filter((anchor) => {
+      const anchorId = anchor.dataset.anchorId || '';
+      return anchorId.trim().length > 0;
+    })
+    .map((anchor, i) => {
+      // Process anchor text: handle special symbols by preserving them
+      // but make it more readable
+      const anchorId = anchor.dataset.anchorId || '';
 
-    // For display, we can format it nicely but keep special characters readable
-    // Handle common patterns: camelCase, kebab-case, snake_case
-    let anchorText = anchorId
-      .replace(/([a-z])([A-Z])/g, '$1 $2') // Insert space between camelCase
-      .replace(/[-_]/g, ' ') // Replace dashes and underscores with spaces
-      .split(' ')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
+      // For display, we can format it nicely but keep special characters readable
+      // Handle common patterns: camelCase, kebab-case, snake_case
+      let anchorText = anchorId
+        .replace(/([a-z])([A-Z])/g, '$1 $2') // Insert space between camelCase
+        .replace(/[-_]/g, ' ') // Replace dashes and underscores with spaces
+        .split(' ')
+        .map(
+          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        )
+        .join(' ');
 
-    // If no transformation happened, use the original anchorId as display text
-    if (!anchorText || anchorText === anchorId) {
-      anchorText = anchorId;
-    }
+      // If no transformation happened, use the original anchorId as display text
+      if (!anchorText || anchorText === anchorId) {
+        anchorText = anchorId;
+      }
 
-    return (
-      <AnchorButton
-        key={i}
-        onClick={() => {
-          const smoother = getSmoother();
+      // Only include anchors with valid text
+      return anchorText.trim().length > 0 ? (
+        <AnchorButton
+          key={i}
+          onClick={() => {
+            const smoother = getSmoother();
 
-          if (smoother && anchor) {
-            smoother.scrollTo(anchor, true, 'top top');
-          }
-        }}
-      >
-        {anchorText}
-      </AnchorButton>
-    );
-  });
+            if (smoother && anchor) {
+              smoother.scrollTo(anchor, true, 'top top');
+            }
+          }}
+        >
+          {anchorText}
+        </AnchorButton>
+      ) : null;
+    })
+    .filter((button) => button !== null);
 
   return (
     <ThemeProvider theme={selectedTheme}>
