@@ -27,10 +27,7 @@ const AnchorNavigator = ({ blok }) => {
   useEffect(() => {
     if (!blok) return;
 
-    const footer = document.querySelector('.footer');
-    // if (!footer) return;
-
-    const footerOffset = footer?.offsetTop + footer?.offsetHeight;
+    const bodyHeight = document.body.scrollHeight;
 
     // Create opacity animation that starts at 100px scroll
     const opacityTl = gsap.timeline({
@@ -42,18 +39,17 @@ const AnchorNavigator = ({ blok }) => {
       },
     });
 
-    opacityTl
-      .fromTo(
-        '.anchorNav',
-        { autoAlpha: 0, pointerEvents: 'none', height: 0 },
-        { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' }
-      )
+    opacityTl.fromTo(
+      '.anchorNav',
+      { autoAlpha: 0, pointerEvents: 'none', height: 0 },
+      { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' }
+    );
 
     // Create pinning animation
     ScrollTrigger.create({
       trigger: '.anchorNav',
       start: 'top 200px',
-      end: `${footerOffset}px`,
+      end: `${bodyHeight}px`,
       pin: true,
       pinSpacing: false,
     });
