@@ -624,11 +624,6 @@ const nextConfig = {
         destination: '/industries/government/',
         permanent: true,
       },
-      // {
-      //   source: '/home/',
-      //   destination: '/',
-      //   permanent: true,
-      // },
       {
         source: '/launches/eliminate-print-servers/',
         destination: '/whats-new/',
@@ -787,6 +782,21 @@ const nextConfig = {
       {
         source: '/yubikey/',
         destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/self-service-printer-installation-portal/',
+        destination: '/print/self-service-installation-portal/',
+        permanent: true,
+      },
+      {
+        source: '/logistics/',
+        destination: '/industries/logistics/',
+        permanent: true,
+      },
+      {
+        source: '/msp-partner/',
+        destination: '/msp-partners/',
         permanent: true,
       },
       // {
