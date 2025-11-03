@@ -41,11 +41,11 @@ export async function GET() {
         slug = slug.replace(/\/home\//, '/'); // "/home/" in middle, replace with "/"
         slug = slug.replace(/\/+$/, ''); // Remove trailing slashes
 
-        // Build the URL (matching hreflang format - no trailing slashes)
-        // If slug is empty after processing, it's the homepage (baseUrl only)
+        // Build the URL with trailing slash
+        // If slug is empty after processing, it's the homepage (baseUrl with trailing slash)
         const loc = slug
-          ? `${baseUrls[locale]}/${slug}`.replace(/\/+$/, '')
-          : baseUrls[locale];
+          ? `${baseUrls[locale]}/${slug}/`
+          : `${baseUrls[locale]}/`;
 
         return `
           <url>
