@@ -4,7 +4,10 @@ Allow: /
 Disallow: /config
 Disallow: /fr/config
 Disallow: /de/config
-Sitemap: https://vasion.com/sitemap.xml/`;
+Disallow: /go/
+Disallow: /fr/go/
+Disallow: /de/go/
+Sitemap: https://vasion.com/sitemap.xml`;
 
   return new Response(body, {
     headers: {
