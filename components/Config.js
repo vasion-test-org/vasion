@@ -179,9 +179,9 @@ const Config = ({ blok, children }) => {
         </MobileNavWrapper>
       )}
 
-      {/* <ChildrenVisibilityWrapper $visible={!!configData || !isLoading}> */}
+      <ChildrenVisibilityWrapper $visible={!!configData || !isLoading}>
         {children}
-      {/* </ChildrenVisibilityWrapper> */}
+      </ChildrenVisibilityWrapper>
 
       {configData && !shouldHideFooter && (
         <Footer blok={configData.footer?.[0]} />
