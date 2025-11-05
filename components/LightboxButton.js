@@ -52,11 +52,8 @@ const LightboxBtn = ({ blok }) => {
   useEffect(() => {
     if (!isOpen) return;
     document.body.style.overflow = "hidden";
-    const smoother = window.ScrollSmoother?.get();
-    smoother?.paused(true);
     return () => {
       document.body.style.overflow = "auto";
-      smoother?.paused(false);
     };
   }, [isOpen]);
 

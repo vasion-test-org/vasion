@@ -10,7 +10,6 @@ import axios from 'axios';
 import XSVG from 'assets/svg/Le-X.svg';
 import DownSVG from 'assets/svg/ChevronDown.svg';
 import RichTextRenderer from './renderers/RichTextRenderer';
-import { getSmoother } from '@/components/ScrollSmoothWrapper';
 
 const SupportedPrinters = ({ blok }) => {
   const [tableData, setTableData] = useState([]);
@@ -124,33 +123,6 @@ const SupportedPrinters = ({ blok }) => {
       .querySelector('#featureDropdown')
       .addEventListener('click', handleFeatureDrop);
   }, []);
-
-  useEffect(() => {
-    const tableBody = document.querySelector('#tableBody');
-    const smoother = getSmoother();
-
-    if (!tableBody) return;
-
-    const handleMouseEnter = () => {
-      if (smoother) {
-        smoother.paused(true);
-      }
-    };
-
-    const handleMouseLeave = () => {
-      if (smoother) {
-        smoother.paused(false);
-      }
-    };
-
-    tableBody.addEventListener('mouseenter', handleMouseEnter);
-    tableBody.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      tableBody.removeEventListener('mouseenter', handleMouseEnter);
-      tableBody.removeEventListener('mouseleave', handleMouseLeave);
-    };
-  }, [tableData]);
 
   const handleSearchChange = (e) => {
     e.preventDefault();
