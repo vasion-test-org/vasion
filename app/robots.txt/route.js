@@ -6,6 +6,9 @@ Disallow: /fr/config
 Disallow: /de/config
 Disallow: /_next/
 Disallow: /api/
+Disallow: /go/
+Disallow: /fr/go/
+Disallow: /de/go/
 Sitemap: https://vasion.com/sitemap.xml`;
 
   return new Response(body, {
