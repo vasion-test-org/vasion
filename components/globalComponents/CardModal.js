@@ -9,7 +9,6 @@ import CookieConsentVideo from '@/components/CookieConsentVideo';
 import useMedia from '@/functions/useMedia';
 import RichTextRenderer from '../renderers/RichTextRenderer';
 import Video from './Video';
-import { getSmoother } from '@/components/ScrollSmoothWrapper';
 
 const CardModal = ({ data, setShowModal }) => {
   const [closeButton, setCloseButton] = useState(
@@ -32,43 +31,8 @@ const CardModal = ({ data, setShowModal }) => {
   };
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    let smoother;
-    try {
-      smoother = getSmoother();
-      if (!smoother && typeof window !== 'undefined' && window.ScrollSmoother) {
-        smoother = window.ScrollSmoother.get();
-      }
-      if (smoother) {
-        smoother.paused(true);
-      } else {
-        console.warn('ScrollSmoother not found');
-      }
-    } catch (error) {
-      console.error('Error accessing ScrollSmoother:', error);
-    }
-    const modalScrollGroup = document.getElementById('modal-scroll-group');
-    const handleMouseEnter = () => {
-      if (smoother) {
-        smoother.paused(true);
-      }
-    };
-    if (modalScrollGroup) {
-      modalScrollGroup.addEventListener('mouseenter', handleMouseEnter);
-    }
     return () => {
       document.body.style.overflow = 'auto';
-      try {
-        if (smoother) {
-          smoother.paused(false);
-          // console.log("ScrollSmoother unpaused successfully");
-        }
-      } catch (error) {
-        // console.error("Error unpausing ScrollSmoother:", error);
-      }
-
-      if (modalScrollGroup) {
-        modalScrollGroup.removeEventListener('mouseenter', handleMouseEnter);
-      }
     };
   }, []);
 

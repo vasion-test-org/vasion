@@ -30,13 +30,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 const BCTPDF = ({ contactFormData, savingsFormData, currency }) => {
   const handlePrint = () => {
-    // Kill all ScrollTriggers and ScrollSmoother before print
+    // Kill all ScrollTriggers before print
     if (ScrollTrigger) {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    }
-  
-    if (gsap.core.globals().ScrollSmoother?.get()) {
-      gsap.core.globals().ScrollSmoother.get().kill();
     }
   
     // Wait a tick to let layout stabilize

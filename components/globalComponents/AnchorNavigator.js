@@ -8,7 +8,6 @@ import text from '@/styles/text';
 import media from '@/styles/media';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
-import { getSmoother } from '@/components/ScrollSmoothWrapper';
 import IconRenderer from '@/components/renderers/Icons';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -121,10 +120,8 @@ const AnchorNavigator = ({ blok }) => {
         <AnchorButton
           key={i}
           onClick={() => {
-            const smoother = getSmoother();
-
-            if (smoother && anchor) {
-              smoother.scrollTo(anchor, true, 'top top');
+            if (anchor) {
+              anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
           }}
         >

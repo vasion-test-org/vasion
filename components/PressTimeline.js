@@ -6,9 +6,9 @@ import media from "styles/media";
 import colors from "styles/colors";
 import text from "styles/text";
 import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
 import RichTextRenderer from "./renderers/RichTextRenderer";
 import { storyblokEditable } from "@storyblok/react";
-import { getSmoother } from "@/components/ScrollSmoothWrapper";
 
 const PressTimeline = ({ blok }) => {
   const [filteredCards, setFilteredCards] = useState([]);
@@ -41,29 +41,11 @@ const PressTimeline = ({ blok }) => {
   useEffect(() => {
     const timelineElement = timelineRef.current;
     const starElement = starRef.current;
-    const smoother = getSmoother();
+
+    if (!timelineElement || !starElement) return;
 
     gsap.set(starElement, { y: 0 });
     gsap.killTweensOf(starElement);
-
-    let isHovering = false;
-
-    const handleMouseEnter = () => {
-      isHovering = true;
-      if (smoother) {
-        smoother.paused(true);
-      }
-    };
-
-    const handleMouseLeave = () => {
-      isHovering = false;
-      if (smoother) {
-        smoother.paused(false);
-      }
-    };
-
-    timelineElement.addEventListener("mouseenter", handleMouseEnter);
-    timelineElement.addEventListener("mouseleave", handleMouseLeave);
 
     gsap.to(starElement, {
       scrollTrigger: {
@@ -79,8 +61,11 @@ const PressTimeline = ({ blok }) => {
     });
 
     return () => {
-      timelineElement.removeEventListener("mouseenter", handleMouseEnter);
-      timelineElement.removeEventListener("mouseleave", handleMouseLeave);
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.vars?.scroller === timelineElement) {
+          trigger.kill();
+        }
+      });
     };
   }, [filteredCards]);
 
