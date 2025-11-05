@@ -2,31 +2,36 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import media from "styles/media";
-import gsap from "gsap";
 import AccordionItem from "@/components/globalComponents/AccordionItem";
 
 const Accordion = ({ accordionData }) => {
   // console.log(accordionData)
 
   useEffect(() => {
-    const accordionItems = gsap.utils.toArray(".accordionItem");
+    const initAccordion = async () => {
+      const { default: gsap } = await import('gsap');
 
-    accordionItems.forEach((item) => {
-      const tl = gsap.timeline({ paused: true, reversed: true });
-      tl.to(item, {
-        height: "auto",
-        duration: 0.3,
-        ease: "power2.inOut",
-      });
+      const accordionItems = gsap.utils.toArray(".accordionItem");
 
-      item.addEventListener("click", function () {
-        if (tl.reversed()) {
-          tl.play();
-        } else {
-          tl.reverse();
-        }
+      accordionItems.forEach((item) => {
+        const tl = gsap.timeline({ paused: true, reversed: true });
+        tl.to(item, {
+          height: "auto",
+          duration: 0.3,
+          ease: "power2.inOut",
+        });
+
+        item.addEventListener("click", function () {
+          if (tl.reversed()) {
+            tl.play();
+          } else {
+            tl.reverse();
+          }
+        });
       });
-    });
+    };
+
+    initAccordion();
   }, []);
 
   return (

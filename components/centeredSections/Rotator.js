@@ -7,7 +7,6 @@ import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import { ScreenContext } from '@/components/providers/Screen';
 import colors from '@/styles/colors';
 import ComponentRenderer from '../renderers/ComponentRenderer';
-import gsap from 'gsap';
 import useMedia from '@/functions/useMedia';
 
 const Rotator = ({ rotatorData }) => {
@@ -60,7 +59,9 @@ const Rotator = ({ rotatorData }) => {
       });
   }, [backgroundImages]);
 
-  const handleTabClick = (index) => {
+  const handleTabClick = async (index) => {
+    const { default: gsap } = await import('gsap');
+
     if (mobile) {
       gsap.to('#mobile-active-card', {
         autoAlpha: 0,
@@ -94,13 +95,19 @@ const Rotator = ({ rotatorData }) => {
   };
 
   useEffect(() => {
-    if (!mobile) {
-      gsap.set('.rotator', { autoAlpha: 0 });
-      gsap.set('#rotator-0', { autoAlpha: 1 });
-    }
-    gsap.set('#rotator-tab-0', {
-      background: 'linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%)',
-    });
+    const initRotator = async () => {
+      const { default: gsap } = await import('gsap');
+
+      if (!mobile) {
+        gsap.set('.rotator', { autoAlpha: 0 });
+        gsap.set('#rotator-0', { autoAlpha: 1 });
+      }
+      gsap.set('#rotator-tab-0', {
+        background: 'linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%)',
+      });
+    };
+
+    initRotator();
   }, [mobile]);
 
   const tabMap = rotatorData.map((tab, index) => (

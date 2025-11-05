@@ -5,8 +5,6 @@ import styled from "styled-components";
 import media from "styles/media";
 import colors from "styles/colors";
 import text from "styles/text";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
 import RichTextRenderer from "./renderers/RichTextRenderer";
 import { storyblokEditable } from "@storyblok/react";
 
@@ -44,28 +42,47 @@ const PressTimeline = ({ blok }) => {
 
     if (!timelineElement || !starElement) return;
 
-    gsap.set(starElement, { y: 0 });
-    gsap.killTweensOf(starElement);
+    const initAnimation = async () => {
+      const [{ default: gsap }, { default: ScrollTrigger }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
 
-    gsap.to(starElement, {
-      scrollTrigger: {
-        scroller: timelineElement,
-        trigger: timelineElement,
-        start: "top top",
-        endTrigger: "#last-element",
-        end: "bottom bottom",
-        scrub: 2,
-      },
-      y: () => timelineElement.offsetHeight - starElement.offsetHeight,
-      ease: "none",
+      gsap.registerPlugin(ScrollTrigger);
+
+      gsap.set(starElement, { y: 0 });
+      gsap.killTweensOf(starElement);
+
+      gsap.to(starElement, {
+        scrollTrigger: {
+          scroller: timelineElement,
+          trigger: timelineElement,
+          start: "top top",
+          endTrigger: "#last-element",
+          end: "bottom bottom",
+          scrub: 2,
+        },
+        y: () => timelineElement.offsetHeight - starElement.offsetHeight,
+        ease: "none",
+      });
+
+      return ScrollTrigger;
+    };
+
+    let ScrollTriggerInstance;
+
+    initAnimation().then((st) => {
+      ScrollTriggerInstance = st;
     });
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.vars?.scroller === timelineElement) {
-          trigger.kill();
-        }
-      });
+      if (ScrollTriggerInstance && ScrollTriggerInstance.getAll) {
+        ScrollTriggerInstance.getAll().forEach(trigger => {
+          if (trigger.vars?.scroller === timelineElement) {
+            trigger.kill();
+          }
+        });
+      }
     };
   }, [filteredCards]);
 

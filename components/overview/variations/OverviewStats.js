@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import media from 'styles/media';
 import colors from 'styles/colors';
 import text from 'styles/text';
-import gsap from 'gsap';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import { storyblokEditable } from '@storyblok/react/rsc';
 const OverviewStats = ({ blok }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleMobileClick = () => {
+  const handleMobileClick = async () => {
+    const { default: gsap } = await import('gsap');
+
     if (isOpen) {
       setIsOpen(false);
       gsap.to('.stats-overview-visibility', {

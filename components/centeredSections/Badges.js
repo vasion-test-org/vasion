@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect } from "react";
-import gsap from "gsap";
 import styled from "styled-components";
 import media from "@/styles/media";
 import colors from "@/styles/colors";
@@ -47,34 +46,40 @@ const G2Badges = ({ badges }) => {
   ));
 
   useEffect(() => {
-    const badgeGroups = gsap.utils.toArray(".badgeGroup");
+    const initBadgeAnimations = async () => {
+      const { default: gsap } = await import('gsap');
 
-    const loop = horizontalLoop(badgeGroups, { deep: false, paused: true });
+      const badgeGroups = gsap.utils.toArray(".badgeGroup");
 
-    function NextLoop() {
-      loop.next({ duration: 2, ease: "slow" });
-    }
+      const loop = horizontalLoop(badgeGroups, { deep: false, paused: true });
 
-    const loopTL = gsap.timeline({});
-    loopTL.set(NextLoop, {
-      delay: 7,
-      onRepeat: NextLoop,
-      repeat: -1,
-      repeatDelay: 7,
-    });
+      function NextLoop() {
+        loop.next({ duration: 2, ease: "slow" });
+      }
 
-    const progressTL = gsap.timeline({
-      defaults: {
-        duration: 7,
-      },
-    });
+      const loopTL = gsap.timeline({});
+      loopTL.set(NextLoop, {
+        delay: 7,
+        onRepeat: NextLoop,
+        repeat: -1,
+        repeatDelay: 7,
+      });
 
-    progressTL.to(".pro-bar", {
-      delay: 0.75,
-      stagger: 7,
-      width: "100%",
-      repeat: -1,
-    });
+      const progressTL = gsap.timeline({
+        defaults: {
+          duration: 7,
+        },
+      });
+
+      progressTL.to(".pro-bar", {
+        delay: 0.75,
+        stagger: 7,
+        width: "100%",
+        repeat: -1,
+      });
+    };
+
+    initBadgeAnimations();
   }, []);
 
   return (

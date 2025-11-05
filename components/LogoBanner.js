@@ -4,33 +4,48 @@ import styled, { ThemeProvider } from "styled-components";
 import { useAvailableThemes } from "@/context/ThemeContext";
 import { storyblokEditable } from "@storyblok/react/rsc";
 import media from "@/styles/media";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const LogoBanner = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
   useEffect(() => {
-    ScrollTrigger.create({
-      trigger: ".logo-banner",
-      start: "top top",
-      end: "max",
-      pin: true,
-      pinSpacing: false,
+    const initScrollTrigger = async () => {
+      const [{ default: gsap }, { default: ScrollTrigger }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      ScrollTrigger.create({
+        trigger: ".logo-banner",
+        start: "top top",
+        end: "max",
+        pin: true,
+        pinSpacing: false,
+      });
+
+      return ScrollTrigger;
+    };
+
+    let ScrollTriggerInstance;
+
+    initScrollTrigger().then((st) => {
+      ScrollTriggerInstance = st;
     });
 
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => {
-        if (
-          trigger.trigger &&
-          trigger.trigger.classList.contains("logo-banner")
-        ) {
-          trigger.kill();
-        }
-      });
+      if (ScrollTriggerInstance && ScrollTriggerInstance.getAll) {
+        ScrollTriggerInstance.getAll().forEach((trigger) => {
+          if (
+            trigger.trigger &&
+            trigger.trigger.classList.contains("logo-banner")
+          ) {
+            trigger.kill();
+          }
+        });
+      }
     };
   }, []);
 

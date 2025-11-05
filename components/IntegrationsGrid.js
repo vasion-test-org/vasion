@@ -4,7 +4,6 @@ import styled, { ThemeProvider } from "styled-components";
 import colors from "@/styles/colors";
 import text from "@/styles/text";
 import media from "@/styles/media";
-import gsap from "gsap";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import IntegrationBloks from "@/components/globalComponents/IntegrationBloks";
 import { storyblokEditable } from "@storyblok/react/rsc";
@@ -29,24 +28,30 @@ const IntegrationsGrid = ({ blok }) => {
   }, []);
 
   useEffect(() => {
-    if (!isMounted || !wrapperRef.current) return;
-    const currentRef = wrapperRef.current;
-    if (isMobile) {
-      if (isOpen) {
-        const fullHeight = currentRef.scrollHeight;
-        gsap.to(currentRef, {
-          height: fullHeight,
-          duration: 1,
-          ease: "sine.out",
-        });
+    const initAnimations = async () => {
+      const { default: gsap } = await import('gsap');
+
+      if (!isMounted || !wrapperRef.current) return;
+      const currentRef = wrapperRef.current;
+      if (isMobile) {
+        if (isOpen) {
+          const fullHeight = currentRef.scrollHeight;
+          gsap.to(currentRef, {
+            height: fullHeight,
+            duration: 1,
+            ease: "sine.out",
+          });
+        } else {
+          gsap.set(currentRef, {
+            height: "70vh",
+          });
+        }
       } else {
-        gsap.set(currentRef, {
-          height: "70vh",
-        });
+        gsap.set(currentRef, { height: "auto" });
       }
-    } else {
-      gsap.set(currentRef, { height: "auto" });
-    }
+    };
+
+    initAnimations();
   }, [isOpen, isMobile, isMounted]);
 
   const handleViewMore = () => {

@@ -6,7 +6,6 @@ import colors from '@/styles/colors';
 import text from '@/styles/text';
 import useMedia from '@/functions/useMedia';
 import CookieConsentVideo from '@/components/CookieConsentVideo';
-import gsap from 'gsap';
 import RichTextRenderer from './renderers/RichTextRenderer';
 
 const ComparisonSelect = ({ blok }) => {
@@ -20,141 +19,147 @@ const ComparisonSelect = ({ blok }) => {
   const object2Ref = useRef(null);
 
   useEffect(() => {
-    const tl1 = gsap.timeline({ paused: true });
-    const tl2 = gsap.timeline({ paused: true });
+    const initAnimations = async () => {
+      const { default: gsap } = await import('gsap');
 
-    tl1
-      .to(object1Ref.current, {
-        duration: 0.2,
-        scale: 1.03,
-        opacity: 1,
-        boxShadow: '-7px 8px 14px -2px rgba(0,0,0,0.68)',
-        y: 0,
-      })
-      .to(
-        object2Ref.current,
-        {
+      const tl1 = gsap.timeline({ paused: true });
+      const tl2 = gsap.timeline({ paused: true });
+
+      tl1
+        .to(object1Ref.current, {
           duration: 0.2,
-          scale: 1,
-          y: -4,
-          opacity: 0.5,
-          boxShadow: 'unset',
-        },
-        0
-      );
+          scale: 1.03,
+          opacity: 1,
+          boxShadow: '-7px 8px 14px -2px rgba(0,0,0,0.68)',
+          y: 0,
+        })
+        .to(
+          object2Ref.current,
+          {
+            duration: 0.2,
+            scale: 1,
+            y: -4,
+            opacity: 0.5,
+            boxShadow: 'unset',
+          },
+          0
+        );
 
-    tl2
-      .to(object2Ref.current, {
-        duration: 0.2,
-        scale: 1.03,
-        opacity: 1,
-        boxShadow: '7px 8px 14px -2px rgba(0,0,0,0.68)',
-        y: 0,
-      })
-      .to(
-        object1Ref.current,
-        {
+      tl2
+        .to(object2Ref.current, {
           duration: 0.2,
-          scale: 1,
-          y: -4,
-          opacity: 0.5,
-        },
-        0
-      );
+          scale: 1.03,
+          opacity: 1,
+          boxShadow: '7px 8px 14px -2px rgba(0,0,0,0.68)',
+          y: 0,
+        })
+        .to(
+          object1Ref.current,
+          {
+            duration: 0.2,
+            scale: 1,
+            y: -4,
+            opacity: 0.5,
+          },
+          0
+        );
 
-    const handleClick1 = () => {
-      if (activeTl !== 'tl1') {
-        if (tl2.progress() > 0) {
-          tl2.reverse().then(() => {
+      const handleClick1 = () => {
+        if (activeTl !== 'tl1') {
+          if (tl2.progress() > 0) {
+            tl2.reverse().then(() => {
+              tl1.restart();
+              setActiveTl('tl1');
+            });
+          } else {
             tl1.restart();
             setActiveTl('tl1');
-          });
-        } else {
-          tl1.restart();
-          setActiveTl('tl1');
+          }
         }
-      }
-    };
+      };
 
-    const handleClick2 = () => {
-      if (activeTl !== 'tl2') {
-        if (tl1.progress() > 0) {
-          tl1.reverse().then(() => {
+      const handleClick2 = () => {
+        if (activeTl !== 'tl2') {
+          if (tl1.progress() > 0) {
+            tl1.reverse().then(() => {
+              tl2.restart();
+              setActiveTl('tl2');
+            });
+          } else {
             tl2.restart();
             setActiveTl('tl2');
-          });
-        } else {
-          tl2.restart();
-          setActiveTl('tl2');
+          }
         }
-      }
+      };
+
+      const handleMouseEnter1 = () => {
+        if (activeTl === null) {
+          gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
+        } else if (activeTl !== 'tl1') {
+          gsap.to(object1Ref.current, {
+            duration: 0.2,
+            opacity: 0.7,
+            scale: 1.01,
+          });
+        }
+      };
+
+      const handleMouseLeave1 = () => {
+        if (activeTl === null) {
+          gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
+        } else if (activeTl !== 'tl1') {
+          gsap.to(object1Ref.current, {
+            duration: 0.2,
+            opacity: 0.5,
+            scale: 1,
+          });
+        }
+      };
+
+      const handleMouseEnter2 = () => {
+        if (activeTl === null) {
+          gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
+        } else if (activeTl !== 'tl2') {
+          gsap.to(object2Ref.current, {
+            duration: 0.2,
+            opacity: 0.7,
+            scale: 1.01,
+          });
+        }
+      };
+
+      const handleMouseLeave2 = () => {
+        if (activeTl === null) {
+          gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
+        } else if (activeTl !== 'tl2') {
+          gsap.to(object2Ref.current, {
+            duration: 0.2,
+            opacity: 0.5,
+            scale: 1,
+          });
+        }
+      };
+
+      object1Ref.current.addEventListener('click', handleClick1);
+      object2Ref.current.addEventListener('click', handleClick2);
+
+      object1Ref.current.addEventListener('mouseenter', handleMouseEnter1);
+      object1Ref.current.addEventListener('mouseleave', handleMouseLeave1);
+
+      object2Ref.current.addEventListener('mouseenter', handleMouseEnter2);
+      object2Ref.current.addEventListener('mouseleave', handleMouseLeave2);
+
+      return () => {
+        object1Ref.current?.removeEventListener('click', handleClick1);
+        object2Ref.current?.removeEventListener('click', handleClick2);
+        object1Ref.current?.removeEventListener('mouseenter', handleMouseEnter1);
+        object1Ref.current?.removeEventListener('mouseleave', handleMouseLeave1);
+        object2Ref.current?.removeEventListener('mouseenter', handleMouseEnter2);
+        object2Ref.current?.removeEventListener('mouseleave', handleMouseLeave2);
+      };
     };
 
-    const handleMouseEnter1 = () => {
-      if (activeTl === null) {
-        gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
-      } else if (activeTl !== 'tl1') {
-        gsap.to(object1Ref.current, {
-          duration: 0.2,
-          opacity: 0.7,
-          scale: 1.01,
-        });
-      }
-    };
-
-    const handleMouseLeave1 = () => {
-      if (activeTl === null) {
-        gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
-      } else if (activeTl !== 'tl1') {
-        gsap.to(object1Ref.current, {
-          duration: 0.2,
-          opacity: 0.5,
-          scale: 1,
-        });
-      }
-    };
-
-    const handleMouseEnter2 = () => {
-      if (activeTl === null) {
-        gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
-      } else if (activeTl !== 'tl2') {
-        gsap.to(object2Ref.current, {
-          duration: 0.2,
-          opacity: 0.7,
-          scale: 1.01,
-        });
-      }
-    };
-
-    const handleMouseLeave2 = () => {
-      if (activeTl === null) {
-        gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
-      } else if (activeTl !== 'tl2') {
-        gsap.to(object2Ref.current, {
-          duration: 0.2,
-          opacity: 0.5,
-          scale: 1,
-        });
-      }
-    };
-
-    object1Ref.current.addEventListener('click', handleClick1);
-    object2Ref.current.addEventListener('click', handleClick2);
-
-    object1Ref.current.addEventListener('mouseenter', handleMouseEnter1);
-    object1Ref.current.addEventListener('mouseleave', handleMouseLeave1);
-
-    object2Ref.current.addEventListener('mouseenter', handleMouseEnter2);
-    object2Ref.current.addEventListener('mouseleave', handleMouseLeave2);
-
-    return () => {
-      object1Ref.current?.removeEventListener('click', handleClick1);
-      object2Ref.current?.removeEventListener('click', handleClick2);
-      object1Ref.current?.removeEventListener('mouseenter', handleMouseEnter1);
-      object1Ref.current?.removeEventListener('mouseleave', handleMouseLeave1);
-      object2Ref.current?.removeEventListener('mouseenter', handleMouseEnter2);
-      object2Ref.current?.removeEventListener('mouseleave', handleMouseLeave2);
-    };
+    initAnimations();
   }, [activeTl]);
 
   const background = {

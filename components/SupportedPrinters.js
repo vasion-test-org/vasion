@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import media from 'styles/media';
 import colors from 'styles/colors';
 import text from 'styles/text';
-import gsap from 'gsap';
 import axios from 'axios';
 import XSVG from 'assets/svg/Le-X.svg';
 import DownSVG from 'assets/svg/ChevronDown.svg';
@@ -38,90 +37,102 @@ const SupportedPrinters = ({ blok }) => {
   }, []);
 
   useEffect(() => {
-    const tl = gsap.timeline({});
+    const initAlertAnimation = async () => {
+      const { default: gsap } = await import('gsap');
+      
+      const tl = gsap.timeline({});
 
-    const closeAlert = () => {
-      tl.to('#alertBox', {
-        opacity: 0,
-        height: 0,
-        padding: 0,
-        margin: 0,
-        duration: 0.75,
-      }).to('#alertBox', {
-        display: 'none',
-      });
+      const closeAlert = () => {
+        tl.to('#alertBox', {
+          opacity: 0,
+          height: 0,
+          padding: 0,
+          margin: 0,
+          duration: 0.75,
+        }).to('#alertBox', {
+          display: 'none',
+        });
+      };
+
+      document.querySelector('#xsvg').addEventListener('click', closeAlert);
     };
 
-    document.querySelector('#xsvg').addEventListener('click', closeAlert);
+    initAlertAnimation();
   }, []);
 
   useEffect(() => {
-    //manufacturer dropdown timeline
-    const manuDropDownTL = gsap.timeline({ paused: true });
-    manuDropDownTL
-      .set('#manuOptions', {
-        display: 'flex',
-      })
-      .to('#manuOptions', {
-        height: 'auto',
-        duration: 0.55,
-      });
+    const initDropdownAnimations = async () => {
+      const { default: gsap } = await import('gsap');
 
-    //platform dropdown timeline
-    const platformDropDownTL = gsap.timeline({ paused: true });
-    platformDropDownTL
-      .set('#platformOptions', {
-        display: 'flex',
-      })
-      .to('#platformOptions', {
-        height: 'auto',
-        duration: 0.55,
-      });
+      //manufacturer dropdown timeline
+      const manuDropDownTL = gsap.timeline({ paused: true });
+      manuDropDownTL
+        .set('#manuOptions', {
+          display: 'flex',
+        })
+        .to('#manuOptions', {
+          height: 'auto',
+          duration: 0.55,
+        });
 
-    //feature dropdown timeline
-    const featureDropDownTL = gsap.timeline({ paused: true });
-    featureDropDownTL
-      .set('#featureOptions', {
-        display: 'flex',
-      })
-      .to('#featureOptions', {
-        height: 'auto',
-        duration: 0.55,
-      });
+      //platform dropdown timeline
+      const platformDropDownTL = gsap.timeline({ paused: true });
+      platformDropDownTL
+        .set('#platformOptions', {
+          display: 'flex',
+        })
+        .to('#platformOptions', {
+          height: 'auto',
+          duration: 0.55,
+        });
 
-    const handleManuDrop = (e) => {
-      manuDropDownTL.paused() || manuDropDownTL.reversed()
-        ? manuDropDownTL.play()
-        : manuDropDownTL.reverse();
-      featureDropDownTL.reverse();
-      platformDropDownTL.reverse();
+      //feature dropdown timeline
+      const featureDropDownTL = gsap.timeline({ paused: true });
+      featureDropDownTL
+        .set('#featureOptions', {
+          display: 'flex',
+        })
+        .to('#featureOptions', {
+          height: 'auto',
+          duration: 0.55,
+        });
+
+      const handleManuDrop = (e) => {
+        manuDropDownTL.paused() || manuDropDownTL.reversed()
+          ? manuDropDownTL.play()
+          : manuDropDownTL.reverse();
+        featureDropDownTL.reverse();
+        platformDropDownTL.reverse();
+      };
+
+      const handlePlatformDrop = () => {
+        platformDropDownTL.paused() || platformDropDownTL.reversed()
+          ? platformDropDownTL.play()
+          : platformDropDownTL.reverse();
+        manuDropDownTL.reverse();
+        featureDropDownTL.reverse();
+      };
+
+      const handleFeatureDrop = () => {
+        featureDropDownTL.paused() || featureDropDownTL.reversed()
+          ? featureDropDownTL.play()
+          : featureDropDownTL.reverse();
+        manuDropDownTL.reverse();
+        platformDropDownTL.reverse();
+      };
+
+      document
+        .querySelector('#manuDropdown')
+        .addEventListener('click', handleManuDrop);
+      document
+        .querySelector('#platformDropdown')
+        .addEventListener('click', handlePlatformDrop);
+      document
+        .querySelector('#featureDropdown')
+        .addEventListener('click', handleFeatureDrop);
     };
 
-    const handlePlatformDrop = () => {
-      platformDropDownTL.paused() || platformDropDownTL.reversed()
-        ? platformDropDownTL.play()
-        : platformDropDownTL.reverse();
-      manuDropDownTL.reverse();
-      featureDropDownTL.reverse();
-    };
-
-    const handleFeatureDrop = () => {
-      featureDropDownTL.paused() || featureDropDownTL.reversed()
-        ? featureDropDownTL.play()
-        : featureDropDownTL.reverse();
-      manuDropDownTL.reverse();
-      platformDropDownTL.reverse();
-    };
-
-    document
-      .querySelector('#manuDropdown')
-      .addEventListener('click', handleManuDrop);
-    document
-      .querySelector('#platformDropdown')
-      .addEventListener('click', handlePlatformDrop);
-    document
-      .querySelector('#featureDropdown')
-      .addEventListener('click', handleFeatureDrop);
+    initDropdownAnimations();
   }, []);
 
   const handleSearchChange = (e) => {

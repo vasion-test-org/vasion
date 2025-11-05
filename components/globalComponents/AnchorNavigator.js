@@ -1,16 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
 import media from '@/styles/media';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import IconRenderer from '@/components/renderers/Icons';
-
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const AnchorNavigator = ({ blok }) => {
   // Only render if we have a blok prop
@@ -26,42 +21,61 @@ const AnchorNavigator = ({ blok }) => {
   useEffect(() => {
     if (!blok) return;
 
-    const bodyHeight = document.body.scrollHeight;
+    const initAnimations = async () => {
+      const [{ default: gsap }, { default: ScrollTrigger }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
 
-    // Create opacity animation that starts at 100px scroll
-    const opacityTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: 'body',
-        start: '100px top',
-        end: '200px top',
-        scrub: true,
-      },
-    });
+      gsap.registerPlugin(ScrollTrigger);
 
-    opacityTl.fromTo(
-      '.anchorNav',
-      { autoAlpha: 0, pointerEvents: 'none', height: 0 },
-      { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' }
-    );
+      const bodyHeight = document.body.scrollHeight;
 
-    // Create pinning animation
-    ScrollTrigger.create({
-      trigger: '.anchorNav',
-      start: 'top 200px',
-      end: `${bodyHeight}px`,
-      pin: true,
-      pinSpacing: false,
+      // Create opacity animation that starts at 100px scroll
+      const opacityTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: 'body',
+          start: '100px top',
+          end: '200px top',
+          scrub: true,
+        },
+      });
+
+      opacityTl.fromTo(
+        '.anchorNav',
+        { autoAlpha: 0, pointerEvents: 'none', height: 0 },
+        { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' }
+      );
+
+      // Create pinning animation
+      ScrollTrigger.create({
+        trigger: '.anchorNav',
+        start: 'top 200px',
+        end: `${bodyHeight}px`,
+        pin: true,
+        pinSpacing: false,
+      });
+
+      return ScrollTrigger;
+    };
+
+    let ScrollTriggerInstance;
+
+    initAnimations().then((st) => {
+      ScrollTriggerInstance = st;
     });
 
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => {
-        if (
-          trigger.trigger === document.querySelector('.anchorNav') ||
-          trigger.trigger === document.body
-        ) {
-          trigger.kill();
-        }
-      });
+      if (ScrollTriggerInstance && ScrollTriggerInstance.getAll) {
+        ScrollTriggerInstance.getAll().forEach((trigger) => {
+          if (
+            trigger.trigger === document.querySelector('.anchorNav') ||
+            trigger.trigger === document.body
+          ) {
+            trigger.kill();
+          }
+        });
+      }
     };
   }, [blok]);
 

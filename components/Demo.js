@@ -10,7 +10,6 @@ import Form from '@/components/Form';
 import colors from '@/styles/colors';
 import media from '@/styles/media';
 import text from '@/styles/text';
-import gsap from 'gsap';
 import { ScreenContext } from '@/components/providers/Screen';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Chevron from 'assets/svg/WhiteChevron.svg';

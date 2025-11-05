@@ -5,7 +5,6 @@ import styled from "styled-components";
 import media from "@/styles/media";
 import text from "@/styles/text";
 import colors from "@/styles/colors";
-import gsap from "gsap";
 import getMedia from "@/functions/getMedia";
 
 function JobList() {
@@ -68,7 +67,9 @@ function JobList() {
     }
   }
 
-  const toggleSwitch = () => {
+  const toggleSwitch = async () => {
+    const { default: gsap } = await import('gsap');
+
     setIsOn((prevIsOn) => !prevIsOn);
     const xValue = getMedia("30px", "2.083vw", "2.93vw", "7.009vw");
     const target = document.querySelector(".toggle-button-workable-slider");
