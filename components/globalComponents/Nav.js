@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-// import gsap from 'gsap';
 import { useRouter, usePathname } from 'next/navigation';
 import NextLink from 'next/link';
 import styled, { ThemeProvider } from 'styled-components';
@@ -15,12 +14,9 @@ import IconRenderer from '@/components/renderers/Icons';
 import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import VasionNavLogo from '@/assets/svg/vasion-nav-logo.svg';
 import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const Nav = ({ blok }) => {
   const copycomponents = [
@@ -266,84 +262,111 @@ const Nav = ({ blok }) => {
   useEffect(() => {
     if (!navReady) return;
 
-    const footer = document.querySelector('.footer');
-    if (!footer) return;
+    const loadScrollTrigger = async () => {
+      const [{ default: gsap }, { default: ScrollTrigger }] = await Promise.all(
+        [import('gsap'), import('gsap/ScrollTrigger')]
+      );
 
-    const footerOffset = footer.offsetTop + footer.offsetHeight;
+      gsap.registerPlugin(ScrollTrigger);
 
-    ScrollTrigger.create({
-      trigger: '.desktopNav',
-      start: 'top top',
-      end: `${footerOffset}px`,
-      pin: true,
-      pinSpacing: false,
-    });
+      const footer = document.querySelector('.footer');
+      if (!footer) return;
+
+      const footerOffset = footer.offsetTop + footer.offsetHeight;
+
+      ScrollTrigger.create({
+        trigger: '.desktopNav',
+        start: 'top top',
+        end: `${footerOffset}px`,
+        pin: true,
+        pinSpacing: false,
+      });
+    };
+
+    loadScrollTrigger();
   }, [navReady]);
 
   useEffect(() => {
     if (!navReady) return;
 
-    gsap.set('.dropdowns', { autoAlpha: 0, display: 'flex' });
+    let cleanupFunctions = [];
 
-    const allTabs = gsap.utils.toArray('.tabs');
-    const allDropdowns = gsap.utils.toArray('.dropdowns');
-    const navWrapper = document.querySelector('.mainNavWrapper');
+    const initDropdownAnimations = async () => {
+      const { default: gsap } = await import('gsap');
 
-    let isAnimating = false;
-    let queuedIndex = null;
+      gsap.set('.dropdowns', { autoAlpha: 0, display: 'flex' });
 
-    const closeDropdown = () => {
-      isAnimating = true;
-      return gsap.to('.dropdowns', {
-        autoAlpha: 0,
-        duration: 0.35,
-        onComplete: () => {
-          isAnimating = false;
-          if (queuedIndex !== null) {
-            const indexToOpen = queuedIndex;
-            queuedIndex = null;
-            openDropdown(indexToOpen);
-          }
-        },
+      const allTabs = gsap.utils.toArray('.tabs');
+      const allDropdowns = gsap.utils.toArray('.dropdowns');
+      const navWrapper = document.querySelector('.mainNavWrapper');
+
+      let isAnimating = false;
+      let queuedIndex = null;
+
+      const closeDropdown = () => {
+        isAnimating = true;
+        return gsap.to('.dropdowns', {
+          autoAlpha: 0,
+          duration: 0.35,
+          onComplete: () => {
+            isAnimating = false;
+            if (queuedIndex !== null) {
+              const indexToOpen = queuedIndex;
+              queuedIndex = null;
+              openDropdown(indexToOpen);
+            }
+          },
+        });
+      };
+
+      const openDropdown = (index) => {
+        if (isAnimating) {
+          queuedIndex = index;
+          return;
+        }
+        gsap.to(`#dropdown-${index}`, {
+          autoAlpha: 1,
+          duration: 0.35,
+        });
+      };
+
+      const tabEnterHandlers = allTabs.map((tab, index) => {
+        const handler = () => {
+          closeDropdown().then(() => {});
+          queuedIndex = index;
+        };
+        tab.addEventListener('mouseenter', handler);
+        return { tab, handler };
       });
-    };
 
-    const openDropdown = (index) => {
-      if (isAnimating) {
-        queuedIndex = index;
-        return;
+      const dropdownLeaveHandlers = allDropdowns.map((dropdown) => {
+        dropdown.addEventListener('mouseleave', closeDropdown);
+        return { dropdown, handler: closeDropdown };
+      });
+
+      let navWrapperHandler = null;
+      if (navWrapper) {
+        navWrapperHandler = closeDropdown;
+        navWrapper.addEventListener('mouseleave', navWrapperHandler);
       }
-      gsap.to(`#dropdown-${index}`, {
-        autoAlpha: 1,
-        duration: 0.35,
+
+      cleanupFunctions.push(() => {
+        tabEnterHandlers.forEach(({ tab, handler }) => {
+          tab.removeEventListener('mouseenter', handler);
+        });
+        dropdownLeaveHandlers.forEach(({ dropdown, handler }) => {
+          dropdown.removeEventListener('mouseleave', handler);
+        });
+        if (navWrapper && navWrapperHandler) {
+          navWrapper.removeEventListener('mouseleave', navWrapperHandler);
+        }
       });
     };
 
-    allTabs.forEach((tab, index) => {
-      tab.addEventListener('mouseenter', () => {
-        closeDropdown().then(() => {});
-        queuedIndex = index;
-      });
-    });
-
-    allDropdowns.forEach((dropdown) => {
-      dropdown.addEventListener('mouseleave', closeDropdown);
-    });
-
-    if (navWrapper) {
-      navWrapper.addEventListener('mouseleave', closeDropdown);
-    }
+    initDropdownAnimations();
 
     return () => {
-      allTabs.forEach((tab, index) => {
-        tab.removeEventListener('mouseenter', () => openDropdown(index));
-      });
-      allDropdowns.forEach((dropdown) => {
-        dropdown.removeEventListener('mouseleave', closeDropdown);
-      });
-      if (navWrapper) {
-        navWrapper.removeEventListener('mouseleave', closeDropdown);
-      }
+      cleanupFunctions.forEach((cleanup) => cleanup());
     };
   }, [navReady]);
 
@@ -351,7 +374,8 @@ const Nav = ({ blok }) => {
   useEffect(() => {
     if (!navReady) return;
 
-    const closeDropdownsOnRouteChange = () => {
+    const closeDropdownsOnRouteChange = async () => {
+      const { default: gsap } = await import('gsap');
       // Use requestAnimationFrame to batch DOM updates and reduce scheduler pressure
       requestAnimationFrame(() => {
         gsap.to('.dropdowns', {
@@ -378,86 +402,110 @@ const Nav = ({ blok }) => {
   }, [path, navReady]); // Add path as a dependency to trigger on route changes
 
   useEffect(() => {
-    const handleGlobeHover = () => {
-      // Batch DOM updates to reduce scheduler overhead
-      requestAnimationFrame(() => {
-        gsap.to('#languageItemsContainer', { width: '100%' });
+    let cleanupFunctions = [];
+
+    const initLanguageAnimations = async () => {
+      const { default: gsap } = await import('gsap');
+
+      const handleGlobeHover = () => {
+        // Batch DOM updates to reduce scheduler overhead
+        requestAnimationFrame(() => {
+          gsap.to('#languageItemsContainer', { width: '100%' });
+        });
+      };
+
+      const handleGlobeExit = () => {
+        requestAnimationFrame(() => {
+          gsap.to('#languageItemsContainer', { width: '0%' });
+        });
+      };
+
+      const globe = document.querySelector('#globe');
+      const langSelector = document.querySelector('#languageSelector');
+
+      globe?.addEventListener('mouseenter', handleGlobeHover);
+      langSelector?.addEventListener('mouseleave', handleGlobeExit);
+
+      cleanupFunctions.push(() => {
+        globe?.removeEventListener('mouseenter', handleGlobeHover);
+        langSelector?.removeEventListener('mouseleave', handleGlobeExit);
       });
     };
 
-    const handleGlobeExit = () => {
-      requestAnimationFrame(() => {
-        gsap.to('#languageItemsContainer', { width: '0%' });
-      });
-    };
-
-    const globe = document.querySelector('#globe');
-    const langSelector = document.querySelector('#languageSelector');
-
-    globe?.addEventListener('mouseenter', handleGlobeHover);
-    langSelector?.addEventListener('mouseleave', handleGlobeExit);
+    initLanguageAnimations();
 
     return () => {
-      globe?.removeEventListener('mouseenter', handleGlobeHover);
-      langSelector?.removeEventListener('mouseleave', handleGlobeExit);
+      cleanupFunctions.forEach((cleanup) => cleanup());
     };
   }, []);
 
   useEffect(() => {
     if (!navReady) return;
 
-    const tabs = document.querySelector('.tabs');
-    const individualTabs = document.querySelectorAll('.tab');
-    const dropdowns = document.querySelectorAll('.dropdowns');
-    const backdrop = document.querySelector('.navBackdrop');
+    let cleanupFunctions = [];
 
-    const handleMouseEnter = () => {
-      setIsHoveringNav(true);
-      gsap.to(backdrop, {
-        opacity: 1,
-        duration: 0.3,
-        ease: 'power2.out',
+    const initBackdropAnimations = async () => {
+      const { default: gsap } = await import('gsap');
+
+      const tabs = document.querySelector('.tabs');
+      const individualTabs = document.querySelectorAll('.tab');
+      const dropdowns = document.querySelectorAll('.dropdowns');
+      const backdrop = document.querySelector('.navBackdrop');
+
+      const handleMouseEnter = () => {
+        setIsHoveringNav(true);
+        gsap.to(backdrop, {
+          opacity: 1,
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      };
+
+      const handleMouseLeave = () => {
+        setIsHoveringNav(false);
+        gsap.to(backdrop, {
+          opacity: 0,
+          duration: 0.3,
+          ease: 'power2.in',
+        });
+      };
+
+      // Add listeners to tabs container
+      tabs?.addEventListener('mouseenter', handleMouseEnter);
+      tabs?.addEventListener('mouseleave', handleMouseLeave);
+
+      // Add listeners to individual tabs
+      individualTabs.forEach((tab) => {
+        tab.addEventListener('mouseenter', handleMouseEnter);
+        tab.addEventListener('mouseleave', handleMouseLeave);
+      });
+
+      // Add listeners to all dropdowns
+      dropdowns.forEach((dropdown) => {
+        dropdown.addEventListener('mouseenter', handleMouseEnter);
+        dropdown.addEventListener('mouseleave', handleMouseLeave);
+      });
+
+      cleanupFunctions.push(() => {
+        tabs?.removeEventListener('mouseenter', handleMouseEnter);
+        tabs?.removeEventListener('mouseleave', handleMouseLeave);
+
+        individualTabs.forEach((tab) => {
+          tab.removeEventListener('mouseenter', handleMouseEnter);
+          tab.removeEventListener('mouseleave', handleMouseLeave);
+        });
+
+        dropdowns.forEach((dropdown) => {
+          dropdown.removeEventListener('mouseenter', handleMouseEnter);
+          dropdown.removeEventListener('mouseleave', handleMouseLeave);
+        });
       });
     };
 
-    const handleMouseLeave = () => {
-      setIsHoveringNav(false);
-      gsap.to(backdrop, {
-        opacity: 0,
-        duration: 0.3,
-        ease: 'power2.in',
-      });
-    };
-
-    // Add listeners to tabs container
-    tabs?.addEventListener('mouseenter', handleMouseEnter);
-    tabs?.addEventListener('mouseleave', handleMouseLeave);
-
-    // Add listeners to individual tabs
-    individualTabs.forEach((tab) => {
-      tab.addEventListener('mouseenter', handleMouseEnter);
-      tab.addEventListener('mouseleave', handleMouseLeave);
-    });
-
-    // Add listeners to all dropdowns
-    dropdowns.forEach((dropdown) => {
-      dropdown.addEventListener('mouseenter', handleMouseEnter);
-      dropdown.addEventListener('mouseleave', handleMouseLeave);
-    });
+    initBackdropAnimations();
 
     return () => {
-      tabs?.removeEventListener('mouseenter', handleMouseEnter);
-      tabs?.removeEventListener('mouseleave', handleMouseLeave);
-
-      individualTabs.forEach((tab) => {
-        tab.removeEventListener('mouseenter', handleMouseEnter);
-        tab.removeEventListener('mouseleave', handleMouseLeave);
-      });
-
-      dropdowns.forEach((dropdown) => {
-        dropdown.removeEventListener('mouseenter', handleMouseEnter);
-        dropdown.removeEventListener('mouseleave', handleMouseLeave);
-      });
+      cleanupFunctions.forEach((cleanup) => cleanup());
     };
   }, [navReady]);
 
