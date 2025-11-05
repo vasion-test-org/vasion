@@ -22,7 +22,7 @@ const MobileNav = ({ blok }) => {
   const selectedTheme = themes[blok.theme] || themes.default;
   const dropdownIndex = useRef(null);
   const [currentNavItems, setCurrentNavItems] = useState(
-    blok?.english_nav_items || []
+    blok?.english_nav_items || [],
   );
   const isOpen = useRef(false);
   const copycomponents = [
@@ -165,7 +165,7 @@ const MobileNav = ({ blok }) => {
         router.push(newPath);
       } else {
         setTooltipMessage(
-          'This page is not yet available in the selected language'
+          'This page is not yet available in the selected language',
         );
         setShowTooltip(true);
         setTimeout(() => {
@@ -174,7 +174,7 @@ const MobileNav = ({ blok }) => {
       }
     } catch (error) {
       setTooltipMessage(
-        'This page is not yet available in the selected language'
+        'This page is not yet available in the selected language',
       );
       setShowTooltip(true);
       setTimeout(() => {
@@ -212,8 +212,8 @@ const MobileNav = ({ blok }) => {
                   const normalizedUrl = isExternal
                     ? rawUrl
                     : rawUrl.startsWith('/')
-                    ? rawUrl
-                    : `/${rawUrl}`;
+                      ? rawUrl
+                      : `/${rawUrl}`;
 
                   const handleClick = () => {
                     if (normalizedUrl === '#') return;
@@ -225,7 +225,7 @@ const MobileNav = ({ blok }) => {
                       window.open(
                         normalizedUrl,
                         '_blank',
-                        'noopener,noreferrer'
+                        'noopener,noreferrer',
                       );
                     } else {
                       window.location.href = normalizedUrl;
@@ -320,7 +320,7 @@ const MobileNav = ({ blok }) => {
                                     {...storyblokEditable(ctaItem)}
                                   >
                                     {copycomponents.includes(
-                                      ctaItem.component
+                                      ctaItem.component,
                                     ) ? (
                                       <RichTextRenderer
                                         document={ctaItem.copy}
@@ -330,7 +330,7 @@ const MobileNav = ({ blok }) => {
                                       <ComponentRenderer blok={ctaItem} />
                                     )}
                                   </div>
-                                )
+                                ),
                               )}
                             </DropDownCTA>
                           );
@@ -426,7 +426,10 @@ const MobileNav = ({ blok }) => {
         </TopNav>
         <MainWrapper className="mainNavWrapper mobileNav">
           <a href="/">
-            <VasionLogo src="/images/logos/vasion-logo-purple.webp" />
+            <VasionLogo
+              src="/images/logos/vasion-logo-purple.webp"
+              alt="vasion-logo"
+            />
           </a>
           <HamburgerContainer className="hamburger">
             <HamSlice id="slice-0" />
@@ -548,7 +551,7 @@ const MobileNav = ({ blok }) => {
             `#tabHeader-${index}`,
             {
               display: 'none',
-            }
+            },
           );
           isOpen.current = false;
           dropdownIndex.current = null;
@@ -595,7 +598,7 @@ const MobileNav = ({ blok }) => {
   useEffect(() => {
     const initScrollTrigger = async () => {
       const [{ default: gsap }, { default: ScrollTrigger }] = await Promise.all(
-        [import('gsap'), import('gsap/ScrollTrigger')]
+        [import('gsap'), import('gsap/ScrollTrigger')],
       );
 
       gsap.registerPlugin(ScrollTrigger);
@@ -912,35 +915,35 @@ const NavItem = styled.div`
       props.card_size === 'small'
         ? '3.399vw'
         : props.card_size === 'medium'
-        ? '3.333vw'
-        : props.card_size === 'large'
-        ? '3.333vw'
-        : '1.667vw'};
+          ? '3.333vw'
+          : props.card_size === 'large'
+            ? '3.333vw'
+            : '1.667vw'};
 
     width: ${(props) =>
       props.card_size === 'small'
         ? '100%'
         : props.card_size === 'medium'
-        ? '93.333vw'
-        : props.card_size === 'large'
-        ? '93.333vw'
-        : '50%'};
+          ? '93.333vw'
+          : props.card_size === 'large'
+            ? '93.333vw'
+            : '50%'};
 
     padding: ${(props) =>
       props.card_size === 'small'
         ? '2.5vw 1.667vw'
         : props.card_size === 'medium'
-        ? '0.877vw 3.333vw 0.877vw 0.877vw'
-        : props.card_size === 'large'
-        ? '1.667vw 3.333vw 1.667vw 1.667vw'
-        : '1.667vw 3.333vw 1.667vw 1.667vw'};
+          ? '0.877vw 3.333vw 0.877vw 0.877vw'
+          : props.card_size === 'large'
+            ? '1.667vw 3.333vw 1.667vw 1.667vw'
+            : '1.667vw 3.333vw 1.667vw 1.667vw'};
     border-radius: 0.391vw;
     height: ${(props) =>
       props.card_size === 'large'
         ? 'fit-content'
         : props.card_size === 'medium'
-        ? '18.75vw'
-        : 'auto'};
+          ? '18.75vw'
+          : 'auto'};
   }
   &:hover {
     background: ${colors.lightPurpleGrey};

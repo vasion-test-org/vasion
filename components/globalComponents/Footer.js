@@ -51,7 +51,7 @@ const Footer = ({ blok }) => {
   useEffect(() => {
     const initFooterAnimation = async () => {
       const [{ default: gsap }, { default: ScrollTrigger }] = await Promise.all(
-        [import('gsap'), import('gsap/ScrollTrigger')]
+        [import('gsap'), import('gsap/ScrollTrigger')],
       );
 
       gsap.registerPlugin(ScrollTrigger);
@@ -95,8 +95,8 @@ const Footer = ({ blok }) => {
           const normalizedUrl = isExternal
             ? url
             : url.startsWith('/')
-            ? url
-            : `/${url}`;
+              ? url
+              : `/${url}`;
 
           return (
             <LinkName
@@ -125,7 +125,7 @@ const Footer = ({ blok }) => {
     <Wrapper className="footer">
       <MainFooterContainer>
         <LogoContainer>
-          <Logo onClick={() => handleNavigate('/')} />
+          <Logo onClick={() => handleNavigate('/')} alt="vasion-logo" />
           <Address>432 S. Tech Ridge Drive, St. George, Utah 84770 USA</Address>
           <VasionStar />
         </LogoContainer>
@@ -143,7 +143,7 @@ const Footer = ({ blok }) => {
           <SocialIcon
             onClick={() =>
               handleNavigate(
-                'https://x.com/i/flow/login?redirect_after_login=%2FVasionSoftware'
+                'https://x.com/i/flow/login?redirect_after_login=%2FVasionSoftware',
               )
             }
           >
@@ -152,7 +152,7 @@ const Footer = ({ blok }) => {
           <SocialIcon
             onClick={() =>
               handleNavigate(
-                'https://www.linkedin.com/company/vasion-software/posts/?feedView=all'
+                'https://www.linkedin.com/company/vasion-software/posts/?feedView=all',
               )
             }
           >
@@ -490,7 +490,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%),
+  background:
+    linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%),
     linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
   height: 88.806vw;
   gap: 3.611vw;
