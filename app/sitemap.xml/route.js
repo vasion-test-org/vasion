@@ -21,7 +21,23 @@ export async function GET() {
     });
 
     const urls = stories
-      .filter((story) => !story.is_folder)
+      .filter((story) => {
+        // Exclude folders
+        if (story.is_folder) return false;
+        
+        // Exclude Next.js internal paths and API routes
+        const fullSlug = story.full_slug || '';
+        if (
+          fullSlug.startsWith('_next/') ||
+          fullSlug.startsWith('api/') ||
+          fullSlug.includes('/_next/') ||
+          fullSlug.includes('/api/')
+        ) {
+          return false;
+        }
+        
+        return true;
+      })
       .map((story) => {
         let slug = story.full_slug.replace(/\/$/, '');
 
