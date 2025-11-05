@@ -179,9 +179,9 @@ const Config = ({ blok, children }) => {
         </MobileNavWrapper>
       )}
 
-      <ChildrenVisibilityWrapper $visible={!!configData || !isLoading}>
+      {/* <ChildrenVisibilityWrapper $visible={!!configData || !isLoading}> */}
         {children}
-      </ChildrenVisibilityWrapper>
+      {/* </ChildrenVisibilityWrapper> */}
 
       {configData && !shouldHideFooter && (
         <Footer blok={configData.footer?.[0]} />
@@ -190,9 +190,9 @@ const Config = ({ blok, children }) => {
   );
 };
 
-const ChildrenVisibilityWrapper = styled.div`
-  visibility: ${({ $visible }) => ($visible ? 'visible' : 'hidden')};
-`;
+// const ChildrenVisibilityWrapper = styled.div`
+//   visibility: ${({ $visible }) => ($visible ? 'visible' : 'hidden')};
+// `;
 
 const NavWrapper = styled.div`
   display: block;

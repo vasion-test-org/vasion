@@ -17,12 +17,32 @@ const nextConfig = {
   },
   // Image optimization configuration
   images: {
-    domains: [
-      'a-us.storyblok.com',
-      'a.storyblok.com',
-      's3.amazonaws.com',
-      'img2.storyblok.com',
-      'img.storyblok.com',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'a-us.storyblok.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'a.storyblok.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.storyblok.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img2.storyblok.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 's3.amazonaws.com',
+        pathname: '/**',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -30,6 +50,8 @@ const nextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Enable image optimization
+    unoptimized: false,
   },
   // Performance optimizations
   compress: true,
@@ -191,7 +213,7 @@ const nextConfig = {
     }
 
     const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.('.svg'),
+      rule.test?.test?.('.svg')
     );
 
     config.module.rules.push(
@@ -225,7 +247,7 @@ const nextConfig = {
             },
           },
         ],
-      },
+      }
     );
 
     fileLoaderRule.exclude = /\.svg$/i;
