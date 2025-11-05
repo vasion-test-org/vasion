@@ -4,6 +4,8 @@ Allow: /
 Disallow: /config
 Disallow: /fr/config
 Disallow: /de/config
+Disallow: /_next/
+Disallow: /api/
 Disallow: /go/
 Disallow: /fr/go/
 Disallow: /de/go/
