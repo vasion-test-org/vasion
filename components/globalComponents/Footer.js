@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useRouter, usePathname } from 'next/navigation';
 import VasionStarSVG from '@/assets/svg/VasionStarBig.svg';
@@ -7,6 +7,7 @@ import VasionSmall from '@/assets/svg/SmallVasion.svg';
 import colors from '@/styles/colors';
 import media from '@/styles/media';
 import text from '@/styles/text';
+// GSAP will be loaded dynamically when footer is about to be visible
 import Button from '@/components/globalComponents/Button';
 import Facebook from '@/assets/svg/footer/Facebook.svg';
 import Twitter from '@/assets/svg/footer/Twitter.svg';
@@ -18,6 +19,7 @@ const Footer = ({ blok }) => {
   const path = usePathname();
   const [language, setLanguage] = useState('en');
   const [footerColumns, setFooterColumns] = useState(blok.footer_columns);
+  const footerRef = useRef(null);
 
   useEffect(() => {
     function checkPathLocale(url) {
@@ -49,42 +51,53 @@ const Footer = ({ blok }) => {
   }, [path, blok]);
 
   useEffect(() => {
-    // Load GSAP only when footer is about to be visible
-    const footerElement = document.querySelector('.footer');
+    // Only load GSAP when footer is about to be visible (Intersection Observer)
+    const footerElement = footerRef.current;
     if (!footerElement) return;
 
     const observer = new IntersectionObserver(
       async (entries) => {
         if (entries[0].isIntersecting) {
-          const [{ default: gsap }, ScrollTrigger] = await Promise.all([
-            import('gsap'),
-            import('gsap/ScrollTrigger'),
-          ]);
+          // Footer is visible - load GSAP dynamically
+          try {
+            const [{ default: gsap }, ScrollTrigger] = await Promise.all([
+              import('gsap'),
+              import('gsap/ScrollTrigger'),
+            ]);
 
-          gsap.registerPlugin(ScrollTrigger);
+            gsap.registerPlugin(ScrollTrigger);
 
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: '.footer',
-              start: '50% 50%',
-            },
-          });
+            const tl = gsap.timeline({
+              scrollTrigger: {
+                trigger: footerElement,
+                start: '50% 50%',
+              },
+            });
 
-          tl.from('#vasionfootersvg', {
-            yPercent: 100,
-            duration: 2,
-            ease: 'back.out',
-          });
+            tl.from('#vasionfootersvg', {
+              yPercent: 100,
+              duration: 2,
+              ease: 'back.out',
+            });
 
-          observer.disconnect();
+            // Cleanup observer after animation is set up
+            observer.disconnect();
+          } catch (error) {
+            console.error('Failed to load GSAP for footer animation:', error);
+          }
         }
       },
-      { rootMargin: '200px' }
+      {
+        rootMargin: '200px', // Start loading 200px before footer is visible
+        threshold: 0,
+      }
     );
 
     observer.observe(footerElement);
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -136,7 +149,7 @@ const Footer = ({ blok }) => {
   };
 
   return (
-    <Wrapper className="footer">
+    <Wrapper className="footer" ref={footerRef}>
       <MainFooterContainer>
         <LogoContainer>
           <Logo onClick={() => handleNavigate('/')} />
