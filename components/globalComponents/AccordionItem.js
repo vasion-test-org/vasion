@@ -5,7 +5,6 @@ import { storyblokEditable } from "@storyblok/react/rsc";
 import media from "styles/media";
 import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import colors from "@/styles/colors";
-import gsap from "gsap";
 import DownChevron from "@/assets/svg/ChevronDown.svg";
 
 const AccordionItem = ({ accordionItem }) => {
@@ -14,7 +13,9 @@ const AccordionItem = ({ accordionItem }) => {
   const contentRef = useRef(null);
   const contentInnerRef = useRef(null);
 
-  const toggleAccordion = () => {
+  const toggleAccordion = async () => {
+    const { default: gsap } = await import('gsap');
+
     setIsOpen(!isOpen);
 
     if (chevronRef.current) {
@@ -27,20 +28,26 @@ const AccordionItem = ({ accordionItem }) => {
   };
 
   useEffect(() => {
-    if (contentRef.current && contentInnerRef.current) {
-      const contentHeight = isOpen ? contentInnerRef.current.offsetHeight : 0;
+    const initAnimation = async () => {
+      const { default: gsap } = await import('gsap');
 
-      gsap.to(contentRef.current, {
-        height: contentHeight,
-        duration: 0.4,
-        ease: "power2.out",
-        onComplete: () => {
-          if (isOpen) {
-            gsap.set(contentRef.current, { height: "auto" });
-          }
-        },
-      });
-    }
+      if (contentRef.current && contentInnerRef.current) {
+        const contentHeight = isOpen ? contentInnerRef.current.offsetHeight : 0;
+
+        gsap.to(contentRef.current, {
+          height: contentHeight,
+          duration: 0.4,
+          ease: "power2.out",
+          onComplete: () => {
+            if (isOpen) {
+              gsap.set(contentRef.current, { height: "auto" });
+            }
+          },
+        });
+      }
+    };
+
+    initAnimation();
   }, [isOpen]);
 
   const headerContent = accordionItem.copy_blocks[0];

@@ -1,18 +1,13 @@
 "use client";
 
 import React, { useEffect } from "react";
-import gsap from "gsap";
 import styled from "styled-components";
 import media from "styles/media";
 import colors from "styles/colors";
 import { horizontalLoop } from "functions/horizontalLoop";
-import { Draggable } from "gsap/Draggable";
-import { InertiaPlugin } from "gsap/InertiaPlugin";
 import text from "styles/text";
 import RichTextRenderer from "./renderers/RichTextRenderer";
 import { storyblokEditable } from "@storyblok/react/rsc";
-
-gsap.registerPlugin(Draggable, InertiaPlugin);
 
 const ReviewsCarousel = ({ blok }) => {
   const redditReviews = blok?.reviews;
@@ -79,22 +74,34 @@ const ReviewsCarousel = ({ blok }) => {
     : null;
 
   useEffect(() => {
-    horizontalLoop(`.reviewItems`, {
-      repeat: -1,
-      paddingRight: 0,
-      draggable: true,
-      speed: 0.6,
-      deep: true,
-    });
+    const initCarousel = async () => {
+      const [{ default: gsap }, { default: Draggable }, { default: InertiaPlugin }] = await Promise.all([
+        import('gsap'),
+        import('gsap/Draggable'),
+        import('gsap/InertiaPlugin'),
+      ]);
 
-    if (hasStats) {
-      horizontalLoop(`.statsDraggable`, {
+      gsap.registerPlugin(Draggable, InertiaPlugin);
+
+      horizontalLoop(`.reviewItems`, {
         repeat: -1,
-        paddingRight: 10,
-        // draggable: true,
-        speed: 0.3,
+        paddingRight: 0,
+        draggable: true,
+        speed: 0.6,
+        deep: true,
       });
-    }
+
+      if (hasStats) {
+        horizontalLoop(`.statsDraggable`, {
+          repeat: -1,
+          paddingRight: 10,
+          // draggable: true,
+          speed: 0.3,
+        });
+      }
+    };
+
+    initCarousel();
   }, [hasStats]);
 
   return (

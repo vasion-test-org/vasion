@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 
-import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import media from 'styles/media';
 import colors from 'styles/colors';
@@ -12,12 +11,9 @@ import Button from '@/components/globalComponents/Button';
 import useMedia from '@/functions/useMedia';
 import { horizontalLoop } from '@/functions/horizontalLoop';
 import { useAvailableThemes } from '@/context/ThemeContext';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import getMedia from '@/functions/getMedia';
 import RichTextRenderer from './renderers/RichTextRenderer';
 import { storyblokEditable } from '@storyblok/react/rsc';
-
-gsap.registerPlugin(ScrollToPlugin);
 
 const VideoCarousel = ({ blok }) => {
   // console.log(blok);
@@ -92,69 +88,80 @@ const VideoCarousel = ({ blok }) => {
   });
 
   useEffect(() => {
-    const videoArray = gsap.utils.toArray('.videos');
-    const popups = gsap.utils.toArray('.video-popup');
-    const body = document.body;
-    let activeElement;
+    const initCarousel = async () => {
+      const [{ default: gsap }, { default: ScrollToPlugin }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollToPlugin'),
+      ]);
 
-    const loop = horizontalLoop(videoArray, {
-      deep: false,
-      paused: true,
-      paddingRight: loopPadding,
-      center: true,
-      onChange: (element, index) => {
-        activeElement && activeElement.classList.remove('active');
-        element.classList.add('active');
-        activeElement = element;
-        setActiveIndex(index);
-      },
-    });
+      gsap.registerPlugin(ScrollToPlugin);
 
-    const modalTl = gsap.timeline({});
-    const closeTl = gsap.timeline({});
+      const videoArray = gsap.utils.toArray('.videos');
+      const popups = gsap.utils.toArray('.video-popup');
+      const body = document.body;
+      let activeElement;
 
-    popups.forEach((popup, index) => {
-      popup.addEventListener('click', (e) => {
-        // Don't close modal if clicking on cookie consent elements
-        if (e.target.closest('[data-cookie-consent]')) {
-          return;
-        }
-        
-        closeTl
-          .call(setModalActive(null))
-          .to(`#popup-${index}`, { autoAlpha: 0 })
-          .set(`#popup-${index}`, { 'z-index': -5 })
-          .set(body, { overflow: 'auto' });
+      const loop = horizontalLoop(videoArray, {
+        deep: false,
+        paused: true,
+        paddingRight: loopPadding,
+        center: true,
+        onChange: (element, index) => {
+          activeElement && activeElement.classList.remove('active');
+          element.classList.add('active');
+          activeElement = element;
+          setActiveIndex(index);
+        },
       });
-    });
 
-    videoArray.forEach((video, index) => {
-      video.addEventListener('click', () =>
-        modalTl
-          .to(window, {
-            duration: 0.25,
-            scrollTo: {
-              y: `#popup-${index}`,
-              offsetY: -25,
-            },
-          })
-          .call(setModalActive(index))
-          .set(`#popup-${index}`, { 'z-index': 10000 })
-          .to(`#popup-${index}`, { autoAlpha: 1 })
-          .set(body, { overflow: 'hidden' }, '+=.25')
-      );
-    });
+      const modalTl = gsap.timeline({});
+      const closeTl = gsap.timeline({});
 
-    document
-      .querySelector('#video-prev')
-      .addEventListener('click', () =>
-        loop.previous({ duration: 0.4, ease: 'power1.inOut' })
-      );
-    document
-      .querySelector('#video-next')
-      .addEventListener('click', () =>
-        loop.next({ duration: 0.4, ease: 'power1.inOut' })
-      );
+      popups.forEach((popup, index) => {
+        popup.addEventListener('click', (e) => {
+          // Don't close modal if clicking on cookie consent elements
+          if (e.target.closest('[data-cookie-consent]')) {
+            return;
+          }
+          
+          closeTl
+            .call(setModalActive(null))
+            .to(`#popup-${index}`, { autoAlpha: 0 })
+            .set(`#popup-${index}`, { 'z-index': -5 })
+            .set(body, { overflow: 'auto' });
+        });
+      });
+
+      videoArray.forEach((video, index) => {
+        video.addEventListener('click', () =>
+          modalTl
+            .to(window, {
+              duration: 0.25,
+              scrollTo: {
+                y: `#popup-${index}`,
+                offsetY: -25,
+              },
+            })
+            .call(setModalActive(index))
+            .set(`#popup-${index}`, { 'z-index': 10000 })
+            .to(`#popup-${index}`, { autoAlpha: 1 })
+            .set(body, { overflow: 'hidden' }, '+=.25')
+        );
+      });
+
+      document
+        .querySelector('#video-prev')
+        .addEventListener('click', () =>
+          loop.previous({ duration: 0.4, ease: 'power1.inOut' })
+        );
+      document
+        .querySelector('#video-next')
+        .addEventListener('click', () =>
+          loop.next({ duration: 0.4, ease: 'power1.inOut' })
+        );
+    };
+
+    initCarousel();
   }, []);
 
   return (

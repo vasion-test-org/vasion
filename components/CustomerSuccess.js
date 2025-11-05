@@ -9,7 +9,6 @@ import RichTextRenderer from "@/components/renderers/RichTextRenderer";
 import media from "@/styles/media";
 import colors from "@/styles/colors";
 import text from "@/styles/text";
-import gsap from "gsap";
 
 const FeaturedTestimonials = ({ blok }) => {
   // console.log(blok);
@@ -31,47 +30,53 @@ const FeaturedTestimonials = ({ blok }) => {
     setHoveredIndex(null);
   };
   useEffect(() => {
-    if (timelineRef.current) timelineRef.current.kill();
+    const initAnimations = async () => {
+      const { default: gsap } = await import('gsap');
 
-    const items = itemsRef.current;
-    gsap.set(items, { autoAlpha: 0 });
-    gsap.set(items[0], { autoAlpha: 1, display: "flex" });
+      if (timelineRef.current) timelineRef.current.kill();
 
-    const masterTimeline = gsap.timeline({
-      repeat: -1,
-      onRepeat: () => {
-        setCurrentIndex(0);
-      },
-    });
-    const animationConfig = {
-      fadeIn: {
-        autoAlpha: 1,
-        duration: 1,
-        ease: "power2.inOut",
-      },
-      fadeOut: { autoAlpha: 0, duration: 1, ease: "power2.inOut" },
-      progress: { width: "100%", duration: 3, ease: "none" },
+      const items = itemsRef.current;
+      gsap.set(items, { autoAlpha: 0 });
+      gsap.set(items[0], { autoAlpha: 1, display: "flex" });
+
+      const masterTimeline = gsap.timeline({
+        repeat: -1,
+        onRepeat: () => {
+          setCurrentIndex(0);
+        },
+      });
+      const animationConfig = {
+        fadeIn: {
+          autoAlpha: 1,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        fadeOut: { autoAlpha: 0, duration: 1, ease: "power2.inOut" },
+        progress: { width: "100%", duration: 3, ease: "none" },
+      };
+      items.forEach((item, i) => {
+        const slideTimeline = gsap.timeline();
+
+        slideTimeline
+          .set(progressBarsRef.current[i], { width: "0%" })
+          .to(item, {
+            ...animationConfig.fadeIn,
+            onStart: () => setCurrentIndex(i),
+          })
+          .to(progressBarsRef.current[i], animationConfig.progress, "<")
+          .to(item, animationConfig.fadeOut, "+=2");
+
+        masterTimeline.add(slideTimeline, i * 4);
+      });
+
+      timelineRef.current = masterTimeline;
+
+      return () => {
+        timelineRef.current?.kill();
+      };
     };
-    items.forEach((item, i) => {
-      const slideTimeline = gsap.timeline();
 
-      slideTimeline
-        .set(progressBarsRef.current[i], { width: "0%" })
-        .to(item, {
-          ...animationConfig.fadeIn,
-          onStart: () => setCurrentIndex(i),
-        })
-        .to(progressBarsRef.current[i], animationConfig.progress, "<")
-        .to(item, animationConfig.fadeOut, "+=2");
-
-      masterTimeline.add(slideTimeline, i * 4);
-    });
-
-    timelineRef.current = masterTimeline;
-
-    return () => {
-      timelineRef.current?.kill();
-    };
+    initAnimations();
   }, [blok]);
 
   const featured = blok?.testimonials?.map((item, index) => (

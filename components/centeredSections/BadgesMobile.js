@@ -1,6 +1,5 @@
 import React, { useEffect, useContext, useRef } from "react";
 
-import gsap from "gsap";
 import styled from "styled-components";
 import media from "styles/media";
 import colors from "styles/colors";
@@ -27,52 +26,48 @@ const G2BadgesMobile = ({ badges }) => {
   ));
 
   useEffect(() => {
-    const badges = gsap.utils.toArray(".badges");
-    const badgeCounter = document.querySelector("#badgeCounter");
+    const initBadgeAnimations = async () => {
+      const { default: gsap } = await import('gsap');
 
-    const loop = horizontalLoop(badges, { paused: true });
+      const badges = gsap.utils.toArray(".badges");
+      const badgeCounter = document.querySelector("#badgeCounter");
 
-    function NextLoop() {
-      loop.next({ duration: 2, ease: "slow" });
+      const loop = horizontalLoop(badges, { paused: true });
 
-      if (countRef.current >= badges?.length) {
-        countRef.current = 1;
-      } else {
-        countRef.current += 1;
-        badgeCounter.innerHTML = countRef.current;
+      function NextLoop() {
+        loop.next({ duration: 2, ease: "slow" });
+
+        if (countRef.current >= badges?.length) {
+          countRef.current = 1;
+        } else {
+          countRef.current += 1;
+          badgeCounter.innerHTML = countRef.current;
+        }
       }
-    }
 
-    const loopTL = gsap.timeline({});
-    loopTL.set(NextLoop, {
-      delay: 7,
-      onRepeat: NextLoop,
-      repeat: -1,
-      repeatDelay: 7,
-    });
+      const loopTL = gsap.timeline({});
+      loopTL.set(NextLoop, {
+        delay: 7,
+        onRepeat: NextLoop,
+        repeat: -1,
+        repeatDelay: 7,
+      });
 
-    const progressTL = gsap.timeline({
-      defaults: {
-        duration: 7,
-      },
-    });
+      const progressTL = gsap.timeline({
+        defaults: {
+          duration: 7,
+        },
+      });
 
-    progressTL.to(".pro-bar", {
-      delay: 0.75,
-      stagger: 7,
-      width: "100%",
-      repeat: -1,
-    });
+      progressTL.to(".pro-bar", {
+        delay: 0.75,
+        stagger: 7,
+        width: "100%",
+        repeat: -1,
+      });
+    };
 
-    // function Pause() {
-    //   progressTL.restart()
-    //   progressTL.kill()
-    //   loopTL.kill()
-    // }
-
-    // document
-    //   .querySelector(".badgeGroup")
-    //   .addEventListener("click", () => Pause())
+    initBadgeAnimations();
   }, []);
 
   return (

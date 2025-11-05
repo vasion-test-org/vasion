@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef } from "react";
 
-import gsap from "gsap";
 import styled, { ThemeProvider } from "styled-components";
 import { useAvailableThemes } from "@/context/ThemeContext";
 
@@ -11,10 +10,7 @@ import colors from "@/styles/colors";
 import text from "@/styles/text";
 import getMedia from "@/functions/getMedia";
 import Button from "./globalComponents/Button";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { storyblokEditable } from "@storyblok/react/rsc";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const CustomerLogos = ({ blok }) => {
   // console.log(blok);
@@ -49,24 +45,35 @@ const CustomerLogos = ({ blok }) => {
   ));
 
   useEffect(() => {
-    const logoTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: categoryRef.current,
-        start: "top 40%",
-        end: "bottom bottom",
-        // markers: true,
-      },
-    });
+    const initLogoAnimation = async () => {
+      const [{ default: gsap }, { default: ScrollTrigger }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
 
-    logoTl
-      .from(cardsRef.current, {
-        y: 500,
-        duration: 1.25,
-        stagger: 0.1,
-        ease: "power4",
-      })
-      .from(mainCardRef.current, { autoAlpha: 0, duration: 2.25 }, ">-.75")
-      .from(logosRef.current, { autoAlpha: 0, duration: 1.75 }, "<");
+      gsap.registerPlugin(ScrollTrigger);
+
+      const logoTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: categoryRef.current,
+          start: "top 40%",
+          end: "bottom bottom",
+          // markers: true,
+        },
+      });
+
+      logoTl
+        .from(cardsRef.current, {
+          y: 500,
+          duration: 1.25,
+          stagger: 0.1,
+          ease: "power4",
+        })
+        .from(mainCardRef.current, { autoAlpha: 0, duration: 2.25 }, ">-.75")
+        .from(logosRef.current, { autoAlpha: 0, duration: 1.75 }, "<");
+    };
+
+    initLogoAnimation();
   }, []);
 
   return (

@@ -40,6 +40,8 @@ export default async function RootLayout({ children }) {
 
         {/* Resource hints for performance optimization */}
         <link rel="preconnect" href="https://a-us.storyblok.com" />
+        <link rel="preconnect" href="https://a-us.storyblok.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://a-us.storyblok.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google.com" />
         <link rel="preconnect" href="https://unpkg.com" />

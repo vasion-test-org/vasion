@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
@@ -15,6 +14,7 @@ import text from '@/styles/text';
 import ResourceCard from './globalComponents/ResourceCard';
 import ChrevronDown from '@/assets/svg/selectDownChevron.svg';
 import { usePathname } from 'next/navigation';
+import gsap from 'gsap';
 
 const PaginatedCards = ({ blok }) => {
   const themes = useAvailableThemes();

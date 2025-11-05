@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect } from 'react';
 
-import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
@@ -24,19 +23,25 @@ const TestimonialCarousel = ({ blok }) => {
   ));
 
   useEffect(() => {
-    const testimonialsArr = gsap.utils.toArray('.testimonials');
-    const testimonialLoop = horizontalLoop(testimonialsArr, {centered: true, paused: true });
-  
-    document
-      .querySelector('.next')
-      .addEventListener('click', () =>
-        testimonialLoop.next({ duration: 0.4, ease: 'power1.inOut' })
-      );
-    document
-      .querySelector('.prev')
-      .addEventListener('click', () =>
-        testimonialLoop.previous({ duration: 0.4, ease: 'power1.inOut' })
-      );
+    const initCarousel = async () => {
+      const { default: gsap } = await import('gsap');
+
+      const testimonialsArr = gsap.utils.toArray('.testimonials');
+      const testimonialLoop = horizontalLoop(testimonialsArr, {centered: true, paused: true });
+    
+      document
+        .querySelector('.next')
+        .addEventListener('click', () =>
+          testimonialLoop.next({ duration: 0.4, ease: 'power1.inOut' })
+        );
+      document
+        .querySelector('.prev')
+        .addEventListener('click', () =>
+          testimonialLoop.previous({ duration: 0.4, ease: 'power1.inOut' })
+        );
+    };
+
+    initCarousel();
   }, []);
 
   return (

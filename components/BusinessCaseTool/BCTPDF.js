@@ -1,12 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
-import gsap from 'gsap';
 
 import styled from 'styled-components';
 import media from 'styles/media';
 import colors from 'styles/colors';
 import text from 'styles/text';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 
 import CoverPage from 'components/BusinessCaseTool/PDFPages/CoverPage';
 import PDFIntro from './PDFPages/PDFIntro';
@@ -26,12 +24,13 @@ import PDFPage15 from './PDFPages/PDFPage15';
 import PDFPage16 from './PDFPages/PDFPage16';
 import PDFPage17 from './PDFPages/PDFPage17';
 
-gsap.registerPlugin(ScrollTrigger);
-
 const BCTPDF = ({ contactFormData, savingsFormData, currency }) => {
-  const handlePrint = () => {
+  const handlePrint = async () => {
+    // Dynamically load ScrollTrigger only when needed for print
+    const { default: ScrollTrigger } = await import('gsap/ScrollTrigger');
+
     // Kill all ScrollTriggers before print
-    if (ScrollTrigger) {
+    if (ScrollTrigger && ScrollTrigger.getAll) {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     }
   

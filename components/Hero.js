@@ -86,6 +86,7 @@ const Hero = ({ blok }) => {
                 <Image
                   images={blok.hero_asset}
                   priority={true}
+                  fetchPriority="high"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   quality={90}
                   // borderRadius={blok.hero_asset?.[0]?.border_radius}
@@ -165,6 +166,7 @@ const Hero = ({ blok }) => {
               <Image
                 images={blok.hero_asset}
                 priority={true}
+                fetchPriority="high"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 quality={90}
                 // borderRadius={blok.hero_asset?.[0]?.border_radius}
