@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
 import { useRouter, usePathname } from 'next/navigation';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
@@ -11,14 +10,11 @@ import Button from './Button';
 import text from '@/styles/text';
 import colors from '@/styles/colors';
 import IconRenderer from '@/components/renderers/Icons';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from './Image';
 import LinkArrow from 'assets/svg/LinkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
-
-gsap.registerPlugin(ScrollTrigger);
 const MobileNav = ({ blok }) => {
   const router = useRouter();
   const path = usePathname();
@@ -69,11 +65,12 @@ const MobileNav = ({ blok }) => {
 
   // Add click-based language selector for mobile with GSAP animations
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = async (event) => {
       const languageSelector = document.querySelector('.language-selector');
       if (languageSelector && !languageSelector.contains(event.target)) {
         setShowLanguageDropdown(false);
         // Animate language items container closing
+        const { default: gsap } = await import('gsap');
         gsap.to('#languageItemsContainer', { width: '0%', duration: 0.35 });
       }
     };
@@ -87,7 +84,8 @@ const MobileNav = ({ blok }) => {
     };
   }, [showLanguageDropdown]);
 
-  const toggleLanguageDropdown = () => {
+  const toggleLanguageDropdown = async () => {
+    const { default: gsap } = await import('gsap');
     if (showLanguageDropdown) {
       // Animate language items container closing
       gsap.to('#languageItemsContainer', { width: '0%', duration: 1 });
@@ -99,7 +97,8 @@ const MobileNav = ({ blok }) => {
   };
 
   // Function to close mobile dropdown
-  const closeMobileDropdown = () => {
+  const closeMobileDropdown = async () => {
+    const { default: gsap } = await import('gsap');
     const dropdown = document.querySelector('.mobileDropdown');
     const hamburger = document.querySelector('.hamburger');
 
@@ -155,6 +154,7 @@ const MobileNav = ({ blok }) => {
         setActiveLanguage(locale);
         setShowLanguageDropdown(false);
         // Animate language items container closing
+        const { default: gsap } = await import('gsap');
         gsap.to('#languageItemsContainer', { width: '0%', duration: 0.35 });
         // Close mobile dropdown before navigation
         closeMobileDropdown();
@@ -480,73 +480,72 @@ const MobileNav = ({ blok }) => {
   }
 
   useEffect(() => {
-    // console.log('MobileNav useEffect - setting up dropdowns');
-    // console.log('GSAP available:', typeof gsap !== 'undefined');
+    const initMobileNav = async () => {
+      const [{ default: gsap }, ScrollTrigger] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
 
-    gsap.set('.tabDropdowns', { height: 0, display: 'none' });
-    gsap.set('.mobileDropdown', { height: 0, display: 'none' });
-    gsap.set('#languageItemsContainer', { width: '0%' });
+      gsap.registerPlugin(ScrollTrigger);
 
-    const allTabs = gsap.utils.toArray('.tabHeader');
-    const hamburger = document.querySelector('.hamburger');
+      gsap.set('.tabDropdowns', { height: 0, display: 'none' });
+      gsap.set('.mobileDropdown', { height: 0, display: 'none' });
+      gsap.set('#languageItemsContainer', { width: '0%' });
 
-    // console.log('Found tabs:', allTabs.length);
-    // console.log('Found hamburger:', !!hamburger);
+      const allTabs = gsap.utils.toArray('.tabHeader');
+      const hamburger = document.querySelector('.hamburger');
 
-    let tl = gsap.timeline({ paused: true });
+      let tl = gsap.timeline({ paused: true });
 
-    const hamburgerTl = gsap
-      .timeline({ paused: true, reversed: true })
-      .set('#mainDrop', { padding: '4.673vw 0' })
-      .to('#mainDrop', { height: 'auto', duration: 0.5 })
-      .to('#slice-0', { top: '1.95vw', rotate: 45 }, '<')
-      .to('#slice-1', { opacity: 0 }, '<')
-      .to('#slice-2', { top: '-1.075vw', rotate: -45 }, '<');
+      const hamburgerTl = gsap
+        .timeline({ paused: true, reversed: true })
+        .set('#mainDrop', { padding: '4.673vw 0' })
+        .to('#mainDrop', { height: 'auto', duration: 0.5 })
+        .to('#slice-0', { top: '1.95vw', rotate: 45 }, '<')
+        .to('#slice-1', { opacity: 0 }, '<')
+        .to('#slice-2', { top: '-1.075vw', rotate: -45 }, '<');
 
-    const toggleMobileDropdown = () => {
-      // console.log('Toggle mobile dropdown clicked');
-      const dropdown = document.querySelector('.mobileDropdown');
-      if (!dropdown) {
-        console.error('Mobile dropdown element not found');
-        return;
+      const toggleMobileDropdown = () => {
+        const dropdown = document.querySelector('.mobileDropdown');
+        if (!dropdown) {
+          console.error('Mobile dropdown element not found');
+          return;
+        }
+
+        if (mobileOpenRef.current) {
+          gsap.to(dropdown, {
+            height: 0,
+            duration: 0.4,
+            ease: 'power2.inOut',
+            onComplete: () => gsap.set(dropdown, { display: 'none' }),
+          });
+        } else {
+          gsap.set(dropdown, { display: 'flex' });
+          gsap.to(dropdown, {
+            height: '89vh',
+            duration: 0.4,
+            ease: 'power2.inOut',
+          });
+        }
+
+        mobileOpenRef.current = !mobileOpenRef.current;
+
+        if (hamburgerTl.reversed()) {
+          hamburgerTl.play();
+        } else {
+          hamburgerTl.reverse();
+        }
+      };
+
+      if (hamburger) {
+        hamburger.addEventListener('click', toggleMobileDropdown);
       }
 
-      if (mobileOpenRef.current) {
-        gsap.to(dropdown, {
-          height: 0,
-          duration: 0.4,
-          ease: 'power2.inOut',
-          onComplete: () => gsap.set(dropdown, { display: 'none' }),
-        });
-      } else {
-        gsap.set(dropdown, { display: 'flex' });
-        gsap.to(dropdown, {
-          height: '89vh',
-          duration: 0.4,
-          ease: 'power2.inOut',
-        });
-      }
+      const openDropdown = (index) => {
+        tl.clear();
 
-      mobileOpenRef.current = !mobileOpenRef.current;
-
-      if (hamburgerTl.reversed()) {
-        hamburgerTl.play();
-      } else {
-        hamburgerTl.reverse();
-      }
-    };
-
-    if (hamburger) {
-      hamburger.addEventListener('click', toggleMobileDropdown);
-    }
-
-    const openDropdown = (index) => {
-      // console.log('Opening dropdown for index:', index);
-      tl.clear();
-
-      if (dropdownIndex.current === index && isOpen.current) {
-        // console.log('Closing dropdown for index:', index);
-        tl.to(`#tabHeader-${index}`, { height: 0 }).set(`#tabHeader-${index}`, {
+        if (dropdownIndex.current === index && isOpen.current) {
+          tl.to(`#tabHeader-${index}`, { height: 0 }).set(`#tabHeader-${index}`, {
           display: 'none',
         });
         isOpen.current = false;
@@ -591,14 +590,24 @@ const MobileNav = ({ blok }) => {
   }, []);
 
   useEffect(() => {
-    ScrollTrigger.create({
-      trigger: '.mobileNav',
-      start: 'top top',
-      end: () => `${document.body.scrollHeight - window.innerHeight}px`,
-      pin: true,
-      pinSpacing: false,
-      // markers: true,
-    });
+    const initScrollTrigger = async () => {
+      const [{ default: gsap }, ScrollTrigger] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      ScrollTrigger.create({
+        trigger: '.mobileNav',
+        start: 'top top',
+        end: () => `${document.body.scrollHeight - window.innerHeight}px`,
+        pin: true,
+        pinSpacing: false,
+      });
+    };
+
+    initScrollTrigger();
   }, []);
 
   return (

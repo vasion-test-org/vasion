@@ -7,11 +7,6 @@ import { useAvailableThemes } from '@/context/ThemeContext';
 import text from '@/styles/text';
 import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
 import media from '@/styles/media';
-import { gsap } from 'gsap';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
-
-// Register the ScrollToPlugin
-gsap.registerPlugin(ScrollToPlugin);
 
 const Button = ({ $buttonData, stretch, onNavigate }) => {
   const themes = useAvailableThemes();
@@ -65,8 +60,6 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
 
   // Handle anchor scrolling with GSAP
   const handleClick = async (e) => {
-    // console.log(normalizedUrl);
-
     // Handle anchor scrolling
     if ($buttonData?.link_url?.anchor) {
       // First try to find by ID
@@ -82,6 +75,14 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
       if (anchorElement) {
         // Only prevent default if we found the element and can scroll to it
         e.preventDefault();
+
+        // Load GSAP only when anchor link is clicked
+        const [{ default: gsap }, ScrollToPlugin] = await Promise.all([
+          import('gsap'),
+          import('gsap/ScrollToPlugin'),
+        ]);
+
+        gsap.registerPlugin(ScrollToPlugin);
 
         gsap.to(window, {
           duration: 1,

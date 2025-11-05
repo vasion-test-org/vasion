@@ -7,7 +7,6 @@ import VasionSmall from '@/assets/svg/SmallVasion.svg';
 import colors from '@/styles/colors';
 import media from '@/styles/media';
 import text from '@/styles/text';
-import gsap from 'gsap';
 import Button from '@/components/globalComponents/Button';
 import Facebook from '@/assets/svg/footer/Facebook.svg';
 import Twitter from '@/assets/svg/footer/Twitter.svg';
@@ -50,18 +49,42 @@ const Footer = ({ blok }) => {
   }, [path, blok]);
 
   useEffect(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.footer',
-        start: '50% 50%',
-      },
-    });
+    // Load GSAP only when footer is about to be visible
+    const footerElement = document.querySelector('.footer');
+    if (!footerElement) return;
 
-    tl.from('#vasionfootersvg', {
-      yPercent: 100,
-      duration: 2,
-      ease: 'back.out',
-    });
+    const observer = new IntersectionObserver(
+      async (entries) => {
+        if (entries[0].isIntersecting) {
+          const [{ default: gsap }, ScrollTrigger] = await Promise.all([
+            import('gsap'),
+            import('gsap/ScrollTrigger'),
+          ]);
+
+          gsap.registerPlugin(ScrollTrigger);
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: '.footer',
+              start: '50% 50%',
+            },
+          });
+
+          tl.from('#vasionfootersvg', {
+            yPercent: 100,
+            duration: 2,
+            ease: 'back.out',
+          });
+
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+
+    observer.observe(footerElement);
+
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
