@@ -637,7 +637,10 @@ const MobileNav = ({ blok }) => {
       </TopNav>
       <MainWrapper className="mainNavWrapper mobileNav">
         <a href="/">
-          <VasionLogo src="/images/logos/vasion-logo-purple.webp" />
+          <VasionLogo
+            src="/images/logos/vasion-logo-purple.webp"
+            alt="vasion-logo"
+          />
         </a>
         <HamburgerContainer className="hamburger">
           <HamSlice id="slice-0" />
