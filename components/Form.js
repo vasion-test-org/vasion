@@ -235,7 +235,10 @@ const Form = ({ blok }) => {
                 redirectUrl = '/' + redirectUrl;
               }
 
-              if (isExternal(redirectUrl)) {
+              if (blok.new_tab) {
+                // Open in new tab
+                window.open(redirectUrl, '_blank', 'noopener,noreferrer');
+              } else if (isExternal(redirectUrl)) {
                 window.location.href = redirectUrl;
               } else {
                 router.push(redirectUrl);

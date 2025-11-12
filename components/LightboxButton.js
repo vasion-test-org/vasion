@@ -43,6 +43,7 @@ const LightboxBtn = ({ blok }) => {
     theme: blok.theme || "dark",
     header: blok.form_header || null,
     animated: blok.animated || false,
+    new_tab: blok.new_tab || false,
   };
 
   useEffect(() => {
