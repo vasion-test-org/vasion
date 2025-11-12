@@ -13,6 +13,7 @@ import Button from '../globalComponents/Button';
 import Form from '../Form';
 import ContactCard from '../globalComponents/ContactCard';
 import SmallQuote from 'components/SmallQuote';
+import LightboxBtn from '../LightboxButton';
 
 // Dynamic imports for heavy components
 const LogoCube = dynamic(() => import('@/components/LogoCube'), {
@@ -86,6 +87,11 @@ const ComponentRenderer = ({
     );
   }
 
+  // Debug: log component name to help identify issues
+  if (process.env.NODE_ENV === 'development' && blok.component === 'light_box_button') {
+    console.log('Lightbox button detected:', blok);
+  }
+
   switch (blok.component) {
     case 'assets':
       return (
@@ -154,6 +160,8 @@ const ComponentRenderer = ({
       );
     case 'global_link':
       return <Button $buttonData={blok} />;
+    case 'light_box_button':
+      return <LightboxBtn blok={blok} />;
     case 'contact_card':
       return <ContactCard blok={blok} />;
     case 'overview':
@@ -161,6 +169,10 @@ const ComponentRenderer = ({
     case 'small_quote':
       return <SmallQuote short blok={blok} />;
     default:
+      // Debug: log unknown component to help identify the issue
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Unknown Component:', blok.component, blok);
+      }
       return (
         <BlockWrapper {...storyblokEditable(blok)}>
           Unknown Component
