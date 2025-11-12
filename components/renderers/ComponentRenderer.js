@@ -13,6 +13,7 @@ import Button from '../globalComponents/Button';
 import Form from '../Form';
 import ContactCard from '../globalComponents/ContactCard';
 import SmallQuote from 'components/SmallQuote';
+import LightboxBtn from '../LightboxButton';
 
 // Dynamic imports for heavy components
 const LogoCube = dynamic(() => import('@/components/LogoCube'), {
@@ -154,6 +155,8 @@ const ComponentRenderer = ({
       );
     case 'global_link':
       return <Button $buttonData={blok} />;
+    case 'light_box_button':
+      return <LightboxBtn blok={blok} />;
     case 'contact_card':
       return <ContactCard blok={blok} />;
     case 'overview':
