@@ -29,6 +29,20 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        {/* Google Tag Manager */}
+        <Script
+          id="gtm"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-WMKX59W');
+    `,
+          }}
+        />
         <meta
           name="google-site-verification"
           content="9aTxhC978Sh5yhlRXic1mj23gCh4RcexRTfgiwMKbks"
@@ -40,7 +54,11 @@ export default async function RootLayout({ children }) {
 
         {/* Resource hints for performance optimization */}
         <link rel="preconnect" href="https://a-us.storyblok.com" />
-        <link rel="preconnect" href="https://a-us.storyblok.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://a-us.storyblok.com"
+          crossOrigin="anonymous"
+        />
         <link rel="dns-prefetch" href="https://a-us.storyblok.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google.com" />
@@ -89,39 +107,6 @@ export default async function RootLayout({ children }) {
         />
 
         {/* Rive WASM will be loaded on-demand when animations are needed */}
-
-        {/* Optimized Google Tag Manager */}
-        <Script
-          id="gtm-optimized"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: `
-        // Optimized GTM loading with performance improvements
-        (function() {
-          if (window.gtmLoaded) return;
-          
-          // Initialize dataLayer early to prevent blocking
-          window.dataLayer = window.dataLayer || [];
-          window.dataLayer.push({
-            'gtm.start': new Date().getTime(),
-            event: 'gtm.js'
-          });
-          
-          // Create optimized GTM script
-          const script = document.createElement('script');
-          script.async = true;
-          script.defer = true;
-          script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-WMKX59W';
-          script.crossOrigin = 'anonymous';
-          script.setAttribute('data-gtm-optimized', 'true');
-          
-          // Insert in head for better performance
-          document.head.appendChild(script);
-          window.gtmLoaded = true;
-        })();
-      `,
-          }}
-        />
 
         {/* Marketo Munchkin - Load after page is interactive */}
         <Script
@@ -205,87 +190,9 @@ export default async function RootLayout({ children }) {
           }}
         />
 
-        {/* Optimized Google Analytics - Load after page is interactive */}
-        <Script
-          id="ga-optimized"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-        // Optimized Google Analytics loading
-        (function() {
-          if (window.gtagLoaded) return;
-          
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          window.gtag = gtag;
-          gtag('js', new Date());
-          
-          const script = document.createElement('script');
-          script.async = true;
-          script.defer = true;
-          script.src = 'https://www.googletagmanager.com/gtag/js?id=G-407WZSYMN0';
-          script.crossOrigin = 'anonymous';
-          document.head.appendChild(script);
-          
-          window.gtagLoaded = true;
-        })();
-      `,
-          }}
-        />
+        {/* GA4 handled via GTM - direct GA script removed */}
 
-        {/* Optimized Google Ads - Load only on conversion pages or after user interaction */}
-        <Script
-          id="google-ads-optimized"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: `
-        // Optimized Google Ads loading - single script with multiple configs
-        (function() {
-          if (window.googleAdsLoaded) return;
-          
-          const primaryAdsId = 'AW-977173538';
-          const additionalAdsIds = ['AW-11184646465', 'AW-11184713828'];
-          
-          const loadAdsScripts = () => {
-            if (window.googleAdsLoaded) return;
-            window.googleAdsLoaded = true;
-            
-            // Load gtag.js once with primary ID
-            const script = document.createElement('script');
-            script.async = true;
-            script.defer = true;
-            script.src = 'https://www.googletagmanager.com/gtag/js?id=' + primaryAdsId + '&cx=c&gtm=4e5981';
-            script.crossOrigin = 'anonymous';
-            document.head.appendChild(script);
-            
-            // Configure additional ad accounts using gtag config
-            script.onload = function() {
-              additionalAdsIds.forEach(function(id) {
-                if (window.gtag) {
-                  window.gtag('config', id);
-                }
-              });
-            };
-          };
-          
-          // Load on conversion pages immediately
-          const isConversionPage = window.location.pathname.includes('thank-you') || 
-                                 window.location.pathname.includes('conversion') ||
-                                 window.location.pathname.includes('purchase');
-          
-          if (isConversionPage) {
-            loadAdsScripts();
-          } else {
-            // Defer until user interaction
-            const events = ['click', 'scroll', 'mousemove'];
-            events.forEach(function(event) {
-              document.addEventListener(event, loadAdsScripts, { once: true, passive: true });
-            });
-          }
-        })();
-      `,
-          }}
-        />
+        {/* Google Ads handled via GTM - direct Ads script removed */}
 
         {/* VWO - Load after page is interactive */}
         <VWOScript accountId="827254" />
@@ -323,6 +230,13 @@ export default async function RootLayout({ children }) {
       </head>
 
       <body>
+        {/* Google Tag Manager (noscript) */}
+        <noscript
+          dangerouslySetInnerHTML={{
+            __html:
+              '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WMKX59W" height="0" width="0" style="display:none;visibility:hidden"></iframe>',
+          }}
+        />
         <ThemeProviderWrapper>
           <StoryblokProvider>
             <StyledComponentsRegistry>
