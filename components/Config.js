@@ -16,6 +16,10 @@ const Config = ({ blok, children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const { pageData } = usePageData();
 
+  // Cache setup
+  const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+  const getCacheKey = (locale) => `vasion:nav-config:${locale}`;
+
   const getLocaleFromPath = () => {
     const parts = pathname?.split('/');
     const localeCandidate = parts[1];
@@ -23,120 +27,31 @@ const Config = ({ blok, children }) => {
     return supportedLocales.includes(localeCandidate) ? localeCandidate : 'en';
   };
 
-  // Fallback navigation data for 404 pages or when config fetch fails
-  const getFallbackNavData = () => {
-    const locale = getLocaleFromPath();
-    return {
-      nav: [
-        {
-          banner:
-            locale === 'en'
-              ? 'Free Trial Available'
-              : locale === 'fr'
-              ? 'Essai gratuit disponible'
-              : 'Kostenlose Testversion verfügbar',
-          english_nav_items: [
-            {
-              tab_name: 'Products',
-              tab_columns: [
-                {
-                  column_header: 'Print Management',
-                  nav_items: [
-                    {
-                      _uid: 'fallback-print',
-                      tab_name: 'Print Management',
-                      icon: 'Print',
-                      item_copy: {
-                        type: 'doc',
-                        content: [
-                          {
-                            type: 'paragraph',
-                            content: [
-                              { type: 'text', text: 'Print Management' },
-                            ],
-                          },
-                        ],
-                      },
-                      item_link: { cached_url: '/print/' },
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          french_nav_items: [
-            {
-              tab_name: 'Produits',
-              tab_columns: [
-                {
-                  column_header: "Gestion d'impression",
-                  nav_items: [
-                    {
-                      _uid: 'fallback-print-fr',
-                      tab_name: "Gestion d'impression",
-                      icon: 'Print',
-                      item_copy: {
-                        type: 'doc',
-                        content: [
-                          {
-                            type: 'paragraph',
-                            content: [
-                              { type: 'text', text: "Gestion d'impression" },
-                            ],
-                          },
-                        ],
-                      },
-                      item_link: { cached_url: '/fr/print/' },
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          german_nav_items: [
-            {
-              tab_name: 'Produkte',
-              tab_columns: [
-                {
-                  column_header: 'Druckverwaltung',
-                  nav_items: [
-                    {
-                      _uid: 'fallback-print-de',
-                      tab_name: 'Druckverwaltung',
-                      icon: 'Print',
-                      item_copy: {
-                        type: 'doc',
-                        content: [
-                          {
-                            type: 'paragraph',
-                            content: [
-                              { type: 'text', text: 'Druckverwaltung' },
-                            ],
-                          },
-                        ],
-                      },
-                      item_link: { cached_url: '/de/print/' },
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          button: [],
-        },
-      ],
-      footer: [
-        {
-          // Basic footer structure
-        },
-      ],
-    };
-  };
+
 
   useEffect(() => {
     const fetchConfig = async () => {
       setIsLoading(true);
       const locale = getLocaleFromPath();
+
+      // Try cached config for this locale first (for instant render on subsequent visits)
+      try {
+        if (typeof window !== 'undefined') {
+          const cachedRaw = window.localStorage.getItem(getCacheKey(locale));
+          if (cachedRaw) {
+            const cached = JSON.parse(cachedRaw);
+            if (
+              cached?.data &&
+              Date.now() - (cached.timestamp || 0) < CACHE_TTL_MS
+            ) {
+              setConfigData(cached.data);
+              setIsLoading(false);
+            }
+          }
+        }
+      } catch (e) {
+        // ignore cache errors
+      }
 
       try {
         const storyblokApi = getStoryblokApi();
@@ -145,10 +60,23 @@ const Config = ({ blok, children }) => {
           language: locale,
         });
         setConfigData(data?.story?.content ?? null);
+        // Update cache
+        try {
+          if (typeof window !== 'undefined' && data?.story?.content) {
+            window.localStorage.setItem(
+              getCacheKey(locale),
+              JSON.stringify({
+                timestamp: Date.now(),
+                data: data.story.content,
+              })
+            );
+          }
+        } catch (e) {
+          // ignore cache set errors
+        }
       } catch (error) {
         console.error('Failed to fetch config:', error);
-        // Use fallback data when config fetch fails (like on 404 pages)
-        setConfigData(getFallbackNavData());
+        // If no cache was available, keep configData as-is (possibly null)
       } finally {
         setIsLoading(false);
       }
@@ -160,27 +88,25 @@ const Config = ({ blok, children }) => {
   const shouldHideNav = pageData?.content?.hide_nav === true;
   const shouldHideFooter = pageData?.content?.hide_footer === true;
 
-  // Show navigation even if configData is null (fallback case) but not if explicitly hidden
-  const shouldShowNav = !shouldHideNav && (configData || !isLoading);
+  // Show nav only when config is available (cached or fetched) and not explicitly hidden
+  const shouldShowNav = !shouldHideNav && !!configData;
 
   return (
     <>
       {shouldShowNav && (
         <NavWrapper>
-          <Nav blok={configData?.nav?.[0] || getFallbackNavData().nav[0]} />
+          <Nav blok={configData?.nav?.[0]} />
         </NavWrapper>
       )}
 
       {shouldShowNav && (
         <MobileNavWrapper>
-          <MobileNav
-            blok={configData?.nav?.[0] || getFallbackNavData().nav[0]}
-          />
+          <MobileNav blok={configData?.nav?.[0]} />
         </MobileNavWrapper>
       )}
 
       {/* <ChildrenVisibilityWrapper $visible={!!configData || !isLoading}> */}
-        {children}
+      {children}
       {/* </ChildrenVisibilityWrapper> */}
 
       {configData && !shouldHideFooter && (
