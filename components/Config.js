@@ -27,8 +27,6 @@ const Config = ({ blok, children }) => {
     return supportedLocales.includes(localeCandidate) ? localeCandidate : 'en';
   };
 
-
-
   useEffect(() => {
     const fetchConfig = async () => {
       setIsLoading(true);

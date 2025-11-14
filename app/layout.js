@@ -16,6 +16,8 @@ import { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/next';
 import { VWOScript } from 'vwo-smartcode-nextjs';
 
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-WMKX59W';
+
 export const metadata = {
   metadataBase: new URL('https://vasion.com'),
   title: {
@@ -39,7 +41,7 @@ export default async function RootLayout({ children }) {
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
       j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-WMKX59W');
+      })(window,document,'script','dataLayer','${GTM_ID}');
     `,
           }}
         />
@@ -233,8 +235,7 @@ export default async function RootLayout({ children }) {
         {/* Google Tag Manager (noscript) */}
         <noscript
           dangerouslySetInnerHTML={{
-            __html:
-              '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WMKX59W" height="0" width="0" style="display:none;visibility:hidden"></iframe>',
+            __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=${GTM_ID}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
           }}
         />
         <ThemeProviderWrapper>
