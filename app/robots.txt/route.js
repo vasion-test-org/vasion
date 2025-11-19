@@ -8,6 +8,9 @@ Disallow: /api/
 Disallow: /go/
 Disallow: /fr/go/
 Disallow: /de/go/
+Disallow: /_next/static/chunks/
+Allow: /_next/static/css/
+Allow: /_next/static/media/
 Sitemap: https://vasion.com/sitemap.xml`;
 
   return new Response(body, {
