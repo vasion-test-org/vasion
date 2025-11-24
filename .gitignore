@@ -40,6 +40,3 @@ localhost-key.pem
 
 # Sentry Config File
 .env.sentry-build-plugin
-
-# Bundle analysis results
-bundle-analysis-results.json
