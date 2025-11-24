@@ -15,45 +15,45 @@ import React from 'react';
 
 export default function TailwindTestPage() {
   return (
-    <div className="flex flex-col items-center p-8 min-h-screen bg-gray-50">
-      <section className="w-full max-w-6xl mb-12">
-        <h1 className="text-4xl font-bold text-center mb-4 text-gray-900">
+    <div className="flex flex-col items-center p-8 min-h-screen bg-[#f7fafc]">
+      <section className="w-full max-w-[1200px] mb-12">
+        <h1 className="text-[2.5rem] font-bold text-center mb-4 text-[#1a202c]">
           Tailwind CSS Test Page
         </h1>
-        <p className="text-center text-lg text-gray-600 mb-12">
+        <p className="text-center text-[1.125rem] text-[#4a5568] mb-12">
           This page uses Tailwind CSS for all styling. Test with GTmetrix to compare performance.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 min-[481px]:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 mb-12">
           {Array.from({ length: 9 }).map((_, i) => (
             <div
               key={i}
-              className="flex flex-col p-6 rounded-xl bg-white shadow-md hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
+              className="flex flex-col p-6 rounded-[0.75rem] bg-white shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)] transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05)]"
             >
-              <h2 className="text-2xl font-semibold mb-3 text-gray-900">Card {i + 1}</h2>
-              <p className="text-base leading-relaxed text-gray-600 mb-4">
+              <h2 className="text-2xl font-semibold mb-3 text-[#1a202c]">Card {i + 1}</h2>
+              <p className="text-base leading-[1.5] text-[#4a5568] mb-4">
                 This is a test card component styled with Tailwind CSS. It includes
                 hover effects, responsive design, and utility classes. This content is
                 repeated multiple times to create a substantial page for performance testing.
               </p>
-              <button className="px-6 py-3 bg-gradient-to-b from-[#7E5FDD] to-[#583F99] text-white border-none rounded-lg font-medium cursor-pointer transition-opacity hover:opacity-90 active:scale-[0.98] w-fit">
+              <button className="px-6 py-3 bg-gradient-to-b from-[#7E5FDD] to-[#583F99] text-white border-none rounded-lg font-medium cursor-pointer transition-opacity duration-200 hover:opacity-90 active:scale-[0.98] w-fit">
                 Learn More
               </button>
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        <div className="grid grid-cols-1 min-[481px]:grid-cols-2 min-[1025px]:grid-cols-3 gap-8 mt-12">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="p-8 bg-white rounded-2xl shadow-md text-center"
+              className="p-8 bg-white rounded-2xl shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center"
             >
               <div className="w-16 h-16 bg-gradient-to-b from-[#7E5FDD] to-[#583F99] rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
                 {i + 1}
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-gray-900">Feature {i + 1}</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <h3 className="text-xl font-semibold mb-2 text-[#1a202c]">Feature {i + 1}</h3>
+              <p className="text-sm text-[#4a5568] leading-[1.5]">
                 This feature card demonstrates Tailwind CSS with icons, titles, and descriptions.
                 Multiple instances help create a realistic page size for performance testing.
               </p>
@@ -61,24 +61,24 @@ export default function TailwindTestPage() {
           ))}
         </div>
 
-        <div className="flex flex-col md:flex-row justify-around items-center p-12 bg-white rounded-2xl mt-12 gap-8 md:gap-0">
+        <div className="flex flex-col max-[480px]:flex-col max-[480px]:gap-8 max-[480px]:text-center min-[481px]:flex-row justify-around items-center py-12 bg-white rounded-2xl mt-12">
           <div className="flex flex-col items-center">
-            <div className="text-5xl font-bold bg-gradient-to-b from-[#7E5FDD] to-[#583F99] bg-clip-text text-transparent mb-2">
+            <div className="text-[3rem] font-bold bg-gradient-to-b from-[#7E5FDD] to-[#583F99] bg-clip-text text-transparent mb-2">
               1.02
             </div>
-            <div className="text-base text-gray-600 font-medium">MB Bundle</div>
+            <div className="text-base text-[#4a5568] font-medium">MB Bundle</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="text-5xl font-bold bg-gradient-to-b from-[#7E5FDD] to-[#583F99] bg-clip-text text-transparent mb-2">
+            <div className="text-[3rem] font-bold bg-gradient-to-b from-[#7E5FDD] to-[#583F99] bg-clip-text text-transparent mb-2">
               417
             </div>
-            <div className="text-base text-gray-600 font-medium">KB First Load</div>
+            <div className="text-base text-[#4a5568] font-medium">KB First Load</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="text-5xl font-bold bg-gradient-to-b from-[#7E5FDD] to-[#583F99] bg-clip-text text-transparent mb-2">
+            <div className="text-[3rem] font-bold bg-gradient-to-b from-[#7E5FDD] to-[#583F99] bg-clip-text text-transparent mb-2">
               95
             </div>
-            <div className="text-base text-gray-600 font-medium">Performance Score</div>
+            <div className="text-base text-[#4a5568] font-medium">Performance Score</div>
           </div>
         </div>
       </section>
