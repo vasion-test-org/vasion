@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 /**
  * Tailwind CSS Test Page
@@ -14,6 +14,74 @@ import React from 'react';
  */
 
 export default function TailwindTestPage() {
+  const [tailwindInstalled, setTailwindInstalled] = useState(true);
+
+  useEffect(() => {
+    // Check if Tailwind is working by testing if a Tailwind class is applied
+    const testEl = document.createElement('div');
+    testEl.className = 'hidden';
+    document.body.appendChild(testEl);
+    const styles = window.getComputedStyle(testEl);
+    // If Tailwind is installed, 'hidden' class will set display: none
+    // If not, it will be display: block (default)
+    const isInstalled = styles.display === 'none';
+    document.body.removeChild(testEl);
+    setTailwindInstalled(isInstalled);
+  }, []);
+
+  if (!tailwindInstalled) {
+    return (
+      <div style={{ 
+        padding: '3rem', 
+        textAlign: 'center', 
+        fontFamily: 'system-ui',
+        maxWidth: '800px',
+        margin: '0 auto'
+      }}>
+        <h1 style={{ fontSize: '2rem', marginBottom: '1rem', color: '#1a202c' }}>
+          ⚠️ Tailwind CSS Not Installed
+        </h1>
+        <p style={{ fontSize: '1.125rem', color: '#4a5568', marginBottom: '2rem', lineHeight: '1.6' }}>
+          This page requires Tailwind CSS to be installed and configured.
+        </p>
+        <div style={{ 
+          background: '#f7fafc', 
+          padding: '2rem', 
+          borderRadius: '0.75rem',
+          textAlign: 'left',
+          marginBottom: '2rem'
+        }}>
+          <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: '#1a202c' }}>
+            To install Tailwind:
+          </h2>
+          <ol style={{ paddingLeft: '1.5rem', color: '#4a5568', lineHeight: '2' }}>
+            <li><code style={{ background: '#e2e8f0', padding: '0.25rem 0.5rem', borderRadius: '0.25rem' }}>npm install -D tailwindcss postcss autoprefixer</code></li>
+            <li><code style={{ background: '#e2e8f0', padding: '0.25rem 0.5rem', borderRadius: '0.25rem' }}>npx tailwindcss init -p</code></li>
+            <li>Add to <code style={{ background: '#e2e8f0', padding: '0.25rem 0.5rem', borderRadius: '0.25rem' }}>app/globals.css</code>:
+              <pre style={{ 
+                background: '#1a202c', 
+                color: '#f7fafc', 
+                padding: '1rem', 
+                borderRadius: '0.5rem',
+                marginTop: '0.5rem',
+                overflow: 'auto'
+              }}>
+{`@tailwind base;
+@tailwind components;
+@tailwind utilities;`}
+              </pre>
+            </li>
+            <li>Update <code style={{ background: '#e2e8f0', padding: '0.25rem 0.5rem', borderRadius: '0.25rem' }}>tailwind.config.js</code> content paths</li>
+            <li>Restart dev server</li>
+          </ol>
+        </div>
+        <p style={{ fontSize: '0.875rem', color: '#838587' }}>
+          For now, test the <a href="/test-styled-components" style={{ color: '#7E5FDD', textDecoration: 'underline' }}>styled-components version</a> instead.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center p-8 min-h-screen bg-[#f7fafc]">
       <section className="w-full max-w-[1200px] mb-12">
