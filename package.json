@@ -39,12 +39,15 @@
     "@svgr/webpack": "^8.1.0",
     "@types/node": "24.6.0",
     "@types/react": "19.1.16",
+    "autoprefixer": "^10.4.22",
     "babel-plugin-react-compiler": "^19.1.0-rc.3",
     "concurrently": "^9.2.1",
     "eslint": "^9.36.0",
     "eslint-config-next": "^15.5.4",
     "local-ssl-proxy": "^2.0.5",
+    "postcss": "^8.5.6",
     "rimraf": "^6.0.1",
+    "tailwindcss": "^4.1.17",
     "typescript": "5.9.2"
   }
 }
