@@ -112,7 +112,10 @@ const RiveAnimation = ({
   }, [isActive]);
 
   return (
-    <div ref={containerRef} className="rive-container">
+    <div
+      ref={containerRef}
+      className="mt-[1.389vw] aspect-[419/327] w-full h-auto fullWidth:mt-5 fullWidth:h-[349px] tablet:mt-0 tablet:aspect-[298/248] tablet:h-[24.219vw] mobile:mt-0 mobile:w-full mobile:h-[67.917vw]"
+    >
       {shouldLoadRive ? <RiveComponent /> : null}
     </div>
   );
@@ -158,199 +161,10 @@ const StackedCardsTailwind = React.memo(({ blok }) => {
   };
 
   return (
-    <>
-      <style>{`
-        .stacked-cards-wrapper {
-          position: relative;
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          align-items: center;
-          justify-content: center;
-          gap: 0.75vw;
-          width: 100%;
-        }
-        @media (min-width: 1601px) {
-          .stacked-cards-wrapper {
-            width: 1350px;
-            gap: 24px;
-          }
-        }
-        @media (min-width: 481px) and (max-width: 1024px) {
-          .stacked-cards-wrapper {
-            gap: 1.172vw;
-          }
-        }
-        @media (max-width: 480px) {
-          .stacked-cards-wrapper {
-            gap: 5vw;
-          }
-        }
-        .stacked-card-item {
-          display: flex;
-          flex-direction: column;
-          background-repeat: no-repeat;
-          background-size: cover;
-          background-position: center;
-          transition: opacity 0.3s ease-out;
-          border-radius: 0.833vw;
-          gap: 0.75vw;
-        }
-        @media (min-width: 1601px) {
-          .stacked-card-item {
-            border-radius: 12px;
-            gap: 12px;
-          }
-          .stacked-card-item.last-card {
-            width: 1304px;
-            padding: 43px 60px;
-            height: fit-content;
-          }
-          .stacked-card-item:not(.last-card) {
-            height: 600px;
-            width: 427px;
-            padding: 20px;
-          }
-        }
-        @media (min-width: 481px) and (max-width: 1024px) {
-          .stacked-card-item {
-            opacity: 1 !important;
-            border-radius: 1.172vw;
-          }
-          .stacked-card-item.last-card {
-            width: 89.488vw;
-            padding: 3.906vw;
-            height: fit-content;
-          }
-          .stacked-card-item:not(.last-card) {
-            width: 29.102vw;
-            padding: 1.953vw;
-            height: 45.953vw;
-          }
-        }
-        @media (max-width: 480px) {
-          .stacked-card-item {
-            opacity: 1 !important;
-            border-radius: 2.804vw;
-          }
-          .stacked-card-item.last-card {
-            width: 89.167vw;
-            height: 171.042vw;
-            padding: 5.417vw 8.333vw;
-          }
-          .stacked-card-item:not(.last-card) {
-            width: 89.167vw;
-            height: fit-content;
-            padding: 4.167vw;
-          }
-        }
-        .stacked-card-content {
-          display: flex;
-          flex-direction: column;
-          white-space: nowrap;
-          hyphens: none;
-        }
-        .stacked-card-content.last-card {
-          width: 33.25vw;
-          gap: 0.75vw;
-        }
-        .stacked-card-content:not(.last-card) {
-          width: fit-content;
-          gap: 0.5vw;
-        }
-        @media (min-width: 1601px) {
-          .stacked-card-content.last-card {
-            width: 532px;
-            gap: 12px;
-          }
-          .stacked-card-content:not(.last-card) {
-            gap: 8px;
-          }
-        }
-        @media (min-width: 481px) and (max-width: 1024px) {
-          .stacked-card-content.last-card {
-            width: 38.281vw;
-            gap: 1.172vw;
-          }
-          .stacked-card-content:not(.last-card) {
-            height: 17.16vw;
-            gap: 0.781vw;
-          }
-        }
-        @media (max-width: 480px) {
-          .stacked-card-content.last-card {
-            width: 78.333vw;
-            gap: 2.5vw;
-          }
-          .stacked-card-content:not(.last-card) {
-            gap: 1.667vw;
-          }
-        }
-        .stacked-card-buttons {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          width: max-content;
-          gap: 1.667vw;
-        }
-        .stacked-card-buttons.last-card {
-          margin-top: 2.5vw;
-        }
-        .stacked-card-buttons:not(.last-card) {
-          margin-top: 1.125vw;
-        }
-        @media (min-width: 1601px) {
-          .stacked-card-buttons {
-            gap: 24px;
-          }
-          .stacked-card-buttons.last-card {
-            margin-top: 40px;
-          }
-          .stacked-card-buttons:not(.last-card) {
-            margin-top: 18px;
-          }
-        }
-        @media (min-width: 481px) and (max-width: 1024px) {
-          .stacked-card-buttons {
-            gap: 2.344vw;
-          }
-        }
-        @media (max-width: 480px) {
-          .stacked-card-buttons {
-            gap: 5.607vw;
-          }
-        }
-        .rive-container {
-          margin-top: 1.389vw;
-          aspect-ratio: 419 / 327;
-          width: 100%;
-          height: auto;
-        }
-        @media (min-width: 1601px) {
-          .rive-container {
-            margin-top: 20px;
-            height: 349px;
-          }
-        }
-        @media (min-width: 481px) and (max-width: 1024px) {
-          .rive-container {
-            margin-top: 0;
-            aspect-ratio: 298/248;
-            height: 24.219vw;
-          }
-        }
-        @media (max-width: 480px) {
-          .rive-container {
-            margin-top: 0;
-            width: 100%;
-            height: 67.917vw;
-          }
-        }
-      `}</style>
-      <div
-        ref={stackedCardsRef}
-        className="stacked-cards-wrapper"
-      >
+    <div
+      ref={stackedCardsRef}
+      className="relative flex flex-row flex-wrap items-center justify-center gap-[0.75vw] w-full fullWidth:w-[1350px] fullWidth:gap-6 tablet:gap-[1.172vw] mobile:gap-[5vw]"
+    >
       {blok.map((card, index) => {
         const isLastCard = index === blok?.length - 1;
         const cardImage = getMedia(
@@ -372,7 +186,11 @@ const StackedCardsTailwind = React.memo(({ blok }) => {
         return (
           <div
             {...storyblokEditable(card)}
-            className={`stackedCards stacked-card-item ${isLastCard ? 'last-card' : ''}`}
+            className={`stackedCards flex flex-col bg-cover bg-center bg-no-repeat transition-opacity duration-300 ease-out rounded-[0.833vw] gap-[0.75vw] ${
+              isLastCard
+                ? 'h-fit w-[81.5vw] p-[2.688vw_3.75vw] fullWidth:h-fit fullWidth:w-[1304px] fullWidth:p-[43px_60px] fullWidth:rounded-xl fullWidth:gap-3 tablet:w-[89.488vw] tablet:p-[3.906vw] tablet:rounded-[1.172vw] tablet:opacity-100 mobile:w-[89.167vw] mobile:h-[171.042vw] mobile:p-[5.417vw_8.333vw] mobile:rounded-[2.804vw] mobile:opacity-100'
+                : 'h-[37.5vw] w-[26.688vw] p-[1.25vw] fullWidth:h-[600px] fullWidth:w-[427px] fullWidth:p-5 fullWidth:rounded-xl fullWidth:gap-3 tablet:w-[29.102vw] tablet:p-[1.953vw] tablet:h-[45.953vw] tablet:rounded-[1.172vw] tablet:opacity-100 mobile:h-fit mobile:p-[4.167vw] mobile:rounded-[2.804vw] mobile:opacity-100'
+            }`}
             style={{
               backgroundImage: `url(${cardImage ? cardImage : card?.background_image[0].filename})`,
               opacity: getOpacity(),
@@ -382,7 +200,11 @@ const StackedCardsTailwind = React.memo(({ blok }) => {
             onMouseLeave={handleCardMouseLeave}
           >
             <div
-              className={`stacked-card-content ${isLastCard ? 'last-card' : ''}`}
+              className={`flex flex-col whitespace-nowrap hyphens-none ${
+                isLastCard
+                  ? 'w-[33.25vw] gap-[0.75vw] fullWidth:w-[532px] fullWidth:gap-3 tablet:w-[38.281vw] tablet:gap-[1.172vw] mobile:w-[78.333vw] mobile:gap-[2.5vw]'
+                  : 'w-fit gap-[0.5vw] fullWidth:gap-2 tablet:h-[17.16vw] tablet:gap-[0.781vw] mobile:gap-[1.667vw]'
+              }`}
             >
               {card?.eyebrow && <RichTextRenderer document={card.eyebrow} />}
               <div {...storyblokEditable(card.header)}>
@@ -393,7 +215,13 @@ const StackedCardsTailwind = React.memo(({ blok }) => {
               </div>
             </div>
 
-            <div className={`stacked-card-buttons ${isLastCard ? 'last-card' : ''}`}>
+            <div
+              className={`flex flex-row items-center w-max gap-[1.667vw] ${
+                isLastCard
+                  ? 'mt-[2.5vw] fullWidth:gap-6 fullWidth:mt-10 tablet:gap-[2.344vw] mobile:gap-[5.607vw]'
+                  : 'mt-[1.125vw] fullWidth:gap-6 fullWidth:mt-[18px] tablet:gap-[2.344vw] mobile:gap-[5.607vw]'
+              }`}
+            >
               {card?.link?.map(($buttonData) => (
                 <div
                   {...storyblokEditable($buttonData)}
@@ -419,8 +247,7 @@ const StackedCardsTailwind = React.memo(({ blok }) => {
           </div>
         );
       })}
-      </div>
-    </>
+    </div>
   );
 });
 
