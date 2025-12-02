@@ -41,7 +41,7 @@ const Rotator = dynamic(() => import('@/components/centeredSections/Rotator'), {
 });
 
 const StackedCards = dynamic(
-  () => import('@/components/centeredSections/StackedCards'),
+  () => import('@/components/centeredSections/StackedCardsTailwind'),
   {
     loading: () => <div style={{ height: '200px' }} />,
   },
@@ -88,7 +88,10 @@ const CenteredSectionCopy = ({ blok }) => {
       };
     }
     return {
-      background: selectedTheme.centered.bg || selectedTheme.centered.background || '#FFFFFF',
+      background:
+        selectedTheme.centered.bg ||
+        selectedTheme.centered.background ||
+        '#FFFFFF',
     };
   };
 
@@ -119,12 +122,27 @@ const CenteredSectionCopy = ({ blok }) => {
   const getPaddingStyle = () => {
     if (spacing && spacing !== 'default') {
       if (offset === 'top') {
-        return { paddingTop: `${spacing}px`, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 };
+        return {
+          paddingTop: `${spacing}px`,
+          paddingBottom: 0,
+          paddingLeft: 0,
+          paddingRight: 0,
+        };
       }
       if (offset === 'bottom') {
-        return { paddingTop: 0, paddingBottom: `${spacing}px`, paddingLeft: 0, paddingRight: 0 };
+        return {
+          paddingTop: 0,
+          paddingBottom: `${spacing}px`,
+          paddingLeft: 0,
+          paddingRight: 0,
+        };
       }
-      return { paddingTop: `${spacing}px`, paddingBottom: `${spacing}px`, paddingLeft: 0, paddingRight: 0 };
+      return {
+        paddingTop: `${spacing}px`,
+        paddingBottom: `${spacing}px`,
+        paddingLeft: 0,
+        paddingRight: 0,
+      };
     }
     return {};
   };
@@ -144,7 +162,11 @@ const CenteredSectionCopy = ({ blok }) => {
         <div className="flex flex-col items-center justify-center w-[67.75vw] gap-[1vw] text-center fullWidth:w-[1084px] fullWidth:gap-4 mobile:w-[89.167vw] mobile:gap-[3.333vw]">
           {blok.centered_copy &&
             blok.centered_copy.map((copy) => (
-              <div {...storyblokEditable(copy)} key={copy.component} style={{ color: textColor }}>
+              <div
+                {...storyblokEditable(copy)}
+                key={copy.component}
+                style={{ color: textColor }}
+              >
                 <RichTextRenderer
                   document={copy?.copy}
                   responsiveTextStyles={copy?.responsive_text_styles}
@@ -158,10 +180,7 @@ const CenteredSectionCopy = ({ blok }) => {
                 {...storyblokEditable($buttonData)}
                 key={$buttonData.link_text}
               >
-                <Button
-                  key={$buttonData.link_text}
-                  $buttonData={$buttonData}
-                />
+                <Button key={$buttonData.link_text} $buttonData={$buttonData} />
               </div>
             ))}
         </div>
@@ -252,10 +271,7 @@ const CenteredSectionCopy = ({ blok }) => {
       )}
       {blok.button_position === 'below' &&
         blok?.button_group?.map(($buttonData) => (
-          <div
-            {...storyblokEditable($buttonData)}
-            key={$buttonData.link_text}
-          >
+          <div {...storyblokEditable($buttonData)} key={$buttonData.link_text}>
             <Button key={$buttonData.link_text} $buttonData={$buttonData} />
           </div>
         ))}
