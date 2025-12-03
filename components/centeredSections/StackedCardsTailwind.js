@@ -160,6 +160,28 @@ const StackedCardsTailwind = React.memo(({ blok }) => {
     }
   };
 
+  // Extract className constants for better readability
+  const baseCardClasses =
+    'stackedCards flex flex-col bg-cover bg-center bg-no-repeat transition-opacity duration-300 ease-out rounded-[0.833vw] gap-[0.75vw]';
+
+  const lastCardClasses =
+    'h-fit w-[81.5vw] py-[2.688vw] px-[3.75vw] fullWidth:h-fit fullWidth:w-[1304px] fullWidth:py-[43px] fullWidth:px-[60px] fullWidth:rounded-xl fullWidth:gap-3 tablet:w-[89.488vw] tablet:p-[3.906vw] tablet:rounded-[1.172vw] tablet:opacity-100 mobile:w-[89.167vw] mobile:h-[171.042vw] mobile:py-[5.417vw] mobile:px-[8.333vw] mobile:rounded-[2.804vw] mobile:opacity-100';
+
+  const regularCardClasses =
+    'h-[37.5vw] w-[26.688vw] p-[1.25vw] fullWidth:h-[600px] fullWidth:w-[427px] fullWidth:p-5 fullWidth:rounded-xl fullWidth:gap-3 tablet:w-[29.102vw] tablet:p-[1.953vw] tablet:h-[45.953vw] tablet:rounded-[1.172vw] tablet:opacity-100 mobile:h-fit mobile:p-[4.167vw] mobile:rounded-[2.804vw] mobile:opacity-100';
+
+  const lastCardContentClasses =
+    'w-[33.25vw] gap-[0.75vw] fullWidth:w-[532px] fullWidth:gap-3 tablet:w-[38.281vw] tablet:gap-[1.172vw] mobile:w-[78.333vw] mobile:gap-[2.5vw]';
+
+  const regularCardContentClasses =
+    'w-fit gap-[0.5vw] fullWidth:gap-2 tablet:h-[17.16vw] tablet:gap-[0.781vw] mobile:gap-[1.667vw]';
+
+  const lastCardButtonClasses =
+    'mt-[2.5vw] fullWidth:gap-6 fullWidth:mt-10 tablet:gap-[2.344vw] mobile:gap-[5.607vw]';
+
+  const regularCardButtonClasses =
+    'mt-[1.125vw] fullWidth:gap-6 fullWidth:mt-[18px] tablet:gap-[2.344vw] mobile:gap-[5.607vw]';
+
   return (
     <div
       ref={stackedCardsRef}
@@ -186,10 +208,8 @@ const StackedCardsTailwind = React.memo(({ blok }) => {
         return (
           <div
             {...storyblokEditable(card)}
-            className={`stackedCards flex flex-col bg-cover bg-center bg-no-repeat transition-opacity duration-300 ease-out rounded-[0.833vw] gap-[0.75vw] ${
-              isLastCard
-                ? 'h-fit w-[81.5vw] p-[2.688vw_3.75vw] fullWidth:h-fit fullWidth:w-[1304px] fullWidth:p-[43px_60px] fullWidth:rounded-xl fullWidth:gap-3 tablet:w-[89.488vw] tablet:p-[3.906vw] tablet:rounded-[1.172vw] tablet:opacity-100 mobile:w-[89.167vw] mobile:h-[171.042vw] mobile:p-[5.417vw_8.333vw] mobile:rounded-[2.804vw] mobile:opacity-100'
-                : 'h-[37.5vw] w-[26.688vw] p-[1.25vw] fullWidth:h-[600px] fullWidth:w-[427px] fullWidth:p-5 fullWidth:rounded-xl fullWidth:gap-3 tablet:w-[29.102vw] tablet:p-[1.953vw] tablet:h-[45.953vw] tablet:rounded-[1.172vw] tablet:opacity-100 mobile:h-fit mobile:p-[4.167vw] mobile:rounded-[2.804vw] mobile:opacity-100'
+            className={`${baseCardClasses} ${
+              isLastCard ? lastCardClasses : regularCardClasses
             }`}
             style={{
               backgroundImage: `url(${cardImage ? cardImage : card?.background_image[0].filename})`,
@@ -201,9 +221,7 @@ const StackedCardsTailwind = React.memo(({ blok }) => {
           >
             <div
               className={`flex flex-col whitespace-nowrap hyphens-none ${
-                isLastCard
-                  ? 'w-[33.25vw] gap-[0.75vw] fullWidth:w-[532px] fullWidth:gap-3 tablet:w-[38.281vw] tablet:gap-[1.172vw] mobile:w-[78.333vw] mobile:gap-[2.5vw]'
-                  : 'w-fit gap-[0.5vw] fullWidth:gap-2 tablet:h-[17.16vw] tablet:gap-[0.781vw] mobile:gap-[1.667vw]'
+                isLastCard ? lastCardContentClasses : regularCardContentClasses
               }`}
             >
               {card?.eyebrow && <RichTextRenderer document={card.eyebrow} />}
@@ -217,9 +235,7 @@ const StackedCardsTailwind = React.memo(({ blok }) => {
 
             <div
               className={`flex flex-row items-center w-max gap-[1.667vw] ${
-                isLastCard
-                  ? 'mt-[2.5vw] fullWidth:gap-6 fullWidth:mt-10 tablet:gap-[2.344vw] mobile:gap-[5.607vw]'
-                  : 'mt-[1.125vw] fullWidth:gap-6 fullWidth:mt-[18px] tablet:gap-[2.344vw] mobile:gap-[5.607vw]'
+                isLastCard ? lastCardButtonClasses : regularCardButtonClasses
               }`}
             >
               {card?.link?.map(($buttonData) => (
