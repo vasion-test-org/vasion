@@ -269,4 +269,4 @@ const StackedCards_tw = React.memo(({ blok }) => {
 
 StackedCards_tw.displayName = 'StackedCards_tw';
 
-export default StackedCardsTailwind;
+export default StackedCards_tw;
