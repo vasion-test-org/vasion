@@ -92,7 +92,7 @@ const CenteredSection = ({ blok }) => {
           <ContentWrapper>
             {blok.centered_copy &&
               blok.centered_copy.map((copy) => (
-                <div {...storyblokEditable(copy)} key={copy.component}>
+                <div {...storyblokEditable(copy)} key={copy._uid || copy.component}>
                   <RichTextRenderer
                     document={copy?.copy}
                     responsiveTextStyles={copy?.responsive_text_styles}

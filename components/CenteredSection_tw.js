@@ -168,13 +168,7 @@ const CenteredSection_tw = ({ blok }) => {
     ? 'flex w-[38.875vw] h-auto fullWidth:w-[622px] tablet:w-[49.609vw] mobile:w-[89.167vw]'
     : '';
 
-  const videoContainerClasses = `
-    flex items-center justify-center max-w-full overflow-hidden rounded-xl
-    w-[67.75vw] h-[38vw]
-    fullWidth:w-[1084px] fullWidth:h-[608px]
-    tablet:w-[92.188vw] tablet:h-[51.758vw]
-    mobile:w-[89.167vw] mobile:h-[50vw]
-  `;
+  const videoContainerClasses = 'flex items-center justify-center max-w-full overflow-hidden rounded-xl w-[67.75vw] h-[38vw] fullWidth:w-[1084px] fullWidth:h-[608px] tablet:w-[92.188vw] tablet:h-[51.758vw] mobile:w-[89.167vw] mobile:h-[50vw]';
 
   return (
     <div
@@ -253,21 +247,21 @@ const CenteredSection_tw = ({ blok }) => {
             {blok.component_type === 'icon_cards' && blok.icon_cards && (
               <IconCards blok={blok.icon_cards} />
             )}
-            {blok.component_type === 'card' && blok.cards && (
-              <Cards_tw cardData={blok.cards} />
+            {blok.component_type === 'card' && blok.cards_tw && (
+              <Cards_tw cardData={blok.cards_tw} />
             )}
-            {blok.component_type === 'grid' && blok.grid && (
-              <Grid_tw gridData={blok.grid} alignment={blok.grid_alignment} />
+            {blok.component_type === 'grid' && blok.grid_tw && (
+              <Grid_tw gridData={blok.grid_tw} alignment={blok.grid_alignment} />
             )}
-            {blok.component_type === 'stats' && blok.stats && (
+            {blok.component_type === 'stats' && blok.stats_tw && (
               <Stats_tw
-                statsData={blok.stats}
+                statsData={blok.stats_tw}
                 toggle_card_style={blok.card_style}
                 alignment={blok.stats_alignment}
               />
             )}
-            {blok.component_type === 'accordion' && blok.accordion && (
-              <Accordion_tw accordionData={blok.accordion} />
+            {blok.component_type === 'accordion' && blok.accordion_tw && (
+              <Accordion_tw accordionData={blok.accordion_tw} />
             )}
             {blok.component_type === 'rotator' && blok.rotator && (
               <Rotator rotatorData={blok.rotator} />
@@ -278,8 +272,8 @@ const CenteredSection_tw = ({ blok }) => {
             {blok.component_type === 'logo_gallery' && blok.logo_gallery && (
               <LogosGallery logoData={blok.logo_gallery} />
             )}
-            {blok.component_type === 'stacked_cards' && blok.stacked_cards && (
-              <StackedCards_tw blok={blok.stacked_cards} />
+            {blok.component_type === 'stacked_cards' && blok.stacked_cards_tw && (
+              <StackedCards_tw blok={blok.stacked_cards_tw} />
             )}
             {blok.component_type === 'badges' && blok.badges && (
               <>
