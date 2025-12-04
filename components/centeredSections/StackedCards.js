@@ -82,7 +82,7 @@ const RiveAnimation = ({
           setIsInViewport(true);
         }
       },
-      { threshold: 0.1, rootMargin: '50px' }
+      { threshold: 0.1, rootMargin: '50px' },
     );
 
     observer.observe(containerRef.current);
@@ -169,7 +169,7 @@ const StackedCards = React.memo(({ blok }) => {
           card?.background_image[0]?.filename,
           card?.background_image[0]?.filename,
           card?.background_image[1]?.filename,
-          card?.background_image[2]?.filename
+          card?.background_image[2]?.filename,
         );
 
         return (
@@ -304,10 +304,10 @@ const CardContainer = styled.div`
     props?.$last
       ? '1'
       : props.index < 3
-      ? props.$active === props.index
-        ? '1'
-        : '0.5'
-      : '1'};
+        ? props.$active === props.index
+          ? '1'
+          : '0.5'
+        : '1'};
   transition: opacity 0.3s ease-out;
   flex-direction: column;
   background-image: url(${(props) => props.$bgimg});
