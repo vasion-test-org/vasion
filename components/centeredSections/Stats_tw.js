@@ -14,7 +14,7 @@ const Stats_tw = ({ statsData, toggle_card_style, alignment }) => {
     >
       {statsData.map((statItem, index) => (
         <StatItem
-          key={`stat-item-${index}`}
+          key={statItem._uid || `stat-item-${index}`}
           statItem={statItem}
           alignment={alignment}
         />
