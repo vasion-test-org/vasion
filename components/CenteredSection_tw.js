@@ -46,7 +46,7 @@ const Rotator = dynamic(() => import('@/components/centeredSections/Rotator'), {
   ssr: false, // Disable SSR for animations
 });
 
-const StackedCardsTailwind = dynamic(
+const StackedCards_tw = dynamic(
   () => import('@/components/centeredSections/StackedCards_tw'),
   {
     loading: () => <div style={{ height: '200px' }} />,
@@ -279,7 +279,7 @@ const CenteredSection_tw = ({ blok }) => {
               <LogosGallery logoData={blok.logo_gallery} />
             )}
             {blok.component_type === 'stacked_cards' && blok.stacked_cards && (
-              <StackedCardsTailwind blok={blok.stacked_cards} />
+              <StackedCards_tw blok={blok.stacked_cards} />
             )}
             {blok.component_type === 'badges' && blok.badges && (
               <>
