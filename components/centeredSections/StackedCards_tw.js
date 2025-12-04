@@ -78,7 +78,7 @@ const RiveAnimation = ({
           setIsInViewport(true);
         }
       },
-      { threshold: 0.1, rootMargin: '50px' }
+      { threshold: 0.1, rootMargin: '50px' },
     );
 
     observer.observe(containerRef.current);
@@ -121,7 +121,7 @@ const RiveAnimation = ({
   );
 };
 
-const StackedCardsTailwind = React.memo(({ blok }) => {
+const StackedCards_tw = React.memo(({ blok }) => {
   // console.log(blok);
   const { mobile, tablet } = useContext(ScreenContext);
 
@@ -193,7 +193,7 @@ const StackedCardsTailwind = React.memo(({ blok }) => {
           card?.background_image[0]?.filename,
           card?.background_image[0]?.filename,
           card?.background_image[1]?.filename,
-          card?.background_image[2]?.filename
+          card?.background_image[2]?.filename,
         );
 
         // Calculate opacity based on active state
@@ -267,6 +267,6 @@ const StackedCardsTailwind = React.memo(({ blok }) => {
   );
 });
 
-StackedCardsTailwind.displayName = 'StackedCardsTailwind';
+StackedCards_tw.displayName = 'StackedCards_tw';
 
 export default StackedCardsTailwind;

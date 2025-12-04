@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import AccordionItem from "@/components/globalComponents/AccordionItem";
+import AccordionItem_tw from "@/components/globalComponents/AccordionItem_tw";
 
 const Accordion_tw = ({ accordionData }) => {
   useEffect(() => {
@@ -45,7 +45,7 @@ const Accordion_tw = ({ accordionData }) => {
   return (
     <div className="flex flex-col w-[81.5vw] fullWidth:w-[1304px] tablet:w-[90.234vw] mobile:w-[89.167vw]">
       {accordionData.map((accordionItem, index) => (
-        <AccordionItem
+        <AccordionItem_tw
           key={accordionItem._uid || `accordion-${index}`}
           accordionItem={accordionItem}
         />

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import StatItem from "@/components/globalComponents/StatItem";
+import StatItem_tw from "@/components/globalComponents/StatItem_tw";
 import colors from "styles/colors";
 
 const Stats_tw = ({ statsData, toggle_card_style, alignment }) => {
@@ -13,7 +13,7 @@ const Stats_tw = ({ statsData, toggle_card_style, alignment }) => {
       }}
     >
       {statsData.map((statItem, index) => (
-        <StatItem
+        <StatItem_tw
           key={statItem._uid || `stat-item-${index}`}
           statItem={statItem}
           alignment={alignment}
