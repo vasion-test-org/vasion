@@ -1,7 +1,6 @@
 import React from 'react';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Icon from '@/components/globalComponents/Icon';
-import Button from '@/components/globalComponents/Button';
 import { storyblokEditable } from '@storyblok/react/rsc';
 
 const GridItem_tw = ({ content, alignment }) => {
@@ -40,4 +39,3 @@ const GridItem_tw = ({ content, alignment }) => {
 };
 
 export default GridItem_tw;
-
