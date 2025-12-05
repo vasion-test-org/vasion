@@ -58,17 +58,6 @@ const Card_tw = ({ content, paginated, borderradius }) => {
     return `${base} ${width} ${height} ${cursor} ${blur}`.trim();
   };
 
-  // Get hover background style
-  const getHoverStyle = () => {
-    if (content?.has_hover && hasValidUrl) {
-      return {
-        background: 'linear-gradient(180deg, #7E5FDD 0%, #583F99 100%)',
-      };
-    }
-    return {};
-  };
-
-
   const WrapperContent = (
     <>
       {content.Image && (
@@ -102,14 +91,6 @@ const Card_tw = ({ content, paginated, borderradius }) => {
   const getCardStyle = () => {
     return {
       background: cardBg,
-    };
-  };
-
-  // Get box shadow style
-  const getBoxShadowStyle = () => {
-    return {
-      boxShadow:
-        '0vw 0vw 0.063vw 0vw rgba(25, 29, 30, 0.04), 0vw 0.125vw 0.25vw 0vw rgba(25, 29, 30, 0.16)',
     };
   };
 
@@ -173,4 +154,3 @@ const Card_tw = ({ content, paginated, borderradius }) => {
 };
 
 export default Card_tw;
-
