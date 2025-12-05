@@ -12,9 +12,12 @@ import Form from './Form';
 import { ScreenContext } from '@/components/providers/Screen';
 
 // Dynamic imports for heavy components
-const Cards_tw = dynamic(() => import('@/components/centeredSections/Cards_tw'), {
-  loading: () => <div style={{ height: '200px' }} />,
-});
+const Cards_tw = dynamic(
+  () => import('@/components/centeredSections/Cards_tw'),
+  {
+    loading: () => <div style={{ height: '200px' }} />,
+  },
+);
 
 const IconCards = dynamic(() => import('@/components/IconCards'), {
   loading: () => <div style={{ height: '200px' }} />,
@@ -172,37 +175,43 @@ const CenteredSection_tw = ({ blok }) => {
         @media (min-width: 1601px) {
           [data-centered-section-tw] {
             gap: 16px;
-            ${blok.section_spacing && blok.section_spacing !== 'default'
-              ? blok.offset_spacing === 'top'
-                ? `padding: ${blok.section_spacing}px 0 0 0 !important;`
-                : blok.offset_spacing === 'bottom'
-                  ? `padding: 0 0 ${blok.section_spacing}px 0 !important;`
-                  : `padding: ${blok.section_spacing}px 0 ${blok.section_spacing}px 0 !important;`
-              : ''}
+            ${
+              blok.section_spacing && blok.section_spacing !== 'default'
+                ? blok.offset_spacing === 'top'
+                  ? `padding: ${blok.section_spacing}px 0 0 0 !important;`
+                  : blok.offset_spacing === 'bottom'
+                    ? `padding: 0 0 ${blok.section_spacing}px 0 !important;`
+                    : `padding: ${blok.section_spacing}px 0 ${blok.section_spacing}px 0 !important;`
+                : ''
+            }
           }
         }
         @media (min-width: 481px) and (max-width: 1024px) {
           [data-centered-section-tw] {
             gap: 1.563vw;
-            ${blok.section_spacing && blok.section_spacing !== 'default'
-              ? blok.offset_spacing === 'top'
-                ? `padding: ${blok.section_spacing}px 0 0 0 !important;`
-                : blok.offset_spacing === 'bottom'
-                  ? `padding: 0 0 ${blok.section_spacing}px 0 !important;`
-                  : `padding: ${blok.section_spacing}px 0 ${blok.section_spacing}px 0 !important;`
-              : ''}
+            ${
+              blok.section_spacing && blok.section_spacing !== 'default'
+                ? blok.offset_spacing === 'top'
+                  ? `padding: ${blok.section_spacing}px 0 0 0 !important;`
+                  : blok.offset_spacing === 'bottom'
+                    ? `padding: 0 0 ${blok.section_spacing}px 0 !important;`
+                    : `padding: ${blok.section_spacing}px 0 ${blok.section_spacing}px 0 !important;`
+                : ''
+            }
           }
         }
         @media (max-width: 480px) {
           [data-centered-section-tw] {
             gap: 3.333vw;
-            ${blok.section_spacing && blok.section_spacing !== 'default'
-              ? blok.offset_spacing === 'top'
-                ? `padding: ${blok.section_spacing}px 0 0 0 !important;`
-                : blok.offset_spacing === 'bottom'
-                  ? `padding: 0 0 ${blok.section_spacing}px 0 !important;`
-                  : `padding: ${blok.section_spacing}px 0 ${blok.section_spacing}px 0 !important;`
-              : ''}
+            ${
+              blok.section_spacing && blok.section_spacing !== 'default'
+                ? blok.offset_spacing === 'top'
+                  ? `padding: ${blok.section_spacing}px 0 0 0 !important;`
+                  : blok.offset_spacing === 'bottom'
+                    ? `padding: 0 0 ${blok.section_spacing}px 0 !important;`
+                    : `padding: ${blok.section_spacing}px 0 ${blok.section_spacing}px 0 !important;`
+                : ''
+            }
           }
         }
       `}</style>
@@ -221,7 +230,10 @@ const CenteredSection_tw = ({ blok }) => {
           <div className="flex flex-col items-center justify-center w-[67.75vw] gap-[1vw] text-center fullWidth:w-[1084px] fullWidth:gap-4 mobile:w-[89.167vw] mobile:gap-[3.333vw]">
             {blok.centered_copy &&
               blok.centered_copy.map((copy) => (
-                <div {...storyblokEditable(copy)} key={copy._uid || copy.component}>
+                <div
+                  {...storyblokEditable(copy)}
+                  key={copy._uid || copy.component}
+                >
                   <RichTextRenderer
                     document={copy?.copy}
                     responsiveTextStyles={copy?.responsive_text_styles}
@@ -235,10 +247,7 @@ const CenteredSection_tw = ({ blok }) => {
                   {...storyblokEditable($buttonData)}
                   key={$buttonData._uid || $buttonData.link_text}
                 >
-                  <Button
-                    key={$buttonData.link_text}
-                    $buttonData={$buttonData}
-                  />
+                  <Button $buttonData={$buttonData} />
                 </div>
               ))}
           </div>
@@ -248,7 +257,7 @@ const CenteredSection_tw = ({ blok }) => {
             className={`flex flex-col items-center justify-center ${getAttachedComponentClasses(!!blok.centered_copy)}`}
           >
             {blok.component_type === 'media' &&
-              blok?.media[0].component === 'assets' && (
+              blok?.media?.[0]?.component === 'assets' && (
                 <div
                   className={`flex h-auto ${
                     blok.smaller_assets
@@ -258,8 +267,8 @@ const CenteredSection_tw = ({ blok }) => {
                 >
                   <div className="w-full" {...storyblokEditable(blok.media)}>
                     <Image
-                      images={blok.media?.[0]?.media}
-                      borderradius={blok.media?.[0]?.border_radius}
+                      images={blok?.media?.[0]?.media}
+                      borderradius={blok?.media?.[0]?.border_radius}
                     />
                   </div>
                 </div>
@@ -338,4 +347,3 @@ const CenteredSection_tw = ({ blok }) => {
 };
 
 export default CenteredSection_tw;
-
