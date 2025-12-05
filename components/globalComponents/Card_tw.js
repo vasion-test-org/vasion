@@ -58,17 +58,6 @@ const Card_tw = ({ content, paginated, borderradius }) => {
     return `${base} ${width} ${height} ${cursor} ${blur}`.trim();
   };
 
-  // Get hover background style
-  const getHoverStyle = () => {
-    if (content?.has_hover && hasValidUrl) {
-      return {
-        background: 'linear-gradient(180deg, #7E5FDD 0%, #583F99 100%)',
-      };
-    }
-    return {};
-  };
-
-
   const WrapperContent = (
     <>
       {content.Image && (
@@ -173,4 +162,3 @@ const Card_tw = ({ content, paginated, borderradius }) => {
 };
 
 export default Card_tw;
-
