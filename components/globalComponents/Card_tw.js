@@ -94,14 +94,6 @@ const Card_tw = ({ content, paginated, borderradius }) => {
     };
   };
 
-  // Get box shadow style
-  const getBoxShadowStyle = () => {
-    return {
-      boxShadow:
-        '0vw 0vw 0.063vw 0vw rgba(25, 29, 30, 0.04), 0vw 0.125vw 0.25vw 0vw rgba(25, 29, 30, 0.16)',
-    };
-  };
-
   return (
     <>
       <style>{`
