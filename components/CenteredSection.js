@@ -144,7 +144,7 @@ const CenteredSection = ({ blok }) => {
             {blok.component_type === 'icon_cards' && blok.icon_cards && (
               <IconCards blok={blok.icon_cards} />
             )}
-            {blok.component_type === 'card' && blok.cards && (
+            {blok.component_type === 'cards' && blok.cards && (
               <Cards cardData={blok.cards} />
             )}
             {blok.component_type === 'grid' && blok.grid && (

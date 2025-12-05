@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Image from '@/components/globalComponents/Image';
@@ -70,7 +71,7 @@ const Card_tw = ({ content, paginated, borderradius }) => {
         </div>
       )}
       <div className="flex flex-col h-full pt-0 pr-[0.5vw] pb-[0.5vw] pl-[0.5vw] gap-[1vw] fullWidth:pt-0 fullWidth:pr-2 fullWidth:pb-2 fullWidth:pl-2 fullWidth:gap-4 tablet:pt-0 tablet:pr-[0.781vw] tablet:pb-[0.781vw] tablet:pl-[0.781vw] tablet:gap-[1.563vw] mobile:pt-0 mobile:pr-[1.667vw] mobile:pb-[1.667vw] mobile:pl-[1.667vw] mobile:gap-[3.333vw]">
-        {content.content.map((copy, index) => (
+        {content.content && Array.isArray(content.content) && content.content.map((copy, index) => (
           <div
             key={copy._uid || `card-copy-${index}`}
             {...storyblokEditable(copy)}
