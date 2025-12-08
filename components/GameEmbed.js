@@ -5,7 +5,7 @@ import media from '@/styles/media';
 
 const GameEmbed = ({ blok }) => {
   return (
-    <Wrapper>
+    <Wrapper fullwidth={blok.fullwidth}>
       <StyledIframe
         data-anchor-id={blok.anchor_id}
         src={blok.embed_link}
@@ -22,6 +22,7 @@ const StyledIframe = styled.iframe`
   width: 480px;
   height: 480px;
   border: none;
+  overflow: hidden;
   transform: scale(1.8); /* Makes it 864px visually */
   transform-origin: center;
 
@@ -40,7 +41,9 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding: 60px;
-  background-color: transparent;
+
+  background-color: ${(props) =>
+    props.fullwidth ? 'rgb(26, 31, 33)' : 'transparent'};
 
   /* Need extra space for the scaled iframe */
   min-height: 960px;
