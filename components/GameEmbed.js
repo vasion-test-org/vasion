@@ -8,9 +8,8 @@ const GameEmbed = ({ blok }) => {
     <Wrapper>
       <StyledIframe
         data-anchor-id={blok.anchor_id}
-        src="https://static-cdn.pl-labs.com/minigames/arkanoid/index.html"
+        src={blok.embed_link}
         allowFullScreen
-        scrolling="no"
         allow="accelerometer; autoplay; encrypted-media; gyroscope"
       />
     </Wrapper>
