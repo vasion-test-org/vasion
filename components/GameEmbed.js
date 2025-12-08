@@ -33,6 +33,9 @@ const StyledIframe = styled.iframe`
   ${media.tablet} {
     transform: scale(1.3); /* 720px */
   }
+  ${media.mobile} {
+    display: none;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -50,6 +53,9 @@ const Wrapper = styled.div`
 
   ${media.tablet} {
     min-height: 720px;
+  }
+  ${media.mobile} {
+    display: none;
   }
 `;
 
