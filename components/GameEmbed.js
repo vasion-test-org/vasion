@@ -31,7 +31,7 @@ const StyledIframe = styled.iframe`
   }
 
   ${media.tablet} {
-    transform: scale(1.5); /* 720px */
+    transform: scale(1.3); /* 720px */
   }
 `;
 
