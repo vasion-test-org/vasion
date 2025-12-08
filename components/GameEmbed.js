@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
 
-const Embed = ({ blok }) => {
+const GameEmbed = ({ blok }) => {
   return (
     <Wrapper>
       <StyledIframe
@@ -17,7 +17,7 @@ const Embed = ({ blok }) => {
   );
 };
 
-export default Embed;
+export default GameEmbed;
 
 const StyledIframe = styled.iframe`
   width: 480px;
