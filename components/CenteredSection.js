@@ -30,7 +30,7 @@ const Accordion = dynamic(
   () => import('@/components/centeredSections/Accordion'),
   {
     loading: () => <div style={{ height: '100px' }} />,
-  },
+  }
 );
 
 const Stats = dynamic(() => import('@/components/centeredSections/Stats'), {
@@ -46,7 +46,7 @@ const StackedCards = dynamic(
   () => import('@/components/centeredSections/StackedCards'),
   {
     loading: () => <div style={{ height: '200px' }} />,
-  },
+  }
 );
 
 const Badges = dynamic(() => import('@/components/centeredSections/Badges'), {
@@ -57,21 +57,21 @@ const BadgesMobile = dynamic(
   () => import('@/components/centeredSections/BadgesMobile'),
   {
     loading: () => <div style={{ height: '100px' }} />,
-  },
+  }
 );
 
 const LogosGallery = dynamic(
   () => import('@/components/centeredSections/LogosGallery'),
   {
     loading: () => <div style={{ height: '150px' }} />,
-  },
+  }
 );
 
 const ReviewCtaCards = dynamic(
   () => import('@/components/centeredSections/ReviewCtaCards'),
   {
     loading: () => <div style={{ height: '200px' }} />,
-  },
+  }
 );
 
 const CenteredSection = ({ blok }) => {
@@ -136,7 +136,8 @@ const CenteredSection = ({ blok }) => {
                       videos={blok.media?.[0]?.media}
                       borderradius={blok.media?.[0]?.border_radius}
                       thumbnails={blok.media?.[0]?.thumbnails}
-                      width="100%"
+                      width="1000px"
+                      height="560px"
                     />
                   </CenteredVideoContainer>
                 </MediaWrapper>
@@ -144,7 +145,7 @@ const CenteredSection = ({ blok }) => {
             {blok.component_type === 'icon_cards' && blok.icon_cards && (
               <IconCards blok={blok.icon_cards} />
             )}
-            {blok.component_type === 'cards' && blok.cards && (
+            {blok.component_type === 'card' && blok.cards && (
               <Cards cardData={blok.cards} />
             )}
             {blok.component_type === 'grid' && blok.grid && (
@@ -263,27 +264,11 @@ const ContentWrapper = styled.div`
 `;
 
 const CenteredVideoContainer = styled.div`
+  width: 100%;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 100%;
-  overflow: hidden;
-  width: 67.75vw;
-  height: 38vw;
-  border-radius: 12px;
-  ${media.fullWidth} {
-    width: 1084px;
-    height: 608px;
-  }
-  ${media.tablet} {
-    width: 92.188vw;
-    height: 51.758vw;
-  }
-
-  ${media.mobile} {
-    width: 89.167vw;
-    height: 50vw;
-  }
 `;
 
 const CenteredWrapper = styled.div`
@@ -297,8 +282,7 @@ const CenteredWrapper = styled.div`
     props.backgroundImage
       ? `url(${props.backgroundImage})`
       : props.theme.centered.bg};
-
-  background-size: ${(props) => (props.backgroundImage ? '100% 100%' : 'auto')};
+  background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
 
@@ -311,21 +295,21 @@ const CenteredWrapper = styled.div`
       return props.spacing === 'default'
         ? '3.75vw 0 0'
         : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '3.75vw 0 0';
+        ? `${props.spacing}px 0 0`
+        : '3.75vw 0 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 0 3.75vw'
         : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 3.75vw';
+        ? `0 0 ${props.spacing}px`
+        : '0 0 3.75vw';
     }
     return props.spacing === 'default'
       ? '3.75vw 0'
       : props.spacing
-        ? `${props.spacing}px 0`
-        : '3.75vw 0';
+      ? `${props.spacing}px 0`
+      : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
@@ -335,21 +319,21 @@ const CenteredWrapper = styled.div`
         return props.spacing === 'default'
           ? '60px 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : '60px 0 0';
+          ? `${props.spacing}px 0 0`
+          : '60px 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 60px'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : '0 0 60px';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 60px';
       }
       return props.spacing === 'default'
         ? '60px 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : '60px 0';
+        ? `${props.spacing}px 0`
+        : '60px 0';
     }};
   }
 
@@ -359,21 +343,21 @@ const CenteredWrapper = styled.div`
         return props.spacing === 'default'
           ? '5.859vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : '5.859vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : '5.859vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 5.859vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : '0 0 5.859vw';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 5.859vw';
       }
       return props.spacing === 'default'
         ? '5.859vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : '5.859vw 0';
+        ? `${props.spacing}px 0`
+        : '5.859vw 0';
     }};
     gap: 1.563vw;
   }
@@ -384,21 +368,21 @@ const CenteredWrapper = styled.div`
         return props.spacing === 'default'
           ? '12.5vw 0 0'
           : props.spacing
-            ? `${props.spacing}px 0 0`
-            : '12.5vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : '12.5vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 12.5vw'
           : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : '0 0 12.5vw';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 12.5vw';
       }
       return props.spacing === 'default'
         ? '12.5vw 0'
         : props.spacing
-          ? `${props.spacing}px 0`
-          : '12.5vw 0';
+        ? `${props.spacing}px 0`
+        : '12.5vw 0';
     }};
     gap: 3.333vw;
   }
