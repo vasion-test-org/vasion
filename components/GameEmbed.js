@@ -8,57 +8,46 @@ const Embed = ({ blok }) => {
     <Wrapper>
       <StyledIframe
         data-anchor-id={blok.anchor_id}
-        id="game-container"
-        alt="styled game iframe"
-        src={blok.embed_link}
+        src="https://static-cdn.pl-labs.com/minigames/arkanoid/index.html"
         allowFullScreen
+        scrolling="no"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope"
       />
     </Wrapper>
   );
 };
+
 export default Embed;
-//#game-container
-//
+
 const StyledIframe = styled.iframe`
-  width: 100vw;
-  height: 100%;
+  width: 480px;
+  height: 480px;
   border: none;
+  transform: scale(1.8); /* Makes it 864px visually */
+  transform-origin: center;
 
   ${media.fullWidth} {
-    width: 1304px;
+    transform: scale(2); /* 960px */
   }
+
   ${media.tablet} {
-    width: 100vw;
-    height: 750px;
-  }
-  ${media.mobile} {
-    /* width: 90vw; */
+    transform: scale(1.5); /* 720px */
   }
 `;
 
 const Wrapper = styled.div`
   width: 100%;
-  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3.75vw;
-  height: 56.25vw;
+  padding: 60px;
+  background-color: transparent;
 
-  ${media.fullWidth} {
-    padding: 60px;
-    height: 900px;
-  }
+  /* Need extra space for the scaled iframe */
+  min-height: 960px;
 
   ${media.tablet} {
-    padding: 0px;
-    height: 100%;
-  }
-
-  ${media.mobile} {
-    /* padding: 12.5vw;
-    height: 95vw; */
-    display: none;
+    min-height: 720px;
   }
 `;
 
