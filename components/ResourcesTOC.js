@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
@@ -8,8 +8,9 @@ import media from 'styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
+import Tools from '@/assets/svg/tools.svg';
 
-const TableOfContent = ({ copy }) => {
+const TableOfContent = ({ copy, toc }) => {
   const [isCopied, setIsCopied] = useState(false);
 
   // Extract headers from the copy document
@@ -82,11 +83,21 @@ const TableOfContent = ({ copy }) => {
 
   const scrollToHeader = (headerId) => {
     const element = document.getElementById(headerId);
-    if (element) {
+    if (!element) return;
+
+    // Native smooth scroll to the target element
+    try {
       element.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
+        inline: 'nearest',
       });
+    } catch {
+      // Fallback for older browsers
+      const rect = element.getBoundingClientRect();
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      window.scrollTo({ top: rect.top + scrollTop, behavior: 'smooth' });
     }
   };
 
@@ -107,7 +118,7 @@ const TableOfContent = ({ copy }) => {
   // const selectedTheme = themes[blok.theme] || themes.default;
   return (
     // <ThemeProvider theme={selectedTheme}>
-    <Wrapper>
+    <Wrapper toc={toc}>
       <TOCContainer>
         <TOCHeader>Table of Contents</TOCHeader>
         <TOCList>
@@ -135,6 +146,7 @@ const TableOfContent = ({ copy }) => {
         </TOCList>
       </TOCContainer>
       <BlogLink onClick={copyUrlToClipboard}>
+        <Tools />
         {isCopied ? 'Link copied!' : 'Copy blog link'}
       </BlogLink>
     </Wrapper>
@@ -185,6 +197,11 @@ const TOCItemLinkText = styled.p`
   line-height: 1.4;
 `;
 const BlogLink = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  gap: 0.5vw;
   ${text.bodySm};
   color: ${colors.txtSubtle};
   margin-top: 1.25vw;
@@ -193,10 +210,16 @@ const BlogLink = styled.button`
   cursor: pointer;
   padding: 0;
   text-decoration: none;
-  transition: opacity 0.2s ease;
+  transition: color 0.2s ease;
 
   &:hover {
-    opacity: 0.8;
+    color: ${colors.primaryOrange};
+
+    svg {
+      path {
+        fill: ${colors.primaryOrange};
+      }
+    }
   }
 `;
 
@@ -233,20 +256,22 @@ const TOCContainer = styled.div`
 `;
 
 const Wrapper = styled.div`
-  display: flex;
+  display: ${(props) => (props.toc ? 'flex' : 'none')};
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: absolute;
+  position: sticky;
   top: 2.5vw;
-  right: 0;
+  align-self: flex-start;
+  padding: 5.5vw 0;
 
   ${media.fullWidth} {
     top: 40px;
   }
 
   ${media.tablet} {
-    top: 3.906vw;
+    /* top: 3.906vw; */
+    display: none;
   }
 
   ${media.mobile} {
