@@ -91,33 +91,33 @@ const Wrapper = styled.div`
     display: none;
   }
 `;
-iframe.contentWindow.postMessage(
-  { type: 'KEY_EVENT', key: 'ArrowLeft', code: 'ArrowLeft', keyCode: 37 },
-  '*',
-);
-window.addEventListener('message', (event) => {
-  if (event.data.type === 'KEY_EVENT') {
-    const { key, code, keyCode } = event.data;
-    const keyDownEvent = new KeyboardEvent('keydown', {
-      key,
-      code,
-      keyCode,
-      bubbles: true,
-      cancelable: true,
-    });
-    document.dispatchEvent(keyDownEvent);
-    setTimeout(() => {
-      const keyUpEvent = new KeyboardEvent('keyup', {
-        key,
-        code,
-        keyCode,
-        bubbles: true,
-        cancelable: true,
-      });
-      document.dispatchEvent(keyUpEvent);
-    }, 100);
-  }
-});
+// iframe.contentWindow.postMessage(
+//   { type: 'KEY_EVENT', key: 'ArrowLeft', code: 'ArrowLeft', keyCode: 37 },
+//   '*',
+// );
+// window.addEventListener('message', (event) => {
+//   if (event.data.type === 'KEY_EVENT') {
+//     const { key, code, keyCode } = event.data;
+//     const keyDownEvent = new KeyboardEvent('keydown', {
+//       key,
+//       code,
+//       keyCode,
+//       bubbles: true,
+//       cancelable: true,
+//     });
+//     document.dispatchEvent(keyDownEvent);
+//     setTimeout(() => {
+//       const keyUpEvent = new KeyboardEvent('keyup', {
+//         key,
+//         code,
+//         keyCode,
+//         bubbles: true,
+//         cancelable: true,
+//       });
+//       document.dispatchEvent(keyUpEvent);
+//     }, 100);
+//   }
+// });
 //<head>
 //   <meta charset="UTF-8" />
 //   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
