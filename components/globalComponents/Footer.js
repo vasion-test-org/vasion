@@ -128,21 +128,30 @@ const Footer = ({ blok }) => {
 
       star.addEventListener('mouseenter', () => {
         spinAnimation = gsap.to(star, {
-          rotation: '+=360',
-          duration: 1.5,
+          rotation: 360,
+          duration: 4, // starts off slow
           repeat: -1,
           ease: 'linear',
+        });
+
+        gsap.to(spinAnimation, {
+          duration: 2,
+          timeScale: 5, // this is the final speed
+          ease: 'power2.in',
         });
       });
 
       star.addEventListener('mouseleave', () => {
         if (spinAnimation) {
-          spinAnimation.kill(); // stops wherever it is
+          spinAnimation.kill();
         }
       });
+
       star.addEventListener('click', () => {
-        router.push('/component-testing');
+        window.location.href = '/your-page-url';
       });
+
+      star.style.cursor = 'pointer';
     };
     initAnimations();
   }, []);
