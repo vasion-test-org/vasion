@@ -120,14 +120,39 @@ const Footer = ({ blok }) => {
       router.push(link);
     }
   };
+  useEffect(() => {
+    const initAnimations = async () => {
+      const { default: gsap } = await import('gsap');
+      let star = document.getElementById('vasion-star-svg');
+      let spinAnimation;
 
+      star.addEventListener('mouseenter', () => {
+        spinAnimation = gsap.to(star, {
+          rotation: '+=360',
+          duration: 1.5,
+          repeat: -1,
+          ease: 'linear',
+        });
+      });
+
+      star.addEventListener('mouseleave', () => {
+        if (spinAnimation) {
+          spinAnimation.kill(); // stops wherever it is
+        }
+      });
+      star.addEventListener('click', () => {
+        router.push('/component-testing');
+      });
+    };
+    initAnimations();
+  }, []);
   return (
     <Wrapper className="footer">
       <MainFooterContainer>
         <LogoContainer>
           <Logo onClick={() => handleNavigate('/')} alt="vasion-logo" />
           <Address>432 S. Tech Ridge Drive, St. George, Utah 84770 USA</Address>
-          <VasionStar />
+          <VasionStar id="vasion-star-svg" />
         </LogoContainer>
         <AllLinksContainer>{allLinksColumns}</AllLinksContainer>
       </MainFooterContainer>
@@ -395,6 +420,7 @@ const AllLinksContainer = styled.div`
   }
 `;
 const VasionStar = styled(VasionStarSVG)`
+  cursor: pointer;
   margin-top: 3.472vw;
   width: 4.167vw;
   height: 4.167vw;
