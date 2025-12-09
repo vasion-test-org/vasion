@@ -136,7 +136,7 @@ const Footer = ({ blok }) => {
 
         gsap.to(spinAnimation, {
           duration: 2,
-          timeScale: 5, // this is the final speed
+          timeScale: 3, // this is the final speed
           ease: 'power2.in',
         });
       });
@@ -148,7 +148,7 @@ const Footer = ({ blok }) => {
       });
 
       star.addEventListener('click', () => {
-        window.location.href = '/your-page-url';
+        window.location.href = '/component-testing';
       });
 
       star.style.cursor = 'pointer';
