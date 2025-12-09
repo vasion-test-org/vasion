@@ -1,12 +1,46 @@
 'use client';
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
 
 const GameEmbed = ({ blok }) => {
+  const iframeRef = useRef(null);
+
+  useEffect(() => {
+    // Wait for iframe to load
+    const iframe = iframeRef.current;
+
+    const handleLoad = () => {
+      try {
+        // Try to dispatch event to iframe's contentWindow
+        const event = new KeyboardEvent('keydown', {
+          key: ' ',
+          code: 'Space',
+          keyCode: 32,
+          which: 32,
+          bubbles: true,
+          cancelable: true,
+        });
+
+        iframe.contentWindow.dispatchEvent(event);
+      } catch (error) {
+        console.warn(
+          'Cannot dispatch event to iframe due to cross-origin restrictions:',
+          error,
+        );
+      }
+    };
+
+    if (iframe) {
+      iframe.addEventListener('load', handleLoad);
+      return () => iframe.removeEventListener('load', handleLoad);
+    }
+  }, []);
+
   return (
     <Wrapper fullwidth={blok.fullwidth}>
       <StyledIframe
+        ref={iframeRef}
         data-anchor-id={blok.anchor_id}
         src={blok.embed_link}
         allowFullScreen
@@ -17,7 +51,6 @@ const GameEmbed = ({ blok }) => {
 };
 
 export default GameEmbed;
-
 const StyledIframe = styled.iframe`
   width: 480px;
   height: 480px;
@@ -58,7 +91,33 @@ const Wrapper = styled.div`
     display: none;
   }
 `;
-
+iframe.contentWindow.postMessage(
+  { type: 'KEY_EVENT', key: 'ArrowLeft', code: 'ArrowLeft', keyCode: 37 },
+  '*',
+);
+window.addEventListener('message', (event) => {
+  if (event.data.type === 'KEY_EVENT') {
+    const { key, code, keyCode } = event.data;
+    const keyDownEvent = new KeyboardEvent('keydown', {
+      key,
+      code,
+      keyCode,
+      bubbles: true,
+      cancelable: true,
+    });
+    document.dispatchEvent(keyDownEvent);
+    setTimeout(() => {
+      const keyUpEvent = new KeyboardEvent('keyup', {
+        key,
+        code,
+        keyCode,
+        bubbles: true,
+        cancelable: true,
+      });
+      document.dispatchEvent(keyUpEvent);
+    }, 100);
+  }
+});
 //<head>
 //   <meta charset="UTF-8" />
 //   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
