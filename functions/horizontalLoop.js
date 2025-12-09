@@ -33,13 +33,12 @@ export function horizontalLoop(items, config) {
     center = config.center,
     pixelsPerSecond = (config.speed || 1) * 100,
     /*
-     *      some browsers shift by a pixel to accommodate flex layouts,
+     *      Some browsers shift by a pixel to accommodate flex layouts,
      *      so for example if width is 20% the first element's width might be 242px,
      *      and the next 243px, alternating back and forth.
      *      So we snap to 5 percentage points to make things look more natural
      *
      *      */
-
     snap = config.snap === false ? (v) => v : gsap.utils.snap(config.snap || 1),
     timeOffset = 0,
     container =
