@@ -94,16 +94,13 @@ const CookieConsentVideo = ({
         try {
           const consentData = window.getCkyConsent();
           // Check if user has completed consent action and accepted cookies
-          const hasConsent =
+          setCookiesAccepted(
             consentData.isUserActionCompleted &&
-            (consentData.categories?.analytics ||
-              consentData.categories?.marketing ||
-              consentData.categories?.functional);
-          setCookiesAccepted(hasConsent);
+              (consentData.categories?.analytics ||
+                consentData.categories?.marketing ||
+                consentData.categories?.functional),
+          );
           setIsChecking(false);
-          if (hasConsent) {
-            console.log('Cookie consent detected via CookieYes API');
-          }
         } catch (error) {
           console.warn('Error getting CookieYes consent:', error);
           // Fallback to cookie check
@@ -120,59 +117,18 @@ const CookieConsentVideo = ({
       if (cookieValue) {
         try {
           const consentData = JSON.parse(cookieValue);
-          const hasConsent =
-            consentData.consent === true || consentData.accepted === true;
-          setCookiesAccepted(hasConsent);
-          if (hasConsent) {
-            console.log('Cookie consent detected via cookie fallback');
-          }
+          setCookiesAccepted(
+            consentData.consent === true || consentData.accepted === true,
+          );
         } catch (e) {
           // If parsing fails, check for simple string values
-          const hasConsent =
-            cookieValue === 'accepted' || cookieValue === 'true';
-          setCookiesAccepted(hasConsent);
-          if (hasConsent) {
-            console.log('Cookie consent detected via string fallback');
-          }
+          setCookiesAccepted(
+            cookieValue === 'accepted' || cookieValue === 'true',
+          );
         }
       } else {
-        // Check for alternative cookie names that CookieYes might use
-        const altCookies = [
-          'cky-consent',
-          'cky_consent',
-          'cookie-consent',
-          'cookie_consent',
-        ];
-        let foundConsent = false;
-        for (const cookieName of altCookies) {
-          const altCookieValue = getCookie(cookieName);
-          if (altCookieValue) {
-            try {
-              const consentData = JSON.parse(altCookieValue);
-              if (
-                consentData.consent === true ||
-                consentData.accepted === true ||
-                consentData.analytics === true ||
-                consentData.marketing === true
-              ) {
-                foundConsent = true;
-                break;
-              }
-            } catch (e) {
-              if (
-                altCookieValue === 'accepted' ||
-                altCookieValue === 'true'
-              ) {
-                foundConsent = true;
-                break;
-              }
-            }
-          }
-        }
-        setCookiesAccepted(foundConsent);
-        if (!foundConsent) {
-          console.log('No cookie consent found - showing consent message');
-        }
+        // No consent cookie found, assume not accepted
+        setCookiesAccepted(false);
       }
       setIsChecking(false);
     };
@@ -195,12 +151,9 @@ const CookieConsentVideo = ({
         }
       }, 100);
 
-      // Clean up interval after 15 seconds (increased from 10)
-      // Also do a final fallback check before giving up
+      // Clean up interval after 10 seconds
       timeoutId = setTimeout(() => {
         clearInterval(checkInterval);
-        // Do one final cookie check before giving up
-        checkCookieFallback();
         // Use functional update to avoid stale closure
         setIsChecking(prevIsChecking => {
           if (prevIsChecking) {
@@ -208,7 +161,7 @@ const CookieConsentVideo = ({
           }
           return prevIsChecking;
         });
-      }, 15000);
+      }, 10000);
     }
 
     // Listen for consent changes
@@ -248,80 +201,11 @@ const CookieConsentVideo = ({
     return parts.length === 2 ? parts.pop()?.split(';').shift() : null;
   };
 
-  // Ensure video URL is a full URL (not relative)
-  const resolveVideoUrl = (videoUrl) => {
-    if (!videoUrl) return null;
-    
-    // If it's already a full URL (starts with http:// or https://), return as-is
-    if (videoUrl.startsWith('http://') || videoUrl.startsWith('https://')) {
-      return videoUrl;
-    }
-    
-    // If it's a Storyblok asset path (starts with /), prepend the CDN domain
-    if (videoUrl.startsWith('/')) {
-      // Storyblok US region CDN (most common)
-      // Try US first, but Storyblok URLs are usually already full URLs
-      return `https://a-us.storyblok.com${videoUrl}`;
-    }
-    
-    // If it's just a filename or relative path, return as-is
-    // Storyblok typically provides full URLs, so this should be rare
-    // ReactPlayer should be able to handle most URL formats
-    console.warn('Video URL might not be a full URL:', videoUrl);
-    return videoUrl;
-  };
-
   // Determine video source
   let videoSrc = filename;
   if (!videoSrc && videos) {
     videoSrc = videos?.[0]?.filename;
   }
-  
-  // Resolve the video URL to ensure it's a full URL
-  const resolvedUrl = url ? resolveVideoUrl(url) : (videoSrc ? resolveVideoUrl(videoSrc) : null);
-  
-  // Check if this is a YouTube URL
-  const isYouTube = resolvedUrl && (
-    resolvedUrl.includes('youtube.com') || 
-    resolvedUrl.includes('youtu.be') ||
-    resolvedUrl.includes('youtube-nocookie.com')
-  );
-  
-  // Extract YouTube video ID for loop functionality
-  const getYouTubeVideoId = (url) => {
-    if (!url) return null;
-    const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-    return match ? match[1] : null;
-  };
-  
-  const youtubeVideoId = isYouTube ? getYouTubeVideoId(resolvedUrl) : null;
-  
-  // YouTube player configuration for proper embedding
-  // Note: Autoplay requires muted on most browsers, and loop requires playlist format
-  const youtubeConfig = isYouTube ? {
-    youtube: {
-      playerVars: {
-        // Autoplay only works when muted on most browsers
-        // On production, browsers may still block autoplay even when muted
-        autoplay: playing && muted ? 1 : 0,
-        controls: controls ? 1 : 0,
-        mute: muted ? 1 : 0,
-        // Loop requires playlist format with the same video ID
-        loop: loop && youtubeVideoId ? 1 : 0,
-        playlist: loop && youtubeVideoId ? youtubeVideoId : undefined,
-        playsinline: playsinline ? 1 : 0,
-        rel: 0, // Don't show related videos from other channels
-        modestbranding: 1, // Hide YouTube logo
-        enablejsapi: 1, // Enable JavaScript API
-        origin: typeof window !== 'undefined' ? window.location.origin : '',
-        iv_load_policy: 3, // Hide annotations
-        fs: 1, // Allow fullscreen
-        cc_lang_pref: 'en', // Closed captions language
-        // Prevent privacy mode issues
-        widget_referrer: typeof window !== 'undefined' ? window.location.origin : '',
-      },
-    },
-  } : undefined;
 
   // Show loading state while checking cookies
   if (isChecking) {
@@ -420,7 +304,7 @@ const CookieConsentVideo = ({
         isSideBySideVideo={isSideBySideVideo}
       >
         <ReactPlayer
-          url={resolvedUrl}
+          url={url || videoSrc}
           width={width}
           height={height}
           controls={controls}
@@ -431,42 +315,30 @@ const CookieConsentVideo = ({
           muted={muted}
           loop={loop}
           playIcon={playIcon}
-          config={youtubeConfig}
           onReady={() => {
-            console.log('ReactPlayer v3 ready - URL:', resolvedUrl, isYouTube ? '(YouTube)' : '');
+            console.log('ReactPlayer v3 ready - URL:', url || videoSrc);
           }}
           onError={(error) => {
             console.error('ReactPlayer v3 error:', error);
             console.error('Error details:', {
-              originalUrl: url || videoSrc,
-              resolvedUrl: resolvedUrl,
-              isYouTube: isYouTube,
+              url: url || videoSrc,
               error: error,
-              errorType: error?.type,
-              errorData: error?.data,
               userAgent:
                 typeof window !== 'undefined'
                   ? window.navigator.userAgent
                   : 'SSR',
             });
-            
-            // If it's a YouTube autoplay error, try to recover
-            if (isYouTube && playing && error?.data === 150) {
-              console.warn('YouTube autoplay blocked - this is normal on some browsers');
-            }
           }}
           onLoadStart={() => {
             console.log(
               'ReactPlayer v3 loading started - URL:',
-              resolvedUrl,
-              isYouTube ? '(YouTube)' : '',
+              url || videoSrc,
             );
           }}
           onLoad={() => {
             console.log(
               'ReactPlayer v3 load completed - URL:',
-              resolvedUrl,
-              isYouTube ? '(YouTube)' : '',
+              url || videoSrc,
             );
           }}
           onStart={() => {
