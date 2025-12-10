@@ -28,7 +28,6 @@ const CTA = ({ blok }) => {
       blok?.background_image?.[0],
   );
 
-  // console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <PillContainer
