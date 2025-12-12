@@ -98,7 +98,23 @@ const GameEmbed = ({ blok }) => {
           allow="accelerometer; autoplay; encrypted-media; gyroscope"
         />
       </Wrapper>
-
+      {!mobile && !tablet && (
+        <DesktopInstructions>
+          <InstructionsCard>
+            <h2>Game Controls</h2>
+            <p>
+              Use keyboard arrows <strong>← / →</strong> or{' '}
+              <strong>A / D</strong> to move
+            </p>
+            <p>
+              Press <strong>SPACE BAR</strong> to start
+            </p>
+            <p>
+              Pause with <strong>ESC</strong>
+            </p>
+          </InstructionsCard>
+        </DesktopInstructions>
+      )}
       {
         <MobileControls>
           <ControlsContainer>
@@ -320,13 +336,13 @@ const DirectionalRow = styled.div`
 `;
 
 const StartButton = styled(ControlButton)`
-  background: #2196f3;
+  background: ${colors.purpleGradient};
   display: flex;
   flex-direction: column;
   align-items: center;
 
   &:active {
-    background: #0b7dda;
+    background: ${colors.darkPurple};
   }
   ${media.fullWidth} {
     display: none;
@@ -334,12 +350,61 @@ const StartButton = styled(ControlButton)`
 `;
 
 const PauseButton = styled(ControlButton)`
-  background: ${colors.lightPurple};
+  ${text.stat};
+  background: ${colors.darkPurpleGradient};
   display: flex;
   flex-direction: column;
   align-items: center;
 
   &:active {
-    background: ${colors.primaryPurple};
+    background: ${colors.darkPurple};
+  }
+`;
+const DesktopInstructions = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background-color: rgb(26, 31, 33);
+
+  ${media.tablet} {
+    display: none;
+  }
+
+  ${media.mobile} {
+    display: none;
+  }
+`;
+
+const InstructionsCard = styled.div`
+  background: white;
+
+  text-align: center;
+  padding: 2.5vw 3.75vw;
+  border-radius: 0.5vw;
+  max-width: 31.25vw;
+  h2 {
+    ${text.h2};
+  }
+
+  p {
+    ${text.bodyLg};
+  }
+
+  strong {
+    ${text.bodyLgBold};
+    color: ${colors.primaryOrange};
+  }
+
+  ${media.fullWidth} {
+    padding: 40px 60px;
+    border-radius: 8px;
+    max-width: 500px;
+  }
+  ${media.tablet} {
+    display: none;
+  }
+  ${media.mobile} {
+    display: none;
   }
 `;
