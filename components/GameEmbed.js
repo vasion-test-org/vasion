@@ -297,7 +297,7 @@ const ControlButton = styled.button`
   flex: 1;
   transition: all 0.1s ease;
   &:active {
-    background: #45a049;
+    background: ${colors.orangeGradient};
     transform: scale(0.95);
   }
 
