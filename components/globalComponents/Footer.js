@@ -121,39 +121,45 @@ const Footer = ({ blok }) => {
     }
   };
   useEffect(() => {
-    const initAnimations = async () => {
+    const star = document.getElementById('vasion-star-svg');
+    if (!star) {
+      return;
+    }
+
+    let spinAnimation;
+
+    const handleMouseEnter = async () => {
       const { default: gsap } = await import('gsap');
-      let star = document.getElementById('vasion-star-svg');
-      let spinAnimation;
-
-      star.addEventListener('mouseenter', () => {
-        spinAnimation = gsap.to(star, {
-          rotation: 360,
-          duration: 4, // starts off slow
-          repeat: -1,
-          ease: 'linear',
-        });
-
-        gsap.to(spinAnimation, {
-          duration: 2,
-          timeScale: 3, // this is the final speed
-          ease: 'power2.in',
-        });
+      spinAnimation = gsap.to(star, {
+        rotation: '+=360',
+        duration: 1.5,
+        repeat: -1,
+        ease: 'linear',
       });
-
-      star.addEventListener('mouseleave', () => {
-        if (spinAnimation) {
-          spinAnimation.kill();
-        }
-      });
-
-      star.addEventListener('click', () => {
-        window.location.href = '/component-testing';
-      });
-
-      star.style.cursor = 'pointer';
     };
-    initAnimations();
+
+    const handleMouseLeave = () => {
+      if (spinAnimation) {
+        spinAnimation.kill();
+      }
+    };
+
+    const handleClick = () => {
+      router.push('/component-testing');
+    };
+
+    star.addEventListener('mouseenter', handleMouseEnter);
+    star.addEventListener('mouseleave', handleMouseLeave);
+    star.addEventListener('click', handleClick);
+
+    return () => {
+      star.removeEventListener('mouseenter', handleMouseEnter);
+      star.removeEventListener('mouseleave', handleMouseLeave);
+      star.removeEventListener('click', handleClick);
+      if (spinAnimation) {
+        spinAnimation.kill();
+      }
+    };
   }, []);
   return (
     <Wrapper className="footer">
