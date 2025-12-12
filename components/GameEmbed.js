@@ -317,10 +317,6 @@ const ControlButton = styled.button`
     touch-action: manipulation;
     flex: 1;
     transition: all 0.1s ease;
-    &:active {
-      background: #45a049;
-      transform: scale(0.95);
-    }
   }
 `;
 
