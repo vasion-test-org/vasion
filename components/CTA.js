@@ -108,7 +108,11 @@ const ContentWrapper = styled.div`
 const CtaWrapper = styled.div`
   display: flex;
   align-items: ${(props) =>
-    props.$ctastyle === 'pill' && props.$pillbgimg ? 'flex-start' : 'center'};
+    props.$ctastyle === 'pill' && props.$pillbgimg
+      ? 'flex-start'
+      : props.$ctastyle === 'image' && props.$bgimg
+        ? 'flex-start'
+        : 'center'};
   overflow: hidden;
   background: ${(props) =>
     props.$ctastyle === 'image'
