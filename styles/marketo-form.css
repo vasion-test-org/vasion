@@ -1,0 +1,651 @@
+/* Marketo Form Styles - Extracted from components/Form.js */
+
+/* Base form container styles */
+.mktoForm {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: start;
+  width: 31.25vw !important;
+  gap: 1.25vw 1.25vw;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoForm {
+    width: 500px !important;
+    gap: 20px 20px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoForm {
+    width: 39.063vw !important;
+    gap: 1.953vw 1.953vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoForm {
+    width: 75.833vw !important;
+    gap: 4.167vw 4.167vw;
+    padding: unset !important;
+  }
+}
+
+/* Field Descriptor */
+.mktoFieldDescriptor {
+  max-height: 3.375vw !important;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoFieldDescriptor {
+    max-height: 54px !important;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoFieldDescriptor {
+    max-height: 5.273vw !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoFieldDescriptor {
+    max-height: 11.25vw !important;
+  }
+}
+
+.mktoFieldDescriptor:has(#LblformFriendlyProductofInterest) {
+  max-height: none !important;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoFieldDescriptor:has(#LblformFriendlyProductofInterest) {
+    max-height: none !important;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoFieldDescriptor:has(#LblformFriendlyProductofInterest) {
+    max-height: none !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoFieldDescriptor:has(#LblformFriendlyProductofInterest) {
+    max-height: none !important;
+  }
+}
+
+/* Captcha Disclaimer */
+.mktoCaptchaDisclaimer {
+  display: none;
+}
+
+/* Form Row */
+.mktoFormRow:has(> .mktoPlaceholder) {
+  display: none;
+}
+
+.mktoFormRow:has(a[href*='vasion.com/privacy-policy']) span {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.972vw !important;
+  line-height: 1.25vw !important;
+  text-align: center;
+  color: #1b1d21;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoFormRow:has(a[href*='vasion.com/privacy-policy']) span {
+    font-size: 14px !important;
+    line-height: 18px !important;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoFormRow:has(a[href*='vasion.com/privacy-policy']) span {
+    font-size: 1.367vw !important;
+    line-height: 1.758vw !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoFormRow:has(a[href*='vasion.com/privacy-policy']) span {
+    font-size: 3.271vw !important;
+    line-height: 4.206vw !important;
+  }
+}
+
+.mktoFormRow:has(a[href*='vasion.com/privacy-policy']) span a {
+  color: #ff5100;
+  padding: unset !important;
+}
+
+.mktoFormRow:has(> input[type='hidden']) {
+  display: none;
+}
+
+.mktoFormRow:has(.mktoCheckboxList) {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin: 1vw 0 0 0;
+  padding: unset !important;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoFormRow:has(.mktoCheckboxList) {
+    margin: 16px 0 0 0;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoFormRow:has(.mktoCheckboxList) {
+    margin: 1.563vw 0 0 0;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoFormRow:has(.mktoCheckboxList) {
+    margin: 3.333vw 0 0 0;
+  }
+}
+
+/* Button Row */
+.mktoButtonRow {
+  width: 100%;
+}
+
+/* Offset and Gutter */
+.mktoOffset,
+.mktoGutter {
+  width: unset !important;
+}
+
+/* Checkbox List */
+.mktoCheckboxList {
+  width: 100% !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: left !important;
+  padding: unset !important;
+}
+
+@media screen and (max-width: 480px) {
+  .mktoCheckboxList {
+    width: 108% !important;
+  }
+}
+
+.mktoCheckboxList label {
+  margin: 0 1vw 0 0.25vw !important;
+  width: max-content !important;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoCheckboxList label {
+    margin: 0 16px 0 4px !important;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoCheckboxList label {
+    margin: 0 7.563vw 0 0.325vw !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoCheckboxList label {
+    margin: 1vw 15.5vw 0 0.833vw !important;
+  }
+}
+
+/* Checkbox Input */
+.mktoCheckboxList input[type='checkbox'] {
+  height: auto !important;
+  margin-right: 0vw !important;
+  border-radius: 0.25vw !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 0.938vw !important;
+  height: 0.938vw !important;
+  min-height: 0.938vw !important;
+  border: 1px solid #a8abae !important;
+  background-color: #f5f4f7 !important;
+  cursor: pointer !important;
+  position: relative !important;
+  padding: unset !important;
+}
+
+.mktoCheckboxList input[type='checkbox']:checked {
+  background-color: #ff5100 !important;
+  border-color: #ff5100 !important;
+}
+
+.mktoCheckboxList input[type='checkbox']:checked::after {
+  content: '✓' !important;
+  position: absolute !important;
+  color: #ffffff !important;
+  font-size: 0.75vw !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoCheckboxList input[type='checkbox'] {
+    margin-right: 0px !important;
+    width: 15px !important;
+    height: 15px !important;
+    min-height: 15px !important;
+    border-radius: 4px !important;
+  }
+
+  .mktoCheckboxList input[type='checkbox']:checked::after {
+    font-size: 12px !important;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoCheckboxList input[type='checkbox'] {
+    margin-right: 0.781vw !important;
+    width: 1.563vw !important;
+    height: 1.563vw !important;
+    min-height: 1.563vw !important;
+    border-radius: 0.391vw !important;
+  }
+
+  .mktoCheckboxList input[type='checkbox']:checked::after {
+    font-size: 0.977vw !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoCheckboxList input[type='checkbox'] {
+    margin-right: 0vw !important;
+    margin-top: 1vw !important;
+    width: 4.167vw !important;
+    height: 4.167vw !important;
+    min-height: 4.167vw !important;
+    border-radius: 0.833vw !important;
+  }
+
+  .mktoCheckboxList input[type='checkbox']:checked::after {
+    font-size: 2.5vw !important;
+  }
+}
+
+/* Email Opt In Label */
+#LblemailOptIn {
+  color: #1b1d21;
+  display: flex;
+  align-items: center !important;
+  gap: 0.5vw;
+  margin: 0 !important;
+  min-width: max-content !important;
+  min-height: unset !important;
+  margin-right: 0.5vw !important;
+}
+
+@media screen and (min-width: 1601px) {
+  #LblemailOptIn {
+    margin-right: 8px !important;
+    gap: 8px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  #LblemailOptIn {
+    margin-right: 0.781vw !important;
+    gap: 0.781vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #LblemailOptIn {
+    margin-right: 1.667vw !important;
+    gap: 1.667vw;
+  }
+}
+
+/* Buttons */
+.mktoForm button {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1vw;
+  line-height: 1.375vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ff5100;
+  color: #ffffff;
+  width: 100vw !important;
+  padding: 0.75vw 0;
+  border-radius: 2.375vw;
+  border: none;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoForm button {
+    font-size: 16px;
+    line-height: 22px;
+    padding: 12px 0;
+    border-radius: 38px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoForm button {
+    font-size: 1.563vw;
+    line-height: 2.148vw;
+    padding: 1.172vw 0;
+    border-radius: 3.711vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoForm button {
+    font-size: 3.738vw;
+    line-height: 5.14vw;
+    padding: 2.5vw 0;
+    border-radius: 7.917vw;
+    width: 100vw !important;
+  }
+}
+
+.mktoForm button:hover {
+  background: white;
+  color: #ff5100;
+  border: 1px solid #ff5100;
+}
+
+/* Labels */
+.mktoForm label {
+  color: #1b1d21;
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.111vw;
+  line-height: 1.528vw;
+  width: max-content !important;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoForm label {
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoForm label {
+    font-size: 1.563vw;
+    line-height: 2.148vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoForm label {
+    font-size: 3.333vw;
+    line-height: 5.14vw;
+  }
+}
+
+/* Input Fields */
+.mktoForm input {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.111vw;
+  line-height: 1.528vw;
+  border: 1px solid #a8abae;
+  background: #f5f4f7;
+  color: #808085;
+  padding: 1vw !important;
+  border-radius: 0.25vw;
+  height: 3.375vw;
+  width: 100% !important;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoForm input {
+    font-size: 16px;
+    line-height: 22px;
+    padding: 16px !important;
+    border-radius: 4px;
+    height: 54px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoForm input {
+    font-size: 1.563vw;
+    line-height: 2.148vw;
+    padding: 1.563vw !important;
+    border-radius: 0.391vw;
+    height: 5.273vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoForm input {
+    font-size: 3.333vw;
+    line-height: 5.14vw;
+    padding: 3.333vw !important;
+    border-radius: 0.833vw;
+    min-height: 11.25vw;
+    height: 16.25vw;
+  }
+}
+
+/* Input States */
+.mktoForm input:focus {
+  background: #ffffff;
+}
+
+.mktoForm input:invalid {
+  border: 0.063vw solid #ba1a1a;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoForm input:invalid {
+    border: 1px solid #ba1a1a;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoForm input:invalid {
+    border: 0.098vw solid #ba1a1a;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoForm input:invalid {
+    border: 0.234vw solid #ba1a1a;
+  }
+}
+
+/* Error Messages */
+.mktoErrorMsg {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.972vw !important;
+  line-height: 1.25vw !important;
+  color: #ba1a1a;
+  margin-top: 0.5vw;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoErrorMsg {
+    font-size: 14px !important;
+    line-height: 18px !important;
+    margin-top: 8px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoErrorMsg {
+    font-size: 1.367vw !important;
+    line-height: 1.758vw !important;
+    margin-top: 0.781vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoErrorMsg {
+    font-size: 3.271vw !important;
+    line-height: 4.206vw !important;
+    margin-top: 1.667vw;
+  }
+}
+
+/* Select Fields */
+.mktoForm select {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.111vw;
+  line-height: 1.528vw;
+  border: 1px solid #a8abae;
+  background: #f5f4f7;
+  color: #1b1d21 !important;
+  width: 100vw !important;
+  padding: 1vw !important;
+  border-radius: 0.25vw;
+  height: 3.375vw;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoForm select {
+    font-size: 16px;
+    line-height: 22px;
+    width: 100vw !important;
+    padding: 16px !important;
+    border-radius: 4px;
+    height: 54px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoForm select {
+    font-size: 1.563vw;
+    line-height: 2.148vw;
+    width: 100vw !important;
+    padding: 1.563vw !important;
+    border-radius: 0.391vw;
+    height: 5.273vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoForm select {
+    font-size: 3.333vw;
+    line-height: 5.14vw;
+    width: 100vw !important;
+    padding: 3.333vw !important;
+    border-radius: 0.833vw;
+    min-height: 11.25vw;
+    height: 16.25vw;
+  }
+}
+
+.mktoForm select option {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.111vw;
+  line-height: 1.528vw;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoForm select option {
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoForm select option {
+    font-size: 1.563vw;
+    line-height: 2.148vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoForm select option {
+    font-size: 3.333vw;
+    line-height: 5.14vw;
+  }
+}
+
+/* Field Wrap */
+.mktoFieldWrap {
+  display: flex !important;
+}
+
+@media screen and (max-width: 480px) {
+  .mktoFieldWrap {
+    gap: 1.042vw;
+  }
+}
+
+.mktoFieldWrap .mktoLabel {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.111vw;
+  line-height: 1.528vw;
+  font-weight: 400 !important;
+}
+
+@media screen and (min-width: 1601px) {
+  .mktoFieldWrap .mktoLabel {
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .mktoFieldWrap .mktoLabel {
+    font-size: 1.563vw;
+    line-height: 2.148vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mktoFieldWrap .mktoLabel {
+    font-size: 3.333vw;
+    line-height: 5.14vw;
+  }
+}
+
+.mktoFieldWrap #LblformFriendlyProductofInterest {
+  width: 100% !important;
+}
+
+.mktoFieldWrap label #formFriendlyProductofInterest {
+  margin-bottom: 0.75vw !important;
+}
+
+.mktoFieldWrap:has(> label) {
+  flex-direction: column !important;
+}
+
+.mktoFieldWrap:has(label[id='LblemailOptIn']) {
+  flex-direction: row !important;
+  width: max-content !important;
+}
+
+/* HTML Text */
+.mktoHtmlText {
+  width: unset !important;
+}
+
+/* Asterisk */
+.mktoAsterix {
+  display: none !important;
+}
