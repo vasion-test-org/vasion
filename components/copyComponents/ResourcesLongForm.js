@@ -128,7 +128,7 @@ const ResourcesLongForm = ({ blok }) => {
           <PodcastSidebar
             image={blok.podcast_image?.filename}
             imageAlt={
-              blok.podcast_image?.alt || blok.podcast_header || 'Podcast cover'
+              blok.podcast_image?.alt || 'Podcast cover'
             }
             title={blok.podcast_header}
             body={blok.podcast_copy}
