@@ -12,7 +12,11 @@ import {
 export const revalidate = 3600; // Revalidate every hour for better performance
 
 export async function generateMetadata({ params, searchParams }) {
-  const slugArray = params.slug || [];
+  // Next.js 16+: params and searchParams must be awaited
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+
+  const slugArray = resolvedParams.slug || [];
   const isLocalized = ['fr', 'de'].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : 'en';
   const storySlug = isLocalized
@@ -52,7 +56,7 @@ export async function generateMetadata({ params, searchParams }) {
 
   // Check if we should include self-referencing hreflang
   const includeSelfReferencing =
-    shouldIncludeSelfReferencingHreflang(searchParams);
+    shouldIncludeSelfReferencingHreflang(resolvedSearchParams);
 
   // Build alternate links using utility function
   const alternateLinks = await buildAlternateLanguageUrls(
@@ -99,7 +103,10 @@ async function fetchStory(slug, locale) {
 }
 
 export default async function DynamicPage({ params }) {
-  const slugArray = params.slug || [];
+  // Next.js 16+: params must be awaited
+  const resolvedParams = await params;
+
+  const slugArray = resolvedParams.slug || [];
   const isLocalized = ['fr', 'de'].includes(slugArray[0]);
   const locale = isLocalized ? slugArray[0] : 'en';
   const storySlug = isLocalized
@@ -125,7 +132,9 @@ export default async function DynamicPage({ params }) {
 
 async function fetchData(slug, locale) {
   const storyblokApi = getStoryblokApi();
-  const host = headers().get('host');
+  // Next.js 16+: headers() must be awaited
+  const headersList = await headers();
+  const host = headersList.get('host');
   const isPreview =
     host === 'localhost:3010' ||
     host === 'vasion-ten.vercel.app' ||

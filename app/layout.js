@@ -12,7 +12,6 @@ import CriticalCSS from '@/components/CriticalCSS';
 import PerformanceMonitor from '@/components/PerformanceMonitor';
 import GTMPerformanceMonitor from '@/components/GTMPerformanceMonitor';
 import { getStoryblokApi } from '@/lib/storyblok';
-import { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/next';
 import { VWOScript } from 'vwo-smartcode-nextjs';
 

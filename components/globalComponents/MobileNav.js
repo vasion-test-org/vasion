@@ -11,7 +11,7 @@ import text from '@/styles/text';
 import colors from '@/styles/colors';
 import IconRenderer from '@/components/renderers/Icons';
 import Image from './Image';
-import LinkArrow from 'assets/svg/LinkArrow.svg';
+import LinkArrow from 'assets/svg/linkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';

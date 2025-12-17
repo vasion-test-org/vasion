@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import text from '@/styles/text';
-import LinkArrowSVG from '@/assets/svg/LinkArrow.svg';
+import LinkArrowSVG from '@/assets/svg/linkArrow.svg';
 import media from '@/styles/media';
 
 const Button = ({ $buttonData, stretch, onNavigate }) => {
@@ -48,7 +48,7 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
   const checkPageExists = async (slug, locale) => {
     try {
       const response = await fetch(
-        `/api/storyblok-check?slug=${encodeURIComponent(slug)}&locale=${locale}`,
+        `/api/storyblok-check?slug=${encodeURIComponent(slug)}&locale=${locale}`
       );
       const data = await response.json();
       return data.exists;
@@ -68,7 +68,7 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
       // If not found by ID, try to find by data-anchor-id attribute
       if (!anchorElement) {
         anchorElement = document.querySelector(
-          `[data-anchor-id="${$buttonData.link_url.anchor}"]`,
+          `[data-anchor-id="${$buttonData.link_url.anchor}"]`
         );
       }
 
@@ -77,10 +77,8 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
         e.preventDefault();
 
         // Dynamically load GSAP only when needed for anchor scrolling
-        const [{ default: gsap }, { default: ScrollToPlugin }] = await Promise.all([
-          import('gsap'),
-          import('gsap/ScrollToPlugin'),
-        ]);
+        const [{ default: gsap }, { default: ScrollToPlugin }] =
+          await Promise.all([import('gsap'), import('gsap/ScrollToPlugin')]);
 
         gsap.registerPlugin(ScrollToPlugin);
 
@@ -123,7 +121,7 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
             const englishStorySlug = storySlug === 'home' ? 'home' : storySlug;
             const englishPageExists = await checkPageExists(
               englishStorySlug,
-              'en',
+              'en'
             );
 
             if (englishPageExists) {
@@ -304,10 +302,10 @@ const ButtonWrapper = styled.div`
     props.size === 'small'
       ? text.bodySm
       : props.size === 'large'
-        ? text.bodyLg
-        : props.size === 'tiny'
-          ? text.tagLight
-          : text.bodyMd};
+      ? text.bodyLg
+      : props.size === 'tiny'
+      ? text.tagLight
+      : text.bodyMd};
 
   width: ${(props) => (props.stretch ? '100%' : 'max-content')};
 `;
