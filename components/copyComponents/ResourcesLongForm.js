@@ -195,21 +195,21 @@ const Wrapper = styled.div`
   justify-self: center;
   height: auto;
   width: 63.125vw;
-  min-width: 750px;
 
   ${media.fullWidth} {
     width: 1010px;
-    min-width: 46.875vw;
   }
 
   ${media.tablet} {
+    min-width: unset;
     width: 92.188vw;
     justify-content: center;
   }
 
   ${media.mobile} {
+    min-width: unset;
     justify-content: center;
-    width: 100vw;
+    width: 100%;
   }
 `;
 export default ResourcesLongForm;
