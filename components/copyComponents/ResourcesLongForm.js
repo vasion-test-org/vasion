@@ -209,7 +209,7 @@ const Wrapper = styled.div`
 
   ${media.mobile} {
     justify-content: center;
-    width: unset;
+    width: 100vw;
   }
 `;
 export default ResourcesLongForm;
