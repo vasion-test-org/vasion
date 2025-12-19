@@ -195,9 +195,11 @@ const Wrapper = styled.div`
   justify-self: center;
   height: auto;
   width: 63.125vw;
+  min-width: 46.875vw;
 
   ${media.fullWidth} {
     width: 1010px;
+    min-width: 225px;
   }
 
   ${media.tablet} {
