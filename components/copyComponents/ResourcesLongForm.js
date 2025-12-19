@@ -30,7 +30,7 @@ const ResourcesLongForm = ({ blok }) => {
           ? node.content
               .map(
                 (item) =>
-                  (item && typeof item === 'object' ? item.text : '') || ''
+                  (item && typeof item === 'object' ? item.text : '') || '',
               )
               .join('')
           : '';
@@ -49,8 +49,8 @@ const ResourcesLongForm = ({ blok }) => {
                   mark.type === 'styled' &&
                   mark.attrs &&
                   mark.attrs.class &&
-                  mark.attrs.class.includes('ignore')
-              )
+                  mark.attrs.class.includes('ignore'),
+              ),
           );
 
         if (
@@ -91,8 +91,8 @@ const ResourcesLongForm = ({ blok }) => {
         // Find header element by text content
         const headerElements = Array.from(
           document.querySelectorAll(
-            '#resources-long-form h1, #resources-long-form h2, #resources-long-form h3, #resources-long-form h4, #resources-long-form h5'
-          )
+            '#resources-long-form h1, #resources-long-form h2, #resources-long-form h3, #resources-long-form h4, #resources-long-form h5',
+          ),
         );
 
         headerElements.forEach((element) => {
@@ -127,9 +127,7 @@ const ResourcesLongForm = ({ blok }) => {
         {hasPodcastData ? (
           <PodcastSidebar
             image={blok.podcast_image?.filename}
-            imageAlt={
-              blok.podcast_image?.alt || 'Podcast cover'
-            }
+            imageAlt={blok.podcast_image?.alt || 'Podcast cover'}
             title={blok.podcast_header}
             body={blok.podcast_copy}
             spotifyUrl={blok.spotify_url}
@@ -179,6 +177,10 @@ const ResourcesLongFormContainer = styled.div`
     ${media.mobile} {
       height: 4.167vw;
     }
+  }
+  ${media.mobile} {
+    min-width: unset;
+    width: 92.375vw;
   }
 `;
 const Wrapper = styled.div`
