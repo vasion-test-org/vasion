@@ -178,6 +178,9 @@ const ResourcesLongFormContainer = styled.div`
       height: 4.167vw;
     }
   }
+  ${media.tablet} {
+    width: 92.188vw;
+  }
   ${media.mobile} {
     min-width: unset;
     width: 92.375vw;
