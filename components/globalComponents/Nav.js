@@ -95,6 +95,10 @@ const Nav = ({ blok }) => {
 
       if (data.story) {
         // console.log('Story exists, navigating...');
+        // Dispatch custom event for Conversica chatbot to update
+        window.dispatchEvent(
+          new CustomEvent('conversica-locale-change', { detail: { locale } })
+        );
         router.push(newPath);
       } else {
         // console.log('Story does not exist, showing tooltip');

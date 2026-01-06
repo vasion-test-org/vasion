@@ -11,6 +11,7 @@ import Config from '@/components/Config';
 import CriticalCSS from '@/components/CriticalCSS';
 import PerformanceMonitor from '@/components/PerformanceMonitor';
 import GTMPerformanceMonitor from '@/components/GTMPerformanceMonitor';
+import ConversicaChat from '@/components/ConversicaChat';
 import { getStoryblokApi } from '@/lib/storyblok';
 import { Analytics } from '@vercel/analytics/next';
 import { VWOScript } from 'vwo-smartcode-nextjs';
@@ -64,7 +65,7 @@ export default async function RootLayout({ children }) {
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google.com" />
         <link rel="preconnect" href="https://unpkg.com" />
-        <link rel="dns-prefetch" href="https://js.intercomcdn.com" />
+        <link rel="dns-prefetch" href="https://chat.conversica.com" />
         <link rel="dns-prefetch" href="https://static.hotjar.com" />
         <link
           rel="dns-prefetch"
@@ -146,51 +147,6 @@ export default async function RootLayout({ children }) {
           src="https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js"
         />
 
-        {/* Intercom - Load with conditional loading based on user interaction */}
-        <Script
-          id="intercom"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: `
-      // Only load Intercom after user interaction to improve initial page performance
-      let intercomLoaded = false;
-      
-      function loadIntercom() {
-        if (intercomLoaded) return;
-        intercomLoaded = true;
-        
-        window.intercomSettings = {
-          api_base: "https://api-iam.intercom.io",
-          app_id: "h87qerzy"
-        };
-        (function(){var w=window;var ic=w.Intercom;
-        if(typeof ic==="function"){
-          ic('reattach_activator');
-          ic('update',w.intercomSettings);
-        }else{
-          var d=document;var i=function(){i.c(arguments);};
-          i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;
-          var l=function(){
-            var s=d.createElement('script');
-            s.type='text/javascript';s.async=true;
-            s.src='https://widget.intercom.io/widget/h87qerzy';
-            var x=d.getElementsByTagName('script')[0];
-            x.parentNode.insertBefore(s,x);
-          };
-          if(document.readyState==='complete'){l();}
-          else if(w.attachEvent){w.attachEvent('onload',l);}
-          else{w.addEventListener('load',l,false);}
-        }})();
-      }
-      
-      // Load Intercom on first user interaction
-      ['click', 'scroll', 'mousemove'].forEach(event => {
-        document.addEventListener(event, loadIntercom, { once: true, passive: true });
-      });
-    `,
-          }}
-        />
-
         {/* GA4 handled via GTM - direct GA script removed */}
 
         {/* Google Ads handled via GTM - direct Ads script removed */}
@@ -250,6 +206,7 @@ export default async function RootLayout({ children }) {
                     <Config>
                       {children}
                       <Analytics />
+                      <ConversicaChat />
                     </Config>
                   </PageDataProvider>
                 </ThankYouProvider>
