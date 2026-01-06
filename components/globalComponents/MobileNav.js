@@ -160,6 +160,10 @@ const MobileNav = ({ blok }) => {
         // Animate language items container closing
         const { default: gsap } = await import('gsap');
         gsap.to('#languageItemsContainer', { width: '0%', duration: 0.35 });
+        // Dispatch custom event for Conversica chatbot to update
+        window.dispatchEvent(
+          new CustomEvent('conversica-locale-change', { detail: { locale } })
+        );
         // Close mobile dropdown before navigation
         closeMobileDropdown();
         router.push(newPath);
