@@ -18,7 +18,7 @@ const Footer = ({ blok }) => {
   const path = usePathname();
   const [language, setLanguage] = useState('en');
   const [footerColumns, setFooterColumns] = useState(blok.footer_columns);
-  const starRef = React.useRef(null);
+  const starRef = useRef(null);
   useEffect(() => {
     function checkPathLocale(url) {
       const { pathname } = new URL(url, 'https://vasion.com');
@@ -52,7 +52,6 @@ const Footer = ({ blok }) => {
     if (!star) {
       return;
     }
-
     let spinAnimation;
 
     const handleMouseEnter = async () => {
@@ -87,16 +86,17 @@ const Footer = ({ blok }) => {
         spinAnimation.kill();
       }
     };
-  }, []);
+  }, [router]);
+  /* THIS CODE BELOW DOES NOTHING SO I COMMENETED IT OUT ON 01/21/2026 Tanner Davison
 
-  useEffect(() => {
-    const canvas = document.getElementById('gradientCanvas');
+   useEffect(() => {
+     const canvas = document.getElementById('gradientCanvas');
 
-    if (canvas) {
-    }
-  }, []);
-  // console.log("footerColumns", footerColumns);
-
+     if (canvas) {
+     }
+   }, []);
+   console.log("footerColumns", footerColumns);
+*/
   const allLinksColumns =
     footerColumns?.map((column) => (
       <LinkColumn key={column._uid}>
