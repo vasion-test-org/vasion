@@ -79,7 +79,6 @@ const GameEmbed = ({ blok }) => {
     sendKeyUp(key, code, keyCode);
   };
 
-  // For single press keys (space, escape)
   const handleSinglePress = (key, code, keyCode) => {
     sendKeyDown(key, code, keyCode);
     setTimeout(() => {
@@ -171,15 +170,18 @@ const StyledIframe = styled.iframe`
   width: 480px;
   height: 480px;
   border: none;
+  border-radius: 0.75vw;
   overflow: hidden;
-  transform: scale(1.8);
+  transform: scale(1.6);
   transform-origin: center;
 
   ${media.fullWidth} {
     transform: scale(2);
+    border-radius: 12px;
   }
 
   ${media.tablet} {
+    border-radius: 1.172vw;
     transform: scale(1.3);
   }
   ${media.mobile} {
@@ -187,7 +189,10 @@ const StyledIframe = styled.iframe`
     height: 480px;
     transform: scale(0.75);
     transform-origin: top left;
-
+    border-radius: 0vw;
+    @media (min-width: 375px) {
+      transform: scale(0.785);
+    }
     @media (min-width: 390px) {
       transform: scale(0.819);
     }
@@ -252,11 +257,20 @@ const MobileControls = styled.div`
     backdrop-filter: blur(10px);
     border-top: 2px solid rgba(255, 255, 255, 0.1);
 
+    @media (min-width: 375px) {
+      bottom: 29.167vw;
+    }
+
+    /* Iphone XE*/
+    @media (min-width: 415px) {
+      bottom: 17.167vw;
+    }
+
     /* Iphone 12 pro*/
     @media (min-width: 390px) {
       bottom: 23.167vw;
     }
-    /*Adjustin for larger phones*/
+    /*Adjustments for larger phones*/
 
     @media (min-width: 420px) {
       bottom: 21vw;
