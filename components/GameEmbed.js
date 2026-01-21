@@ -172,7 +172,7 @@ const StyledIframe = styled.iframe`
   border: none;
   border-radius: 0.75vw;
   overflow: hidden;
-  transform: scale(1.6);
+  transform: scale(1.4);
   transform-origin: center;
 
   ${media.fullWidth} {
@@ -223,8 +223,10 @@ const Wrapper = styled.div`
   overflow: hidden;
   background-color: ${(props) =>
     props.fullwidth ? 'rgb(26, 31, 33)' : 'transparent'};
-  min-height: 960px;
-
+  min-height: 707px;
+  ${media.fullWidth} {
+    min-height: 960px;
+  }
   ${media.tablet} {
     min-height: 720px;
   }
