@@ -101,10 +101,12 @@ const GameEmbed = ({ blok }) => {
         <DesktopInstructions>
           <InstructionsCard>
             <h2>Game Controls</h2>
+            <br />
+            <p>Use keyboard arrows </p>
             <p>
-              Use keyboard arrows <strong>← / →</strong> or{' '}
-              <strong>A / D</strong> to move
+              <strong>← / →</strong> or <strong>A / D</strong> to move
             </p>
+            <br />
             <p>
               Press <strong>SPACE BAR</strong> to start
             </p>
