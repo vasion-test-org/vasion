@@ -12,7 +12,8 @@ export async function GET(request) {
     return NextResponse.json({ message: 'Invalid preview token' }, { status: 401 });
   }
 
-  draftMode().enable();
+  // Next.js 16+: draftMode() must be awaited
+  (await draftMode()).enable();
 
   const redirectUrl = new URL(`/${slug}`, request.nextUrl.origin).toString();
   // console.log(`[✅ Success] Draft mode enabled. Redirecting to: ${redirectUrl}`);

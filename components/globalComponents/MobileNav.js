@@ -11,7 +11,7 @@ import text from '@/styles/text';
 import colors from '@/styles/colors';
 import IconRenderer from '@/components/renderers/Icons';
 import Image from './Image';
-import LinkArrow from 'assets/svg/LinkArrow.svg';
+import LinkArrow from 'assets/svg/linkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
@@ -160,6 +160,10 @@ const MobileNav = ({ blok }) => {
         // Animate language items container closing
         const { default: gsap } = await import('gsap');
         gsap.to('#languageItemsContainer', { width: '0%', duration: 0.35 });
+        // Dispatch custom event for Conversica chatbot to update
+        window.dispatchEvent(
+          new CustomEvent('conversica-locale-change', { detail: { locale } })
+        );
         // Close mobile dropdown before navigation
         closeMobileDropdown();
         router.push(newPath);

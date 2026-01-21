@@ -8,7 +8,8 @@ import {
 } from '@/lib/seoUtils';
 
 export default async function Home() {
-  const { isEnabled } = draftMode();
+  // Next.js 16+: draftMode() must be awaited
+  const { isEnabled } = await draftMode();
   const story = await fetchStory('home', isEnabled);
 
   return (
@@ -24,6 +25,9 @@ export const dynamic = 'force-static';
 export const revalidate = 3600; // Revalidate every hour
 
 export async function generateMetadata({ searchParams }) {
+  // Next.js 16+: searchParams must be awaited
+  const resolvedSearchParams = await searchParams;
+
   const story = await fetchStory('home');
 
   const { content } = story;
@@ -36,7 +40,7 @@ export async function generateMetadata({ searchParams }) {
 
   // Check if we should include self-referencing hreflang
   const includeSelfReferencing =
-    shouldIncludeSelfReferencingHreflang(searchParams);
+    shouldIncludeSelfReferencingHreflang(resolvedSearchParams);
 
   // Build alternate links for all locales
   const alternateLinks = {};
@@ -72,7 +76,9 @@ import { headers } from 'next/headers';
 
 async function fetchStory(slug, locale = 'en') {
   const storyblokApi = getStoryblokApi();
-  const host = headers().get('host');
+  // Next.js 16+: headers() must be awaited
+  const headersList = await headers();
+  const host = headersList.get('host');
   const isPreview = host === 'localhost:3000' || host?.includes('vercel.app');
 
   const sbParams = {

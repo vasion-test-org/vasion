@@ -12,7 +12,7 @@ import text from '@/styles/text';
 import colors from '@/styles/colors';
 import IconRenderer from '@/components/renderers/Icons';
 import Image from './Image';
-import LinkArrow from 'assets/svg/LinkArrow.svg';
+import LinkArrow from 'assets/svg/linkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
 import VasionNavLogo from '@/assets/svg/vasion-nav-logo.svg';
 import { getStoryblokApi } from '@/lib/storyblok';
@@ -95,6 +95,10 @@ const Nav = ({ blok }) => {
 
       if (data.story) {
         // console.log('Story exists, navigating...');
+        // Dispatch custom event for Conversica chatbot to update
+        window.dispatchEvent(
+          new CustomEvent('conversica-locale-change', { detail: { locale } })
+        );
         router.push(newPath);
       } else {
         // console.log('Story does not exist, showing tooltip');

@@ -3,49 +3,48 @@ import React from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
 
+// Helper function to extract attribute value from HTML string using regex
+const extractAttribute = (html, attr) => {
+  // Match both single and double quotes, and handle attributes without quotes
+  const regex = new RegExp(`${attr}=["']([^"']*)["']|${attr}=([^\\s>]+)`, 'i');
+  const match = html.match(regex);
+  return match ? match[1] || match[2] : null;
+};
+
 const SpotifyEmbed = ({ blok }) => {
   // Extract iframe HTML from blok data
-  const iframeHtml = blok?.iframe_html || blok?.embed_code || '';
+  const iframeHtml = blok || '';
 
-  // Parse the iframe HTML to extract attributes
-  const parseIframeAttributes = (html) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const iframe = doc.querySelector('iframe');
-
-    if (!iframe) return null;
-
-    return {
-      src: iframe.getAttribute('src'),
-      width: iframe.getAttribute('width'),
-      height: iframe.getAttribute('height'),
-      allowFullScreen: iframe.getAttribute('allowfullscreen'),
-      allow: iframe.getAttribute('allow'),
-      loading: iframe.getAttribute('loading'),
-      style: iframe.getAttribute('style'),
-      dataTestId: iframe.getAttribute('data-testid'),
-    };
-  };
-
-  const iframeAttrs = parseIframeAttributes(iframeHtml);
-
-  if (!iframeAttrs) {
+  // Check if the HTML contains an iframe
+  if (!iframeHtml || !iframeHtml.includes('<iframe')) {
     return null;
   }
+
+  // Extract the src attribute using regex (works on both server and client)
+  const src = extractAttribute(iframeHtml, 'src');
+
+  if (!src) {
+    return null;
+  }
+
+  const width = extractAttribute(iframeHtml, 'width') || '624';
+  const height = extractAttribute(iframeHtml, 'height') || '351';
+  const allow =
+    extractAttribute(iframeHtml, 'allow') ||
+    'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+  const loading = extractAttribute(iframeHtml, 'loading') || 'lazy';
 
   return (
     <Wrapper>
       <EmbedContainer>
         <StyledIframe
-          data-testid={iframeAttrs.dataTestId}
-          src={iframeAttrs.src}
-          width={iframeAttrs.width}
-          height={iframeAttrs.height}
+          src={src}
+          width={width}
+          height={height}
           frameBorder="0"
-          allowFullScreen={iframeAttrs.allowFullScreen}
-          allow={iframeAttrs.allow}
-          loading={iframeAttrs.loading}
-          data-anchor-id={blok.anchor_id}
+          allowFullScreen
+          allow={allow}
+          loading={loading}
         />
       </EmbedContainer>
     </Wrapper>
@@ -59,19 +58,18 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 3.75vw;
+  padding: 3.75vw 0;
 
   ${media.fullWidth} {
-    padding: 60px;
+    padding: 60px 0;
   }
 
   ${media.tablet} {
-    padding: 5.859vw;
+    padding: 5.859vw 0;
   }
 
   ${media.mobile} {
-    padding: 12.5vw;
+    padding: 12.5vw 0;
   }
 `;
 
@@ -80,12 +78,10 @@ const EmbedContainer = styled.div`
   height: auto;
   display: flex;
   align-items: center;
-  justify-content: center;
 `;
 
 const StyledIframe = styled.iframe`
   width: 100%;
-  max-width: 624px;
   height: 352px;
   border: none;
   border-radius: 12px;

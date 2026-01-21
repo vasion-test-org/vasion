@@ -8,10 +8,15 @@ import media from 'styles/media';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import colors from '@/styles/colors';
 import ResourcesTOC from '@/components/ResourcesTOC';
+import PodcastSidebar from '@/components/PodcastSidebar';
+import SpotifyEmbed from '../SpotifyEmbed';
 
 const ResourcesLongForm = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
+  // Check if podcast data exists
+  const hasPodcastData =
+    blok.podcast_image || blok.podcast_header || blok.podcast_copy;
 
   // Extract headers and their IDs from the copy document
   const extractHeaderData = (document) => {
@@ -25,7 +30,7 @@ const ResourcesLongForm = ({ blok }) => {
           ? node.content
               .map(
                 (item) =>
-                  (item && typeof item === 'object' ? item.text : '') || ''
+                  (item && typeof item === 'object' ? item.text : '') || '',
               )
               .join('')
           : '';
@@ -44,8 +49,8 @@ const ResourcesLongForm = ({ blok }) => {
                   mark.type === 'styled' &&
                   mark.attrs &&
                   mark.attrs.class &&
-                  mark.attrs.class.includes('ignore')
-              )
+                  mark.attrs.class.includes('ignore'),
+              ),
           );
 
         if (
@@ -86,8 +91,8 @@ const ResourcesLongForm = ({ blok }) => {
         // Find header element by text content
         const headerElements = Array.from(
           document.querySelectorAll(
-            '#resources-long-form h1, #resources-long-form h2, #resources-long-form h3, #resources-long-form h4, #resources-long-form h5'
-          )
+            '#resources-long-form h1, #resources-long-form h2, #resources-long-form h3, #resources-long-form h4, #resources-long-form h5',
+          ),
         );
 
         headerElements.forEach((element) => {
@@ -104,10 +109,14 @@ const ResourcesLongForm = ({ blok }) => {
     return () => clearTimeout(timer);
   }, [headers]);
 
+  // Determine which sidebar to show
+  const showSidebar = hasPodcastData || blok.table_of_contents;
+
   return (
     <ThemeProvider theme={selectedTheme}>
-      <Wrapper toc={blok.table_of_contents}>
+      <Wrapper toc={showSidebar}>
         <ResourcesLongFormContainer id="resources-long-form">
+          {blok.spotify_embed && <SpotifyEmbed blok={blok.spotify_embed} />}
           <RichTextRenderer
             key={`copy-`}
             document={blok.copy}
@@ -115,7 +124,20 @@ const ResourcesLongForm = ({ blok }) => {
             responsiveTextStyles={blok?.responsive_text_styles}
           />
         </ResourcesLongFormContainer>
-        <ResourcesTOC copy={blok.copy} toc={blok.table_of_contents} />
+        {hasPodcastData ? (
+          <PodcastSidebar
+            image={blok.podcast_image?.filename}
+            imageAlt={blok.podcast_image?.alt || 'Podcast cover'}
+            title={blok.podcast_header}
+            body={blok.podcast_copy}
+            spotifyUrl={blok.spotify_url}
+            applePodcastsUrl={blok.apple_url}
+            youtubeUrl={blok.youtube_url}
+            rssUrl={blok.rss_feed_url}
+          />
+        ) : (
+          <ResourcesTOC copy={blok.copy} toc={blok.table_of_contents} />
+        )}
       </Wrapper>
     </ThemeProvider>
   );
@@ -123,10 +145,11 @@ const ResourcesLongForm = ({ blok }) => {
 
 const ResourcesLongFormContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 46.875vw;
-  margin: 2.5vw;
+  min-width: 46.875vw;
+  margin: 2.5vw 1.5vw 2.5vw 0;
 
   h1,
   h2,
@@ -155,6 +178,13 @@ const ResourcesLongFormContainer = styled.div`
       height: 4.167vw;
     }
   }
+  ${media.tablet} {
+    width: 92.188vw;
+  }
+  ${media.mobile} {
+    min-width: unset;
+    width: 92.375vw;
+  }
 `;
 const Wrapper = styled.div`
   position: relative;
@@ -165,19 +195,23 @@ const Wrapper = styled.div`
   justify-self: center;
   height: auto;
   width: 63.125vw;
+  min-width: 46.875vw;
 
   ${media.fullWidth} {
     width: 1010px;
+    min-width: 225px;
   }
 
   ${media.tablet} {
+    min-width: unset;
     width: 92.188vw;
     justify-content: center;
   }
 
   ${media.mobile} {
+    min-width: unset;
     justify-content: center;
-    width: unset;
+    width: 100%;
   }
 `;
 export default ResourcesLongForm;
