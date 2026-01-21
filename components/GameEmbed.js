@@ -100,19 +100,19 @@ const GameEmbed = ({ blok }) => {
       {!mobile && !tablet && (
         <DesktopInstructions>
           <InstructionsCard>
-            <h2>Game Controls</h2>
+            <ControllerTitle>Game Controls</ControllerTitle>
             <br />
-            <p>Use keyboard arrows </p>
-            <p>
+            <ControlsText>Use keyboard arrows </ControlsText>
+            <ControlsText>
               <strong>← / →</strong> or <strong>A / D</strong> to move
-            </p>
+            </ControlsText>
             <br />
-            <p>
+            <ControlsText>
               Press <strong>SPACE BAR</strong> to start
-            </p>
-            <p>
+            </ControlsText>
+            <ControlsText>
               Pause with <strong>ESC</strong>
-            </p>
+            </ControlsText>
           </InstructionsCard>
         </DesktopInstructions>
       )}
@@ -167,7 +167,12 @@ const GameEmbed = ({ blok }) => {
 };
 
 export default GameEmbed;
-
+const ControllerTitle = styled.h2`
+  ${text.h2};
+`;
+const ControlsText = styled.p`
+  ${text.bodyMd};
+`;
 const StyledIframe = styled.iframe`
   width: 480px;
   height: 480px;
