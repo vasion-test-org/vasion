@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useRouter, usePathname } from 'next/navigation';
 import VasionStarSVG from '@/assets/svg/VasionStarBig.svg';
@@ -18,7 +18,7 @@ const Footer = ({ blok }) => {
   const path = usePathname();
   const [language, setLanguage] = useState('en');
   const [footerColumns, setFooterColumns] = useState(blok.footer_columns);
-
+  const starRef = React.useRef(null);
   useEffect(() => {
     function checkPathLocale(url) {
       const { pathname } = new URL(url, 'https://vasion.com');
@@ -47,30 +47,46 @@ const Footer = ({ blok }) => {
       checkPathLocale(path);
     }
   }, [path, blok]);
-
   useEffect(() => {
-    const initFooterAnimation = async () => {
-      const [{ default: gsap }, { default: ScrollTrigger }] = await Promise.all(
-        [import('gsap'), import('gsap/ScrollTrigger')],
-      );
+    const star = starRef.current;
+    if (!star) {
+      return;
+    }
 
-      gsap.registerPlugin(ScrollTrigger);
+    let spinAnimation;
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.footer',
-          start: '50% 50%',
-        },
-      });
-
-      tl.from('#vasionfootersvg', {
-        yPercent: 100,
-        duration: 2,
-        ease: 'back.out',
+    const handleMouseEnter = async () => {
+      const { default: gsap } = await import('gsap');
+      spinAnimation = gsap.to(star, {
+        rotation: '+=360',
+        duration: 1.5,
+        repeat: -1,
+        ease: 'linear',
       });
     };
 
-    initFooterAnimation();
+    const handleMouseLeave = () => {
+      if (spinAnimation) {
+        spinAnimation.kill();
+      }
+    };
+
+    const handleClick = () => {
+      router.push('/component-testing');
+    };
+
+    star.addEventListener('mouseenter', handleMouseEnter);
+    star.addEventListener('mouseleave', handleMouseLeave);
+    star.addEventListener('click', handleClick);
+
+    return () => {
+      star.removeEventListener('mouseenter', handleMouseEnter);
+      star.removeEventListener('mouseleave', handleMouseLeave);
+      star.removeEventListener('click', handleClick);
+      if (spinAnimation) {
+        spinAnimation.kill();
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -167,7 +183,7 @@ const Footer = ({ blok }) => {
         <LogoContainer>
           <Logo onClick={() => handleNavigate('/')} alt="vasion-logo" />
           <Address>432 S. Tech Ridge Drive, St. George, Utah 84770 USA</Address>
-          <VasionStar id="vasion-star-svg" />
+          <VasionStar ref={starRef} id="vasion-star-svg" />
         </LogoContainer>
         <AllLinksContainer>{allLinksColumns}</AllLinksContainer>
       </MainFooterContainer>
