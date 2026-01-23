@@ -3,34 +3,10 @@ import React, { useRef, useEffect, useState } from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
+import text from '@/styles/text';
 import media from '@/styles/media';
-
-// Icon Components
-const CheckIcon = ({ color = '#6B46C1', opacity = 1 }) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="10" fill={color} opacity={opacity} />
-    <path
-      d="M8 12.5L10.5 15L16 9.5"
-      stroke="white"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const PartialCheckIcon = ({ color = '#6B46C1' }) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="10" fill={color} opacity="0.3" />
-    <path
-      d="M8 12.5L10.5 15L16 9.5"
-      stroke={color}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+import colors from '@/styles/colors';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 const CompetitiveAnalysis = ({ blok }) => {
   console.log('blok data:', blok);
@@ -39,30 +15,99 @@ const CompetitiveAnalysis = ({ blok }) => {
   const selectedTheme = themes[blok.theme] || themes.default;
 
   const scrollContainerRef = useRef(null);
+  const firstColumnRef = useRef(null);
   const [showLeftShadow, setShowLeftShadow] = useState(false);
   const [showRightShadow, setShowRightShadow] = useState(true);
 
-  // Parse table data
-  const tableData = blok.table_data || { tbody: [], thead: [] };
-  const headers = blok.column_headers
-    ? blok.column_headers.split(',').map((h) => h.trim())
-    : [];
+  const extractTableData = () => {
+    if (!blok.table || !blok.table.content || !blok.table.content[0]) {
+      return [];
+    }
 
-  console.log('tableData:', tableData);
-  console.log('headers:', headers);
+    const tableNode = blok.table.content[0];
+    if (tableNode.type !== 'table' || !tableNode.content) {
+      return [];
+    }
 
-  // Create a lookup map for cell configurations
-  const cellConfigMap = {};
-  if (blok.cell_config) {
-    blok.cell_config.forEach((config) => {
-      const key = `${config.row_index},${config.col_index}`;
-      cellConfigMap[key] = config;
+    return tableNode.content.map((row) => {
+      if (row.type !== 'tableRow' || !row.content) {
+        return [];
+      }
+
+      return row.content.map((cell) => {
+        if (cell.type !== 'tableCell') {
+          return null;
+        }
+        return cell.content || [];
+      });
     });
-  }
+  };
 
-  console.log('cellConfigMap:', cellConfigMap);
+  const tableRows = extractTableData();
+  console.log('Extracted table rows:', tableRows);
 
-  // Handle scroll shadows for visual feedback
+  const headerRow = tableRows[0] || [];
+  const dataRows = tableRows.slice(1);
+
+  useEffect(() => {
+    const syncRowHeights = () => {
+      if (!firstColumnRef.current || !scrollContainerRef.current) return;
+
+      const firstColumnCells =
+        firstColumnRef.current.querySelectorAll('[data-row]');
+      const scrollableCells =
+        scrollContainerRef.current.querySelectorAll('[data-row]');
+
+      const rowGroups = {};
+
+      firstColumnCells.forEach((cell) => {
+        const rowIndex = cell.getAttribute('data-row');
+        if (!rowGroups[rowIndex]) rowGroups[rowIndex] = [];
+        rowGroups[rowIndex].push(cell);
+      });
+
+      scrollableCells.forEach((cell) => {
+        const rowIndex = cell.getAttribute('data-row');
+        if (!rowGroups[rowIndex]) rowGroups[rowIndex] = [];
+        rowGroups[rowIndex].push(cell);
+      });
+
+      Object.values(rowGroups).forEach((cells) => {
+        cells.forEach((cell) => {
+          cell.style.height = 'auto';
+        });
+      });
+
+      Object.values(rowGroups).forEach((cells) => {
+        const maxHeight = Math.max(...cells.map((cell) => cell.offsetHeight));
+        cells.forEach((cell) => {
+          cell.style.height = `${maxHeight}px`;
+        });
+      });
+    };
+
+    syncRowHeights();
+
+    const resizeObserver = new ResizeObserver(syncRowHeights);
+    if (firstColumnRef.current) resizeObserver.observe(firstColumnRef.current);
+    if (scrollContainerRef.current)
+      resizeObserver.observe(scrollContainerRef.current);
+
+    const images = document.querySelectorAll('img');
+    images.forEach((img) => {
+      if (!img.complete) {
+        img.addEventListener('load', syncRowHeights);
+      }
+    });
+
+    return () => {
+      resizeObserver.disconnect();
+      images.forEach((img) => {
+        img.removeEventListener('load', syncRowHeights);
+      });
+    };
+  }, [tableRows]);
+
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -73,10 +118,9 @@ const CompetitiveAnalysis = ({ blok }) => {
       setShowRightShadow(scrollLeft < scrollWidth - clientWidth - 1);
     };
 
-    handleScroll(); // Initial check
+    handleScroll();
     container.addEventListener('scroll', handleScroll);
 
-    // Check on resize
     const resizeObserver = new ResizeObserver(handleScroll);
     resizeObserver.observe(container);
 
@@ -86,54 +130,17 @@ const CompetitiveAnalysis = ({ blok }) => {
     };
   }, []);
 
-  // Render cell content with optional icons
-  const renderCellContent = (cellValue, rowIndex, colIndex) => {
-    const config = cellConfigMap[`${rowIndex},${colIndex}`];
-
-    console.log(
-      `Cell [${rowIndex},${colIndex}]:`,
-      cellValue,
-      'config:',
-      config,
-    );
-
-    if (!config) {
-      // No special configuration, just render text
-      return cellValue ? <CellText>{cellValue}</CellText> : null;
+  const renderCellContent = (cellContent) => {
+    if (!cellContent || cellContent.length === 0) {
+      return null;
     }
 
-    const hasIcon = config.icon_type && config.icon_type !== 'none';
-    const hasText = cellValue && cellValue.trim() !== '';
-    const showBoth = config.show_text_with_icon && hasIcon && hasText;
+    const richTextDoc = {
+      type: 'doc',
+      content: cellContent,
+    };
 
-    if (showBoth) {
-      return (
-        <CellContentStacked>
-          {config.icon_type === 'check' && (
-            <CheckIcon color={config.icon_color} />
-          )}
-          {config.icon_type === 'partial' && (
-            <PartialCheckIcon color={config.icon_color} />
-          )}
-          {hasText && <CellText>{cellValue}</CellText>}
-        </CellContentStacked>
-      );
-    }
-
-    if (hasIcon) {
-      return (
-        <CellContentCentered>
-          {config.icon_type === 'check' && (
-            <CheckIcon color={config.icon_color} />
-          )}
-          {config.icon_type === 'partial' && (
-            <PartialCheckIcon color={config.icon_color} />
-          )}
-        </CellContentCentered>
-      );
-    }
-
-    return cellValue ? <CellText>{cellValue}</CellText> : null;
+    return <RichTextRenderer document={richTextDoc} />;
   };
 
   return (
@@ -146,16 +153,15 @@ const CompetitiveAnalysis = ({ blok }) => {
       >
         <TableContainer>
           {/* Sticky First Column */}
-          <FirstColumn>
-            <HeaderCell>
-              <span>{/* Empty header */}</span>
+          <FirstColumn ref={firstColumnRef}>
+            <HeaderCell data-row="header">
+              {renderCellContent(headerRow[0] || [])}
             </HeaderCell>
-            {tableData.tbody?.map((row, index) => {
-              // First column (index 0) contains feature names
-              const featureLabel = row.body?.[0]?.value || '';
+            {dataRows.map((row, index) => {
+              const featureCellContent = row[0] || [];
               return (
-                <FeatureCell key={index}>
-                  <FeatureLabel>{featureLabel}</FeatureLabel>
+                <FeatureCell key={index} data-row={index}>
+                  {renderCellContent(featureCellContent)}
                 </FeatureCell>
               );
             })}
@@ -168,17 +174,16 @@ const CompetitiveAnalysis = ({ blok }) => {
             showRightShadow={showRightShadow}
           >
             <ScrollContent>
-              {headers.map((header, colIndex) => (
+              {headerRow.slice(1).map((headerCellContent, colIndex) => (
                 <Column key={colIndex}>
-                  <HeaderCell>
-                    <HeaderText>{header}</HeaderText>
+                  <HeaderCell data-row="header">
+                    {renderCellContent(headerCellContent)}
                   </HeaderCell>
-                  {tableData.tbody?.map((row, rowIndex) => {
-                    // colIndex + 1 because column 0 is the feature name
-                    const cellValue = row.body?.[colIndex + 1]?.value || '';
+                  {dataRows.map((row, rowIndex) => {
+                    const cellContent = row[colIndex + 1] || [];
                     return (
-                      <DataCell key={rowIndex}>
-                        {renderCellContent(cellValue, rowIndex, colIndex)}
+                      <DataCell key={rowIndex} data-row={rowIndex}>
+                        {renderCellContent(cellContent)}
                       </DataCell>
                     );
                   })}
@@ -196,324 +201,12 @@ const CompetitiveAnalysis = ({ blok }) => {
 
 export default CompetitiveAnalysis;
 
-// ... (rest of your styled components remain the same)
-
-const TableContainer = styled.div`
-  display: flex;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5vw;
-  overflow: hidden;
-  background: white;
-
-  ${media.fullWidth} {
-    border-radius: 8px;
-  }
-
-  ${media.tablet} {
-    border-radius: 0.781vw;
-  }
-
-  ${media.mobile} {
-    border-radius: 1.667vw;
-  }
-`;
-
-const FirstColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-right: 2px solid #e5e7eb;
-  flex-shrink: 0;
-  z-index: 2;
-  min-width: 12.5vw;
-
-  ${media.fullWidth} {
-    min-width: 200px;
-  }
-
-  ${media.tablet} {
-    min-width: 19.531vw;
-  }
-
-  ${media.mobile} {
-    min-width: 33.333vw;
-  }
-`;
-
-const ScrollContainer = styled.div`
-  flex: 1;
-  overflow-x: auto;
-  overflow-y: hidden;
-  position: relative;
-
-  /* Smooth scrolling on mobile */
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-
-  /* Hide scrollbar but keep functionality */
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e0 transparent;
-
-  &::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #cbd5e0;
-    border-radius: 4px;
-  }
-
-  /* Scroll shadows */
-  ${(props) =>
-    props.showLeftShadow &&
-    `
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 20px;
-      background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
-      pointer-events: none;
-      z-index: 1;
-    }
-  `}
-
-  ${(props) =>
-    props.showRightShadow &&
-    `
-    &::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 20px;
-      background: linear-gradient(to left, rgba(0,0,0,0.1), transparent);
-      pointer-events: none;
-      z-index: 1;
-    }
-  `}
-`;
-
-const ScrollContent = styled.div`
-  display: flex;
-  min-width: min-content;
-`;
-
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 10.417vw;
-  border-right: 1px solid #e5e7eb;
-  &:first-child {
-    background: #f9fafb;
-  }
-  &:last-child {
-    border-right: none;
-  }
-
-  ${media.fullWidth} {
-    min-width: 167px;
-  }
-
-  ${media.tablet} {
-    min-width: 16.276vw;
-  }
-
-  ${media.mobile} {
-    min-width: 35vw;
-  }
-`;
-
-const HeaderCell = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.25vw 1vw;
-  min-height: 4.167vw;
-  border-bottom: 2px solid #e5e7eb;
-  background: ${(props) => (props.isFirstColumn ? '#f9fafb' : 'white')};
-  font-weight: 600;
-
-  ${media.fullWidth} {
-    padding: 20px 16px;
-    min-height: 67px;
-  }
-
-  ${media.tablet} {
-    padding: 1.953vw 1.563vw;
-    min-height: 6.51vw;
-  }
-
-  ${media.mobile} {
-    padding: 4.167vw 3.333vw;
-    min-height: 13.889vw;
-  }
-`;
-
-const HeaderText = styled.span`
-  font-size: 1vw;
-  font-weight: 600;
-  text-align: center;
-  color: #111827;
-
-  ${media.fullWidth} {
-    font-size: 16px;
-  }
-
-  ${media.tablet} {
-    font-size: 1.563vw;
-  }
-
-  ${media.mobile} {
-    font-size: 3.333vw;
-  }
-`;
-
-const FeatureCell = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 1.25vw 1vw;
-  min-height: 4.167vw;
-  border-bottom: 1px solid #e5e7eb;
-
-  &:last-child {
-    border-bottom: none;
-  }
-
-  ${media.fullWidth} {
-    padding: 20px 16px;
-    min-height: 67px;
-  }
-
-  ${media.tablet} {
-    padding: 1.953vw 1.563vw;
-    min-height: 6.51vw;
-  }
-
-  ${media.mobile} {
-    padding: 4.167vw 3.333vw;
-    min-height: 13.889vw;
-  }
-`;
-
-const FeatureLabel = styled.span`
-  font-size: 0.875vw;
-  color: #374151;
-  font-weight: 500;
-
-  ${media.fullWidth} {
-    font-size: 14px;
-  }
-
-  ${media.tablet} {
-    font-size: 1.367vw;
-  }
-
-  ${media.mobile} {
-    font-size: 2.917vw;
-  }
-`;
-
-const DataCell = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.25vw 1vw;
-  min-height: 4.167vw;
-  border-bottom: 1px solid #e5e7eb;
-
-  &:last-child {
-    border-bottom: none;
-  }
-
-  ${media.fullWidth} {
-    padding: 20px 16px;
-    min-height: 67px;
-  }
-
-  ${media.tablet} {
-    padding: 1.953vw 1.563vw;
-    min-height: 6.51vw;
-  }
-
-  ${media.mobile} {
-    padding: 4.167vw 3.333vw;
-    min-height: 13.889vw;
-  }
-`;
-
-const CellContentStacked = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5vw;
-
-  ${media.fullWidth} {
-    gap: 8px;
-  }
-
-  ${media.tablet} {
-    gap: 0.781vw;
-  }
-
-  ${media.mobile} {
-    gap: 1.667vw;
-  }
-`;
-
-const CellContentCentered = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const CellText = styled.span`
-  font-size: 0.75vw;
-  color: #6b7280;
-  text-align: center;
-  line-height: 1.4;
-
-  ${media.fullWidth} {
-    font-size: 12px;
-  }
-
-  ${media.tablet} {
-    font-size: 1.172vw;
-  }
-
-  ${media.mobile} {
-    font-size: 2.5vw;
-  }
-`;
-
-const Footnote = styled.p`
-  margin-top: 1.25vw;
-  color: #6b7280;
-  font-style: italic;
-
-  ${media.fullWidth} {
-    margin-top: 20px;
-    font-size: 12px;
-  }
-
-  ${media.tablet} {
-    margin-top: 1.953vw;
-    font-size: 1.172vw;
-  }
-
-  ${media.mobile} {
-    margin-top: 4.167vw;
-    font-size: 2.5vw;
-  }
-`;
+// Styled components (same as before)
 const TableWrapper = styled.div`
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   padding: ${(props) => {
     if (props.spacingOffset === 'top') {
       return props.spacing === 'default'
@@ -606,5 +299,291 @@ const TableWrapper = styled.div`
           ? `${props.spacing}px 0`
           : '12.5vw 0';
     }};
+  }
+`;
+
+const TableContainer = styled.div`
+  display: flex;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5vw;
+  overflow: hidden;
+  background: white;
+
+  ${media.fullWidth} {
+    border-radius: 8px;
+  }
+
+  ${media.tablet} {
+    border-radius: 0.781vw;
+  }
+
+  ${media.mobile} {
+    border-radius: 1.667vw;
+  }
+`;
+
+const FirstColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid #e5e7eb;
+  flex-shrink: 0;
+  z-index: 2;
+  min-width: 12.5vw;
+
+  ${media.fullWidth} {
+    min-width: 200px;
+  }
+
+  ${media.tablet} {
+    min-width: 19.531vw;
+  }
+
+  ${media.mobile} {
+    min-width: 33.333vw;
+  }
+`;
+
+const ScrollContainer = styled.div`
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 transparent;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #cbd5e0;
+    border-radius: 4px;
+  }
+
+  ${(props) =>
+    props.showLeftShadow &&
+    `
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 20px;
+      background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
+      pointer-events: none;
+      z-index: 1;
+    }
+  `}
+
+  ${(props) =>
+    props.showRightShadow &&
+    `
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 20px;
+      background: linear-gradient(to left, rgba(0,0,0,0.1), transparent);
+      pointer-events: none;
+      z-index: 1;
+    }
+  `}
+`;
+
+const ScrollContent = styled.div`
+  display: flex;
+  min-width: min-content;
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-width: 10.417vw;
+  border-right: 1px solid #e5e7eb;
+
+  &:first-child {
+    background: #f9fafb;
+  }
+
+  &:last-child {
+    border-right: none;
+  }
+
+  ${media.fullWidth} {
+    min-width: 167px;
+  }
+
+  ${media.tablet} {
+    min-width: 16.276vw;
+  }
+
+  ${media.mobile} {
+    min-width: 35vw;
+  }
+`;
+
+const HeaderCell = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25vw 1vw;
+  border-bottom: 2px solid #e5e7eb;
+  background: transparent;
+  font-weight: 600;
+
+  ${media.fullWidth} {
+    padding: 20px 16px;
+  }
+
+  ${media.tablet} {
+    padding: 1.953vw 1.563vw;
+  }
+
+  ${media.mobile} {
+    padding: 4.167vw 3.333vw;
+  }
+
+  p {
+    text-align: center;
+    margin: 0;
+  }
+
+  img {
+    width: 9.875vw;
+    height: 2.5vw;
+    height: auto;
+    display: block;
+
+    ${media.fullWidth} {
+      width: 158px;
+      height: 40px;
+    }
+    ${media.tablet} {
+      width: 15.43vw;
+      height: 3.906vw;
+    }
+    ${media.mobile} {
+      width: 32.917vw;
+      height: 8.333vw;
+    }
+  }
+`;
+
+const FeatureCell = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 1.25vw 1vw;
+  border-bottom: 1px solid #e5e7eb;
+  ${text.bodyLgBold};
+  &:last-child {
+    border-bottom: none;
+  }
+
+  ${media.fullWidth} {
+    padding: 20px 16px;
+  }
+
+  ${media.tablet} {
+    padding: 1.953vw 1.563vw;
+  }
+
+  ${media.mobile} {
+    padding: 4.167vw 3.333vw;
+  }
+  a {
+    color: ${colors.txtPrimary};
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: ${colors.primaryOrange};
+    }
+
+    &:visited {
+      color: ${colors.darkOrange};
+    }
+  }
+  p {
+    margin: 0;
+  }
+`;
+
+const DataCell = styled.div`
+  ${text.bodyMd};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25vw 1vw;
+  border-bottom: 1px solid #e5e7eb;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  ${media.fullWidth} {
+    padding: 20px 16px;
+  }
+
+  ${media.tablet} {
+    padding: 1.953vw 1.563vw;
+  }
+
+  ${media.mobile} {
+    padding: 4.167vw 3.333vw;
+  }
+
+  p {
+    text-align: center;
+    margin: 0;
+  }
+
+  img {
+    display: flex;
+    justify-self: center;
+    width: 1.75vw;
+    height: auto;
+
+    ${media.fullWidth} {
+      width: 28px;
+    }
+    ${media.tablet} {
+      width: 2.734vw;
+    }
+    ${media.mobile} {
+      width: 5.833vw;
+    }
+  }
+`;
+
+const Footnote = styled.p`
+  margin-top: 1.25vw;
+  color: #6b7280;
+  font-style: italic;
+
+  ${media.fullWidth} {
+    margin-top: 20px;
+    font-size: 12px;
+  }
+
+  ${media.tablet} {
+    margin-top: 1.953vw;
+    font-size: 1.172vw;
+  }
+
+  ${media.mobile} {
+    margin-top: 4.167vw;
+    font-size: 2.5vw;
   }
 `;
