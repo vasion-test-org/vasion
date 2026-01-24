@@ -497,7 +497,6 @@ const DataCell = styled.div`
       background: ${colors.lightPurpleGrey};
     }
   }
-
   p {
     text-align: center;
     margin: 0;
