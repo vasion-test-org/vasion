@@ -280,7 +280,7 @@ const CompetitiveAnalysis = ({ blok }) => {
         </MobileTableWrapper>
 
         {blok.footnote && (
-          <Footnote>
+          <Footnote {...storyblokEditable(blok.footnote)}>
             <RichTextRenderer document={blok.footnote} />
           </Footnote>
         )}
@@ -599,7 +599,7 @@ const Footnote = styled.p`
     ${media.tablet} {
       width: 2.734vw;
       top: 0.488vw;
-      margin-right: 2.344vw;
+      margin-right: 1.144vw;
     }
 
     ${media.mobile} {
