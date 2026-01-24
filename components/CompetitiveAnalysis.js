@@ -1,29 +1,24 @@
 'use client';
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useContext, useState } from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
+import { ScreenContext } from '@/components/providers/Screen';
 import text from '@/styles/text';
 import media from '@/styles/media';
 import colors from '@/styles/colors';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 const CompetitiveAnalysis = ({ blok }) => {
-  console.log('blok data:', blok);
-
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
   const scrollContainerRef = useRef(null);
   const firstColumnRef = useRef(null);
-  const [showLeftShadow, setShowLeftShadow] = useState(false);
-  const [showRightShadow, setShowRightShadow] = useState(true);
-  const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth <= 768;
-    }
-    return false;
-  });
+  const mobileScrollContainerRef = useRef(null);
+  const mobileFirstColumnRef = useRef(null);
+
+  const { mobile } = useContext(ScreenContext);
 
   const extractTableData = () => {
     if (!blok.table || !blok.table.content || !blok.table.content[0]) {
@@ -50,22 +45,13 @@ const CompetitiveAnalysis = ({ blok }) => {
   };
 
   const tableRows = extractTableData();
-  console.log('Extracted table rows:', tableRows);
-
   const headerRow = tableRows[0] || [];
   const dataRows = tableRows.slice(1);
 
+  // Desktop row height sync
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
+    if (mobile) return;
 
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  useEffect(() => {
     const syncRowHeights = () => {
       if (!firstColumnRef.current || !scrollContainerRef.current) return;
 
@@ -123,29 +109,72 @@ const CompetitiveAnalysis = ({ blok }) => {
         img.removeEventListener('load', syncRowHeights);
       });
     };
-  }, [tableRows, isMobile]);
+  }, [tableRows, mobile]);
 
+  // Mobile row height sync
   useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
+    if (!mobile) return;
 
-    const handleScroll = () => {
-      const { scrollLeft, scrollWidth, clientWidth } = container;
-      setShowLeftShadow(scrollLeft > 0);
-      setShowRightShadow(scrollLeft < scrollWidth - clientWidth - 1);
+    const syncRowHeights = () => {
+      if (!mobileFirstColumnRef.current || !mobileScrollContainerRef.current)
+        return;
+
+      const firstColumnCells =
+        mobileFirstColumnRef.current.querySelectorAll('[data-row]');
+      const scrollableCells =
+        mobileScrollContainerRef.current.querySelectorAll('[data-row]');
+
+      const rowGroups = {};
+
+      firstColumnCells.forEach((cell) => {
+        const rowIndex = cell.getAttribute('data-row');
+        if (!rowGroups[rowIndex]) rowGroups[rowIndex] = [];
+        rowGroups[rowIndex].push(cell);
+      });
+
+      scrollableCells.forEach((cell) => {
+        const rowIndex = cell.getAttribute('data-row');
+        if (!rowGroups[rowIndex]) rowGroups[rowIndex] = [];
+        rowGroups[rowIndex].push(cell);
+      });
+
+      Object.values(rowGroups).forEach((cells) => {
+        cells.forEach((cell) => {
+          cell.style.height = 'auto';
+        });
+      });
+
+      Object.values(rowGroups).forEach((cells) => {
+        const maxHeight = Math.max(...cells.map((cell) => cell.offsetHeight));
+        cells.forEach((cell) => {
+          cell.style.height = `${maxHeight}px`;
+        });
+      });
     };
 
-    handleScroll();
-    container.addEventListener('scroll', handleScroll);
+    syncRowHeights();
 
-    const resizeObserver = new ResizeObserver(handleScroll);
-    resizeObserver.observe(container);
+    const resizeObserver = new ResizeObserver(syncRowHeights);
+    const images = document.querySelectorAll('img');
+
+    if (mobileFirstColumnRef.current)
+      resizeObserver.observe(mobileFirstColumnRef.current);
+    if (mobileScrollContainerRef.current)
+      resizeObserver.observe(mobileScrollContainerRef.current);
+
+    images.forEach((img) => {
+      if (!img.complete) {
+        img.addEventListener('load', syncRowHeights);
+      }
+    });
 
     return () => {
-      container.removeEventListener('scroll', handleScroll);
       resizeObserver.disconnect();
+      images.forEach((img) => {
+        img.removeEventListener('load', syncRowHeights);
+      });
     };
-  }, []);
+  }, [tableRows, mobile]);
 
   const renderCellContent = (cellContent) => {
     if (!cellContent || cellContent.length === 0) {
@@ -160,97 +189,8 @@ const CompetitiveAnalysis = ({ blok }) => {
     return <RichTextRenderer document={richTextDoc} />;
   };
 
-  const renderDesktopTable = () => (
-    <TableContainer>
-      {/* Sticky First Column */}
-      <FirstColumn ref={firstColumnRef}>
-        <HeaderCell data-row="header">
-          {renderCellContent(headerRow[0] || [])}
-        </HeaderCell>
-        {dataRows.map((row, index) => {
-          const featureCellContent = row[0] || [];
-          return (
-            <FeatureCell key={index} data-row={index}>
-              {renderCellContent(featureCellContent)}
-            </FeatureCell>
-          );
-        })}
-      </FirstColumn>
-
-      {/* Scrollable Columns */}
-      <ScrollContainer
-        ref={scrollContainerRef}
-        showLeftShadow={showLeftShadow}
-        showRightShadow={showRightShadow}
-      >
-        <ScrollContent>
-          {headerRow.slice(1).map((headerCellContent, colIndex) => (
-            <Column key={colIndex}>
-              <HeaderCell data-row="header">
-                {renderCellContent(headerCellContent)}
-              </HeaderCell>
-              {dataRows.map((row, rowIndex) => {
-                const cellContent = row[colIndex + 1] || [];
-                return (
-                  <DataCell key={rowIndex} data-row={rowIndex}>
-                    {renderCellContent(cellContent)}
-                  </DataCell>
-                );
-              })}
-            </Column>
-          ))}
-        </ScrollContent>
-      </ScrollContainer>
-    </TableContainer>
-  );
-
-  const renderMobileTable = () => {
-    // Products from header row (slice off the first cell which is empty/feature label)
-    const products = headerRow.slice(1);
-    // Features are the first cell of each data row
-    const features = dataRows.map((row) => row[0]);
-
-    return (
-      <TableContainer>
-        {/* Sticky First Column - now contains products going down */}
-        <FirstColumn ref={firstColumnRef}>
-          <HeaderCell data-row="header">{/* Empty corner cell */}</HeaderCell>
-          {products.map((productCell, index) => (
-            <FeatureCell key={index} data-row={index}>
-              {renderCellContent(productCell)}
-            </FeatureCell>
-          ))}
-        </FirstColumn>
-
-        {/* Scrollable Columns - now each column is a feature going across */}
-        <ScrollContainer
-          ref={scrollContainerRef}
-          showLeftShadow={showLeftShadow}
-          showRightShadow={showRightShadow}
-        >
-          <ScrollContent>
-            {features.map((featureCell, featureIndex) => (
-              <Column key={featureIndex}>
-                <HeaderCell data-row="header">
-                  {renderCellContent(featureCell)}
-                </HeaderCell>
-                {products.map((_, productIndex) => {
-                  // Get data from dataRows[featureIndex][productIndex + 1]
-                  const cellContent =
-                    dataRows[featureIndex][productIndex + 1] || [];
-                  return (
-                    <DataCell key={productIndex} data-row={productIndex}>
-                      {renderCellContent(cellContent)}
-                    </DataCell>
-                  );
-                })}
-              </Column>
-            ))}
-          </ScrollContent>
-        </ScrollContainer>
-      </TableContainer>
-    );
-  };
+  const products = headerRow.slice(1);
+  const features = dataRows.map((row) => row[0]);
 
   return (
     <ThemeProvider theme={selectedTheme}>
@@ -260,14 +200,113 @@ const CompetitiveAnalysis = ({ blok }) => {
         spacing={blok.section_spacing}
         {...storyblokEditable(blok)}
       >
-        {isMobile ? renderMobileTable() : renderDesktopTable()}
-        {blok.footnote && <Footnote>{blok.footnote}</Footnote>}
+        {/* Desktop Table - Hidden on mobile */}
+        <DesktopTableWrapper>
+          <TableContainer suppressHydrationWarning>
+            <FirstColumn ref={firstColumnRef}>
+              <HeaderCell data-row="header">
+                {renderCellContent(headerRow[0] || [])}
+              </HeaderCell>
+              {dataRows.map((row, index) => {
+                const featureCellContent = row[0] || [];
+                return (
+                  <FeatureCell key={index} data-row={index}>
+                    {renderCellContent(featureCellContent)}
+                  </FeatureCell>
+                );
+              })}
+            </FirstColumn>
+
+            <ScrollContainer ref={scrollContainerRef} suppressHydrationWarning>
+              <ScrollContent>
+                {headerRow.slice(1).map((headerCellContent, colIndex) => (
+                  <Column key={colIndex}>
+                    <HeaderCell data-row="header">
+                      {renderCellContent(headerCellContent)}
+                    </HeaderCell>
+                    {dataRows.map((row, rowIndex) => {
+                      const cellContent = row[colIndex + 1] || [];
+                      return (
+                        <DataCell key={rowIndex} data-row={rowIndex}>
+                          {renderCellContent(cellContent)}
+                        </DataCell>
+                      );
+                    })}
+                  </Column>
+                ))}
+              </ScrollContent>
+            </ScrollContainer>
+          </TableContainer>
+        </DesktopTableWrapper>
+
+        {/* Mobile Table - Hidden on desktop */}
+        <MobileTableWrapper>
+          <TableContainer suppressHydrationWarning>
+            <FirstColumn ref={mobileFirstColumnRef}>
+              <HeaderCell data-row="header">
+                {/* Empty corner cell */}
+              </HeaderCell>
+              {products.map((productCell, index) => (
+                <FeatureCell key={index} data-row={index}>
+                  {renderCellContent(productCell)}
+                </FeatureCell>
+              ))}
+            </FirstColumn>
+
+            <ScrollContainer
+              ref={mobileScrollContainerRef}
+              suppressHydrationWarning
+            >
+              <ScrollContent>
+                {features.map((featureCell, featureIndex) => (
+                  <Column key={featureIndex}>
+                    <HeaderCell data-row="header">
+                      {renderCellContent(featureCell)}
+                    </HeaderCell>
+                    {products.map((_, productIndex) => {
+                      const cellContent =
+                        dataRows[featureIndex][productIndex + 1] || [];
+                      return (
+                        <DataCell key={productIndex} data-row={productIndex}>
+                          {renderCellContent(cellContent)}
+                        </DataCell>
+                      );
+                    })}
+                  </Column>
+                ))}
+              </ScrollContent>
+            </ScrollContainer>
+          </TableContainer>
+        </MobileTableWrapper>
+
+        {blok.footnote && (
+          <Footnote>
+            <RichTextRenderer document={blok.footnote} />
+          </Footnote>
+        )}
       </TableWrapper>
     </ThemeProvider>
   );
 };
 
 export default CompetitiveAnalysis;
+
+// New wrapper components for showing/hiding tables
+const DesktopTableWrapper = styled.div`
+  display: block;
+
+  ${media.mobile} {
+    display: none;
+  }
+`;
+
+const MobileTableWrapper = styled.div`
+  display: none;
+
+  ${media.mobile} {
+    display: block;
+  }
+`;
 
 const ScrollContainer = styled.div`
   flex: 1;
@@ -293,38 +332,6 @@ const ScrollContainer = styled.div`
     background-color: #cbd5e0;
     border-radius: 4px;
   }
-
-  ${(props) =>
-    props.showLeftShadow &&
-    `
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 20px;
-      background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
-      pointer-events: none;
-      z-index: 1;
-    }
-  `}
-
-  ${(props) =>
-    props.showRightShadow &&
-    `
-    &::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 20px;
-      background: linear-gradient(to left, rgba(0,0,0,0.1), transparent);
-      pointer-events: none;
-      z-index: 1;
-    }
-  `}
 `;
 
 const ScrollContent = styled.div`
@@ -355,6 +362,9 @@ const Column = styled.div`
 
   ${media.mobile} {
     min-width: 38vw;
+    &:first-child {
+      background: transparent;
+    }
   }
 `;
 
@@ -363,6 +373,7 @@ const HeaderCell = styled.div`
   align-items: center;
   justify-content: center;
   padding: 1.5vw 5vw;
+  text-align: center;
   border-bottom: 2px solid #e5e7eb;
   background: transparent;
   font-weight: 600;
@@ -382,12 +393,21 @@ const HeaderCell = styled.div`
     text-align: center;
     margin: 0;
   }
+  a {
+    color: ${colors.txtPrimary};
+    transition: color 0.2s ease;
 
+    &:hover {
+      color: ${colors.primaryOrange};
+    }
+    &:visited {
+      color: ${text.darkOrange};
+    }
+  }
   img {
-    width: 9.875vw;
-    height: 2.5vw;
-    height: auto;
     display: block;
+    width: 9.875vw;
+    height: auto;
 
     ${media.fullWidth} {
       width: 158px;
@@ -402,13 +422,14 @@ const HeaderCell = styled.div`
 `;
 
 const FeatureCell = styled.div`
+  ${text.bodyLgBold};
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 1.25vw 1vw;
   border-bottom: 1px solid #e5e7eb;
-  ${text.bodyLgBold};
+  text-align: center;
   &:last-child {
     border-bottom: none;
   }
@@ -423,12 +444,11 @@ const FeatureCell = styled.div`
 
   ${media.mobile} {
     padding: 4.167vw 3.333vw;
-    max-width: 160px;
+    width: 33.333vw;
   }
   a {
     color: ${colors.txtPrimary};
     text-decoration: none;
-    font-weight: 600;
     transition: color 0.2s ease;
 
     &:hover {
@@ -468,8 +488,11 @@ const DataCell = styled.div`
   }
 
   ${media.mobile} {
+    max-width: unset;
     padding: 4.167vw 3.333vw;
-    max-width: 33.333vw;
+    &[data-row='0'] {
+      background: #f9fafb;
+    }
   }
 
   p {
@@ -493,30 +516,97 @@ const DataCell = styled.div`
       padding: 0.391vw;
     }
     ${media.mobile} {
-      width: 5.833vw;
+      width: 7.833vw;
       padding: 0.833vw;
     }
   }
 `;
-
 const Footnote = styled.p`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   margin-top: 1.25vw;
   color: #6b7280;
-  font-style: italic;
+  width: 81.5vw;
 
   ${media.fullWidth} {
+    width: 1304px;
     margin-top: 20px;
-    font-size: 12px;
   }
 
   ${media.tablet} {
     margin-top: 1.953vw;
-    font-size: 1.172vw;
+    width: 92.188vw;
   }
 
   ${media.mobile} {
     margin-top: 4.167vw;
-    font-size: 2.5vw;
+    width: 89.167vw;
+  }
+
+  /* Override RichTextRenderer nested styles */
+  .BodyCopy__StyledBodyCopy-sc-4fe6b91b-0,
+  div[class*='BodyCopy__StyledBodyCopy'],
+  div[class*='BodyCopy'] {
+    position: relative;
+    display: inline-block;
+    gap: 0.5vw;
+
+    ${media.fullWidth} {
+      gap: 8px;
+    }
+
+    ${media.tablet} {
+      gap: 0.6vw;
+    }
+
+    ${media.mobile} {
+      gap: 1.5vw;
+    }
+  }
+
+  /* Keep bold/strong text together - no breaks inside */
+  .BodyCopy__StyledBodyCopy-sc-4fe6b91b-0 strong,
+  .BodyCopy__StyledBodyCopy-sc-4fe6b91b-0 b,
+  div[class*='BodyCopy__StyledBodyCopy'] strong,
+  div[class*='BodyCopy__StyledBodyCopy'] b,
+  div[class*='BodyCopy'] strong,
+  div[class*='BodyCopy'] b {
+    ${text.bodyLg}
+    display: inline;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  /* Target images inside BodyCopy */
+  .BodyCopy__StyledBodyCopy-sc-4fe6b91b-0 img,
+  div[class*='BodyCopy__StyledBodyCopy'] img,
+  div[class*='BodyCopy'] img {
+    position: relative;
+    width: 1.75vw;
+    height: auto;
+    flex-shrink: 0;
+    padding: unset;
+    top: 0.313vw;
+    margin-right: 0.5vw;
+
+    ${media.fullWidth} {
+      width: 28px;
+      top: 5px;
+      margin-right: 15px;
+    }
+
+    ${media.tablet} {
+      width: 2.734vw;
+      top: 0.488vw;
+      margin-right: 2.344vw;
+    }
+
+    ${media.mobile} {
+      width: 5.833vw;
+      top: 1.042vw;
+      margin-right: 2vw;
+    }
   }
 `;
 
@@ -525,7 +615,7 @@ const TableContainer = styled.div`
   border: 1px solid #e5e7eb;
   border-radius: 0.5vw;
   overflow: hidden;
-  background: white;
+  background: transparent;
   max-width: 81.5vw;
 
   ${media.fullWidth} {
@@ -628,6 +718,7 @@ const TableWrapper = styled.div`
   }
 
   ${media.mobile} {
+    max-height: min-content;
     padding: ${(props) => {
       if (props.spacingOffset === 'top') {
         return props.spacing === 'default'
