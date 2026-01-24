@@ -445,6 +445,9 @@ const FeatureCell = styled.div`
   ${media.mobile} {
     padding: 4.167vw 3.333vw;
     width: 33.333vw;
+    &:nth-child(2) {
+      background: ${colors.lightPurpleGrey};
+    }
   }
   a {
     color: ${colors.txtPrimary};
@@ -491,7 +494,7 @@ const DataCell = styled.div`
     max-width: unset;
     padding: 4.167vw 3.333vw;
     &[data-row='0'] {
-      background: #f9fafb;
+      background: ${colors.lightPurpleGrey};
     }
   }
 
