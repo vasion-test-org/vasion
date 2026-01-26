@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useEffect, useContext, useState } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
@@ -47,18 +47,16 @@ const CompetitiveAnalysis = ({ blok }) => {
   const tableRows = extractTableData();
   const headerRow = tableRows[0] || [];
   const dataRows = tableRows.slice(1);
-
-  // Desktop row height sync
   useEffect(() => {
-    if (mobile) return;
-
     const syncRowHeights = () => {
-      if (!firstColumnRef.current || !scrollContainerRef.current) return;
+      const firstColRef = mobile ? mobileFirstColumnRef : firstColumnRef;
+      const scrollRef = mobile ? mobileScrollContainerRef : scrollContainerRef;
+
+      if (!firstColRef.current || !scrollRef.current) return;
 
       const firstColumnCells =
-        firstColumnRef.current.querySelectorAll('[data-row]');
-      const scrollableCells =
-        scrollContainerRef.current.querySelectorAll('[data-row]');
+        firstColRef.current.querySelectorAll('[data-row]');
+      const scrollableCells = scrollRef.current.querySelectorAll('[data-row]');
 
       const rowGroups = {};
 
@@ -93,74 +91,11 @@ const CompetitiveAnalysis = ({ blok }) => {
     const resizeObserver = new ResizeObserver(syncRowHeights);
     const images = document.querySelectorAll('img');
 
-    if (firstColumnRef.current) resizeObserver.observe(firstColumnRef.current);
-    if (scrollContainerRef.current)
-      resizeObserver.observe(scrollContainerRef.current);
+    const firstColRef = mobile ? mobileFirstColumnRef : firstColumnRef;
+    const scrollRef = mobile ? mobileScrollContainerRef : scrollContainerRef;
 
-    images.forEach((img) => {
-      if (!img.complete) {
-        img.addEventListener('load', syncRowHeights);
-      }
-    });
-
-    return () => {
-      resizeObserver.disconnect();
-      images.forEach((img) => {
-        img.removeEventListener('load', syncRowHeights);
-      });
-    };
-  }, [tableRows, mobile]);
-
-  // Mobile row height sync
-  useEffect(() => {
-    if (!mobile) return;
-
-    const syncRowHeights = () => {
-      if (!mobileFirstColumnRef.current || !mobileScrollContainerRef.current)
-        return;
-
-      const firstColumnCells =
-        mobileFirstColumnRef.current.querySelectorAll('[data-row]');
-      const scrollableCells =
-        mobileScrollContainerRef.current.querySelectorAll('[data-row]');
-
-      const rowGroups = {};
-
-      firstColumnCells.forEach((cell) => {
-        const rowIndex = cell.getAttribute('data-row');
-        if (!rowGroups[rowIndex]) rowGroups[rowIndex] = [];
-        rowGroups[rowIndex].push(cell);
-      });
-
-      scrollableCells.forEach((cell) => {
-        const rowIndex = cell.getAttribute('data-row');
-        if (!rowGroups[rowIndex]) rowGroups[rowIndex] = [];
-        rowGroups[rowIndex].push(cell);
-      });
-
-      Object.values(rowGroups).forEach((cells) => {
-        cells.forEach((cell) => {
-          cell.style.height = 'auto';
-        });
-      });
-
-      Object.values(rowGroups).forEach((cells) => {
-        const maxHeight = Math.max(...cells.map((cell) => cell.offsetHeight));
-        cells.forEach((cell) => {
-          cell.style.height = `${maxHeight}px`;
-        });
-      });
-    };
-
-    syncRowHeights();
-
-    const resizeObserver = new ResizeObserver(syncRowHeights);
-    const images = document.querySelectorAll('img');
-
-    if (mobileFirstColumnRef.current)
-      resizeObserver.observe(mobileFirstColumnRef.current);
-    if (mobileScrollContainerRef.current)
-      resizeObserver.observe(mobileScrollContainerRef.current);
+    if (firstColRef.current) resizeObserver.observe(firstColRef.current);
+    if (scrollRef.current) resizeObserver.observe(scrollRef.current);
 
     images.forEach((img) => {
       if (!img.complete) {
