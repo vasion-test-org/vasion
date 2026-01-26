@@ -653,8 +653,8 @@ const FirstColumn = styled.div`
   }
   ${media.mobile} {
     border-right: 0.508vw solid #e5e7eb;
-    -webkit-box-shadow: -2px 2px 28px 0px rgba(0, 0, 0, 0.33);
-    box-shadow: -2px 2px 28px 0px rgba(0, 0, 0, 0.33);
+    -webkit-box-shadow: -2px 2px 25px -7px rgba(0, 0, 0, 0.33);
+    box-shadow: -2px 2px 25px -7px rgba(0, 0, 0, 0.33);
   }
   z-index: 2;
 `;
