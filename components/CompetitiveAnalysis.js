@@ -362,6 +362,7 @@ const Column = styled.div`
 
   ${media.mobile} {
     min-width: 38vw;
+
     &:first-child {
       background: transparent;
     }
@@ -476,6 +477,7 @@ const DataCell = styled.div`
   padding: 1.25vw 1vw;
   border-bottom: 1px solid #e5e7eb;
   max-width: 19.875vw;
+
   &:last-child {
     border-bottom: none;
   }
@@ -493,6 +495,7 @@ const DataCell = styled.div`
   ${media.mobile} {
     max-width: unset;
     padding: 4.167vw 3.333vw;
+
     &[data-row='0'] {
       background: ${colors.lightPurpleGrey};
     }
@@ -639,8 +642,18 @@ const TableContainer = styled.div`
 const FirstColumn = styled.div`
   display: flex;
   flex-direction: column;
-  border-right: 2px solid #e5e7eb;
+  border-right: 0.125vw solid #e5e7eb;
   flex-shrink: 0;
+
+  ${media.fullWidth} {
+    border-right: 2px solid #e5e7eb;
+  }
+  ${media.tablet} {
+    border-right: 0.195vw solid #e5e7eb;
+  }
+  ${media.mobile} {
+    border-right: 1.2vw solid #e5e7eb;
+  }
   z-index: 2;
 `;
 
