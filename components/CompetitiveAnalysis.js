@@ -461,7 +461,7 @@ const DataCell = styled.div`
     }
   }
 `;
-const Footnote = styled.p`
+const Footnote = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
