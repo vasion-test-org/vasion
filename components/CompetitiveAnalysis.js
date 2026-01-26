@@ -642,17 +642,19 @@ const TableContainer = styled.div`
 const FirstColumn = styled.div`
   display: flex;
   flex-direction: column;
-  border-right: 0.125vw solid #e5e7eb;
+  border-right: 0.208vw solid #e5e7eb;
   flex-shrink: 0;
 
   ${media.fullWidth} {
-    border-right: 2px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
   }
   ${media.tablet} {
-    border-right: 0.195vw solid #e5e7eb;
+    border-right: 0.098vw solid #e5e7eb;
   }
   ${media.mobile} {
-    border-right: 1.2vw solid #e5e7eb;
+    border-right: 0.508vw solid #e5e7eb;
+    -webkit-box-shadow: -2px 2px 28px 0px rgba(0, 0, 0, 0.33);
+    box-shadow: -2px 2px 28px 0px rgba(0, 0, 0, 0.33);
   }
   z-index: 2;
 `;
