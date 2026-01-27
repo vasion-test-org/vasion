@@ -3,9 +3,11 @@ import React, { useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { horizontalLoop } from '@/functions/horizontalLoop';
+
 import media from 'styles/media';
 import text from '@/styles/text';
 import colors from '@/styles/colors';
+
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Testimonial from './Testimonial';
 import SideArrow from '@/assets/svg/side-arrow.svg';
@@ -14,7 +16,6 @@ const TestimonialCarousel = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const [activeIndex, setActiveIndex] = useState(0);
-
   const tagTopics = blok.testimonials?.[activeIndex]?.tag_topics;
 
   useEffect(() => {
@@ -74,8 +75,6 @@ const TestimonialCarousel = ({ blok }) => {
   );
 };
 
-// ... rest of styled components
-
 const Tag = styled.div`
   ${text.tagBold};
   display: flex;
@@ -98,9 +97,11 @@ const Tag = styled.div`
     padding: 0.7vw 2.5vw;
   }
 `;
+
 const NextSideArrow = styled(SideArrow)`
   rotate: 180deg;
 `;
+
 const Button = styled.div`
   display: inline-flex;
   align-items: center;
@@ -122,6 +123,7 @@ const Button = styled.div`
     padding: 1.667vw;
   }
 `;
+
 const Buttons = styled.div`
   position: absolute;
   display: flex;
@@ -151,7 +153,9 @@ const Buttons = styled.div`
     gap: 4.167vw;
   }
 `;
+
 const TestimonialWrapper = styled.div``;
+
 const Testimonials = styled.div`
   display: flex;
   overflow: hidden;
@@ -169,6 +173,7 @@ const Testimonials = styled.div`
     width: 89.167vw;
   }
 `;
+
 const Wrapper = styled.div`
   position: relative;
   display: flex;
@@ -192,4 +197,5 @@ const Wrapper = styled.div`
     padding: 5.417vw;
   }
 `;
+
 export default TestimonialCarousel;
