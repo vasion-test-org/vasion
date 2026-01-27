@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
-import { storyblokEditable } from '@storyblok/react/rsc';
 import { horizontalLoop } from '@/functions/horizontalLoop';
 import media from 'styles/media';
 import text from '@/styles/text';
