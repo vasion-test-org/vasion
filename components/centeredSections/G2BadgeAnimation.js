@@ -109,9 +109,9 @@ const G2BadgeAnimation = ({ blok }) => {
               .to(
                 leftImageRefs.current[leftFrontIndex],
                 {
-                  x: '98%',
+                  x: '105%',
                   scale: 0.85,
-                  duration: 1,
+                  duration: 1.5,
                   ease: 'power2.inOut',
                 },
                 0,
@@ -119,9 +119,9 @@ const G2BadgeAnimation = ({ blok }) => {
               .to(
                 rightImageRefs.current[rightFrontIndex],
                 {
-                  x: '-98%',
+                  x: '-105%',
                   scale: 0.85,
-                  duration: 1,
+                  duration: 1.5,
                   ease: 'power2.inOut',
                 },
                 0,
@@ -131,7 +131,7 @@ const G2BadgeAnimation = ({ blok }) => {
                 leftImageRefs.current[leftBackIndex],
                 {
                   scale: 1,
-                  duration: 0.8,
+                  duration: 1,
                   ease: 'power2.in',
                 },
                 0,
@@ -140,7 +140,7 @@ const G2BadgeAnimation = ({ blok }) => {
                 rightImageRefs.current[rightBackIndex],
                 {
                   scale: 1,
-                  duration: 0.8,
+                  duration: 1,
                   ease: 'power2.in',
                 },
                 0,
@@ -244,13 +244,13 @@ const LeftImages = styled.div`
 
   ${media.fullWidth} {
     ${BadgeImage}:not(:first-child) {
-      margin-left: -24px;
+      margin-left: -80px;
     }
   }
 
   ${media.tablet} {
     ${BadgeImage}:not(:first-child) {
-      margin-left: -5vw;
+      margin-left: -8vw;
     }
   }
 
@@ -271,13 +271,13 @@ const RightImages = styled.div`
 
   ${media.fullWidth} {
     ${BadgeImage}:not(:first-child) {
-      margin-left: -150px;
+      margin-left: -80px;
     }
   }
 
   ${media.tablet} {
     ${BadgeImage}:not(:first-child) {
-      margin-left: -15vw;
+      margin-left: -8vw;
     }
   }
 
@@ -292,7 +292,7 @@ const CenteredBadge = styled.img`
   width: 6.25vw;
   height: 6.25vw;
   position: relative;
-  z-index: 10; /* Always on top */
+  z-index: 10;
 
   ${media.fullWidth} {
     width: 100px;
@@ -329,4 +329,15 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 0.75vw;
+
+  ${media.fullWidth} {
+    margin-bottom: 12px;
+  }
+  ${media.tablet} {
+    margin-bottom: 1.172vw;
+  }
+  ${media.mobile} {
+    margin-bottom: 2.5vw;
+  }
 `;

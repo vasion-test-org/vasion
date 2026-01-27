@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import media from '@/styles/media';
 import colors from '@/styles/colors';
 // import text from '@/styles/text';
-const BodyCopy = ({ className, children }) => {
+const BodyCopy = ({ className, children, $featured = false }) => {
   // Recursive function to clone children and pass down className
   const cloneChildrenWithClassName = (children, parentClassName = '') => {
     return React.Children.map(children, (child) => {
@@ -28,7 +28,7 @@ const BodyCopy = ({ className, children }) => {
         return React.cloneElement(clonedChild, {
           children: cloneChildrenWithClassName(
             child.props.children,
-            combinedClassName
+            combinedClassName,
           ),
         });
       }
@@ -38,7 +38,7 @@ const BodyCopy = ({ className, children }) => {
   };
 
   return (
-    <StyledBodyCopy className={className}>
+    <StyledBodyCopy className={className} $featured={$featured}>
       {cloneChildrenWithClassName(children)}
     </StyledBodyCopy>
   );
@@ -52,6 +52,30 @@ const StyledBodyCopy = styled.div`
   font-weight: 400;
   white-space: pre-wrap;
 
+  /* Featured body_copy being used in CenteredSection intro content */
+  ${(props) =>
+    props.$featured &&
+    `
+    background-color:${colors.lightPurpleGrey};
+    padding:1.5vw;
+    border-radius: 1vw;
+ 
+    ${media.fullWidth}{
+    border-radius: 16px;
+    padding:24px;
+    }
+
+    ${media.tablet}{
+    border-radius: 1.563vw;
+    padding:2.344vw;
+    }
+
+    ${media.mobile}{
+    border-radius: 3.333vw;
+    padding:5vw;
+    }
+
+`}
   /* Apply styles to all children */
   & > * {
     font-family: inherit;

@@ -85,7 +85,7 @@ const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { mobile } = useContext(ScreenContext);
-  // console.log(blok);
+  console.log('CENTERED_SECTION->', blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper
@@ -95,6 +95,11 @@ const CenteredSection = ({ blok }) => {
         backgroundImage={blok.background_image?.[0]?.filename}
         {...storyblokEditable(blok)}
       >
+        {blok.component_type === 'g2_badge_animation' && (
+          <>
+            <G2BadgeAnimation blok={blok?.badges_animation[0]} />
+          </>
+        )}
         {(blok.centered_copy?.length > 0 || blok.button_group?.length > 0) && (
           <ContentWrapper>
             {blok.centered_copy &&
@@ -104,6 +109,9 @@ const CenteredSection = ({ blok }) => {
                     document={copy?.copy}
                     responsiveTextStyles={copy?.responsive_text_styles}
                     gradientText={copy?.gradient}
+                    featuredCopy={
+                      copy.component === 'body_copy' && blok.featured_copy
+                    }
                   />
                 </div>
               ))}
@@ -186,11 +194,6 @@ const CenteredSection = ({ blok }) => {
                 ) : (
                   <Badges badges={blok?.badges?.[0]} />
                 )}
-              </>
-            )}
-            {blok.component_type === 'g2_badge_animation' && (
-              <>
-                <G2BadgeAnimation blok={blok?.badges_animation[0]} />
               </>
             )}
             {blok.component_type === 'review_cta' && blok.review_cta && (
