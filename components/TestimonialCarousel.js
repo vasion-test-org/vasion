@@ -72,42 +72,57 @@ const TestimonialCarousel = ({ blok }) => {
 };
 
 const Tag = styled.div`
-  ${text.tagBold}
+  ${text.tagBold};
   display: flex;
   align-items: center;
   background-color: ${colors.purpleTag};
   color: ${colors.primaryPurple};
-  padding: 0vw 0.8vw;
+  padding: 0.23vw 0.85vw;
   border-radius: 1.5vw;
+
+  ${media.fullWidth} {
+    border-radius: 24px;
+    padding: 0px 12px;
+  }
+  ${media.tablet} {
+    border-radius: 2.344vw;
+    padding: 0.3vw 1.172vw;
+  }
+  ${media.mobile} {
+    border-radius: 5vw;
+    padding: 0.7vw 2.5vw;
+  }
 `;
 const NextSideArrow = styled(SideArrow)`
   rotate: 180deg;
 `;
 const Button = styled.div`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   background: ${colors.primaryOrange};
   padding: 0.5vw;
-  border-radius: 6.25vw;
+  border-radius: 100%;
 
   ${media.fullWidth} {
     padding: 8px;
-    border-radius: 100px;
   }
 
   ${media.tablet} {
     padding: 0.781vw;
-    border-radius: 9.766vw;
   }
 
   ${media.mobile} {
     padding: 1.667vw;
-    border-radius: 20.833vw;
   }
 `;
 const Buttons = styled.div`
   position: absolute;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
   z-index: 2;
   top: 7vw;
   right: 15vw;
@@ -154,22 +169,9 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: row;
+  flex-direction: column;
   height: auto;
   width: 100%;
   background: ${(props) => props.theme.testimonial.bg};
-  padding: 3.75vw 9.25vw;
-
-  ${media.fullWidth} {
-    padding: 60px 148px;
-  }
-
-  ${media.tablet} {
-    padding: 3.906vw;
-  }
-
-  ${media.mobile} {
-    padding: 5.417vw;
-  }
 `;
 export default TestimonialCarousel;
