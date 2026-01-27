@@ -13,14 +13,16 @@ import Button from './globalComponents/Button';
 const Testimonial = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  // console.log(blok);
+  console.log(blok);
 
   return (
     <ThemeProvider theme={selectedTheme}>
       <TestimonialWrapper layout={blok.layout} spacing={blok.section_spacing}>
         <TestimonialCard>
           <TestimonialContent>
-            <TestimonialEyebrow>{blok?.eyebrow || Testimonial}</TestimonialEyebrow>
+            <TestimonialEyebrow>
+              {blok?.eyebrow || Testimonial}
+            </TestimonialEyebrow>
             {blok.quote.map((copy) => (
               <div {...storyblokEditable(copy)} key={copy.component}>
                 <RichTextRenderer document={copy.copy} />
@@ -62,18 +64,18 @@ const Testimonial = ({ blok }) => {
 
 const ButtonWrapper = styled.div`
   margin-top: 1.25vw;
- ${media.fullWidth} {
-  margin-top: 20px;
- }
- 
- ${media.tablet} {
-  margin-top: 1.953vw;
- }
- 
- ${media.mobile} {
-  margin-top: 4.167vw;
- }
-`
+  ${media.fullWidth} {
+    margin-top: 20px;
+  }
+
+  ${media.tablet} {
+    margin-top: 1.953vw;
+  }
+
+  ${media.mobile} {
+    margin-top: 4.167vw;
+  }
+`;
 const SourceWrapper = styled.div`
   margin-top: 3.75vw;
 
@@ -182,16 +184,16 @@ const TestimonialWrapper = styled.div`
     props.spacing === 'default'
       ? '3.75vw 0vw'
       : props.spacing
-      ? `calc(${props.spacing} / 1600 * 100vw) 0vw`
-      : '3.75vw 0vw'};
+        ? `calc(${props.spacing} / 1600 * 100vw) 0vw`
+        : '3.75vw 0vw'};
 
   ${media.fullWidth} {
     padding: ${(props) =>
       props.spacing === 'default'
         ? '60px 0px'
         : props.spacing
-        ? `calc(${props.spacing} / 1600 * 1600px) 0px`
-        : '60px 0px'};
+          ? `calc(${props.spacing} / 1600 * 1600px) 0px`
+          : '60px 0px'};
   }
 
   ${media.tablet} {
@@ -199,8 +201,8 @@ const TestimonialWrapper = styled.div`
       props.spacing === 'default'
         ? '3.906vw 0vw'
         : props.spacing
-        ? `calc(${props.spacing} / 1024 * 100vw) 0vw`
-        : '3.906vw 0vw'};
+          ? `calc(${props.spacing} / 1024 * 100vw) 0vw`
+          : '3.906vw 0vw'};
   }
 
   ${media.mobile} {
@@ -208,8 +210,8 @@ const TestimonialWrapper = styled.div`
       props.spacing === 'default'
         ? '3.906vw 0vw 0vw 0vw'
         : props.spacing
-        ? `calc(${props.spacing} / 428 * 100vw) 0vw`
-        : '3.906vw 0vw 0vw 0vw'};
+          ? `calc(${props.spacing} / 428 * 100vw) 0vw`
+          : '3.906vw 0vw 0vw 0vw'};
   }
 `;
 export default Testimonial;

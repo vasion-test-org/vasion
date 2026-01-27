@@ -5,7 +5,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import media from '@/styles/media';
 
 const G2BadgeAnimation = ({ blok }) => {
-  console.log('G2 Badge Animation->', blok);
+  // console.log('G2 Badge Animation->', blok);
 
   const leftImageRefs = useRef([]);
   const rightImageRefs = useRef([]);
@@ -84,7 +84,7 @@ const G2BadgeAnimation = ({ blok }) => {
             '<',
           );
 
-        // Wait for entrance to complete, then start infinite loop
+        // Wait for entrance to complete, then start
         entranceTl.call(() => {
           // Track which badge is currently in front
           let leftFrontIndex = 1;

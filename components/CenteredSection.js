@@ -85,7 +85,7 @@ const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { mobile } = useContext(ScreenContext);
-  console.log('CENTERED_SECTION->', blok);
+  // console.log('CENTERED_SECTION->', blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper
