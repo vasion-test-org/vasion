@@ -239,7 +239,7 @@ const LeftImages = styled.div`
   position: relative;
 
   ${BadgeImage}:not(:first-child) {
-    margin-left: -4vw;
+    margin-left: -5vw;
   }
 
   ${media.fullWidth} {
@@ -250,7 +250,7 @@ const LeftImages = styled.div`
 
   ${media.tablet} {
     ${BadgeImage}:not(:first-child) {
-      margin-left: -9vw;
+      margin-left: -5vw;
     }
   }
 
@@ -266,18 +266,18 @@ const RightImages = styled.div`
   position: relative;
 
   ${BadgeImage}:not(:first-child) {
-    margin-left: -1.5vw;
+    margin-left: -5vw;
   }
 
   ${media.fullWidth} {
     ${BadgeImage}:not(:first-child) {
-      margin-left: -24px;
+      margin-left: -150px;
     }
   }
 
   ${media.tablet} {
     ${BadgeImage}:not(:first-child) {
-      margin-left: -9vw;
+      margin-left: -15vw;
     }
   }
 
@@ -311,7 +311,7 @@ const CenteredBadge = styled.img`
 const AnimationWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 1vw;
+  gap: 0.3vw;
 
   ${media.fullWidth} {
     gap: 16px;
