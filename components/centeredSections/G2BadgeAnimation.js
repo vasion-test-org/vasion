@@ -109,7 +109,7 @@ const G2BadgeAnimation = ({ blok }) => {
               .to(
                 leftImageRefs.current[leftFrontIndex],
                 {
-                  x: '103%',
+                  x: '98%',
                   scale: 0.85,
                   duration: 1,
                   ease: 'power2.inOut',
@@ -119,7 +119,7 @@ const G2BadgeAnimation = ({ blok }) => {
               .to(
                 rightImageRefs.current[rightFrontIndex],
                 {
-                  x: '-103%',
+                  x: '-98%',
                   scale: 0.85,
                   duration: 1,
                   ease: 'power2.inOut',
@@ -131,8 +131,8 @@ const G2BadgeAnimation = ({ blok }) => {
                 leftImageRefs.current[leftBackIndex],
                 {
                   scale: 1,
-                  duration: 1,
-                  ease: 'power2.inOut',
+                  duration: 0.8,
+                  ease: 'power2.in',
                 },
                 0,
               )
@@ -140,8 +140,8 @@ const G2BadgeAnimation = ({ blok }) => {
                 rightImageRefs.current[rightBackIndex],
                 {
                   scale: 1,
-                  duration: 1,
-                  ease: 'power2.inOut',
+                  duration: 0.8,
+                  ease: 'power2.in',
                 },
                 0,
               )
