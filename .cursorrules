@@ -1,0 +1,158 @@
+# Vasion Project AI Rules
+
+This project uses Tailwind CSS (migrating from styled-components). Follow these rules for ALL code changes.
+
+## Critical Rules
+
+1. **ALWAYS use Tailwind CSS** - Never use styled-components for new code
+2. **NEVER use arbitrary values** - No `w-[450px]`, use relative values like `w-96`
+3. **ALWAYS use design tokens** - Reference `tailwind.config.js` for colors, typography, spacing
+4. **ALWAYS ensure ADA compliance** - Alt text, focus states, semantic HTML
+5. **ALWAYS use the `cn()` utility** - Import from `@/lib/cn` for conditional classes
+
+## Quick Reference
+
+### Imports to Use
+```jsx
+import { cn } from '@/lib/cn';
+import { cva, type VariantProps } from '@/lib/cva';
+import Image from 'next/image';
+```
+
+### Breakpoints
+- `mob:` (max-480px)
+- `tab:` (481-1024px)
+- `desk:` (1025-1600px)
+- `fw:` (1601px+)
+
+### Common Colors
+- Purple: `purple-DEFAULT`, `purple-dark`, `purple-light`, `purple-border`
+- Orange: `orange-DEFAULT`, `orange-500`
+- Teal: `teal-DEFAULT`, `teal-500`
+- Grey: `grey-800` to `grey-25`
+- Text: `txt-primary`, `txt-subtle`
+
+### Typography
+- Headings: `text-h1` through `text-h5`
+- Body: `text-body-xl`, `text-body-lg`, `text-body-md`, `text-body-sm`
+- Special: `text-eyebrow`, `text-tag`, `text-subtle`
+- Font: `font-archivo`, `font-orbitron`
+
+### Gradients
+- `bg-purple-orbital`, `bg-purple-gradient`, `bg-orange-gradient`
+- `bg-light-purple`, `bg-dark-purple`, `bg-medium-purple`
+
+## Component Template (Simple)
+
+```jsx
+// Only add 'use client' if needed for hooks/interactivity
+'use client';
+
+import { useState } from 'react';
+
+import Image from 'next/image';
+
+import { cn } from '@/lib/cn';
+
+export default function ComponentName({ variant = 'default', className }) {
+  return (
+    <div 
+      className={cn(
+        // Base styles
+        'flex flex-col gap-4 p-6',
+        // Responsive styles
+        'tab:flex-row tab:gap-6 tab:p-8',
+        'desk:gap-8 desk:p-12',
+        // Variant styles
+        variant === 'primary' && 'bg-purple-DEFAULT text-white',
+        variant === 'secondary' && 'bg-grey-25 text-txt-primary',
+        // Allow className override
+        className
+      )}
+    >
+      {/* Content with proper accessibility */}
+      <Image 
+        src="/image.webp"
+        alt="Descriptive alt text"
+        width={400}
+        height={300}
+        className="rounded-lg"
+      />
+      <button
+        className="px-4 py-2 bg-orange-DEFAULT text-white rounded-md
+          hover:bg-orange-dark transition-colors
+          focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+      >
+        Button Text
+      </button>
+    </div>
+  );
+}
+```
+
+## Component Template (With CVA Variants)
+
+```jsx
+import { cva, type VariantProps } from '@/lib/cva';
+import { cn } from '@/lib/cn';
+
+const cardVariants = cva(
+  'rounded-lg p-6 transition-shadow', // base styles
+  {
+    variants: {
+      variant: {
+        default: 'bg-white shadow-md',
+        elevated: 'bg-white shadow-lg hover:shadow-xl',
+        outlined: 'bg-transparent border border-grey-200',
+      },
+      size: {
+        sm: 'p-4',
+        md: 'p-6',
+        lg: 'p-8 tab:p-10',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+    },
+  }
+);
+
+type CardProps = VariantProps<typeof cardVariants> & {
+  className?: string;
+  children: React.ReactNode;
+};
+
+export default function Card({ variant, size, className, children }: CardProps) {
+  return (
+    <div className={cn(cardVariants({ variant, size }), className)}>
+      {children}
+    </div>
+  );
+}
+```
+
+## Converting styled-components
+
+When asked to convert a file:
+1. Remove `import styled from 'styled-components'`
+2. Replace `styled.div` with `<div className="...">`
+3. Convert props-based styles to `cn()` conditionals
+4. Map `${media.mobile}` to `mob:`, `${media.tablet}` to `tab:`, `${media.desktop}` to `desk:`, `${media.fullWidth}` to `fw:`
+5. Map `${colors.X}` to `text-X` or `bg-X`
+6. Map `${text.X}` to `text-X font-archivo`
+7. Add focus states to interactive elements
+8. Ensure all images have alt text
+9. Check heading hierarchy (h1 > h2 > h3)
+
+## Validation
+
+After making changes, remind user to run:
+```bash
+npm run checks
+```
+
+See detailed rules in:
+- `.cursor/rules/tailwind-migration.mdc`
+- `.cursor/rules/design-tokens.mdc`
+- `docs/TAILWIND_MIGRATION.md`

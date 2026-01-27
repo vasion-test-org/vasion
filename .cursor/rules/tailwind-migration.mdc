@@ -1,0 +1,250 @@
+---
+description: Guidelines for Tailwind CSS migration and maintaining code quality standards
+globs: ["**/*.{js,jsx,ts,tsx}"]
+alwaysApply: true
+---
+
+# Tailwind CSS Migration Guidelines
+
+This project is migrating from styled-components to Tailwind CSS for improved performance. Follow these rules when creating or modifying components.
+
+## Styling Rules
+
+### Use Tailwind Utility Classes
+- **NEVER** use arbitrary pixel values like `w-[450px]` or `h-[200px]`
+- Use the closest relative Tailwind value (e.g., `w-96` instead of `w-[384px]`)
+- Reference the extended values in `tailwind.config.js` for custom spacing/sizing
+
+### Responsive Design
+- Use project breakpoint prefixes: `mob:`, `tab:`, `desk:`, `fw:`
+- Mobile-first is preferred: write base styles, then add larger breakpoint overrides
+- Example: `text-body-sm tab:text-body-md desk:text-body-lg`
+
+### Design Tokens
+- Use colors from the config: `text-purple-DEFAULT`, `bg-teal-500`, etc.
+- Use typography classes: `text-h1`, `text-body-lg`, `text-eyebrow`
+- Use spacing tokens: `p-4`, `gap-6`, `m-8` (avoid arbitrary values)
+
+### Conditional Classes
+- Use the `cn()` utility from `@/lib/cn` for conditional class merging
+- Import: `import { cn } from '@/lib/cn'`
+- Example: `className={cn('base-classes', condition && 'conditional-class')}`
+
+### Component Variants (CVA)
+- Use `cva()` from `@/lib/cva` for components with multiple variant dimensions
+- Import: `import { cva, type VariantProps } from '@/lib/cva'`
+- Use CVA when a component has multiple props that affect styling (size, color, state)
+- Combine with cn() for className overrides: `cn(variants({ size }), className)`
+
+### Gradients
+- Use CSS custom property backgrounds: `bg-purple-gradient`, `bg-orange-gradient`
+- Available gradients: `purple-orbital`, `purple-gradient`, `orange-gradient`, `grey-gradient`, `light-purple`, `dark-purple`, `medium-purple`
+
+---
+
+## Performance Rules
+
+### Server vs Client Components
+- Prefer Server Components by default
+- Only add `'use client'` directive when necessary (interactivity, hooks, browser APIs)
+- Keep client component boundaries as small as possible
+
+### Styling Performance
+- Avoid inline styles; use Tailwind classes exclusively
+- Do not import styled-components in new code
+- Use Tailwind's built-in transitions: `transition-colors`, `duration-200`
+
+### Image Optimization
+- Always use Next.js `<Image>` component from `next/image`
+- Provide explicit `width` and `height` or use `fill` with a sized container
+- Use appropriate `sizes` attribute for responsive images
+- Set `priority` for above-the-fold images, `loading="lazy"` for others
+
+### Bundle Size
+- Avoid importing entire libraries; use tree-shakeable imports
+- Dynamic import heavy components: `const Component = dynamic(() => import('./Component'))`
+
+---
+
+## ADA Compliance Rules (WCAG 2.1 AA)
+
+### 1. Perceivable
+
+#### 1.1.1 Non-text Content
+- All `<img>` and `<Image>` MUST have `alt` attribute
+- Meaningful images: descriptive alt text explaining content/purpose
+- Decorative images: use `alt=""` with `aria-hidden="true"` or `role="presentation"`
+- Complex images (charts): provide detailed description via `aria-describedby`
+
+#### 1.2 Time-based Media
+- Videos with audio MUST have captions
+- Provide audio descriptions for important visual content
+- ReactPlayer: configure tracks for captions
+
+#### 1.4.3 Color Contrast
+- Normal text: minimum 4.5:1 contrast ratio
+- Large text (18px+ or 14px+ bold): minimum 3:1 ratio
+- UI components/graphics: minimum 3:1 ratio
+- Never convey information by color alone
+
+#### 1.4.4 Resize Text
+- Use rem/em units, not px for fonts
+- Text must be resizable to 200% without loss of functionality
+
+### 2. Operable
+
+#### 2.1.1 Keyboard
+- All functionality accessible via keyboard
+- No keyboard traps
+- Use semantic elements: `<button>`, `<a>`, `<input>`
+- If using `onClick` on div/span, add `onKeyDown` and `role="button"` + `tabIndex={0}`
+
+#### 2.4.1 Bypass Blocks
+- Include skip navigation link in layout: `<a href="#main" className="sr-only focus:not-sr-only">Skip to content</a>`
+- Use `<main id="main">` landmark
+
+#### 2.4.4 Link Purpose
+- Use descriptive link text (avoid "click here", "read more")
+- Icon-only links need `aria-label`
+
+#### 2.4.7 Focus Visible
+- ALL interactive elements MUST have visible focus states
+- Required pattern: `focus:outline-none focus:ring-2 focus:ring-purple-border focus:ring-offset-2`
+- Use `focus-visible:` for keyboard-only focus styles
+
+### 3. Understandable
+
+#### 3.1.1 Language
+- `<html lang="en">` required on root layout
+
+#### 3.3.1 Error Identification
+- Form errors must be clearly identified
+- Use `aria-invalid="true"` and `aria-describedby` for error messages
+
+#### 3.3.2 Labels
+- All inputs MUST have labels via `<label htmlFor>`, `aria-label`, or `aria-labelledby`
+- Placeholders are NOT sufficient as labels
+
+### 4. Robust
+
+#### 4.1.2 Name, Role, Value
+- Interactive elements need accessible names
+- Icon-only buttons: `<button aria-label="Close menu">`
+- Custom components: proper ARIA roles and states
+- If `aria-hidden="true"` on focusable element, add `tabIndex={-1}`
+
+---
+
+## SEO Best Practices
+
+### Metadata (Next.js App Router)
+- Every page MUST export `metadata` or `generateMetadata`
+- Required fields: `title`, `description`
+- Include `openGraph` and `twitter` for social sharing
+- Add `alternates.canonical` for canonical URLs
+
+```jsx
+export const metadata = {
+  title: 'Page Title | Vasion',
+  description: 'Page description for search results',
+  openGraph: {
+    title: 'Page Title',
+    description: 'Description for social sharing',
+    images: ['/og-image.jpg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
+  alternates: {
+    canonical: 'https://vasion.com/page-url',
+  },
+};
+```
+
+### Heading Hierarchy
+- Every page MUST have exactly ONE `<h1>`
+- Headings MUST follow logical order: h1 → h2 → h3 (never skip levels)
+- Use headings for structure, not styling
+
+### Semantic HTML
+- Use landmarks: `<main>`, `<nav>`, `<header>`, `<footer>`, `<aside>`
+- Use `<article>` for self-contained content
+- Use `<section>` for thematic groupings (with heading)
+- Avoid excessive div nesting ("div soup")
+
+### Images
+- ALL images need descriptive `alt` text
+- Use Next.js `<Image>` for automatic optimization
+- Include `width`, `height` or `fill` with `sizes`
+- Use `priority` for above-fold images (LCP)
+
+### Links
+- Use descriptive anchor text (not "click here")
+- External links: `target="_blank" rel="noopener noreferrer"`
+- Internal links: use Next.js `<Link>` component
+
+### Structured Data (JSON-LD)
+- Add schema.org markup for rich search results
+- Common types: Organization, Product, Article, FAQ, BreadcrumbList
+
+### Required Files
+- `public/robots.txt` - search engine instructions
+- `public/sitemap.xml` - use next-sitemap for auto-generation
+- `public/favicon.ico` - browser tab icon
+- `app/opengraph-image.jpg` - social sharing fallback
+
+---
+
+## Code Quality Standards
+
+### Import Organization
+- ESLint with perfectionist plugin enforces import sorting
+- Order: React/Next > external packages > internal aliases > relative imports
+- Group imports with blank lines between groups
+
+### Component Structure
+```jsx
+// 1. 'use client' directive (if needed)
+'use client';
+
+// 2. Imports (sorted by perfectionist)
+import { useState } from 'react';
+import Image from 'next/image';
+import { cn } from '@/lib/cn';
+
+// 3. Types/Interfaces (if TypeScript)
+
+// 4. Component definition
+export default function ComponentName({ prop1, prop2 }) {
+  // 5. Hooks
+  // 6. Handlers
+  // 7. Render
+  return (
+    <div className={cn('base-classes', condition && 'conditional')}>
+      {/* content */}
+    </div>
+  );
+}
+```
+
+### Naming Conventions
+- Components: PascalCase (`HeroSection.jsx`)
+- Utilities/hooks: camelCase (`useMediaQuery.js`)
+- CSS classes: kebab-case in Tailwind config
+
+---
+
+## Migration Checklist
+
+When converting a styled-component file to Tailwind:
+
+1. [ ] Remove styled-components imports
+2. [ ] Replace styled components with native elements + Tailwind classes
+3. [ ] Convert dynamic styles (props) to conditional classes using `cn()`
+4. [ ] Map media queries to responsive prefixes
+5. [ ] Replace theme values with Tailwind design tokens
+6. [ ] Verify ADA compliance (alt text, focus states, contrast)
+7. [ ] Check heading hierarchy and semantic structure
+8. [ ] Test all breakpoints: mob, tab, desk, fw
+9. [ ] Remove unused styled-component definitions
+10. [ ] Run `npm run checks` to validate compliance

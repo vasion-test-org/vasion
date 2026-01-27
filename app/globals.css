@@ -3,6 +3,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Custom Properties for Gradients (from styles/colors.js) */
+:root {
+  --gradient-purple-orbital: linear-gradient(107deg, #5101AF -20.03%, #2A1844 31.32%, #2A1844 59.09%, #5101AF 96.2%), linear-gradient(90deg, #FFEEE5 0%, rgba(255, 238, 229, 0.00) 50%, #FFEEE5 100%), #F5F4F7;
+  --gradient-purple: linear-gradient(270deg, #945AEE 0%, rgba(148, 90, 238, 0.4) 100%);
+  --gradient-orange: linear-gradient(270deg, #FF5100 0%, rgba(255, 81, 0, 0.4) 100%);
+  --gradient-grey: linear-gradient(270deg, #000000 0%, rgba(0, 0, 0, 0.4) 100%);
+  --gradient-light-purple: linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%);
+  --gradient-dark-purple: linear-gradient(180deg, #583F99 0%, #3D2562 100%);
+  --gradient-medium-purple: linear-gradient(180deg, #7E5FDD 0%, #583F99 100%);
+
+  /* Color tokens as CSS variables for runtime theming */
+  --color-yellow-primary: #FFCB04;
+  --color-teal-primary: #00A19B;
+  --color-purple-primary: #3D2562;
+  --color-orange-primary: #ff5100;
+  --color-txt-primary: #1B1D21;
+  --color-txt-subtle: #808085;
+}
+
 @font-face {
   font-family: 'Archivo Bold';
   src: url('/fonts/Archivo-Bold.woff2') format('woff2'),
