@@ -1,6 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
@@ -8,7 +7,6 @@ import { horizontalLoop } from '@/functions/horizontalLoop';
 import media from 'styles/media';
 import text from '@/styles/text';
 import colors from '@/styles/colors';
-
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Testimonial from './Testimonial';
 import SideArrow from '@/assets/svg/side-arrow.svg';
@@ -16,32 +14,37 @@ import SideArrow from '@/assets/svg/side-arrow.svg';
 const TestimonialCarousel = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  const tagTopics = blok.testimonials?.[0]?.tag_topics;
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const tagTopics = blok.testimonials?.[activeIndex]?.tag_topics;
 
   useEffect(() => {
     const initCarousel = async () => {
       const { default: gsap } = await import('gsap');
-
       const testimonialsArr = gsap.utils.toArray('.testimonials');
       const testimonialLoop = horizontalLoop(testimonialsArr, {
         centered: true,
         paused: true,
+        onChange: (element) => {
+          const index = testimonialsArr.indexOf(element);
+          setActiveIndex(index);
+        },
       });
 
-      document
-        .querySelector('.next')
-        .addEventListener('click', () =>
-          testimonialLoop.next({ duration: 0.4, ease: 'power1.inOut' }),
-        );
-      document
-        .querySelector('.prev')
-        .addEventListener('click', () =>
-          testimonialLoop.previous({ duration: 0.4, ease: 'power1.inOut' }),
-        );
-    };
+      document.querySelector('.next').addEventListener('click', () => {
+        testimonialLoop.next({ duration: 0.4, ease: 'power1.inOut' });
+        setActiveIndex((prev) => (prev + 1) % blok.testimonials.length);
+      });
 
+      document.querySelector('.prev').addEventListener('click', () => {
+        testimonialLoop.previous({ duration: 0.4, ease: 'power1.inOut' });
+        setActiveIndex((prev) =>
+          prev === 0 ? blok.testimonials.length - 1 : prev - 1,
+        );
+      });
+    };
     initCarousel();
-  }, []);
+  }, [blok.testimonials.length]);
 
   const mappedTestimonials = blok.testimonials.map((testimonial, i) => (
     <TestimonialWrapper key={testimonial._uid || i} className="testimonials">
@@ -54,7 +57,8 @@ const TestimonialCarousel = ({ blok }) => {
       <Wrapper>
         <Buttons>
           {tagTopics?.content && tagTopics.content.length > 0 && (
-            <Tag>
+            <Tag key={activeIndex}>
+              {' '}
               <RichTextRenderer document={tagTopics} />
             </Tag>
           )}
@@ -70,6 +74,8 @@ const TestimonialCarousel = ({ blok }) => {
     </ThemeProvider>
   );
 };
+
+// ... rest of styled components
 
 const Tag = styled.div`
   ${text.tagBold};
@@ -173,5 +179,18 @@ const Wrapper = styled.div`
   height: auto;
   width: 100%;
   background: ${(props) => props.theme.testimonial.bg};
+  padding: 3.75vw 9.25vw;
+
+  ${media.fullWidth} {
+    padding: 60px 148px;
+  }
+
+  ${media.tablet} {
+    padding: 3.906vw;
+  }
+
+  ${media.mobile} {
+    padding: 5.417vw;
+  }
 `;
 export default TestimonialCarousel;
