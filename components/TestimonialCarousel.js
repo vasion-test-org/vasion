@@ -4,54 +4,64 @@ import React, { useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
+import { horizontalLoop } from '@/functions/horizontalLoop';
 import media from 'styles/media';
+import text from '@/styles/text';
+import colors from '@/styles/colors';
+
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Testimonial from './Testimonial';
-
-import { horizontalLoop } from '@/functions/horizontalLoop';
-import colors from '@/styles/colors';
 import SideArrow from '@/assets/svg/side-arrow.svg';
 
 const TestimonialCarousel = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-
-  const mappedTestimonials = blok.testimonials.map((testimonial, i) => (
-    <TestimonialWrapper key={testimonial._uid || i} className='testimonials'>
-      <Testimonial blok={testimonial} />
-    </TestimonialWrapper>
-  ));
+  const tagTopics = blok.testimonials?.[0]?.tag_topics;
 
   useEffect(() => {
     const initCarousel = async () => {
       const { default: gsap } = await import('gsap');
 
       const testimonialsArr = gsap.utils.toArray('.testimonials');
-      const testimonialLoop = horizontalLoop(testimonialsArr, {centered: true, paused: true });
-    
+      const testimonialLoop = horizontalLoop(testimonialsArr, {
+        centered: true,
+        paused: true,
+      });
+
       document
         .querySelector('.next')
         .addEventListener('click', () =>
-          testimonialLoop.next({ duration: 0.4, ease: 'power1.inOut' })
+          testimonialLoop.next({ duration: 0.4, ease: 'power1.inOut' }),
         );
       document
         .querySelector('.prev')
         .addEventListener('click', () =>
-          testimonialLoop.previous({ duration: 0.4, ease: 'power1.inOut' })
+          testimonialLoop.previous({ duration: 0.4, ease: 'power1.inOut' }),
         );
     };
 
     initCarousel();
   }, []);
 
+  const mappedTestimonials = blok.testimonials.map((testimonial, i) => (
+    <TestimonialWrapper key={testimonial._uid || i} className="testimonials">
+      <Testimonial blok={testimonial} />
+    </TestimonialWrapper>
+  ));
+
   return (
     <ThemeProvider theme={selectedTheme}>
       <Wrapper>
         <Buttons>
-          <Button className='prev'>
+          {tagTopics?.content && tagTopics.content.length > 0 && (
+            <Tag>
+              <RichTextRenderer document={tagTopics} />
+            </Tag>
+          )}
+          <Button className="prev">
             <SideArrow />
           </Button>
-          <Button className='next'>
+          <Button className="next">
             <NextSideArrow />
           </Button>
         </Buttons>
@@ -61,6 +71,15 @@ const TestimonialCarousel = ({ blok }) => {
   );
 };
 
+const Tag = styled.div`
+  ${text.tagBold}
+  display: flex;
+  align-items: center;
+  background-color: ${colors.purpleTag};
+  color: ${colors.primaryPurple};
+  padding: 0vw 0.8vw;
+  border-radius: 1.5vw;
+`;
 const NextSideArrow = styled(SideArrow)`
   rotate: 180deg;
 `;
@@ -112,9 +131,7 @@ const Buttons = styled.div`
     gap: 4.167vw;
   }
 `;
-const TestimonialWrapper = styled.div`
-
-`;
+const TestimonialWrapper = styled.div``;
 const Testimonials = styled.div`
   display: flex;
   overflow: hidden;

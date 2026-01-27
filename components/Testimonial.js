@@ -13,7 +13,7 @@ import Button from './globalComponents/Button';
 const Testimonial = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  console.log(blok);
+  console.log('TESTIMONIAL', blok);
 
   return (
     <ThemeProvider theme={selectedTheme}>
@@ -136,7 +136,7 @@ const TestimonialContent = styled.div`
   }
 
   ${media.tablet} {
-    width: 45.703vw;
+    width: 80.703vw;
   }
 
   ${media.mobile} {
