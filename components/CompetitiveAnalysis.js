@@ -10,7 +10,7 @@ import colors from '@/styles/colors';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 const CompetitiveAnalysis = ({ blok }) => {
-  console.log('CompetitiveAnalysis', blok);
+  // console.log('CompetitiveAnalysis', blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
@@ -191,7 +191,7 @@ const CompetitiveAnalysis = ({ blok }) => {
 
             <ScrollContainer
               ref={mobileScrollContainerRef}
-              suppressHydrationWarning
+              suppressHydrationWarning={true}
             >
               <ScrollContent>
                 {features.map((featureCell, featureIndex) => (
@@ -227,7 +227,6 @@ const CompetitiveAnalysis = ({ blok }) => {
 
 export default CompetitiveAnalysis;
 
-// New wrapper components for showing/hiding tables
 const DesktopTableWrapper = styled.div`
   display: block;
 
