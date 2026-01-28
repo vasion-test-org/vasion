@@ -218,4 +218,5 @@ const TestimonialWrapper = styled.div`
           : '3.906vw 0vw 0vw 0vw'};
   }
 `;
+
 export default Testimonial;
