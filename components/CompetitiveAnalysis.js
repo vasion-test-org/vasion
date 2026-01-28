@@ -10,6 +10,7 @@ import colors from '@/styles/colors';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 const CompetitiveAnalysis = ({ blok }) => {
+  console.log('CompetitiveAnalysis', blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
@@ -47,6 +48,9 @@ const CompetitiveAnalysis = ({ blok }) => {
   const tableRows = extractTableData();
   const headerRow = tableRows[0] || [];
   const dataRows = tableRows.slice(1);
+  const products = headerRow.slice(1);
+  const features = dataRows.map((row) => row[0]);
+
   useEffect(() => {
     const syncRowHeights = () => {
       const firstColRef = mobile ? mobileFirstColumnRef : firstColumnRef;
@@ -124,9 +128,6 @@ const CompetitiveAnalysis = ({ blok }) => {
     return <RichTextRenderer document={richTextDoc} />;
   };
 
-  const products = headerRow.slice(1);
-  const features = dataRows.map((row) => row[0]);
-
   return (
     <ThemeProvider theme={selectedTheme}>
       <TableWrapper
@@ -135,7 +136,7 @@ const CompetitiveAnalysis = ({ blok }) => {
         spacing={blok.section_spacing}
         {...storyblokEditable(blok)}
       >
-        {/* Desktop Table - Hidden on mobile */}
+        {/* Desktop Table this is Hidden on mobile */}
         <DesktopTableWrapper>
           <TableContainer suppressHydrationWarning>
             <FirstColumn ref={firstColumnRef}>
