@@ -209,3 +209,64 @@ className="px-6 py-12 tab:px-10 tab:py-16 desk:px-37 desk:py-24"
 | `${colors.txtPrimary}` | `text-txt-primary` |
 | `${colors.grey500}` | `text-grey-500` or `bg-grey-500` |
 | `${props.theme.hero.bg}` | Use appropriate gradient: `bg-purple-orbital` |
+
+## VW to Tailwind Conversion
+
+**CRITICAL**: Preserve original layout - converted components must look identical!
+
+Based on [pxvwconverter](https://github.com/RJWadley/pxvwconverter) - different vw values per breakpoint target the **same pixel size**.
+
+### Key Insight
+```jsx
+// These all produce 200px:
+width: 12.5vw;   // At 1600px: 12.5 × 16 = 200px
+width: 19.531vw; // At 1024px: 19.531 × 10.24 = 200px  
+width: 41.667vw; // At 480px: 41.667 × 4.8 = 200px
+
+// Convert to ONE Tailwind class:
+className="w-50" // 12.5rem = 200px
+```
+
+### Conversion Formula
+```
+px = vw × (viewportWidth / 100)
+rem = px / 16
+```
+
+### Common Conversions
+
+| Target | Desktop (1600px) | Tablet (1024px) | Mobile (480px) | Tailwind |
+|--------|------------------|-----------------|----------------|----------|
+| 16px | `1vw` | `1.563vw` | `3.333vw` | `4` |
+| 40px | `2.5vw` | `3.906vw` | `8.333vw` | `10` |
+| 80px | `5vw` | `7.813vw` | `16.667vw` | `20` |
+| 100px | `6.25vw` | `9.766vw` | `20.833vw` | `25` |
+| 120px | `7.5vw` | `11.719vw` | `25vw` | `30` |
+| 148px | `9.25vw` | `14.453vw` | `30.833vw` | `37` |
+| 160px | `10vw` | `15.625vw` | `33.333vw` | `40` |
+| 200px | `12.5vw` | `19.531vw` | `41.667vw` | `50` |
+
+### PX to Tailwind Class
+**Tailwind JIT auto-generates any number**: `number × 0.25rem = size`
+
+**Formula**: `px / 4 = Tailwind number`
+
+| Pixels | Calculation | Tailwind Class |
+|--------|-------------|----------------|
+| 1304px | 1304 / 4 | `w-326` |
+| 1236px | 1236 / 4 | `w-309` |
+| 200px | 200 / 4 | `w-50` |
+| 100px | 100 / 4 | `w-25` |
+| 24px | 24 / 4 | `p-6` |
+
+**DO NOT add custom values to tailwind.config.js** - JIT handles it automatically.
+
+### Conversion Utility
+```typescript
+import { vwToRem, vwToPx, detectBreakpoint } from '@/lib/tailwind-utils';
+
+// All produce same 200px = 12.5rem = Tailwind "50"
+vwToRem(12.5, 1600)  // Desktop: 12.5rem
+vwToRem(19.531, 1024) // Tablet: 12.5rem
+vwToRem(41.667, 480)  // Mobile: 12.5rem
+```

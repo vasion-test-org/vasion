@@ -3,11 +3,15 @@
 /**
  * ADA/WCAG 2.1 AA Compliance Check Script
  * Scans codebase for accessibility issues
- * Run with: npm run checks:ada
+ * 
+ * Usage:
+ *   npm run checks:ada                    # Scan entire codebase
+ *   npm run checks:ada -- path/to/file.js # Scan specific file
+ *   npm run checks:ada -- components/     # Scan specific directory
  */
 
 import { readFileSync, readdirSync, statSync, existsSync } from 'fs';
-import { join, extname } from 'path';
+import { join, extname, resolve } from 'path';
 
 const COLORS = {
   red: '\x1b[31m',
@@ -23,11 +27,32 @@ const issues = [];
 let filesScanned = 0;
 
 /**
+ * Get target paths from command line arguments
+ */
+function getTargetPaths() {
+  const args = process.argv.slice(2);
+  if (args.length === 0) {
+    return null; // Scan entire codebase
+  }
+  return args.map(arg => resolve(process.cwd(), arg));
+}
+
+/**
  * Recursively get all files in directory
  */
 function getFiles(dir, extensions = ['.js', '.jsx', '.ts', '.tsx']) {
   const files = [];
   if (!existsSync(dir)) return files;
+  
+  const stat = statSync(dir);
+  
+  // If it's a file, return it directly
+  if (stat.isFile()) {
+    if (extensions.includes(extname(dir))) {
+      return [dir];
+    }
+    return [];
+  }
   
   const items = readdirSync(dir);
 
@@ -38,9 +63,9 @@ function getFiles(dir, extensions = ['.js', '.jsx', '.ts', '.tsx']) {
       continue;
     }
 
-    const stat = statSync(fullPath);
+    const itemStat = statSync(fullPath);
     
-    if (stat.isDirectory()) {
+    if (itemStat.isDirectory()) {
       files.push(...getFiles(fullPath, extensions));
     } else if (extensions.includes(extname(item))) {
       files.push(fullPath);
@@ -575,14 +600,32 @@ function scanFile(filePath) {
  * Run the ADA checks
  */
 function run() {
-  console.log(`\n${COLORS.bold}${COLORS.blue}♿ Running WCAG 2.1 AA Compliance Checks...${COLORS.reset}\n`);
+  const targetPaths = getTargetPaths();
+  const isSingleFile = targetPaths && targetPaths.length === 1 && existsSync(targetPaths[0]) && statSync(targetPaths[0]).isFile();
+  
+  console.log(`\n${COLORS.bold}${COLORS.blue}♿ Running WCAG 2.1 AA Compliance Checks...${COLORS.reset}`);
+  
+  if (targetPaths) {
+    console.log(`${COLORS.cyan}Target: ${targetPaths.join(', ')}${COLORS.reset}\n`);
+  } else {
+    console.log(`${COLORS.cyan}Target: Entire codebase${COLORS.reset}\n`);
+  }
 
   const rootDir = process.cwd();
-  const dirsToScan = ['app', 'components', 'pages'].map((d) => join(rootDir, d));
-
-  for (const dir of dirsToScan) {
-    const files = getFiles(dir);
-    files.forEach(scanFile);
+  
+  if (targetPaths) {
+    // Scan specific files/directories
+    for (const target of targetPaths) {
+      const files = getFiles(target);
+      files.forEach(scanFile);
+    }
+  } else {
+    // Scan entire codebase
+    const dirsToScan = ['app', 'components', 'pages'].map((d) => join(rootDir, d));
+    for (const dir of dirsToScan) {
+      const files = getFiles(dir);
+      files.forEach(scanFile);
+    }
   }
 
   // Report results
@@ -625,18 +668,19 @@ function run() {
     console.log(`${COLORS.green}${COLORS.bold}✅ No WCAG 2.1 AA compliance issues found!${COLORS.reset}\n`);
   }
 
-  // Summary by WCAG principle
-  console.log(`${COLORS.bold}📊 Summary by WCAG Principle:${COLORS.reset}`);
-  const categories = [...new Set(issues.map(i => i.category.split(' ')[0]))];
-  const perceivable = issues.filter(i => i.category.startsWith('1.'));
-  const operable = issues.filter(i => i.category.startsWith('2.'));
-  const understandable = issues.filter(i => i.category.startsWith('3.'));
-  const robust = issues.filter(i => i.category.startsWith('4.'));
-  
-  console.log(`   Perceivable (1.x): ${perceivable.length} issues`);
-  console.log(`   Operable (2.x): ${operable.length} issues`);
-  console.log(`   Understandable (3.x): ${understandable.length} issues`);
-  console.log(`   Robust (4.x): ${robust.length} issues\n`);
+  // Summary by WCAG principle (only for full codebase scans)
+  if (!isSingleFile) {
+    console.log(`${COLORS.bold}📊 Summary by WCAG Principle:${COLORS.reset}`);
+    const perceivable = issues.filter(i => i.category.startsWith('1.'));
+    const operable = issues.filter(i => i.category.startsWith('2.'));
+    const understandable = issues.filter(i => i.category.startsWith('3.'));
+    const robust = issues.filter(i => i.category.startsWith('4.'));
+    
+    console.log(`   Perceivable (1.x): ${perceivable.length} issues`);
+    console.log(`   Operable (2.x): ${operable.length} issues`);
+    console.log(`   Understandable (3.x): ${understandable.length} issues`);
+    console.log(`   Robust (4.x): ${robust.length} issues\n`);
+  }
 
   return errors.length > 0 ? 1 : 0;
 }

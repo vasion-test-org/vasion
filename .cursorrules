@@ -4,11 +4,42 @@ This project uses Tailwind CSS (migrating from styled-components). Follow these 
 
 ## Critical Rules
 
-1. **ALWAYS use Tailwind CSS** - Never use styled-components for new code
-2. **NEVER use arbitrary values** - No `w-[450px]`, use relative values like `w-96`
-3. **ALWAYS use design tokens** - Reference `tailwind.config.js` for colors, typography, spacing
-4. **ALWAYS ensure ADA compliance** - Alt text, focus states, semantic HTML
-5. **ALWAYS use the `cn()` utility** - Import from `@/lib/cn` for conditional classes
+1. **PRESERVE ORIGINAL LAYOUT** - Converted components must look IDENTICAL to the original
+2. **ALWAYS use Tailwind CSS** - Never use styled-components for new code
+3. **NO arbitrary px values** - No `w-[450px]`, use rem or closest Tailwind value
+4. **ALWAYS use design tokens** - Reference `tailwind.config.js` for colors, typography, spacing
+5. **ALWAYS ensure ADA compliance** - Alt text, focus states, semantic HTML
+6. **ALWAYS use the `cn()` utility** - Import from `@/lib/cn` for conditional classes
+
+## Converting VW to Tailwind
+
+**Key Insight**: Different vw values per breakpoint = SAME pixel target → ONE Tailwind class
+
+| Target | Desktop (1600px) | Tablet (1024px) | Mobile (480px) | Tailwind |
+|--------|------------------|-----------------|----------------|----------|
+| 200px | `12.5vw` | `19.531vw` | `41.667vw` | `w-50` |
+| 100px | `6.25vw` | `9.766vw` | `20.833vw` | `w-25` |
+| 80px | `5vw` | `7.813vw` | `16.667vw` | `w-20` |
+
+**Formula**: `px = vw × (viewportWidth / 100)` then `rem = px / 16`
+
+## PX to Tailwind Class
+
+**Tailwind JIT generates any number automatically using**: `number × 0.25rem = size`
+
+**To convert px to Tailwind class**: `px / 4 = Tailwind number`
+
+Examples:
+- 1304px / 4 = 326 → `w-326` (auto-generates 81.5rem)
+- 1236px / 4 = 309 → `max-w-309` (auto-generates 77.25rem)
+- 200px / 4 = 50 → `w-50`
+- 100px / 4 = 25 → `w-25`
+
+**DO NOT add custom values to tailwind.config.js** - Tailwind JIT handles it automatically.
+
+```typescript
+import { vwToRem, detectBreakpoint } from '@/lib/tailwind-utils';
+```
 
 ## Quick Reference
 

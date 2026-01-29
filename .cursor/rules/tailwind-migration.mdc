@@ -8,12 +8,88 @@ alwaysApply: true
 
 This project is migrating from styled-components to Tailwind CSS for improved performance. Follow these rules when creating or modifying components.
 
+## CRITICAL: Preserve Original Layout
+
+When converting styled-components to Tailwind:
+- **PRESERVE THE EXACT VISUAL LAYOUT** - The converted component must look identical
+- **DO NOT ADJUST SPACING, SIZING, OR POSITIONING** unless explicitly asked
+- Match the original values as closely as possible using Tailwind utilities
+- If an exact match isn't possible, use the CLOSEST Tailwind value
+
+## Converting VW Values
+
+Based on [pxvwconverter](https://github.com/RJWadley/pxvwconverter) - the **same pixel value** requires **different vw values** at each breakpoint.
+
+### Key Insight
+When styled-components use different vw values per breakpoint, they're targeting the **same pixel size**:
+
+| Target | Desktop (1600px) | Tablet (1024px) | Mobile (480px) | Tailwind |
+|--------|------------------|-----------------|----------------|----------|
+| 200px | `12.5vw` | `19.531vw` | `41.667vw` | `w-50` |
+| 100px | `6.25vw` | `9.766vw` | `20.833vw` | `w-25` |
+| 80px | `5vw` | `7.813vw` | `16.667vw` | `w-20` |
+| 40px | `2.5vw` | `3.906vw` | `8.333vw` | `w-10` |
+
+### Conversion Formula
+```
+px = vw × (viewportWidth / 100)
+rem = px / 16
+```
+
+### How to Convert
+1. **Identify the breakpoint** from the media query context
+2. **Calculate px** using that breakpoint's viewport width
+3. **Convert to rem** (px / 16)
+4. **Find closest Tailwind** value
+
+### Example: Converting styled-components
+```jsx
+// Original:
+const Box = styled.div`
+  width: 12.5vw; // Desktop (1600px): 12.5 × 16 = 200px = 12.5rem
+  ${media.tablet} {
+    width: 19.531vw; // Tablet (1024px): 19.531 × 10.24 = 200px = 12.5rem
+  }
+  ${media.mobile} {
+    width: 41.667vw; // Mobile (480px): 41.667 × 4.8 = 200px = 12.5rem
+  }
+`;
+
+// Converted: All breakpoints produce 200px, so use ONE Tailwind class:
+<div className="w-50" /> // 12.5rem = 200px at all breakpoints
+```
+
+### Use Conversion Utility
+```typescript
+import { vwToRem, vwToPx, detectBreakpoint } from '@/lib/tailwind-utils';
+
+// Convert vw at specific breakpoint
+vwToRem(12.5, 1600) // Desktop: 12.5rem (200px)
+vwToRem(19.531, 1024) // Tablet: 12.5rem (200px)
+vwToRem(41.667, 480) // Mobile: 12.5rem (200px)
+
+// All produce same result → use w-50
+```
+
+---
+
 ## Styling Rules
 
 ### Use Tailwind Utility Classes
-- **NEVER** use arbitrary pixel values like `w-[450px]` or `h-[200px]`
-- Use the closest relative Tailwind value (e.g., `w-96` instead of `w-[384px]`)
-- Reference the extended values in `tailwind.config.js` for custom spacing/sizing
+- **NEVER** use arbitrary values like `w-[450px]`, `h-[200px]`, or `w-[9.5rem]`
+- **ALWAYS** convert px to Tailwind number: `px / 4 = Tailwind class`
+- Tailwind JIT auto-generates any number (e.g., `w-326` = 326 × 0.25rem = 1304px)
+- **DO NOT add custom values to tailwind.config.js** - JIT handles it automatically
+
+### PX to Tailwind Conversion
+```
+px / 4 = Tailwind number
+```
+Examples:
+- 1304px → `w-326` (1304 / 4 = 326)
+- 200px → `w-50` (200 / 4 = 50)
+- 100px → `w-25` (100 / 4 = 25)
+- 24px → `p-6` (24 / 4 = 6)
 
 ### Responsive Design
 - Use project breakpoint prefixes: `mob:`, `tab:`, `desk:`, `fw:`
