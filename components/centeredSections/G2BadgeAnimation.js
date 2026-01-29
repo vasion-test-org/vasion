@@ -98,9 +98,10 @@ const G2BadgeAnimation = ({ blok }) => {
             const leftBackIndex = leftFrontIndex === 1 ? 0 : 1;
             const rightBackIndex = rightFrontIndex === 0 ? 1 : 0;
 
-            const Offset = 24; // This offset is the offset the original top needs to move after shrinking into the center
-            const GrowthOffset = 5; // The offset of the secondary Badge when replacing the original top
-            const ShrinkMax = '115%'; // This is the second badge behind the original first needs to shrink farther than top
+            const Offset = 24; // This offset is the distance the original top most badge needs to move after it finishes shrinking into the center
+            const GrowthOffset = 5; // The amount of growth needed to replace the current top based off of top or bottom badge location
+            const shrinkMax = '115%'; // This is the second badge behind the original first needs to shrink farther than top
+            const shrinkMin = '108%'; // This is the original top badge shrinking in -> distance
 
             const animConfig = {
               left: {
@@ -110,7 +111,9 @@ const G2BadgeAnimation = ({ blok }) => {
                     ? `${GrowthOffset}`
                     : '-6',
                 transitionToMiddle:
-                  leftFrontIndex != leftOriginalFront ? `${ShrinkMax}` : '108%',
+                  leftFrontIndex != leftOriginalFront
+                    ? `${shrinkMax}`
+                    : `${shrinkMin}`,
               },
               right: {
                 offset:
@@ -121,8 +124,8 @@ const G2BadgeAnimation = ({ blok }) => {
                     : '6',
                 transitionToMiddle:
                   rightFrontIndex != rightOriginalFront
-                    ? `-${ShrinkMax}`
-                    : '-108%',
+                    ? `-${shrinkMax}`
+                    : `-${shrinkMin}`,
               },
             };
 
@@ -140,7 +143,7 @@ const G2BadgeAnimation = ({ blok }) => {
               .to(
                 leftImageRefs.current[leftFrontIndex],
                 {
-                  x: animConfig.left.transitionToMiddle,
+                  x: animConfig.left.transitionToMiddle, // animConfig
                   scale: 0.85,
                   duration: 1.5,
                   ease: 'power2.inOut',
@@ -150,7 +153,7 @@ const G2BadgeAnimation = ({ blok }) => {
               .to(
                 rightImageRefs.current[rightFrontIndex],
                 {
-                  x: animConfig.right.transitionToMiddle,
+                  x: animConfig.right.transitionToMiddle, // animConfig
                   scale: 0.85,
                   duration: 1.5,
                   ease: 'power2.inOut',
@@ -162,7 +165,7 @@ const G2BadgeAnimation = ({ blok }) => {
                 leftImageRefs.current[leftBackIndex],
                 {
                   scale: 1,
-                  x: animConfig.left.returningToFront,
+                  x: animConfig.left.returningToFront, //animConfig
                   duration: 1,
                   ease: 'power2.inOut',
                 },
@@ -172,7 +175,7 @@ const G2BadgeAnimation = ({ blok }) => {
                 rightImageRefs.current[rightBackIndex],
                 {
                   scale: 1,
-                  x: animConfig.right.returningToFront,
+                  x: animConfig.right.returningToFront, //animConfig
                   duration: 1,
                   ease: 'power2.inOut',
                 },
@@ -190,7 +193,7 @@ const G2BadgeAnimation = ({ blok }) => {
 
               /* NOTE:Returning badges slide back (already have correct z-index) */
               .to(leftImageRefs.current[leftFrontIndex], {
-                x: animConfig.left.offset,
+                x: animConfig.left.offset, // animConfig
                 scale: 0.85,
                 duration: 1,
                 ease: 'power2.inOut',
@@ -198,7 +201,7 @@ const G2BadgeAnimation = ({ blok }) => {
               .to(
                 rightImageRefs.current[rightFrontIndex],
                 {
-                  x: animConfig.right.offset,
+                  x: animConfig.right.offset, // animConfig
                   scale: 0.85,
                   duration: 1,
                   ease: 'power2.inOut',
