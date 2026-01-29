@@ -5,8 +5,6 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import media from '@/styles/media';
 
 const G2BadgeAnimation = ({ blok }) => {
-  // console.log('G2 Badge Animation->', blok);
-
   const leftImageRefs = useRef([]);
   const rightImageRefs = useRef([]);
   const centerImageRef = useRef(null);
@@ -15,7 +13,6 @@ const G2BadgeAnimation = ({ blok }) => {
     if (!image_assets || image_assets.length === 0) {
       return null;
     }
-
     const maxZIndex = image_assets.length - 1;
 
     return image_assets.map((image, index) => {
