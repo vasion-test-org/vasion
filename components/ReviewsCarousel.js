@@ -105,7 +105,8 @@ const ReviewsCarousel = ({ blok }) => {
   }, [hasStats]);
 
   return (
-    <SpacingWrapper>
+    <SpacingWrapper   spacingOffset={blok.offset_spacing}
+    spacing={blok.section_spacing}>
       <Wrapper id="reddit-reviews">
         <HeaderContainer
           spacingOffset={blok.offset_spacing}

@@ -92,7 +92,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 6.5vw;
+  height: 5vw;
   background: ${(props) => props.theme.logo_banner.bg};
   padding: ${(props) => {
     if (props.spacingOffset === "top") {
@@ -119,7 +119,7 @@ const Wrapper = styled.div`
   z-index: 20;
 
   ${media.fullWidth} {
-    height: 104px;
+    height: 80px;
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
         return props.spacing === "default"
@@ -143,7 +143,7 @@ const Wrapper = styled.div`
     }};
   }
   ${media.tablet} {
-    height: 8.925vw;
+    height: 8.887vw;
     padding: ${(props) => {
       if (props.spacingOffset === "top") {
         return props.spacing === "default"
