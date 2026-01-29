@@ -84,32 +84,63 @@ const G2BadgeAnimation = ({ blok }) => {
             '<',
           );
 
-        // Wait for entrance to complete, then start
+        // NOTE:Wait for entrance completion
+
         entranceTl.call(() => {
           // Track which badge is currently in front
           let leftFrontIndex = 1;
           let rightFrontIndex = 0;
 
+          const leftOriginalFront = 1;
+          const rightOriginalFront = 0;
+
           const createLoopCycle = () => {
             const leftBackIndex = leftFrontIndex === 1 ? 0 : 1;
             const rightBackIndex = rightFrontIndex === 0 ? 1 : 0;
 
+            const Offset = 24; // This offset is the offset the original top needs to move after shrinking into the center
+            const GrowthOffset = 5; // The offset of the secondary Badge when replacing the original top
+            const ShrinkMax = '115%'; // This is the second badge behind the original first needs to shrink farther than top
+
+            const animConfig = {
+              left: {
+                offset: leftFrontIndex === leftOriginalFront ? `-${Offset}` : 0,
+                returningToFront:
+                  leftFrontIndex === leftOriginalFront
+                    ? `${GrowthOffset}`
+                    : '-6',
+                transitionToMiddle:
+                  leftFrontIndex != leftOriginalFront ? `${ShrinkMax}` : '108%',
+              },
+              right: {
+                offset:
+                  rightFrontIndex === rightOriginalFront ? `${Offset}` : 0,
+                returningToFront:
+                  rightFrontIndex === rightOriginalFront
+                    ? `-${GrowthOffset}`
+                    : '6',
+                transitionToMiddle:
+                  rightFrontIndex != rightOriginalFront
+                    ? `-${ShrinkMax}`
+                    : '-108%',
+              },
+            };
+
             const loopTl = gsap.timeline({
               onComplete: () => {
-                // Swap indices for next cycle
                 leftFrontIndex = leftFrontIndex === 1 ? 0 : 1;
                 rightFrontIndex = rightFrontIndex === 0 ? 1 : 0;
-                // Recursively create next cycle
+                //NOTE: starts next cycle recursivley
                 createLoopCycle();
               },
             });
 
-            // Animate current front badges to center
+            /*NOTE:Front badges to center */
             loopTl
               .to(
                 leftImageRefs.current[leftFrontIndex],
                 {
-                  x: '105%',
+                  x: animConfig.left.transitionToMiddle,
                   scale: 0.85,
                   duration: 1.5,
                   ease: 'power2.inOut',
@@ -119,20 +150,21 @@ const G2BadgeAnimation = ({ blok }) => {
               .to(
                 rightImageRefs.current[rightFrontIndex],
                 {
-                  x: '-105%',
+                  x: animConfig.right.transitionToMiddle,
                   scale: 0.85,
                   duration: 1.5,
                   ease: 'power2.inOut',
                 },
                 0,
               )
-              // Animate back badges scale up AS front badges move away
+              // NOTE:Animate back badges scale up AS front badges move away
               .to(
                 leftImageRefs.current[leftBackIndex],
                 {
                   scale: 1,
+                  x: animConfig.left.returningToFront,
                   duration: 1,
-                  ease: 'power2.in',
+                  ease: 'power2.inOut',
                 },
                 0,
               )
@@ -140,24 +172,25 @@ const G2BadgeAnimation = ({ blok }) => {
                 rightImageRefs.current[rightBackIndex],
                 {
                   scale: 1,
+                  x: animConfig.right.returningToFront,
                   duration: 1,
-                  ease: 'power2.in',
+                  ease: 'power2.inOut',
                 },
                 0,
               )
 
-              // SWITCH Z-INDEX RIGHT AT CENTER - front badges go below, back badges come to front
+              /*NOTE:SWITCH Z-INDEX RIGHT AT CENTER  front badges go below, back badges come to front */
               .set(leftImageRefs.current[leftFrontIndex], { zIndex: 0 })
               .set(rightImageRefs.current[rightFrontIndex], { zIndex: 0 })
               .set(leftImageRefs.current[leftBackIndex], { zIndex: 1 })
               .set(rightImageRefs.current[rightBackIndex], { zIndex: 1 })
 
-              // Pause at center
+              /*NOTE:Pause at center */
               .to({}, { duration: 0.5 })
 
-              // Returning badges slide back (already have correct z-index)
+              /* NOTE:Returning badges slide back (already have correct z-index) */
               .to(leftImageRefs.current[leftFrontIndex], {
-                x: 0,
+                x: animConfig.left.offset,
                 scale: 0.85,
                 duration: 1,
                 ease: 'power2.inOut',
@@ -165,7 +198,7 @@ const G2BadgeAnimation = ({ blok }) => {
               .to(
                 rightImageRefs.current[rightFrontIndex],
                 {
-                  x: 0,
+                  x: animConfig.right.offset,
                   scale: 0.85,
                   duration: 1,
                   ease: 'power2.inOut',
@@ -173,10 +206,10 @@ const G2BadgeAnimation = ({ blok }) => {
                 '<',
               )
 
-              // Brief pause before next cycle
+              /* NOTE: Brief pause before next cycle */
               .to({}, { duration: 1 });
           };
-          // Start the first cycle after a delay
+          //NOTE: Start the first cycle after a delay
           gsap.delayedCall(1, createLoopCycle);
         });
       });
