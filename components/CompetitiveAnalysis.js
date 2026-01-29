@@ -1,13 +1,13 @@
 'use client';
 import React, { useRef, useEffect, useContext } from 'react';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
 import { ScreenContext } from '@/components/providers/Screen';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import styled, { ThemeProvider } from 'styled-components';
+import { storyblokEditable } from '@storyblok/react/rsc';
+import { useAvailableThemes } from '@/context/ThemeContext';
 import text from '@/styles/text';
 import media from '@/styles/media';
 import colors from '@/styles/colors';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 const CompetitiveAnalysis = ({ blok }) => {
   // console.log('CompetitiveAnalysis', blok);
@@ -175,7 +175,7 @@ const CompetitiveAnalysis = ({ blok }) => {
           </TableContainer>
         </DesktopTableWrapper>
 
-        {/* Mobile Table - Hidden on desktop */}
+        {/* Mobile Table -> Hidden on desktop */}
         <MobileTableWrapper>
           <TableContainer suppressHydrationWarning>
             <FirstColumn ref={mobileFirstColumnRef}>
