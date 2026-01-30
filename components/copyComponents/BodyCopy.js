@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
 import colors from '@/styles/colors';
-// import text from '@/styles/text';
+
 const BodyCopy = ({ className, children, $featured = false }) => {
   // Recursive function to clone children and pass down className
   const cloneChildrenWithClassName = (children, parentClassName = '') => {
@@ -12,7 +12,6 @@ const BodyCopy = ({ className, children, $featured = false }) => {
       if (!React.isValidElement(child)) {
         return child;
       }
-
       // Combine parent class with current class and passed className
       const combinedClassName = `${parentClassName} ${
         child.props.className || ''
@@ -32,11 +31,9 @@ const BodyCopy = ({ className, children, $featured = false }) => {
           ),
         });
       }
-
       return clonedChild;
     });
   };
-
   return (
     <StyledBodyCopy className={className} $featured={$featured}>
       {cloneChildrenWithClassName(children)}
@@ -59,12 +56,12 @@ const StyledBodyCopy = styled.div`
     background-color:${colors.lightPurpleGrey};
     padding:1.5vw;
     border-radius: 1vw;
-margin-bottom:10px;
+    margin-bottom:10px;
  
     ${media.fullWidth}{
     border-radius: 16px;
     padding:24px;
-margin-bottom:10px;
+    margin-bottom:10px;
     }
 
     ${media.tablet}{
