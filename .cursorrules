@@ -176,6 +176,156 @@ When asked to convert a file:
 8. Ensure all images have alt text
 9. Check heading hierarchy (h1 > h2 > h3)
 
+## Server Components (CRITICAL for Performance)
+
+**Always prefer Server Components** - only use `'use client'` when absolutely necessary.
+
+### When to Use Server Components
+- Static content rendering
+- Data fetching
+- Components that don't need interactivity
+- Layout containers and wrappers
+
+### When Client Components Are Required
+- React hooks (`useState`, `useEffect`, `useContext`)
+- Browser APIs (`window`, `document`)
+- Event handlers that modify state
+- Third-party libraries requiring client-side execution (GSAP, etc.)
+
+### Extracting Client Logic Pattern
+
+When a component needs GSAP or other client-only features, extract them:
+
+```jsx
+// ServerComponent.js (NO 'use client')
+import CarouselAnimator from './CarouselAnimator';
+
+const ServerComponent = ({ blok }) => {
+  const shouldAnimate = blok.logos?.length > 5;
+  
+  return (
+    <>
+      {/* Static content renders server-side */}
+      <div className="carousel">
+        {blok.logos?.map((logo) => (
+          <div className="carousel-item" key={logo.id}>...</div>
+        ))}
+      </div>
+      
+      {/* Minimal client component for animation only */}
+      {shouldAnimate && <CarouselAnimator selector=".carousel-item" />}
+    </>
+  );
+};
+```
+
+### Scoped CSS for Responsive Styles (Server Components)
+
+Use inline `<style>` tags with unique IDs for responsive styles without client JS:
+
+```jsx
+const ServerComponent = ({ blok }) => {
+  const componentId = `component-${blok._uid}`;
+  
+  return (
+    <>
+      <style>{`
+        .${componentId} {
+          padding: 3.75rem;
+          max-width: 81.5rem;
+        }
+        @media (max-width: 1024px) {
+          .${componentId} { padding: 2.5rem; }
+        }
+        @media (max-width: 480px) {
+          .${componentId} { padding: 1.75rem 1.125rem; }
+        }
+      `}</style>
+      <div className={componentId}>...</div>
+    </>
+  );
+};
+```
+
+### Reusable Client Components
+
+Use `CarouselAnimator` for any horizontal loop animation:
+
+```jsx
+import CarouselAnimator from '@/components/CarouselAnimator';
+
+// Basic usage
+<CarouselAnimator selector=".my-items" />
+
+// With options
+<CarouselAnimator 
+  selector=".logo-items"
+  options={{ speed: 0.5, reversed: true, draggable: true }}
+/>
+```
+
+## CRITICAL: Inline Styles Fallback
+
+**Tailwind classes may not be applied** due to JIT compilation issues. When layout-critical styles aren't working:
+
+1. **Use ScreenContext for responsive styles** instead of Tailwind breakpoint prefixes:
+```jsx
+import { useContext } from 'react';
+import { ScreenContext } from '@/components/providers/Screen';
+
+const screen = useContext(ScreenContext);
+
+const getResponsiveStyle = () => {
+  if (screen.mobile) {
+    return { padding: '2.8rem 1.8rem', borderRadius: '1.7rem' };
+  } else if (screen.tablet) {
+    return { padding: '2.5rem', borderRadius: '1.5rem' };
+  }
+  return { padding: '3.75rem', maxWidth: '81.5rem', borderRadius: '1.5rem' };
+};
+```
+
+2. **Apply critical layout styles inline**:
+```jsx
+<div style={getResponsiveStyle()}>
+```
+
+3. **Always add to lists**:
+```jsx
+<ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+  <li style={{ listStyle: 'none' }}>
+```
+
+## Before Converting: Ask for Figma Reference
+
+**ALWAYS ask before converting a component:**
+> "Do you have a Figma link for this component? I can use it to ensure pixel-perfect implementation."
+
+If a Figma link is provided:
+1. Use the Figma MCP tools to fetch design specs
+2. Extract exact colors, spacing, typography, and dimensions
+3. Verify converted component matches design precisely
+
+## Conversion Checklist
+
+When converting a styled-component:
+
+1. **Evaluate for Server Component** - Can it work WITHOUT `'use client'`?
+   - If yes: Use scoped `<style>` tags for responsive styles, import themes statically
+   - If client code needed (GSAP): Extract to minimal client component like `CarouselAnimator`
+2. **Preserve EXACT structure** - Same number of containers, same nesting
+3. **Handle ALL props** - Check original for props like:
+   - `transparent_background` → affects width, padding, background
+   - `offset_spacing` → affects vertical padding (top/bottom/both)
+   - `section_spacing` → custom pixel spacing value
+4. **Match values per breakpoint** - Calculate original vw → px → rem for EACH breakpoint
+5. **Use appropriate responsive approach**:
+   - Server Component: `<style>` tag with `@media` queries
+   - Client Component: `ScreenContext` for reliable responsive styles
+6. **Test ALL breakpoints** - Desktop, tablet, mobile must match original
+7. **Check outer wrapper** - Most components have section padding for spacing between components
+8. **Remove `'use client'`** - After extracting client logic, verify main component is server-side
+
 ## Validation
 
 After making changes, remind user to run:

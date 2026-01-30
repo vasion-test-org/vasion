@@ -1,26 +1,26 @@
-'use client';
-
-import React, { useEffect, useState } from 'react';
-
 import Image from 'next/image';
 
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import { horizontalLoop } from '@/functions/horizontalLoop';
-import { cn } from '@/lib/cn';
-import { optimizeGSAP } from '@/lib/scriptOptimization';
+import { defaultTheme, darkTheme, lightTheme } from '@/styles/theme';
 import { storyblokEditable } from '@storyblok/react/rsc';
 
+import CarouselAnimator from './CarouselAnimator';
+
+// Theme lookup - static, no context needed
+const themes = {
+  default: defaultTheme,
+  dark: darkTheme,
+  light: lightTheme,
+};
+
 /**
- * LogoCube Component
+ * LogoCube Component (Server Component)
  * Displays a carousel of company logos with optional header text.
  * Supports transparent and themed backgrounds.
  */
 const LogoCube = ({ blok }) => {
-  const themes = useAvailableThemes();
-  const selectedTheme = themes[blok.theme] || themes.default;
-  const [gsapLoaded, setGsapLoaded] = useState(false);
   const isTransparent = blok.transparent_background;
+  const selectedTheme = themes[blok.theme] || themes.default;
 
   const defaultLogos = [
     { alt: 'NASCAR logo - Professional racing organization', image: '/images/icons/nascar.png' },
@@ -35,145 +35,149 @@ const LogoCube = ({ blok }) => {
 
   const logosToDisplay = blok.logos?.length > 0 ? blok.logos : defaultLogos;
   const shouldCenter = logosToDisplay?.length < 6;
+  const shouldAnimate = logosToDisplay?.length >= 7;
 
-  useEffect(() => {
-    optimizeGSAP().then(() => {
-      setGsapLoaded(true);
-    });
-  }, []);
+  // Generate unique ID for scoped styles
+  const componentId = `logo-cube-${blok._uid || 'default'}`;
 
-  useEffect(() => {
-    if (gsapLoaded && logosToDisplay?.length >= 7) {
-      const logosArr = window.gsap.utils.toArray('.cubeLogos');
-      horizontalLoop(logosArr, { deep: false, repeat: -1 });
-    }
-  }, [logosToDisplay?.length, gsapLoaded]);
+  // Calculate spacing based on props
+  const hasCustomSpacing = blok.section_spacing && blok.section_spacing !== 'default';
+  const customSpacing = hasCustomSpacing ? `${blok.section_spacing}px` : null;
 
-  // Get wrapper vertical padding based on offset and custom spacing
-  const getWrapperPadding = () => {
-    const hasCustomSpacing = blok.section_spacing && blok.section_spacing !== 'default';
-    
-    // Default padding: 60px (py-15) desktop, 60px tablet, 60px mobile
-    // These match: 3.75vw@1600=60px, 5.859vw@1024=60px, 12.5vw@480=60px
-    if (hasCustomSpacing) {
-      return ''; // Custom spacing handled via inline style
-    }
-    
-    if (blok.offset_spacing === 'top') {
-      return 'pt-15 pb-0';
-    }
-    if (blok.offset_spacing === 'bottom') {
-      return 'pt-0 pb-15';
-    }
-    return 'py-15';
-  };
+  // Determine padding class based on offset_spacing
+  let paddingClass = 'logo-cube-py'; // default: both
+  if (blok.offset_spacing === 'top') paddingClass = 'logo-cube-pt';
+  if (blok.offset_spacing === 'bottom') paddingClass = 'logo-cube-pb';
 
-  // Get custom spacing inline style
-  const getWrapperStyle = () => {
-    if (!blok.section_spacing || blok.section_spacing === 'default') {
-      return {};
-    }
-    const spacing = `${blok.section_spacing}px`;
-    if (blok.offset_spacing === 'top') {
-      return { paddingTop: spacing, paddingBottom: 0 };
-    }
-    if (blok.offset_spacing === 'bottom') {
-      return { paddingTop: 0, paddingBottom: spacing };
-    }
-    return { paddingTop: spacing, paddingBottom: spacing };
-  };
-
-  // Card background based on transparent prop and theme
-  const getCardStyle = () => {
-    if (isTransparent) {
-      return { background: 'transparent' };
-    }
-    return {
-      background: selectedTheme?.logo_cube?.cardBg || '#3d2562',
-      color: selectedTheme?.logo_cube?.textColor || 'white',
-    };
-  };
+  // Theme colors (from static theme object)
+  const cardBg = selectedTheme?.logo_cube?.cardBg || '#3d2562';
+  const textColor = selectedTheme?.logo_cube?.textColor || 'white';
 
   return (
-    <section
-      {...storyblokEditable(blok)}
-      aria-label="Trusted by leading companies"
-      className={cn(
-        'flex w-full items-center justify-center',
-        getWrapperPadding()
-      )}
-      style={getWrapperStyle()}
-    >
-      {/* Card container */}
-      <div
-        className={cn(
-          'overflow-hidden rounded-3xl',
-          // Width: transparent = 100%, solid = 1304px (max-w-326)
-          isTransparent ? 'w-full' : 'max-w-326',
-          // Padding: transparent has different padding than solid
-          isTransparent
-            ? 'px-0 py-15 tab:py-10 tab:pb-15 mob:pt-11 mob:pb-18'
-            : 'px-24 py-15 tab:p-10 tab:pb-15 mob:px-7 mob:pt-11 mob:pb-18',
-          // Border radius adjustments
-          'tab:rounded-3xl mob:rounded-[27px]'
-        )}
-        style={getCardStyle()}
-      >
-        {/* Inner container with gap */}
-        <div
-          className={cn(
-            'flex flex-col items-center justify-center',
-            'gap-10 tab:gap-5 mob:gap-9'
-          )}
-        >
-          {/* Title/Header */}
-          {blok.header && (
-            <header className="w-full text-center">
-              <RichTextRenderer
-                blok={blok}
-                document={blok.header}
-                responsiveTextStyles={blok?.responsive_text_styles}
-              />
-            </header>
-          )}
+    <>
+      {/* Scoped CSS for responsive styles - no JS needed! */}
+      <style>{`
+        .${componentId} {
+          --card-bg: ${isTransparent ? 'transparent' : cardBg};
+          --card-color: ${textColor};
+          --custom-spacing: ${customSpacing || '3.75rem'};
+        }
+        
+        /* Wrapper padding - Desktop/Fullwidth */
+        .${componentId}.logo-cube-py { padding-top: ${customSpacing || '3.75rem'}; padding-bottom: ${customSpacing || '3.75rem'}; }
+        .${componentId}.logo-cube-pt { padding-top: ${customSpacing || '3.75rem'}; padding-bottom: 0; }
+        .${componentId}.logo-cube-pb { padding-top: 0; padding-bottom: ${customSpacing || '3.75rem'}; }
+        
+        /* Card - Desktop */
+        .${componentId} .logo-cube-card {
+          background: var(--card-bg);
+          color: var(--card-color);
+          max-width: ${isTransparent ? '100%' : '81.5rem'};
+          padding: 3.75rem;
+          border-radius: 1.5rem;
+        }
+        
+        /* Inner container gap - Desktop */
+        .${componentId} .logo-cube-inner { gap: 2.5rem; }
+        
+        /* Logo size - Desktop */
+        .${componentId} .logo-cube-logo { width: 12.5rem; height: 6.25rem; }
+        
+        /* Tablet styles (481px - 1024px) */
+        @media (min-width: 481px) and (max-width: 1024px) {
+          .${componentId} { padding-left: 2.5rem; padding-right: 2.5rem; }
+          .${componentId}.logo-cube-py { padding-top: ${customSpacing || '5.859vw'}; padding-bottom: ${customSpacing || '5.859vw'}; }
+          .${componentId}.logo-cube-pt { padding-top: ${customSpacing || '5.859vw'}; }
+          .${componentId}.logo-cube-pb { padding-bottom: ${customSpacing || '5.859vw'}; }
+          
+          .${componentId} .logo-cube-card {
+            max-width: 100%;
+            padding: 2.5rem 2.5rem 3.75rem;
+            border-radius: 1.5rem;
+          }
+          .${componentId} .logo-cube-inner { gap: 1.25rem; }
+        }
+        
+        /* Mobile styles (max 480px) */
+        @media (max-width: 480px) {
+          .${componentId} { padding-left: 1rem; padding-right: 1rem; }
+          .${componentId}.logo-cube-py { padding-top: ${customSpacing || '12.5vw'}; padding-bottom: ${customSpacing || '12.5vw'}; }
+          .${componentId}.logo-cube-pt { padding-top: ${customSpacing || '12.5vw'}; }
+          .${componentId}.logo-cube-pb { padding-bottom: ${customSpacing || '12.5vw'}; }
+          
+          .${componentId} .logo-cube-card {
+            max-width: 100%;
+            padding: 2.8125rem 1.8125rem 4.1875rem;
+            border-radius: 1.6875rem;
+          }
+          .${componentId} .logo-cube-inner { gap: 2.25rem; }
+          .${componentId} .logo-cube-logo { width: 14rem; height: 7rem; }
+        }
+      `}</style>
 
-          {/* Logos container */}
-          <ul
-            aria-label="Company logos carousel"
-            className={cn(
-              'flex items-center overflow-hidden gap-5',
-              // Width: transparent = 100%, solid = 1236px (max-w-309)
-              isTransparent ? 'w-full' : 'w-full max-w-309',
-              // Justify: center if less than 6 logos, otherwise start (for scrolling)
-              shouldCenter ? 'justify-center' : 'justify-start'
-            )}
-            role="list"
+      <section
+        {...storyblokEditable(blok)}
+        aria-label="Trusted by leading companies"
+        className={`${componentId} ${paddingClass}`}
+        style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center' }}
+      >
+        <div className="logo-cube-card" style={{ overflow: 'hidden', width: '100%' }}>
+          <div
+            className="logo-cube-inner"
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
           >
-            {logosToDisplay.map((logo, index) => (
-              <li
-                key={logo.filename || logo.alt || index}
-                className="cubeLogos flex-shrink-0"
-                role="listitem"
-              >
-                <Image
-                  alt={logo.alt || 'Company logo'}
-                  className={cn(
-                    // Desktop: 200×100px (w-50 h-25)
-                    'h-25 w-50',
-                    // Mobile: 224×112px (w-56 h-28)
-                    'mob:h-28 mob:w-56'
-                  )}
-                  height={100}
-                  loading="lazy"
-                  src={logo.filename || logo.image}
-                  width={200}
+            {/* Title Container */}
+            {blok.header && (
+              <header style={{ width: '100%', textAlign: 'center' }}>
+                <RichTextRenderer
+                  blok={blok}
+                  document={blok.header}
+                  responsiveTextStyles={blok?.responsive_text_styles}
                 />
-              </li>
-            ))}
-          </ul>
+              </header>
+            )}
+
+            {/* LogoContainer - logos row */}
+            <ul
+              aria-label="Company logos carousel"
+              role="list"
+              style={{
+                display: 'flex',
+                width: '100%',
+                alignItems: 'center',
+                overflow: 'hidden',
+                listStyle: 'none',
+                gap: '1.25rem',
+                justifyContent: shouldCenter ? 'center' : 'flex-start',
+                margin: 0,
+                padding: 0,
+              }}
+            >
+              {logosToDisplay.map((logo, index) => (
+                <li
+                  key={logo.filename || logo.alt || index}
+                  className="cubeLogos"
+                  role="listitem"
+                  style={{ flexShrink: 0, listStyle: 'none' }}
+                >
+                  <Image
+                    alt={logo.alt || 'Company logo'}
+                    className="logo-cube-logo"
+                    height={100}
+                    loading="lazy"
+                    src={logo.filename || logo.image}
+                    width={200}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Client component only for GSAP animation - minimal JS */}
+      {shouldAnimate && <CarouselAnimator selector=".cubeLogos" />}
+    </>
   );
 };
 

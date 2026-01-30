@@ -3,11 +3,15 @@
 /**
  * SEO Compliance Check Script
  * Scans codebase for SEO issues and best practices
- * Run with: npm run checks:seo
+ * 
+ * Usage:
+ *   npm run checks:seo                    # Scan entire codebase
+ *   npm run checks:seo -- path/to/file.js # Scan specific file
+ *   npm run checks:seo -- components/     # Scan specific directory
  */
 
 import { readFileSync, readdirSync, statSync, existsSync } from 'fs';
-import { join, extname } from 'path';
+import { join, extname, resolve } from 'path';
 
 const COLORS = {
   red: '\x1b[31m',
@@ -23,11 +27,32 @@ const issues = [];
 let filesScanned = 0;
 
 /**
+ * Get target paths from command line arguments
+ */
+function getTargetPaths() {
+  const args = process.argv.slice(2);
+  if (args.length === 0) {
+    return null; // Scan entire codebase
+  }
+  return args.map(arg => resolve(process.cwd(), arg));
+}
+
+/**
  * Recursively get all files in directory
  */
 function getFiles(dir, extensions = ['.js', '.jsx', '.ts', '.tsx']) {
   const files = [];
   if (!existsSync(dir)) return files;
+  
+  const stat = statSync(dir);
+  
+  // If it's a file, return it directly
+  if (stat.isFile()) {
+    if (extensions.includes(extname(dir))) {
+      return [dir];
+    }
+    return [];
+  }
   
   const items = readdirSync(dir);
 
@@ -38,9 +63,9 @@ function getFiles(dir, extensions = ['.js', '.jsx', '.ts', '.tsx']) {
       continue;
     }
 
-    const stat = statSync(fullPath);
+    const itemStat = statSync(fullPath);
     
-    if (stat.isDirectory()) {
+    if (itemStat.isDirectory()) {
       files.push(...getFiles(fullPath, extensions));
     } else if (extensions.includes(extname(item))) {
       files.push(fullPath);
@@ -503,20 +528,39 @@ function scanFile(filePath) {
  * Run the SEO checks
  */
 function run() {
-  console.log(`\n${COLORS.bold}${COLORS.blue}🔍 Running SEO Compliance Checks...${COLORS.reset}\n`);
+  const targetPaths = getTargetPaths();
+  const isSingleTarget = targetPaths !== null;
+  
+  console.log(`\n${COLORS.bold}${COLORS.blue}🔍 Running SEO Compliance Checks...${COLORS.reset}`);
+  if (isSingleTarget) {
+    console.log(`${COLORS.cyan}Target: ${targetPaths.join(', ')}${COLORS.reset}`);
+  }
+  console.log('');
 
   const rootDir = process.cwd();
   
-  // Check SEO files first
-  checkSEOFiles(rootDir);
+  // Only check SEO files when scanning entire codebase
+  if (!isSingleTarget) {
+    checkSEOFiles(rootDir);
+  }
   
   // Scan code files
-  const dirsToScan = ['app', 'components', 'pages'].map((d) => join(rootDir, d));
-
-  for (const dir of dirsToScan) {
-    const files = getFiles(dir);
-    files.forEach(scanFile);
+  let filesToScan = [];
+  
+  if (isSingleTarget) {
+    // Scan specific files/directories
+    for (const targetPath of targetPaths) {
+      filesToScan.push(...getFiles(targetPath));
+    }
+  } else {
+    // Scan entire codebase
+    const dirsToScan = ['app', 'components', 'pages'].map((d) => join(rootDir, d));
+    for (const dir of dirsToScan) {
+      filesToScan.push(...getFiles(dir));
+    }
   }
+
+  filesToScan.forEach(scanFile);
 
   // Report results
   console.log(`${COLORS.bold}Files scanned: ${filesScanned}${COLORS.reset}\n`);

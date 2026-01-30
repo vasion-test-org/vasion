@@ -3,7 +3,11 @@
 /**
  * Main Compliance Check Runner
  * Runs all compliance checks: ADA, SEO, and Performance
- * Run with: npm run checks
+ * 
+ * Usage:
+ *   npm run checks                          # Run all checks on entire codebase
+ *   npm run checks -- path/to/file.js       # Run all checks on specific file
+ *   npm run checks -- components/           # Run all checks on specific directory
  */
 
 import { spawn } from 'child_process';
@@ -29,13 +33,17 @@ const checks = [
   { name: 'Performance', script: 'performance.mjs', emoji: '⚡' },
 ];
 
+// Get CLI arguments to pass to individual scripts
+const cliArgs = process.argv.slice(2);
+
 /**
  * Run a single check script
  */
 function runCheck(check) {
   return new Promise((resolve) => {
     const scriptPath = join(__dirname, check.script);
-    const child = spawn('node', [scriptPath], {
+    // Pass CLI arguments to individual scripts
+    const child = spawn('node', [scriptPath, ...cliArgs], {
       stdio: 'inherit',
       cwd: process.cwd(),
     });
@@ -57,7 +65,12 @@ function runCheck(check) {
 async function main() {
   console.log(`\n${COLORS.bold}${COLORS.cyan}╔════════════════════════════════════════════╗${COLORS.reset}`);
   console.log(`${COLORS.bold}${COLORS.cyan}║     🛠️  Codebase Compliance Checker 🛠️      ║${COLORS.reset}`);
-  console.log(`${COLORS.bold}${COLORS.cyan}╚════════════════════════════════════════════╝${COLORS.reset}\n`);
+  console.log(`${COLORS.bold}${COLORS.cyan}╚════════════════════════════════════════════╝${COLORS.reset}`);
+  
+  if (cliArgs.length > 0) {
+    console.log(`\n${COLORS.cyan}📁 Target: ${cliArgs.join(', ')}${COLORS.reset}`);
+  }
+  console.log('');
 
   const results = [];
 

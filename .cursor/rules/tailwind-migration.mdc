@@ -120,10 +120,125 @@ Examples:
 
 ## Performance Rules
 
-### Server vs Client Components
-- Prefer Server Components by default
-- Only add `'use client'` directive when necessary (interactivity, hooks, browser APIs)
-- Keep client component boundaries as small as possible
+### Server vs Client Components (CRITICAL)
+
+**Server Components are the default and preferred choice** for performance.
+
+#### Benefits of Server Components
+- Zero client-side JavaScript for static content
+- Faster initial page load
+- Better SEO (content available immediately)
+- Reduced bundle size
+
+#### When to Use Server Components (Default)
+- Rendering static content
+- Displaying data from CMS (Storyblok)
+- Layout containers and wrappers
+- Components without interactivity
+
+#### When Client Components Are Required
+- React hooks: `useState`, `useEffect`, `useContext`, `useRef`
+- Browser APIs: `window`, `document`, `localStorage`
+- Event handlers that modify component state
+- Third-party client libraries: GSAP, Swiper, etc.
+
+### Extracting Client Logic Pattern
+
+**ALWAYS extract client-only code into minimal client components**:
+
+```jsx
+// MyComponent.js - Server Component (NO 'use client')
+import Image from 'next/image';
+import CarouselAnimator from '@/components/CarouselAnimator';
+import { defaultTheme, darkTheme, lightTheme } from '@/styles/theme';
+
+// Static theme lookup - no hooks needed
+const themes = { default: defaultTheme, dark: darkTheme, light: lightTheme };
+
+const MyComponent = ({ blok }) => {
+  const theme = themes[blok.theme] || themes.default;
+  const shouldAnimate = blok.items?.length > 5;
+  
+  return (
+    <>
+      {/* All static content renders on server */}
+      <section style={{ background: theme.myComponent.bg }}>
+        <ul className="item-list">
+          {blok.items?.map((item) => (
+            <li key={item._uid} className="item">
+              <Image src={item.image.filename} alt={item.alt} />
+            </li>
+          ))}
+        </ul>
+      </section>
+      
+      {/* Minimal client component - animation only */}
+      {shouldAnimate && <CarouselAnimator selector=".item" />}
+    </>
+  );
+};
+
+export default MyComponent;
+```
+
+### Reusable CarouselAnimator
+
+Use `CarouselAnimator` for any horizontal loop animation instead of creating new client components:
+
+```jsx
+import CarouselAnimator from '@/components/CarouselAnimator';
+
+// Basic infinite scroll
+<CarouselAnimator selector=".logo-item" />
+
+// With custom options
+<CarouselAnimator 
+  selector=".testimonial-card"
+  options={{
+    speed: 0.5,        // Slower animation
+    reversed: true,    // Right to left
+    draggable: true,   // Enable drag
+    paused: true,      // Start paused
+  }}
+  onChange={(el, index) => console.log('Active:', index)}
+/>
+```
+
+### Scoped CSS for Server Component Responsive Styles
+
+Use inline `<style>` tags with unique component IDs for responsive styles without client JS:
+
+```jsx
+const componentId = `card-${blok._uid}`;
+
+return (
+  <>
+    <style>{`
+      .${componentId} {
+        --card-bg: ${theme.card.bg};
+        padding: 3.75rem;
+        max-width: 81.5rem;
+        border-radius: 1.5rem;
+      }
+      @media (max-width: 1024px) {
+        .${componentId} {
+          padding: 2.5rem;
+          max-width: 100%;
+        }
+      }
+      @media (max-width: 480px) {
+        .${componentId} {
+          padding: 1.75rem 1.125rem;
+          border-radius: 1.7rem;
+        }
+      }
+    `}</style>
+    <div className={componentId} style={{ background: 'var(--card-bg)' }}>
+      ...
+    </div>
+  </>
+);
+```
 
 ### Styling Performance
 - Avoid inline styles; use Tailwind classes exclusively
@@ -310,17 +425,129 @@ export default function ComponentName({ prop1, prop2 }) {
 
 ---
 
+## IMPORTANT: Inline Styles Fallback
+
+**Tailwind JIT classes may not be applied** in some cases. When layout-critical styles aren't working:
+
+### Use ScreenContext for Responsive Styles
+
+Instead of Tailwind breakpoint prefixes, use `ScreenContext` for reliable responsive values:
+
+```jsx
+'use client';
+import { useContext } from 'react';
+import { ScreenContext } from '@/components/providers/Screen';
+
+const MyComponent = () => {
+  const screen = useContext(ScreenContext);
+  
+  // Responsive styles using screen context
+  const getContainerStyle = () => {
+    if (screen.mobile) {
+      return { 
+        padding: '2.8rem 1.8rem 4.2rem', // 45px 29px 67px
+        borderRadius: '1.7rem', // 27px
+      };
+    } else if (screen.tablet) {
+      return { 
+        padding: '2.5rem 2.5rem 3.75rem', // 40px 40px 60px
+        borderRadius: '1.5rem', // 24px
+      };
+    }
+    // Desktop/Fullwidth
+    return { 
+      maxWidth: '81.5rem', // 1304px
+      padding: '3.75rem', // 60px
+      borderRadius: '1.5rem', // 24px
+    };
+  };
+  
+  return <div style={getContainerStyle()}>...</div>;
+};
+```
+
+### Lists Always Need Inline Style
+
+```jsx
+<ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', gap: '1.25rem' }}>
+  <li style={{ listStyle: 'none', flexShrink: 0 }}>
+```
+
+### Section Wrapper Pattern
+
+Most components have an outer wrapper for spacing between components:
+
+```jsx
+const getWrapperStyle = () => {
+  const hasCustomSpacing = blok.section_spacing && blok.section_spacing !== 'default';
+  
+  let verticalSpacing = '3.75rem'; // 60px default
+  let horizontalPadding = '0';
+  
+  if (screen.tablet) {
+    verticalSpacing = '5.859vw';
+    horizontalPadding = '2.5rem'; // 40px
+  } else if (screen.mobile) {
+    verticalSpacing = '12.5vw';
+    horizontalPadding = '1rem'; // 16px
+  }
+  
+  const spacing = hasCustomSpacing ? `${blok.section_spacing}px` : verticalSpacing;
+  
+  if (blok.offset_spacing === 'top') {
+    return { paddingTop: spacing, paddingBottom: 0, paddingLeft: horizontalPadding, paddingRight: horizontalPadding };
+  }
+  if (blok.offset_spacing === 'bottom') {
+    return { paddingTop: 0, paddingBottom: spacing, paddingLeft: horizontalPadding, paddingRight: horizontalPadding };
+  }
+  return { paddingTop: spacing, paddingBottom: spacing, paddingLeft: horizontalPadding, paddingRight: horizontalPadding };
+};
+```
+
+---
+
 ## Migration Checklist
 
 When converting a styled-component file to Tailwind:
 
-1. [ ] Remove styled-components imports
-2. [ ] Replace styled components with native elements + Tailwind classes
-3. [ ] Convert dynamic styles (props) to conditional classes using `cn()`
-4. [ ] Map media queries to responsive prefixes
-5. [ ] Replace theme values with Tailwind design tokens
-6. [ ] Verify ADA compliance (alt text, focus states, contrast)
-7. [ ] Check heading hierarchy and semantic structure
-8. [ ] Test all breakpoints: mob, tab, desk, fw
-9. [ ] Remove unused styled-component definitions
-10. [ ] Run `npm run checks` to validate compliance
+### 0. Ask for Figma Reference (BEFORE starting)
+
+**ALWAYS ask the user:**
+> "Do you have a Figma link for this component? I can use it to ensure pixel-perfect implementation."
+
+If a Figma link is provided:
+- Use the **Figma MCP tools** to fetch design specifications
+- Extract exact values: colors, spacing, typography, dimensions, border-radius
+- Compare converted component against Figma design
+- Verify responsive breakpoints match design specs
+
+### 1. Analyze Component Requirements
+1. [ ] **Can this be a Server Component?** - Check for hooks, browser APIs, client libraries
+2. [ ] If client-only code exists (GSAP, etc.), plan to extract it to minimal client component
+
+### 2. Convert Structure
+3. [ ] Remove styled-components imports
+4. [ ] **Preserve EXACT container structure** - same number of wrappers, same nesting
+5. [ ] **Handle ALL original props** - check for `transparent_background`, `offset_spacing`, `section_spacing`, etc.
+6. [ ] Replace styled components with native elements + Tailwind classes or inline styles
+
+### 3. Handle Styling
+7. [ ] Convert dynamic styles (props) to conditional classes using `cn()` or conditional inline styles
+8. [ ] Calculate values for EACH breakpoint - vw→px→rem
+9. [ ] For Server Components: Use scoped `<style>` tags with `@media` queries for responsive styles
+10. [ ] For Client Components: Use `ScreenContext` when Tailwind breakpoint classes don't work
+11. [ ] Replace theme values with static theme imports (Server) or theme context (Client)
+12. [ ] Add `listStyle: 'none'` to all ul/li elements
+
+### 4. Extract Client Logic (if needed)
+13. [ ] Move GSAP/animation code to `CarouselAnimator` or similar minimal client component
+14. [ ] Conditionally render client component only when needed (e.g., `{shouldAnimate && <CarouselAnimator />}`)
+15. [ ] Remove `'use client'` directive from main component if no longer needed
+
+### 5. Validate
+16. [ ] Verify ADA compliance (alt text, focus states, contrast)
+17. [ ] Check heading hierarchy and semantic structure
+18. [ ] **Test ALL breakpoints**: desktop, tablet, mobile - must match original exactly
+19. [ ] Remove unused styled-component definitions
+20. [ ] Remove debug console.log statements
+21. [ ] Run `npm run checks` to validate compliance
