@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import media from '@/styles/media';
+import getMedia from '@/functions/getMedia';
 
 const G2BadgeAnimation = ({ blok }) => {
   const leftImageRefs = useRef([]);
@@ -95,9 +96,10 @@ const G2BadgeAnimation = ({ blok }) => {
             const leftBackIndex = leftFrontIndex === 1 ? 0 : 1;
             const rightBackIndex = rightFrontIndex === 0 ? 1 : 0;
 
-            const Offset = 24; // This offset is the distance the original top most badge needs to move after it finishes shrinking into the center
-            const GrowthOffset = 5; // The amount of growth needed to replace the current top based off of top or bottom badge location
-            const shrinkMax = '115%'; // This is the second badge behind the original first needs to shrink farther than top
+            const Offset = getMedia(30, 29, 24, 24); // This offset is the distance the original top most badge needs to move after it finishes shrinking into the center
+            const offsetBack = getMedia(6, 0, 6, 0);
+            const GrowthOffset = getMedia(5, 5, 3, 5); // The amount of growth needed to replace the current top based off of top or bottom badge location
+            const shrinkMax = getMedia('120%', '120%', '118%', '115%'); // This is the second badge behind the original first needs to shrink farther than top
             const shrinkMin = '108%'; // This is the original top badge shrinking in -> distance
 
             const animConfig = {
@@ -106,7 +108,7 @@ const G2BadgeAnimation = ({ blok }) => {
                 returningToFront:
                   leftFrontIndex === leftOriginalFront
                     ? `${GrowthOffset}`
-                    : '-6',
+                    : `0`,
                 transitionToMiddle:
                   leftFrontIndex != leftOriginalFront
                     ? `${shrinkMax}`
@@ -118,7 +120,7 @@ const G2BadgeAnimation = ({ blok }) => {
                 returningToFront:
                   rightFrontIndex === rightOriginalFront
                     ? `-${GrowthOffset}`
-                    : '6',
+                    : `0`,
                 transitionToMiddle:
                   rightFrontIndex != rightOriginalFront
                     ? `-${shrinkMax}`
@@ -344,7 +346,7 @@ const CenteredBadge = styled.img`
 const AnimationWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.3vw;
+  gap: 1vw;
 
   ${media.fullWidth} {
     gap: 16px;
