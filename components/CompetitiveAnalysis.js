@@ -13,7 +13,6 @@ const CompetitiveAnalysis = ({ blok }) => {
   // console.log('CompetitiveAnalysis', blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-
   const scrollContainerRef = useRef(null);
   const firstColumnRef = useRef(null);
   const mobileScrollContainerRef = useRef(null);
@@ -136,7 +135,7 @@ const CompetitiveAnalysis = ({ blok }) => {
         spacing={blok.section_spacing}
         {...storyblokEditable(blok)}
       >
-        {/* Desktop Table this is Hidden on mobile */}
+        {/* Desktop table this is Hidden on mobile */}
         <DesktopTableWrapper>
           <TableContainer suppressHydrationWarning>
             <FirstColumn ref={firstColumnRef}>
@@ -175,7 +174,7 @@ const CompetitiveAnalysis = ({ blok }) => {
           </TableContainer>
         </DesktopTableWrapper>
 
-        {/* Mobile Table -> Hidden on desktop */}
+        {/* Mobile table Hidden on desktop */}
         <MobileTableWrapper>
           <TableContainer suppressHydrationWarning>
             <FirstColumn ref={mobileFirstColumnRef}>
@@ -404,7 +403,7 @@ const FeatureCell = styled.div`
 `;
 
 const DataCell = styled.div`
-  ${text.bodyMd};
+  ${text.bodyLg};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -412,7 +411,9 @@ const DataCell = styled.div`
   padding: 1.25vw 1vw;
   border-bottom: 1px solid #e5e7eb;
   max-width: 19.875vw;
-
+  span {
+    ${text.bodyMd};
+  }
   &:last-child {
     border-bottom: none;
   }
@@ -428,6 +429,10 @@ const DataCell = styled.div`
   }
 
   ${media.mobile} {
+    ${text.bodyMd};
+    span {
+      ${text.bodyMd};
+    }
     max-width: unset;
     padding: 4.167vw 3.333vw;
 
@@ -462,6 +467,7 @@ const DataCell = styled.div`
   }
 `;
 const Footnote = styled.div`
+  color: ${colors.txtPrimary};
   display: flex;
   flex-wrap: wrap;
   align-items: center;

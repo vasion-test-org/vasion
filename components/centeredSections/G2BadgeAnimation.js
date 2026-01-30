@@ -81,68 +81,69 @@ const G2BadgeAnimation = ({ blok }) => {
             },
             '<',
           );
-
-        // NOTE:Wait for entrance completion
+        const INITIAL_FRONT_BADGES = {
+          left: 1, // NOTE: Left side starts with second badge (index 1) in front
+          right: 0, // NOTE: Right side starts with first badge (index 0) in front
+        };
 
         entranceTl.call(() => {
-          // Track which badge is currently in front
-          let leftFrontIndex = 1;
-          let rightFrontIndex = 0;
-
-          const leftOriginalFront = 1;
-          const rightOriginalFront = 0;
+          // Track current front badge
+          let currentFront = { ...INITIAL_FRONT_BADGES };
 
           const createLoopCycle = () => {
-            const leftBackIndex = leftFrontIndex === 1 ? 0 : 1;
-            const rightBackIndex = rightFrontIndex === 0 ? 1 : 0;
+            const currentBack = {
+              left: currentFront.left === 1 ? 0 : 1,
+              right: currentFront.right === 0 ? 1 : 0,
+            };
 
-            const Offset = getMedia(30, 29, 24, 24); // This offset is the distance the original top most badge needs to move after it finishes shrinking into the center
-            const offsetBack = getMedia(6, 0, 6, 0);
-            const GrowthOffset = getMedia(5, 5, 3, 5); // The amount of growth needed to replace the current top based off of top or bottom badge location
-            const shrinkMax = getMedia('120%', '120%', '118%', '115%'); // This is the second badge behind the original first needs to shrink farther than top
-            const shrinkMin = '108%'; // This is the original top badge shrinking in -> distance
+            /*NOTE: Determine if we're returning to original positions */
+
+            const isReturningToOriginal = {
+              left: currentFront.left === INITIAL_FRONT_BADGES.left,
+              right: currentFront.right === INITIAL_FRONT_BADGES.right,
+            };
+
+            const Offset = getMedia(30, 29, 24, 24);
+            const GrowthOffset = getMedia(5, 5, 3, 5);
+            const shrinkMax = getMedia('120%', '120%', '118%', '115%');
+            const shrinkMin = '108%';
 
             const animConfig = {
               left: {
-                offset: leftFrontIndex === leftOriginalFront ? `-${Offset}` : 0,
-                returningToFront:
-                  leftFrontIndex === leftOriginalFront
-                    ? `${GrowthOffset}`
-                    : `0`,
-                transitionToMiddle:
-                  leftFrontIndex != leftOriginalFront
-                    ? `${shrinkMax}`
-                    : `${shrinkMin}`,
+                offset: isReturningToOriginal.left ? `-${Offset}` : 0,
+                returningToFront: isReturningToOriginal.left
+                  ? `${GrowthOffset}`
+                  : '0',
+                transitionToMiddle: !isReturningToOriginal.left
+                  ? `${shrinkMax}`
+                  : `${shrinkMin}`,
               },
               right: {
-                offset:
-                  rightFrontIndex === rightOriginalFront ? `${Offset}` : 0,
-                returningToFront:
-                  rightFrontIndex === rightOriginalFront
-                    ? `-${GrowthOffset}`
-                    : `0`,
-                transitionToMiddle:
-                  rightFrontIndex != rightOriginalFront
-                    ? `-${shrinkMax}`
-                    : `-${shrinkMin}`,
+                offset: isReturningToOriginal.right ? `${Offset}` : 0,
+                returningToFront: isReturningToOriginal.right
+                  ? `-${GrowthOffset}`
+                  : '0',
+                transitionToMiddle: !isReturningToOriginal.right
+                  ? `-${shrinkMax}`
+                  : `-${shrinkMin}`,
               },
             };
 
             const loopTl = gsap.timeline({
               onComplete: () => {
-                leftFrontIndex = leftFrontIndex === 1 ? 0 : 1;
-                rightFrontIndex = rightFrontIndex === 0 ? 1 : 0;
-                //NOTE: starts next cycle recursivley
+                // Toggle to the other badge
+                currentFront.left = currentFront.left === 1 ? 0 : 1;
+                currentFront.right = currentFront.right === 0 ? 1 : 0;
                 createLoopCycle();
               },
             });
 
-            /*NOTE:Front badges to center */
+            /* NOTE: Front badges to center */
             loopTl
               .to(
-                leftImageRefs.current[leftFrontIndex],
+                leftImageRefs.current[currentFront.left],
                 {
-                  x: animConfig.left.transitionToMiddle, // animConfig
+                  x: animConfig.left.transitionToMiddle,
                   scale: 0.85,
                   duration: 1.5,
                   ease: 'power2.inOut',
@@ -150,57 +151,57 @@ const G2BadgeAnimation = ({ blok }) => {
                 0,
               )
               .to(
-                rightImageRefs.current[rightFrontIndex],
+                rightImageRefs.current[currentFront.right],
                 {
-                  x: animConfig.right.transitionToMiddle, // animConfig
+                  x: animConfig.right.transitionToMiddle,
                   scale: 0.85,
                   duration: 1.5,
                   ease: 'power2.inOut',
                 },
                 0,
               )
-              // NOTE:Animate back badges scale up AS front badges move away
+              // NOTE: Animate back badges scale up AS front badges move away
               .to(
-                leftImageRefs.current[leftBackIndex],
+                leftImageRefs.current[currentBack.left],
                 {
                   scale: 1,
-                  x: animConfig.left.returningToFront, //animConfig
+                  x: animConfig.left.returningToFront,
                   duration: 1,
                   ease: 'power2.inOut',
                 },
                 0,
               )
               .to(
-                rightImageRefs.current[rightBackIndex],
+                rightImageRefs.current[currentBack.right],
                 {
                   scale: 1,
-                  x: animConfig.right.returningToFront, //animConfig
+                  x: animConfig.right.returningToFront,
                   duration: 1,
                   ease: 'power2.inOut',
                 },
                 0,
               )
 
-              /*NOTE:SWITCH Z-INDEX RIGHT AT CENTER  front badges go below, back badges come to front */
-              .set(leftImageRefs.current[leftFrontIndex], { zIndex: 0 })
-              .set(rightImageRefs.current[rightFrontIndex], { zIndex: 0 })
-              .set(leftImageRefs.current[leftBackIndex], { zIndex: 1 })
-              .set(rightImageRefs.current[rightBackIndex], { zIndex: 1 })
+              /* NOTE: SWITCH Z-INDEX RIGHT AT CENTER */
+              .set(leftImageRefs.current[currentFront.left], { zIndex: 0 })
+              .set(rightImageRefs.current[currentFront.right], { zIndex: 0 })
+              .set(leftImageRefs.current[currentBack.left], { zIndex: 1 })
+              .set(rightImageRefs.current[currentBack.right], { zIndex: 1 })
 
-              /*NOTE:Pause at center */
+              /* NOTE: Pause at center */
               .to({}, { duration: 0.5 })
 
-              /* NOTE:Returning badges slide back (already have correct z-index) */
-              .to(leftImageRefs.current[leftFrontIndex], {
-                x: animConfig.left.offset, // animConfig
+              /* NOTE: Returning badges slide back */
+              .to(leftImageRefs.current[currentFront.left], {
+                x: animConfig.left.offset,
                 scale: 0.85,
                 duration: 1,
                 ease: 'power2.inOut',
               })
               .to(
-                rightImageRefs.current[rightFrontIndex],
+                rightImageRefs.current[currentFront.right],
                 {
-                  x: animConfig.right.offset, // animConfig
+                  x: animConfig.right.offset,
                   scale: 0.85,
                   duration: 1,
                   ease: 'power2.inOut',
@@ -211,7 +212,7 @@ const G2BadgeAnimation = ({ blok }) => {
               /* NOTE: Brief pause before next cycle */
               .to({}, { duration: 1 });
           };
-          //NOTE: Start the first cycle after a delay
+
           gsap.delayedCall(1, createLoopCycle);
         });
       });

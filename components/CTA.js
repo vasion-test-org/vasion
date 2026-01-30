@@ -108,33 +108,37 @@ const ContentWrapper = styled.div`
 
 const CtaWrapper = styled.div`
   display: flex;
-  align-items: ${(props) =>
-    props.$ctastyle === 'pill' && props.$pillbgimg
-      ? 'flex-start'
-      : props.$ctastyle === 'image' && props.$bgimg
-        ? 'flex-start'
-        : 'center'};
+  color: ${(props) => props.theme.cta.textColor};
   overflow: hidden;
-  background: ${(props) =>
-    props.$ctastyle === 'image'
-      ? `url(${props.$bgimg})`
-      : props.$ctastyle === 'pill' && props.$pillbgimg
-        ? `url(${props.$pillbgimg})`
-        : props.theme.cta.cardBg};
+
+  align-items: ${(props) => {
+    if (props.$ctastyle === 'pill' && props.$pillbgimg) return 'flex-start';
+    if (props.$ctastyle === 'image' && props.$bgimg) return 'flex-start';
+    return 'center';
+  }};
+
+  background: ${(props) => {
+    if (props.$ctastyle === 'image') return `url(${props.$bgimg})`;
+    if (props.$ctastyle === 'pill' && props.$pillbgimg)
+      return `url(${props.$pillbgimg})`;
+    return props.theme.cta.cardBg;
+  }};
+
+  background-repeat: no-repeat;
+
   background-size: ${(props) =>
     props.$ctastyle === 'pill' && props.$pillbgimg ? '100% 100%' : 'cover'};
-  background-repeat: no-repeat;
-  color: ${(props) => props.theme.cta.textColor};
-  justify-content: ${(props) =>
-    props.$ctastyle === 'pill' && props.$pillbgimg
-      ? 'flex-start'
-      : 'space-between'};
-  flex-direction: ${(props) =>
-    props.$ctastyle === 'pill' && props.$pillbgimg
-      ? 'column'
-      : props.$ctastyle === 'pill'
-        ? 'row'
-        : 'column'};
+
+  justify-content: ${(props) => {
+    if (props.$ctastyle === 'pill' && props.$pillbgimg) return 'flex-start';
+    return 'space-between';
+  }};
+
+  flex-direction: ${(props) => {
+    if (props.$ctastyle === 'pill' && props.$pillbgimg) return 'column';
+    if (props.$ctastyle === 'pill') return 'row';
+    return 'column';
+  }};
   gap: ${(props) =>
     props.$ctastyle === 'pill' && props.$pillbgimg ? '2.5vw' : '3.75vw'};
   padding: ${(props) =>
@@ -261,8 +265,7 @@ const CtaWrapper = styled.div`
       props.$ctastyle === 'pill' && props.$pillbgimg
         ? 'flex-start'
         : 'space-between'};
-    padding-top: ${(props) =>
-      props.$ctastyle === 'pill' && props.$pillbgimg ? '8.333vw' : '8.333vw'};
+    padding: 8.333vw;
   }
 `;
 
