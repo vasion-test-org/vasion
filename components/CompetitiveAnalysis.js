@@ -357,7 +357,7 @@ const HeaderCell = styled.div`
 `;
 
 const FeatureCell = styled.div`
-  ${text.bodyLgBold};
+  ${text.bodyMd};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -397,13 +397,16 @@ const FeatureCell = styled.div`
       color: ${colors.darkOrange};
     }
   }
-  p {
+  p,
+  span,
+  a {
+    ${text.bodyMd}
     margin: 0;
   }
 `;
 
 const DataCell = styled.div`
-  ${text.bodyLg};
+  ${text.bodyMd};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -440,7 +443,9 @@ const DataCell = styled.div`
       background: ${colors.lightPurpleGrey};
     }
   }
-  p {
+  p,
+  a,
+  span {
     text-align: center;
     margin: 0;
   }

@@ -156,16 +156,16 @@ const StyledBodyCopy = styled.div`
   &.tag,
   & > .tag {
     font-weight: 600;
-    font-size: 0.625vw;
+    font-size: 0.953vw;
     line-height: 0.75vw;
 
     ${media.fullWidth} {
-      font-size: 10px;
+      font-size: 13px;
       line-height: 12px;
     }
 
     ${media.tablet} {
-      font-size: 0.977vw;
+      font-size: 1.458vw;
       line-height: 1.172vw;
     }
 
