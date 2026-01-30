@@ -59,20 +59,25 @@ const StyledBodyCopy = styled.div`
     background-color:${colors.lightPurpleGrey};
     padding:1.5vw;
     border-radius: 1vw;
+margin-bottom:10px;
  
     ${media.fullWidth}{
     border-radius: 16px;
     padding:24px;
+margin-bottom:10px;
     }
 
     ${media.tablet}{
     border-radius: 1.563vw;
     padding:2.344vw;
+    margin-bottom:0.977vw;
     }
 
     ${media.mobile}{
     border-radius: 3.333vw;
     padding:5vw;
+    margin-bottom:2.083vw;
+
     }
 
 `}
