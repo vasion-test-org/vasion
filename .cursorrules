@@ -336,4 +336,4 @@ npm run checks
 See detailed rules in:
 - `.cursor/rules/tailwind-migration.mdc`
 - `.cursor/rules/design-tokens.mdc`
-- `docs/TAILWIND_MIGRATION.md`
+- `docs/COMPONENT_OPTIMIZATION.md`

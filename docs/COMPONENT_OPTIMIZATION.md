@@ -1,6 +1,6 @@
-# Tailwind CSS Migration Guide
+# Component Optimization and Compliance Guide
 
-This document explains our Tailwind CSS setup and migration strategy from styled-components.
+This document explains our component optimization strategy, Tailwind CSS setup, and compliance standards for accessibility, SEO, and performance.
 
 ## Table of Contents
 
@@ -10,19 +10,21 @@ This document explains our Tailwind CSS setup and migration strategy from styled
 - [Design System](#design-system)
 - [How to Write Styles](#how-to-write-styles)
 - [Tooling](#tooling)
-- [Migration Process](#migration-process)
+- [Optimization Process](#optimization-process)
 - [FAQ](#faq)
 
 ---
 
 ## Overview
 
-We are migrating from **styled-components** to **Tailwind CSS** for improved performance, better developer experience, and smaller bundle sizes. This is a gradual migration - both systems will coexist during the transition.
+We are optimizing components for **performance**, **accessibility**, and **SEO** compliance. This includes migrating from styled-components to Tailwind CSS, converting to Server Components where possible, and ensuring WCAG 2.1 AA compliance.
 
 ### Key Benefits
 
-- **Performance**: No runtime CSS-in-JS overhead
+- **Performance**: Server Components, no runtime CSS-in-JS overhead
 - **Bundle Size**: Tailwind purges unused styles automatically
+- **Accessibility**: WCAG 2.1 AA compliance enforced
+- **SEO**: Semantic HTML, proper heading hierarchy
 - **Developer Experience**: Faster styling with utility classes
 - **Consistency**: Design tokens enforced through configuration
 
@@ -407,84 +409,161 @@ Run `npm run checks` to scan the codebase:
 
 ---
 
-## Migration Process
+## Optimization Process
 
-### Step-by-Step Guide
+### Before Starting: Get Figma Reference
 
-1. **Identify the component** to migrate
-   ```bash
-   npm run checks:perf  # See files with styled-components
-   ```
+**Always ask for a Figma link** before converting a component. Use the Figma MCP tools to:
+- Fetch exact design specifications
+- Extract colors, spacing, typography, dimensions
+- Verify converted component matches design precisely
 
-2. **Remove styled-components imports**
-   ```jsx
-   // Remove this
-   import styled from 'styled-components';
-   ```
+### Step 0: Evaluate Server Component Potential
 
-3. **Convert styled components to native elements + Tailwind**
-   
-   **Before:**
-   ```jsx
-   const Wrapper = styled.div`
-     display: flex;
-     padding: 24px;
-     background: ${props => props.theme.hero.bg};
-   `;
-   
-   <Wrapper>Content</Wrapper>
-   ```
-   
-   **After:**
-   ```jsx
-   <div className="flex p-6 bg-purple-orbital">
-     Content
-   </div>
-   ```
+**CRITICAL**: Always check if the component can be a Server Component.
 
-4. **Convert props-based styles to conditional classes**
-   
-   **Before:**
-   ```jsx
-   const Box = styled.div`
-     width: ${props => props.centered ? '100%' : '50%'};
-   `;
-   ```
-   
-   **After:**
-   ```jsx
-   <div className={cn(centered ? 'w-full' : 'w-1/2')}>
-   ```
+**Can be Server Component if:**
+- No React hooks (`useState`, `useEffect`, `useContext`, `useRef`)
+- No browser APIs (`window`, `document`)
+- No event handlers that modify state
+- No client-only libraries (GSAP in the main component)
 
-5. **Map media queries to responsive prefixes**
-   
-   | Old | New |
-   |-----|-----|
-   | `${media.mobile} { ... }` | `mob:...` |
-   | `${media.tablet} { ... }` | `tab:...` |
-   | `${media.desktop} { ... }` | `desk:...` |
-   | `${media.fullWidth} { ... }` | `fw:...` |
+**If GSAP/animations are needed:**
+- Extract animation logic to minimal client component
+- Use the reusable `CarouselAnimator` for horizontal loop animations
+- Keep main component as Server Component
 
-6. **Run compliance checks**
-   ```bash
-   npm run checks
-   ```
+### Step 1: Identify and Analyze
 
-7. **Test all breakpoints** - Verify at mob (480px), tab (1024px), desk (1600px), and fw (1601px+)
+```bash
+npm run checks:perf  # See files with styled-components
+npm run checks -- components/MyComponent.js  # Check specific file
+```
 
-### Migration Checklist
+### Step 2: Convert to Server Component (if possible)
 
+**Server Component Pattern:**
+```jsx
+// MyComponent.js - NO 'use client'
+import Image from 'next/image';
+import CarouselAnimator from '@/components/CarouselAnimator';
+import { defaultTheme, darkTheme, lightTheme } from '@/styles/theme';
+
+// Static theme lookup - no hooks needed
+const themes = { default: defaultTheme, dark: darkTheme, light: lightTheme };
+
+const MyComponent = ({ blok }) => {
+  const theme = themes[blok.theme] || themes.default;
+  const componentId = `my-component-${blok._uid}`;
+  const shouldAnimate = blok.items?.length > 5;
+  
+  return (
+    <>
+      {/* Scoped CSS for responsive styles */}
+      <style>{`
+        .${componentId} {
+          padding: 3.75rem;
+          max-width: 81.5rem;
+        }
+        @media (max-width: 1024px) {
+          .${componentId} { padding: 2.5rem; }
+        }
+        @media (max-width: 480px) {
+          .${componentId} { padding: 1.75rem; }
+        }
+      `}</style>
+      
+      <section className={componentId} style={{ background: theme.myComponent.bg }}>
+        {blok.items?.map((item) => (
+          <div key={item._uid} className="item">...</div>
+        ))}
+      </section>
+      
+      {/* Minimal client component for animation only */}
+      {shouldAnimate && <CarouselAnimator selector=".item" />}
+    </>
+  );
+};
+
+export default MyComponent;
+```
+
+### Step 3: Remove styled-components
+
+```jsx
+// Remove this
+import styled from 'styled-components';
+```
+
+### Step 4: Convert Styles
+
+**Map media queries:**
+
+| Old | New |
+|-----|-----|
+| `${media.mobile} { ... }` | `mob:...` or `@media (max-width: 480px)` |
+| `${media.tablet} { ... }` | `tab:...` or `@media (max-width: 1024px)` |
+| `${media.desktop} { ... }` | `desk:...` or `@media (max-width: 1600px)` |
+| `${media.fullWidth} { ... }` | `fw:...` or `@media (min-width: 1601px)` |
+
+**Convert vw to Tailwind:**
+```jsx
+// Original vw values (all target same 200px):
+width: 12.5vw;   // Desktop (1600px)
+width: 19.531vw; // Tablet (1024px)
+width: 41.667vw; // Mobile (480px)
+
+// Convert to ONE Tailwind class:
+className="w-50" // 200px / 4 = 50
+```
+
+### Step 5: Run Compliance Checks
+
+```bash
+# Check specific component
+npm run checks -- components/MyComponent.js
+
+# Check multiple files
+npm run checks -- components/MyComponent.js components/OtherComponent.js
+
+# Check entire directory
+npm run checks -- components/centeredSections/
+```
+
+### Step 6: Test All Breakpoints
+
+Verify at: mobile (480px), tablet (1024px), desktop (1600px), fullWidth (1601px+)
+
+### Optimization Checklist
+
+**Phase 0: Planning**
+- [ ] Ask for Figma reference link
+- [ ] Evaluate if component can be Server Component
+- [ ] Identify client-only code that needs extraction
+
+**Phase 1: Convert Structure**
 - [ ] Remove styled-components imports
-- [ ] Replace styled components with native elements + Tailwind classes
-- [ ] Convert dynamic styles (props) to conditional classes using `cn()`
-- [ ] Map media queries to responsive prefixes
-- [ ] Replace theme values with Tailwind design tokens
+- [ ] Remove `'use client'` if converting to Server Component
+- [ ] Preserve EXACT container structure
+- [ ] Handle ALL original props (`transparent_background`, `offset_spacing`, etc.)
+
+**Phase 2: Convert Styles**
+- [ ] Use scoped `<style>` tags for Server Components
+- [ ] Use `ScreenContext` for Client Components when Tailwind fails
+- [ ] Convert vw → px → Tailwind number (px / 4)
+- [ ] Add `listStyle: 'none'` to ul/li elements
+
+**Phase 3: Extract Client Logic**
+- [ ] Move GSAP to `CarouselAnimator` or similar minimal client component
+- [ ] Conditionally render client component only when needed
+
+**Phase 4: Validate**
 - [ ] Add focus states to interactive elements
 - [ ] Verify alt text on images
 - [ ] Check heading hierarchy
-- [ ] Test all breakpoints
-- [ ] Remove unused styled-component definitions
-- [ ] Run `npm run checks` to validate
+- [ ] Test ALL breakpoints
+- [ ] Run `npm run checks -- path/to/component.js`
+- [ ] Remove debug console.log statements
 
 ---
 
@@ -494,6 +573,58 @@ Run `npm run checks` to scan the codebase:
 
 Yes, during the migration both systems coexist. However, **all new components should use Tailwind**.
 
+### Q: Should I use Server or Client Components?
+
+**Always prefer Server Components** for performance benefits:
+- Zero client-side JavaScript
+- Faster initial page load
+- Better SEO
+- Reduced bundle size
+
+Only use `'use client'` when you need:
+- React hooks (`useState`, `useEffect`, `useContext`)
+- Browser APIs (`window`, `document`)
+- Event handlers that modify state
+- Client-only libraries like GSAP
+
+### Q: How do I handle GSAP animations?
+
+Extract animation logic to minimal client components. Use the reusable `CarouselAnimator`:
+
+```jsx
+// Server Component
+import CarouselAnimator from '@/components/CarouselAnimator';
+
+const MyComponent = ({ blok }) => {
+  const shouldAnimate = blok.items?.length > 5;
+  
+  return (
+    <>
+      <div className="items">
+        {blok.items?.map((item) => (
+          <div key={item._uid} className="item">...</div>
+        ))}
+      </div>
+      
+      {shouldAnimate && (
+        <CarouselAnimator 
+          selector=".item"
+          options={{ speed: 1, reversed: false }}
+        />
+      )}
+    </>
+  );
+};
+```
+
+**CarouselAnimator Options:**
+- `selector` - CSS selector for items (e.g., `.item`)
+- `speed` - Animation speed (default: 1)
+- `reversed` - Reverse direction (default: false)
+- `draggable` - Enable drag interaction (default: false)
+- `paused` - Start paused (default: false)
+- `onChange` - Callback when active item changes
+
 ### Q: What about complex animations?
 
 For simple animations, use Tailwind's built-in utilities:
@@ -501,7 +632,7 @@ For simple animations, use Tailwind's built-in utilities:
 className="transition-all duration-300 ease-in-out hover:scale-105"
 ```
 
-For complex animations (GSAP, etc.), continue using JavaScript-based solutions.
+For complex animations (GSAP, etc.), extract to minimal client components.
 
 ### Q: How do I handle theme switching?
 
