@@ -1,67 +1,48 @@
-"use client";
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import media from "styles/media";
-import AccordionItem from "@/components/globalComponents/AccordionItem";
+import AccordionItem from '@/components/globalComponents/AccordionItem';
 
+/**
+ * Accordion (Server Component)
+ * Container for accordion items. Animation handled by AccordionItem.
+ */
 const Accordion = ({ accordionData }) => {
-  // console.log(accordionData)
-
-  useEffect(() => {
-    const initAccordion = async () => {
-      const { default: gsap } = await import('gsap');
-
-      const accordionItems = gsap.utils.toArray(".accordionItem");
-
-      accordionItems.forEach((item) => {
-        const tl = gsap.timeline({ paused: true, reversed: true });
-        tl.to(item, {
-          height: "auto",
-          duration: 0.3,
-          ease: "power2.inOut",
-        });
-
-        item.addEventListener("click", function () {
-          if (tl.reversed()) {
-            tl.play();
-          } else {
-            tl.reverse();
-          }
-        });
-      });
-    };
-
-    initAccordion();
-  }, []);
+  // Generate unique ID for scoped styles
+  const componentId = `accordion-${Math.random().toString(36).slice(2, 9)}`;
 
   return (
-    <AccordionContainer>
-      {accordionData.map((accordionItem, index) => (
-        <AccordionItem
-          key={`accordion-${index}`}
-          accordionItem={accordionItem}
-        />
-      ))}
-    </AccordionContainer>
+    <>
+      <style>{`
+        .${componentId} {
+          display: flex;
+          flex-direction: column;
+          width: 81.5vw;
+          max-width: 81.5rem; /* 1304px */
+        }
+        @media (min-width: 1601px) {
+          .${componentId} {
+            width: 81.5rem; /* 1304px fixed */
+          }
+        }
+        @media (max-width: 1024px) {
+          .${componentId} {
+            width: 90.234vw;
+          }
+        }
+        @media (max-width: 480px) {
+          .${componentId} {
+            width: 89.167vw;
+          }
+        }
+      `}</style>
+      <div className={componentId}>
+        {accordionData?.map((accordionItem, index) => (
+          <AccordionItem
+            key={accordionItem._uid || `accordion-${index}`}
+            accordionItem={accordionItem}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 
-const AccordionContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 81.5vw;
-
-  ${media.fullWidth} {
-    width: 1304px;
-  }
-
-  ${media.tablet} {
-    width: 90.234vw;
-  }
-
-  ${media.mobile} {
-    width: 89.167vw;
-  }
-`;
 export default Accordion;
-
