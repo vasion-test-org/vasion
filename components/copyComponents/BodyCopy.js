@@ -16,12 +16,10 @@ const BodyCopy = ({ className, children, $featured = false }) => {
       const combinedClassName = `${parentClassName} ${
         child.props.className || ''
       } ${className || ''}`.trim();
-
       // Clone the child with the combined className
       const clonedChild = React.cloneElement(child, {
         className: combinedClassName,
       });
-
       // If the child has children, recursively process them with the combined class
       if (child.props.children) {
         return React.cloneElement(clonedChild, {
