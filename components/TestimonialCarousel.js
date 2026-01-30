@@ -81,16 +81,16 @@ const Tag = styled.div`
   align-items: center;
   background-color: ${colors.purpleTag};
   color: ${colors.primaryPurple};
-  padding: 0.23vw 0.85vw;
+  padding: 0.313vw 0.813vw;
   border-radius: 1.5vw;
 
   ${media.fullWidth} {
     border-radius: 24px;
-    padding: 0px 12px;
+    padding: 5px 12px;
   }
   ${media.tablet} {
     border-radius: 2.344vw;
-    padding: 0.3vw 1.172vw;
+    padding: 0.7vw 1.172vw;
   }
   ${media.mobile} {
     border-radius: 5vw;
