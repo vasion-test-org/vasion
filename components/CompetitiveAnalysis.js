@@ -584,7 +584,6 @@ const TableContainer = styled.div`
     width: 89.167vw;
   }
 `;
-
 const FirstColumn = styled.div`
   display: flex;
   flex-direction: column;
