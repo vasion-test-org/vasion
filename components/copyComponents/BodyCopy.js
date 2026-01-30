@@ -155,7 +155,7 @@ const StyledBodyCopy = styled.div`
 
   &.tag,
   & > .tag {
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.953vw;
     line-height: 0.75vw;
 
