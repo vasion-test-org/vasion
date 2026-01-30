@@ -327,7 +327,7 @@ const CenteredBadge = styled.img`
   width: 6.25vw;
   height: 6.25vw;
   position: relative;
-  z-index: 10;
+  z-index: 5;
 
   ${media.fullWidth} {
     width: 100px;
