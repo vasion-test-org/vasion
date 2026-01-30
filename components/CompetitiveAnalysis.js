@@ -355,7 +355,6 @@ const HeaderCell = styled.div`
     }
   }
 `;
-
 const FeatureCell = styled.div`
   ${text.bodyMd};
   display: flex;
@@ -364,7 +363,7 @@ const FeatureCell = styled.div`
   text-align: center;
   padding: 1.25vw 1vw;
   border-bottom: 1px solid #e5e7eb;
-  text-align: center;
+
   &:last-child {
     border-bottom: none;
   }
@@ -384,6 +383,16 @@ const FeatureCell = styled.div`
       background: ${colors.lightPurpleGrey};
     }
   }
+
+  /* Add these overrides for all nested elements */
+  p,
+  span,
+  a {
+    ${text.bodyMd};
+    margin: 0;
+    text-align: center;
+  }
+
   a {
     color: ${colors.txtPrimary};
     text-decoration: none;
@@ -397,11 +406,11 @@ const FeatureCell = styled.div`
       color: ${colors.darkOrange};
     }
   }
-  p,
-  span,
-  a {
-    ${text.bodyMd}
-    margin: 0;
+
+  /* Override any RichTextRenderer wrapper styles */
+  div,
+  div[class*='BodyCopy'] {
+    ${text.bodyMd};
   }
 `;
 
@@ -486,6 +495,7 @@ const Footnote = styled.div`
   }
 
   ${media.tablet} {
+    ${text.bodyMd};
     margin-top: 1.953vw;
     width: 92.188vw;
   }
@@ -499,6 +509,7 @@ const Footnote = styled.div`
   .BodyCopy__StyledBodyCopy-sc-4fe6b91b-0,
   div[class*='BodyCopy__StyledBodyCopy'],
   div[class*='BodyCopy'] {
+    ${text.bodyMd};
     position: relative;
     display: inline-block;
     gap: 0.5vw;
@@ -581,6 +592,7 @@ const TableContainer = styled.div`
 
   ${media.mobile} {
     border-radius: 1.667vw;
+    max-width: unset;
     width: 89.167vw;
   }
 `;
