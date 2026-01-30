@@ -523,7 +523,7 @@ const Footnote = styled.div`
   div[class*='BodyCopy__StyledBodyCopy'] b,
   div[class*='BodyCopy'] strong,
   div[class*='BodyCopy'] b {
-    ${text.bodyLg}
+    ${text.bodyMd}
     display: inline;
     font-weight: bold;
     white-space: nowrap;
