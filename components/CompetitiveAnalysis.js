@@ -302,7 +302,6 @@ const Column = styled.div`
     }
   }
 `;
-
 const HeaderCell = styled.div`
   display: flex;
   align-items: center;
@@ -312,6 +311,7 @@ const HeaderCell = styled.div`
   border-bottom: 2px solid #e5e7eb;
   background: transparent;
   font-weight: 600;
+
   ${media.fullWidth} {
     padding: 24px 80px;
   }
@@ -324,21 +324,34 @@ const HeaderCell = styled.div`
     padding: 4.167vw 3.333vw;
   }
 
-  p {
-    text-align: center;
+  p,
+  span {
+    ${text.bodyMd};
     margin: 0;
+    text-align: center;
   }
+
   a {
+    ${text.bodyMd};
+    margin: 0;
+    text-align: center;
     color: ${colors.txtPrimary};
     transition: color 0.2s ease;
 
     &:hover {
       color: ${colors.primaryOrange};
     }
+
     &:visited {
       color: ${text.darkOrange};
     }
   }
+
+  div,
+  div[class*='BodyCopy'] {
+    ${text.bodyMd};
+  }
+
   img {
     display: block;
     width: 9.875vw;
@@ -355,6 +368,7 @@ const HeaderCell = styled.div`
     }
   }
 `;
+
 const FeatureCell = styled.div`
   ${text.bodyMd};
   display: flex;
@@ -384,15 +398,19 @@ const FeatureCell = styled.div`
     }
   }
 
-  /* Add these overrides for all nested elements */
+  /* Force text sizing on all text elements */
   p,
   span,
-  a {
-    ${text.bodyMd};
+  b,
+  a,
+  div,
+  div[class*='BodyCopy'] {
+    ${text.bodyMdBold} !important;
     margin: 0;
     text-align: center;
   }
 
+  /* Combined a styles */
   a {
     color: ${colors.txtPrimary};
     text-decoration: none;
@@ -406,12 +424,6 @@ const FeatureCell = styled.div`
       color: ${colors.darkOrange};
     }
   }
-
-  /* Override any RichTextRenderer wrapper styles */
-  div,
-  div[class*='BodyCopy'] {
-    ${text.bodyMd};
-  }
 `;
 
 const DataCell = styled.div`
@@ -423,9 +435,7 @@ const DataCell = styled.div`
   padding: 1.25vw 1vw;
   border-bottom: 1px solid #e5e7eb;
   max-width: 19.875vw;
-  span {
-    ${text.bodyMd};
-  }
+
   &:last-child {
     border-bottom: none;
   }
@@ -441,10 +451,6 @@ const DataCell = styled.div`
   }
 
   ${media.mobile} {
-    ${text.bodyMd};
-    span {
-      ${text.bodyMd};
-    }
     max-width: unset;
     padding: 4.167vw 3.333vw;
 
@@ -452,11 +458,31 @@ const DataCell = styled.div`
       background: ${colors.lightPurpleGrey};
     }
   }
+
+  /* Force text sizing on all text elements */
   p,
+  span,
   a,
-  span {
+  div,
+  div[class*='BodyCopy'] {
+    ${text.bodyMd} !important;
     text-align: center;
     margin: 0;
+  }
+
+  /* Specifically target link styling */
+  a {
+    color: ${colors.txtPrimary};
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: ${colors.primaryOrange};
+    }
+
+    &:visited {
+      color: ${colors.darkOrange};
+    }
   }
 
   img {
@@ -480,6 +506,7 @@ const DataCell = styled.div`
     }
   }
 `;
+
 const Footnote = styled.div`
   color: ${colors.txtPrimary};
   display: flex;
