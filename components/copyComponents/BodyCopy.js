@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import media from '@/styles/media';
 import colors from '@/styles/colors';
-
+// import text from '@/styles/text';
 const BodyCopy = ({ className, children, $featured = false }) => {
   // Recursive function to clone children and pass down className
   const cloneChildrenWithClassName = (children, parentClassName = '') => {
@@ -12,14 +12,17 @@ const BodyCopy = ({ className, children, $featured = false }) => {
       if (!React.isValidElement(child)) {
         return child;
       }
+
       // Combine parent class with current class and passed className
       const combinedClassName = `${parentClassName} ${
         child.props.className || ''
       } ${className || ''}`.trim();
+
       // Clone the child with the combined className
       const clonedChild = React.cloneElement(child, {
         className: combinedClassName,
       });
+
       // If the child has children, recursively process them with the combined class
       if (child.props.children) {
         return React.cloneElement(clonedChild, {
@@ -29,9 +32,11 @@ const BodyCopy = ({ className, children, $featured = false }) => {
           ),
         });
       }
+
       return clonedChild;
     });
   };
+
   return (
     <StyledBodyCopy className={className} $featured={$featured}>
       {cloneChildrenWithClassName(children)}
@@ -54,25 +59,20 @@ const StyledBodyCopy = styled.div`
     background-color:${colors.lightPurpleGrey};
     padding:1.5vw;
     border-radius: 1vw;
-    margin-bottom:10px;
  
     ${media.fullWidth}{
     border-radius: 16px;
     padding:24px;
-    margin-bottom:10px;
     }
 
     ${media.tablet}{
     border-radius: 1.563vw;
     padding:2.344vw;
-    margin-bottom:0.977vw;
     }
 
     ${media.mobile}{
     border-radius: 3.333vw;
     padding:5vw;
-    margin-bottom:2.083vw;
-
     }
 
 `}
@@ -219,21 +219,21 @@ const StyledBodyCopy = styled.div`
 
   &.bodyMd,
   & > .bodyMd {
-    font-size: 1vw;
+    font-size: 1.111vw;
     line-height: 1.375vw;
 
     ${media.fullWidth} {
-      font-size: 16px;
+      font-size: 17px;
       line-height: 22px;
     }
 
     ${media.tablet} {
-      font-size: 16px;
+      font-size: 17px;
       line-height: 2.148vw;
     }
 
     ${media.mobile} {
-      font-size: 3.738vw;
+      font-size: 3.542vw;
       line-height: 5.14vw;
     }
   }

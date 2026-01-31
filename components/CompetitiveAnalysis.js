@@ -511,14 +511,13 @@ const DataCell = styled.div`
     }
   }
 `;
-
 const Footnote = styled.div`
-  color: ${colors.txtPrimary};
+  ${text.bodyMd};
+  color: #6b7280;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   margin-top: 1.25vw;
-  color: #6b7280;
   width: 81.5vw;
 
   ${media.fullWidth} {
@@ -527,7 +526,6 @@ const Footnote = styled.div`
   }
 
   ${media.tablet} {
-    ${text.bodyMd};
     margin-top: 1.953vw;
     width: 92.188vw;
   }
@@ -537,45 +535,41 @@ const Footnote = styled.div`
     width: 89.167vw;
   }
 
-  /* Override RichTextRenderer nested styles */
-  .BodyCopy__StyledBodyCopy-sc-4fe6b91b-0,
-  div[class*='BodyCopy__StyledBodyCopy'],
+  /* Force text sizing on all text elements - same as DataCell */
+  p,
+  span,
+  a,
+  div,
   div[class*='BodyCopy'] {
-    ${text.bodyMd};
-    position: relative;
-    display: inline-block;
-    gap: 0.5vw;
+    ${text.bodyMd} !important;
+    margin: 0;
+  }
 
-    ${media.fullWidth} {
-      gap: 8px;
+  /* Link styling - same as DataCell */
+  a {
+    color: ${colors.txtPrimary};
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: ${colors.primaryOrange};
     }
 
-    ${media.tablet} {
-      gap: 0.6vw;
-    }
-
-    ${media.mobile} {
-      gap: 1.5vw;
+    &:visited {
+      color: ${colors.darkOrange};
     }
   }
 
-  /* Keep bold/strong text together - no breaks inside */
-  .BodyCopy__StyledBodyCopy-sc-4fe6b91b-0 strong,
-  .BodyCopy__StyledBodyCopy-sc-4fe6b91b-0 b,
-  div[class*='BodyCopy__StyledBodyCopy'] strong,
-  div[class*='BodyCopy__StyledBodyCopy'] b,
-  div[class*='BodyCopy'] strong,
-  div[class*='BodyCopy'] b {
-    ${text.bodyMd}
-    display: inline;
+  /* Keep bold/strong text together */
+  strong,
+  b {
+    ${text.bodyMd} !important;
     font-weight: bold;
     white-space: nowrap;
   }
 
-  /* Target images inside BodyCopy */
-  .BodyCopy__StyledBodyCopy-sc-4fe6b91b-0 img,
-  div[class*='BodyCopy__StyledBodyCopy'] img,
-  div[class*='BodyCopy'] img {
+  /* Images */
+  img {
     position: relative;
     width: 1.75vw;
     height: auto;
@@ -603,7 +597,6 @@ const Footnote = styled.div`
     }
   }
 `;
-
 const TableContainer = styled.div`
   display: flex;
   border: 1px solid #e5e7eb;
