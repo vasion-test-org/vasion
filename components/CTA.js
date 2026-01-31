@@ -114,7 +114,7 @@ const CtaWrapper = styled.div`
 
   align-items: ${(props) => {
     if (props.$ctastyle === 'pill' && props.$pillbgimg) return 'flex-start';
-    if (props.$ctastyle === 'image' && props.$bgimg) return 'flex-start';
+    if (props.$ctastyle === 'image' && props.$bgimg) return 'center';
     return 'center';
   }};
 
