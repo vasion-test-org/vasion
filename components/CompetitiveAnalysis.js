@@ -131,6 +131,7 @@ const CompetitiveAnalysis = ({ blok }) => {
     return <RichTextRenderer document={richTextDoc} />;
   };
 
+  // Helper function for styled components
   return (
     <ThemeProvider theme={selectedTheme}>
       <TableWrapper
@@ -647,103 +648,41 @@ const FirstColumn = styled.div`
   z-index: 2;
 `;
 
+const getPaddingStyles = (defaultPadding, props) => {
+  const { spacing, spacingOffset } = props;
+  const paddingValue =
+    spacing === 'default'
+      ? defaultPadding
+      : spacing
+        ? `${spacing}px`
+        : defaultPadding;
+
+  if (spacingOffset === 'top') {
+    return `${paddingValue} 0 0`;
+  }
+  if (spacingOffset === 'bottom') {
+    return `0 0 ${paddingValue}`;
+  }
+  return `${paddingValue} 0`;
+};
+
 const TableWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: ${(props) => {
-    if (props.spacingOffset === 'top') {
-      return props.spacing === 'default'
-        ? '3.75vw 0 0'
-        : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '3.75vw 0 0';
-    }
-    if (props.spacingOffset === 'bottom') {
-      return props.spacing === 'default'
-        ? '0 0 3.75vw'
-        : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 3.75vw';
-    }
-    return props.spacing === 'default'
-      ? '3.75vw 0'
-      : props.spacing
-        ? `${props.spacing}px 0`
-        : '3.75vw 0';
-  }};
+  padding: ${(props) => getPaddingStyles('3.75vw', props)};
 
   ${media.fullWidth} {
-    padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '60px 0 0'
-          : props.spacing
-            ? `${props.spacing}px 0 0`
-            : '60px 0 0';
-      }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 60px'
-          : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : '0 0 60px';
-      }
-      return props.spacing === 'default'
-        ? '60px 0'
-        : props.spacing
-          ? `${props.spacing}px 0`
-          : '60px 0';
-    }};
+    padding: ${(props) => getPaddingStyles('60px', props)};
   }
 
   ${media.tablet} {
-    padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '5.859vw 0 0'
-          : props.spacing
-            ? `${props.spacing}px 0 0`
-            : '5.859vw 0 0';
-      }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 5.859vw'
-          : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : '0 0 5.859vw';
-      }
-      return props.spacing === 'default'
-        ? '5.859vw 0'
-        : props.spacing
-          ? `${props.spacing}px 0`
-          : '5.859vw 0';
-    }};
+    padding: ${(props) => getPaddingStyles('5.859vw', props)};
   }
 
   ${media.mobile} {
     max-height: min-content;
-    padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '12.5vw 0 0'
-          : props.spacing
-            ? `${props.spacing}px 0 0`
-            : '12.5vw 0 0';
-      }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 12.5vw'
-          : props.spacing
-            ? `0 0 ${props.spacing}px`
-            : '0 0 12.5vw';
-      }
-      return props.spacing === 'default'
-        ? '12.5vw 0'
-        : props.spacing
-          ? `${props.spacing}px 0`
-          : '12.5vw 0';
-    }};
+    padding: ${(props) => getPaddingStyles('12.5vw', props)};
   }
 `;
