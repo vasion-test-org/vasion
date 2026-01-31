@@ -22,6 +22,13 @@ const IconCards = dynamic(() => import('@/components/IconCards'), {
   loading: () => <div style={{ height: '200px' }} />,
 });
 
+const G2BadgeAnimation = dynamic(
+  () => import('@/components/centeredSections/G2BadgeAnimation'),
+  {
+    loading: () => <div style={{ height: '200px' }} />,
+  },
+);
+
 const Grid = dynamic(() => import('@/components/centeredSections/Grid'), {
   loading: () => <div style={{ height: '200px' }} />,
 });
@@ -30,7 +37,7 @@ const Accordion = dynamic(
   () => import('@/components/centeredSections/Accordion'),
   {
     loading: () => <div style={{ height: '100px' }} />,
-  }
+  },
 );
 
 const Stats = dynamic(() => import('@/components/centeredSections/Stats'), {
@@ -46,7 +53,7 @@ const StackedCards = dynamic(
   () => import('@/components/centeredSections/StackedCards'),
   {
     loading: () => <div style={{ height: '200px' }} />,
-  }
+  },
 );
 
 const Badges = dynamic(() => import('@/components/centeredSections/Badges'), {
@@ -57,28 +64,28 @@ const BadgesMobile = dynamic(
   () => import('@/components/centeredSections/BadgesMobile'),
   {
     loading: () => <div style={{ height: '100px' }} />,
-  }
+  },
 );
 
 const LogosGallery = dynamic(
   () => import('@/components/centeredSections/LogosGallery'),
   {
     loading: () => <div style={{ height: '150px' }} />,
-  }
+  },
 );
 
 const ReviewCtaCards = dynamic(
   () => import('@/components/centeredSections/ReviewCtaCards'),
   {
     loading: () => <div style={{ height: '200px' }} />,
-  }
+  },
 );
 
 const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const { mobile } = useContext(ScreenContext);
-  // console.log(blok);
+  // console.log('CENTERED_SECTION->', blok);
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper
@@ -88,6 +95,11 @@ const CenteredSection = ({ blok }) => {
         backgroundImage={blok.background_image?.[0]?.filename}
         {...storyblokEditable(blok)}
       >
+        {blok.component_type === 'g2_badge_animation' && (
+          <>
+            <G2BadgeAnimation blok={blok?.badges_animation[0]} />
+          </>
+        )}
         {(blok.centered_copy?.length > 0 || blok.button_group?.length > 0) && (
           <ContentWrapper>
             {blok.centered_copy &&
@@ -97,6 +109,9 @@ const CenteredSection = ({ blok }) => {
                     document={copy?.copy}
                     responsiveTextStyles={copy?.responsive_text_styles}
                     gradientText={copy?.gradient}
+                    featuredCopy={
+                      copy.component === 'body_copy' && blok.featured_copy
+                    }
                   />
                 </div>
               ))}
@@ -310,21 +325,21 @@ const CenteredWrapper = styled.div`
       return props.spacing === 'default'
         ? '3.75vw 0 0'
         : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '3.75vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : '3.75vw 0 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 0 3.75vw'
         : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 3.75vw';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 3.75vw';
     }
     return props.spacing === 'default'
       ? '3.75vw 0'
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0';
+        ? `${props.spacing}px 0`
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
@@ -334,21 +349,21 @@ const CenteredWrapper = styled.div`
         return props.spacing === 'default'
           ? '60px 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+            ? `${props.spacing}px 0 0`
+            : '60px 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 60px'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 60px';
       }
       return props.spacing === 'default'
         ? '60px 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+          ? `${props.spacing}px 0`
+          : '60px 0';
     }};
   }
 
@@ -358,21 +373,21 @@ const CenteredWrapper = styled.div`
         return props.spacing === 'default'
           ? '5.859vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '5.859vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '5.859vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 5.859vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 5.859vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 5.859vw';
       }
       return props.spacing === 'default'
         ? '5.859vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '5.859vw 0';
+          ? `${props.spacing}px 0`
+          : '5.859vw 0';
     }};
     gap: 1.563vw;
   }
@@ -383,21 +398,21 @@ const CenteredWrapper = styled.div`
         return props.spacing === 'default'
           ? '12.5vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '12.5vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '12.5vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 12.5vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 12.5vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 12.5vw';
       }
       return props.spacing === 'default'
         ? '12.5vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0';
+          ? `${props.spacing}px 0`
+          : '12.5vw 0';
     }};
     gap: 3.333vw;
   }

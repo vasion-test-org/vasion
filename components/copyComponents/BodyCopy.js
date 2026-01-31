@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import media from '@/styles/media';
 import colors from '@/styles/colors';
 // import text from '@/styles/text';
-const BodyCopy = ({ className, children }) => {
+const BodyCopy = ({ className, children, $featured = false }) => {
   // Recursive function to clone children and pass down className
   const cloneChildrenWithClassName = (children, parentClassName = '') => {
     return React.Children.map(children, (child) => {
@@ -28,7 +28,7 @@ const BodyCopy = ({ className, children }) => {
         return React.cloneElement(clonedChild, {
           children: cloneChildrenWithClassName(
             child.props.children,
-            combinedClassName
+            combinedClassName,
           ),
         });
       }
@@ -38,7 +38,7 @@ const BodyCopy = ({ className, children }) => {
   };
 
   return (
-    <StyledBodyCopy className={className}>
+    <StyledBodyCopy className={className} $featured={$featured}>
       {cloneChildrenWithClassName(children)}
     </StyledBodyCopy>
   );
@@ -52,6 +52,34 @@ const StyledBodyCopy = styled.div`
   font-weight: 400;
   white-space: pre-wrap;
 
+  /* Featured body_copy being used in CenteredSection intro content */
+  ${(props) =>
+    props.$featured &&
+    `
+    margin-bottom:0.625vw;
+    background-color:${colors.lightPurpleGrey};
+    padding:1.5vw;
+    border-radius: 1vw;
+ 
+    ${media.fullWidth}{
+    margin-bottom:10px;
+    border-radius: 16px;
+    padding:24px;
+    }
+
+    ${media.tablet}{
+    margin-bottom:0.977vw;
+    border-radius: 1.563vw;
+    padding:2.344vw;
+    }
+
+    ${media.mobile}{
+    margin-bottom:2.083vw;
+    border-radius: 3.333vw;
+    padding:5vw;
+    }
+
+`}
   /* Apply styles to all children */
   & > * {
     font-family: inherit;
@@ -131,17 +159,17 @@ const StyledBodyCopy = styled.div`
 
   &.tag,
   & > .tag {
-    font-weight: 600;
-    font-size: 0.625vw;
+    font-weight: 700;
+    font-size: 0.953vw;
     line-height: 0.75vw;
 
     ${media.fullWidth} {
-      font-size: 10px;
+      font-size: 13px;
       line-height: 12px;
     }
 
     ${media.tablet} {
-      font-size: 0.977vw;
+      font-size: 1.458vw;
       line-height: 1.172vw;
     }
 
@@ -195,21 +223,21 @@ const StyledBodyCopy = styled.div`
 
   &.bodyMd,
   & > .bodyMd {
-    font-size: 1vw;
+    font-size: 1.111vw;
     line-height: 1.375vw;
 
     ${media.fullWidth} {
-      font-size: 16px;
+      font-size: 17px;
       line-height: 22px;
     }
 
     ${media.tablet} {
-      font-size: 16px;
+      font-size: 17px;
       line-height: 2.148vw;
     }
 
     ${media.mobile} {
-      font-size: 3.738vw;
+      font-size: 3.542vw;
       line-height: 5.14vw;
     }
   }
