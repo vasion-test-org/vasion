@@ -17,8 +17,11 @@ const TestimonialCarousel = ({ blok }) => {
   const selectedTheme = themes[blok.theme] || themes.default;
   const [activeIndex, setActiveIndex] = useState(0);
   const tagTopics = blok.testimonials?.[activeIndex]?.tag_topics;
-
   useEffect(() => {
+    const nextBtn = document.querySelector('.next');
+    const prevBtn = document.querySelector('.prev');
+    let onNext, onPrev;
+
     const initCarousel = async () => {
       const { default: gsap } = await import('gsap');
       const testimonialsArr = gsap.utils.toArray('.testimonials');
@@ -31,19 +34,27 @@ const TestimonialCarousel = ({ blok }) => {
         },
       });
 
-      document.querySelector('.next').addEventListener('click', () => {
+      onNext = () => {
         testimonialLoop.next({ duration: 0.4, ease: 'power1.inOut' });
         setActiveIndex((prev) => (prev + 1) % blok.testimonials.length);
-      });
-
-      document.querySelector('.prev').addEventListener('click', () => {
+      };
+      onPrev = () => {
         testimonialLoop.previous({ duration: 0.4, ease: 'power1.inOut' });
         setActiveIndex((prev) =>
           prev === 0 ? blok.testimonials.length - 1 : prev - 1,
         );
-      });
+      };
+
+      if (nextBtn) nextBtn.addEventListener('click', onNext);
+      if (prevBtn) prevBtn.addEventListener('click', onPrev);
     };
+
     initCarousel();
+
+    return () => {
+      if (nextBtn && onNext) nextBtn.removeEventListener('click', onNext);
+      if (prevBtn && onPrev) prevBtn.removeEventListener('click', onPrev);
+    };
   }, [blok.testimonials.length]);
 
   const mappedTestimonials = blok.testimonials.map((testimonial, i) => (

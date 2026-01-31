@@ -49,7 +49,6 @@ const CompetitiveAnalysis = ({ blok }) => {
   const dataRows = tableRows.slice(1);
   const products = headerRow.slice(1);
   const features = dataRows.map((row) => row[0]);
-
   useEffect(() => {
     const syncRowHeights = () => {
       const firstColRef = mobile ? mobileFirstColumnRef : firstColumnRef;
@@ -92,10 +91,15 @@ const CompetitiveAnalysis = ({ blok }) => {
     syncRowHeights();
 
     const resizeObserver = new ResizeObserver(syncRowHeights);
-    const images = document.querySelectorAll('img');
 
     const firstColRef = mobile ? mobileFirstColumnRef : firstColumnRef;
     const scrollRef = mobile ? mobileScrollContainerRef : scrollContainerRef;
+
+    // Scope image queries to only this component's refs
+    const images = [
+      ...(firstColRef.current?.querySelectorAll('img') || []),
+      ...(scrollRef.current?.querySelectorAll('img') || []),
+    ];
 
     if (firstColRef.current) resizeObserver.observe(firstColRef.current);
     if (scrollRef.current) resizeObserver.observe(scrollRef.current);
@@ -398,7 +402,7 @@ const FeatureCell = styled.div`
     }
   }
 
-  /* Force text sizing on all text elements */
+  /* Force text sizing on all text elements overriding rich text*/
   p,
   span,
   b,
