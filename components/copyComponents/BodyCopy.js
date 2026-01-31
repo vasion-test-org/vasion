@@ -56,21 +56,25 @@ const StyledBodyCopy = styled.div`
   ${(props) =>
     props.$featured &&
     `
+    margin-bottom:0.625vw;
     background-color:${colors.lightPurpleGrey};
     padding:1.5vw;
     border-radius: 1vw;
  
     ${media.fullWidth}{
+    margin-bottom:10px;
     border-radius: 16px;
     padding:24px;
     }
 
     ${media.tablet}{
+    margin-bottom:0.977vw;
     border-radius: 1.563vw;
     padding:2.344vw;
     }
 
     ${media.mobile}{
+    margin-bottom:2.083vw;
     border-radius: 3.333vw;
     padding:5vw;
     }
