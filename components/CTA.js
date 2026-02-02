@@ -78,10 +78,8 @@ const CTA = ({ blok }) => {
 };
 
 const ContentWrapper = styled.div`
-  --text-align: ${(props) =>
+  text-align: ${(props) =>
     ['pill', 'image'].includes(props.$ctastyle) ? 'left' : 'center'};
-
-  text-align: var(--text-align);
   display: flex;
   flex-direction: column;
   gap: 1vw;
