@@ -99,6 +99,8 @@ const ContentWrapper = styled.div`
   }
 
   ${media.mobile} {
+    text-align: ${(props) =>
+      ['pill', 'image'].includes(props.$ctastyle) ? 'center' : 'center'};
     gap: 3.333vw;
     max-width: ${(props) =>
       props.$ctastyle === 'pill' && props.$pillbgimg ? '392px' : '100%'};
