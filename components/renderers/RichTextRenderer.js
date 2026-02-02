@@ -32,6 +32,7 @@ const RichTextRenderer = ({
   responsiveTextStyles = [],
   blok,
   gradientText,
+  featuredCopy = false,
 }) => {
   if (!document) return null;
   const extractText = (contentArray) => {
@@ -145,7 +146,11 @@ const RichTextRenderer = ({
         responsiveTextStyles[1],
       );
       // console.log('selectedClassName', selectedClassName)
-      return <BodyCopy className={selectedClassName}>{children}</BodyCopy>;
+      return (
+        <BodyCopy className={selectedClassName} $featured={featuredCopy}>
+          {children}
+        </BodyCopy>
+      );
     },
   };
 
