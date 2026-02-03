@@ -4,7 +4,6 @@ import styled, { ThemeProvider } from 'styled-components';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import media from '@/styles/media';
 import { useAvailableThemes } from '@/context/ThemeContext';
-import { horizontalLoop } from '@/functions/horizontalLoop';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Image from '@/components/globalComponents/Image';
 import text from '@/styles/text';
@@ -13,25 +12,31 @@ import Button from './globalComponents/Button';
 const Testimonial = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
-  // console.log(blok);
+  // console.log('TESTIMONIAL', blok);
 
   return (
     <ThemeProvider theme={selectedTheme}>
       <TestimonialWrapper layout={blok.layout} spacing={blok.section_spacing}>
         <TestimonialCard>
           <TestimonialContent>
-            <TestimonialEyebrow>{blok?.eyebrow || Testimonial}</TestimonialEyebrow>
+            <TestimonialEyebrow>
+              {blok?.eyebrow || Testimonial}
+            </TestimonialEyebrow>
             {blok.quote.map((copy) => (
               <div {...storyblokEditable(copy)} key={copy.component}>
                 <RichTextRenderer document={copy.copy} />
               </div>
             ))}
             {blok?.quote_source_info && (
-              <SourceWrapper
-                {...storyblokEditable(blok.quote_source_info)}
-                key={blok.quote_source_info.component}
-              >
-                <RichTextRenderer document={blok?.quote_source_info[0]?.copy} />
+              <SourceWrapper>
+                {blok.quote_source_info.map((sourceInfo) => (
+                  <div
+                    {...storyblokEditable(sourceInfo)}
+                    key={sourceInfo._uid || sourceInfo.component}
+                  >
+                    <RichTextRenderer document={sourceInfo?.copy} />
+                  </div>
+                ))}
                 {blok?.link?.map(($buttonData) => (
                   <ButtonWrapper
                     {...storyblokEditable($buttonData)}
@@ -48,10 +53,7 @@ const Testimonial = ({ blok }) => {
           </TestimonialContent>
           {blok?.media[0] && (
             <ImageWrapper {...storyblokEditable(blok)}>
-              <Image
-                images={blok.media[0]?.media}
-                // borderRadius={blok.hero_asset?.[0]?.border_radius}
-              />
+              <Image images={blok.media[0]?.media} />
             </ImageWrapper>
           )}
         </TestimonialCard>
@@ -62,18 +64,19 @@ const Testimonial = ({ blok }) => {
 
 const ButtonWrapper = styled.div`
   margin-top: 1.25vw;
- ${media.fullWidth} {
-  margin-top: 20px;
- }
- 
- ${media.tablet} {
-  margin-top: 1.953vw;
- }
- 
- ${media.mobile} {
-  margin-top: 4.167vw;
- }
-`
+  ${media.fullWidth} {
+    margin-top: 20px;
+  }
+
+  ${media.tablet} {
+    margin-top: 1.953vw;
+  }
+
+  ${media.mobile} {
+    margin-top: 4.167vw;
+  }
+`;
+
 const SourceWrapper = styled.div`
   margin-top: 3.75vw;
 
@@ -88,6 +91,7 @@ const SourceWrapper = styled.div`
   ${media.mobile} {
   }
 `;
+
 const ImageWrapper = styled.div`
   align-content: center;
   min-width: 24vw;
@@ -110,6 +114,7 @@ const ImageWrapper = styled.div`
     max-width: 89.167vw;
   }
 `;
+
 const TestimonialEyebrow = styled.p`
   margin-bottom: 2vw;
   ${text.eyebrow};
@@ -125,6 +130,7 @@ const TestimonialEyebrow = styled.p`
   ${media.mobile} {
   }
 `;
+
 const TestimonialContent = styled.div`
   text-align: left;
   max-width: 81.5vw;
@@ -134,11 +140,11 @@ const TestimonialContent = styled.div`
   }
 
   ${media.tablet} {
-    width: 45.703vw;
+    width: 80.703vw;
   }
 
   ${media.mobile} {
-    width: 89.167vw;
+    width: 79.167vw;
   }
 `;
 const TestimonialCard = styled.div`
@@ -170,7 +176,7 @@ const TestimonialCard = styled.div`
     border-radius: unset;
     width: 100%;
     gap: 8.333vw;
-    padding: 6.667vw 5.417vw;
+    padding: 15.667vw 5.417vw;
   }
 `;
 const TestimonialWrapper = styled.div`
@@ -182,16 +188,16 @@ const TestimonialWrapper = styled.div`
     props.spacing === 'default'
       ? '3.75vw 0vw'
       : props.spacing
-      ? `calc(${props.spacing} / 1600 * 100vw) 0vw`
-      : '3.75vw 0vw'};
+        ? `calc(${props.spacing} / 1600 * 100vw) 0vw`
+        : '3.75vw 0vw'};
 
   ${media.fullWidth} {
     padding: ${(props) =>
       props.spacing === 'default'
         ? '60px 0px'
         : props.spacing
-        ? `calc(${props.spacing} / 1600 * 1600px) 0px`
-        : '60px 0px'};
+          ? `calc(${props.spacing} / 1600 * 1600px) 0px`
+          : '60px 0px'};
   }
 
   ${media.tablet} {
@@ -199,8 +205,8 @@ const TestimonialWrapper = styled.div`
       props.spacing === 'default'
         ? '3.906vw 0vw'
         : props.spacing
-        ? `calc(${props.spacing} / 1024 * 100vw) 0vw`
-        : '3.906vw 0vw'};
+          ? `calc(${props.spacing} / 1024 * 100vw) 0vw`
+          : '3.906vw 0vw'};
   }
 
   ${media.mobile} {
@@ -208,8 +214,9 @@ const TestimonialWrapper = styled.div`
       props.spacing === 'default'
         ? '3.906vw 0vw 0vw 0vw'
         : props.spacing
-        ? `calc(${props.spacing} / 428 * 100vw) 0vw`
-        : '3.906vw 0vw 0vw 0vw'};
+          ? `calc(${props.spacing} / 428 * 100vw) 0vw`
+          : '3.906vw 0vw 0vw 0vw'};
   }
 `;
+
 export default Testimonial;
