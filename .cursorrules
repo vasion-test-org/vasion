@@ -262,6 +262,36 @@ import CarouselAnimator from '@/components/CarouselAnimator';
 
 **Never use inline styles or scoped `<style>` tags.** Use only Tailwind classes.
 
+### Mobile-First Responsive Pattern (IMPORTANT)
+
+**Always use mobile-first approach with standard Tailwind breakpoints:**
+
+```jsx
+// ✅ CORRECT: Mobile-first (base = mobile, sm: = larger screens)
+className="px-4 sm:px-10"  // 16px on mobile, 40px at 481px+
+
+// ❌ WRONG: Desktop-first with custom breakpoints
+className="px-10 mob:px-4"  // This may not work as expected in v4
+```
+
+**Standard Tailwind v4 breakpoints (min-width):**
+- `sm:` → 640px and up (use for tablet+)
+- `md:` → 768px and up
+- `lg:` → 1024px and up
+- `xl:` → 1280px and up
+
+### Centering Elements with Max-Width (CRITICAL)
+
+**ALWAYS add `mx-auto` when using `max-w-*` to center content:**
+
+```jsx
+// ✅ CORRECT: Centered card with max-width
+<div className="w-full max-w-326 mx-auto">
+
+// ❌ WRONG: Missing mx-auto - card will be left-aligned
+<div className="w-full max-w-326">
+```
+
 ### Converting VW Values
 When styled-components use different vw values per breakpoint targeting the SAME pixel size, use ONE Tailwind class:
 
@@ -275,20 +305,28 @@ padding: 5vw;          // Mobile: 5 × 480/100 = 24px
 className="py-6" // 24px / 4 = 6
 ```
 
-### Theme-Based Styling
-Map theme props to Tailwind classes using conditional logic:
+### Theme-Based Styling with Inline Conditionals
+
+Use ternary operators directly in `clsx()` for cleaner code:
 
 ```jsx
-const getCardBgClass = () => {
-  if (isTransparent) return 'bg-transparent';
-  switch (theme) {
-    case 'dark': return 'bg-purple-dark';
-    case 'light': return 'bg-white';
-    default: return 'bg-purple';
-  }
-};
+import clsx from 'clsx';
 
-<div className={cn('p-15 rounded-3xl', getCardBgClass())}>
+<div
+  className={clsx(
+    'w-full overflow-hidden mx-auto',
+    // Background - inline ternary
+    isTransparent ? 'bg-transparent' : theme === 'dark' ? 'bg-purple-dark' : 'bg-purple',
+    // Text color
+    theme === 'light' ? 'text-txt-primary' : 'text-white',
+    // Max width
+    isTransparent ? 'max-w-full' : 'max-w-326',
+    // Padding
+    'p-15 sm:p-10',
+    // Border radius
+    'rounded-3xl'
+  )}
+>
 ```
 
 ### Lists
@@ -313,7 +351,6 @@ If a Figma link is provided:
 When converting a styled-component:
 
 1. **Evaluate for Server Component** - Can it work WITHOUT `'use client'`?
-   - If yes: Use scoped `<style>` tags for responsive styles, import themes statically
    - If client code needed (GSAP): Extract to minimal client component like `CarouselAnimator`
 2. **Preserve EXACT structure** - Same number of containers, same nesting
 3. **Handle ALL props** - Check original for props like:
@@ -321,12 +358,64 @@ When converting a styled-component:
    - `offset_spacing` → affects vertical padding (top/bottom/both)
    - `section_spacing` → custom pixel spacing value
 4. **Match values per breakpoint** - Calculate original vw → px → rem for EACH breakpoint
-5. **Use appropriate responsive approach**:
-   - Server Component: `<style>` tag with `@media` queries
-   - Client Component: `ScreenContext` for reliable responsive styles
-6. **Test ALL breakpoints** - Desktop, tablet, mobile must match original
-7. **Check outer wrapper** - Most components have section padding for spacing between components
-8. **Remove `'use client'`** - After extracting client logic, verify main component is server-side
+5. **Use mobile-first responsive** - Base styles for mobile, `sm:` for larger screens
+6. **Center with mx-auto** - Always add `mx-auto` when using `max-w-*`
+7. **Test ALL breakpoints** - Desktop, tablet, mobile must match original
+8. **Check outer wrapper** - Most components have section padding for spacing between components
+9. **Remove `'use client'`** - After extracting client logic, verify main component is server-side
+
+## Reference: LogoCube Component Pattern
+
+This is the gold standard for converted components:
+
+```jsx
+import clsx from 'clsx';
+import Image from 'next/image';
+import CarouselAnimator from './CarouselAnimator';
+
+const LogoCube = ({ blok }) => {
+  const isTransparent = blok.transparent_background;
+  const theme = blok.theme || 'default';
+  const offsetSpacing = blok.offset_spacing;
+
+  return (
+    <>
+      <section
+        aria-label="Trusted by leading companies"
+        className={clsx(
+          'flex w-full items-center justify-center',
+          // Mobile-first padding
+          'px-4 sm:px-10',
+          // Vertical padding based on props
+          offsetSpacing === 'top' && 'pt-15 pb-0',
+          offsetSpacing === 'bottom' && 'pt-0 pb-15',
+          !offsetSpacing && 'py-15'
+        )}
+      >
+        <div
+          className={clsx(
+            // CRITICAL: mx-auto for centering with max-width
+            'w-full overflow-hidden mx-auto',
+            // Theme-based background (inline ternary)
+            isTransparent ? 'bg-transparent' : theme === 'dark' ? 'bg-purple-dark' : 'bg-purple',
+            // Theme-based text color
+            theme === 'light' ? 'text-txt-primary' : 'text-white',
+            // Conditional max-width
+            isTransparent ? 'max-w-full' : 'max-w-326',
+            // Padding and border radius
+            'p-15 rounded-3xl'
+          )}
+        >
+          {/* Content */}
+        </div>
+      </section>
+
+      {/* Client component for animation - conditionally rendered */}
+      {shouldAnimate && <CarouselAnimator selector=".cubeLogos" />}
+    </>
+  );
+};
+```
 
 ## Validation
 

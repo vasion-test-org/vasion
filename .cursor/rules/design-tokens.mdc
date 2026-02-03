@@ -12,13 +12,33 @@ Use these exact class names when styling components. NEVER use arbitrary values.
 
 ## Breakpoints
 
-| Prefix | Range | When to Use |
-|--------|-------|-------------|
-| (none) | Base/mobile-first | Default styles |
-| `mob:` | max-480px | Mobile-only overrides |
-| `tab:` | 481px-1024px | Tablet-specific |
-| `desk:` | 1025px-1600px | Desktop-specific |
-| `fw:` | 1601px+ | Large screens (full width) |
+### Standard Tailwind v4 Breakpoints (RECOMMENDED - Mobile-First)
+
+| Prefix | Min-Width | When to Use |
+|--------|-----------|-------------|
+| (none) | 0px | Base/mobile styles |
+| `sm:` | 640px | Small tablets and up |
+| `md:` | 768px | Tablets and up |
+| `lg:` | 1024px | Laptops and up |
+| `xl:` | 1280px | Desktops and up |
+| `2xl:` | 1536px | Large desktops |
+
+**Usage Pattern (Mobile-First):**
+```jsx
+// Base for mobile, sm: for larger screens
+className="px-4 sm:px-10 lg:px-16"
+```
+
+### Custom Project Breakpoints (Legacy)
+
+| Prefix | Range | Notes |
+|--------|-------|-------|
+| `mob:` | max-480px | May not work reliably in v4 |
+| `tab:` | 481px-1024px | Use `sm:` or `md:` instead |
+| `desk:` | 1025px-1600px | Use `lg:` or `xl:` instead |
+| `fw:` | 1601px+ | Use `2xl:` instead |
+
+**IMPORTANT:** Prefer standard Tailwind breakpoints (`sm:`, `md:`, `lg:`) for reliability.
 
 ## Colors
 
@@ -158,9 +178,21 @@ Use these exact class names when styling components. NEVER use arbitrary values.
 
 ## Common Patterns
 
+### Centered Card with Max-Width (CRITICAL)
+```jsx
+// ALWAYS include mx-auto when using max-w-* for centering
+className="w-full max-w-326 mx-auto p-15 rounded-3xl bg-purple"
+```
+
+### Mobile-First Responsive Padding
+```jsx
+// Base = mobile, sm: = tablet+, lg: = desktop+
+className="px-4 sm:px-10 lg:px-16 py-8 sm:py-12"
+```
+
 ### Button with Focus State
 ```jsx
-className="px-4 py-2 rounded-md bg-purple-DEFAULT text-white hover:bg-purple-dark focus:outline-none focus:ring-2 focus:ring-purple-border focus:ring-offset-2 transition-colors"
+className="px-4 py-2 rounded-md bg-purple text-white hover:bg-purple-dark focus:outline-none focus:ring-2 focus:ring-purple-border focus:ring-offset-2 transition-colors"
 ```
 
 ### Responsive Text

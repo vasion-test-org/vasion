@@ -415,6 +415,36 @@ export default function ComponentName({ prop1, prop2 }) {
 
 **NEVER use inline styles or scoped `<style>` tags.** Use only Tailwind classes.
 
+### Mobile-First Responsive Pattern (CRITICAL)
+
+**Always use mobile-first approach with standard Tailwind breakpoints:**
+
+```jsx
+// ✅ CORRECT: Mobile-first (base = mobile, sm: = larger screens)
+className="px-4 sm:px-10"  // 16px on mobile, 40px at 481px+
+
+// ❌ WRONG: Custom breakpoints may not work as expected
+className="px-10 mob:px-4"
+```
+
+**Standard Tailwind v4 breakpoints (min-width based):**
+- `sm:` → 640px and up
+- `md:` → 768px and up  
+- `lg:` → 1024px and up
+- `xl:` → 1280px and up
+
+### Centering Elements with Max-Width (CRITICAL)
+
+**ALWAYS add `mx-auto` when using `max-w-*` to center content:**
+
+```jsx
+// ✅ CORRECT: Centered card with max-width
+<div className="w-full max-w-326 mx-auto">
+
+// ❌ WRONG: Missing mx-auto - card will be left-aligned
+<div className="w-full max-w-326">
+```
+
 ### Converting VW to Tailwind
 
 When different vw values per breakpoint target the SAME pixel size, use ONE Tailwind class:
@@ -429,48 +459,52 @@ padding: 5vw;          // Mobile: 5 × 480/100 = 24px
 className="py-6" // 24px / 4 = 6
 ```
 
-### Theme-Based Styling
+### Theme-Based Styling with Inline Conditionals
 
-Map theme props to Tailwind classes using conditional logic:
+Use ternary operators directly in `clsx()` for cleaner, more readable code:
 
 ```jsx
-const getCardBgClass = () => {
-  if (isTransparent) return 'bg-transparent';
-  switch (theme) {
-    case 'dark': return 'bg-purple-dark';
-    case 'light': return 'bg-white';
-    default: return 'bg-purple';
-  }
-};
+import clsx from 'clsx';
 
-const getTextClass = () => {
-  switch (theme) {
-    case 'light': return 'text-txt-primary';
-    default: return 'text-white';
-  }
-};
-
-<div className={cn('p-15 rounded-3xl', getCardBgClass(), getTextClass())}>
+<div
+  className={clsx(
+    // CRITICAL: mx-auto for centering
+    'w-full overflow-hidden mx-auto',
+    // Background - inline ternary chain
+    isTransparent ? 'bg-transparent' : theme === 'dark' ? 'bg-purple-dark' : 'bg-purple',
+    // Text color
+    theme === 'light' ? 'text-txt-primary' : 'text-white',
+    // Max width - conditional
+    isTransparent ? 'max-w-full' : 'max-w-326',
+    // Padding
+    'p-15 sm:p-10',
+    // Border radius
+    'rounded-3xl'
+  )}
+>
 ```
 
-### Responsive Padding Pattern
+### Responsive Padding Based on Props
 
-Map offset_spacing prop to Tailwind classes:
+Map offset_spacing prop to Tailwind classes with mobile-first approach:
 
 ```jsx
-const getPaddingClasses = () => {
-  const base = blok.offset_spacing;
-  if (base === 'top') return 'pt-15 pb-0 tab:pt-10 mob:pt-15';
-  if (base === 'bottom') return 'pt-0 pb-15 tab:pb-10 mob:pb-15';
-  return 'py-15 tab:py-10 mob:py-15';
-};
-
-<section className={cn('flex w-full', getPaddingClasses())}>
+<section
+  className={clsx(
+    'flex w-full items-center justify-center',
+    // Mobile-first horizontal padding
+    'px-4 sm:px-10',
+    // Vertical padding based on offset_spacing prop
+    offsetSpacing === 'top' && 'pt-15 pb-0',
+    offsetSpacing === 'bottom' && 'pt-0 pb-15',
+    !offsetSpacing && 'py-15'
+  )}
+>
 ```
 
 ### Lists
 
-Use Tailwind's `list-none` class:
+Use Tailwind's `list-none` class on both ul and li:
 
 ```jsx
 <ul className="list-none m-0 p-0 flex gap-5">
@@ -505,12 +539,13 @@ If a Figma link is provided:
 6. [ ] Replace styled components with native elements + Tailwind classes or inline styles
 
 ### 3. Handle Styling
-7. [ ] Convert dynamic styles (props) to conditional Tailwind classes using `cn()`
+7. [ ] Convert dynamic styles (props) to conditional Tailwind classes using `clsx()`
 8. [ ] Calculate values for EACH breakpoint - vw→px→Tailwind (px / 4)
-9. [ ] Use Tailwind breakpoint prefixes: `mob:`, `tab:`, `desk:`, `fw:`
-10. [ ] Map theme values to Tailwind classes using helper functions
-11. [ ] Add `list-none` class to all ul/li elements
-12. [ ] **NEVER use inline styles or scoped `<style>` tags**
+9. [ ] **Use mobile-first with standard breakpoints**: `sm:`, `md:`, `lg:`, `xl:`
+10. [ ] **Add `mx-auto` when using `max-w-*`** to center content
+11. [ ] Use inline ternary operators in `clsx()` for theme-based styling
+12. [ ] Add `list-none` class to all ul/li elements
+13. [ ] **NEVER use inline styles or scoped `<style>` tags**
 
 ### 4. Extract Client Logic (if needed)
 13. [ ] Move GSAP/animation code to `CarouselAnimator` or similar minimal client component
