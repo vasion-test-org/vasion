@@ -1,7 +1,7 @@
+import clsx from 'clsx';
 import Image from 'next/image';
 
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import { cn } from '@/lib/cn';
 import { storyblokEditable } from '@storyblok/react/rsc';
 
 import CarouselAnimator from './CarouselAnimator';
@@ -10,16 +10,11 @@ import CarouselAnimator from './CarouselAnimator';
  * LogoCube Component (Server Component)
  * Displays a carousel of company logos with optional header text.
  * Supports transparent and themed backgrounds.
- * 
- * VW Conversion Notes:
- * - Card max-width: 81.5vw (desk) = 1304px → max-w-326
- * - Card padding: 3.75rem (60px) desk, 2.5rem (40px) tab, varies mobile
- * - Logo size: 12.5vw (desk) = 200px → w-50 h-25
- * - Inner gap: 2.5rem (40px) desk → gap-10, 1.25rem (20px) tab → gap-5
  */
 const LogoCube = ({ blok }) => {
   const isTransparent = blok.transparent_background;
   const theme = blok.theme || 'default';
+  const offsetSpacing = blok.offset_spacing;
 
   const defaultLogos = [
     { alt: 'NASCAR logo - Professional racing organization', image: '/images/icons/nascar.png' },
@@ -36,67 +31,37 @@ const LogoCube = ({ blok }) => {
   const shouldCenter = logosToDisplay?.length < 6;
   const shouldAnimate = logosToDisplay?.length >= 7;
 
-  // Map offset_spacing to Tailwind padding classes
-  const getPaddingClasses = () => {
-    const base = blok.offset_spacing;
-    // Default: py-15 (60px), tablet: py-10 (40px approx via 5.859vw), mobile: py-15 (60px via 12.5vw)
-    if (base === 'top') return 'pt-15 pb-0 tab:pt-10 mob:pt-15';
-    if (base === 'bottom') return 'pt-0 pb-15 tab:pb-10 mob:pb-15';
-    return 'py-15 tab:py-10 mob:py-15';
-  };
-
-  // Theme-based background classes
-  const getCardBgClass = () => {
-    if (isTransparent) return 'bg-transparent';
-    // Map themes to Tailwind bg classes
-    switch (theme) {
-      case 'dark': return 'bg-purple-dark';
-      case 'light': return 'bg-white';
-      default: return 'bg-purple-DEFAULT';
-    }
-  };
-
-  // Theme-based text color classes
-  const getCardTextClass = () => {
-    switch (theme) {
-      case 'light': return 'text-txt-primary';
-      default: return 'text-white';
-    }
-  };
-
   return (
     <>
       <section
         {...storyblokEditable(blok)}
         aria-label="Trusted by leading companies"
-        className={cn(
+        className={clsx(
           'flex w-full items-center justify-center',
-          getPaddingClasses(),
-          // Horizontal padding for tablet/mobile
-          'tab:px-10 mob:px-4'
+          // Mobile-first: start with mobile padding, increase for larger screens
+          'px-4 sm:px-10',
+          // Vertical padding based on offset_spacing
+          offsetSpacing === 'top' && 'pt-15 pb-0',
+          offsetSpacing === 'bottom' && 'pt-0 pb-15',
+          !offsetSpacing && 'py-15'
         )}
       >
         <div
-          className={cn(
-            'w-full overflow-hidden',
-            getCardBgClass(),
-            getCardTextClass(),
-            // Max width - transparent gets full, themed gets constrained
+          className={clsx(
+            'w-full overflow-hidden mx-auto',
+            // Background
+            isTransparent ? 'bg-transparent' : theme === 'dark' ? 'bg-purple-dark' : theme === 'light' ? 'bg-white' : 'bg-purple',
+            // Text color
+            theme === 'light' ? 'text-txt-primary' : 'text-white',
+            // Max width
             isTransparent ? 'max-w-full' : 'max-w-326',
-            // Padding - desktop: 60px, tablet: 40px 40px 60px, mobile: 45px 29px 67px
-            'p-15 tab:px-10 tab:py-10 tab:pb-15 mob:px-7 mob:pt-11 mob:pb-17',
+            // Padding
+            'p-15 tab:p-10 mob:px-7 mob:pt-11 mob:pb-17',
             // Border radius
             'rounded-3xl mob:rounded-4xl'
           )}
         >
-          <div
-            className={cn(
-              'flex flex-col items-center justify-center',
-              // Gap - desktop: 40px, tablet: 20px, mobile: 36px
-              'gap-10 tab:gap-5 mob:gap-9'
-            )}
-          >
-            {/* Title Container */}
+          <div className="flex flex-col items-center justify-center gap-10 tab:gap-5 mob:gap-9">
             {blok.header && (
               <header className="w-full text-center">
                 <RichTextRenderer
@@ -107,24 +72,20 @@ const LogoCube = ({ blok }) => {
               </header>
             )}
 
-            {/* LogoContainer - logos row */}
             <ul
               aria-label="Company logos carousel"
-              role="list"
-              className={cn(
-                'flex w-full items-center overflow-hidden list-none gap-5 m-0 p-0',
+              className={clsx(
+                'flex w-full items-center overflow-hidden gap-5 m-0 p-0 list-none',
                 shouldCenter ? 'justify-center' : 'justify-start'
               )}
             >
               {logosToDisplay.map((logo, index) => (
                 <li
                   key={logo.filename || logo.alt || index}
-                  className="cubeLogos flex-shrink-0 list-none"
-                  role="listitem"
+                  className="cubeLogos shrink-0 list-none"
                 >
                   <Image
                     alt={logo.alt || 'Company logo'}
-                    // Logo size: 200x100 desktop, 224x112 mobile
                     className="w-50 h-25 mob:w-56 mob:h-28"
                     height={100}
                     loading="lazy"
@@ -138,7 +99,6 @@ const LogoCube = ({ blok }) => {
         </div>
       </section>
 
-      {/* Client component only for GSAP animation - minimal JS */}
       {shouldAnimate && <CarouselAnimator selector=".cubeLogos" />}
     </>
   );

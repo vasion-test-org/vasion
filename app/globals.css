@@ -1,9 +1,169 @@
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* ——— Theme variables (Tailwind v4) ——— */
+@theme {
+  /* Reset default colors to add our own */
+  --color-*: initial;
 
-/* CSS Custom Properties for Gradients (from styles/colors.js) */
+  /* Base colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+
+  /* Purple palette (Brand Primary) */
+  --color-purple-navy: #090121;
+  --color-purple-dark: #201435;
+  --color-purple: #3D2562;
+  --color-purple-medium: #583F99;
+  --color-purple-light: #7E5FDD;
+  --color-purple-border: #945AEE;
+  --color-purple-sysLight: #b19cf1;
+  --color-purple-500: #6A2C6A;
+  --color-purple-400: #8B5B8B;
+  --color-purple-300: #AC8AAC;
+  --color-purple-200: #CBBFF1;
+  --color-purple-100: #E6DFF8;
+  --color-purple-tag: #E5DFF8;
+  --color-purple-gray50: #ECE9EF;
+  --color-purple-lightGrey: #F5F4F7;
+  --color-purple-reddit: #190C31;
+
+  /* Orange palette */
+  --color-orange-dark: #CC4800;
+  --color-orange: #ff5100;
+  --color-orange-500: #FF612A;
+  --color-orange-400: #FF854d;
+  --color-orange-300: #FFAD80;
+  --color-orange-200: #FFCBB2;
+  --color-orange-100: #FFEEE5;
+
+  /* Teal palette */
+  --color-teal-dark: #007C77;
+  --color-teal: #00A19B;
+  --color-teal-500: #33B4AF;
+  --color-teal-400: #66C7C3;
+  --color-teal-300: #99DAD7;
+  --color-teal-200: #CCECEB;
+  --color-teal-100: #E5F6F5;
+
+  /* Yellow palette */
+  --color-yellow-dark: #D3A809;
+  --color-yellow: #FFCB04;
+  --color-yellow-500: #FFDB4F;
+  --color-yellow-400: #FFE068;
+  --color-yellow-300: #FFE582;
+  --color-yellow-200: #FFF5CD;
+  --color-yellow-100: #FFFAE6;
+
+  /* Grey palette */
+  --color-grey-800: #191D1E;
+  --color-grey-750: #292B2C;
+  --color-grey-700: #38383D;
+  --color-grey-600: #5E5F61;
+  --color-grey-500: #838587;
+  --color-grey-400: #A8ABAE;
+  --color-grey-300: #BBBEC1;
+  --color-grey-200: #C2C5C7;
+  --color-grey-100: #CFD2D4;
+  --color-grey-ghost: #C8C9CE;
+  --color-grey-75: #DDDFE0;
+  --color-grey-50: #EBECEC;
+  --color-grey-25: #F6F7F7;
+
+  /* Text colors */
+  --color-txt-primary: #1B1D21;
+  --color-txt-subtle: #808085;
+
+  /* Other colors */
+  --color-pink: #DD5FC1;
+
+  /* Breakpoints */
+  --breakpoint-mob: 480px;
+  --breakpoint-tab: 1024px;
+  --breakpoint-desk: 1600px;
+  --breakpoint-fw: 1601px;
+  --breakpoint-sm: 481px;
+  --breakpoint-md: 1025px;
+  --breakpoint-lg: 1601px;
+
+  /* Spacing (custom extensions) */
+  --spacing-4_5: 1.125rem;
+  --spacing-7: 1.8125rem;
+  --spacing-11: 2.8125rem;
+  --spacing-13: 3.25rem;
+  --spacing-15: 3.75rem;
+  --spacing-17: 4.1875rem;
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+  --spacing-25: 6.25rem;
+  --spacing-30: 7.5rem;
+  --spacing-37: 9.25rem;
+  --spacing-50: 12.5rem;
+  --spacing-75: 18.75rem;
+  --spacing-100: 25rem;
+  --spacing-150: 37.5rem;
+
+  /* Container sizes */
+  --container-content: 100rem;
+  --container-narrow: 55rem;
+  --container-wide: 75rem;
+  --container-326: 81.5rem;
+
+  /* Border radius */
+  --radius-sm: 0.1875rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-4xl: 1.6875rem;
+
+  /* Fonts */
+  --font-archivo: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-archivo-bold: 'Archivo Bold', ui-sans-serif, system-ui, sans-serif;
+  --font-orbitron: 'Orbitron Regular', ui-sans-serif, system-ui, sans-serif;
+
+  /* Typography scale */
+  --text-h1: 2.875rem;
+  --text-h1--line-height: 3.5rem;
+  --text-h1--font-weight: 800;
+
+  --text-h2: 2.875rem;
+  --text-h2--line-height: 3.5rem;
+  --text-h2--font-weight: 700;
+
+  --text-h3: 2rem;
+  --text-h3--line-height: 2.5rem;
+  --text-h3--font-weight: 700;
+
+  --text-h4: 1.625rem;
+  --text-h4--line-height: 2rem;
+  --text-h4--font-weight: 700;
+
+  --text-h5: 1.25rem;
+  --text-h5--line-height: 1.5rem;
+  --text-h5--font-weight: 700;
+
+  --text-body-xl: 1.4375rem;
+  --text-body-xl--line-height: 1.875rem;
+
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.5rem;
+
+  --text-body-md: 1rem;
+  --text-body-md--line-height: 1.375rem;
+
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.125rem;
+
+  --text-eyebrow: 0.875rem;
+  --text-eyebrow--line-height: 1.125rem;
+  --text-eyebrow--font-weight: 700;
+  --text-eyebrow--letter-spacing: 0.175rem;
+  --text-eyebrow--text-transform: uppercase;
+}
+
+/* CSS Custom Properties for Gradients */
 :root {
   --gradient-purple-orbital: linear-gradient(107deg, #5101AF -20.03%, #2A1844 31.32%, #2A1844 59.09%, #5101AF 96.2%), linear-gradient(90deg, #FFEEE5 0%, rgba(255, 238, 229, 0.00) 50%, #FFEEE5 100%), #F5F4F7;
   --gradient-purple: linear-gradient(270deg, #945AEE 0%, rgba(148, 90, 238, 0.4) 100%);
@@ -12,14 +172,6 @@
   --gradient-light-purple: linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%);
   --gradient-dark-purple: linear-gradient(180deg, #583F99 0%, #3D2562 100%);
   --gradient-medium-purple: linear-gradient(180deg, #7E5FDD 0%, #583F99 100%);
-
-  /* Color tokens as CSS variables for runtime theming */
-  --color-yellow-primary: #FFCB04;
-  --color-teal-primary: #00A19B;
-  --color-purple-primary: #3D2562;
-  --color-orange-primary: #ff5100;
-  --color-txt-primary: #1B1D21;
-  --color-txt-subtle: #808085;
 }
 
 @font-face {

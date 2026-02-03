@@ -1,15 +1,37 @@
 # Vasion Project AI Rules
 
-This project uses Tailwind CSS (migrating from styled-components). Follow these rules for ALL code changes.
+This project uses **Tailwind CSS v4** (migrating from styled-components). Follow these rules for ALL code changes.
 
 ## Critical Rules
 
 1. **PRESERVE ORIGINAL LAYOUT** - Converted components must look IDENTICAL to the original
 2. **ALWAYS use Tailwind CSS** - Never use styled-components for new code
 3. **NO arbitrary px values** - No `w-[450px]`, use rem or closest Tailwind value
-4. **ALWAYS use design tokens** - Reference `tailwind.config.js` for colors, typography, spacing
+4. **ALWAYS use design tokens** - Defined in `@theme` block in `app/globals.css`
 5. **ALWAYS ensure ADA compliance** - Alt text, focus states, semantic HTML
-6. **ALWAYS use the `cn()` utility** - Import from `@/lib/cn` for conditional classes
+6. **Use `cn()` or `clsx()`** - Import from `@/lib/cn` or `clsx` for conditional classes
+
+## Tailwind v4 Configuration
+
+This project uses **Tailwind CSS v4** with CSS-based configuration:
+
+```css
+/* app/globals.css */
+@import "tailwindcss";
+
+@theme {
+  --color-purple: #3D2562;
+  --color-orange: #ff5100;
+  --spacing-15: 3.75rem;
+  --breakpoint-mob: 480px;
+  /* ... all design tokens defined here */
+}
+```
+
+**Key differences from v3:**
+- No `tailwind.config.js` for theme customization (use `@theme` in CSS)
+- Import with `@import "tailwindcss"` instead of `@tailwind base/components/utilities`
+- Custom values defined as CSS custom properties in `@theme` block
 
 ## Converting VW to Tailwind
 
@@ -56,10 +78,10 @@ import Image from 'next/image';
 - `desk:` (1025-1600px)
 - `fw:` (1601px+)
 
-### Common Colors
-- Purple: `purple-DEFAULT`, `purple-dark`, `purple-light`, `purple-border`
-- Orange: `orange-DEFAULT`, `orange-500`
-- Teal: `teal-DEFAULT`, `teal-500`
+### Common Colors (DEFAULT accessed without suffix)
+- Purple: `bg-purple` (DEFAULT), `bg-purple-dark`, `bg-purple-light`, `border-purple-border`
+- Orange: `bg-orange` (DEFAULT), `bg-orange-500`
+- Teal: `bg-teal` (DEFAULT), `bg-teal-500`
 - Grey: `grey-800` to `grey-25`
 - Text: `txt-primary`, `txt-subtle`
 
@@ -95,7 +117,7 @@ export default function ComponentName({ variant = 'default', className }) {
         'tab:flex-row tab:gap-6 tab:p-8',
         'desk:gap-8 desk:p-12',
         // Variant styles
-        variant === 'primary' && 'bg-purple-DEFAULT text-white',
+        variant === 'primary' && 'bg-purple text-white',
         variant === 'secondary' && 'bg-grey-25 text-txt-primary',
         // Allow className override
         className
@@ -110,7 +132,7 @@ export default function ComponentName({ variant = 'default', className }) {
         className="rounded-lg"
       />
       <button
-        className="px-4 py-2 bg-orange-DEFAULT text-white rounded-md
+        className="px-4 py-2 bg-orange text-white rounded-md
           hover:bg-orange-dark transition-colors
           focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
       >
@@ -262,7 +284,7 @@ const getCardBgClass = () => {
   switch (theme) {
     case 'dark': return 'bg-purple-dark';
     case 'light': return 'bg-white';
-    default: return 'bg-purple-DEFAULT';
+    default: return 'bg-purple';
   }
 };
 

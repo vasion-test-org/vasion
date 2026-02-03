@@ -5,6 +5,24 @@ module.exports = {
     './components/**/*.{js,jsx,ts,tsx}',
     './pages/**/*.{js,jsx,ts,tsx}',
   ],
+  // Safelist ensures these classes are always generated
+  safelist: [
+    'bg-purple',
+    'bg-purple-dark',
+    'bg-white',
+    'bg-transparent',
+    'text-white',
+    'text-txt-primary',
+    'max-w-326',
+    'max-w-full',
+    'list-none',
+    'p-15',
+    'py-15',
+    'pt-15',
+    'pb-15',
+    'rounded-3xl',
+    'rounded-4xl',
+  ],
   theme: {
     extend: {
       // Breakpoints from styles/media.js
@@ -227,6 +245,7 @@ module.exports = {
         'content': '100rem',  // 1600px - fullWidth breakpoint
         'narrow': '55rem',    // 880px
         'wide': '75rem',      // 1200px
+        '326': '81.5rem',     // 1304px - LogoCube card width
       },
 
       // Border radius

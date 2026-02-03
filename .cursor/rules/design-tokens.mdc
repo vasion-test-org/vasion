@@ -4,7 +4,9 @@ globs: ["**/*.{js,jsx,ts,tsx,css}"]
 alwaysApply: true
 ---
 
-# Design Token Quick Reference
+# Design Token Quick Reference (Tailwind v4)
+
+**All design tokens are defined in `app/globals.css` using the `@theme` directive.**
 
 Use these exact class names when styling components. NEVER use arbitrary values.
 
@@ -23,7 +25,7 @@ Use these exact class names when styling components. NEVER use arbitrary values.
 ### Purple (Brand Primary)
 - `purple-navy` → #090121
 - `purple-dark` → #201435
-- `purple-DEFAULT` → #3D2562 (use as `text-purple-DEFAULT` or `bg-purple-DEFAULT`)
+- `purple-DEFAULT` → #3D2562 (use as `text-purple` or `bg-purple` - DEFAULT is accessed without suffix)
 - `purple-medium` → #583F99
 - `purple-light` → #7E5FDD
 - `purple-border` → #945AEE

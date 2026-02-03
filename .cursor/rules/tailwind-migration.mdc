@@ -1,12 +1,33 @@
 ---
-description: Guidelines for Tailwind CSS migration and maintaining code quality standards
+description: Guidelines for Tailwind CSS v4 migration and maintaining code quality standards
 globs: ["**/*.{js,jsx,ts,tsx}"]
 alwaysApply: true
 ---
 
-# Tailwind CSS Migration Guidelines
+# Tailwind CSS v4 Migration Guidelines
 
-This project is migrating from styled-components to Tailwind CSS for improved performance. Follow these rules when creating or modifying components.
+This project uses **Tailwind CSS v4** with CSS-based configuration. We are migrating from styled-components for improved performance. Follow these rules when creating or modifying components.
+
+## Tailwind v4 Configuration
+
+Design tokens are defined in `app/globals.css` using the `@theme` directive:
+
+```css
+@import "tailwindcss";
+
+@theme {
+  --color-purple: #3D2562;
+  --color-orange: #ff5100;
+  --spacing-15: 3.75rem;
+  --breakpoint-mob: 480px;
+  /* All custom values defined here */
+}
+```
+
+**Key v4 differences:**
+- Use `@import "tailwindcss"` (not `@tailwind base/components/utilities`)
+- Define custom values in `@theme` block (not `tailwind.config.js`)
+- Colors use `--color-*`, spacing uses `--spacing-*`, breakpoints use `--breakpoint-*`
 
 ## CRITICAL: Preserve Original Layout
 
@@ -79,7 +100,7 @@ vwToRem(41.667, 480) // Mobile: 12.5rem (200px)
 - **NEVER** use arbitrary values like `w-[450px]`, `h-[200px]`, or `w-[9.5rem]`
 - **ALWAYS** convert px to Tailwind number: `px / 4 = Tailwind class`
 - Tailwind JIT auto-generates any number (e.g., `w-326` = 326 × 0.25rem = 1304px)
-- **DO NOT add custom values to tailwind.config.js** - JIT handles it automatically
+- Custom design tokens are defined in `@theme` block in `app/globals.css`
 
 ### PX to Tailwind Conversion
 ```
@@ -97,7 +118,7 @@ Examples:
 - Example: `text-body-sm tab:text-body-md desk:text-body-lg`
 
 ### Design Tokens
-- Use colors from the config: `text-purple-DEFAULT`, `bg-teal-500`, etc.
+- Use colors from the config: `text-purple`, `bg-teal-500`, etc. (DEFAULT accessed without suffix)
 - Use typography classes: `text-h1`, `text-body-lg`, `text-eyebrow`
 - Use spacing tokens: `p-4`, `gap-6`, `m-8` (avoid arbitrary values)
 
@@ -418,7 +439,7 @@ const getCardBgClass = () => {
   switch (theme) {
     case 'dark': return 'bg-purple-dark';
     case 'light': return 'bg-white';
-    default: return 'bg-purple-DEFAULT';
+    default: return 'bg-purple';
   }
 };
 
