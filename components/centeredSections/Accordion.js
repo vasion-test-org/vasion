@@ -1,47 +1,34 @@
 import AccordionItem from '@/components/globalComponents/AccordionItem';
+import { cn } from '@/lib/cn';
 
 /**
  * Accordion (Server Component)
  * Container for accordion items. Animation handled by AccordionItem.
+ * 
+ * VW Conversion Notes:
+ * - Desktop: 81.5vw at 1600px = 1304px → max-w-326
+ * - Tablet: 90.234vw at 1024px = 924px → ~90% width
+ * - Mobile: 89.167vw at 480px = 428px → ~89% width
+ * Using max-w-326 with percentage widths for responsive
  */
 const Accordion = ({ accordionData }) => {
-  // Generate unique ID for scoped styles
-  const componentId = `accordion-${Math.random().toString(36).slice(2, 9)}`;
-
   return (
-    <>
-      <style>{`
-        .${componentId} {
-          display: flex;
-          flex-direction: column;
-          width: 81.5vw;
-          max-width: 81.5rem; /* 1304px */
-        }
-        @media (min-width: 1601px) {
-          .${componentId} {
-            width: 81.5rem; /* 1304px fixed */
-          }
-        }
-        @media (max-width: 1024px) {
-          .${componentId} {
-            width: 90.234vw;
-          }
-        }
-        @media (max-width: 480px) {
-          .${componentId} {
-            width: 89.167vw;
-          }
-        }
-      `}</style>
-      <div className={componentId}>
-        {accordionData?.map((accordionItem, index) => (
-          <AccordionItem
-            key={accordionItem._uid || `accordion-${index}`}
-            accordionItem={accordionItem}
-          />
-        ))}
-      </div>
-    </>
+    <div
+      className={cn(
+        'flex flex-col',
+        // Width: 1304px max on desktop, ~90% on smaller
+        'w-full max-w-326',
+        // Tablet/mobile: constrain to ~90% of viewport
+        'tab:w-11/12 mob:w-11/12'
+      )}
+    >
+      {accordionData?.map((accordionItem, index) => (
+        <AccordionItem
+          key={accordionItem._uid || `accordion-${index}`}
+          accordionItem={accordionItem}
+        />
+      ))}
+    </div>
   );
 };
 

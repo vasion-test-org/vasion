@@ -204,44 +204,9 @@ import CarouselAnimator from '@/components/CarouselAnimator';
 />
 ```
 
-### Scoped CSS for Server Component Responsive Styles
-
-Use inline `<style>` tags with unique component IDs for responsive styles without client JS:
-
-```jsx
-const componentId = `card-${blok._uid}`;
-
-return (
-  <>
-    <style>{`
-      .${componentId} {
-        --card-bg: ${theme.card.bg};
-        padding: 3.75rem;
-        max-width: 81.5rem;
-        border-radius: 1.5rem;
-      }
-      @media (max-width: 1024px) {
-        .${componentId} {
-          padding: 2.5rem;
-          max-width: 100%;
-        }
-      }
-      @media (max-width: 480px) {
-        .${componentId} {
-          padding: 1.75rem 1.125rem;
-          border-radius: 1.7rem;
-        }
-      }
-    `}</style>
-    <div className={componentId} style={{ background: 'var(--card-bg)' }}>
-      ...
-    </div>
-  </>
-);
-```
-
 ### Styling Performance
-- Avoid inline styles; use Tailwind classes exclusively
+- **NEVER use inline styles** - use Tailwind classes exclusively
+- **NEVER use scoped `<style>` tags** - use Tailwind breakpoint prefixes
 - Do not import styled-components in new code
 - Use Tailwind's built-in transitions: `transition-colors`, `duration-200`
 
@@ -425,83 +390,70 @@ export default function ComponentName({ prop1, prop2 }) {
 
 ---
 
-## IMPORTANT: Inline Styles Fallback
+## IMPORTANT: Pure Tailwind Only
 
-**Tailwind JIT classes may not be applied** in some cases. When layout-critical styles aren't working:
+**NEVER use inline styles or scoped `<style>` tags.** Use only Tailwind classes.
 
-### Use ScreenContext for Responsive Styles
+### Converting VW to Tailwind
 
-Instead of Tailwind breakpoint prefixes, use `ScreenContext` for reliable responsive values:
+When different vw values per breakpoint target the SAME pixel size, use ONE Tailwind class:
 
 ```jsx
-'use client';
-import { useContext } from 'react';
-import { ScreenContext } from '@/components/providers/Screen';
+// Original styled-components (all target 24px):
+padding: 1.5vw;        // Desktop: 1.5 × 1600/100 = 24px
+padding: 2.344vw;      // Tablet: 2.344 × 1024/100 = 24px  
+padding: 5vw;          // Mobile: 5 × 480/100 = 24px
 
-const MyComponent = () => {
-  const screen = useContext(ScreenContext);
-  
-  // Responsive styles using screen context
-  const getContainerStyle = () => {
-    if (screen.mobile) {
-      return { 
-        padding: '2.8rem 1.8rem 4.2rem', // 45px 29px 67px
-        borderRadius: '1.7rem', // 27px
-      };
-    } else if (screen.tablet) {
-      return { 
-        padding: '2.5rem 2.5rem 3.75rem', // 40px 40px 60px
-        borderRadius: '1.5rem', // 24px
-      };
-    }
-    // Desktop/Fullwidth
-    return { 
-      maxWidth: '81.5rem', // 1304px
-      padding: '3.75rem', // 60px
-      borderRadius: '1.5rem', // 24px
-    };
-  };
-  
-  return <div style={getContainerStyle()}>...</div>;
-};
+// Converted: ONE Tailwind class
+className="py-6" // 24px / 4 = 6
 ```
 
-### Lists Always Need Inline Style
+### Theme-Based Styling
+
+Map theme props to Tailwind classes using conditional logic:
 
 ```jsx
-<ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', gap: '1.25rem' }}>
-  <li style={{ listStyle: 'none', flexShrink: 0 }}>
+const getCardBgClass = () => {
+  if (isTransparent) return 'bg-transparent';
+  switch (theme) {
+    case 'dark': return 'bg-purple-dark';
+    case 'light': return 'bg-white';
+    default: return 'bg-purple-DEFAULT';
+  }
+};
+
+const getTextClass = () => {
+  switch (theme) {
+    case 'light': return 'text-txt-primary';
+    default: return 'text-white';
+  }
+};
+
+<div className={cn('p-15 rounded-3xl', getCardBgClass(), getTextClass())}>
 ```
 
-### Section Wrapper Pattern
+### Responsive Padding Pattern
 
-Most components have an outer wrapper for spacing between components:
+Map offset_spacing prop to Tailwind classes:
 
 ```jsx
-const getWrapperStyle = () => {
-  const hasCustomSpacing = blok.section_spacing && blok.section_spacing !== 'default';
-  
-  let verticalSpacing = '3.75rem'; // 60px default
-  let horizontalPadding = '0';
-  
-  if (screen.tablet) {
-    verticalSpacing = '5.859vw';
-    horizontalPadding = '2.5rem'; // 40px
-  } else if (screen.mobile) {
-    verticalSpacing = '12.5vw';
-    horizontalPadding = '1rem'; // 16px
-  }
-  
-  const spacing = hasCustomSpacing ? `${blok.section_spacing}px` : verticalSpacing;
-  
-  if (blok.offset_spacing === 'top') {
-    return { paddingTop: spacing, paddingBottom: 0, paddingLeft: horizontalPadding, paddingRight: horizontalPadding };
-  }
-  if (blok.offset_spacing === 'bottom') {
-    return { paddingTop: 0, paddingBottom: spacing, paddingLeft: horizontalPadding, paddingRight: horizontalPadding };
-  }
-  return { paddingTop: spacing, paddingBottom: spacing, paddingLeft: horizontalPadding, paddingRight: horizontalPadding };
+const getPaddingClasses = () => {
+  const base = blok.offset_spacing;
+  if (base === 'top') return 'pt-15 pb-0 tab:pt-10 mob:pt-15';
+  if (base === 'bottom') return 'pt-0 pb-15 tab:pb-10 mob:pb-15';
+  return 'py-15 tab:py-10 mob:py-15';
 };
+
+<section className={cn('flex w-full', getPaddingClasses())}>
+```
+
+### Lists
+
+Use Tailwind's `list-none` class:
+
+```jsx
+<ul className="list-none m-0 p-0 flex gap-5">
+  <li className="list-none flex-shrink-0">
 ```
 
 ---
@@ -532,12 +484,12 @@ If a Figma link is provided:
 6. [ ] Replace styled components with native elements + Tailwind classes or inline styles
 
 ### 3. Handle Styling
-7. [ ] Convert dynamic styles (props) to conditional classes using `cn()` or conditional inline styles
-8. [ ] Calculate values for EACH breakpoint - vw→px→rem
-9. [ ] For Server Components: Use scoped `<style>` tags with `@media` queries for responsive styles
-10. [ ] For Client Components: Use `ScreenContext` when Tailwind breakpoint classes don't work
-11. [ ] Replace theme values with static theme imports (Server) or theme context (Client)
-12. [ ] Add `listStyle: 'none'` to all ul/li elements
+7. [ ] Convert dynamic styles (props) to conditional Tailwind classes using `cn()`
+8. [ ] Calculate values for EACH breakpoint - vw→px→Tailwind (px / 4)
+9. [ ] Use Tailwind breakpoint prefixes: `mob:`, `tab:`, `desk:`, `fw:`
+10. [ ] Map theme values to Tailwind classes using helper functions
+11. [ ] Add `list-none` class to all ul/li elements
+12. [ ] **NEVER use inline styles or scoped `<style>` tags**
 
 ### 4. Extract Client Logic (if needed)
 13. [ ] Move GSAP/animation code to `CarouselAnimator` or similar minimal client component

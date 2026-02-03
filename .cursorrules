@@ -219,34 +219,6 @@ const ServerComponent = ({ blok }) => {
 };
 ```
 
-### Scoped CSS for Responsive Styles (Server Components)
-
-Use inline `<style>` tags with unique IDs for responsive styles without client JS:
-
-```jsx
-const ServerComponent = ({ blok }) => {
-  const componentId = `component-${blok._uid}`;
-  
-  return (
-    <>
-      <style>{`
-        .${componentId} {
-          padding: 3.75rem;
-          max-width: 81.5rem;
-        }
-        @media (max-width: 1024px) {
-          .${componentId} { padding: 2.5rem; }
-        }
-        @media (max-width: 480px) {
-          .${componentId} { padding: 1.75rem 1.125rem; }
-        }
-      `}</style>
-      <div className={componentId}>...</div>
-    </>
-  );
-};
-```
-
 ### Reusable Client Components
 
 Use `CarouselAnimator` for any horizontal loop animation:
@@ -264,36 +236,44 @@ import CarouselAnimator from '@/components/CarouselAnimator';
 />
 ```
 
-## CRITICAL: Inline Styles Fallback
+## CRITICAL: Pure Tailwind Only
 
-**Tailwind classes may not be applied** due to JIT compilation issues. When layout-critical styles aren't working:
+**Never use inline styles or scoped `<style>` tags.** Use only Tailwind classes.
 
-1. **Use ScreenContext for responsive styles** instead of Tailwind breakpoint prefixes:
+### Converting VW Values
+When styled-components use different vw values per breakpoint targeting the SAME pixel size, use ONE Tailwind class:
+
 ```jsx
-import { useContext } from 'react';
-import { ScreenContext } from '@/components/providers/Screen';
+// Original (all target 24px):
+padding: 1.5vw;        // Desktop: 1.5 × 1600/100 = 24px
+padding: 2.344vw;      // Tablet: 2.344 × 1024/100 = 24px  
+padding: 5vw;          // Mobile: 5 × 480/100 = 24px
 
-const screen = useContext(ScreenContext);
+// Converted: ONE class
+className="py-6" // 24px / 4 = 6
+```
 
-const getResponsiveStyle = () => {
-  if (screen.mobile) {
-    return { padding: '2.8rem 1.8rem', borderRadius: '1.7rem' };
-  } else if (screen.tablet) {
-    return { padding: '2.5rem', borderRadius: '1.5rem' };
+### Theme-Based Styling
+Map theme props to Tailwind classes using conditional logic:
+
+```jsx
+const getCardBgClass = () => {
+  if (isTransparent) return 'bg-transparent';
+  switch (theme) {
+    case 'dark': return 'bg-purple-dark';
+    case 'light': return 'bg-white';
+    default: return 'bg-purple-DEFAULT';
   }
-  return { padding: '3.75rem', maxWidth: '81.5rem', borderRadius: '1.5rem' };
 };
+
+<div className={cn('p-15 rounded-3xl', getCardBgClass())}>
 ```
 
-2. **Apply critical layout styles inline**:
+### Lists
+Use Tailwind's `list-none` class:
 ```jsx
-<div style={getResponsiveStyle()}>
-```
-
-3. **Always add to lists**:
-```jsx
-<ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-  <li style={{ listStyle: 'none' }}>
+<ul className="list-none m-0 p-0 flex gap-5">
+  <li className="list-none flex-shrink-0">
 ```
 
 ## Before Converting: Ask for Figma Reference

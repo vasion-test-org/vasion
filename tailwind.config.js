@@ -206,8 +206,11 @@ module.exports = {
       spacing: {
         // Common values from Hero.js and other components
         '4.5': '1.125rem',    // 18px
+        '7': '1.8125rem',     // 29px (mobile horizontal padding)
+        '11': '2.8125rem',    // 45px (mobile top padding)
         '13': '3.25rem',      // 52px
         '15': '3.75rem',      // 60px
+        '17': '4.1875rem',    // 67px (mobile bottom padding)
         '18': '4.5rem',       // 72px
         '22': '5.5rem',       // 88px
         '25': '6.25rem',      // 100px
@@ -232,6 +235,9 @@ module.exports = {
         'md': '0.5rem',       // 8px
         'lg': '1rem',         // 16px
         'xl': '1.5rem',       // 24px
+        '2xl': '1rem',        // 16px (default override)
+        '3xl': '1.5rem',      // 24px
+        '4xl': '1.6875rem',   // 27px (mobile rounded corners)
       },
 
       // Transitions
