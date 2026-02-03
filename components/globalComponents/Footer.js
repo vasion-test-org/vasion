@@ -237,7 +237,7 @@ const Footer = ({ blok }) => {
           |
           <LegalLink onClick={() => handleNavigate('/legal/')}>Legal</LegalLink>
         </LegalLinks>
-        © 2025 Vasion. All Rights Reserved
+        © 2026 Vasion. All Rights Reserved
       </LegalDiv>
       <VasionFooter
         src={'/images/uiElements/VasionFooterPNG.png'}
