@@ -23,7 +23,8 @@ const AccordionItem = ({ accordionItem }) => {
   const chevronRef = useRef(null);
   const contentRef = useRef(null);
   const contentInnerRef = useRef(null);
-  const componentId = useRef(`accordion-item-${Math.random().toString(36).slice(2, 9)}`).current;
+  // Use accordionItem._uid for deterministic ID that matches parent key
+  const componentId = `accordion-item-${accordionItem._uid}`;
 
   const toggleAccordion = async () => {
     const { default: gsap } = await import('gsap');
