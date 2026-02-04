@@ -205,6 +205,18 @@ className = 'font-orbitron'; // Orbitron (for stats)
 
 ## How to Write Styles
 
+### CRITICAL: Pure Tailwind Only
+
+**NEVER use these in components:**
+- ❌ Inline `style` attributes (`style={{ padding: '20px' }}`)
+- ❌ Scoped `<style>` tags (`<style>{`.class { ... }`}</style>`)
+- ❌ CSS-in-JS or styled-components for new code
+
+**ALWAYS use:**
+- ✅ Tailwind utility classes
+- ✅ `cn()` for conditional classes
+- ✅ `tw` tagged template for variant groups (cleaner responsive code)
+
 ### The `cn()` Utility
 
 Use the `cn()` utility for conditional and merged class names:
@@ -232,6 +244,51 @@ import { cn } from '@/lib/cn';
 // Overriding classes (tailwind-merge handles conflicts)
 <div className={cn('px-4', 'px-6')}>  {/* Results in 'px-6' */}
 ```
+
+### The `tw` Tagged Template (Variant Groups)
+
+Use `tw` for cleaner responsive styles with **variant groups**. Instead of repeating prefixes, group them:
+
+```jsx
+import { tw } from '@/lib/cn';
+
+// ❌ Verbose - repeating md: prefix
+<div className="flex px-4 py-2 md:px-8 md:py-4 md:gap-6 lg:px-12 lg:py-6 lg:gap-8">
+
+// ✅ Clean - using tw with variant groups
+<div className={tw`flex px-4 py-2 md:(px-8 py-4 gap-6) lg:(px-12 py-6 gap-8)`}>
+```
+
+**How it works:**
+- `md:(px-8 py-4 gap-6)` expands to `md:px-8 md:py-4 md:gap-6`
+- Works with any variant: `hover:`, `focus:`, `lg:`, `xl:`, etc.
+
+**More examples:**
+
+```jsx
+// Hover and focus states grouped
+<button className={tw`bg-white text-purple hover:(bg-purple text-white) focus:(ring-2 ring-purple-border outline-none)`}>
+
+// Complex responsive layout
+<section className={tw`
+  flex flex-col gap-4 p-4
+  md:(flex-row gap-6 p-8)
+  lg:(gap-8 p-12)
+  xl:(gap-10 p-16)
+`}>
+
+// With conditionals (combine tw and cn)
+<div className={cn(
+  tw`flex gap-4 md:(gap-6 p-4) lg:(gap-8 p-6)`,
+  isActive && 'bg-purple text-white',
+  className
+)}>
+```
+
+**When to use which:**
+- `tw` - When you have multiple responsive breakpoints (cleaner syntax)
+- `cn()` - When you have conditional classes based on props/state
+- Both together - Complex components with responsive + conditional styles
 
 ### Class Variance Authority (CVA)
 
@@ -486,44 +543,54 @@ npm run checks -- components/MyComponent.js  # Check specific file
 
 ### Step 2: Convert to Server Component (if possible)
 
-**Server Component Pattern:**
+**Server Component Pattern (Pure Tailwind):**
 
 ```jsx
 // MyComponent.js - NO 'use client'
 import Image from 'next/image';
-import CarouselAnimator from '@/components/CarouselAnimator';
-import { defaultTheme, darkTheme, lightTheme } from '@/styles/theme';
 
-// Static theme lookup - no hooks needed
-const themes = { default: defaultTheme, dark: darkTheme, light: lightTheme };
+import clsx from 'clsx';
+
+import CarouselAnimator from '@/components/CarouselAnimator';
+import { tw } from '@/lib/cn';
 
 const MyComponent = ({ blok }) => {
-  const theme = themes[blok.theme] || themes.default;
-  const componentId = `my-component-${blok._uid}`;
+  const isTransparent = blok.transparent_background;
+  const theme = blok.theme || 'default';
   const shouldAnimate = blok.items?.length > 5;
 
   return (
     <>
-      {/* Scoped CSS for responsive styles */}
-      <style>{`
-        .${componentId} {
-          padding: 3.75rem;
-          max-width: 81.5rem;
-        }
-        @media (max-width: 1024px) {
-          .${componentId} { padding: 2.5rem; }
-        }
-        @media (max-width: 480px) {
-          .${componentId} { padding: 1.75rem; }
-        }
-      `}</style>
-
-      <section className={componentId} style={{ background: theme.myComponent.bg }}>
-        {blok.items?.map((item) => (
-          <div key={item._uid} className="item">
-            ...
-          </div>
-        ))}
+      <section
+        className={clsx(
+          'flex w-full items-center justify-center',
+          // Mobile-first responsive padding using tw for variant groups
+          tw`p-7 md:p-10 lg:p-15 xl:p-15`,
+          // Max width
+          'max-w-326 mx-auto'
+        )}
+      >
+        <div
+          className={clsx(
+            'w-full overflow-hidden rounded-3xl',
+            // Background based on theme (pure Tailwind, no inline styles)
+            isTransparent
+              ? 'bg-transparent'
+              : theme === 'dark'
+                ? 'bg-purple-dark'
+                : theme === 'light'
+                  ? 'bg-white'
+                  : 'bg-purple',
+            // Text color
+            theme === 'light' ? 'text-txt-primary' : 'text-white'
+          )}
+        >
+          {blok.items?.map((item) => (
+            <div key={item._uid} className="item shrink-0">
+              ...
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Minimal client component for animation only */}
@@ -534,6 +601,12 @@ const MyComponent = ({ blok }) => {
 
 export default MyComponent;
 ```
+
+**Key patterns:**
+- ❌ No `<style>` tags - use Tailwind responsive classes
+- ❌ No `style={{ }}` inline - use conditional Tailwind classes via `clsx()`
+- ✅ Use `tw` for grouped responsive classes
+- ✅ Use ternary/conditional for theme-based styling
 
 ### Step 3: Remove styled-components
 
@@ -614,12 +687,13 @@ Verify at: mobile (480px), tablet (1024px), desktop (1600px), fullWidth (1601px+
 - [ ] Preserve EXACT container structure
 - [ ] Handle ALL original props (`transparent_background`, `offset_spacing`, etc.)
 
-**Phase 2: Convert Styles**
+**Phase 2: Convert Styles (Pure Tailwind)**
 
-- [ ] Use scoped `<style>` tags for Server Components
-- [ ] Use `ScreenContext` for Client Components when Tailwind fails
+- [ ] Use `tw` utility for grouped responsive classes
+- [ ] Use `cn()` or `clsx()` for conditional classes
 - [ ] Convert vw → px → Tailwind number (px / 4)
-- [ ] Add `listStyle: 'none'` to ul/li elements
+- [ ] Use `list-none` class on ul/li elements (not inline style)
+- [ ] **NEVER use** inline `style` attributes or `<style>` tags
 
 **Phase 3: Extract Client Logic**
 
@@ -709,7 +783,29 @@ For complex animations (GSAP, etc.), extract to minimal client components.
 
 ### Q: How do I handle theme switching?
 
-Use CSS custom properties defined in `globals.css`:
+**Use conditional Tailwind classes based on theme prop:**
+
+```jsx
+import clsx from 'clsx';
+
+const ThemedComponent = ({ theme = 'default' }) => {
+  return (
+    <div
+      className={clsx(
+        'p-6 rounded-lg',
+        // Background per theme
+        theme === 'dark' && 'bg-purple-dark text-white',
+        theme === 'light' && 'bg-white text-txt-primary',
+        theme === 'default' && 'bg-purple text-white'
+      )}
+    >
+      Content here
+    </div>
+  );
+};
+```
+
+**For site-wide themes**, CSS custom properties in `globals.css`:
 
 ```css
 :root {

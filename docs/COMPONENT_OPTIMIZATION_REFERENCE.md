@@ -27,6 +27,7 @@ This document contains all information needed to understand and execute componen
 - **Animations**: GSAP
 - **Utilities**:
   - `cn()` - Conditional class merging (clsx + tailwind-merge)
+  - `tw` - Tagged template for variant groups (`md:(px-4 py-2)`)
   - `cva()` - Class Variance Authority for component variants
 
 ---
@@ -229,20 +230,29 @@ When a component needs GSAP animations but should be a Server Component:
 
 ```jsx
 // MyComponent.js - Server Component (NO 'use client')
-import CarouselAnimator from '@/components/CarouselAnimator';
-import { defaultTheme, darkTheme, lightTheme } from '@/styles/theme';
+import clsx from 'clsx';
 
-const themes = { default: defaultTheme, dark: darkTheme, light: lightTheme };
+import CarouselAnimator from '@/components/CarouselAnimator';
+import { tw } from '@/lib/cn';
 
 const MyComponent = ({ blok }) => {
-  const theme = themes[blok.theme] || themes.default;
+  const theme = blok.theme || 'default';
   const shouldAnimate = blok.items?.length > 5;
 
   return (
     <>
-      <section style={{ background: theme.myComponent.bg }}>
+      <section
+        className={clsx(
+          'flex w-full items-center justify-center',
+          tw`p-7 md:p-10 lg:p-15`,
+          // Theme via conditional Tailwind (no inline styles!)
+          theme === 'dark' && 'bg-purple-dark text-white',
+          theme === 'light' && 'bg-white text-txt-primary',
+          theme === 'default' && 'bg-purple text-white'
+        )}
+      >
         {blok.items?.map((item) => (
-          <div key={item._uid} className="item">
+          <div key={item._uid} className="item shrink-0">
             ...
           </div>
         ))}
@@ -257,37 +267,42 @@ const MyComponent = ({ blok }) => {
 
 ---
 
-## Scoped CSS Pattern (Server Components)
+## Pure Tailwind Pattern (REQUIRED)
 
-Use inline `<style>` tags with unique IDs for responsive styles:
+**NEVER use these:**
+- ❌ Inline `style` attributes
+- ❌ Scoped `<style>` tags
+- ❌ CSS-in-JS or styled-components for new code
+
+**ALWAYS use Tailwind utilities with `cn()` and `tw`:**
 
 ```jsx
+import clsx from 'clsx';
+
+import { tw } from '@/lib/cn';
+
 const MyComponent = ({ blok }) => {
-  const componentId = `my-component-${blok._uid}`;
+  const isTransparent = blok.transparent_background;
+  const theme = blok.theme || 'default';
 
   return (
-    <>
-      <style>{`
-        .${componentId} {
-          padding: 3.75rem;
-          max-width: 81.5rem;
-          border-radius: 1.5rem;
-        }
-        @media (max-width: 1024px) {
-          .${componentId} {
-            padding: 2.5rem;
-            max-width: 100%;
-          }
-        }
-        @media (max-width: 480px) {
-          .${componentId} {
-            padding: 1.75rem 1.125rem;
-            border-radius: 1.7rem;
-          }
-        }
-      `}</style>
-      <div className={componentId}>...</div>
-    </>
+    <div
+      className={clsx(
+        'flex w-full items-center justify-center',
+        // Responsive padding using tw for grouped variants
+        tw`p-7 md:p-10 lg:p-15 xl:p-15`,
+        // Conditional background (no inline styles!)
+        isTransparent
+          ? 'bg-transparent'
+          : theme === 'dark'
+            ? 'bg-purple-dark'
+            : 'bg-purple',
+        // Border radius (responsive)
+        'rounded-4xl md:rounded-3xl lg:rounded-3xl xl:rounded-3xl'
+      )}
+    >
+      ...
+    </div>
   );
 };
 ```
@@ -345,6 +360,43 @@ import { cn } from '@/lib/cn';
   isActive && 'bg-purple text-white',
   isDisabled && 'opacity-50 cursor-not-allowed',
   className // Allow override
+)}>
+```
+
+### tw - Variant Groups (PREFERRED for responsive)
+
+Use `tw` tagged template for cleaner responsive styles with **variant groups**:
+
+```jsx
+import { tw } from '@/lib/cn';
+
+// ❌ Verbose - repeating prefixes
+<div className="px-4 py-2 md:px-8 md:py-4 md:gap-6 lg:px-12 lg:py-6 lg:gap-8">
+
+// ✅ Clean - grouped variants
+<div className={tw`px-4 py-2 md:(px-8 py-4 gap-6) lg:(px-12 py-6 gap-8)`}>
+```
+
+**How it works:** `md:(px-8 py-4)` expands to `md:px-8 md:py-4`
+
+**More examples:**
+
+```jsx
+// Hover/focus states
+<button className={tw`bg-white hover:(bg-purple text-white) focus:(ring-2 ring-purple-border)`}>
+
+// Complex responsive
+<section className={tw`
+  flex flex-col gap-4 p-4
+  md:(flex-row gap-6 p-8)
+  lg:(gap-8 p-12)
+  xl:(gap-10 p-16)
+`}>
+
+// Combine tw + cn for conditionals
+<div className={cn(
+  tw`flex gap-4 md:(gap-6 p-4) lg:(gap-8 p-6)`,
+  isActive && 'bg-purple text-white'
 )}>
 ```
 
@@ -481,12 +533,13 @@ npm run checks:perf      # Performance
 - [ ] Preserve EXACT container structure
 - [ ] Handle ALL original props
 
-### Phase 2: Convert Styles
+### Phase 2: Convert Styles (Pure Tailwind)
 
-- [ ] Server Component: Use scoped `<style>` tags
-- [ ] Client Component: Use `ScreenContext` fallback
+- [ ] Use `tw` utility for grouped responsive classes
+- [ ] Use `cn()` or `clsx()` for conditional classes
 - [ ] Convert vw → px → Tailwind (px / 4)
-- [ ] Add `listStyle: 'none'` to ul/li elements
+- [ ] Use `list-none` class on ul/li elements
+- [ ] **NEVER** use inline `style` or `<style>` tags
 
 ### Phase 3: Extract Client Logic
 
@@ -532,8 +585,8 @@ npm run checks:perf      # Performance
 ├── tailwind.config.js          # Design tokens
 ├── app/globals.css             # CSS variables, base styles
 ├── lib/
-│   ├── cn.ts                   # Conditional class utility
-│   └── cva.ts                  # Component variants
+│   ├── cn.ts                   # cn(), tw tagged template, expandVariantGroups()
+│   └── cva.ts                  # Component variants (CVA)
 ├── components/
 │   └── CarouselAnimator.js     # Reusable GSAP animation
 ├── scripts/checks/
@@ -552,8 +605,10 @@ npm run checks:perf      # Performance
 ## Key Principles
 
 1. **Server Components First** - Only use `'use client'` when required
-2. **No Arbitrary Values** - Use `px / 4` formula, not `w-[450px]`
-3. **Preserve Layout** - Converted components must look identical
-4. **ADA Compliance** - Focus states, alt text, semantic HTML
-5. **Test All Breakpoints** - Mobile, tablet, desktop, fullWidth
-6. **Ask for Figma** - Get design reference before converting
+2. **Pure Tailwind Only** - No inline styles, no `<style>` tags, no CSS-in-JS
+3. **Use `tw` for Responsive** - Cleaner variant groups: `md:(px-4 py-2)`
+4. **No Arbitrary Values** - Use `px-4` formula, not `w-[450px]`
+5. **Preserve Layout** - Converted components must look identical
+6. **ADA Compliance** - Focus states, alt text, semantic HTML
+7. **Test All Breakpoints** - Mobile, tablet, desktop, fullWidth
+8. **Ask for Figma** - Get design reference before converting

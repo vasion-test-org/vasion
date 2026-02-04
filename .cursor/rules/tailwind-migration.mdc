@@ -379,23 +379,32 @@ className={clsx(
 ```jsx
 // MyComponent.js - Server Component (NO 'use client')
 import Image from 'next/image';
-import CarouselAnimator from '@/components/CarouselAnimator';
-import { defaultTheme, darkTheme, lightTheme } from '@/styles/theme';
 
-// Static theme lookup - no hooks needed
-const themes = { default: defaultTheme, dark: darkTheme, light: lightTheme };
+import clsx from 'clsx';
+
+import CarouselAnimator from '@/components/CarouselAnimator';
+import { tw } from '@/lib/cn';
 
 const MyComponent = ({ blok }) => {
-  const theme = themes[blok.theme] || themes.default;
+  const theme = blok.theme || 'default';
   const shouldAnimate = blok.items?.length > 5;
   
   return (
     <>
-      {/* All static content renders on server */}
-      <section style={{ background: theme.myComponent.bg }}>
-        <ul className="item-list">
+      {/* All static content renders on server - PURE TAILWIND only */}
+      <section
+        className={clsx(
+          'flex w-full items-center justify-center',
+          tw`p-7 md:p-10 lg:p-15`,
+          // Theme via conditional Tailwind (NO inline styles!)
+          theme === 'dark' && 'bg-purple-dark text-white',
+          theme === 'light' && 'bg-white text-txt-primary',
+          theme === 'default' && 'bg-purple text-white'
+        )}
+      >
+        <ul className="m-0 flex list-none items-center gap-5 p-0">
           {blok.items?.map((item) => (
-            <li key={item._uid} className="item">
+            <li key={item._uid} className="item list-none shrink-0">
               <Image src={item.image.filename} alt={item.alt} />
             </li>
           ))}
