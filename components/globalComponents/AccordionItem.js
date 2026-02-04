@@ -32,9 +32,9 @@ const AccordionItem = ({ accordionItem }) => {
 
     if (chevronRef.current) {
       gsap.to(chevronRef.current, {
-        rotation: isOpen ? 0 : 180,
         color: isOpen ? '#1B1D21' : '#ff5100', // txt-primary : orange-DEFAULT
         duration: 0.3,
+        rotation: isOpen ? 0 : 180,
       });
     }
   };
@@ -47,9 +47,9 @@ const AccordionItem = ({ accordionItem }) => {
         const contentHeight = isOpen ? contentInnerRef.current.offsetHeight : 0;
 
         gsap.to(contentRef.current, {
-          height: contentHeight,
           duration: 0.4,
           ease: 'power2.out',
+          height: contentHeight,
           onComplete: () => {
             if (isOpen) {
               gsap.set(contentRef.current, { height: 'auto' });
@@ -74,15 +74,15 @@ const AccordionItem = ({ accordionItem }) => {
       )}
     >
       <button
-        id={`${componentId}-header`}
-        type="button"
         className={cn(
           'w-full cursor-pointer bg-transparent border-none p-0 text-left',
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-border focus-visible:ring-offset-2 rounded-sm'
         )}
-        onClick={toggleAccordion}
-        aria-expanded={isOpen}
         aria-controls={`${componentId}-content`}
+        aria-expanded={isOpen}
+        id={`${componentId}-header`}
+        type="button"
+        onClick={toggleAccordion}
       >
         {headerContent && (
           <div
@@ -96,9 +96,9 @@ const AccordionItem = ({ accordionItem }) => {
               />
             </div>
             <div
-              ref={chevronRef}
-              className="flex items-center justify-center flex-shrink-0"
               aria-hidden="true"
+              className="flex items-center justify-center flex-shrink-0"
+              ref={chevronRef}
             >
               <DownChevron className="size-6 transition-transform duration-300" />
             </div>
@@ -107,13 +107,13 @@ const AccordionItem = ({ accordionItem }) => {
       </button>
 
       <div
+        aria-labelledby={`${componentId}-header`}
+        className="h-0 overflow-hidden"
         id={`${componentId}-content`}
         ref={contentRef}
-        className="h-0 overflow-hidden"
         role="region"
-        aria-labelledby={`${componentId}-header`}
       >
-        <div ref={contentInnerRef} className="pt-6">
+        <div className="pt-6" ref={contentInnerRef}>
           {contentBlocks.map((copy, idx) => (
             <div key={copy._uid || `content-${idx}`} {...storyblokEditable(copy)}>
               <RichTextRenderer

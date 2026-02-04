@@ -21,8 +21,8 @@
       "  )",
       "}",
       "",
-      "export default ${1:functionName}"
+      "export default ${1:functionName}",
     ],
-    "description": "Create a new React component with theme provider"
-  }
-} 
+    "description": "Create a new React component with theme provider",
+  },
+}

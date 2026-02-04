@@ -97,7 +97,10 @@ export default [
         {
           type: 'natural',
           order: 'asc',
-          groups: ['shorthand', 'unknown', 'multiline', 'callback'],
+          groups: ['shorthand', 'multiline', 'unknown', 'callback'],
+          customGroups: {
+            callback: '^on[A-Z].*',
+          },
         },
       ],
     },
@@ -155,15 +158,15 @@ export default [
     },
   },
 
-  // Unused imports detection and auto-removal
+  // Unused imports detection (disabled auto-removal - styled-components uses may appear unused)
   {
     plugins: {
       'unused-imports': unusedImports,
     },
     rules: {
-      // Auto-remove unused imports on fix
-      'unused-imports/no-unused-imports': 'error',
-      // Detect unused variables (works with imports)
+      // DISABLED: Auto-removal causes issues with styled-components and dynamic imports
+      'unused-imports/no-unused-imports': 'off',
+      // Detect unused variables (warn only, no auto-fix)
       'unused-imports/no-unused-vars': [
         'warn',
         {
@@ -206,6 +209,9 @@ export default [
         IntersectionObserver: 'readonly',
         ResizeObserver: 'readonly',
         MutationObserver: 'readonly',
+        Response: 'readonly',
+        Request: 'readonly',
+        Headers: 'readonly',
         // Node globals
         process: 'readonly',
         module: 'readonly',

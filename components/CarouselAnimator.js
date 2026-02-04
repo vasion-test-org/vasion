@@ -23,9 +23,9 @@ import { optimizeGSAP } from '@/lib/scriptOptimization';
  * @param {function} onChange - Callback when active item changes
  */
 const CarouselAnimator = ({
-  selector = '.carousel-item',
-  options = {},
   onChange,
+  options = {},
+  selector = '.carousel-item',
 }) => {
   const [gsapLoaded, setGsapLoaded] = useState(false);
 
@@ -44,10 +44,10 @@ const CarouselAnimator = ({
     // Default options
     const loopOptions = {
       deep: false,
-      repeat: -1,
-      speed: 1,
-      reversed: false,
       paused: false,
+      repeat: -1,
+      reversed: false,
+      speed: 1,
       ...options,
     };
 

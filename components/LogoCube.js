@@ -1,11 +1,13 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import { tw } from '@/lib/cn';
 import { storyblokEditable } from '@storyblok/react/rsc';
 
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { tw } from '@/lib/cn';
+
 import CarouselAnimator from './CarouselAnimator';
+
 
 /**
  * LogoCube Component (Server Component)
@@ -36,7 +38,6 @@ const LogoCube = ({ blok }) => {
     <>
       <section
         {...storyblokEditable(blok)}
-        aria-label="Trusted by leading companies"
         className={clsx(
           'flex w-full items-center justify-center',
           // Mobile-first: start with mobile padding, increase for larger screens
@@ -46,6 +47,7 @@ const LogoCube = ({ blok }) => {
           offsetSpacing === 'bottom' && 'pt-0 pb-15',
           !offsetSpacing && 'py-15'
         )}
+        aria-label="Trusted by leading companies"
       >
         <div
           className={clsx(
@@ -75,16 +77,16 @@ const LogoCube = ({ blok }) => {
             )}
 
             <ul
-              aria-label="Company logos carousel"
               className={clsx(
                 'flex w-full items-center overflow-hidden gap-5 m-0 p-0 list-none',
                 shouldCenter ? 'justify-center' : 'justify-start'
               )}
+              aria-label="Company logos carousel"
             >
               {logosToDisplay.map((logo, index) => (
                 <li
-                  key={logo.filename || logo.alt || index}
                   className="cubeLogos shrink-0 list-none"
+                  key={logo.filename || logo.alt || index}
                 >
                   <Image
                     alt={logo.alt || 'Company logo'}
