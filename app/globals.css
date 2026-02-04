@@ -77,14 +77,15 @@
   /* Other colors */
   --color-pink: #DD5FC1;
 
-  /* Breakpoints */
-  --breakpoint-mob: 480px;
-  --breakpoint-tab: 1024px;
-  --breakpoint-desk: 1600px;
-  --breakpoint-fw: 1601px;
-  --breakpoint-sm: 481px;
-  --breakpoint-md: 1025px;
-  --breakpoint-lg: 1601px;
+  /* Breakpoints (sm/md/lg/xl naming)
+     sm = mobile (max 480px)
+     md = tablet (481-1024px)
+     lg = desktop (1025-1600px)
+     xl = full width (1601px+) */
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 1024px;
+  --breakpoint-lg: 1600px;
+  --breakpoint-xl: 1601px;
 
   /* Spacing (custom extensions) */
   --spacing-4_5: 1.125rem;
@@ -161,6 +162,16 @@
   --text-eyebrow--font-weight: 700;
   --text-eyebrow--letter-spacing: 0.175rem;
   --text-eyebrow--text-transform: uppercase;
+
+  /* Background images / gradients */
+  --background-image-footer: linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%), linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
+  --background-image-purple-orbital: linear-gradient(107deg, #5101AF -20.03%, #2A1844 31.32%, #2A1844 59.09%, #5101AF 96.2%), linear-gradient(90deg, #FFEEE5 0%, rgba(255, 238, 229, 0.00) 50%, #FFEEE5 100%), #F5F4F7;
+  --background-image-purple-gradient: linear-gradient(270deg, #945AEE 0%, rgba(148, 90, 238, 0.4) 100%);
+  --background-image-orange-gradient: linear-gradient(270deg, #FF5100 0%, rgba(255, 81, 0, 0.4) 100%);
+  --background-image-grey-gradient: linear-gradient(270deg, #000000 0%, rgba(0, 0, 0, 0.4) 100%);
+  --background-image-light-purple: linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%);
+  --background-image-dark-purple: linear-gradient(180deg, #583F99 0%, #3D2562 100%);
+  --background-image-medium-purple: linear-gradient(180deg, #7E5FDD 0%, #583F99 100%);
 }
 
 /* CSS Custom Properties for Gradients */
@@ -172,6 +183,40 @@
   --gradient-light-purple: linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%);
   --gradient-dark-purple: linear-gradient(180deg, #583F99 0%, #3D2562 100%);
   --gradient-medium-purple: linear-gradient(180deg, #7E5FDD 0%, #583F99 100%);
+  --gradient-footer: linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%), linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
+}
+
+/* Custom utility classes for gradients */
+@utility bg-footer {
+  background: linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%), linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
+}
+
+@utility bg-purple-orbital {
+  background: var(--gradient-purple-orbital);
+}
+
+@utility bg-purple-gradient {
+  background: var(--gradient-purple);
+}
+
+@utility bg-orange-gradient {
+  background: var(--gradient-orange);
+}
+
+@utility bg-grey-gradient {
+  background: var(--gradient-grey);
+}
+
+@utility bg-light-purple {
+  background: var(--gradient-light-purple);
+}
+
+@utility bg-dark-purple {
+  background: var(--gradient-dark-purple);
+}
+
+@utility bg-medium-purple {
+  background: var(--gradient-medium-purple);
 }
 
 @font-face {

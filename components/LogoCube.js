@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { tw } from '@/lib/cn';
 import { storyblokEditable } from '@storyblok/react/rsc';
 
 import CarouselAnimator from './CarouselAnimator';
@@ -55,13 +56,14 @@ const LogoCube = ({ blok }) => {
             theme === 'light' ? 'text-txt-primary' : 'text-white',
             // Max width
             isTransparent ? 'max-w-full' : 'max-w-326',
-            // Padding
-            'p-15 tab:p-10 mob:px-7 mob:pt-11 mob:pb-17',
+            // Padding - using tw() for variant groups
+            tw`p-15 md:p-10 sm:(px-7 pt-11 pb-17)`,
             // Border radius
-            'rounded-3xl mob:rounded-4xl'
+            'rounded-3xl sm:rounded-4xl'
           )}
         >
-          <div className="flex flex-col items-center justify-center gap-10 tab:gap-5 mob:gap-9">
+          {/* Using tw() for grouped responsive classes */}
+          <div className={tw`flex flex-col items-center justify-center gap-10 md:gap-5 sm:gap-9`}>
             {blok.header && (
               <header className="w-full text-center">
                 <RichTextRenderer
@@ -86,7 +88,8 @@ const LogoCube = ({ blok }) => {
                 >
                   <Image
                     alt={logo.alt || 'Company logo'}
-                    className="w-50 h-25 mob:w-56 mob:h-28"
+                    // Using tw() for variant groups
+                    className={tw`w-50 h-25 sm:(w-56 h-28)`}
                     height={100}
                     loading="lazy"
                     src={logo.filename || logo.image}

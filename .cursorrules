@@ -2,14 +2,25 @@
 
 This project uses **Tailwind CSS v4** (migrating from styled-components). Follow these rules for ALL code changes.
 
+## BEFORE STARTING: Ask for Figma Link
+
+**ALWAYS ask before creating or converting ANY component:**
+
+> "Do you have a Figma MCP link for this component? I can use it to ensure pixel-perfect implementation."
+
+Wait for the user's response before proceeding. If a Figma link is provided, use the Figma MCP tools to extract exact specs.
+
+---
+
 ## Critical Rules
 
-1. **PRESERVE ORIGINAL LAYOUT** - Converted components must look IDENTICAL to the original
-2. **ALWAYS use Tailwind CSS** - Never use styled-components for new code
-3. **NO arbitrary px values** - No `w-[450px]`, use rem or closest Tailwind value
-4. **ALWAYS use design tokens** - Defined in `@theme` block in `app/globals.css`
-5. **ALWAYS ensure ADA compliance** - Alt text, focus states, semantic HTML
-6. **Use `cn()` or `clsx()`** - Import from `@/lib/cn` or `clsx` for conditional classes
+1. **ASK FOR FIGMA FIRST** - Always request Figma link before starting work
+2. **PRESERVE EXACT STRUCTURE & BEHAVIOR** - Never add/remove containers; never simplify breakpoint logic
+3. **ALWAYS use Tailwind CSS** - Never use styled-components for new code
+4. **NO arbitrary px values** - No `w-[450px]`, use rem or closest Tailwind value
+5. **ALWAYS use design tokens** - Defined in `@theme` block in `app/globals.css`
+6. **ALWAYS ensure ADA compliance** - Alt text, focus states, semantic HTML
+7. **Use `cn()` or `clsx()`** - Import from `@/lib/cn` or `clsx` for conditional classes
 
 ## Tailwind v4 Configuration
 
@@ -23,7 +34,7 @@ This project uses **Tailwind CSS v4** with CSS-based configuration:
   --color-purple: #3D2562;
   --color-orange: #ff5100;
   --spacing-15: 3.75rem;
-  --breakpoint-mob: 480px;
+  --breakpoint-sm: 480px;
   /* ... all design tokens defined here */
 }
 ```
@@ -32,18 +43,63 @@ This project uses **Tailwind CSS v4** with CSS-based configuration:
 - No `tailwind.config.js` for theme customization (use `@theme` in CSS)
 - Import with `@import "tailwindcss"` instead of `@tailwind base/components/utilities`
 - Custom values defined as CSS custom properties in `@theme` block
+- Custom utility classes use `@utility` directive (see below)
+
+### Custom Utility Classes with @utility
+
+For custom backgrounds, gradients, or complex styles, use `@utility` in `globals.css`:
+
+```css
+/* app/globals.css */
+@utility bg-footer {
+  background: linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%), 
+              linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
+}
+
+@utility bg-purple-orbital {
+  background: var(--gradient-purple-orbital);
+}
+```
+
+**When to use @utility:**
+- Custom gradients (complex backgrounds that can't be expressed as single values)
+- Multi-layer backgrounds
+- Any CSS that needs more than one property
 
 ## Converting VW to Tailwind
 
-**Key Insight**: Different vw values per breakpoint = SAME pixel target → ONE Tailwind class
+**Viewport widths for calculation:**
+- Desktop (base): 1600px
+- Tablet (md): 1024px
+- Mobile (sm): 480px
+- FullWidth (xl): uses px values directly
 
-| Target | Desktop (1600px) | Tablet (1024px) | Mobile (480px) | Tailwind |
-|--------|------------------|-----------------|----------------|----------|
-| 200px | `12.5vw` | `19.531vw` | `41.667vw` | `w-50` |
-| 100px | `6.25vw` | `9.766vw` | `20.833vw` | `w-25` |
-| 80px | `5vw` | `7.813vw` | `16.667vw` | `w-20` |
+**Formula:** `px = vw × (viewport / 100)` then `Tailwind number = px / 4`
 
-**Formula**: `px = vw × (viewportWidth / 100)` then `rem = px / 16`
+### Step 1: Calculate px for EACH breakpoint separately
+
+```
+Desktop:  vw × 16 = px
+Tablet:   vw × 10.24 = px  
+Mobile:   vw × 4.8 = px
+```
+
+### Step 2: Check if px values are the SAME or DIFFERENT
+
+**Case A: Same px target → ONE Tailwind class**
+| Breakpoint | VW Value | Calculation | Result |
+|------------|----------|-------------|--------|
+| Desktop | 12.5vw | 12.5 × 16 = 200px | All same! |
+| Tablet | 19.531vw | 19.531 × 10.24 = 200px | → w-50 |
+| Mobile | 41.667vw | 41.667 × 4.8 = 200px | |
+
+**Case B: Different px targets → SEPARATE Tailwind classes per breakpoint**
+| Breakpoint | VW Value | Calculation | Tailwind |
+|------------|----------|-------------|----------|
+| Desktop | 88.806vw | 88.806 × 16 = 1421px | h-355 (base) |
+| Tablet | 124.902vw | 124.902 × 10.24 = 1279px | md:h-320 |
+| Mobile | 353.738vw | 353.738 × 4.8 = 1698px | sm:h-425 |
+| FullWidth | 1279px | 1279 / 4 = 320 | xl:h-320 |
 
 ## PX to Tailwind Class
 
@@ -67,16 +123,33 @@ import { vwToRem, detectBreakpoint } from '@/lib/tailwind-utils';
 
 ### Imports to Use
 ```jsx
-import { cn } from '@/lib/cn';
+import { cn, tw } from '@/lib/cn';
 import { cva, type VariantProps } from '@/lib/cva';
 import Image from 'next/image';
 ```
 
+### Variant Groups with `tw` (Tagged Template)
+Use `tw` to group classes by breakpoint/variant:
+
+```jsx
+// Instead of repeating the prefix:
+className="sm:px-7 sm:pt-11 sm:pb-17"
+
+// Use variant groups:
+className={tw`sm:(px-7 pt-11 pb-17)`}
+
+// Works with hover, focus, etc:
+className={tw`hover:(bg-purple text-white) focus:(ring-2 outline-none)`}
+
+// Mix with regular classes:
+className={tw`flex gap-4 md:(flex-row gap-6) lg:(gap-8 p-10)`}
+```
+
 ### Breakpoints
-- `mob:` (max-480px)
-- `tab:` (481-1024px)
-- `desk:` (1025-1600px)
-- `fw:` (1601px+)
+- `sm:` (max-480px) - mobile
+- `md:` (481-1024px) - tablet
+- `lg:` (1025-1600px) - desktop
+- `xl:` (1601px+) - full width
 
 ### Common Colors (DEFAULT accessed without suffix)
 - Purple: `bg-purple` (DEFAULT), `bg-purple-dark`, `bg-purple-light`, `border-purple-border`
@@ -114,8 +187,8 @@ export default function ComponentName({ variant = 'default', className }) {
         // Base styles
         'flex flex-col gap-4 p-6',
         // Responsive styles
-        'tab:flex-row tab:gap-6 tab:p-8',
-        'desk:gap-8 desk:p-12',
+        'md:flex-row md:gap-6 md:p-8',
+        'lg:gap-8 lg:p-12',
         // Variant styles
         variant === 'primary' && 'bg-purple text-white',
         variant === 'secondary' && 'bg-grey-25 text-txt-primary',
@@ -161,7 +234,7 @@ const cardVariants = cva(
       size: {
         sm: 'p-4',
         md: 'p-6',
-        lg: 'p-8 tab:p-10',
+        lg: 'p-8 md:p-10',
       },
     },
     defaultVariants: {
@@ -187,16 +260,79 @@ export default function Card({ variant, size, className, children }: CardProps) 
 
 ## Converting styled-components
 
-When asked to convert a file:
+### CRITICAL: Preserve Exact Structure AND Behavior
+
+**DO NOT move, remove, or add containers.** Convert each element 1:1.
+**DO NOT simplify or "improve" the layout logic.** Match the original exactly.
+
+**Rules:**
+1. **Preserve exact HTML structure** - Same containers, same nesting order
+2. **Preserve exact behavior per breakpoint** - If desktop uses margin and fullWidth uses fixed width + centering, convert BOTH approaches exactly as they are
+3. **Never simplify** - Even if CSS seems redundant or could be "cleaner", match the original
+4. **Each breakpoint is independent** - Different breakpoints may have completely different layout logic; preserve ALL of it
+
+**Conversion Process (element by element):**
+1. Start at outermost container
+2. Read its styled-component CSS **for ALL breakpoints**
+3. Convert CSS to Tailwind classes **for each breakpoint separately**
+4. Move to the next nested child
+5. Repeat until all elements converted
+6. Verify behavior matches at EACH breakpoint (desktop, tablet, mobile, fullWidth)
+
+**Example - CORRECT conversion:**
+```jsx
+// Original styled-components
+const Wrapper = styled.section`padding: 60px;`;
+const Container = styled.div`max-width: 1304px; margin: 0 auto;`;
+const Inner = styled.div`display: flex; gap: 40px;`;
+
+// CORRECT: Same 3 containers
+<section className="p-15">
+  <div className="max-w-326 mx-auto">
+    <div className="flex gap-10">
+```
+
+**Example - Preserving different breakpoint behaviors:**
+```jsx
+// Original: Different layout approach at fullWidth vs desktop
+const LegalDiv = styled.div`
+  margin: 0 10.278vw;           /* Desktop: uses margin */
+  ${media.fullWidth} {
+    width: 1244px;              /* FullWidth: uses fixed width */
+    align-self: center;         /* FullWidth: uses centering */
+  }
+`;
+
+// CORRECT: Preserve BOTH approaches
+<div className="mx-41 xl:mx-0 xl:w-311 xl:self-center">
+
+// ❌ WRONG: Simplified to just one approach
+<div className="max-w-311 mx-auto">  /* Lost the margin-based desktop behavior! */
+```
+
+**Example - WRONG conversion:**
+```jsx
+// ❌ WRONG: Removed Container, merged into section
+<section className="p-15 max-w-326 mx-auto">
+  <div className="flex gap-10">
+
+// ❌ WRONG: Added extra wrapper
+<section className="p-15">
+  <div className="some-wrapper">  {/* This didn't exist! */}
+    <div className="max-w-326 mx-auto">
+```
+
+### Step-by-Step Conversion:
 1. Remove `import styled from 'styled-components'`
 2. Replace `styled.div` with `<div className="...">`
 3. Convert props-based styles to `cn()` conditionals
-4. Map `${media.mobile}` to `mob:`, `${media.tablet}` to `tab:`, `${media.desktop}` to `desk:`, `${media.fullWidth}` to `fw:`
+4. Map `${media.mobile}` to `sm:`, `${media.tablet}` to `md:`, `${media.desktop}` to `lg:`, `${media.fullWidth}` to `xl:`
 5. Map `${colors.X}` to `text-X` or `bg-X`
 6. Map `${text.X}` to `text-X font-archivo`
-7. Add focus states to interactive elements
-8. Ensure all images have alt text
-9. Check heading hierarchy (h1 > h2 > h3)
+7. **For custom gradients**: Add `@utility` class in `globals.css` (see Tailwind v4 Configuration)
+8. Add focus states to interactive elements
+9. Ensure all images have alt text
+10. Check heading hierarchy (h1 > h2 > h3)
 
 ## Server Components (CRITICAL for Performance)
 
@@ -270,8 +406,8 @@ import CarouselAnimator from '@/components/CarouselAnimator';
 // ✅ CORRECT: Mobile-first (base = mobile, sm: = larger screens)
 className="px-4 sm:px-10"  // 16px on mobile, 40px at 481px+
 
-// ❌ WRONG: Desktop-first with custom breakpoints
-className="px-10 mob:px-4"  // This may not work as expected in v4
+// ❌ WRONG: Desktop-first approach
+className="px-10 sm:px-4"  // Don't put larger value as base
 ```
 
 **Standard Tailwind v4 breakpoints (min-width):**
@@ -293,16 +429,21 @@ className="px-10 mob:px-4"  // This may not work as expected in v4
 ```
 
 ### Converting VW Values
-When styled-components use different vw values per breakpoint targeting the SAME pixel size, use ONE Tailwind class:
+**Always calculate px for EACH breakpoint first, then determine if they're the same or different.**
 
 ```jsx
-// Original (all target 24px):
-padding: 1.5vw;        // Desktop: 1.5 × 1600/100 = 24px
-padding: 2.344vw;      // Tablet: 2.344 × 1024/100 = 24px  
-padding: 5vw;          // Mobile: 5 × 480/100 = 24px
+// Case A: All breakpoints target SAME px → ONE class
+// Desktop: 1.5vw × 16 = 24px
+// Tablet: 2.344vw × 10.24 = 24px  
+// Mobile: 5vw × 4.8 = 24px
+// All = 24px → py-6
 
-// Converted: ONE class
-className="py-6" // 24px / 4 = 6
+// Case B: Breakpoints target DIFFERENT px → SEPARATE classes
+// Desktop: 88.806vw × 16 = 1421px → h-355 (base)
+// Tablet: 124.902vw × 10.24 = 1279px → md:h-320
+// Mobile: 353.738vw × 4.8 = 1698px → sm:h-425
+// xl (px): 1279px → xl:h-320
+className="h-355 md:h-320 sm:h-425 xl:h-320"
 ```
 
 ### Theme-Based Styling with Inline Conditionals
@@ -336,33 +477,28 @@ Use Tailwind's `list-none` class:
   <li className="list-none flex-shrink-0">
 ```
 
-## Before Converting: Ask for Figma Reference
-
-**ALWAYS ask before converting a component:**
-> "Do you have a Figma link for this component? I can use it to ensure pixel-perfect implementation."
-
-If a Figma link is provided:
-1. Use the Figma MCP tools to fetch design specs
-2. Extract exact colors, spacing, typography, and dimensions
-3. Verify converted component matches design precisely
-
 ## Conversion Checklist
 
 When converting a styled-component:
 
-1. **Evaluate for Server Component** - Can it work WITHOUT `'use client'`?
+1. **ASK FOR FIGMA LINK** - Request before starting (see top of file)
+2. **Count containers first** - Note exactly how many wrapper elements exist
+3. **Convert element by element** - Start at outer, work inward, never skip or merge
+4. **Evaluate for Server Component** - Can it work WITHOUT `'use client'`?
    - If client code needed (GSAP): Extract to minimal client component like `CarouselAnimator`
-2. **Preserve EXACT structure** - Same number of containers, same nesting
-3. **Handle ALL props** - Check original for props like:
+5. **Preserve EXACT structure** - Same number of containers, same nesting order
+6. **Handle ALL props** - Check original for props like:
    - `transparent_background` → affects width, padding, background
    - `offset_spacing` → affects vertical padding (top/bottom/both)
    - `section_spacing` → custom pixel spacing value
-4. **Match values per breakpoint** - Calculate original vw → px → rem for EACH breakpoint
-5. **Use mobile-first responsive** - Base styles for mobile, `sm:` for larger screens
-6. **Center with mx-auto** - Always add `mx-auto` when using `max-w-*`
-7. **Test ALL breakpoints** - Desktop, tablet, mobile must match original
-8. **Check outer wrapper** - Most components have section padding for spacing between components
-9. **Remove `'use client'`** - After extracting client logic, verify main component is server-side
+7. **Match values per breakpoint** - Calculate original vw → px → rem for EACH breakpoint
+8. **Use mobile-first responsive** - Base styles for mobile, `sm:` for larger screens
+9. **Center with mx-auto** - Always add `mx-auto` when using `max-w-*`
+10. **Test ALL breakpoints** - Desktop, tablet, mobile must match original
+11. **Check outer wrapper** - Most components have section padding for spacing between components
+12. **Remove `'use client'`** - After extracting client logic, verify main component is server-side
+13. **Verify container count** - Final component must have same number of elements as original
+14. **Clear browser cache** - Remind user to hard refresh or use incognito to see changes
 
 ## Reference: LogoCube Component Pattern
 
@@ -423,6 +559,12 @@ After making changes, remind user to run:
 ```bash
 npm run checks
 ```
+
+**IMPORTANT: Clear browser cache after conversions!**
+Tailwind changes may not appear immediately due to caching. Tell the user to:
+- Hard refresh (Cmd+Shift+R / Ctrl+Shift+R)
+- Or open in incognito/private window
+- Or clear browser cache
 
 See detailed rules in:
 - `.cursor/rules/tailwind-migration.mdc`

@@ -12,33 +12,25 @@ Use these exact class names when styling components. NEVER use arbitrary values.
 
 ## Breakpoints
 
-### Standard Tailwind v4 Breakpoints (RECOMMENDED - Mobile-First)
+### Project Breakpoints (sm/md/lg/xl)
 
-| Prefix | Min-Width | When to Use |
-|--------|-----------|-------------|
-| (none) | 0px | Base/mobile styles |
-| `sm:` | 640px | Small tablets and up |
-| `md:` | 768px | Tablets and up |
-| `lg:` | 1024px | Laptops and up |
-| `xl:` | 1280px | Desktops and up |
-| `2xl:` | 1536px | Large desktops |
+| Prefix | Range | Description |
+|--------|-------|-------------|
+| (none) | Base | Default styles (apply to all) |
+| `sm:` | max-480px | Mobile only |
+| `md:` | 481-1024px | Tablet only |
+| `lg:` | 1025-1600px | Desktop only |
+| `xl:` | 1601px+ | Full width only |
 
-**Usage Pattern (Mobile-First):**
+**Usage Pattern:**
 ```jsx
-// Base for mobile, sm: for larger screens
-className="px-4 sm:px-10 lg:px-16"
+// Base styles, then override for specific breakpoints
+className="px-4 md:px-10 lg:px-16"
+// Or use responsive typography
+className="text-h1-sm md:text-h1 lg:text-h1-lg"
 ```
 
-### Custom Project Breakpoints (Legacy)
-
-| Prefix | Range | Notes |
-|--------|-------|-------|
-| `mob:` | max-480px | May not work reliably in v4 |
-| `tab:` | 481px-1024px | Use `sm:` or `md:` instead |
-| `desk:` | 1025px-1600px | Use `lg:` or `xl:` instead |
-| `fw:` | 1601px+ | Use `2xl:` instead |
-
-**IMPORTANT:** Prefer standard Tailwind breakpoints (`sm:`, `md:`, `lg:`) for reliability.
+**Note:** These breakpoints use a combination of min-width and max-width ranges, not mobile-first min-width only.
 
 ## Colors
 
@@ -110,12 +102,23 @@ className="px-4 sm:px-10 lg:px-16"
 
 ## Gradients (use as `bg-*`)
 
+Gradients are defined using `@utility` directive in `app/globals.css`:
+
+- `bg-footer` - Footer gradient (purple/orange layers)
 - `bg-purple-orbital` - Purple orbital gradient
 - `bg-purple-gradient` - Purple linear gradient
 - `bg-orange-gradient` - Orange linear gradient
 - `bg-grey-gradient` - Grey linear gradient
 - `bg-light-purple` - Light purple gradient
 - `bg-dark-purple` - Dark purple gradient
+- `bg-medium-purple` - Medium purple gradient
+
+**Adding new gradients:** Use `@utility` in globals.css:
+```css
+@utility bg-custom-gradient {
+  background: linear-gradient(...);
+}
+```
 - `bg-medium-purple` - Medium purple gradient
 
 ## Typography
@@ -197,12 +200,12 @@ className="px-4 py-2 rounded-md bg-purple text-white hover:bg-purple-dark focus:
 
 ### Responsive Text
 ```jsx
-className="text-body-sm tab:text-body-md desk:text-body-lg"
+className="text-body-sm md:text-body-md lg:text-body-lg"
 ```
 
 ### Responsive Heading
 ```jsx
-className="text-h1-mob tab:text-h1-tab desk:text-h1-desk fw:text-h1"
+className="text-h1-sm md:text-h1 lg:text-h1-lg"
 ```
 
 ### Conditional Classes
@@ -223,17 +226,17 @@ className="rounded-lg bg-white p-6 shadow-md"
 
 ### Section Padding
 ```jsx
-className="px-6 py-12 tab:px-10 tab:py-16 desk:px-37 desk:py-24"
+className="px-6 py-12 md:px-10 md:py-16 lg:px-37 lg:py-24"
 ```
 
 ## Styled-Components → Tailwind Mapping
 
 | styled-components | Tailwind Equivalent |
 |-------------------|---------------------|
-| `${media.mobile} { ... }` | `mob:...` |
-| `${media.tablet} { ... }` | `tab:...` |
-| `${media.desktop} { ... }` | `desk:...` |
-| `${media.fullWidth} { ... }` | `fw:...` |
+| `${media.mobile} { ... }` | `sm:...` |
+| `${media.tablet} { ... }` | `md:...` |
+| `${media.desktop} { ... }` | `lg:...` |
+| `${media.fullWidth} { ... }` | `xl:...` |
 | `${text.h1}` | `text-h1 font-archivo` |
 | `${text.bodyLg}` | `text-body-lg font-archivo` |
 | `${text.eyebrow}` | `text-eyebrow font-archivo` |

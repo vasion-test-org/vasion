@@ -25,16 +25,16 @@ module.exports = {
   ],
   theme: {
     extend: {
-      // Breakpoints from styles/media.js
+      // Breakpoints (renamed from mob/tab/desk/fw to sm/md/lg/xl)
+      // sm = mobile (max 480px)
+      // md = tablet (481-1024px)
+      // lg = desktop (1025-1600px)
+      // xl = full width (1601px+)
       screens: {
-        mob: { max: '480px' },
-        tab: { min: '481px', max: '1024px' },
-        desk: { min: '1025px', max: '1600px' },
-        fw: { min: '1601px' },
-        // Standard min-width breakpoints for mobile-first approach
-        'sm': '481px',
-        'md': '1025px',
-        'lg': '1601px',
+        sm: { max: '480px' },
+        md: { min: '481px', max: '1024px' },
+        lg: { min: '1025px', max: '1600px' },
+        xl: { min: '1601px' },
       },
 
       // Colors from styles/colors.js
@@ -122,99 +122,71 @@ module.exports = {
         orbitron: ['Orbitron Regular', 'sans-serif'],
       },
 
-      // Font sizes mapped from styles/text.js (all rem values, use breakpoint prefixes for responsive)
+      // Font sizes mapped from styles/text.js
+      // Duplicates removed: h1-md = h1, h2-md = h2, h3-md = h3, h4-md = h4, h5-md = h5, giant-md = giant
+      // Renamed: -mob → -sm, -desk → -lg, -tab → -md (removed if same as base)
       fontSize: {
-        // Giant - 100px at fullWidth (1600px)
+        // Giant - 100px base (same at md)
         'giant': ['6.25rem', { lineHeight: '6.875rem', fontWeight: '700' }],
-        // Giant at desktop (1600px): 6.944vw = 111px = 6.944rem
-        'giant-desk': ['6.944rem', { lineHeight: '7.639rem', fontWeight: '700' }],
-        // Giant at tablet (1024px): 9.766vw = 100px = 6.25rem
-        'giant-tab': ['6.25rem', { lineHeight: '6.875rem', fontWeight: '700' }],
+        'giant-lg': ['6.944rem', { lineHeight: '7.639rem', fontWeight: '700' }],
         
-        // Stat - 48px at fullWidth
+        // Stat - 48px
         'stat': ['3rem', { lineHeight: '3.625rem', fontWeight: '500' }],
         
-        // H1 - 46px at fullWidth (1600px)
+        // H1 - 46px base (same at md)
         'h1': ['2.875rem', { lineHeight: '3.5rem', fontWeight: '800' }],
-        // H1 at desktop (1600px): 3.194vw = 51px = 3.188rem
-        'h1-desk': ['3.188rem', { lineHeight: '3.875rem', fontWeight: '800' }],
-        // H1 at tablet (1024px): 4.492vw = 46px = 2.875rem
-        'h1-tab': ['2.875rem', { lineHeight: '3.5rem', fontWeight: '800' }],
-        // H1 at mobile (480px): 7.477vw = 36px = 2.25rem
-        'h1-mob': ['2.25rem', { lineHeight: '2.813rem', fontWeight: '800' }],
+        'h1-lg': ['3.188rem', { lineHeight: '3.875rem', fontWeight: '800' }],
+        'h1-sm': ['2.25rem', { lineHeight: '2.813rem', fontWeight: '800' }],
         
-        // H2 - 46px at fullWidth (1600px)
+        // H2 - 46px base (same at md)
         'h2': ['2.875rem', { lineHeight: '3.5rem', fontWeight: '700' }],
-        // H2 at desktop (1600px): 3.194vw = 51px = 3.188rem
-        'h2-desk': ['3.188rem', { lineHeight: '3.875rem', fontWeight: '700' }],
-        // H2 at tablet (1024px): 4.492vw = 46px = 2.875rem
-        'h2-tab': ['2.875rem', { lineHeight: '3.5rem', fontWeight: '700' }],
-        // H2 at mobile (480px): 7.477vw = 36px = 2.25rem
-        'h2-mob': ['2.25rem', { lineHeight: '2.813rem', fontWeight: '700' }],
+        'h2-lg': ['3.188rem', { lineHeight: '3.875rem', fontWeight: '700' }],
+        'h2-sm': ['2.25rem', { lineHeight: '2.813rem', fontWeight: '700' }],
         
-        // H3 - 32px at fullWidth (1600px)
+        // H3 - 32px base (same at md)
         'h3': ['2rem', { lineHeight: '2.5rem', fontWeight: '700' }],
-        // H3 at desktop (1600px): 2.222vw = 36px = 2.25rem
-        'h3-desk': ['2.25rem', { lineHeight: '2.75rem', fontWeight: '700' }],
-        // H3 at tablet (1024px): 3.125vw = 32px = 2rem
-        'h3-tab': ['2rem', { lineHeight: '2.5rem', fontWeight: '700' }],
-        // H3 at mobile (480px): 6.075vw = 29px = 1.813rem
-        'h3-mob': ['1.813rem', { lineHeight: '2.25rem', fontWeight: '700' }],
+        'h3-lg': ['2.25rem', { lineHeight: '2.75rem', fontWeight: '700' }],
+        'h3-sm': ['1.813rem', { lineHeight: '2.25rem', fontWeight: '700' }],
         
-        // H4 - 26px at fullWidth (1600px)
+        // H4 - 26px base (same at md)
         'h4': ['1.625rem', { lineHeight: '2rem', fontWeight: '700' }],
-        // H4 at desktop (1600px): 1.806vw = 29px = 1.813rem
-        'h4-desk': ['1.813rem', { lineHeight: '2.25rem', fontWeight: '700' }],
-        // H4 at tablet (1024px): 2.539vw = 26px = 1.625rem
-        'h4-tab': ['1.625rem', { lineHeight: '2rem', fontWeight: '700' }],
-        // H4 at mobile (480px): 4.673vw = 22px = 1.375rem
-        'h4-mob': ['1.375rem', { lineHeight: '1.688rem', fontWeight: '700' }],
+        'h4-lg': ['1.813rem', { lineHeight: '2.25rem', fontWeight: '700' }],
+        'h4-sm': ['1.375rem', { lineHeight: '1.688rem', fontWeight: '700' }],
         
-        // H5 - 20px at fullWidth (1600px)
+        // H5 - 20px base (same at md), lg and sm are same value
         'h5': ['1.25rem', { lineHeight: '1.5rem', fontWeight: '700' }],
-        // H5 at desktop (1600px): 1.389vw = 22px = 1.375rem
-        'h5-desk': ['1.375rem', { lineHeight: '1.688rem', fontWeight: '700' }],
-        // H5 at tablet (1024px): 1.953vw = 20px = 1.25rem
-        'h5-tab': ['1.25rem', { lineHeight: '1.5rem', fontWeight: '700' }],
-        // H5 at mobile (480px): 4.673vw = 22px = 1.375rem
-        'h5-mob': ['1.375rem', { lineHeight: '1.688rem', fontWeight: '700' }],
+        'h5-lg': ['1.375rem', { lineHeight: '1.688rem', fontWeight: '700' }],
         
-        // Body XL - 23px at fullWidth
+        // Body sizes
         'body-xl': ['1.4375rem', { lineHeight: '1.875rem', fontWeight: '400' }],
         'body-xl-bold': ['1.4375rem', { lineHeight: '1.75rem', fontWeight: '700' }],
-        
-        // Body LG - 18px at fullWidth
         'body-lg': ['1.125rem', { lineHeight: '1.5rem', fontWeight: '400' }],
         'body-lg-bold': ['1.125rem', { lineHeight: '1.375rem', fontWeight: '700' }],
-        
-        // Body MD - 16px at fullWidth
         'body-md': ['1rem', { lineHeight: '1.375rem', fontWeight: '400' }],
         'body-md-bold': ['1rem', { lineHeight: '1.375rem', fontWeight: '600' }],
-        
-        // Body SM - 14px at fullWidth
         'body-sm': ['0.875rem', { lineHeight: '1.125rem', fontWeight: '400' }],
         'body-sm-bold': ['0.875rem', { lineHeight: '1.125rem', fontWeight: '700' }],
         
-        // Button Large - 16px at fullWidth
+        // Button
         'button-lg': ['1rem', { lineHeight: '1.0625rem', fontWeight: '700', textTransform: 'uppercase' }],
         
-        // Eyebrow - 14px at fullWidth
+        // Eyebrow
         'eyebrow': ['0.875rem', { lineHeight: '1.125rem', fontWeight: '700', letterSpacing: '0.175rem', textTransform: 'uppercase' }],
         
-        // Tag - 10px at fullWidth
+        // Tags
         'tag': ['0.625rem', { lineHeight: '0.75rem', fontWeight: '400' }],
         'tag-bold': ['0.6875rem', { lineHeight: '0.875rem', fontWeight: '600' }],
         'tag-light': ['0.625rem', { lineHeight: '0.75rem', fontWeight: '300' }],
         
-        // Subtle - 14px
+        // Subtle
         'subtle': ['0.875rem', { lineHeight: '1.125rem', fontWeight: '400' }],
         
-        // Menu styles
+        // Menu
         'm1': ['0.9375rem', { lineHeight: '1rem', fontWeight: '400', textTransform: 'uppercase' }],
         'm2': ['1.125rem', { lineHeight: '1.25rem', fontWeight: '500', textTransform: 'capitalize' }],
         'm3': ['1rem', { lineHeight: '1.3125rem', fontWeight: '500' }],
         
-        // PDF specific
+        // PDF
         'pdf-h1': ['3rem', { lineHeight: '3.5rem', fontWeight: '700' }],
         'pdf-h3': ['1.875rem', { lineHeight: '2.25rem', fontWeight: '700' }],
         'pdf-body-headline': ['2rem', { lineHeight: '2.5rem', fontWeight: '400' }],
@@ -274,6 +246,7 @@ module.exports = {
         'light-purple': 'var(--gradient-light-purple)',
         'dark-purple': 'var(--gradient-dark-purple)',
         'medium-purple': 'var(--gradient-medium-purple)',
+        'footer': 'var(--gradient-footer)',
       },
     },
   },
