@@ -2,18 +2,20 @@
 
 import React, { useEffect, useState } from 'react';
 
+import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
-import media from 'styles/media';
 import colors from 'styles/colors';
+import media from 'styles/media';
 import text from 'styles/text';
+
 import CookieConsentVideo from '@/components/CookieConsentVideo';
 import Button from '@/components/globalComponents/Button';
-import useMedia from '@/functions/useMedia';
-import { horizontalLoop } from '@/functions/horizontalLoop';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import getMedia from '@/functions/getMedia';
+import { horizontalLoop } from '@/functions/horizontalLoop';
+import useMedia from '@/functions/useMedia';
+
 import RichTextRenderer from './renderers/RichTextRenderer';
-import { storyblokEditable } from '@storyblok/react/rsc';
 
 const VideoCarousel = ({ blok }) => {
   // console.log(blok);
@@ -32,25 +34,25 @@ const VideoCarousel = ({ blok }) => {
     return (
       <VideoContainer className={`videos`} id={`video-${index}`} key={index}>
         <VideoCover
-          id={`videocover-${index}`}
-          height={videoHeight}
           coverimage={video?.thumbnail?.sourceUrl}
+          height={videoHeight}
+          id={`videocover-${index}`}
         >
-          <VideoPlayButton src='/images/uiElements/PlayButton.webp' />
+          <VideoPlayButton src="/images/uiElements/PlayButton.webp" />
         </VideoCover>
         <Video>
           <CookieConsentVideo
             loop
-            url={video?.video.filename}
+            playsinline
+            controls={false}
+            height={videoHeight}
             light={!isActive && video?.thumbnail?.filename}
+            muted={true}
             playIcon={<></>}
             playing={true}
+            url={video?.video.filename}
             volume={1}
-            muted={true}
-            controls={false}
-            playsinline
             width={videoWidth}
-            height={videoHeight}
           />
         </Video>
         <ContentContainer>
@@ -74,13 +76,13 @@ const VideoCarousel = ({ blok }) => {
       >
         <PopupVideo>
           <CookieConsentVideo
-            url={video?.video.filename}
             controls={true}
-            playing={isModalActive}
+            height={getMedia(400, 400, 400, 250)}
             // volume={1}
             muted={!isModalActive && modalActiveClick}
+            playing={isModalActive}
+            url={video?.video.filename}
             width={getMedia(800, 800, 700, 325)}
-            height={getMedia(400, 400, 400, 250)}
           />
         </PopupVideo>
       </VideoModal>
@@ -102,16 +104,16 @@ const VideoCarousel = ({ blok }) => {
       let activeElement;
 
       const loop = horizontalLoop(videoArray, {
-        deep: false,
-        paused: true,
-        paddingRight: loopPadding,
         center: true,
+        deep: false,
         onChange: (element, index) => {
           activeElement && activeElement.classList.remove('active');
           element.classList.add('active');
           activeElement = element;
           setActiveIndex(index);
         },
+        paddingRight: loopPadding,
+        paused: true,
       });
 
       const modalTl = gsap.timeline({});
@@ -123,7 +125,7 @@ const VideoCarousel = ({ blok }) => {
           if (e.target.closest('[data-cookie-consent]')) {
             return;
           }
-          
+
           closeTl
             .call(setModalActive(null))
             .to(`#popup-${index}`, { autoAlpha: 0 })
@@ -138,8 +140,8 @@ const VideoCarousel = ({ blok }) => {
             .to(window, {
               duration: 0.25,
               scrollTo: {
-                y: `#popup-${index}`,
                 offsetY: -25,
+                y: `#popup-${index}`,
               },
             })
             .call(setModalActive(index))
@@ -151,14 +153,10 @@ const VideoCarousel = ({ blok }) => {
 
       document
         .querySelector('#video-prev')
-        .addEventListener('click', () =>
-          loop.previous({ duration: 0.4, ease: 'power1.inOut' })
-        );
+        .addEventListener('click', () => loop.previous({ duration: 0.4, ease: 'power1.inOut' }));
       document
         .querySelector('#video-next')
-        .addEventListener('click', () =>
-          loop.next({ duration: 0.4, ease: 'power1.inOut' })
-        );
+        .addEventListener('click', () => loop.next({ duration: 0.4, ease: 'power1.inOut' }));
     };
 
     initCarousel();
@@ -167,8 +165,8 @@ const VideoCarousel = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       <Wrapper
-        spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
+        spacingOffset={blok.offset_spacing}
         // {...storyblokEditable(blok)}
       >
         <IntroDiv>
@@ -178,8 +176,8 @@ const VideoCarousel = ({ blok }) => {
         <VideoCarouselContainer>{allVideos}</VideoCarouselContainer>
         {popups}
         <ButtonContainer>
-          <PrevButton id='video-prev'>Previous</PrevButton>
-          <NextButton id='video-next'>Next</NextButton>
+          <PrevButton id="video-prev">Previous</PrevButton>
+          <NextButton id="video-next">Next</NextButton>
         </ButtonContainer>
       </Wrapper>
     </ThemeProvider>
@@ -209,11 +207,7 @@ const VideoModal = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 1) 100%
-  );
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 1) 100%);
   width: 100vw;
   height: 105vh;
   top: 0;
@@ -258,11 +252,7 @@ const VideoCover = styled.div`
   height: ${(props) => props.height};
   top: 0;
   left: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.4) 0%,
-    rgba(0, 0, 0, 0.95) 100%
-  );
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.95) 100%);
   width: 100%;
   z-index: 2;
   padding: 0.972vw 1.319vw;
@@ -509,21 +499,21 @@ const Wrapper = styled.div`
       return props.spacing === 'default'
         ? '3.75vw 0 0'
         : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '3.75vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : '3.75vw 0 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 0 3.75vw'
         : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 3.75vw';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 3.75vw';
     }
     return props.spacing === 'default'
       ? '3.75vw 0'
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0';
+        ? `${props.spacing}px 0`
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
@@ -534,21 +524,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '60px 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+            ? `${props.spacing}px 0 0`
+            : '60px 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 60px'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 60px';
       }
       return props.spacing === 'default'
         ? '60px 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+          ? `${props.spacing}px 0`
+          : '60px 0';
     }};
   }
 
@@ -559,21 +549,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '5.859vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '5.859vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '5.859vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 5.859vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 5.859vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 5.859vw';
       }
       return props.spacing === 'default'
         ? '5.859vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '5.859vw 0';
+          ? `${props.spacing}px 0`
+          : '5.859vw 0';
     }};
   }
 
@@ -584,21 +574,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '12.5vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '12.5vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '12.5vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 12.5vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 12.5vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 12.5vw';
       }
       return props.spacing === 'default'
         ? '12.5vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0';
+          ? `${props.spacing}px 0`
+          : '12.5vw 0';
     }};
   }
 `;

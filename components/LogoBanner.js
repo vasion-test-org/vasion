@@ -1,9 +1,11 @@
-"use client";
-import React, { useEffect } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import media from "@/styles/media";
+'use client';
+import React, { useEffect } from 'react';
+
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+
+import { useAvailableThemes } from '@/context/ThemeContext';
+import media from '@/styles/media';
 
 const LogoBanner = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -19,11 +21,11 @@ const LogoBanner = ({ blok }) => {
       gsap.registerPlugin(ScrollTrigger);
 
       ScrollTrigger.create({
-        trigger: ".logo-banner",
-        start: "top top",
-        end: "max",
+        end: 'max',
         pin: true,
         pinSpacing: false,
+        start: 'top top',
+        trigger: '.logo-banner',
       });
 
       return ScrollTrigger;
@@ -38,10 +40,7 @@ const LogoBanner = ({ blok }) => {
     return () => {
       if (ScrollTriggerInstance && ScrollTriggerInstance.getAll) {
         ScrollTriggerInstance.getAll().forEach((trigger) => {
-          if (
-            trigger.trigger &&
-            trigger.trigger.classList.contains("logo-banner")
-          ) {
+          if (trigger.trigger && trigger.trigger.classList.contains('logo-banner')) {
             trigger.kill();
           }
         });
@@ -57,11 +56,7 @@ const LogoBanner = ({ blok }) => {
         spacingOffset={blok.offset_spacing}
         {...storyblokEditable(blok)}
       >
-        <Logo
-          src={blok.assets.filename}
-          alt="centered-banner-logo"
-          {...storyblokEditable(blok)}
-        />
+        <Logo alt="centered-banner-logo" src={blok.assets.filename} {...storyblokEditable(blok)} />
       </Wrapper>
     </ThemeProvider>
   );
@@ -95,25 +90,25 @@ const Wrapper = styled.div`
   height: 5vw;
   background: ${(props) => props.theme.logo_banner.bg};
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
           ? `${props.spacing}px 0 0`
-          : "3.75vw 0 0";
+          : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
           ? `0 0 ${props.spacing}px`
-          : "0 0 3.75vw";
+          : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
         ? `${props.spacing}px 0`
-        : "3.75vw 0";
+        : '3.75vw 0';
   }};
   position: relative;
   z-index: 20;
@@ -121,73 +116,73 @@ const Wrapper = styled.div`
   ${media.fullWidth} {
     height: 80px;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+            : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+            : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "60px 0";
+          : '60px 0';
     }};
   }
   ${media.tablet} {
     height: 8.887vw;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.859vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "5.859vw 0 0";
+            : '5.859vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 5.859vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 5.859vw";
+            : '0 0 5.859vw';
       }
-      return props.spacing === "default"
-        ? "5.859vw 0"
+      return props.spacing === 'default'
+        ? '5.859vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "5.859vw 0";
+          : '5.859vw 0';
     }};
   }
   ${media.mobile} {
     height: 19.04vw;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "12.5vw 0 0";
+            : '12.5vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 12.5vw";
+            : '0 0 12.5vw';
       }
-      return props.spacing === "default"
-        ? "12.5vw 0"
+      return props.spacing === 'default'
+        ? '12.5vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "12.5vw 0";
+          : '12.5vw 0';
     }};
   }
 `;

@@ -1,8 +1,10 @@
-"use client";
-import React from "react";
-import styled, { ThemeProvider } from "styled-components";
-import media from "@/styles/media";
-import Button from "@/components/globalComponents/Button";
+'use client';
+import React from 'react';
+
+import styled, { ThemeProvider } from 'styled-components';
+
+import Button from '@/components/globalComponents/Button';
+import media from '@/styles/media';
 const G2Reviews = () => {
   return (
     <Wrapper>
@@ -11,34 +13,26 @@ const G2Reviews = () => {
         <Heading>THE RECOMMENDED ZERO TRUST SOLUTION</Heading>
       </HeaderContainer>
       <ReviewBadges>
-        <G2Image
-          loading="lazy"
-          src="/images/zero-trust/zt-award-group-2.png"
-          alt=""
-        />
-        <G2Image loading="lazy" src="/images/zero-trust/zt-leader.png" alt="" />
-        <G2Image
-          loading="lazy"
-          src="/images/zero-trust/zt-award-group.png"
-          alt=""
-        />
+        <G2Image alt="" loading="lazy" src="/images/zero-trust/zt-award-group-2.png" />
+        <G2Image alt="" loading="lazy" src="/images/zero-trust/zt-leader.png" />
+        <G2Image alt="" loading="lazy" src="/images/zero-trust/zt-award-group.png" />
       </ReviewBadges>
       <PullQuoteContainer>
-        <Image loading="lazy" src="/images/zero-trust/review-1.png" alt="" />
-        <Image loading="lazy" src="/images/zero-trust/review-2.png" alt="" />
-        <Image loading="lazy" src="/images/zero-trust/review-3.png" alt="" />
-        <Image loading="lazy" src="/images/zero-trust/review-4.png" alt="" />
+        <Image alt="" loading="lazy" src="/images/zero-trust/review-1.png" />
+        <Image alt="" loading="lazy" src="/images/zero-trust/review-2.png" />
+        <Image alt="" loading="lazy" src="/images/zero-trust/review-3.png" />
+        <Image alt="" loading="lazy" src="/images/zero-trust/review-4.png" />
       </PullQuoteContainer>
       <Button
         $buttonData={{
-          theme: "primary",
+          layout: 'row',
+          link_size: 'medium',
+          link_text: 'Read Our Reviews →',
           link_url: {
-            url: "https://www.g2.com/products/printerlogic/reviews#reviews",
-            target: "_blank",
+            target: '_blank',
+            url: 'https://www.g2.com/products/printerlogic/reviews#reviews',
           },
-          link_text: "Read Our Reviews →",
-          layout: "row",
-          link_size: "medium",
+          theme: 'primary',
         }}
       />
     </Wrapper>
@@ -93,7 +87,7 @@ const SubText = styled.p`
   }
 `;
 const Heading = styled.h2`
-  font-family: "Archivo";
+  font-family: 'Archivo';
   font-weight: 700;
   font-size: 3.333vw;
   line-height: 3.889vw;

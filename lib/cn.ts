@@ -7,8 +7,8 @@ import { twMerge } from 'tailwind-merge';
  *
  * @example
  * // Basic usage
- * cn('px-4 py-2', 'bg-purple-DEFAULT')
- * // => 'px-4 py-2 bg-purple-DEFAULT'
+ * cn('px-4 py-2', 'bg-purple')
+ * // => 'px-4 py-2 bg-purple'
  *
  * @example
  * // Conditional classes

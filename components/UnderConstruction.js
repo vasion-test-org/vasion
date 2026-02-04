@@ -1,10 +1,13 @@
-"use client";
-import React from "react";
-import styled from "styled-components";
-import colors from "@/styles/colors";
-import media from "@/styles/media";
-import RichTextRenderer from "./renderers/RichTextRenderer";
-import Button from "components/globalComponents/Button";
+'use client';
+import React from 'react';
+
+import Button from 'components/globalComponents/Button';
+import styled from 'styled-components';
+
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+
+import RichTextRenderer from './renderers/RichTextRenderer';
 
 const UnderConstruction = ({ blok }) => {
   return (
@@ -13,9 +16,7 @@ const UnderConstruction = ({ blok }) => {
         <RichTextRenderer document={blok.eyebrow} />
         <RichTextRenderer document={blok.header} />
         <RichTextRenderer document={blok.body} />
-        <ButtonWrapper>
-          {blok.button[0] && <Button $buttonData={blok.button[0]} />}
-        </ButtonWrapper>
+        <ButtonWrapper>{blok.button[0] && <Button $buttonData={blok.button[0]} />}</ButtonWrapper>
       </CopyWrapper>
     </Wrapper>
   );

@@ -3,8 +3,10 @@ import React from 'react';
 
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
+
 import { useAvailableThemes } from '@/context/ThemeContext';
-import media, { mobile, desktop, tablet } from '@/styles/media';
+import media, { desktop, mobile, tablet } from '@/styles/media';
+
 import ComponentRenderer from './renderers/ComponentRenderer';
 
 const SideBySide = ({ blok }) => {
@@ -13,10 +15,8 @@ const SideBySide = ({ blok }) => {
 
   const isLeftAsset = blok.left_side_component?.[0]?.component === 'assets';
   const isRightAsset = blok.right_side_component?.[0]?.component === 'assets';
-  const isLeftVideo =
-    blok.left_side_component?.[0]?.component === 'video_assets';
-  const isRightVideo =
-    blok.right_side_component?.[0]?.component === 'video_assets';
+  const isLeftVideo = blok.left_side_component?.[0]?.component === 'video_assets';
+  const isRightVideo = blok.right_side_component?.[0]?.component === 'video_assets';
   const isRightForm = blok.right_side_component?.[0]?.component === 'form';
   const isSideBySideAsset = isLeftAsset && isRightAsset;
   const isSideBySideVideo = isLeftVideo || isRightVideo;
@@ -24,18 +24,18 @@ const SideBySide = ({ blok }) => {
   const content = (
     <>
       <ComponentRenderer
-        extra_copy={blok.left_extra_copy?.[0]}
         blok={blok.left_side_component[0]}
+        extra_copy={blok.left_extra_copy?.[0]}
+        isRightForm={isRightForm}
         isSideBySideAsset={isSideBySideAsset}
         isSideBySideVideo={isSideBySideVideo}
-        isRightForm={isRightForm}
       />
       <ComponentRenderer
-        extra_copy={blok.right_extra_copy?.[0]}
         blok={blok.right_side_component[0]}
+        extra_copy={blok.right_extra_copy?.[0]}
+        isRightForm={isRightForm}
         isSideBySideAsset={isSideBySideAsset}
         isSideBySideVideo={isSideBySideVideo}
-        isRightForm={isRightForm}
       />
     </>
   );
@@ -43,16 +43,16 @@ const SideBySide = ({ blok }) => {
   const sideBySideContent = blok.card ? (
     <CardWrapper
       {...storyblokEditable(blok)}
-      flipped={blok.flipped}
       card_background_color={blok?.card_background_color?.value}
+      flipped={blok.flipped}
     >
       <SideBySideWrapper
-        gap={blok.gap}
         asset_form={blok.asset_form}
-        extra_copy={blok.extra_copy}
         card={blok.card}
-        isSideBySideAsset={isSideBySideAsset}
+        extra_copy={blok.extra_copy}
         flipped={blok.flipped}
+        gap={blok.gap}
+        isSideBySideAsset={isSideBySideAsset}
       >
         {content}
       </SideBySideWrapper>
@@ -60,10 +60,10 @@ const SideBySide = ({ blok }) => {
   ) : (
     <SideBySideWrapper
       {...storyblokEditable(blok)}
-      gap={blok.gap}
       asset_form={blok.asset_form}
       extra_copy={blok.extra_copy}
       flipped={blok.flipped}
+      gap={blok.gap}
       isSideBySideAsset={isSideBySideAsset}
     >
       {content}
@@ -74,8 +74,8 @@ const SideBySide = ({ blok }) => {
     <ThemeProvider theme={selectedTheme}>
       <SpacingContainer
         data-anchor-id={blok.anchor_id}
-        spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
+        spacingOffset={blok.offset_spacing}
       >
         {sideBySideContent}
       </SpacingContainer>
@@ -84,30 +84,28 @@ const SideBySide = ({ blok }) => {
 };
 
 const SpacingContainer = styled.div`
-  background: ${(props) =>
-    props.card ? 'transparent' : props.theme.side_by_side.bg};
-  color: ${(props) =>
-    props.card ? 'inherit' : props.theme.side_by_side.textColor};
+  background: ${(props) => (props.card ? 'transparent' : props.theme.side_by_side.bg)};
+  color: ${(props) => (props.card ? 'inherit' : props.theme.side_by_side.textColor)};
   padding: ${(props) => {
     if (props.spacingOffset === 'top') {
       return props.spacing === 'default'
         ? '3.75vw 0 0'
         : props.spacing
-        ? `${props.spacing}px / 1600 * 100vw) 0 0`
-        : '3.75vw 0 0';
+          ? `${props.spacing}px / 1600 * 100vw) 0 0`
+          : '3.75vw 0 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 0 3.75vw'
         : props.spacing
-        ? `0 0 ${(props.spacing / 1600) * 100}vw`
-        : '0 0 3.75vw';
+          ? `0 0 ${(props.spacing / 1600) * 100}vw`
+          : '0 0 3.75vw';
     }
     return props.spacing === 'default'
       ? '3.75vw 0'
       : props.spacing
-      ? `${(props.spacing / 1600) * 100}vw 0`
-      : '3.75vw 0';
+        ? `${(props.spacing / 1600) * 100}vw 0`
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
@@ -116,21 +114,21 @@ const SpacingContainer = styled.div`
         return props.spacing === 'default'
           ? '60px 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+            ? `${props.spacing}px 0 0`
+            : '60px 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 60px'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 60px';
       }
       return props.spacing === 'default'
         ? '60px 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+          ? `${props.spacing}px 0`
+          : '60px 0';
     }};
   }
 
@@ -140,21 +138,21 @@ const SpacingContainer = styled.div`
         return props.spacing === 'default'
           ? '3.906vw 3.906vw 0'
           : props.spacing
-          ? `${props.spacing}px 3.906vw 0`
-          : '3.906vw 3.906vw 0';
+            ? `${props.spacing}px 3.906vw 0`
+            : '3.906vw 3.906vw 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 3.906vw 3.906vw'
           : props.spacing
-          ? `0 3.906vw ${props.spacing}px`
-          : '0 3.906vw 3.906vw';
+            ? `0 3.906vw ${props.spacing}px`
+            : '0 3.906vw 3.906vw';
       }
       return props.spacing === 'default'
         ? '3.906vw 3.906vw'
         : props.spacing
-        ? `${props.spacing}px 3.906vw`
-        : '3.906vw 3.906vw';
+          ? `${props.spacing}px 3.906vw`
+          : '3.906vw 3.906vw';
     }};
   }
 
@@ -164,28 +162,27 @@ const SpacingContainer = styled.div`
         return props.spacing === 'default'
           ? '5.417vw 5.417vw 0'
           : props.spacing
-          ? `${props.spacing}px 5.417vw 0`
-          : '5.417vw 5.417vw 0';
+            ? `${props.spacing}px 5.417vw 0`
+            : '5.417vw 5.417vw 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 5.417vw 5.417vw'
           : props.spacing
-          ? `0 5.417vw ${props.spacing}px`
-          : '0 5.417vw 5.417vw';
+            ? `0 5.417vw ${props.spacing}px`
+            : '0 5.417vw 5.417vw';
       }
       return props.spacing === 'default'
         ? '5.417vw 5.417vw'
         : props.spacing
-        ? `${props.spacing}px 5.417vw`
-        : '5.417vw 5.417vw';
+          ? `${props.spacing}px 5.417vw`
+          : '5.417vw 5.417vw';
     }};
   }
 `;
 
 const CardWrapper = styled.div`
-  background: ${(props) =>
-    props.card_background_color || props.theme.side_by_side.bg};
+  background: ${(props) => props.card_background_color || props.theme.side_by_side.bg};
   color: ${(props) => props.theme.side_by_side.textColor};
   border-radius: 1.5vw;
   overflow: hidden;
@@ -207,8 +204,7 @@ const CardWrapper = styled.div`
   }
 
   ${media.mobile} {
-    flex-direction: ${(props) =>
-      props.flipped === true ? 'column-reverse' : 'column'};
+    flex-direction: ${(props) => (props.flipped === true ? 'column-reverse' : 'column')};
     width: 89.167vw;
     border-radius: 5vw;
     padding: 5.417vw;
@@ -221,10 +217,8 @@ const SideBySideWrapper = styled.div`
   justify-content: center;
   align-items: ${(props) => (props.extra_copy ? 'start' : 'center')};
   text-align: left;
-  background: ${(props) =>
-    props.card ? 'transparent' : props.theme.side_by_side.bg};
-  color: ${(props) =>
-    props.card ? 'inherit' : props.theme.side_by_side.textColor};
+  background: ${(props) => (props.card ? 'transparent' : props.theme.side_by_side.bg)};
+  color: ${(props) => (props.card ? 'inherit' : props.theme.side_by_side.textColor)};
 
   /* Apply negative margin only to form components */
   > .form-component {
@@ -256,10 +250,10 @@ const SideBySideWrapper = styled.div`
         ? '3.75vw'
         : '9.25vw'
       : props.gap
-      ? `${props.gap}px`
-      : props.card || props.isSideBySideAsset
-      ? '3.75vw'
-      : '9.25vw'};
+        ? `${props.gap}px`
+        : props.card || props.isSideBySideAsset
+          ? '3.75vw'
+          : '9.25vw'};
 
   ${media.fullWidth} {
     gap: ${(props) =>
@@ -268,30 +262,21 @@ const SideBySideWrapper = styled.div`
           ? '60px'
           : '148px'
         : props.gap
-        ? `${props.gap}px`
-        : props.card || props.isSideBySideAsset
-        ? '60px'
-        : '148px'};
+          ? `${props.gap}px`
+          : props.card || props.isSideBySideAsset
+            ? '60px'
+            : '148px'};
   }
 
   ${media.tablet} {
     gap: ${(props) =>
-      props.gap === 'default'
-        ? '3.906vw'
-        : props.gap
-        ? `${props.gap}px`
-        : '3.906vw'};
+      props.gap === 'default' ? '3.906vw' : props.gap ? `${props.gap}px` : '3.906vw'};
   }
 
   ${media.mobile} {
-    flex-direction: ${(props) =>
-      props.flipped === true ? 'column-reverse' : 'column'};
+    flex-direction: ${(props) => (props.flipped === true ? 'column-reverse' : 'column')};
     gap: ${(props) =>
-      props.gap === 'default'
-        ? '6.667vw'
-        : props.gap
-        ? `${props.gap}px`
-        : '6.667vw'};
+      props.gap === 'default' ? '6.667vw' : props.gap ? `${props.gap}px` : '6.667vw'};
   }
 `;
 

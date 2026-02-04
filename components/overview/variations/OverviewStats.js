@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import media from 'styles/media';
-import colors from 'styles/colors';
-import text from 'styles/text';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
+import styled from 'styled-components';
+import colors from 'styles/colors';
+import media from 'styles/media';
+import text from 'styles/text';
+
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 const OverviewStats = ({ blok }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -15,15 +17,15 @@ const OverviewStats = ({ blok }) => {
       setIsOpen(false);
       gsap.to('.stats-overview-visibility', {
         autoAlpha: 0,
-        height: 0,
         duration: 0.5,
+        height: 0,
       });
     } else {
       setIsOpen(true);
       gsap.to('.stats-overview-visibility', {
         autoAlpha: 1,
-        height: 'auto',
         duration: 0.5,
+        height: 'auto',
       });
     }
   };
@@ -48,8 +50,8 @@ const OverviewStats = ({ blok }) => {
         {item?.icon.filename && (
           <Icon
             {...storyblokEditable(item?.icon?.filename)}
-            src={item?.icon?.filename}
             alt={item?.icon?.alt}
+            src={item?.icon?.filename}
           />
         )}
         <CalloutBody>
@@ -64,8 +66,8 @@ const OverviewStats = ({ blok }) => {
 
   return (
     <Wrapper
-      spacingOffset={blok.offset_spacing}
       spacing={blok.section_spacing}
+      spacingOffset={blok.offset_spacing}
       {...storyblokEditable(blok)}
       $isopen={isOpen}
     >
@@ -73,27 +75,21 @@ const OverviewStats = ({ blok }) => {
         <HeaderDiv>
           <Headline>{blok?.headline}</Headline>
           <ExpandCollapseIcon
-            src={
-              isOpen
-                ? '/images/uiElements/closeVector.webp'
-                : '/images/uiElements/OpenBtn.webp'
-            }
-            alt={isOpen ? 'close-btn' : 'open-btn'}
             $isopen={isOpen}
+            alt={isOpen ? 'close-btn' : 'open-btn'}
             className={'stats-overview-close'}
+            src={isOpen ? '/images/uiElements/closeVector.webp' : '/images/uiElements/OpenBtn.webp'}
             onClick={handleMobileClick}
           />
         </HeaderDiv>
 
-        <StatItemsContainer className="stats-overview-visibility">
-          {statlist}
-        </StatItemsContainer>
+        <StatItemsContainer className="stats-overview-visibility">{statlist}</StatItemsContainer>
       </ContentWrapper>
       {calloutList && calloutList.length > 0 && (
-        <CalloutWrapper className="stats-overview-visibility" $isopen={isOpen}>
+        <CalloutWrapper $isopen={isOpen} className="stats-overview-visibility">
           <ImageHeadline
-            src={blok?.callout_logo_header?.filename}
             alt={blok?.callout_logo_header?.alt}
+            src={blok?.callout_logo_header?.filename}
           />
           {<CalloutListContainer>{calloutList}</CalloutListContainer>}
         </CalloutWrapper>
@@ -332,8 +328,7 @@ const ContentWrapper = styled.div`
     width: 91.167vw;
     padding: unset;
     gap: 4.673vw;
-    background-color: ${(props) =>
-      props.$isopen ? `${colors.white}` : 'transparent'};
+    background-color: ${(props) => (props.$isopen ? `${colors.white}` : 'transparent')};
   }
 `;
 

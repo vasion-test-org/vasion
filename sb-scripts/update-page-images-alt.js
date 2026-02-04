@@ -64,9 +64,7 @@ const replaceImageWithItself = async (story, imageInfo) => {
       if (!content) return false;
 
       if (Array.isArray(content)) {
-        return content.some((item) =>
-          replaceImageInContent(item, imageUid, assetId)
-        );
+        return content.some((item) => replaceImageInContent(item, imageUid, assetId));
       } else if (typeof content === 'object') {
         // Check if this is the image we're looking for
         if (content._uid === imageUid) {
@@ -88,16 +86,10 @@ const replaceImageWithItself = async (story, imageInfo) => {
     };
 
     // Replace the image in the content
-    const updated = replaceImageInContent(
-      updatedContent,
-      imageInfo._uid,
-      imageInfo.id
-    );
+    const updated = replaceImageInContent(updatedContent, imageInfo._uid, imageInfo.id);
 
     if (!updated) {
-      console.log(
-        `⚠️  Could not find image with _uid ${imageInfo._uid} in story content`
-      );
+      console.log(`⚠️  Could not find image with _uid ${imageInfo._uid} in story content`);
       return false;
     }
 
@@ -157,9 +149,7 @@ const updatePageImagesAlt = async () => {
 
           // Check if story is published
           if (!story.published_at) {
-            console.log(
-              `⚠️  Skipping draft story: ${story.name} (not published)`
-            );
+            console.log(`⚠️  Skipping draft story: ${story.name} (not published)`);
             draftStoriesSkipped++;
             continue;
           }
@@ -209,9 +199,7 @@ const updatePageImagesAlt = async () => {
 
         // If we got fewer stories than requested, we've reached the end
         if (stories.length < perPage) {
-          console.log(
-            `📄 Reached end of stories (${stories.length} < ${perPage})`
-          );
+          console.log(`📄 Reached end of stories (${stories.length} < ${perPage})`);
           break;
         }
 
@@ -236,10 +224,7 @@ const updatePageImagesAlt = async () => {
     console.log(`📄 Total Pages Processed: ${page - 1} pages`);
     console.log(`⚠️  Draft Stories Skipped: ${draftStoriesSkipped}`);
   } catch (err) {
-    console.error(
-      '❌ Error replacing page images:',
-      err.response?.statusText || err.message
-    );
+    console.error('❌ Error replacing page images:', err.response?.statusText || err.message);
   }
 };
 

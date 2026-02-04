@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+
 import { usePageData } from '@/context/PageDataContext';
 
 const SEOUpdater = () => {

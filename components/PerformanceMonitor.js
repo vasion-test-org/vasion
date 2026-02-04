@@ -14,10 +14,8 @@ const PerformanceMonitor = () => {
         window.gtag('event', metric.name, {
           event_category: 'Web Vitals',
           event_label: metric.id,
-          value: Math.round(
-            metric.name === 'CLS' ? metric.value * 1000 : metric.value
-          ),
           non_interaction: true,
+          value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
         });
       }
 
@@ -27,7 +25,7 @@ const PerformanceMonitor = () => {
 
     // Import and initialize web-vitals
     import('web-vitals')
-      .then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+      .then(({ getCLS, getFCP, getFID, getLCP, getTTFB }) => {
         getCLS(reportWebVitals);
         getFID(reportWebVitals);
         getFCP(reportWebVitals);
@@ -45,8 +43,7 @@ const PerformanceMonitor = () => {
           const navTiming = entry;
           console.log('Navigation timing:', {
             domContentLoaded:
-              navTiming.domContentLoadedEventEnd -
-              navTiming.domContentLoadedEventStart,
+              navTiming.domContentLoadedEventEnd - navTiming.domContentLoadedEventStart,
             loadComplete: navTiming.loadEventEnd - navTiming.loadEventStart,
             totalTime: navTiming.loadEventEnd - navTiming.fetchStart,
           });

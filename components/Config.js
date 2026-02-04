@@ -1,14 +1,18 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Footer from './globalComponents/Footer';
-import Nav from './globalComponents/Nav';
-import MobileNav from './globalComponents/MobileNav';
-import styled from 'styled-components';
-import media from '@/styles/media';
+
 import { usePathname } from 'next/navigation';
-import { getStoryblokApi } from '@/lib/storyblok';
+
+import styled from 'styled-components';
+
 import { usePageData } from '@/context/PageDataContext';
+import { getStoryblokApi } from '@/lib/storyblok';
+import media from '@/styles/media';
+
+import Footer from './globalComponents/Footer';
+import MobileNav from './globalComponents/MobileNav';
+import Nav from './globalComponents/Nav';
 
 const Config = ({ blok, children }) => {
   const pathname = usePathname();
@@ -38,10 +42,7 @@ const Config = ({ blok, children }) => {
           const cachedRaw = window.localStorage.getItem(getCacheKey(locale));
           if (cachedRaw) {
             const cached = JSON.parse(cachedRaw);
-            if (
-              cached?.data &&
-              Date.now() - (cached.timestamp || 0) < CACHE_TTL_MS
-            ) {
+            if (cached?.data && Date.now() - (cached.timestamp || 0) < CACHE_TTL_MS) {
               setConfigData(cached.data);
               setIsLoading(false);
             }
@@ -54,8 +55,8 @@ const Config = ({ blok, children }) => {
       try {
         const storyblokApi = getStoryblokApi();
         const { data } = await storyblokApi.get('cdn/stories/config', {
-          version: 'published',
           language: locale,
+          version: 'published',
         });
         setConfigData(data?.story?.content ?? null);
         // Update cache
@@ -64,8 +65,8 @@ const Config = ({ blok, children }) => {
             window.localStorage.setItem(
               getCacheKey(locale),
               JSON.stringify({
-                timestamp: Date.now(),
                 data: data.story.content,
+                timestamp: Date.now(),
               })
             );
           }
@@ -107,9 +108,7 @@ const Config = ({ blok, children }) => {
       {children}
       {/* </ChildrenVisibilityWrapper> */}
 
-      {configData && !shouldHideFooter && (
-        <Footer blok={configData.footer?.[0]} />
-      )}
+      {configData && !shouldHideFooter && <Footer blok={configData.footer?.[0]} />}
     </>
   );
 };

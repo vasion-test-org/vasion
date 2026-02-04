@@ -1,16 +1,17 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from 'react';
 
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
 
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import getMedia from "@/functions/getMedia";
-import Button from "./globalComponents/Button";
-import { storyblokEditable } from "@storyblok/react/rsc";
+import { useAvailableThemes } from '@/context/ThemeContext';
+import getMedia from '@/functions/getMedia';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
+
+import Button from './globalComponents/Button';
 
 const CustomerLogos = ({ blok }) => {
   // console.log(blok);
@@ -26,21 +27,21 @@ const CustomerLogos = ({ blok }) => {
 
   const allLogos = primaryLogos?.map((logo) => (
     <Logo
-      key={logo.filename}
       alt={logo?.alt}
-      loading="lazy"
       className={`${blok?.logos_category}-logos`}
+      key={logo.filename}
+      loading="lazy"
       src={logo.filename}
     />
   ));
 
   const logoOverflow = remainingLogos?.map((logo) => (
     <Logo
+      alt={logo?.alt}
+      className={`${blok?.logos_category}-logos`}
       key={logo.filename}
       loading="lazy"
-      className={`${blok?.logos_category}-logos`}
       src={logo.filename}
-      alt={logo?.alt}
     />
   ));
 
@@ -55,22 +56,22 @@ const CustomerLogos = ({ blok }) => {
 
       const logoTl = gsap.timeline({
         scrollTrigger: {
+          end: 'bottom bottom',
+          start: 'top 40%',
           trigger: categoryRef.current,
-          start: "top 40%",
-          end: "bottom bottom",
           // markers: true,
         },
       });
 
       logoTl
         .from(cardsRef.current, {
-          y: 500,
           duration: 1.25,
+          ease: 'power4',
           stagger: 0.1,
-          ease: "power4",
+          y: 500,
         })
-        .from(mainCardRef.current, { autoAlpha: 0, duration: 2.25 }, ">-.75")
-        .from(logosRef.current, { autoAlpha: 0, duration: 1.75 }, "<");
+        .from(mainCardRef.current, { autoAlpha: 0, duration: 2.25 }, '>-.75')
+        .from(logosRef.current, { autoAlpha: 0, duration: 1.75 }, '<');
     };
 
     initLogoAnimation();
@@ -80,49 +81,35 @@ const CustomerLogos = ({ blok }) => {
     <ThemeProvider theme={selectedTheme}>
       <Wrapper
         id={blok?.logos_category}
-        spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
+        spacingOffset={blok.offset_spacing}
       >
         <CardsDiv main_side={blok?.main_side} {...storyblokEditable(blok)}>
           <MainCard className={`${blok?.logos_category}-cards`}>
             <MainLogo
-              loading="lazy"
-              className={`${blok?.logos_category}-mainContent`}
-              src={blok?.main_logo?.filename}
               alt={blok?.main_logo?.alt}
+              className={`${blok?.logos_category}-mainContent`}
+              loading="lazy"
+              src={blok?.main_logo?.filename}
             />
             <MainHeadline className={`${blok?.logos_category}-mainContent`}>
               {blok?.main_headline}
             </MainHeadline>
-            <MainBody className={`${blok?.logos_category}-mainContent`}>
-              {blok?.main_copy}
-            </MainBody>
+            <MainBody className={`${blok?.logos_category}-mainContent`}>{blok?.main_copy}</MainBody>
             {blok?.main_link?.map(($buttonData) => (
-              <div
-                {...storyblokEditable($buttonData)}
-                key={$buttonData?.link_text}
-              >
-                <Button
-                  key={$buttonData?.link_text}
-                  $buttonData={$buttonData}
-                />
+              <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
+                <Button $buttonData={$buttonData} key={$buttonData?.link_text} />
               </div>
             ))}
           </MainCard>
-          <LogosCard
-            className={`${blok?.logos_category}-cards`}
-            cardcolor={blok?.cardColor}
-          >
+          <LogosCard cardcolor={blok?.cardColor} className={`${blok?.logos_category}-cards`}>
             <LogoCategoryDiv className={`${blok?.logos_category}-logos`}>
               <LogosCategory>{blok?.logos_category}</LogosCategory>
             </LogoCategoryDiv>
             <LogosDiv>{allLogos}</LogosDiv>
           </LogosCard>
         </CardsDiv>
-        <RemainingLogos
-          className={`${blok?.logos_category}-remaining`}
-          cardcolor={blok?.cardColor}
-        >
+        <RemainingLogos cardcolor={blok?.cardColor} className={`${blok?.logos_category}-remaining`}>
           {logoOverflow}
         </RemainingLogos>
       </Wrapper>
@@ -350,7 +337,7 @@ const RemainingLogos = styled.div`
 `;
 const CardsDiv = styled.div`
   display: flex;
-  flex-direction: ${(props) => (props.main_side ? "row" : "row-reverse")};
+  flex-direction: ${(props) => (props.main_side ? 'row' : 'row-reverse')};
   justify-content: center;
   align-items: center;
   overflow: hidden;
@@ -379,96 +366,96 @@ const Wrapper = styled.div`
   background: ${(props) => props.theme.customer_logos.bg};
 
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
           ? `${props.spacing}px 0 0`
-          : "3.75vw 0 0";
+          : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
           ? `0 0 ${props.spacing}px`
-          : "0 0 3.75vw";
+          : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
         ? `${props.spacing}px 0`
-        : "3.75vw 0";
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+            : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+            : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "60px 0";
+          : '60px 0';
     }};
   }
 
   ${media.tablet} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.859vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "5.859vw 0 0";
+            : '5.859vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 5.859vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 5.859vw";
+            : '0 0 5.859vw';
       }
-      return props.spacing === "default"
-        ? "5.859vw 0"
+      return props.spacing === 'default'
+        ? '5.859vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "5.859vw 0";
+          : '5.859vw 0';
     }};
   }
 
   ${media.mobile} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "12.5vw 0 0";
+            : '12.5vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 12.5vw";
+            : '0 0 12.5vw';
       }
-      return props.spacing === "default"
-        ? "12.5vw 0"
+      return props.spacing === 'default'
+        ? '12.5vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "12.5vw 0";
+          : '12.5vw 0';
     }};
   }
 `;

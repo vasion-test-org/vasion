@@ -1,41 +1,38 @@
-"use client";
-import React, { useEffect, useState } from "react";
+'use client';
+import React, { useEffect, useState } from 'react';
 
-import styled from "styled-components";
-import media from "@/styles/media";
-import text from "@/styles/text";
-import colors from "@/styles/colors";
-import getMedia from "@/functions/getMedia";
+import styled from 'styled-components';
+
+import getMedia from '@/functions/getMedia';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
 
 function JobList() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedLocation, setSelectedLocation] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState("");
-  const [searchKeyword, setSearchKeyword] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState('');
   const [isOn, setIsOn] = useState(false);
   const [allLocations, setAllLocations] = useState([]);
   const [allDepartments, setAllDepartments] = useState([]);
 
   const filteredJobs = jobs.filter((job) => {
-    const location = `${job.city != "" ? job.city : ""} ${
-      job.state != "" ? job.state : ""
+    const location = `${job.city != '' ? job.city : ''} ${
+      job.state != '' ? job.state : ''
     } ${job.country}`;
 
     const locationMatch =
-      selectedLocation === "" ||
-      location
-        .trim()
-        .toLowerCase()
-        .includes(selectedLocation.trim().toLowerCase());
+      selectedLocation === '' ||
+      location.trim().toLowerCase().includes(selectedLocation.trim().toLowerCase());
 
     const departmentMatch =
-      selectedDepartment === "" ||
+      selectedDepartment === '' ||
       job.department.toLowerCase() === selectedDepartment.toLowerCase();
 
     const titleMatch =
-      searchKeyword === "" ||
-      job.title.toLowerCase().includes(searchKeyword.toLowerCase());
+      searchKeyword === '' || job.title.toLowerCase().includes(searchKeyword.toLowerCase());
 
     const remoteMatch = !isOn || job.telecommuting;
 
@@ -56,14 +53,14 @@ function JobList() {
     const timeDifference = currentDate - postedDate;
     const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
     if (daysAgo === 0) {
-      return "Posted Today";
+      return 'Posted Today';
     } else if (daysAgo === 1) {
-      return "Posted Yesterday";
+      return 'Posted Yesterday';
     } else if (daysAgo <= 30) {
       return `Posted ${daysAgo} days ago`;
     } else {
       const monthsAgo = Math.floor(daysAgo / 30);
-      return `Posted ${monthsAgo} ${monthsAgo === 1 ? "month" : "months"} ago`;
+      return `Posted ${monthsAgo} ${monthsAgo === 1 ? 'month' : 'months'} ago`;
     }
   }
 
@@ -71,8 +68,8 @@ function JobList() {
     const { default: gsap } = await import('gsap');
 
     setIsOn((prevIsOn) => !prevIsOn);
-    const xValue = getMedia("30px", "2.083vw", "2.93vw", "7.009vw");
-    const target = document.querySelector(".toggle-button-workable-slider");
+    const xValue = getMedia('30px', '2.083vw', '2.93vw', '7.009vw');
+    const target = document.querySelector('.toggle-button-workable-slider');
 
     if (!isOn) {
       const toggleForward = gsap.timeline().to(target, { left: xValue });
@@ -84,9 +81,8 @@ function JobList() {
   };
   function jsonp(url, callbackName) {
     return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.src =
-        url + (url.indexOf("?") >= 0 ? "&" : "?") + `callback=${callbackName}`;
+      const script = document.createElement('script');
+      script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + `callback=${callbackName}`;
       script.async = true;
       script.onload = () => {
         resolve();
@@ -101,8 +97,8 @@ function JobList() {
   }
 
   useEffect(() => {
-    const apiUrl = "https://www.workable.com/api/accounts/vasion?details=true";
-    const callbackName = "jsonpCallback";
+    const apiUrl = 'https://www.workable.com/api/accounts/vasion?details=true';
+    const callbackName = 'jsonpCallback';
 
     window[callbackName] = (data) => {
       setJobs(data.jobs);
@@ -111,7 +107,7 @@ function JobList() {
       const uniqueDepartments = new Set();
 
       data.jobs.forEach((job) => {
-        if (job.city !== "") {
+        if (job.city !== '') {
           const location = job.city + ` ${job.state}` + ` ${job.country}`;
           uniqueLocations.add(location);
         } else {
@@ -150,25 +146,21 @@ function JobList() {
           return (
             <JobItem key={job + index}>
               <ColumnContainer>
-                <HeadingLink
-                  href={job.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <HeadingLink href={job.url} rel="noopener noreferrer" target="_blank">
                   <JobTitle key={job.id + index}>{job.title}</JobTitle>
                 </HeadingLink>
                 <p>{calculateDaysAgo(job.created_at)}</p>
               </ColumnContainer>
               <JobType>
-                {job.telecommuting && job.city === ""
-                  ? "Remote"
-                  : job.telecommuting && job.city != ""
-                    ? "Hybrid"
-                    : "On-Site"}
+                {job.telecommuting && job.city === ''
+                  ? 'Remote'
+                  : job.telecommuting && job.city != ''
+                    ? 'Hybrid'
+                    : 'On-Site'}
               </JobType>
               <Location>
-                {job?.city && job?.state ? job.city + "," : job.city}
-                {job?.state && job.country ? job.state + "," : job.countryCode}
+                {job?.city && job?.state ? job.city + ',' : job.city}
+                {job?.state && job.country ? job.state + ',' : job.countryCode}
                 {job.country}
               </Location>
               <Department>{job.function}</Department>
@@ -196,8 +188,8 @@ function JobList() {
       <JobContainer>
         <Heading>Job Openings</Heading>
         <SearchInput
-          type="text"
           placeholder="Search Jobs..."
+          type="text"
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
         ></SearchInput>
@@ -223,15 +215,8 @@ function JobList() {
             </SelectFilter>
           }
 
-          <ToggleContainer
-            className="toggle-button-workable"
-            onClick={toggleSwitch}
-            isOn={isOn}
-          >
-            <ToggleButton
-              className="toggle-button-workable-slider"
-              isOn={isOn}
-            />
+          <ToggleContainer className="toggle-button-workable" isOn={isOn} onClick={toggleSwitch}>
+            <ToggleButton className="toggle-button-workable-slider" isOn={isOn} />
           </ToggleContainer>
           <ToggleText>Remote Only</ToggleText>
         </FilterDiv>
@@ -248,7 +233,7 @@ const JobContainer = styled.div`
   gap: 1.389vw;
   align-items: center;
   width: 90vw;
-  font-family: "Archivo", sans-serif;
+  font-family: 'Archivo', sans-serif;
 
   ${media.fullWidth} {
     width: 1440px;
@@ -354,8 +339,7 @@ const ToggleContainer = styled.div`
   width: 4.167vw;
   height: 2.083vw;
   border-radius: 1.042vw;
-  background-color: ${(props) =>
-    props.isOn ? `${colors.primaryOrange}` : `${colors.grey100}`};
+  background-color: ${(props) => (props.isOn ? `${colors.primaryOrange}` : `${colors.grey100}`)};
   position: relative;
   cursor: pointer;
 
@@ -386,25 +370,25 @@ const ToggleButton = styled.div`
   position: absolute;
   top: 0;
   border: 1px solid ${colors.grey200};
-  /* left: ${(props) => (props.isOn ? "2.083vw" : "0")};
+  /* left: ${(props) => (props.isOn ? '2.083vw' : '0')};
   transition: left 0.3s ease-in-out; */
 
   ${media.fullWidth} {
     width: 30px;
     height: 30px;
-    /* left: ${(props) => (props.isOn ? "30px" : "0")}; */
+    /* left: ${(props) => (props.isOn ? '30px' : '0')}; */
   }
 
   ${media.tablet} {
     width: 2.13vw;
     height: 2.13vw;
-    /* left: ${(props) => (props.isOn ? "2.93vw" : "0")}; */
+    /* left: ${(props) => (props.isOn ? '2.93vw' : '0')}; */
   }
 
   ${media.mobile} {
     width: 7.009vw;
     height: 7.009vw;
-    /* left: ${(props) => (props.isOn ? "7.009vw" : "0")}; */
+    /* left: ${(props) => (props.isOn ? '7.009vw' : '0')}; */
   }
 `;
 const Results = styled.div`
@@ -426,7 +410,7 @@ const Results = styled.div`
   }
 `;
 const JobItem = styled.div`
-  font-family: "Archivo", sans-serif;
+  font-family: 'Archivo', sans-serif;
   display: flex;
   align-items: center;
   flex-direction: row;

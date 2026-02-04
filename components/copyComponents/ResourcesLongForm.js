@@ -1,22 +1,23 @@
 'use client';
-import React, { useMemo, useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
 import media from 'styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import colors from '@/styles/colors';
-import ResourcesTOC from '@/components/ResourcesTOC';
+
 import PodcastSidebar from '@/components/PodcastSidebar';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import ResourcesTOC from '@/components/ResourcesTOC';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import colors from '@/styles/colors';
+
 import SpotifyEmbed from '../SpotifyEmbed';
 
 const ResourcesLongForm = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   // Check if podcast data exists
-  const hasPodcastData =
-    blok.podcast_image || blok.podcast_header || blok.podcast_copy;
+  const hasPodcastData = blok.podcast_image || blok.podcast_header || blok.podcast_copy;
 
   // Extract headers and their IDs from the copy document
   const extractHeaderData = (document) => {
@@ -28,10 +29,7 @@ const ResourcesLongForm = ({ blok }) => {
       if (node.type === 'heading') {
         const text = node.content
           ? node.content
-              .map(
-                (item) =>
-                  (item && typeof item === 'object' ? item.text : '') || '',
-              )
+              .map((item) => (item && typeof item === 'object' ? item.text : '') || '')
               .join('')
           : '';
 
@@ -49,16 +47,11 @@ const ResourcesLongForm = ({ blok }) => {
                   mark.type === 'styled' &&
                   mark.attrs &&
                   mark.attrs.class &&
-                  mark.attrs.class.includes('ignore'),
-              ),
+                  mark.attrs.class.includes('ignore')
+              )
           );
 
-        if (
-          text &&
-          typeof text === 'string' &&
-          text.trim() &&
-          !hasIgnoreClass
-        ) {
+        if (text && typeof text === 'string' && text.trim() && !hasIgnoreClass) {
           const id = text
             .toLowerCase()
             .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
@@ -66,8 +59,8 @@ const ResourcesLongForm = ({ blok }) => {
             .trim();
 
           headers.push({
-            text: text.trim(),
             id: id,
+            text: text.trim(),
           });
         }
       }
@@ -91,8 +84,8 @@ const ResourcesLongForm = ({ blok }) => {
         // Find header element by text content
         const headerElements = Array.from(
           document.querySelectorAll(
-            '#resources-long-form h1, #resources-long-form h2, #resources-long-form h3, #resources-long-form h4, #resources-long-form h5',
-          ),
+            '#resources-long-form h1, #resources-long-form h2, #resources-long-form h3, #resources-long-form h4, #resources-long-form h5'
+          )
         );
 
         headerElements.forEach((element) => {
@@ -118,22 +111,22 @@ const ResourcesLongForm = ({ blok }) => {
         <ResourcesLongFormContainer id="resources-long-form">
           {blok.spotify_embed && <SpotifyEmbed blok={blok.spotify_embed} />}
           <RichTextRenderer
-            key={`copy-`}
-            document={blok.copy}
             blok={blok}
+            document={blok.copy}
+            key={`copy-`}
             responsiveTextStyles={blok?.responsive_text_styles}
           />
         </ResourcesLongFormContainer>
         {hasPodcastData ? (
           <PodcastSidebar
+            applePodcastsUrl={blok.apple_url}
+            body={blok.podcast_copy}
             image={blok.podcast_image?.filename}
             imageAlt={blok.podcast_image?.alt || 'Podcast cover'}
-            title={blok.podcast_header}
-            body={blok.podcast_copy}
-            spotifyUrl={blok.spotify_url}
-            applePodcastsUrl={blok.apple_url}
-            youtubeUrl={blok.youtube_url}
             rssUrl={blok.rss_feed_url}
+            spotifyUrl={blok.spotify_url}
+            title={blok.podcast_header}
+            youtubeUrl={blok.youtube_url}
           />
         ) : (
           <ResourcesTOC copy={blok.copy} toc={blok.table_of_contents} />

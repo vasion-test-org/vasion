@@ -24,21 +24,16 @@ const addAnchorIdField = async () => {
         type: 'text',
         pos: 0, // Add at the beginning of the schema
         display_name: 'Anchor ID',
-        description:
-          'Unique identifier for the component, used for anchor links',
+        description: 'Unique identifier for the component, used for anchor links',
         required: false,
         regex: '^[a-z0-9-]+$', // Only allow lowercase letters, numbers, and hyphens
-        regex_error:
-          'Anchor ID can only contain lowercase letters, numbers, and hyphens',
+        regex_error: 'Anchor ID can only contain lowercase letters, numbers, and hyphens',
       };
 
       // Update the component
-      await Storyblok.put(
-        `spaces/${config.spaceId}/components/${component.id}`,
-        {
-          component,
-        }
-      );
+      await Storyblok.put(`spaces/${config.spaceId}/components/${component.id}`, {
+        component,
+      });
       // console.log(`✅ Added anchor_id field to component: ${component.name}`);
     }
 

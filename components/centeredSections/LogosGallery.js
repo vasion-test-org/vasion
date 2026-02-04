@@ -1,46 +1,39 @@
-import React from "react";
+import React from 'react';
 
-import styled from "styled-components";
-import media from "styles/media";
+import styled from 'styled-components';
+import media from 'styles/media';
 // import colors from "styles/colors";
 // import text from "styles/text";
 
 const LogosGallery = ({ logoData }) => {
   // console.log(logoData)
-  
+
   const allLogos = logoData.map((logo) => {
     const rawUrl = logo?.link?.cached_url;
     const isExternal = rawUrl?.startsWith('http://') || rawUrl?.startsWith('https://');
     const href = isExternal ? rawUrl : `/${rawUrl}`.replace(/\/+/g, '/');
-  
+
     if (rawUrl) {
       return (
         <LogoLink
-          key={rawUrl}
           href={href}
-          target={isExternal ? '_blank' : undefined}
+          key={rawUrl}
           rel={isExternal ? 'noopener noreferrer' : undefined}
+          target={isExternal ? '_blank' : undefined}
         >
           <Logo alt={logo?.logo?.alt} src={logo?.logo?.filename} />
         </LogoLink>
       );
     } else {
-      return (
-        <Logo
-          key={logo?.logo?.filename}
-          alt={logo?.logo?.alt}
-          src={logo?.logo?.filename}
-        />
-      );
+      return <Logo alt={logo?.logo?.alt} key={logo?.logo?.filename} src={logo?.logo?.filename} />;
     }
   });
 
   return (
     <Wrapper>
-
       <IconWrapper>{allLogos}</IconWrapper>
     </Wrapper>
-  )
+  );
 };
 
 const LogoLink = styled.a`
@@ -95,5 +88,5 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-`
+`;
 export default LogosGallery;

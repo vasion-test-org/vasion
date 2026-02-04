@@ -7,6 +7,7 @@ The `CookieConsentVideo` component is a wrapper around `ReactPlayer` that checks
 ## How It Works
 
 ### Cookie Detection
+
 The component checks for cookie consent in multiple ways:
 
 1. **CookieYes API**: Uses `window.getCkyConsent()` to get detailed consent data
@@ -14,6 +15,7 @@ The component checks for cookie consent in multiple ways:
 3. **Event Listeners**: Listens for consent change events (`ckyConsentChanged`, `cookieyes-consent`, `cookieconsent`)
 
 ### States
+
 - **Loading**: Shows while checking cookie status
 - **Cookie Consent Required**: Shows message when cookies not accepted
 - **Video Ready**: Shows video when cookies are accepted
@@ -22,6 +24,7 @@ The component checks for cookie consent in multiple ways:
 ## Usage
 
 ### Basic Usage
+
 ```jsx
 import CookieConsentVideo from '@/components/CookieConsentVideo';
 
@@ -30,10 +33,11 @@ import CookieConsentVideo from '@/components/CookieConsentVideo';
   width="100%"
   height="300px"
   controls={true}
-/>
+/>;
 ```
 
 ### With Thumbnail
+
 ```jsx
 <CookieConsentVideo
   url="https://www.youtube.com/watch?v=example"
@@ -45,16 +49,15 @@ import CookieConsentVideo from '@/components/CookieConsentVideo';
 ```
 
 ### All Available Props
+
 ```jsx
 <CookieConsentVideo
   // Video source
   url="https://www.youtube.com/watch?v=example"
-  
   // Legacy props (for backward compatibility)
   videos={videos}
   filename="video.mp4"
   thumbnails={thumbnails}
-  
   // ReactPlayer props
   width="100%"
   height="300px"
@@ -66,14 +69,11 @@ import CookieConsentVideo from '@/components/CookieConsentVideo';
   muted={false}
   loop={false}
   playIcon={<></>}
-  
   // Styling
   borderradius={8}
   isSideBySideVideo={false}
-  
   // Testing
   forceConsentMessage={false} // Set to true to force consent message in test environments
-  
   // Any other ReactPlayer props
   {...otherProps}
 />
@@ -84,6 +84,7 @@ import CookieConsentVideo from '@/components/CookieConsentVideo';
 All existing video components have been updated to use `CookieConsentVideo`:
 
 ### Video.js
+
 ```jsx
 // Before
 <ReactPlayer url={videoSrc} controls={true} />
@@ -93,6 +94,7 @@ All existing video components have been updated to use `CookieConsentVideo`:
 ```
 
 ### ComparisonSelect.js
+
 ```jsx
 // Before
 <ReactPlayer url={blok?.video_url?.url} controls={true} />
@@ -102,6 +104,7 @@ All existing video components have been updated to use `CookieConsentVideo`:
 ```
 
 ### CardModal.js
+
 ```jsx
 // Before
 <ReactPlayer url={videoSrc} controls={true} />
@@ -111,6 +114,7 @@ All existing video components have been updated to use `CookieConsentVideo`:
 ```
 
 ### VideoCarousel.js
+
 ```jsx
 // Before
 <ReactPlayer url={video?.video.filename} controls={true} />
@@ -130,6 +134,7 @@ When cookies are not accepted, the component displays:
 ## Styling
 
 The cookie consent message uses your site's design system:
+
 - **Background**: Gradient from primary purple to primary blue
 - **Text**: White text using your typography system
 - **Button**: White background with purple text
@@ -138,12 +143,15 @@ The cookie consent message uses your site's design system:
 ## Testing
 
 ### Test Environments
+
 The component automatically detects test environments and allows videos by default:
+
 - **Development** (`NODE_ENV === 'development'`)
 - **Vercel previews** (hostname contains `vercel.app`)
 - **Local development** (hostname contains `localhost` or `127.0.0.1`)
 
 ### Force Consent Message
+
 To test the consent message in test environments, use the `forceConsentMessage` prop:
 
 ```jsx
@@ -154,13 +162,14 @@ To test the consent message in test environments, use the `forceConsentMessage` 
 ```
 
 ### Test Component
+
 Use the `CookieConsentTest` component to test the functionality:
 
 ```jsx
 import CookieConsentTest from '@/components/CookieConsentTest';
 
 // Add to any page for testing
-<CookieConsentTest />
+<CookieConsentTest />;
 ```
 
 ## CookieYes Integration
@@ -192,17 +201,20 @@ The component is designed to work with CookieYes (which is already loaded in you
 ## Troubleshooting
 
 ### Videos Not Showing
+
 1. Check if CookieYes is loaded: `window.getCkyConsent` should be a function
 2. Check cookie value: Look for `cookieyes-consent` cookie in browser dev tools
 3. Check console for any JavaScript errors
 4. Verify consent data: `window.getCkyConsent()` should return an object with `isUserActionCompleted` and `categories`
 
 ### Cookie Consent Not Updating
+
 1. Ensure CookieYes events are firing
 2. Check if event listeners are properly attached
 3. Verify CookieYes configuration
 
 ### Styling Issues
+
 1. Check if styled-components are properly configured
 2. Verify media queries are working
 3. Check if colors and text styles are imported correctly
@@ -210,6 +222,7 @@ The component is designed to work with CookieYes (which is already loaded in you
 ## Future Enhancements
 
 Potential improvements:
+
 - **Analytics**: Track cookie consent interactions
 - **Customization**: Allow custom consent messages per component
 - **Multiple Providers**: Support other cookie consent providers

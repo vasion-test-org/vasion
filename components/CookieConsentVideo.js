@@ -1,20 +1,22 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
+
 import styled from 'styled-components';
-import media from '@/styles/media';
+
 import colors from '@/styles/colors';
+import media from '@/styles/media';
 import text from '@/styles/text';
 
 // Error boundary for video components
 class VideoErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { error: null, hasError: false };
   }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true, error };
+    return { error, hasError: true };
   }
 
   componentDidCatch(error, errorInfo) {
@@ -31,9 +33,7 @@ class VideoErrorBoundary extends React.Component {
           <ErrorContainer>
             <ErrorIcon>⚠️</ErrorIcon>
             <ErrorMessage>Video failed to load</ErrorMessage>
-            <RetryButton
-              onClick={() => this.setState({ hasError: false, error: null })}
-            >
+            <RetryButton onClick={() => this.setState({ error: null, hasError: false })}>
               Retry
             </RetryButton>
           </ErrorContainer>
@@ -45,23 +45,23 @@ class VideoErrorBoundary extends React.Component {
 }
 
 const CookieConsentVideo = ({
-  videos,
   borderradius,
-  filename,
-  thumbnails,
-  isSideBySideVideo = false,
-  url,
-  width = '100%',
-  height = '100%',
   controls = true,
-  light,
-  playsinline = true,
-  playing = false,
-  volume = 1,
-  muted = false,
-  loop = false,
-  playIcon,
+  filename,
   forceConsentMessage = false, // For Testing on localhost change to true
+  height = '100%',
+  isSideBySideVideo = false,
+  light,
+  loop = false,
+  muted = false,
+  playIcon,
+  playing = false,
+  playsinline = true,
+  thumbnails,
+  url,
+  videos,
+  volume = 1,
+  width = '100%',
   ...otherProps
 }) => {
   const [cookiesAccepted, setCookiesAccepted] = useState(false);
@@ -87,10 +87,7 @@ const CookieConsentVideo = ({
       }
 
       // Check if CookieYes is available using the correct API
-      if (
-        typeof window !== 'undefined' &&
-        typeof window.getCkyConsent === 'function'
-      ) {
+      if (typeof window !== 'undefined' && typeof window.getCkyConsent === 'function') {
         try {
           const consentData = window.getCkyConsent();
           // Check if user has completed consent action and accepted cookies
@@ -98,7 +95,7 @@ const CookieConsentVideo = ({
             consentData.isUserActionCompleted &&
               (consentData.categories?.analytics ||
                 consentData.categories?.marketing ||
-                consentData.categories?.functional),
+                consentData.categories?.functional)
           );
           setIsChecking(false);
         } catch (error) {
@@ -117,14 +114,10 @@ const CookieConsentVideo = ({
       if (cookieValue) {
         try {
           const consentData = JSON.parse(cookieValue);
-          setCookiesAccepted(
-            consentData.consent === true || consentData.accepted === true,
-          );
+          setCookiesAccepted(consentData.consent === true || consentData.accepted === true);
         } catch (e) {
           // If parsing fails, check for simple string values
-          setCookiesAccepted(
-            cookieValue === 'accepted' || cookieValue === 'true',
-          );
+          setCookiesAccepted(cookieValue === 'accepted' || cookieValue === 'true');
         }
       } else {
         // No consent cookie found, assume not accepted
@@ -140,10 +133,7 @@ const CookieConsentVideo = ({
     let timeoutId = null;
 
     // Also check when CookieYes loads (if not already loaded)
-    if (
-      typeof window !== 'undefined' &&
-      typeof window.getCkyConsent !== 'function'
-    ) {
+    if (typeof window !== 'undefined' && typeof window.getCkyConsent !== 'function') {
       checkInterval = setInterval(() => {
         if (typeof window.getCkyConsent === 'function') {
           checkCookieConsent();
@@ -155,7 +145,7 @@ const CookieConsentVideo = ({
       timeoutId = setTimeout(() => {
         clearInterval(checkInterval);
         // Use functional update to avoid stale closure
-        setIsChecking(prevIsChecking => {
+        setIsChecking((prevIsChecking) => {
           if (prevIsChecking) {
             return false;
           }
@@ -212,8 +202,8 @@ const CookieConsentVideo = ({
     return (
       <VideoWrapper
         borderradius={borderradius}
-        isSideBySideVideo={isSideBySideVideo}
         height={height}
+        isSideBySideVideo={isSideBySideVideo}
       >
         <LoadingContainer>
           <LoadingText>Loading...</LoadingText>
@@ -227,9 +217,9 @@ const CookieConsentVideo = ({
     return (
       <VideoWrapper
         borderradius={borderradius}
-        isSideBySideVideo={isSideBySideVideo}
-        height={height}
         data-cookie-consent="true"
+        height={height}
+        isSideBySideVideo={isSideBySideVideo}
         onClick={(e) => {
           // Prevent event bubbling to parent elements (like video carousel modals)
           e.stopPropagation();
@@ -242,20 +232,19 @@ const CookieConsentVideo = ({
           }}
         >
           <CookieIcon
-            src={'/images/logos/vasion-logo-purple.webp'}
             alt={'accept cookie notification vasion'}
+            src={'/images/logos/vasion-logo-purple.webp'}
           />
           <CookieMessage>
-            {consentButtonClicked 
-              ? 'Please refresh the page to enjoy Media from Vasion.' 
-              : 'Please accept our site cookies to enjoy Media from Vasion.'
-            }
+            {consentButtonClicked
+              ? 'Please refresh the page to enjoy Media from Vasion.'
+              : 'Please accept our site cookies to enjoy Media from Vasion.'}
           </CookieMessage>
           <CookieButton
             onClick={(e) => {
               // Prevent event bubbling to parent elements (like video carousel modals)
               e.stopPropagation();
-              
+
               if (consentButtonClicked) {
                 // Refresh the page to reload with new cookie settings
                 window.location.reload();
@@ -267,10 +256,10 @@ const CookieConsentVideo = ({
                   document.body.style.position = 'fixed';
                   document.body.style.top = `-${currentScrollY}px`;
                   document.body.style.width = '100%';
-                  
+
                   window.revisitCkyConsent();
                   setConsentButtonClicked(true);
-                  
+
                   // Restore scrolling after a short delay
                   setTimeout(() => {
                     document.body.style.position = '';
@@ -294,61 +283,45 @@ const CookieConsentVideo = ({
 
   // Show video if cookies are accepted
   return (
-    <VideoWrapper
-      borderradius={borderradius}
-      isSideBySideVideo={isSideBySideVideo}
-      height={height}
-    >
-      <VideoErrorBoundary
-        borderradius={borderradius}
-        isSideBySideVideo={isSideBySideVideo}
-      >
+    <VideoWrapper borderradius={borderradius} height={height} isSideBySideVideo={isSideBySideVideo}>
+      <VideoErrorBoundary borderradius={borderradius} isSideBySideVideo={isSideBySideVideo}>
         <ReactPlayer
-          url={url || videoSrc}
-          width={width}
-          height={height}
           controls={controls}
+          height={height}
           light={light || thumbnails?.[0]?.filename}
-          playsinline={playsinline}
-          playing={playing}
-          volume={volume}
-          muted={muted}
           loop={loop}
+          muted={muted}
           playIcon={playIcon}
-          onReady={() => {
-            console.log('ReactPlayer v3 ready - URL:', url || videoSrc);
-          }}
+          playing={playing}
+          playsinline={playsinline}
+          url={url || videoSrc}
+          volume={volume}
+          width={width}
           onError={(error) => {
             console.error('ReactPlayer v3 error:', error);
             console.error('Error details:', {
-              url: url || videoSrc,
               error: error,
-              userAgent:
-                typeof window !== 'undefined'
-                  ? window.navigator.userAgent
-                  : 'SSR',
+              url: url || videoSrc,
+              userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : 'SSR',
             });
           }}
-          onLoadStart={() => {
-            console.log(
-              'ReactPlayer v3 loading started - URL:',
-              url || videoSrc,
-            );
-          }}
           onLoad={() => {
-            console.log(
-              'ReactPlayer v3 load completed - URL:',
-              url || videoSrc,
-            );
+            console.log('ReactPlayer v3 load completed - URL:', url || videoSrc);
           }}
-          onStart={() => {
-            console.log('ReactPlayer v3 started playing');
+          onLoadStart={() => {
+            console.log('ReactPlayer v3 loading started - URL:', url || videoSrc);
+          }}
+          onPause={() => {
+            console.log('ReactPlayer v3 paused');
           }}
           onPlay={() => {
             console.log('ReactPlayer v3 playing');
           }}
-          onPause={() => {
-            console.log('ReactPlayer v3 paused');
+          onReady={() => {
+            console.log('ReactPlayer v3 ready - URL:', url || videoSrc);
+          }}
+          onStart={() => {
+            console.log('ReactPlayer v3 started playing');
           }}
           {...otherProps}
         />
@@ -358,7 +331,7 @@ const CookieConsentVideo = ({
 };
 
 const VideoWrapper = styled.div`
-  width: ${(props) => props.isSideBySideVideo ? 'auto' : '100%'};
+  width: ${(props) => (props.isSideBySideVideo ? 'auto' : '100%')};
   height: ${(props) => props.height || '100%'};
   max-width: 100%;
   border-radius: ${(props) => `${props.borderradius || 0}px`};
@@ -381,11 +354,7 @@ const CookieConsentContainer = styled.div`
   justify-content: center;
   text-align: center;
   padding: 2rem;
-  background: linear-gradient(
-    135deg,
-    ${colors.primaryPurple} 0%,
-    ${colors.primaryBlue} 100%
-  );
+  background: linear-gradient(135deg, ${colors.primaryPurple} 0%, ${colors.primaryBlue} 100%);
   color: ${colors.white};
   border-radius: ${(props) => `${props.borderradius || 8}px`};
   width: 100%;

@@ -1,10 +1,12 @@
 'use client';
 import React from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import media from '@/styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 const ResourceInlineQuote = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -13,8 +15,8 @@ const ResourceInlineQuote = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       <Wrapper
-        spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
+        spacingOffset={blok.offset_spacing}
         {...storyblokEditable(blok)}
       >
         <QuoteContainer

@@ -17,10 +17,10 @@ const richTextClasses = {
   'Body Large': 'bodyLrg',
   'Body XL': 'bodyXl',
   'Body XL Bold': 'bodyXl bold',
-  'Tag': 'tag',
+  Tag: 'tag',
   'Tag Bold': 'tag bold',
   'Tag Light': 'tagLight',
-  'Eyebrow': 'eyebrow',
+  Eyebrow: 'eyebrow',
 };
 
 const applyRichTextClasses = async () => {
@@ -33,12 +33,10 @@ const applyRichTextClasses = async () => {
       for (const key of Object.keys(component.schema)) {
         const field = component.schema[key];
         if (field.type === 'richtext') {
-          field.style_options = Object.entries(richTextClasses).map(
-            ([name, value]) => ({
-              name,
-              value,
-            })
-          );
+          field.style_options = Object.entries(richTextClasses).map(([name, value]) => ({
+            name,
+            value,
+          }));
           updates = true;
         }
       }

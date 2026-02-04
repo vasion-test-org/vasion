@@ -32,13 +32,13 @@ We are optimizing components for **performance**, **accessibility**, and **SEO**
 
 ## Why Tailwind?
 
-| styled-components | Tailwind CSS |
-|-------------------|--------------|
-| Runtime CSS generation | Build-time CSS generation |
-| Requires `'use client'` directive | Works with Server Components |
-| Dynamic styles via props | Conditional classes via `cn()` |
-| Custom CSS syntax | Utility-first classes |
-| Theme via ThemeProvider | Theme via config + CSS variables |
+| styled-components                 | Tailwind CSS                     |
+| --------------------------------- | -------------------------------- |
+| Runtime CSS generation            | Build-time CSS generation        |
+| Requires `'use client'` directive | Works with Server Components     |
+| Dynamic styles via props          | Conditional classes via `cn()`   |
+| Custom CSS syntax                 | Utility-first classes            |
+| Theme via ThemeProvider           | Theme via config + CSS variables |
 
 ---
 
@@ -92,49 +92,65 @@ npm run checks:perf      # Run performance checks only
 
 Our design tokens from `styles/colors.js`, `styles/text.js`, and `styles/media.js` are now available as Tailwind utilities.
 
-### Breakpoints
+### Breakpoints (Mobile-First)
 
-| Prefix | Range | Usage |
-|--------|-------|-------|
-| `mob:` | 0 - 480px | Mobile-only styles |
-| `tab:` | 481px - 1024px | Tablet-only styles |
-| `desk:` | 1025px - 1600px | Desktop-only styles |
-| `fw:` | 1601px+ | Large screens (full width) |
+Tailwind uses **min-width** breakpoints. Base classes = mobile, breakpoint prefixes override for larger screens.
+
+| Prefix      | Range          | Usage                              |
+| ----------- | -------------- | ---------------------------------- |
+| **(none)**  | 0 - 480px      | Mobile styles (base, no prefix)    |
+| `md:`       | 481px+         | Tablet and up                      |
+| `lg:`       | 1025px+        | Desktop and up                     |
+| `xl:`       | 1601px+        | Full width and up                  |
+
+**Key Concept:** Styles cascade UP. A `md:` class applies to tablet, desktop, AND fullWidth unless overridden.
 
 **Example:**
+
 ```jsx
-<h1 className="text-h1-mob tab:text-h1-tab desk:text-h1-desk fw:text-h1">
-  Responsive Heading
-</h1>
+// Mobile base, add breakpoints for what CHANGES
+<h1 className="text-h3 md:text-h2 lg:text-h1">Responsive Heading</h1>
+
+// Mobile: column, Tablet+: row
+<div className="flex flex-col md:flex-row gap-6">
 ```
 
-### Colors
+**Converting styled-components (desktop-first) → Tailwind (mobile-first):**
+- `${media.mobile}` → base (no prefix)
+- `${media.tablet}` → `md:`
+- Desktop (base in styled) → `lg:`
+- `${media.fullWidth}` → `xl:`
 
-All colors from `styles/colors.js` are available:
+### Colors (Tailwind v4 - No DEFAULT Suffix)
+
+**IMPORTANT:** In Tailwind v4, colors are used directly without `-DEFAULT` suffix:
+- ✅ `text-orange`, `bg-purple`, `fill-orange`
+- ❌ `text-orange-DEFAULT`, `bg-purple-DEFAULT` (NEVER use this)
 
 ```jsx
 // Purple variants
-className="text-purple-DEFAULT"     // #3D2562
-className="bg-purple-dark"          // #201435
-className="border-purple-border"    // #945AEE
-className="text-purple-light"       // #7E5FDD
+className = 'text-purple'; // #3D2562
+className = 'bg-purple-dark'; // #201435
+className = 'border-purple-border'; // #945AEE
+className = 'text-purple-light'; // #7E5FDD
 
 // Orange variants
-className="bg-orange-DEFAULT"       // #ff5100
-className="text-orange-500"         // #FF612A
+className = 'bg-orange'; // #ff5100
+className = 'text-orange-500'; // #FF612A
+className = 'hover:fill-orange'; // for SVG icons
 
 // Teal variants
-className="bg-teal-DEFAULT"         // #00A19B
-className="text-teal-dark"          // #007C77
+className = 'bg-teal'; // #00A19B
+className = 'text-teal-dark'; // #007C77
 
 // Greys
-className="bg-grey-800"             // #191D1E
-className="text-grey-500"           // #838587
-className="bg-grey-25"              // #F6F7F7
+className = 'bg-grey-800'; // #191D1E
+className = 'text-grey-500'; // #838587
+className = 'bg-grey-25'; // #F6F7F7
 
 // Text colors
-className="text-txt-primary"        // #1B1D21
-className="text-txt-subtle"         // #808085
+className = 'text-txt-primary'; // #1B1D21
+className = 'text-txt-subtle'; // #808085
 ```
 
 ### Gradients
@@ -142,13 +158,13 @@ className="text-txt-subtle"         // #808085
 Gradients are available via CSS custom properties:
 
 ```jsx
-className="bg-purple-gradient"      // Purple gradient
-className="bg-orange-gradient"      // Orange gradient
-className="bg-purple-orbital"       // Orbital purple gradient
-className="bg-light-purple"         // Light purple gradient
-className="bg-dark-purple"          // Dark purple gradient
-className="bg-medium-purple"        // Medium purple gradient
-className="bg-grey-gradient"        // Grey gradient
+className = 'bg-purple-gradient'; // Purple gradient
+className = 'bg-orange-gradient'; // Orange gradient
+className = 'bg-purple-orbital'; // Orbital purple gradient
+className = 'bg-light-purple'; // Light purple gradient
+className = 'bg-dark-purple'; // Dark purple gradient
+className = 'bg-medium-purple'; // Medium purple gradient
+className = 'bg-grey-gradient'; // Grey gradient
 ```
 
 ### Typography
@@ -157,32 +173,32 @@ Font sizes mapped from `styles/text.js`:
 
 ```jsx
 // Headings
-className="text-h1"                 // 46px / 56px line-height / 800 weight
-className="text-h2"                 // 46px / 56px line-height / 700 weight
-className="text-h3"                 // 32px / 40px line-height / 700 weight
-className="text-h4"                 // 26px / 32px line-height / 700 weight
-className="text-h5"                 // 20px / 24px line-height / 700 weight
+className = 'text-h1'; // 46px / 56px line-height / 800 weight
+className = 'text-h2'; // 46px / 56px line-height / 700 weight
+className = 'text-h3'; // 32px / 40px line-height / 700 weight
+className = 'text-h4'; // 26px / 32px line-height / 700 weight
+className = 'text-h5'; // 20px / 24px line-height / 700 weight
 
 // Body text
-className="text-body-xl"            // 23px / 30px line-height
-className="text-body-xl-bold"       // 23px / 28px line-height / 700 weight
-className="text-body-lg"            // 18px / 24px line-height
-className="text-body-lg-bold"       // 18px / 22px line-height / 700 weight
-className="text-body-md"            // 16px / 22px line-height
-className="text-body-md-bold"       // 16px / 22px line-height / 600 weight
-className="text-body-sm"            // 14px / 18px line-height
-className="text-body-sm-bold"       // 14px / 18px line-height / 700 weight
+className = 'text-body-xl'; // 23px / 30px line-height
+className = 'text-body-xl-bold'; // 23px / 28px line-height / 700 weight
+className = 'text-body-lg'; // 18px / 24px line-height
+className = 'text-body-lg-bold'; // 18px / 22px line-height / 700 weight
+className = 'text-body-md'; // 16px / 22px line-height
+className = 'text-body-md-bold'; // 16px / 22px line-height / 600 weight
+className = 'text-body-sm'; // 14px / 18px line-height
+className = 'text-body-sm-bold'; // 14px / 18px line-height / 700 weight
 
 // Special styles
-className="text-eyebrow"            // 14px uppercase with letter-spacing
-className="text-tag"                // 10px
-className="text-tag-bold"           // 11px / 600 weight
-className="text-subtle"             // 14px subtle text
+className = 'text-eyebrow'; // 14px uppercase with letter-spacing
+className = 'text-tag'; // 10px
+className = 'text-tag-bold'; // 11px / 600 weight
+className = 'text-subtle'; // 14px subtle text
 
 // Font families
-className="font-archivo"            // Archivo font
-className="font-archivo-bold"       // Archivo Bold
-className="font-orbitron"           // Orbitron (for stats)
+className = 'font-archivo'; // Archivo font
+className = 'font-archivo-bold'; // Archivo Bold
+className = 'font-orbitron'; // Orbitron (for stats)
 ```
 
 ---
@@ -197,12 +213,12 @@ Use the `cn()` utility for conditional and merged class names:
 import { cn } from '@/lib/cn';
 
 // Basic usage
-<div className={cn('px-4 py-2', 'bg-purple-DEFAULT')}>
+<div className={cn('px-4 py-2', 'bg-purple')}>
 
 // Conditional classes
 <button className={cn(
   'px-4 py-2 rounded-md',
-  isActive && 'bg-purple-DEFAULT text-white',
+  isActive && 'bg-purple text-white',
   isDisabled && 'opacity-50 cursor-not-allowed'
 )}>
 
@@ -232,9 +248,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-purple-DEFAULT text-white hover:bg-purple-dark focus:ring-purple-border',
-        secondary: 'bg-transparent border-2 border-purple-border text-purple-DEFAULT hover:bg-purple-100',
-        orange: 'bg-orange-DEFAULT text-white hover:bg-orange-dark focus:ring-orange-500',
+        primary: 'bg-purple text-white hover:bg-purple-dark focus:ring-purple-border',
+        secondary: 'bg-transparent border-2 border-purple-border text-purple hover:bg-purple-100',
+        orange: 'bg-orange text-white hover:bg-orange-dark focus:ring-orange-500',
       },
       size: {
         sm: 'px-3 py-1.5 text-body-sm',
@@ -270,47 +286,54 @@ function Button({ variant, size, className, children }: ButtonProps) {
 ```
 
 **When to use CVA vs cn():**
+
 - Use `cn()` for simple conditional classes
 - Use `cva()` when a component has multiple variant dimensions (size, color, state, etc.)
 
-### Responsive Design
+### Responsive Design (Mobile-First)
 
-Write mobile-first styles, then add breakpoint prefixes:
+Write mobile-first styles, then add breakpoint prefixes for larger screens:
 
 ```jsx
-// Mobile-first approach
-<div className="text-body-sm tab:text-body-md desk:text-body-lg fw:text-body-xl">
+// Mobile-first approach (base = mobile, then override for larger)
+<div className="text-body-sm md:text-body-md lg:text-body-lg xl:text-body-xl">
 
 // Responsive spacing
-<section className="p-4 tab:p-8 desk:p-12 fw:p-16">
+<section className="p-4 md:p-8 lg:p-12 xl:p-16">
 
-// Responsive layout
-<div className="flex flex-col tab:flex-row gap-4 tab:gap-6">
+// Responsive layout (column on mobile, row on tablet+)
+<div className="flex flex-col md:flex-row gap-4 md:gap-6">
 ```
+
+**Key insight:** Only specify what CHANGES at each breakpoint. Unchanged values inherit from smaller breakpoints.
 
 ### Handling Dynamic Styles
 
 **Before (styled-components):**
+
 ```jsx
 const Button = styled.button`
-  padding: ${props => props.size === 'large' ? '16px 32px' : '8px 16px'};
-  background: ${props => props.variant === 'primary' ? '#3D2562' : 'transparent'};
+  padding: ${(props) => (props.size === 'large' ? '16px 32px' : '8px 16px')};
+  background: ${(props) => (props.variant === 'primary' ? '#3D2562' : 'transparent')};
 `;
 ```
 
 **After (Tailwind):**
+
 ```jsx
 function Button({ size, variant, children }) {
   return (
-    <button className={cn(
-      'rounded-md transition-colors',
-      // Size variants
-      size === 'large' ? 'px-8 py-4' : 'px-4 py-2',
-      // Color variants
-      variant === 'primary' 
-        ? 'bg-purple-DEFAULT text-white hover:bg-purple-dark' 
-        : 'bg-transparent border border-purple-border'
-    )}>
+    <button
+      className={cn(
+        'rounded-md transition-colors',
+        // Size variants
+        size === 'large' ? 'px-8 py-4' : 'px-4 py-2',
+        // Color variants
+        variant === 'primary'
+          ? 'bg-purple hover:bg-purple-dark text-white'
+          : 'border-purple-border border bg-transparent'
+      )}
+    >
       {children}
     </button>
   );
@@ -322,13 +345,7 @@ function Button({ size, variant, children }) {
 Always add visible focus states to interactive elements:
 
 ```jsx
-<button className="
-  px-4 py-2 rounded-md
-  bg-purple-DEFAULT text-white
-  hover:bg-purple-dark
-  focus:outline-none focus:ring-2 focus:ring-purple-border focus:ring-offset-2
-  focus-visible:ring-2 focus-visible:ring-purple-border
-">
+<button className="bg-purple hover:bg-purple-dark focus:ring-purple-border focus-visible:ring-purple-border rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-offset-2 focus:outline-none focus-visible:ring-2">
   Click me
 </button>
 ```
@@ -343,13 +360,14 @@ Prettier automatically sorts Tailwind classes when you save. The order follows T
 
 ```jsx
 // Before save (messy)
-<div className="text-white px-4 sm:px-8 py-2 bg-purple-DEFAULT hover:bg-purple-dark">
+<div className="text-white px-4 md:px-8 py-2 bg-purple hover:bg-purple-dark">
 
 // After save (sorted)
-<div className="bg-purple-DEFAULT px-4 py-2 text-white hover:bg-purple-dark sm:px-8">
+<div className="bg-purple px-4 py-2 text-white hover:bg-purple-dark md:px-8">
 ```
 
 The plugin recognizes classes in:
+
 - `className` attributes
 - `cn()`, `clsx()`, `twMerge()` function calls
 
@@ -362,6 +380,7 @@ Our ESLint setup includes:
 3. **Next.js rules** - Core Web Vitals optimization
 
 **Import Order (enforced by Perfectionist):**
+
 ```jsx
 // 1. React imports
 import { useState, useEffect } from 'react';
@@ -386,20 +405,42 @@ import { formatDate } from './utils';
 Run `npm run checks` to scan the codebase:
 
 **ADA Checks (`checks:ada`):**
-- Images without `alt` attributes
-- Buttons/links without accessible text
-- Missing focus styles
-- Invalid ARIA usage
-- Potential color contrast issues
+
+Our ADA check combines **ESLint jsx-a11y** (AST-level analysis) with **custom pattern checks** for comprehensive WCAG 2.1 AA coverage:
+
+*ESLint jsx-a11y Rules (automatically integrated):*
+- `alt-text` - Images must have alt props
+- `click-events-have-key-events` - Interactive elements need keyboard handlers
+- `no-static-element-interactions` - Non-native interactive elements need roles
+- `aria-props` / `aria-proptypes` - Valid ARIA attributes
+- `label-has-associated-control` - Form labels properly associated
+- `anchor-has-content` / `anchor-is-valid` - Links have proper content
+- `heading-has-content` - Headings have text
+- `interactive-supports-focus` - Interactive elements are focusable
+- And 20+ more rules covering all WCAG principles
+
+*Custom Pattern Checks:*
+- Potential color contrast issues (Tailwind class combinations)
+- Focus ring visibility (non-text contrast)
+- Skip navigation for pages
+- Language attributes
+- Form error patterns
 
 **SEO Checks (`checks:seo`):**
+
 - Multiple `<h1>` tags on a page
 - Skipped heading levels (h1 → h3)
 - Missing semantic HTML (`<main>`, `<article>`)
 - Generic link text ("click here", "read more")
+- Meta tag presence (title, description, Open Graph, Twitter)
+- Canonical URL configuration
+- Robots/noindex directives
+- Structured data (JSON-LD)
+- Image optimization (Next.js Image usage)
 - Missing metadata exports
 
 **Performance Checks (`checks:perf`):**
+
 - Arbitrary Tailwind values (`w-[450px]`)
 - Inline styles that should use Tailwind
 - Files with styled-components (migration candidates)
@@ -414,6 +455,7 @@ Run `npm run checks` to scan the codebase:
 ### Before Starting: Get Figma Reference
 
 **Always ask for a Figma link** before converting a component. Use the Figma MCP tools to:
+
 - Fetch exact design specifications
 - Extract colors, spacing, typography, dimensions
 - Verify converted component matches design precisely
@@ -423,12 +465,14 @@ Run `npm run checks` to scan the codebase:
 **CRITICAL**: Always check if the component can be a Server Component.
 
 **Can be Server Component if:**
+
 - No React hooks (`useState`, `useEffect`, `useContext`, `useRef`)
 - No browser APIs (`window`, `document`)
 - No event handlers that modify state
 - No client-only libraries (GSAP in the main component)
 
 **If GSAP/animations are needed:**
+
 - Extract animation logic to minimal client component
 - Use the reusable `CarouselAnimator` for horizontal loop animations
 - Keep main component as Server Component
@@ -443,6 +487,7 @@ npm run checks -- components/MyComponent.js  # Check specific file
 ### Step 2: Convert to Server Component (if possible)
 
 **Server Component Pattern:**
+
 ```jsx
 // MyComponent.js - NO 'use client'
 import Image from 'next/image';
@@ -456,7 +501,7 @@ const MyComponent = ({ blok }) => {
   const theme = themes[blok.theme] || themes.default;
   const componentId = `my-component-${blok._uid}`;
   const shouldAnimate = blok.items?.length > 5;
-  
+
   return (
     <>
       {/* Scoped CSS for responsive styles */}
@@ -472,13 +517,15 @@ const MyComponent = ({ blok }) => {
           .${componentId} { padding: 1.75rem; }
         }
       `}</style>
-      
+
       <section className={componentId} style={{ background: theme.myComponent.bg }}>
         {blok.items?.map((item) => (
-          <div key={item._uid} className="item">...</div>
+          <div key={item._uid} className="item">
+            ...
+          </div>
         ))}
       </section>
-      
+
       {/* Minimal client component for animation only */}
       {shouldAnimate && <CarouselAnimator selector=".item" />}
     </>
@@ -495,26 +542,44 @@ export default MyComponent;
 import styled from 'styled-components';
 ```
 
-### Step 4: Convert Styles
+### Step 4: Convert Styles (Mobile-First)
 
-**Map media queries:**
+**Map styled-components (desktop-first) → Tailwind (mobile-first):**
 
-| Old | New |
-|-----|-----|
-| `${media.mobile} { ... }` | `mob:...` or `@media (max-width: 480px)` |
-| `${media.tablet} { ... }` | `tab:...` or `@media (max-width: 1024px)` |
-| `${media.desktop} { ... }` | `desk:...` or `@media (max-width: 1600px)` |
-| `${media.fullWidth} { ... }` | `fw:...` or `@media (min-width: 1601px)` |
+| Styled-Component              | Tailwind        | Explanation                      |
+| ----------------------------- | --------------- | -------------------------------- |
+| `${media.mobile} { ... }`     | base (no prefix)| Mobile = default Tailwind styles |
+| `${media.tablet} { ... }`     | `md:...`        | Tablet overrides mobile          |
+| Desktop (base in styled)      | `lg:...`        | Desktop overrides tablet         |
+| `${media.fullWidth} { ... }`  | `xl:...`        | FullWidth overrides desktop      |
+
+**Example conversion:**
+
+```jsx
+// Original styled-component (desktop-first)
+const Box = styled.div`
+  flex-direction: row;      /* Desktop default */
+  ${media.mobile} { flex-direction: column; }
+`;
+
+// Tailwind (mobile-first) - base is mobile, lg: is desktop
+<div className="flex flex-col lg:flex-row">
+```
 
 **Convert vw to Tailwind:**
-```jsx
-// Original vw values (all target same 200px):
-width: 12.5vw;   // Desktop (1600px)
-width: 19.531vw; // Tablet (1024px)
-width: 41.667vw; // Mobile (480px)
 
-// Convert to ONE Tailwind class:
+```jsx
+// If all breakpoints target SAME px → ONE base class
+// Mobile: 41.667vw × 4.8 = 200px
+// Tablet: 19.531vw × 10.24 = 200px
+// Desktop: 12.5vw × 16 = 200px
 className="w-50" // 200px / 4 = 50
+
+// If breakpoints target DIFFERENT px → separate classes
+// Mobile: 353.738vw × 4.8 = 1698px → w-425 (base)
+// Tablet: 124.902vw × 10.24 = 1279px → md:w-320
+// Desktop: 88.806vw × 16 = 1421px → lg:w-355
+className="w-425 md:w-320 lg:w-355"
 ```
 
 ### Step 5: Run Compliance Checks
@@ -537,27 +602,32 @@ Verify at: mobile (480px), tablet (1024px), desktop (1600px), fullWidth (1601px+
 ### Optimization Checklist
 
 **Phase 0: Planning**
+
 - [ ] Ask for Figma reference link
 - [ ] Evaluate if component can be Server Component
 - [ ] Identify client-only code that needs extraction
 
 **Phase 1: Convert Structure**
+
 - [ ] Remove styled-components imports
 - [ ] Remove `'use client'` if converting to Server Component
 - [ ] Preserve EXACT container structure
 - [ ] Handle ALL original props (`transparent_background`, `offset_spacing`, etc.)
 
 **Phase 2: Convert Styles**
+
 - [ ] Use scoped `<style>` tags for Server Components
 - [ ] Use `ScreenContext` for Client Components when Tailwind fails
 - [ ] Convert vw → px → Tailwind number (px / 4)
 - [ ] Add `listStyle: 'none'` to ul/li elements
 
 **Phase 3: Extract Client Logic**
+
 - [ ] Move GSAP to `CarouselAnimator` or similar minimal client component
 - [ ] Conditionally render client component only when needed
 
 **Phase 4: Validate**
+
 - [ ] Add focus states to interactive elements
 - [ ] Verify alt text on images
 - [ ] Check heading hierarchy
@@ -576,12 +646,14 @@ Yes, during the migration both systems coexist. However, **all new components sh
 ### Q: Should I use Server or Client Components?
 
 **Always prefer Server Components** for performance benefits:
+
 - Zero client-side JavaScript
 - Faster initial page load
 - Better SEO
 - Reduced bundle size
 
 Only use `'use client'` when you need:
+
 - React hooks (`useState`, `useEffect`, `useContext`)
 - Browser APIs (`window`, `document`)
 - Event handlers that modify state
@@ -597,20 +669,19 @@ import CarouselAnimator from '@/components/CarouselAnimator';
 
 const MyComponent = ({ blok }) => {
   const shouldAnimate = blok.items?.length > 5;
-  
+
   return (
     <>
       <div className="items">
         {blok.items?.map((item) => (
-          <div key={item._uid} className="item">...</div>
+          <div key={item._uid} className="item">
+            ...
+          </div>
         ))}
       </div>
-      
+
       {shouldAnimate && (
-        <CarouselAnimator 
-          selector=".item"
-          options={{ speed: 1, reversed: false }}
-        />
+        <CarouselAnimator selector=".item" options={{ speed: 1, reversed: false }} />
       )}
     </>
   );
@@ -618,6 +689,7 @@ const MyComponent = ({ blok }) => {
 ```
 
 **CarouselAnimator Options:**
+
 - `selector` - CSS selector for items (e.g., `.item`)
 - `speed` - Animation speed (default: 1)
 - `reversed` - Reverse direction (default: false)
@@ -628,8 +700,9 @@ const MyComponent = ({ blok }) => {
 ### Q: What about complex animations?
 
 For simple animations, use Tailwind's built-in utilities:
+
 ```jsx
-className="transition-all duration-300 ease-in-out hover:scale-105"
+className = 'transition-all duration-300 ease-in-out hover:scale-105';
 ```
 
 For complex animations (GSAP, etc.), extract to minimal client components.
@@ -637,13 +710,14 @@ For complex animations (GSAP, etc.), extract to minimal client components.
 ### Q: How do I handle theme switching?
 
 Use CSS custom properties defined in `globals.css`:
+
 ```css
 :root {
-  --color-primary: #3D2562;
+  --color-primary: #3d2562;
 }
 
-[data-theme="dark"] {
-  --color-primary: #7E5FDD;
+[data-theme='dark'] {
+  --color-primary: #7e5fdd;
 }
 ```
 
@@ -659,11 +733,27 @@ The perfectionist plugin enforces import sorting. Run `npm run lint:fix` to auto
 
 ### Q: How do I know if my component is accessible?
 
-Run `npm run checks:ada` and fix any reported issues. Key things to check:
-- All images have `alt` text
-- Buttons have visible or aria-label text
-- Focus states are visible
-- Color contrast meets WCAG AA (4.5:1)
+Run `npm run checks:ada` to get a comprehensive accessibility report. The check combines:
+
+1. **ESLint jsx-a11y** - AST-level analysis that catches issues in React/JSX
+2. **Custom pattern checks** - Project-specific patterns ESLint can't detect
+
+```bash
+# Check specific component
+npm run checks:ada -- components/MyComponent.js
+
+# Check entire codebase
+npm run checks:ada
+```
+
+Key things to check:
+
+- All images have `alt` text (or `alt=""` for decorative)
+- Buttons/links have visible or `aria-label` text
+- Interactive elements have keyboard handlers (`onClick` needs `onKeyDown`)
+- Focus states are visible (`focus:ring-2`, etc.)
+- Color contrast meets WCAG AA (4.5:1 for text)
+- Non-native interactive elements have proper `role` and `tabIndex`
 
 ---
 

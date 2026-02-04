@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const LazyLoadWrapper = ({
   children,
-  threshold = 0.1,
-  rootMargin = '50px',
-  fallback = null,
   className = '',
+  fallback = null,
+  rootMargin = '50px',
+  threshold = 0.1,
   ...props
 }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -25,8 +25,8 @@ const LazyLoadWrapper = ({
         }
       },
       {
-        threshold,
         rootMargin,
+        threshold,
       }
     );
 
@@ -42,7 +42,7 @@ const LazyLoadWrapper = ({
   }, [threshold, rootMargin, hasLoaded]);
 
   return (
-    <div ref={elementRef} className={className} {...props}>
+    <div className={className} ref={elementRef} {...props}>
       {isVisible ? children : fallback}
     </div>
   );

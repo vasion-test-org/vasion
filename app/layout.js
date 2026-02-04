@@ -1,30 +1,33 @@
-import StoryblokProvider from '@/components/StoryblokProvider';
-import { ThemeProviderWrapper } from '@/context/ThemeContext';
-import { ThankYouProvider } from '@/context/ThankYouContext';
-import { PageDataProvider } from '@/context/PageDataContext';
-import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
-import FormTracking from '@/components/FormTracking';
 import Script from 'next/script';
-import './globals.css';
-import Providers from '@/components/providers';
-import Config from '@/components/Config';
-import CriticalCSS from '@/components/CriticalCSS';
-import PerformanceMonitor from '@/components/PerformanceMonitor';
-import GTMPerformanceMonitor from '@/components/GTMPerformanceMonitor';
-import ConversicaChat from '@/components/ConversicaChat';
-import { getStoryblokApi } from '@/lib/storyblok';
+
 import { Analytics } from '@vercel/analytics/next';
 import { VWOScript } from 'vwo-smartcode-nextjs';
+
+import Config from '@/components/Config';
+import ConversicaChat from '@/components/ConversicaChat';
+import CriticalCSS from '@/components/CriticalCSS';
+import FormTracking from '@/components/FormTracking';
+
+import './globals.css';
+import GTMPerformanceMonitor from '@/components/GTMPerformanceMonitor';
+import PerformanceMonitor from '@/components/PerformanceMonitor';
+import Providers from '@/components/providers';
+import StoryblokProvider from '@/components/StoryblokProvider';
+import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
+import { PageDataProvider } from '@/context/PageDataContext';
+import { ThankYouProvider } from '@/context/ThankYouContext';
+import { ThemeProviderWrapper } from '@/context/ThemeContext';
+import { getStoryblokApi } from '@/lib/storyblok';
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-WMKX59W';
 
 export const metadata = {
+  description: 'Vasion site',
   metadataBase: new URL('https://vasion.com'),
   title: {
-    template: '%s | Vasion',
     default: 'Vasion',
+    template: '%s | Vasion',
   },
-  description: 'Vasion site',
 };
 
 export default async function RootLayout({ children }) {
@@ -33,8 +36,6 @@ export default async function RootLayout({ children }) {
       <head>
         {/* Google Tag Manager */}
         <Script
-          id="gtm"
-          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -44,76 +45,61 @@ export default async function RootLayout({ children }) {
       })(window,document,'script','dataLayer','${GTM_ID}');
     `,
           }}
+          id="gtm"
+          strategy="afterInteractive"
         />
         <meta
-          name="google-site-verification"
           content="9aTxhC978Sh5yhlRXic1mj23gCh4RcexRTfgiwMKbks"
+          name="google-site-verification"
         />
-        <meta
-          name="facebook-domain-verification"
-          content="vw5hfzh0aj764x59srftw18eksj8nq"
-        />
+        <meta content="vw5hfzh0aj764x59srftw18eksj8nq" name="facebook-domain-verification" />
 
         {/* Resource hints for performance optimization */}
-        <link rel="preconnect" href="https://a-us.storyblok.com" />
-        <link
-          rel="preconnect"
-          href="https://a-us.storyblok.com"
-          crossOrigin="anonymous"
-        />
-        <link rel="dns-prefetch" href="https://a-us.storyblok.com" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://www.google.com" />
-        <link rel="preconnect" href="https://unpkg.com" />
-        <link rel="dns-prefetch" href="https://chat.conversica.com" />
-        <link rel="dns-prefetch" href="https://static.hotjar.com" />
-        <link
-          rel="dns-prefetch"
-          href="https://dev.visualwebsiteoptimizer.com"
-        />
-        <link rel="dns-prefetch" href="https://www.gstatic.com" />
-        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link href="https://a-us.storyblok.com" rel="preconnect" />
+        <link crossOrigin="anonymous" href="https://a-us.storyblok.com" rel="preconnect" />
+        <link href="https://a-us.storyblok.com" rel="dns-prefetch" />
+        <link href="https://www.googletagmanager.com" rel="preconnect" />
+        <link href="https://www.google.com" rel="preconnect" />
+        <link href="https://unpkg.com" rel="preconnect" />
+        <link href="https://chat.conversica.com" rel="dns-prefetch" />
+        <link href="https://static.hotjar.com" rel="dns-prefetch" />
+        <link href="https://dev.visualwebsiteoptimizer.com" rel="dns-prefetch" />
+        <link href="https://www.gstatic.com" rel="dns-prefetch" />
+        <link href="https://www.google-analytics.com" rel="dns-prefetch" />
 
         {/* Preload critical fonts */}
         <link
-          rel="preload"
+          as="font"
+          crossOrigin="anonymous"
+          fetchPriority="high"
           href="/fonts/Archivo-Regular.woff2"
-          as="font"
+          rel="preload"
           type="font/woff2"
-          crossOrigin="anonymous"
-          fetchPriority="high"
         />
         <link
-          rel="preload"
+          as="font"
+          crossOrigin="anonymous"
+          fetchPriority="high"
           href="/fonts/Archivo-Bold.woff2"
-          as="font"
+          rel="preload"
           type="font/woff2"
-          crossOrigin="anonymous"
-          fetchPriority="high"
         />
         <link
-          rel="preload"
-          href="/fonts/Archivo-SemiBold.woff2"
           as="font"
-          type="font/woff2"
           crossOrigin="anonymous"
           fetchPriority="high"
+          href="/fonts/Archivo-SemiBold.woff2"
+          rel="preload"
+          type="font/woff2"
         />
 
         {/* Preload critical CSS */}
-        <link
-          rel="preload"
-          href="/globals.css"
-          as="style"
-          fetchPriority="high"
-        />
+        <link as="style" fetchPriority="high" href="/globals.css" rel="preload" />
 
         {/* Rive WASM will be loaded on-demand when animations are needed */}
 
         {/* Marketo Munchkin - Load after page is interactive */}
         <Script
-          id="marketo-munchkin"
-          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
       (function() {
@@ -138,13 +124,15 @@ export default async function RootLayout({ children }) {
       })();
     `,
           }}
+          id="marketo-munchkin"
+          strategy="afterInteractive"
         />
 
         {/* CookieYes - Load after page is interactive */}
         <Script
           id="cookieyes"
-          strategy="afterInteractive"
           src="https://cdn-cookieyes.com/client_data/c1cc367c126e833f0301eb2c/script.js"
+          strategy="afterInteractive"
         />
 
         {/* GA4 handled via GTM - direct GA script removed */}
@@ -156,8 +144,6 @@ export default async function RootLayout({ children }) {
 
         {/* Hotjar - Load only after user interaction to improve initial performance */}
         <Script
-          id="hotjar"
-          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
         // Only load Hotjar after user interaction to improve initial page performance
@@ -183,6 +169,8 @@ export default async function RootLayout({ children }) {
         });
       `,
           }}
+          id="hotjar"
+          strategy="lazyOnload"
         />
       </head>
 

@@ -1,8 +1,10 @@
 'use client';
-import { useSearchParams } from 'next/navigation';
 import React from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
+
+import { useSearchParams } from 'next/navigation';
+
 import BCTPDF from 'components/BusinessCaseTool/BCTPDF';
+import styled, { createGlobalStyle } from 'styled-components';
 
 const ClientBCTResults = () => {
   const searchParams = useSearchParams();
@@ -26,8 +28,8 @@ const ClientBCTResults = () => {
         <>
           <BCTPDF
             contactFormData={contactFormData}
-            savingsFormData={savingsFormData}
             currency={currency}
+            savingsFormData={savingsFormData}
           />
           <GlobalStyle />
         </>

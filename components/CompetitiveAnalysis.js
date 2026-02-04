@@ -1,13 +1,15 @@
 'use client';
-import React, { useRef, useEffect, useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
+
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+
 import { ScreenContext } from '@/components/providers/Screen';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import styled, { ThemeProvider } from 'styled-components';
-import { storyblokEditable } from '@storyblok/react/rsc';
 import { useAvailableThemes } from '@/context/ThemeContext';
-import text from '@/styles/text';
-import media from '@/styles/media';
 import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
 
 const CompetitiveAnalysis = ({ blok }) => {
   // console.log('CompetitiveAnalysis', blok);
@@ -56,8 +58,7 @@ const CompetitiveAnalysis = ({ blok }) => {
 
       if (!firstColRef.current || !scrollRef.current) return;
 
-      const firstColumnCells =
-        firstColRef.current.querySelectorAll('[data-row]');
+      const firstColumnCells = firstColRef.current.querySelectorAll('[data-row]');
       const scrollableCells = scrollRef.current.querySelectorAll('[data-row]');
 
       const rowGroups = {};
@@ -124,8 +125,8 @@ const CompetitiveAnalysis = ({ blok }) => {
     }
 
     const richTextDoc = {
-      type: 'doc',
       content: cellContent,
+      type: 'doc',
     };
 
     return <RichTextRenderer document={richTextDoc} />;
@@ -136,28 +137,26 @@ const CompetitiveAnalysis = ({ blok }) => {
     <ThemeProvider theme={selectedTheme}>
       <TableWrapper
         data-anchor-id={blok.anchor_id}
-        spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
+        spacingOffset={blok.offset_spacing}
         {...storyblokEditable(blok)}
       >
         {/* Desktop table this is Hidden on mobile */}
         <DesktopTableWrapper>
           <TableContainer suppressHydrationWarning>
             <FirstColumn ref={firstColumnRef}>
-              <HeaderCell data-row="header">
-                {renderCellContent(headerRow[0] || [])}
-              </HeaderCell>
+              <HeaderCell data-row="header">{renderCellContent(headerRow[0] || [])}</HeaderCell>
               {dataRows.map((row, index) => {
                 const featureCellContent = row[0] || [];
                 return (
-                  <FeatureCell key={index} data-row={index}>
+                  <FeatureCell data-row={index} key={index}>
                     {renderCellContent(featureCellContent)}
                   </FeatureCell>
                 );
               })}
             </FirstColumn>
 
-            <ScrollContainer ref={scrollContainerRef} suppressHydrationWarning>
+            <ScrollContainer suppressHydrationWarning ref={scrollContainerRef}>
               <ScrollContent>
                 {headerRow.slice(1).map((headerCellContent, colIndex) => (
                   <Column key={colIndex}>
@@ -167,7 +166,7 @@ const CompetitiveAnalysis = ({ blok }) => {
                     {dataRows.map((row, rowIndex) => {
                       const cellContent = row[colIndex + 1] || [];
                       return (
-                        <DataCell key={rowIndex} data-row={rowIndex}>
+                        <DataCell data-row={rowIndex} key={rowIndex}>
                           {renderCellContent(cellContent)}
                         </DataCell>
                       );
@@ -183,31 +182,23 @@ const CompetitiveAnalysis = ({ blok }) => {
         <MobileTableWrapper>
           <TableContainer suppressHydrationWarning>
             <FirstColumn ref={mobileFirstColumnRef}>
-              <HeaderCell data-row="header">
-                {/* Empty corner cell */}
-              </HeaderCell>
+              <HeaderCell data-row="header">{/* Empty corner cell */}</HeaderCell>
               {products.map((productCell, index) => (
-                <FeatureCell key={index} data-row={index}>
+                <FeatureCell data-row={index} key={index}>
                   {renderCellContent(productCell)}
                 </FeatureCell>
               ))}
             </FirstColumn>
 
-            <ScrollContainer
-              ref={mobileScrollContainerRef}
-              suppressHydrationWarning={true}
-            >
+            <ScrollContainer ref={mobileScrollContainerRef} suppressHydrationWarning={true}>
               <ScrollContent>
                 {features.map((featureCell, featureIndex) => (
                   <Column key={featureIndex}>
-                    <HeaderCell data-row="header">
-                      {renderCellContent(featureCell)}
-                    </HeaderCell>
+                    <HeaderCell data-row="header">{renderCellContent(featureCell)}</HeaderCell>
                     {products.map((_, productIndex) => {
-                      const cellContent =
-                        dataRows[featureIndex][productIndex + 1] || [];
+                      const cellContent = dataRows[featureIndex][productIndex + 1] || [];
                       return (
-                        <DataCell key={productIndex} data-row={productIndex}>
+                        <DataCell data-row={productIndex} key={productIndex}>
                           {renderCellContent(cellContent)}
                         </DataCell>
                       );
@@ -644,11 +635,7 @@ const FirstColumn = styled.div`
 const getPaddingStyles = (defaultPadding, props) => {
   const { spacing, spacingOffset } = props;
   const paddingValue =
-    spacing === 'default'
-      ? defaultPadding
-      : spacing
-        ? `${spacing}px`
-        : defaultPadding;
+    spacing === 'default' ? defaultPadding : spacing ? `${spacing}px` : defaultPadding;
 
   if (spacingOffset === 'top') {
     return `${paddingValue} 0 0`;

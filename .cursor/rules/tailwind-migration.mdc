@@ -61,6 +61,83 @@ Wait for response before proceeding. Use Figma MCP tools if link is provided.
 
 ---
 
+## CRITICAL: Mobile-First Tailwind Approach
+
+Tailwind uses **min-width** breakpoints, which means styles cascade UP from mobile. The base (no prefix) classes are mobile styles, and breakpoint prefixes add overrides for larger screens.
+
+**Breakpoint mapping for styled-components → Tailwind:**
+| Original styled-component | Tailwind | Range |
+|---------------------------|----------|-------|
+| `${media.mobile}` | **base (no prefix)** | 0-480px |
+| `${media.tablet}` | `md:` | 481-1024px |
+| Desktop (base in styled) | `lg:` | 1025-1600px |
+| `${media.fullWidth}` | `xl:` | 1601px+ |
+
+**How it works:**
+- **Base classes** = mobile styles (smallest screen)
+- **md:** = tablet styles (481px+), inherits to larger unless overridden
+- **lg:** = desktop styles (1025px+), inherits to larger unless overridden
+- **xl:** = fullWidth styles (1601px+)
+
+**Example conversion:**
+```jsx
+// Original styled-component (desktop-first with max-width media queries):
+const BioWrapper = styled.div`
+  display: flex;
+  flex-direction: row;      /* Desktop default */
+  width: 81.5vw;            /* Desktop: 81.5vw × 16 = 1304px */
+  gap: 1.875vw;             /* Desktop: 1.875vw × 16 = 30px */
+
+  ${media.fullWidth} {
+    width: 1304px;          /* FullWidth: 1304px */
+    gap: 30px;
+  }
+  
+  ${media.tablet} {
+    width: 944px;           /* Tablet: 944px */
+    gap: 30px;
+  }
+  
+  ${media.mobile} {
+    flex-direction: column; /* Mobile: changes to column */
+    width: 428px;           /* Mobile: 428px */
+    gap: 30px;
+  }
+`;
+
+// Correct Tailwind conversion (mobile-first):
+<div className={tw`
+  flex flex-col w-107 gap-7.5
+  md:w-236
+  lg:(flex-row w-326)
+`} />
+
+// Breakdown:
+// - Base: flex-col (mobile), w-107 (428/4), gap-7.5 (30/4)
+// - md: w-236 (944/4) - only width changes, flex-col inherited, gap same
+// - lg: flex-row (desktop changes direction), w-326 (1304/4)
+// - xl: not needed because lg: values carry through to fullWidth
+```
+
+**Key insight:** Only specify what CHANGES at each breakpoint. Unchanged values inherit from smaller breakpoints.
+
+**Common patterns:**
+```jsx
+// Mobile: column, Tablet+: row
+className={tw`flex flex-col md:flex-row`}
+
+// Mobile: smaller, Desktop: larger
+className={tw`w-50 lg:w-100`}
+
+// Mobile: hidden, Tablet: visible
+className={tw`hidden md:block`}
+
+// Different values at each breakpoint
+className={tw`h-425 md:h-320 lg:h-355 xl:h-320`}
+```
+
+---
+
 ## CRITICAL: Preserve Exact Structure AND Behavior
 
 **Never add, remove, or rearrange containers during conversion.**
@@ -104,13 +181,23 @@ const LegalDiv = styled.div`
     width: 1244px;              /* FullWidth: uses fixed width instead */
     align-self: center;         /* FullWidth: uses centering */
   }
+  ${media.tablet} {
+    margin: 0 10.278vw;         /* Tablet: uses margin (different vw = same px) */
+  }
+  ${media.mobile} {
+    margin: 0 10.278vw;         /* Mobile: uses margin (different vw = same px) */
+  }
 `;
 
-// CORRECT: Preserve BOTH approaches exactly
-<div className="mx-41 xl:mx-0 xl:w-311 xl:self-center">
+// CORRECT: Mobile-first, preserving BOTH approaches
+// Mobile margin: 10.278vw × 4.8 = 49px = mx-12
+// Tablet margin: 10.278vw × 10.24 = 105px = mx-26  
+// Desktop margin: 10.278vw × 16 = 164px = mx-41
+// FullWidth: fixed width + centering instead of margins
+<div className="mx-12 md:mx-26 lg:mx-41 xl:mx-0 xl:w-311 xl:self-center">
 
 // ❌ WRONG: Simplified to just one approach
-<div className="max-w-311 mx-auto">  /* Lost the margin-based desktop behavior! */
+<div className="max-w-311 mx-auto">  /* Lost the margin-based responsive behavior! */
 ```
 
 ### Example - WRONG Structure:
@@ -136,10 +223,10 @@ When converting styled-components to Tailwind:
 
 ## Converting VW Values
 
-**Viewport widths for calculation:**
-- Desktop (base): 1600px → multiply vw × 16
+**Viewport widths for calculation (mobile-first order):**
+- Mobile (base): 480px → multiply vw × 4.8
 - Tablet (md): 1024px → multiply vw × 10.24
-- Mobile (sm): 480px → multiply vw × 4.8
+- Desktop (lg): 1600px → multiply vw × 16
 - FullWidth (xl): uses px values directly
 
 ### Key Insight
@@ -213,13 +300,15 @@ Examples:
 - 100px → `w-25` (100 / 4 = 25)
 - 24px → `p-6` (24 / 4 = 6)
 
-### Responsive Design
-- Use project breakpoint prefixes: `sm:`, `md:`, `lg:`, `xl:`
-- Write base styles, then override for specific breakpoints
-- Example: `text-body-sm md:text-body-md lg:text-body-lg`
+### Responsive Design (Mobile-First)
+- Base (no prefix) = mobile styles
+- Use breakpoint prefixes to override at larger screens: `md:`, `lg:`, `xl:`
+- Styles cascade UP (mobile → tablet → desktop → fullWidth)
+- Example: `text-body-sm md:text-body-md lg:text-body-lg` (starts small, gets larger)
 
 ### Design Tokens
-- Use colors from the config: `text-purple`, `bg-teal-500`, etc. (DEFAULT accessed without suffix)
+- Use colors from the config: `text-purple`, `bg-teal-500`, `text-orange`, `fill-orange`
+- **NEVER use `-DEFAULT` suffix** (❌ `text-orange-DEFAULT` → ✅ `text-orange`)
 - Use typography classes: `text-h1`, `text-body-lg`, `text-eyebrow`
 - Use spacing tokens: `p-4`, `gap-6`, `m-8` (avoid arbitrary values)
 
@@ -231,7 +320,7 @@ Examples:
 ### Variant Groups with `tw` (Tagged Template)
 - Use the `tw` utility from `@/lib/cn` to group classes by breakpoint/variant
 - Import: `import { tw } from '@/lib/cn'`
-- Reduces repetition: `sm:(px-7 pt-11 pb-17)` instead of `sm:px-7 sm:pt-11 sm:pb-17`
+- Reduces repetition: `md:(px-8 pt-20 pb-10)` instead of `md:px-8 md:pt-20 md:pb-10`
 
 ```jsx
 // Group by breakpoint
@@ -537,21 +626,24 @@ export default function ComponentName({ prop1, prop2 }) {
 
 ### Mobile-First Responsive Pattern (CRITICAL)
 
-**Always use mobile-first approach with standard Tailwind breakpoints:**
+**Always use mobile-first approach with Tailwind breakpoints:**
 
 ```jsx
-// ✅ CORRECT: Mobile-first (base = mobile, sm: = larger screens)
-className="px-4 sm:px-10"  // 16px on mobile, 40px at 481px+
+// ✅ CORRECT: Mobile-first (base = mobile, larger breakpoints override)
+className="px-7 md:px-8 lg:px-0"  // mobile → tablet → desktop
 
-// ❌ WRONG: Desktop-first approach
-className="px-10 sm:px-4"
+// ✅ CORRECT: Value changes only at some breakpoints
+className="flex-col md:flex-row"  // column on mobile, row on tablet+
+
+// ❌ WRONG: Desktop value as base
+className="px-10 md:px-4"  // Don't put larger value as base
 ```
 
-**Standard Tailwind v4 breakpoints (min-width based):**
-- `sm:` → 640px and up
-- `md:` → 768px and up  
-- `lg:` → 1024px and up
-- `xl:` → 1280px and up
+**Project breakpoints (min-width based):**
+- **base** → mobile (0-480px) - no prefix needed
+- `md:` → 481px+ (tablet and up)
+- `lg:` → 1025px+ (desktop and up)
+- `xl:` → 1601px+ (fullWidth and up)
 
 ### Centering Elements with Max-Width (CRITICAL)
 
@@ -567,24 +659,24 @@ className="px-10 sm:px-4"
 
 ### Converting VW to Tailwind
 
-**Step 1:** Calculate px for EACH breakpoint
+**Step 1:** Calculate px for EACH breakpoint (start with mobile)
 **Step 2:** Check if results are SAME or DIFFERENT
-**Step 3:** Apply appropriate Tailwind classes
+**Step 3:** Apply appropriate Tailwind classes (mobile as base, larger breakpoints override)
 
 ```jsx
-// Case A: All breakpoints target SAME px → ONE class
-// Desktop: 1.5vw × 16 = 24px
-// Tablet: 2.344vw × 10.24 = 24px  
+// Case A: All breakpoints target SAME px → ONE base class
 // Mobile: 5vw × 4.8 = 24px
-// All = 24px / 4 = 6 → py-6
+// Tablet: 2.344vw × 10.24 = 24px  
+// Desktop: 1.5vw × 16 = 24px
+// All = 24px / 4 = 6 → py-6 (just base, no breakpoints needed)
 className="py-6"
 
-// Case B: Breakpoints target DIFFERENT px → SEPARATE classes
-// Desktop: 88.806vw × 16 = 1421px / 4 = 355 → h-355 (base)
-// FullWidth (xl): 1279px / 4 = 320 → xl:h-320
-// Tablet (md): 124.902vw × 10.24 = 1279px / 4 = 320 → md:h-320
-// Mobile (sm): 353.738vw × 4.8 = 1698px / 4 = 425 → sm:h-425
-className="h-355 xl:h-320 md:h-320 sm:h-425"
+// Case B: Breakpoints target DIFFERENT px → mobile as base, then breakpoints for changes
+// Mobile: 353.738vw × 4.8 = 1698px / 4 = 425 → h-425 (base)
+// Tablet: 124.902vw × 10.24 = 1279px / 4 = 320 → md:h-320
+// Desktop: 88.806vw × 16 = 1421px / 4 = 355 → lg:h-355
+// FullWidth: 1279px / 4 = 320 → xl:h-320
+className="h-425 md:h-320 lg:h-355 xl:h-320"
 ```
 
 ### Theme-Based Styling with Inline Conditionals
@@ -604,8 +696,8 @@ import clsx from 'clsx';
     theme === 'light' ? 'text-txt-primary' : 'text-white',
     // Max width - conditional
     isTransparent ? 'max-w-full' : 'max-w-326',
-    // Padding
-    'p-15 sm:p-10',
+    // Padding (mobile-first: small → large)
+    'p-10 lg:p-15',
     // Border radius
     'rounded-3xl'
   )}
@@ -620,8 +712,8 @@ Map offset_spacing prop to Tailwind classes with mobile-first approach:
 <section
   className={clsx(
     'flex w-full items-center justify-center',
-    // Mobile-first horizontal padding
-    'px-4 sm:px-10',
+    // Mobile-first horizontal padding (base = mobile, md: = tablet+)
+    'px-7 md:px-10',
     // Vertical padding based on offset_spacing prop
     offsetSpacing === 'top' && 'pt-15 pb-0',
     offsetSpacing === 'bottom' && 'pt-0 pb-15',
@@ -676,8 +768,8 @@ If a Figma link is provided:
     - Tablet: vw × 10.24 = px
     - Mobile: vw × 4.8 = px
     - Then: px / 4 = Tailwind number
-12. [ ] **Check if px values are SAME or DIFFERENT** - use ONE class if same, SEPARATE classes if different
-13. [ ] **Use breakpoint prefixes**: `sm:` (mobile), `md:` (tablet), `lg:` (desktop), `xl:` (fullWidth)
+12. [ ] **Check if px values are SAME or DIFFERENT** - use ONE base class if same, SEPARATE classes if different
+13. [ ] **Use mobile-first breakpoint prefixes**: base (mobile), `md:` (tablet+), `lg:` (desktop+), `xl:` (fullWidth+)
 13. [ ] **Add `mx-auto` when using `max-w-*`** to center content
 14. [ ] Use inline ternary operators in `clsx()` for theme-based styling
 15. [ ] Add `list-none` class to all ul/li elements

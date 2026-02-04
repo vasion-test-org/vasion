@@ -27,7 +27,10 @@ export default function StyledComponentsRegistry({ children }: StyledComponentsR
   }
 
   return (
-    <StyleSheetManager sheet={styledComponentsStyleSheet.instance} shouldForwardProp={(prop) => isPropValid(prop)}>
+    <StyleSheetManager
+      sheet={styledComponentsStyleSheet.instance}
+      shouldForwardProp={(prop) => isPropValid(prop)}
+    >
       {children}
     </StyleSheetManager>
   );

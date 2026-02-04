@@ -16,9 +16,15 @@ import Button from '@/components/globalComponents/Button';
 import { cn, tw } from '@/lib/cn';
 
 /**
- * Footer Component
- * Container count: 17 elements (preserved from styled-components)
- * Must remain client component due to: useState, useEffect, useRouter, GSAP
+ * Footer Component - Converted from styled-components
+ *
+ * Tailwind Mobile-First Conversion:
+ * - Base (no prefix) = mobile styles (0-480px)
+ * - md: = tablet styles (481-1024px)
+ * - lg: = desktop styles (1025-1600px)
+ * - xl: = fullWidth styles (1601px+)
+ *
+ * Each breakpoint inherits from smaller breakpoints unless overridden.
  */
 const Footer = ({ blok }) => {
   const router = useRouter();
@@ -143,13 +149,15 @@ const Footer = ({ blok }) => {
   }, []);
 
   // LinkColumn rendered for each footer column
+  // Original: gap: 1.389vw (desktop) | 20px (xl) | 1.953vw (md) | 4.673vw (mobile)
+  // Mobile: 4.673vw × 4.8 = 22px → gap-6
+  // Tablet: 1.953vw × 10.24 = 20px → gap-5
+  // Desktop: 1.389vw × 16 = 22px → gap-6 (same as mobile, no change needed)
+  // FullWidth: 20px → gap-5 (same as tablet)
   const allLinksColumns =
     footerColumns?.map((column) => (
-      // 8. LinkColumn - flex col with gap
-      // Desktop: gap 1.389vw×16=22px→gap-6 | xl: 20px→gap-5 | md: 1.953vw×10.24=20px→gap-5 | sm: 4.673vw×4.8=22px→gap-6
-      <div className={tw`flex flex-col gap-6 sm:gap-6 md:gap-5 xl:gap-5`} key={column._uid}>
-        {/* 9. LinkColumnHeader - p tag with bodyMd and txtSubtle */}
-        <p className="text-body-md font-archivo text-txt-subtle">
+      <div className={tw`flex flex-col gap-6 md:gap-5`} key={column._uid}>
+        <p className="font-archivo text-body-md text-txt-subtle">
           {column.column_header?.content?.[0]?.content?.[0]?.text || ''}
         </p>
         {column.links?.map((link) => {
@@ -158,9 +166,8 @@ const Footer = ({ blok }) => {
           const normalizedUrl = isExternal ? url : url.startsWith('/') ? url : `/${url}`;
 
           return (
-            // 10. LinkName - a tag with bodyMd, white, hover orange
             <a
-              className="text-body-md font-archivo hover:text-orange cursor-pointer whitespace-nowrap text-white no-underline"
+              className="font-archivo text-body-md hover:text-orange cursor-pointer whitespace-nowrap text-white no-underline focus:outline-none focus:text-orange focus:underline"
               href={normalizedUrl}
               key={link._uid}
               rel={isExternal ? 'noopener noreferrer' : undefined}
@@ -174,42 +181,51 @@ const Footer = ({ blok }) => {
     )) || [];
 
   return (
-    // 1. Wrapper - main footer container with gradient background
-    // Desktop: h-355 gap-14 | xl: h-320 gap-13 | md: h-320 gap-13 | sm: h-425 gap-9
+    // 1. Wrapper
+    // Mobile: 353.738vw × 4.8 = 1698px → h-425, 7.477vw × 4.8 = 36px → gap-9
+    // Tablet: 124.902vw × 10.24 = 1279px → h-320, 5.078vw × 10.24 = 52px → gap-13
+    // Desktop: 88.806vw × 16 = 1421px → h-355, 3.611vw × 16 = 58px → gap-14
+    // FullWidth: 1279px → h-320, 52px → gap-13
     <div
-      className={tw`footer bg-footer xl:(h-320 gap-13) md:(h-320 gap-13) sm:(h-425 gap-9) relative bottom-0 flex h-355 flex-col gap-14 overflow-hidden print:hidden`}
+      className={tw`footer bg-footer md:(h-320 gap-13) lg:(h-355 gap-14) xl:(h-320 gap-13) relative bottom-0 flex h-425 flex-col gap-9 overflow-hidden print:hidden`}
     >
-      {/* 2. MainFooterContainer - row with logo and links */}
-      {/* Desktop: gap-63 pt-22 pb-12 | xl: gap-57 pt-20 pb-11 | md: gap-26 pt-20 px-8 pb-11 | sm: flex-col gap-11 pt-22 px-7 pb-12 */}
+      {/* 2. MainFooterContainer */}
+      {/* Mobile: flex-col, 9.346vw×4.8=45px→gap-11, pt:18.692vw×4.8=90px→pt-22, px:6.075vw×4.8=29px→px-7, pb:9.813vw×4.8=47px→pb-12 */}
+      {/* Tablet: flex-row, 10.156vw×10.24=104px→gap-26, pt:7.813vw×10.24=80px→pt-20, px:3.125vw×10.24=32px→px-8, pb:4.102vw×10.24=42px→pb-10 */}
+      {/* Desktop: flex-row, 15.694vw×16=251px→gap-63, pt:5.556vw×16=89px→pt-22, px:0, pb:2.917vw×16=47px→pb-12 */}
+      {/* FullWidth: flex-row, 226px→gap-57, pt:80px→pt-20, px:0, pb:42px→pb-10 */}
       <div
-        className={tw`xl:(gap-57 pb-11) md:(gap-26 pb-11) sm:(flex-col pb-12) relative flex h-auto w-full flex-row items-start justify-center gap-11 gap-63 px-7 px-8 pt-20 pt-22 pb-12`}
+        className={tw`md:(flex-row pb-10) lg:(gap-63 pb-12) xl:(gap-57 pb-10) relative flex h-auto w-full flex-col items-start justify-center gap-11 px-7 pt-20 pb-12`}
       >
-        {/* 3. LogoContainer - column with logo, address, star */}
-        {/* Desktop: gap-6 w-67 | xl: gap-5 w-60 | md: gap-5 w-60 | sm: gap-6 w-61 */}
+        {/* 3. LogoContainer */}
+        {/* Mobile: 4.673vw×4.8=22px→gap-6, 50.467vw×4.8=242px→w-61 */}
+        {/* Tablet: 1.953vw×10.24=20px→gap-5, 23.438vw×10.24=240px→w-60 */}
+        {/* Desktop: 1.389vw×16=22px→gap-6, 16.667vw×16=267px→w-67 */}
+        {/* FullWidth: 20px→gap-5, 240px→w-60 */}
         <div
-          className={tw`xl:(gap-5 w-60) md:(gap-5 w-60) sm:(gap-6 w-61) flex w-67 flex-col gap-6`}
+          className={tw`md:(gap-5 w-60) lg:(gap-6 w-67) xl:(gap-5 w-60) flex w-61 flex-col gap-6`}
         >
-          {/* 4. Logo - VasionSmall SVG */}
-          {/* Desktop: w-67 h-9 | xl: w-60 h-8 | md: w-45 h-6 | sm: w-50 h-7 */}
+          {/* 4. Logo (VasionSmall) */}
+          {/* Mobile: 42.056vw×4.8=202px→w-50, 5.841vw×4.8=28px→h-7 */}
+          {/* Tablet: 17.578vw×10.24=180px→w-45, 2.441vw×10.24=25px→h-6 */}
+          {/* Desktop: 16.667vw×16=267px→w-67, 2.292vw×16=37px→h-9 */}
+          {/* FullWidth: 240px→w-60, 33px→h-8 */}
           <VasionSmall
-            className={tw`xl:(w-60 h-8) md:(w-45 h-6) sm:(w-50 h-7) h-9 w-67 cursor-pointer`}
             alt="vasion-logo"
+            className={tw`md:(w-45 h-6) lg:(w-67 h-9) xl:(w-60 h-8) h-7 w-50 cursor-pointer`}
             onClick={() => handleNavigate('/')}
           />
-          {/* 5. Address - div with bodyMd txtSubtle */}
-          <div className="text-body-md font-archivo text-txt-subtle">
+          {/* 5. Address */}
+          <div className="font-archivo text-body-md text-txt-subtle">
             432 S. Tech Ridge Drive, St. George, Utah 84770 USA
           </div>
-          {/* 6. VasionStar - SVG with hover animation, hidden on mobile */}
-          {/* Desktop: mt-14 w-16 h-16 | xl: mt-12 w-15 h-15 | md: mt-12 w-15 h-15 | sm: hidden */}
+          {/* 6. VasionStar */}
+          {/* Mobile: hidden */}
+          {/* Tablet: 4.883vw×10.24=50px→mt-12, 5.859vw×10.24=60px→w-15 h-15 */}
+          {/* Desktop: 3.472vw×16=56px→mt-14, 4.167vw×16=67px→w-17 h-17 */}
+          {/* FullWidth: 50px→mt-12, 60px→w-15 h-15 */}
           <div
-            className={cn(
-              'cursor-pointer self-start',
-              'mt-14 h-16 w-16',
-              'xl:mt-12 xl:h-15 xl:w-15',
-              'md:mt-12 md:h-15 md:w-15',
-              'sm:hidden'
-            )}
+            className={tw`md:(block h-15) lg:(mt-14 h-17) xl:(mt-12 h-15) mt-12 hidden w-15 cursor-pointer self-start`}
             id="vasion-star-svg"
             ref={starRef}
           >
@@ -217,47 +233,65 @@ const Footer = ({ blok }) => {
           </div>
         </div>
 
-        {/* 7. AllLinksContainer - row of link columns */}
-        {/* Desktop: gap-17 | xl: gap-15 | md: gap-15 | sm: flex-wrap gap-17 */}
-        <div className={tw`sm:(flex-wrap gap-17) flex flex-row gap-17 md:gap-15 xl:gap-15`}>
+        {/* 7. AllLinksContainer */}
+        {/* Mobile: flex-wrap, 14.019vw×4.8=67px→gap-17 */}
+        {/* Tablet: flex-row (no wrap), 5.859vw×10.24=60px→gap-15 */}
+        {/* Desktop: flex-row, 4.167vw×16=67px→gap-17 */}
+        {/* FullWidth: 60px→gap-15 */}
+        <div
+          className={tw`md:(flex-nowrap gap-15) flex flex-row flex-wrap gap-10 lg:gap-17 xl:gap-15`}
+        >
           {allLinksColumns}
         </div>
       </div>
 
-      {/* 11. ButtonContainer - socials and CTA button with borders */}
-      {/* Desktop: mx-41 py-9 | xl: mx-0 w-311 self-center py-8 | md: py-8 | sm: flex-col items-center gap-9 py-9 */}
+      {/* 11. ButtonContainer */}
+      {/* Mobile: flex-col, items-center, mx:10.278vw×4.8=49px→mx-12, gap:7.477vw×4.8=36px→gap-9, py:7.477vw×4.8=36px→py-9 */}
+      {/* Tablet: flex-row, mx:10.278vw×10.24=105px→mx-26, py:3.125vw×10.24=32px→py-8 */}
+      {/* Desktop: flex-row, mx:10.278vw×16=164px→mx-41, py:2.222vw×16=36px→py-9 */}
+      {/* FullWidth: flex-row, mx:0, w:1244px→w-311, self-center, py:32px→py-8 */}
       <div
-        className={tw`border-grey-700 xl:(mx-0 py-8) sm:(flex-col py-9) relative z-10 mx-41 flex w-311 flex-row items-center justify-between gap-9 self-center border-y py-9 md:py-8`}
+        className={tw`border-grey-700 md:(flex-row py-8) lg:(mx-41 py-9) xl:(mx-0 py-8) relative z-10 mx-12 flex w-311 flex-col items-center justify-between gap-9 self-center border-y py-9`}
       >
-        {/* 12. SocialsContainer - row of social icons */}
-        {/* Desktop: gap-4 | xl: gap-3.5 | md: gap-3.5 | sm: gap-4 */}
-        <div className={tw`flex flex-row items-center gap-4 sm:gap-4 md:gap-3.5 xl:gap-3.5`}>
-          {/* 13. SocialIcon - Facebook */}
-          {/* Desktop: w-9 h-9 | xl: w-8 h-8 | md: w-8 h-8 | sm: w-9 h-9 */}
-          <div
-            className={tw`[&_path]:hover:fill-orange xl:(w-8 h-8) md:(w-8 h-8) sm:(w-9 h-9) h-9 w-9 cursor-pointer`}
+        {/* 12. SocialsContainer */}
+        {/* Mobile: 3.271vw×4.8=16px→gap-4 */}
+        {/* Tablet: 1.367vw×10.24=14px→gap-3.5 */}
+        {/* Desktop: 0.972vw×16=16px→gap-4 */}
+        {/* FullWidth: 14px→gap-3.5 */}
+        <div className={tw`flex flex-row items-center gap-4 md:gap-3.5 lg:gap-4 xl:gap-3.5`}>
+          {/* 13. SocialIcon */}
+          {/* Mobile: 7.477vw×4.8=36px→w-9 h-9 */}
+          {/* Tablet: 3.125vw×10.24=32px→w-8 h-8 */}
+          {/* Desktop: 2.222vw×16=36px→w-9 h-9 */}
+          {/* FullWidth: 32px→w-8 h-8 */}
+          <button
+            aria-label="Visit Vasion on Facebook"
+            className={tw`[&_path]:hover:fill-orange md:(w-8 h-8) lg:(w-9 h-9) xl:(w-8 h-8) h-9 w-9 cursor-pointer bg-transparent border-none p-0 focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:ring-offset-purple-dark rounded`}
+            type="button"
             onClick={() => handleNavigate('https://www.facebook.com/VasionSoftware')}
           >
             <Facebook />
-          </div>
-          {/* 13. SocialIcon - Twitter */}
-          <div
-            className={tw`[&_path]:hover:fill-orange xl:(w-8 h-8) md:(w-8 h-8) sm:(w-9 h-9) h-9 w-9 cursor-pointer`}
+          </button>
+          <button
+            aria-label="Visit Vasion on X (Twitter)"
+            className={tw`[&_path]:hover:fill-orange md:(w-8 h-8) lg:(w-9 h-9) xl:(w-8 h-8) h-9 w-9 cursor-pointer bg-transparent border-none p-0 focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:ring-offset-purple-dark rounded`}
+            type="button"
             onClick={() =>
               handleNavigate('https://x.com/i/flow/login?redirect_after_login=%2FVasionSoftware')
             }
           >
             <Twitter />
-          </div>
-          {/* 13. SocialIcon - LinkedIn */}
-          <div
-            className={tw`[&_path]:hover:fill-orange xl:(w-8 h-8) md:(w-8 h-8) sm:(w-9 h-9) h-9 w-9 cursor-pointer`}
+          </button>
+          <button
+            aria-label="Visit Vasion on LinkedIn"
+            className={tw`[&_path]:hover:fill-orange md:(w-8 h-8) lg:(w-9 h-9) xl:(w-8 h-8) h-9 w-9 cursor-pointer bg-transparent border-none p-0 focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:ring-offset-purple-dark rounded`}
+            type="button"
             onClick={() =>
               handleNavigate('https://www.linkedin.com/company/vasion-software/posts/?feedView=all')
             }
           >
             <LinkedIn />
-          </div>
+          </button>
         </div>
         {blok?.cta_button?.map(($buttonData) => (
           <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
@@ -266,51 +300,63 @@ const Footer = ({ blok }) => {
         ))}
       </div>
 
-      {/* 14. LegalDiv - legal links and copyright */}
-      {/* Desktop: mx-41 py-9 | xl: mx-0 w-311 self-center py-8 | md: py-8 | sm: flex-col items-center gap-6 py-9 */}
+      {/* 14. LegalDiv */}
+      {/* Mobile: flex-col, items-center, mx:10.278vw×4.8=49px→mx-12, gap:4.673vw×4.8=22px→gap-6, py:7.477vw×4.8=36px→py-9 */}
+      {/* Tablet: flex-row, mx:10.278vw×10.24=105px→mx-26, py:3.125vw×10.24=32px→py-8 */}
+      {/* Desktop: flex-row, mx:10.278vw×16=164px→mx-41, py:2.222vw×16=36px→py-9 */}
+      {/* FullWidth: flex-row, mx:0, w:1244px→w-311, self-center, py:32px→py-8 */}
       <div
-        className={tw`text-body-md font-archivo text-txt-subtle xl:(mx-0 py-8) sm:(flex-col py-9) relative z-10 mx-41 flex w-311 flex-row items-center justify-between gap-6 self-center py-9 md:py-8`}
+        className={tw`font-archivo text-body-md text-txt-subtle md:(flex-row py-8) lg:(mx-41 py-9) xl:(mx-0 py-8) relative z-10 mx-12 flex w-311 flex-col items-center justify-between gap-6 self-center py-9`}
       >
-        {/* 15. LegalLinks - row of legal link anchors */}
-        {/* Desktop: gap-1.5 | xl: gap-1 | md: gap-1 | sm: gap-1.5 */}
-        <div className={tw`flex flex-row gap-1.5 sm:gap-1.5 md:gap-1 xl:gap-1`}>
-          {/* 16. LegalLink × 4 */}
-          <a
-            className="hover:text-orange cursor-pointer no-underline"
+        {/* 15. LegalLinks */}
+        {/* Mobile: 1.168vw×4.8=6px→gap-1.5 */}
+        {/* Tablet: 0.488vw×10.24=5px→gap-1 */}
+        {/* Desktop: 0.347vw×16=6px→gap-1.5 */}
+        {/* FullWidth: 5px→gap-1 */}
+        <div className={tw`flex flex-row gap-1.5 md:gap-1 lg:gap-1.5 xl:gap-1`}>
+          <button
+            className="hover:text-orange cursor-pointer no-underline bg-transparent border-none p-0 text-inherit font-inherit focus:outline-none focus:text-orange focus:underline"
+            type="button"
             onClick={() => handleNavigate('/privacy-policy/')}
           >
             Privacy Policy
-          </a>
+          </button>
           |
-          <a
-            className="hover:text-orange cursor-pointer no-underline"
+          <button
+            className="hover:text-orange cursor-pointer no-underline bg-transparent border-none p-0 text-inherit font-inherit focus:outline-none focus:text-orange focus:underline"
+            type="button"
             onClick={() => handleNavigate('/imprint/')}
           >
             Imprint
-          </a>
+          </button>
           |
-          <a
-            className="hover:text-orange cursor-pointer no-underline"
+          <button
+            className="hover:text-orange cursor-pointer no-underline bg-transparent border-none p-0 text-inherit font-inherit focus:outline-none focus:text-orange focus:underline"
+            type="button"
             onClick={() => handleNavigate('/cookie-information/')}
           >
             Cookies
-          </a>
+          </button>
           |
-          <a
-            className="hover:text-orange cursor-pointer no-underline"
+          <button
+            className="hover:text-orange cursor-pointer no-underline bg-transparent border-none p-0 text-inherit font-inherit focus:outline-none focus:text-orange focus:underline"
+            type="button"
             onClick={() => handleNavigate('/legal/')}
           >
             Legal
-          </a>
+          </button>
         </div>
         © {new Date().getFullYear()} Vasion. All Rights Reserved
       </div>
 
-      {/* 17. VasionFooter - absolute positioned footer image */}
-      {/* Desktop: bottom-48 h-55 | xl: bottom-43 h-43 | md: bottom-43 h-44 | sm: bottom-15 h-26 */}
+      {/* 17. VasionFooter (Image) */}
+      {/* Mobile: bottom:12.421vw×4.8=60px→bottom-15, height:21.262vw×4.8=102px→h-26 */}
+      {/* Tablet: bottom:16.895vw×10.24=173px→bottom-43, height:17.336vw×10.24=178px→h-44 */}
+      {/* Desktop: bottom:12vw×16=192px→bottom-48, height:13.75vw×16=220px→h-55 */}
+      {/* FullWidth: bottom:173px→bottom-43, height:172px→h-43 */}
       <Image
-        className={tw`xl:(bottom-43 h-43) md:(bottom-43 h-44) sm:(bottom-15 h-26) absolute bottom-48 h-55 w-full`}
         alt="Vasion footer decoration"
+        className={tw`md:(bottom-43 h-44) lg:(bottom-48 h-55) xl:(bottom-43 h-43) absolute bottom-15 h-26 w-full`}
         height={220}
         id="vasionfootersvg"
         src="/images/uiElements/VasionFooterPNG.png"

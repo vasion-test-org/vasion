@@ -1,14 +1,18 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import { getStoryblokApi, storyblokEditable } from '@storyblok/react/rsc';
-import Card from '@/components/globalComponents/Card';
-import media from '@/styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import PaginatedCards from './PaginatedCards';
+
 import { usePathname } from 'next/navigation';
+
+import { getStoryblokApi, storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+
+import Card from '@/components/globalComponents/Card';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import media from '@/styles/media';
+
+import PaginatedCards from './PaginatedCards';
 
 const ResourceCards = ({ blok }) => {
   const [resources, setResources] = useState([]);
@@ -35,12 +39,12 @@ const ResourceCards = ({ blok }) => {
 
       while (keepFetching) {
         const { data } = await storyblokApi.get('cdn/stories', {
-          version: 'published',
-          starts_with: 'resources/',
           is_startpage: false,
-          per_page: perPage,
-          page,
           language: currentLocale,
+          page,
+          per_page: perPage,
+          starts_with: 'resources/',
+          version: 'published',
         });
 
         allResources = [...allResources, ...data.stories];
@@ -64,9 +68,7 @@ const ResourceCards = ({ blok }) => {
     <ThemeProvider theme={selectedTheme}>
       <Container {...storyblokEditable(blok)}>
         {resources.length > 0 && (
-          <PaginatedCards
-            blok={{ ...blok, cards: resources, card_type: 'resource' }}
-          />
+          <PaginatedCards blok={{ ...blok, card_type: 'resource', cards: resources }} />
         )}
       </Container>
     </ThemeProvider>

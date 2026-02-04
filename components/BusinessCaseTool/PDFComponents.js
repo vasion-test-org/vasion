@@ -1,8 +1,8 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import media from 'styles/media';
 import colors from 'styles/colors';
+import media from 'styles/media';
 import text from 'styles/text';
 
 export const Text = styled.p`

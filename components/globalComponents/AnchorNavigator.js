@@ -1,11 +1,13 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+
 import styled, { ThemeProvider } from 'styled-components';
+
+import IconRenderer from '@/components/renderers/Icons';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import colors from '@/styles/colors';
-import text from '@/styles/text';
 import media from '@/styles/media';
-import IconRenderer from '@/components/renderers/Icons';
+import text from '@/styles/text';
 
 const AnchorNavigator = ({ blok }) => {
   // Only render if we have a blok prop
@@ -34,26 +36,26 @@ const AnchorNavigator = ({ blok }) => {
       // Create opacity animation that starts at 100px scroll
       const opacityTl = gsap.timeline({
         scrollTrigger: {
-          trigger: 'body',
-          start: '100px top',
           end: '200px top',
           scrub: true,
+          start: '100px top',
+          trigger: 'body',
         },
       });
 
       opacityTl.fromTo(
         '.anchorNav',
-        { autoAlpha: 0, pointerEvents: 'none', height: 0 },
+        { autoAlpha: 0, height: 0, pointerEvents: 'none' },
         { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' }
       );
 
       // Create pinning animation
       ScrollTrigger.create({
-        trigger: '.anchorNav',
-        start: 'top 200px',
         end: `${bodyHeight}px`,
         pin: true,
         pinSpacing: false,
+        start: 'top 200px',
+        trigger: '.anchorNav',
       });
 
       return ScrollTrigger;
@@ -81,9 +83,7 @@ const AnchorNavigator = ({ blok }) => {
 
   useEffect(() => {
     const updateAnchors = () => {
-      const allAnchors = Array.from(
-        document.querySelectorAll('[data-anchor-id]')
-      );
+      const allAnchors = Array.from(document.querySelectorAll('[data-anchor-id]'));
       setAnchorList(allAnchors);
     };
 
@@ -119,9 +119,7 @@ const AnchorNavigator = ({ blok }) => {
         .replace(/([a-z])([A-Z])/g, '$1 $2') // Insert space between camelCase
         .replace(/[-_]/g, ' ') // Replace dashes and underscores with spaces
         .split(' ')
-        .map(
-          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-        )
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join(' ');
 
       // If no transformation happened, use the original anchorId as display text
@@ -149,14 +147,12 @@ const AnchorNavigator = ({ blok }) => {
     <ThemeProvider theme={selectedTheme}>
       <AnchorWrapper
         className="anchorNav"
-        data-has-anchors={anchorList.length > 0}
         data-anchors-count={anchorList.length}
+        data-has-anchors={anchorList.length > 0}
       >
         <AnchorNavWrapper>
           <PageInfo>
-            <PageIcon>
-              {blok?.page_icon && <IconRenderer iconName={blok?.page_icon} />}
-            </PageIcon>
+            <PageIcon>{blok?.page_icon && <IconRenderer iconName={blok?.page_icon} />}</PageIcon>
             <PageTitle>{blok?.page_title}</PageTitle>
           </PageInfo>
           {anchorList.length > 0 && <ButtonsDiv>{anchorMap}</ButtonsDiv>}

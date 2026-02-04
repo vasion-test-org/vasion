@@ -2,10 +2,11 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import media from '@/styles/media';
+
 import colors from '@/styles/colors';
+import media from '@/styles/media';
 // import text from '@/styles/text';
-const BodyCopy = ({ className, children, $featured = false }) => {
+const BodyCopy = ({ $featured = false, children, className }) => {
   // Recursive function to clone children and pass down className
   const cloneChildrenWithClassName = (children, parentClassName = '') => {
     return React.Children.map(children, (child) => {
@@ -26,10 +27,7 @@ const BodyCopy = ({ className, children, $featured = false }) => {
       // If the child has children, recursively process them with the combined class
       if (child.props.children) {
         return React.cloneElement(clonedChild, {
-          children: cloneChildrenWithClassName(
-            child.props.children,
-            combinedClassName,
-          ),
+          children: cloneChildrenWithClassName(child.props.children, combinedClassName),
         });
       }
 
@@ -38,7 +36,7 @@ const BodyCopy = ({ className, children, $featured = false }) => {
   };
 
   return (
-    <StyledBodyCopy className={className} $featured={$featured}>
+    <StyledBodyCopy $featured={$featured} className={className}>
       {cloneChildrenWithClassName(children)}
     </StyledBodyCopy>
   );

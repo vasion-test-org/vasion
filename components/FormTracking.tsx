@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+
 import { useSearchParams } from 'next/navigation';
 import Script from 'next/script';
 
@@ -9,7 +10,7 @@ function FormTrackingComponent() {
   const [language, setLanguage] = useState('en');
   const [isLoaded, setIsLoaded] = useState(false);
   const [shouldLoadRecaptcha, setShouldLoadRecaptcha] = useState(false);
-  const searchParams = useSearchParams(); 
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (document.getElementById('mktoForms')) {
@@ -20,10 +21,11 @@ function FormTrackingComponent() {
   // Detect if forms are present and load reCAPTCHA only when needed
   useEffect(() => {
     const checkForForms = () => {
-      const hasForms = document.querySelector('form') || 
-                      document.querySelector('.mktoForm') || 
-                      document.querySelector('[id*="mktoForm"]');
-      
+      const hasForms =
+        document.querySelector('form') ||
+        document.querySelector('.mktoForm') ||
+        document.querySelector('[id*="mktoForm"]');
+
       if (hasForms && !shouldLoadRecaptcha) {
         setShouldLoadRecaptcha(true);
         // Dynamically load reCAPTCHA only when forms are detected
@@ -40,10 +42,10 @@ function FormTrackingComponent() {
 
     // Check immediately
     checkForForms();
-    
+
     // Also check after a delay to catch dynamically loaded forms
     const timer = setTimeout(checkForForms, 1000);
-    
+
     return () => clearTimeout(timer);
   }, [shouldLoadRecaptcha]);
 
@@ -78,9 +80,7 @@ function FormTrackingComponent() {
       const pathLocale = pathname.split('/')[1];
       const supportedLocales = ['en', 'fr', 'de'];
       const defaultLocale = 'en';
-      const language = supportedLocales.includes(pathLocale)
-        ? pathLocale
-        : defaultLocale;
+      const language = supportedLocales.includes(pathLocale) ? pathLocale : defaultLocale;
       setDomain('www.vasion.com');
       setLanguage(language);
     }

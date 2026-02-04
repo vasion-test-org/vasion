@@ -1,21 +1,17 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
-import styled from "styled-components";
-import StatItem from "@/components/globalComponents/StatItem";
-import media from "@/styles/media";
-import colors from "styles/colors";
+import styled from 'styled-components';
+import colors from 'styles/colors';
+
+import StatItem from '@/components/globalComponents/StatItem';
+import media from '@/styles/media';
 // import text from 'styles/text';
-const Stats = ({ statsData, toggle_card_style, alignment }) => {
-    
+const Stats = ({ alignment, statsData, toggle_card_style }) => {
   return (
     <StatsContainer card_style={toggle_card_style}>
       {statsData.map((statItem, index) => (
-        <StatItem
-          key={`stat-item-${index}`}
-          statItem={statItem}
-          alignment={alignment}
-        />
+        <StatItem alignment={alignment} key={`stat-item-${index}`} statItem={statItem} />
       ))}
     </StatsContainer>
   );
@@ -31,8 +27,7 @@ const StatsContainer = styled.div`
   justify-content: center;
   width: 81.5vw;
   gap: 3.75vw;
-  background: ${(props) =>
-    props.card_style ? colors.lightPurpleGrey : "unset"};
+  background: ${(props) => (props.card_style ? colors.lightPurpleGrey : 'unset')};
   padding: 1.625vw 6vw;
   border-radius: 1.25vw;
   ${media.fullWidth} {

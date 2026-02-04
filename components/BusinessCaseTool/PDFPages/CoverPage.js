@@ -1,14 +1,14 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import media from 'styles/media';
 import colors from 'styles/colors';
+import media from 'styles/media';
 import text from 'styles/text';
 
 const CoverPage = ({ contactFormData }) => {
   return (
     <Cover>
-      <BannerImg alt="front page banner" src='/images/BusinessCaseTool/FrontPageBanner.webp' />
+      <BannerImg alt="front page banner" src="/images/BusinessCaseTool/FrontPageBanner.webp" />
       <IntroDiv>
         <Title>A Business Case for PrinterLogic</Title>
         <CompanyName>Created for {contactFormData?.company}</CompanyName>
@@ -81,7 +81,7 @@ const CompanyName = styled.h3`
 
   ${media.fullWidth} {
     font-size: 44px;
-  line-height: 119px;
+    line-height: 119px;
   }
 `;
 const Title = styled.h1`

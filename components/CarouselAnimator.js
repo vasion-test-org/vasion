@@ -22,11 +22,7 @@ import { optimizeGSAP } from '@/lib/scriptOptimization';
  * @param {string} options.center - Center alignment ('top', 'center', 'bottom')
  * @param {function} onChange - Callback when active item changes
  */
-const CarouselAnimator = ({
-  onChange,
-  options = {},
-  selector = '.carousel-item',
-}) => {
+const CarouselAnimator = ({ onChange, options = {}, selector = '.carousel-item' }) => {
   const [gsapLoaded, setGsapLoaded] = useState(false);
 
   useEffect(() => {

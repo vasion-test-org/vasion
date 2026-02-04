@@ -1,12 +1,15 @@
 'use client';
 import React, { useEffect } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
-import media from '@/styles/media';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import styled, { ThemeProvider } from 'styled-components';
+
 import Image from '@/components/globalComponents/Image';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import media from '@/styles/media';
 import text from '@/styles/text';
+
 import Button from './globalComponents/Button';
 
 const Testimonial = ({ blok }) => {
@@ -19,9 +22,7 @@ const Testimonial = ({ blok }) => {
       <TestimonialWrapper layout={blok.layout} spacing={blok.section_spacing}>
         <TestimonialCard>
           <TestimonialContent>
-            <TestimonialEyebrow>
-              {blok?.eyebrow || Testimonial}
-            </TestimonialEyebrow>
+            <TestimonialEyebrow>{blok?.eyebrow || Testimonial}</TestimonialEyebrow>
             {blok.quote.map((copy) => (
               <div {...storyblokEditable(copy)} key={copy.component}>
                 <RichTextRenderer document={copy.copy} />
@@ -38,14 +39,8 @@ const Testimonial = ({ blok }) => {
                   </div>
                 ))}
                 {blok?.link?.map(($buttonData) => (
-                  <ButtonWrapper
-                    {...storyblokEditable($buttonData)}
-                    key={$buttonData?.link_text}
-                  >
-                    <Button
-                      key={$buttonData?.link_text}
-                      $buttonData={$buttonData}
-                    />
+                  <ButtonWrapper {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
+                    <Button $buttonData={$buttonData} key={$buttonData?.link_text} />
                   </ButtonWrapper>
                 ))}
               </SourceWrapper>

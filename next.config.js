@@ -220,9 +220,7 @@ const nextConfig = {
       };
     }
 
-    const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.('.svg'),
-    );
+    const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.('.svg'));
 
     config.module.rules.push(
       {
@@ -255,7 +253,7 @@ const nextConfig = {
             },
           },
         ],
-      },
+      }
     );
 
     fileLoaderRule.exclude = /\.svg$/i;
@@ -351,8 +349,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source:
-          '/blog/how-going-paperless-will-improve-your-use-of-information/',
+        source: '/blog/how-going-paperless-will-improve-your-use-of-information/',
         destination: '/blog/',
         permanent: true,
       },
@@ -362,8 +359,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source:
-          '/blog/manage-document-workflow-software-to-boost-productivity/',
+        source: '/blog/manage-document-workflow-software-to-boost-productivity/',
         destination: '/blog/',
         permanent: true,
       },
@@ -373,8 +369,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source:
-          '/blog/revolutionize-your-customer-service-with-document-management/',
+        source: '/blog/revolutionize-your-customer-service-with-document-management/',
         destination: '/blog/',
         permanent: true,
       },
@@ -389,8 +384,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source:
-          '/blog/the-benefits-of-moving-to-a-content-management-system-for-productivity/',
+        source: '/blog/the-benefits-of-moving-to-a-content-management-system-for-productivity/',
         destination: '/blog/',
         permanent: true,
       },
@@ -405,14 +399,12 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source:
-          '/blog/why-online-document-management-must-replace-traditional-systems/',
+        source: '/blog/why-online-document-management-must-replace-traditional-systems/',
         destination: '/blog/',
         permanent: true,
       },
       {
-        source:
-          '/blog/printerlogic-acquires-maxxvault-rebrands-solution-as-vasion/',
+        source: '/blog/printerlogic-acquires-maxxvault-rebrands-solution-as-vasion/',
         destination: '/blog/',
         permanent: true,
       },

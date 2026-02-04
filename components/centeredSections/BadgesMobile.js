@@ -1,23 +1,21 @@
-import React, { useEffect, useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef } from 'react';
 
-import styled from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import text from "styles/text";
-import { ScreenContext } from "@/components/providers/Screen";
+import styled from 'styled-components';
+import colors from 'styles/colors';
+import media from 'styles/media';
+import text from 'styles/text';
 
-import { horizontalLoop } from "@/functions/horizontalLoop";
-import RichTextRenderer from "../renderers/RichTextRenderer";
+import { ScreenContext } from '@/components/providers/Screen';
+import { horizontalLoop } from '@/functions/horizontalLoop';
+
+import RichTextRenderer from '../renderers/RichTextRenderer';
 
 const G2BadgesMobile = ({ badges }) => {
   const { mobile } = useContext(ScreenContext);
   const countRef = useRef(1);
   const allBadges = badges.badge_cards.map((badges, index) => (
     <BadgeDiv className="badges">
-      <BadgeImage
-        src={badges.badge_image.filename}
-        alt={badges?.badge_image?.alt}
-      />
+      <BadgeImage alt={badges?.badge_image?.alt} src={badges.badge_image.filename} />
       <BadgeContent>
         <BadgeTitle>{badges.badge_name}</BadgeTitle>
         <RichTextRenderer document={badges.body_copy} />
@@ -29,13 +27,13 @@ const G2BadgesMobile = ({ badges }) => {
     const initBadgeAnimations = async () => {
       const { default: gsap } = await import('gsap');
 
-      const badges = gsap.utils.toArray(".badges");
-      const badgeCounter = document.querySelector("#badgeCounter");
+      const badges = gsap.utils.toArray('.badges');
+      const badgeCounter = document.querySelector('#badgeCounter');
 
       const loop = horizontalLoop(badges, { paused: true });
 
       function NextLoop() {
-        loop.next({ duration: 2, ease: "slow" });
+        loop.next({ duration: 2, ease: 'slow' });
 
         if (countRef.current >= badges?.length) {
           countRef.current = 1;
@@ -59,11 +57,11 @@ const G2BadgesMobile = ({ badges }) => {
         },
       });
 
-      progressTL.to(".pro-bar", {
+      progressTL.to('.pro-bar', {
         delay: 0.75,
-        stagger: 7,
-        width: "100%",
         repeat: -1,
+        stagger: 7,
+        width: '100%',
       });
     };
 
@@ -79,11 +77,10 @@ const G2BadgesMobile = ({ badges }) => {
         </ProgressBar>
       </ProgessBarsDiv>
 
-        <BadgeCounterDiv>
-          <BadgeCounter id="badgeCounter">{countRef.current}</BadgeCounter>/
-          {badges.badge_cards?.length}
-        </BadgeCounterDiv>
-   
+      <BadgeCounterDiv>
+        <BadgeCounter id="badgeCounter">{countRef.current}</BadgeCounter>/
+        {badges.badge_cards?.length}
+      </BadgeCounterDiv>
     </Wrapper>
   );
 };

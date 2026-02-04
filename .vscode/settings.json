@@ -5,12 +5,7 @@
     ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
     ["cn\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ],
-  "tailwindCSS.classAttributes": [
-    "class",
-    "className",
-    "ngClass",
-    "class:list"
-  ],
+  "tailwindCSS.classAttributes": ["class", "className", "ngClass", "class:list"],
 
   // Editor settings
   "editor.formatOnSave": true,
@@ -26,12 +21,7 @@
   },
 
   // ESLint settings
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "eslint.useFlatConfig": true,
 
   // Prettier settings

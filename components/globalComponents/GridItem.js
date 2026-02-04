@@ -1,14 +1,16 @@
 import React from 'react';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import styled from 'styled-components';
-import Icon from '@/components/globalComponents/Icon';
-import Button from '@/components/globalComponents/Button';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
+import styled from 'styled-components';
+
+import Button from '@/components/globalComponents/Button';
+import Icon from '@/components/globalComponents/Icon';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import media from '@/styles/media';
 // import colors from 'styles/colors';
 // import text from 'styles/text';
 
-const GridItem = ({ content, alignment }) => {
+const GridItem = ({ alignment, content }) => {
   // console.log(content.content[0].Content)
   // console.log(content)
   return (
@@ -20,11 +22,7 @@ const GridItem = ({ content, alignment }) => {
       )}
       {content.content.map((copy) => (
         <div key={copy.component} {...storyblokEditable(copy)}>
-          <RichTextRenderer
-            className={copy.component}
-            document={copy.copy}
-            centered
-          />
+          <RichTextRenderer centered className={copy.component} document={copy.copy} />
         </div>
       ))}
       {/* <Button $buttonData={content.Button[0]}/> */}

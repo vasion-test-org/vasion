@@ -1,12 +1,15 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
-import styled from "styled-components";
-import colors from "@/styles/colors";
-import media from "@/styles/media";
-import Form from "./Form";
-import CardModal from "./globalComponents/CardModal";
-import text from "@/styles/text";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+
+import styled from 'styled-components';
+
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
+
+import Form from './Form';
+import CardModal from './globalComponents/CardModal';
 
 const LightboxBtn = ({ blok }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,13 +40,13 @@ const LightboxBtn = ({ blok }) => {
     : null;
 
   const formBlok = {
-    form_id: blok.form_id,
-    thank_you_copy: blok.thank_you,
-    redirect_link: blok.redirect_link || null,
-    theme: blok.theme || "dark",
-    header: blok.form_header || null,
     animated: blok.animated || false,
+    form_id: blok.form_id,
+    header: blok.form_header || null,
     new_tab: blok.new_tab || false,
+    redirect_link: blok.redirect_link || null,
+    thank_you_copy: blok.thank_you,
+    theme: blok.theme || 'dark',
   };
 
   useEffect(() => {
@@ -52,9 +55,9 @@ const LightboxBtn = ({ blok }) => {
 
   useEffect(() => {
     if (!isOpen) return;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = 'auto';
     };
   }, [isOpen]);
 
@@ -73,7 +76,7 @@ const LightboxBtn = ({ blok }) => {
                   <Form blok={formBlok} />
                 </FormContent>
               </Overlay>,
-              document.body,
+              document.body
             )
           )}
         </>
@@ -157,7 +160,7 @@ const CloseBtn = styled.p`
   left: 93%;
   top: 2.5vw;
   width: fit-content;
-  font-family: "Archivo";
+  font-family: 'Archivo';
   color: ${colors.grey600};
   z-index: 4;
   cursor: pointer;

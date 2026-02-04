@@ -1,20 +1,24 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
+
+import { usePathname } from 'next/navigation';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
+import gsap from 'gsap';
+import styled, { ThemeProvider } from 'styled-components';
 import media from 'styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import Card from './globalComponents/Card';
-import EventCard from './globalComponents/EventCard';
-import { horizontalLoop } from '@/functions/horizontalLoop';
+
+import ChrevronDown from '@/assets/svg/selectDownChevron.svg';
 import SideArrow from '@/assets/svg/side-arrow.svg';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { horizontalLoop } from '@/functions/horizontalLoop';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
+
+import Card from './globalComponents/Card';
+import EventCard from './globalComponents/EventCard';
 import ResourceCard from './globalComponents/ResourceCard';
-import ChrevronDown from '@/assets/svg/selectDownChevron.svg';
-import { usePathname } from 'next/navigation';
-import gsap from 'gsap';
 
 const PaginatedCards = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -34,10 +38,10 @@ const PaginatedCards = ({ blok }) => {
   // Get the translated navigation text for the current locale
   const getTranslatedNavigationText = (type) => {
     switch (currentLocale) {
-      case 'fr':
-        return type === 'previous' ? 'Précédent' : 'Suivant';
       case 'de':
         return type === 'previous' ? 'Zurück' : 'Weiter';
+      case 'fr':
+        return type === 'previous' ? 'Précédent' : 'Suivant';
       default:
         return type === 'previous' ? 'Previous' : 'Next';
     }
@@ -46,10 +50,10 @@ const PaginatedCards = ({ blok }) => {
   // Get the translated search placeholder text for the current locale
   const getTranslatedSearchPlaceholder = () => {
     switch (currentLocale) {
-      case 'fr':
-        return 'Rechercher par titre...';
       case 'de':
         return 'Nach Titel suchen...';
+      case 'fr':
+        return 'Rechercher par titre...';
       default:
         return 'Search by title...';
     }
@@ -107,14 +111,12 @@ const PaginatedCards = ({ blok }) => {
     const headerContent = Array.isArray(card?.content)
       ? card.content.find((item) => item.component === 'header')
       : null;
-    const cardTitle =
-      headerContent?.copy?.content?.[0]?.content?.[0]?.text || '';
+    const cardTitle = headerContent?.copy?.content?.[0]?.content?.[0]?.text || '';
 
     const matchesSearch =
       searchQuery === '' ||
       cardTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (card.name &&
-        card.name.toLowerCase().includes(searchQuery.toLowerCase()));
+      (card.name && card.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const matchesFilters =
       selectedFilters.length === 0 ||
@@ -126,11 +128,11 @@ const PaginatedCards = ({ blok }) => {
   });
 
   const availableTags = {
-    solutions: new Set(),
-    products: new Set(),
     contentTypes: new Set(),
     industryType: new Set(),
     newsTypeTags: new Set(),
+    products: new Set(),
+    solutions: new Set(),
   };
 
   filteredCards.forEach((card) => {
@@ -189,37 +191,20 @@ const PaginatedCards = ({ blok }) => {
   for (let i = 0; i < filteredCards.length; i += 6) {
     const chunk = filteredCards.slice(i, i + 6);
     mappedCards.push(
-      <CardChunk
-        key={`chunk-${i / 6}`}
-        card_type={blok.card_type}
-        className="cardChunks"
-      >
+      <CardChunk card_type={blok.card_type} className="cardChunks" key={`chunk-${i / 6}`}>
         {chunk.map((card, index) => {
           if (blok.card_type === 'default') {
-            return (
-              <Card
-                key={`card-${i + index}`}
-                borderradius="6"
-                paginated
-                content={card}
-              />
-            );
+            return <Card paginated borderradius="6" content={card} key={`card-${i + index}`} />;
           } else if (blok.card_type === 'event') {
-            return (
-              <EventCard
-                key={`card-${i + index}`}
-                even={index % 2 === 1}
-                content={card}
-              />
-            );
+            return <EventCard content={card} even={index % 2 === 1} key={`card-${i + index}`} />;
           } else if (blok.card_type === 'resource') {
             return (
               <ResourceCard
-                key={`card-${i + index}`}
                 paginated
-                index={index}
-                content={card}
                 borderradius="6"
+                content={card}
+                index={index}
+                key={`card-${i + index}`}
               />
             );
           }
@@ -276,13 +261,13 @@ const PaginatedCards = ({ blok }) => {
 
     return (
       <PageNumberBlock
-        className="pageNumberBlocks"
-        key={`block-${page}`}
-        id={`block-${page}`}
-        onClick={() => goToPage(page)}
         style={{
           backgroundColor: currentPage === page ? colors.grey100 : 'unset',
         }}
+        className="pageNumberBlocks"
+        id={`block-${page}`}
+        key={`block-${page}`}
+        onClick={() => goToPage(page)}
       >
         {page + 1}
       </PageNumberBlock>
@@ -309,8 +294,8 @@ const PaginatedCards = ({ blok }) => {
       // Initialize new animation if we have cards
       if (totalItems > 0) {
         cardsLoop.current = horizontalLoop(cardChunks, {
-          paused: true,
           center: true,
+          paused: true,
         });
       }
 
@@ -332,8 +317,7 @@ const PaginatedCards = ({ blok }) => {
         if (!cardsLoop.current || totalItems === 0) return;
         requestAnimationFrame(() => {
           cardsLoop.current.previous({ duration: 0.4, ease: 'power1.inOut' });
-          currentIndex.current =
-            (currentIndex.current - 1 + totalItems) % totalItems;
+          currentIndex.current = (currentIndex.current - 1 + totalItems) % totalItems;
           setCurrentPage(currentIndex.current);
         });
       };
@@ -372,7 +356,7 @@ const PaginatedCards = ({ blok }) => {
       .fromTo(
         '#solutionsOptions',
         { height: 0 },
-        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+        { duration: 0.55, ease: 'power2.inOut', height: 'auto' }
       );
 
     const platformDropDownTL = gsap
@@ -381,7 +365,7 @@ const PaginatedCards = ({ blok }) => {
       .fromTo(
         '#productOptions',
         { height: 0 },
-        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+        { duration: 0.55, ease: 'power2.inOut', height: 'auto' }
       );
 
     const featureDropDownTL = gsap
@@ -390,7 +374,7 @@ const PaginatedCards = ({ blok }) => {
       .fromTo(
         '#contentTypesOptions',
         { height: 0 },
-        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+        { duration: 0.55, ease: 'power2.inOut', height: 'auto' }
       );
 
     const industryDropDownTL = gsap
@@ -399,7 +383,7 @@ const PaginatedCards = ({ blok }) => {
       .fromTo(
         '#industryTypesOptions',
         { height: 0 },
-        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+        { duration: 0.55, ease: 'power2.inOut', height: 'auto' }
       );
 
     const newsTypeDropDownTL = gsap
@@ -408,7 +392,7 @@ const PaginatedCards = ({ blok }) => {
       .fromTo(
         '#newsTypeTagsOptions',
         { height: 0 },
-        { height: 'auto', duration: 0.55, ease: 'power2.inOut' }
+        { duration: 0.55, ease: 'power2.inOut', height: 'auto' }
       );
 
     const handleManuDrop = () => {
@@ -487,21 +471,11 @@ const PaginatedCards = ({ blok }) => {
     };
 
     // Add click event listeners
-    document
-      .querySelector('#solutionsDrop')
-      ?.addEventListener('click', handleManuDrop);
-    document
-      .querySelector('#productDrop')
-      ?.addEventListener('click', handlePlatformDrop);
-    document
-      .querySelector('#contentTypesDrop')
-      ?.addEventListener('click', handleFeatureDrop);
-    document
-      .querySelector('#industryTypesDrop')
-      ?.addEventListener('click', handleIndustryDrop);
-    document
-      .querySelector('#newsTypeTagsDrop')
-      ?.addEventListener('click', handleNewsTypeDrop);
+    document.querySelector('#solutionsDrop')?.addEventListener('click', handleManuDrop);
+    document.querySelector('#productDrop')?.addEventListener('click', handlePlatformDrop);
+    document.querySelector('#contentTypesDrop')?.addEventListener('click', handleFeatureDrop);
+    document.querySelector('#industryTypesDrop')?.addEventListener('click', handleIndustryDrop);
+    document.querySelector('#newsTypeTagsDrop')?.addEventListener('click', handleNewsTypeDrop);
 
     // Add click event listener to document to close dropdowns when clicking outside
     const handleClickOutside = (event) => {
@@ -530,31 +504,20 @@ const PaginatedCards = ({ blok }) => {
     document.addEventListener('click', handleClickOutside);
 
     return () => {
-      document
-        .querySelector('#solutionsDrop')
-        ?.removeEventListener('click', handleManuDrop);
-      document
-        .querySelector('#productDrop')
-        ?.removeEventListener('click', handlePlatformDrop);
-      document
-        .querySelector('#contentTypesDrop')
-        ?.removeEventListener('click', handleFeatureDrop);
+      document.querySelector('#solutionsDrop')?.removeEventListener('click', handleManuDrop);
+      document.querySelector('#productDrop')?.removeEventListener('click', handlePlatformDrop);
+      document.querySelector('#contentTypesDrop')?.removeEventListener('click', handleFeatureDrop);
       document
         .querySelector('#industryTypesDrop')
         ?.removeEventListener('click', handleIndustryDrop);
-      document
-        .querySelector('#newsTypeTagsDrop')
-        ?.removeEventListener('click', handleNewsTypeDrop);
+      document.querySelector('#newsTypeTagsDrop')?.removeEventListener('click', handleNewsTypeDrop);
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <Wrapper
-        spacingOffset={blok.offset_spacing}
-        spacing={blok.section_spacing}
-      >
+      <Wrapper spacing={blok.section_spacing} spacingOffset={blok.offset_spacing}>
         {blok.filters && (
           <FiltersWrapper>
             <Filters>
@@ -566,20 +529,17 @@ const PaginatedCards = ({ blok }) => {
                   <OptionsContainer id="solutionsOptions">
                     {[...availableTags.solutions].map((tag) => (
                       <Option
-                        key={tag}
                         $isSelected={selectedFilters.includes(tag)}
+                        key={tag}
                         onClick={() => {
                           if (selectedFilters.includes(tag)) {
-                            setSelectedFilters(
-                              selectedFilters.filter((f) => f !== tag)
-                            );
+                            setSelectedFilters(selectedFilters.filter((f) => f !== tag));
                           } else {
                             setSelectedFilters([...selectedFilters, tag]);
                           }
                         }}
                       >
-                        <Circle src="/images/addCircle.webp" />{' '}
-                        {capitalizeFirstLetter(tag)}{' '}
+                        <Circle src="/images/addCircle.webp" /> {capitalizeFirstLetter(tag)}{' '}
                         <TagCounter>{countTagOccurrences(tag)}</TagCounter>
                       </Option>
                     ))}
@@ -596,20 +556,17 @@ const PaginatedCards = ({ blok }) => {
                   <OptionsContainer id="productOptions">
                     {[...availableTags.products].map((tag) => (
                       <Option
-                        key={tag}
                         $isSelected={selectedFilters.includes(tag)}
+                        key={tag}
                         onClick={() => {
                           if (selectedFilters.includes(tag)) {
-                            setSelectedFilters(
-                              selectedFilters.filter((f) => f !== tag)
-                            );
+                            setSelectedFilters(selectedFilters.filter((f) => f !== tag));
                           } else {
                             setSelectedFilters([...selectedFilters, tag]);
                           }
                         }}
                       >
-                        <Circle src="/images/addCircle.webp" />{' '}
-                        {capitalizeFirstLetter(tag)}{' '}
+                        <Circle src="/images/addCircle.webp" /> {capitalizeFirstLetter(tag)}{' '}
                         <TagCounter>{countTagOccurrences(tag)}</TagCounter>
                       </Option>
                     ))}
@@ -626,20 +583,17 @@ const PaginatedCards = ({ blok }) => {
                   <OptionsContainer id="contentTypesOptions">
                     {[...availableTags.contentTypes].map((tag) => (
                       <Option
-                        key={tag}
                         $isSelected={selectedFilters.includes(tag)}
+                        key={tag}
                         onClick={() => {
                           if (selectedFilters.includes(tag)) {
-                            setSelectedFilters(
-                              selectedFilters.filter((f) => f !== tag)
-                            );
+                            setSelectedFilters(selectedFilters.filter((f) => f !== tag));
                           } else {
                             setSelectedFilters([...selectedFilters, tag]);
                           }
                         }}
                       >
-                        <Circle src="/images/addCircle.webp" />{' '}
-                        {capitalizeFirstLetter(tag)}{' '}
+                        <Circle src="/images/addCircle.webp" /> {capitalizeFirstLetter(tag)}{' '}
                         <TagCounter>{countTagOccurrences(tag)}</TagCounter>
                       </Option>
                     ))}
@@ -655,20 +609,17 @@ const PaginatedCards = ({ blok }) => {
                   <OptionsContainer id="industryTypesOptions">
                     {[...availableTags.industryType].map((tag) => (
                       <Option
-                        key={tag}
                         $isSelected={selectedFilters.includes(tag)}
+                        key={tag}
                         onClick={() => {
                           if (selectedFilters.includes(tag)) {
-                            setSelectedFilters(
-                              selectedFilters.filter((f) => f !== tag)
-                            );
+                            setSelectedFilters(selectedFilters.filter((f) => f !== tag));
                           } else {
                             setSelectedFilters([...selectedFilters, tag]);
                           }
                         }}
                       >
-                        <Circle src="/images/addCircle.webp" />{' '}
-                        {capitalizeFirstLetter(tag)}{' '}
+                        <Circle src="/images/addCircle.webp" /> {capitalizeFirstLetter(tag)}{' '}
                         <TagCounter>{countTagOccurrences(tag)}</TagCounter>
                       </Option>
                     ))}
@@ -684,20 +635,17 @@ const PaginatedCards = ({ blok }) => {
                   <OptionsContainer id="newsTypeTagsOptions">
                     {[...availableTags.newsTypeTags].map((tag) => (
                       <Option
-                        key={tag}
                         $isSelected={selectedFilters.includes(tag)}
+                        key={tag}
                         onClick={() => {
                           if (selectedFilters.includes(tag)) {
-                            setSelectedFilters(
-                              selectedFilters.filter((f) => f !== tag)
-                            );
+                            setSelectedFilters(selectedFilters.filter((f) => f !== tag));
                           } else {
                             setSelectedFilters([...selectedFilters, tag]);
                           }
                         }}
                       >
-                        <Circle src="/images/addCircle.webp" />{' '}
-                        {capitalizeFirstLetter(tag)}{' '}
+                        <Circle src="/images/addCircle.webp" /> {capitalizeFirstLetter(tag)}{' '}
                         <TagCounter>{countTagOccurrences(tag)}</TagCounter>
                       </Option>
                     ))}
@@ -707,8 +655,8 @@ const PaginatedCards = ({ blok }) => {
             </Filters>
             <SearchBar>
               <SearchInput
-                type="text"
                 placeholder={searchPlaceholder}
+                type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -718,14 +666,9 @@ const PaginatedCards = ({ blok }) => {
               {selectedFilters.map((filter) => (
                 <SelectedFilterTag
                   key={filter}
-                  onClick={() =>
-                    setSelectedFilters(
-                      selectedFilters.filter((f) => f !== filter)
-                    )
-                  }
+                  onClick={() => setSelectedFilters(selectedFilters.filter((f) => f !== filter))}
                 >
-                  <Circle src="/images/minusCircle.webp" />{' '}
-                  {capitalizeFirstLetter(filter)}{' '}
+                  <Circle src="/images/minusCircle.webp" /> {capitalizeFirstLetter(filter)}{' '}
                   <TagCounter>{countTagOccurrences(filter)}</TagCounter>
                 </SelectedFilterTag>
               ))}
@@ -744,9 +687,7 @@ const PaginatedCards = ({ blok }) => {
           {filteredCards.length > 0 ? (
             mappedCards
           ) : (
-            <NoResults>
-              No results found. Try adjusting your search or filters.
-            </NoResults>
+            <NoResults>No results found. Try adjusting your search or filters.</NoResults>
           )}
         </CardsContainer>
 
@@ -918,12 +859,10 @@ const Option = styled.div`
   width: fit-content;
   height: 1.625vw;
   padding: 0.25vw;
-  border: 1px solid
-    ${(props) => (props.$isSelected ? colors.lightPurple : colors.grey100)};
+  border: 1px solid ${(props) => (props.$isSelected ? colors.lightPurple : colors.grey100)};
   border-radius: 0.375vw;
   gap: 0.5vw;
-  color: ${(props) =>
-    props.$isSelected ? colors.lightPurple : colors.txtPrimary};
+  color: ${(props) => (props.$isSelected ? colors.lightPurple : colors.txtPrimary)};
 
   ${media.fullWidth} {
     height: 26px;
@@ -1131,8 +1070,7 @@ const PaginationDiv = styled.div`
 const CardChunk = styled.div`
   position: relative;
   display: flex;
-  flex-direction: ${(props) =>
-    props.card_type === 'event' ? 'column' : 'row'};
+  flex-direction: ${(props) => (props.card_type === 'event' ? 'column' : 'row')};
   flex-wrap: ${(props) => (props.card_type === 'event' ? 'nowrap' : 'wrap')};
   gap: ${(props) => (props.card_type === 'event' ? '0' : '1.25vw')};
   min-width: 100%;
@@ -1216,21 +1154,21 @@ const Wrapper = styled.div`
       return props.spacing === 'default'
         ? '3.75vw 0 0'
         : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '3.75vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : '3.75vw 0 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 0 3.75vw'
         : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 3.75vw';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 3.75vw';
     }
     return props.spacing === 'default'
       ? '3.75vw 0'
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0';
+        ? `${props.spacing}px 0`
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
@@ -1239,21 +1177,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '60px 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+            ? `${props.spacing}px 0 0`
+            : '60px 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 60px'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 60px';
       }
       return props.spacing === 'default'
         ? '60px 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+          ? `${props.spacing}px 0`
+          : '60px 0';
     }};
   }
   ${media.tablet} {
@@ -1262,21 +1200,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '5.859vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '5.859vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '5.859vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 5.859vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 5.859vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 5.859vw';
       }
       return props.spacing === 'default'
         ? '5.859vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '5.859vw 0';
+          ? `${props.spacing}px 0`
+          : '5.859vw 0';
     }};
   }
 
@@ -1286,21 +1224,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '12.5vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '12.5vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '12.5vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 12.5vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 12.5vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 12.5vw';
       }
       return props.spacing === 'default'
         ? '12.5vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0';
+          ? `${props.spacing}px 0`
+          : '12.5vw 0';
     }};
   }
 `;

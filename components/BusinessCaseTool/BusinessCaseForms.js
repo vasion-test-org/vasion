@@ -1,35 +1,36 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
 
-import styled from 'styled-components';
-import media from 'styles/media';
-import colors from 'styles/colors';
-import text from 'styles/text';
 import Link from 'next/link';
+
+import styled from 'styled-components';
+import colors from 'styles/colors';
+import media from 'styles/media';
+import text from 'styles/text';
 
 const BusinessCaseForms = ({ blok }) => {
   const [currency, setCurrency] = useState();
   const [contactFormData, setContactFormData] = useState({
+    clientEmail: '',
+    company: '',
     name: '',
     repEmail: '',
-    company: '',
-    clientEmail: '',
   });
 
   const [savingsFormData, setSavingsFormData] = useState({
-    serverQty: '',
-    printerPrice: '',
-    tickets: '',
-    resolveTickets: '',
-    itPay: '',
     adminPay: '',
+    itPay: '',
+    pageCost: '',
+    pagesPrinted: '',
+    printerPrice: '',
     printerQty: '',
     printerSpend: '',
-    pagesPrinted: '',
-    pageCost: '',
+    resolveTickets: '',
+    serverQty: '',
     solutions: '',
-    whichSolution: '',
     solutionSpend: '',
+    tickets: '',
+    whichSolution: '',
   });
 
   const handleContactChange = (e) => {
@@ -60,10 +61,10 @@ const BusinessCaseForms = ({ blok }) => {
         <FormSubheader>{field.form_field_subheader}</FormSubheader>
       </FormText>
       <FormInput
-        onChange={handleContactChange}
         name={field.input_name}
-        type={field.input_type}
         placeholder={field.input_placeholder}
+        type={field.input_type}
+        onChange={handleContactChange}
       ></FormInput>
     </FormFieldDiv>
   ));
@@ -78,41 +79,41 @@ const BusinessCaseForms = ({ blok }) => {
         <RadiosDiv>
           <RadioDiv>
             <RadioFormInput
+              id="$"
+              name="currency"
+              type="radio"
+              value="$"
               onChange={handleCurrency}
-              name='currency'
-              type='radio'
-              value='$'
-              id='$'
             />
-            <RadioLabel for='$'>USD</RadioLabel>
+            <RadioLabel for="$">USD</RadioLabel>
           </RadioDiv>
           <RadioDiv>
             <RadioFormInput
+              id="£"
+              name="currency"
+              type="radio"
+              value="£"
               onChange={handleCurrency}
-              name='currency'
-              type='radio'
-              value='£'
-              id='£'
             />
-            <RadioLabel for='£'>GBP</RadioLabel>
+            <RadioLabel for="£">GBP</RadioLabel>
           </RadioDiv>
           <RadioDiv>
             <RadioFormInput
+              id="€"
+              name="currency"
+              type="radio"
+              value="€"
               onChange={handleCurrency}
-              name='currency'
-              type='radio'
-              value='€'
-              id='€'
             />
-            <RadioLabel for='€'>EUR</RadioLabel>
+            <RadioLabel for="€">EUR</RadioLabel>
           </RadioDiv>
         </RadiosDiv>
       ) : (
         <FormInput
-          onChange={handleSavingsChange}
           name={field.input_name}
-          type={field.input_type}
           placeholder={field.input_placeholder}
+          type={field.input_type}
+          onChange={handleSavingsChange}
         ></FormInput>
       )}
     </FormFieldDiv>
@@ -126,17 +127,15 @@ const BusinessCaseForms = ({ blok }) => {
         <Header>Print Savings</Header>
         <FormFields>{printSavings}</FormFields>
         <TransitionLink
-         href={{
-          pathname: '/business-case-tool/results',
-          query: {
-            currency,
-            data: encodeURIComponent(JSON.stringify({ contactFormData, savingsFormData })),
-          },
-        }}
-      >
-          <FormSubmitButton type='submit'>
-            GET YOUR PRINT SAVINGS REPORT
-          </FormSubmitButton>
+          href={{
+            pathname: '/business-case-tool/results',
+            query: {
+              currency,
+              data: encodeURIComponent(JSON.stringify({ contactFormData, savingsFormData })),
+            },
+          }}
+        >
+          <FormSubmitButton type="submit">GET YOUR PRINT SAVINGS REPORT</FormSubmitButton>
         </TransitionLink>
       </FormSection>
     </Wrapper>

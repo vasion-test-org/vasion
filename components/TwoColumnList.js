@@ -1,12 +1,12 @@
 'use client';
 import React from 'react';
 
-import styled, { ThemeProvider } from 'styled-components';
 import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
 import media from 'styles/media';
-import { useAvailableThemes } from '@/context/ThemeContext';
 
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
 const TwoColumnList = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
@@ -17,9 +17,7 @@ const TwoColumnList = ({ blok }) => {
 
   const column1 = blok?.column_1?.map((item, index) => (
     <ColumnItem key={`col1-item-${index}`}>
-      {item?.icon?.filename && (
-        <ItemIcon small_icon={item.small_icon} src={item.icon.filename} />
-      )}
+      {item?.icon?.filename && <ItemIcon small_icon={item.small_icon} src={item.icon.filename} />}
       <ColumnCopy>
         {item?.copy?.map((item, columnIndex) => (
           <RichTextRenderer document={item.copy} key={columnIndex} />
@@ -35,10 +33,7 @@ const TwoColumnList = ({ blok }) => {
       )}
       <ColumnCopy>
         {item?.copy?.map((copyItem, copyIndex) => (
-          <RichTextRenderer
-            key={`col2-copy-${index}-${copyIndex}`}
-            document={copyItem.copy}
-          />
+          <RichTextRenderer document={copyItem.copy} key={`col2-copy-${index}-${copyIndex}`} />
         ))}
       </ColumnCopy>
     </ColumnItem>
@@ -46,15 +41,10 @@ const TwoColumnList = ({ blok }) => {
 
   // console.log('column 2',column2)
   return (
-    <ComponentWrapper
-      spacingOffset={blok.spacing_offset}
-      spacing={blok.spacing}
-    >
+    <ComponentWrapper spacing={blok.spacing} spacingOffset={blok.spacing_offset}>
       <ThemeProvider theme={selectedTheme}>
         <Wrapper {...storyblokEditable(blok)}>
-          {blok.intro_content && (
-            <IntroContent alignment={blok.alignment}>{introMap}</IntroContent>
-          )}
+          {blok.intro_content && <IntroContent alignment={blok.alignment}>{introMap}</IntroContent>}
           <ColumnContainer comparison={blok.comparison}>
             <Column doublecolumn={column2.length < 0}>{column1}</Column>
             {column2.length > 0 && <Column>{column2}</Column>}

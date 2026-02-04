@@ -1,17 +1,20 @@
 'use client';
 import React, { useContext } from 'react';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import media from '@/styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 import dynamic from 'next/dynamic';
+
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+
+import Button from '@/components/globalComponents/Button';
 import Image from '@/components/globalComponents/Image';
 import Video from '@/components/globalComponents/Video';
-import Button from '@/components/globalComponents/Button';
-import Form from './Form';
 import { ScreenContext } from '@/components/providers/Screen';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import media from '@/styles/media';
+
+import Form from './Form';
 
 // Dynamic imports for heavy components
 const Cards = dynamic(() => import('@/components/centeredSections/Cards'), {
@@ -22,23 +25,17 @@ const IconCards = dynamic(() => import('@/components/IconCards'), {
   loading: () => <div style={{ height: '200px' }} />,
 });
 
-const G2BadgeAnimation = dynamic(
-  () => import('@/components/centeredSections/G2BadgeAnimation'),
-  {
-    loading: () => <div style={{ height: '200px' }} />,
-  },
-);
+const G2BadgeAnimation = dynamic(() => import('@/components/centeredSections/G2BadgeAnimation'), {
+  loading: () => <div style={{ height: '200px' }} />,
+});
 
 const Grid = dynamic(() => import('@/components/centeredSections/Grid'), {
   loading: () => <div style={{ height: '200px' }} />,
 });
 
-const Accordion = dynamic(
-  () => import('@/components/centeredSections/Accordion'),
-  {
-    loading: () => <div style={{ height: '100px' }} />,
-  },
-);
+const Accordion = dynamic(() => import('@/components/centeredSections/Accordion'), {
+  loading: () => <div style={{ height: '100px' }} />,
+});
 
 const Stats = dynamic(() => import('@/components/centeredSections/Stats'), {
   loading: () => <div style={{ height: '150px' }} />,
@@ -49,37 +46,25 @@ const Rotator = dynamic(() => import('@/components/centeredSections/Rotator'), {
   ssr: false, // Disable SSR for animations
 });
 
-const StackedCards = dynamic(
-  () => import('@/components/centeredSections/StackedCards'),
-  {
-    loading: () => <div style={{ height: '200px' }} />,
-  },
-);
+const StackedCards = dynamic(() => import('@/components/centeredSections/StackedCards'), {
+  loading: () => <div style={{ height: '200px' }} />,
+});
 
 const Badges = dynamic(() => import('@/components/centeredSections/Badges'), {
   loading: () => <div style={{ height: '100px' }} />,
 });
 
-const BadgesMobile = dynamic(
-  () => import('@/components/centeredSections/BadgesMobile'),
-  {
-    loading: () => <div style={{ height: '100px' }} />,
-  },
-);
+const BadgesMobile = dynamic(() => import('@/components/centeredSections/BadgesMobile'), {
+  loading: () => <div style={{ height: '100px' }} />,
+});
 
-const LogosGallery = dynamic(
-  () => import('@/components/centeredSections/LogosGallery'),
-  {
-    loading: () => <div style={{ height: '150px' }} />,
-  },
-);
+const LogosGallery = dynamic(() => import('@/components/centeredSections/LogosGallery'), {
+  loading: () => <div style={{ height: '150px' }} />,
+});
 
-const ReviewCtaCards = dynamic(
-  () => import('@/components/centeredSections/ReviewCtaCards'),
-  {
-    loading: () => <div style={{ height: '200px' }} />,
-  },
-);
+const ReviewCtaCards = dynamic(() => import('@/components/centeredSections/ReviewCtaCards'), {
+  loading: () => <div style={{ height: '200px' }} />,
+});
 
 const CenteredSection = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -89,10 +74,10 @@ const CenteredSection = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       <CenteredWrapper
-        data-anchor-id={blok.anchor_id}
-        spacingOffset={blok.offset_spacing}
-        spacing={blok.section_spacing}
         backgroundImage={blok.background_image?.[0]?.filename}
+        data-anchor-id={blok.anchor_id}
+        spacing={blok.section_spacing}
+        spacingOffset={blok.offset_spacing}
         {...storyblokEditable(blok)}
       >
         {blok.component_type === 'g2_badge_animation' && (
@@ -107,69 +92,57 @@ const CenteredSection = ({ blok }) => {
                 <div {...storyblokEditable(copy)} key={copy.component}>
                   <RichTextRenderer
                     document={copy?.copy}
-                    responsiveTextStyles={copy?.responsive_text_styles}
+                    featuredCopy={copy.component === 'body_copy' && blok.featured_copy}
                     gradientText={copy?.gradient}
-                    featuredCopy={
-                      copy.component === 'body_copy' && blok.featured_copy
-                    }
+                    responsiveTextStyles={copy?.responsive_text_styles}
                   />
                 </div>
               ))}
             {blok.button_position === 'above' &&
               blok?.button_group?.map(($buttonData) => (
-                <div
-                  {...storyblokEditable($buttonData)}
-                  key={$buttonData.link_text}
-                >
-                  <Button
-                    key={$buttonData.link_text}
-                    $buttonData={$buttonData}
-                  />
+                <div {...storyblokEditable($buttonData)} key={$buttonData.link_text}>
+                  <Button $buttonData={$buttonData} key={$buttonData.link_text} />
                 </div>
               ))}
           </ContentWrapper>
         )}
         {blok.component_type !== '' && (
           <AttachedComponent hasCenteredCopy={!!blok.centered_copy}>
-            {blok.component_type === 'media' &&
-              blok?.media[0].component === 'assets' && (
-                <CustomSizing custom_size={blok.smaller_assets}>
-                  <MediaWrapper {...storyblokEditable(blok.media)}>
-                    <Image
-                      images={blok.media?.[0]?.media}
-                      borderradius={blok.media?.[0]?.border_radius}
-                    />
-                  </MediaWrapper>
-                </CustomSizing>
-              )}
-
-            {blok.component_type === 'media' &&
-              blok?.media[0].component === 'video_assets' && (
+            {blok.component_type === 'media' && blok?.media[0].component === 'assets' && (
+              <CustomSizing custom_size={blok.smaller_assets}>
                 <MediaWrapper {...storyblokEditable(blok.media)}>
-                  <CenteredVideoContainer>
-                    <Video
-                      videos={blok.media?.[0]?.media}
-                      borderradius={blok.media?.[0]?.border_radius}
-                      thumbnails={blok.media?.[0]?.thumbnails}
-                      width="100%"
-                    />
-                  </CenteredVideoContainer>
+                  <Image
+                    borderradius={blok.media?.[0]?.border_radius}
+                    images={blok.media?.[0]?.media}
+                  />
                 </MediaWrapper>
-              )}
+              </CustomSizing>
+            )}
+
+            {blok.component_type === 'media' && blok?.media[0].component === 'video_assets' && (
+              <MediaWrapper {...storyblokEditable(blok.media)}>
+                <CenteredVideoContainer>
+                  <Video
+                    borderradius={blok.media?.[0]?.border_radius}
+                    thumbnails={blok.media?.[0]?.thumbnails}
+                    videos={blok.media?.[0]?.media}
+                    width="100%"
+                  />
+                </CenteredVideoContainer>
+              </MediaWrapper>
+            )}
             {blok.component_type === 'icon_cards' && blok.icon_cards && (
               <IconCards blok={blok.icon_cards} />
             )}
-            {blok.component_type === 'card' && blok.cards && (
-              <Cards cardData={blok.cards} />
-            )}
+            {blok.component_type === 'card' && blok.cards && <Cards cardData={blok.cards} />}
             {blok.component_type === 'grid' && blok.grid && (
-              <Grid gridData={blok.grid} alignment={blok.grid_alignment} />
+              <Grid alignment={blok.grid_alignment} gridData={blok.grid} />
             )}
             {blok.component_type === 'stats' && blok.stats && (
               <Stats
+                alignment={blok.stats_alignment}
                 statsData={blok.stats}
                 toggle_card_style={blok.card_style}
-                alignment={blok.stats_alignment}
               />
             )}
             {blok.component_type === 'accordion' && blok.accordion && (
@@ -178,9 +151,7 @@ const CenteredSection = ({ blok }) => {
             {blok.component_type === 'rotator' && blok.rotator && (
               <Rotator rotatorData={blok.rotator} />
             )}
-            {blok.component_type === 'form' && blok.form && (
-              <Form blok={blok.form[0]} />
-            )}
+            {blok.component_type === 'form' && blok.form && <Form blok={blok.form[0]} />}
             {blok.component_type === 'logo_gallery' && blok.logo_gallery && (
               <LogosGallery logoData={blok.logo_gallery} />
             )}
@@ -203,11 +174,8 @@ const CenteredSection = ({ blok }) => {
         )}
         {blok.button_position === 'below' &&
           blok?.button_group?.map(($buttonData) => (
-            <div
-              {...storyblokEditable($buttonData)}
-              key={$buttonData.link_text}
-            >
-              <Button key={$buttonData.link_text} $buttonData={$buttonData} />
+            <div {...storyblokEditable($buttonData)} key={$buttonData.link_text}>
+              <Button $buttonData={$buttonData} key={$buttonData.link_text} />
             </div>
           ))}
       </CenteredWrapper>
@@ -227,13 +195,11 @@ const AttachedComponent = styled.div`
   }
 
   ${media.tablet} {
-    margin: ${(props) =>
-      props.hasCenteredCopy ? '1.953vw 0 3.906vw' : '3.906vw 0'};
+    margin: ${(props) => (props.hasCenteredCopy ? '1.953vw 0 3.906vw' : '3.906vw 0')};
   }
 
   ${media.mobile} {
-    margin: ${(props) =>
-      props.hasCenteredCopy ? '4.167vw 0 8.333vw' : '8.333vw 0'};
+    margin: ${(props) => (props.hasCenteredCopy ? '4.167vw 0 8.333vw' : '8.333vw 0')};
   }
 `;
 const CustomSizing = styled.div`
@@ -309,9 +275,7 @@ const CenteredWrapper = styled.div`
   gap: 1vw;
   color: ${(props) => props.theme.centered.textColor};
   background: ${(props) =>
-    props.backgroundImage
-      ? `url(${props.backgroundImage})`
-      : props.theme.centered.bg};
+    props.backgroundImage ? `url(${props.backgroundImage})` : props.theme.centered.bg};
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;

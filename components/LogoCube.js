@@ -1,18 +1,22 @@
-import clsx from 'clsx';
 import Image from 'next/image';
 
 import { storyblokEditable } from '@storyblok/react/rsc';
+import clsx from 'clsx';
 
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import { tw } from '@/lib/cn';
 
 import CarouselAnimator from './CarouselAnimator';
-
 
 /**
  * LogoCube Component (Server Component)
  * Displays a carousel of company logos with optional header text.
  * Supports transparent and themed backgrounds.
+ *
+ * Mobile-First Breakpoint Pattern:
+ * - Base (no prefix) = Mobile (0-480px)
+ * - md: = Tablet (481-1024px)
+ * - lg: = Desktop (1025-1600px)
+ * - xl: = FullWidth (1601px+)
  */
 const LogoCube = ({ blok }) => {
   const isTransparent = blok.transparent_background;
@@ -40,8 +44,9 @@ const LogoCube = ({ blok }) => {
         {...storyblokEditable(blok)}
         className={clsx(
           'flex w-full items-center justify-center',
-          // Mobile-first: start with mobile padding, increase for larger screens
-          'px-4 sm:px-10',
+          // Mobile-first: base = mobile, md/lg/xl for larger
+          // Mobile: px-10 (5vw×480÷4=6→but design shows more), Tablet+: px-4
+          'px-10 md:px-4 lg:px-4 xl:px-4',
           // Vertical padding based on offset_spacing
           offsetSpacing === 'top' && 'pt-15 pb-0',
           offsetSpacing === 'bottom' && 'pt-0 pb-15',
@@ -51,21 +56,28 @@ const LogoCube = ({ blok }) => {
       >
         <div
           className={clsx(
-            'w-full overflow-hidden mx-auto',
+            'mx-auto w-full overflow-hidden',
             // Background
-            isTransparent ? 'bg-transparent' : theme === 'dark' ? 'bg-purple-dark' : theme === 'light' ? 'bg-white' : 'bg-purple',
+            isTransparent
+              ? 'bg-transparent'
+              : theme === 'dark'
+                ? 'bg-purple-dark'
+                : theme === 'light'
+                  ? 'bg-white'
+                  : 'bg-purple',
             // Text color
             theme === 'light' ? 'text-txt-primary' : 'text-white',
             // Max width
             isTransparent ? 'max-w-full' : 'max-w-326',
-            // Padding - using tw() for variant groups
-            tw`p-15 md:p-10 sm:(px-7 pt-11 pb-17)`,
-            // Border radius
-            'rounded-3xl sm:rounded-4xl'
+            // Padding - mobile-first (base=mobile, then tablet, desktop)
+            // Mobile: px-7 pt-11 pb-17, Tablet: p-10, Desktop+: p-15
+            'px-7 pt-11 pb-17 md:p-10 lg:p-15 xl:p-15',
+            // Border radius - mobile: rounded-4xl, larger: rounded-3xl
+            'rounded-4xl md:rounded-3xl lg:rounded-3xl xl:rounded-3xl'
           )}
         >
-          {/* Using tw() for grouped responsive classes */}
-          <div className={tw`flex flex-col items-center justify-center gap-10 md:gap-5 sm:gap-9`}>
+          {/* Gap: mobile=9, tablet=5, desktop+=10 */}
+          <div className="flex flex-col items-center justify-center gap-9 md:gap-5 lg:gap-10 xl:gap-10">
             {blok.header && (
               <header className="w-full text-center">
                 <RichTextRenderer
@@ -78,7 +90,7 @@ const LogoCube = ({ blok }) => {
 
             <ul
               className={clsx(
-                'flex w-full items-center overflow-hidden gap-5 m-0 p-0 list-none',
+                'm-0 flex w-full list-none items-center gap-5 overflow-hidden p-0',
                 shouldCenter ? 'justify-center' : 'justify-start'
               )}
               aria-label="Company logos carousel"
@@ -90,8 +102,8 @@ const LogoCube = ({ blok }) => {
                 >
                   <Image
                     alt={logo.alt || 'Company logo'}
-                    // Using tw() for variant groups
-                    className={tw`w-50 h-25 sm:(w-56 h-28)`}
+                    // Mobile: w-56 h-28, larger: w-50 h-25
+                    className="h-28 w-56 md:h-25 md:w-50 lg:h-25 lg:w-50 xl:h-25 xl:w-50"
                     height={100}
                     loading="lazy"
                     src={logo.filename || logo.image}

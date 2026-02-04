@@ -1,12 +1,14 @@
 'use client';
 import React from 'react';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import media from '@/styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+
 import Button from '@/components/globalComponents/Button';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
 import useMedia from '@/functions/useMedia';
+import media from '@/styles/media';
 
 const ResourceCta = ({ blok }) => {
   console.log(blok);
@@ -28,22 +30,21 @@ const ResourceCta = ({ blok }) => {
           customTheme?.background_media?.[1]?.filename ||
             customTheme?.background_media?.[0]?.filename,
           customTheme?.background_media?.[2]?.filename ||
-            customTheme?.background_media?.[0]?.filename,
+            customTheme?.background_media?.[0]?.filename
         )
       : blok.background_image?.[0]?.filename;
-  const bg_color =
-    backgroundType === 'color' ? customTheme?.background_color?.value : null;
+  const bg_color = backgroundType === 'color' ? customTheme?.background_color?.value : null;
 
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
       <BlogCtaBGWrapper>
         <BlogCtaWrapper
-          data-anchor-id={blok.anchor_id}
-          spacingOffset={blok.offset_spacing}
-          spacing={blok.section_spacing}
-          bg_img={bg_img}
-          bg_color={bg_color}
           background_type={backgroundType}
+          bg_color={bg_color}
+          bg_img={bg_img}
+          data-anchor-id={blok.anchor_id}
+          spacing={blok.section_spacing}
+          spacingOffset={blok.offset_spacing}
           {...storyblokEditable(blok)}
         >
           <ContentContainer>
@@ -53,22 +54,16 @@ const ResourceCta = ({ blok }) => {
                   <div {...storyblokEditable(copy)} key={copy.u_id}>
                     <RichTextRenderer
                       document={copy?.copy}
-                      responsiveTextStyles={copy?.responsive_text_styles}
                       gradientText={copy?.gradient}
+                      responsiveTextStyles={copy?.responsive_text_styles}
                     />
                   </div>
                 ))}
               {blok.button_group?.length > 0 && (
                 <ButtonWrapper>
                   {blok.button_group.map(($buttonData) => (
-                    <div
-                      {...storyblokEditable($buttonData)}
-                      key={$buttonData.u_id}
-                    >
-                      <Button
-                        key={$buttonData.u_id}
-                        $buttonData={$buttonData}
-                      />
+                    <div {...storyblokEditable($buttonData)} key={$buttonData.u_id}>
+                      <Button $buttonData={$buttonData} key={$buttonData.u_id} />
                     </div>
                   ))}
                 </ButtonWrapper>
@@ -155,7 +150,7 @@ const BlogCtaWrapper = styled.div`
   background-position: center;
   object-fit: contain;
   border-radius: 1vw;
-  
+
   ${media.fullWidth} {
     width: 750px;
     min-height: 200px;

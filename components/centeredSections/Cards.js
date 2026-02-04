@@ -1,17 +1,18 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import styled from "styled-components";
-import Card from "@/components/globalComponents/Card";
-import media from "@/styles/media";
+import styled from 'styled-components';
+
+import Card from '@/components/globalComponents/Card';
+import media from '@/styles/media';
 // import colors from 'styles/colors';
 // import text from 'styles/text';
 const Cards = ({ cardData }) => {
   return (
     <CardsContainer>
       {cardData.map((card, index) => (
-        <Card key={`card-${index}`} content={card} />
+        <Card content={card} key={`card-${index}`} />
       ))}
     </CardsContainer>
   );

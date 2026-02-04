@@ -19,9 +19,7 @@ const findImages = (content, images = [], path = '') => {
   if (!content) return images;
 
   if (Array.isArray(content)) {
-    content.forEach((item, index) =>
-      findImages(item, images, `${path}[${index}]`)
-    );
+    content.forEach((item, index) => findImages(item, images, `${path}[${index}]`));
   } else if (typeof content === 'object') {
     // Check if this is an image (has id, alt, filename)
     if (content.id && content.alt !== undefined && content.filename) {
@@ -60,9 +58,7 @@ const replaceImagesWithThemselves = async (content, path = '') => {
   } else if (typeof content === 'object') {
     // Check if this is an image (has id, alt, filename)
     if (content.id && content.alt !== undefined && content.filename) {
-      console.log(
-        `🔄 Replacing image ${content.id} at ${path} with asset from library`
-      );
+      console.log(`🔄 Replacing image ${content.id} at ${path} with asset from library`);
       console.log(`🔍 Current image data:`, {
         id: content.id,
         alt: content.alt,
@@ -108,14 +104,8 @@ const replaceImagesWithThemselves = async (content, path = '') => {
         console.log(`   Old alt: "${oldAlt}"`);
         console.log(`   New alt: "${asset.alt}"`);
       } catch (assetError) {
-        console.error(
-          `❌ Failed to get asset ${content.id}:`,
-          assetError.message
-        );
-        console.error(
-          `❌ Error details:`,
-          assetError.response?.data || assetError
-        );
+        console.error(`❌ Failed to get asset ${content.id}:`, assetError.message);
+        console.error(`❌ Error details:`, assetError.response?.data || assetError);
       }
     } else {
       // Recursively check all properties
@@ -190,9 +180,7 @@ const getAllPublishedStories = async () => {
 
       // If we got fewer stories than requested, we've reached the end
       if (stories.length < perPage) {
-        console.log(
-          `📄 Reached end of stories (${stories.length} < ${perPage})`
-        );
+        console.log(`📄 Reached end of stories (${stories.length} < ${perPage})`);
         break;
       }
 
@@ -225,9 +213,7 @@ const updateAllPageImages = async () => {
       }`
     );
     console.log(
-      `   - STORYBLOK_PUBLIC_TOKEN: ${
-        process.env.STORYBLOK_PUBLIC_TOKEN ? 'Set' : 'Not set'
-      }`
+      `   - STORYBLOK_PUBLIC_TOKEN: ${process.env.STORYBLOK_PUBLIC_TOKEN ? 'Set' : 'Not set'}`
     );
 
     // Get all published stories
@@ -249,11 +235,7 @@ const updateAllPageImages = async () => {
     for (let i = 0; i < stories.length; i++) {
       const story = stories[i];
       try {
-        console.log(
-          `\n📄 [${i + 1}/${stories.length}] Processing: ${story.name} (${
-            story.slug
-          })`
-        );
+        console.log(`\n📄 [${i + 1}/${stories.length}] Processing: ${story.name} (${story.slug})`);
         console.log(`🔍 Story details:`, {
           id: story.id,
           slug: story.slug,
@@ -309,9 +291,7 @@ const updateAllPageImages = async () => {
 
         // Replace images with themselves
         console.log('🔄 Replacing images with themselves...');
-        const updatedContent = await replaceImagesWithThemselves(
-          fullStory.data.story.content
-        );
+        const updatedContent = await replaceImagesWithThemselves(fullStory.data.story.content);
 
         // Save the updated content using Management API
         console.log('💾 Saving updated content...');
@@ -336,10 +316,7 @@ const updateAllPageImages = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } catch (storyError) {
         console.error(`❌ Error processing ${story.name}:`, storyError.message);
-        console.error(
-          `❌ Error details:`,
-          storyError.response?.data || storyError
-        );
+        console.error(`❌ Error details:`, storyError.response?.data || storyError);
         pagesWithErrors++;
         pagesProcessed++;
       }

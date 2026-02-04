@@ -1,9 +1,1 @@
-<div className="clsx(w-full overflow-hidden mx-auto,
-bg-purple-dark,
-text-white,
-max-w-326,
-p-15 sm:p-10,
-rounded-3xl
-)">
-
-</div>
+<div className="clsx(w-full mx-auto, bg-purple-dark, text-white, max-w-326, sm:p-10, ) overflow-hidden rounded-3xl p-15"></div>;

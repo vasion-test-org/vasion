@@ -10,34 +10,44 @@ alwaysApply: true
 
 Use these exact class names when styling components. NEVER use arbitrary values.
 
-## Breakpoints
+## Breakpoints (Mobile-First)
 
-### Project Breakpoints (sm/md/lg/xl)
+Tailwind uses **min-width** breakpoints. Base classes = mobile, breakpoint prefixes override for larger screens.
 
 | Prefix | Range | Description |
 |--------|-------|-------------|
-| (none) | Base | Default styles (apply to all) |
-| `sm:` | max-480px | Mobile only |
-| `md:` | 481-1024px | Tablet only |
-| `lg:` | 1025-1600px | Desktop only |
-| `xl:` | 1601px+ | Full width only |
+| **(none)** | 0-480px | **Mobile (base)** - no prefix needed |
+| `md:` | 481px+ | Tablet and up |
+| `lg:` | 1025px+ | Desktop and up |
+| `xl:` | 1601px+ | Full width and up |
+
+**Key Concept:** Styles cascade UP. A `md:` class applies to tablet, desktop, AND fullWidth unless overridden.
 
 **Usage Pattern:**
 ```jsx
-// Base styles, then override for specific breakpoints
-className="px-4 md:px-10 lg:px-16"
-// Or use responsive typography
-className="text-h1-sm md:text-h1 lg:text-h1-lg"
+// Mobile base, then add breakpoints for what CHANGES
+className="flex-col w-107 gap-7.5 md:w-236 lg:(flex-row w-326)"
+
+// If value is same across all breakpoints, just use base
+className="gap-6"  // No prefixes needed if gap is always 24px
 ```
 
-**Note:** These breakpoints use a combination of min-width and max-width ranges, not mobile-first min-width only.
+**Converting styled-components:**
+- `${media.mobile}` → base (no prefix)
+- `${media.tablet}` → `md:`
+- Desktop (base) → `lg:`
+- `${media.fullWidth}` → `xl:`
 
-## Colors
+## Colors (Tailwind v4 - No DEFAULT Suffix)
+
+**IMPORTANT:** In Tailwind v4, colors are used directly without `-DEFAULT` suffix:
+- ✅ `text-orange`, `bg-purple`, `fill-orange`
+- ❌ `text-orange-DEFAULT`, `bg-purple-DEFAULT` (NEVER use this)
 
 ### Purple (Brand Primary)
 - `purple-navy` → #090121
 - `purple-dark` → #201435
-- `purple-DEFAULT` → #3D2562 (use as `text-purple` or `bg-purple` - DEFAULT is accessed without suffix)
+- `purple` → #3D2562 (use as `text-purple` or `bg-purple`)
 - `purple-medium` → #583F99
 - `purple-light` → #7E5FDD
 - `purple-border` → #945AEE
@@ -53,7 +63,7 @@ className="text-h1-sm md:text-h1 lg:text-h1-lg"
 
 ### Orange
 - `orange-dark` → #CC4800
-- `orange-DEFAULT` → #ff5100
+- `orange` → #ff5100 (use as `text-orange`, `bg-orange`, `fill-orange`)
 - `orange-500` → #FF612A
 - `orange-400` → #FF854d
 - `orange-300` → #FFAD80
@@ -62,7 +72,7 @@ className="text-h1-sm md:text-h1 lg:text-h1-lg"
 
 ### Teal
 - `teal-dark` → #007C77
-- `teal-DEFAULT` → #00A19B
+- `teal` → #00A19B (use as `text-teal`, `bg-teal`)
 - `teal-500` → #33B4AF
 - `teal-400` → #66C7C3
 - `teal-300` → #99DAD7
@@ -71,7 +81,7 @@ className="text-h1-sm md:text-h1 lg:text-h1-lg"
 
 ### Yellow
 - `yellow-dark` → #D3A809
-- `yellow-DEFAULT` → #FFCB04
+- `yellow` → #FFCB04 (use as `text-yellow`, `bg-yellow`)
 - `yellow-500` → #FFDB4F
 - `yellow-400` → #FFE068
 - `yellow-300` → #FFE582
@@ -98,7 +108,7 @@ className="text-h1-sm md:text-h1 lg:text-h1-lg"
 - `txt-subtle` → #808085
 
 ### Other
-- `pink-DEFAULT` → #DD5FC1
+- `pink` → #DD5FC1 (use as `text-pink`, `bg-pink`)
 
 ## Gradients (use as `bg-*`)
 
@@ -189,8 +199,8 @@ className="w-full max-w-326 mx-auto p-15 rounded-3xl bg-purple"
 
 ### Mobile-First Responsive Padding
 ```jsx
-// Base = mobile, sm: = tablet+, lg: = desktop+
-className="px-4 sm:px-10 lg:px-16 py-8 sm:py-12"
+// Base = mobile, md: = tablet+, lg: = desktop+
+className="px-7 md:px-8 lg:px-16 py-9 md:py-12"
 ```
 
 ### Button with Focus State
@@ -214,7 +224,7 @@ import { cn } from '@/lib/cn';
 
 className={cn(
   'base-classes',
-  isActive && 'bg-purple-DEFAULT text-white',
+  isActive && 'bg-purple text-white',
   isDisabled && 'opacity-50 cursor-not-allowed'
 )}
 ```
@@ -229,23 +239,42 @@ className="rounded-lg bg-white p-6 shadow-md"
 className="px-6 py-12 md:px-10 md:py-16 lg:px-37 lg:py-24"
 ```
 
-## Styled-Components → Tailwind Mapping
+## Styled-Components → Tailwind Mapping (Mobile-First)
 
+**Breakpoint Conversion:**
+| styled-components | Tailwind | Explanation |
+|-------------------|----------|-------------|
+| `${media.mobile} { ... }` | **base (no prefix)** | Mobile = default styles |
+| `${media.tablet} { ... }` | `md:...` | Tablet overrides mobile |
+| Desktop (base in styled) | `lg:...` | Desktop overrides tablet |
+| `${media.fullWidth} { ... }` | `xl:...` | FullWidth overrides desktop |
+
+**Example:**
+```jsx
+// styled-component (desktop-first)
+const Box = styled.div`
+  flex-direction: row;  /* desktop */
+  ${media.mobile} { flex-direction: column; }
+`;
+
+// Tailwind (mobile-first)
+<div className="flex-col lg:flex-row">
+```
+
+**Theme Values:**
 | styled-components | Tailwind Equivalent |
 |-------------------|---------------------|
-| `${media.mobile} { ... }` | `sm:...` |
-| `${media.tablet} { ... }` | `md:...` |
-| `${media.desktop} { ... }` | `lg:...` |
-| `${media.fullWidth} { ... }` | `xl:...` |
 | `${text.h1}` | `text-h1 font-archivo` |
 | `${text.bodyLg}` | `text-body-lg font-archivo` |
 | `${text.eyebrow}` | `text-eyebrow font-archivo` |
-| `${colors.primaryPurple}` | `text-purple-DEFAULT` or `bg-purple-DEFAULT` |
-| `${colors.primaryOrange}` | `text-orange-DEFAULT` or `bg-orange-DEFAULT` |
+| `${colors.primaryPurple}` | `text-purple` or `bg-purple` |
+| `${colors.primaryOrange}` | `text-orange` or `bg-orange` |
 | `${colors.darkPurple}` | `text-purple-dark` or `bg-purple-dark` |
 | `${colors.txtPrimary}` | `text-txt-primary` |
 | `${colors.grey500}` | `text-grey-500` or `bg-grey-500` |
 | `${props.theme.hero.bg}` | Use appropriate gradient: `bg-purple-orbital` |
+
+**Note:** Never use `-DEFAULT` suffix in Tailwind v4. Use `text-orange` not `text-orange-DEFAULT`.
 
 ## VW to Tailwind Conversion
 

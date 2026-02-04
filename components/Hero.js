@@ -1,22 +1,26 @@
 'use client';
 import React from 'react';
+
+import dynamic from 'next/dynamic';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
 import styled, { ThemeProvider } from 'styled-components';
-import media from '@/styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import { ScreenContext } from '@/components/providers/Screen';
+
 import Button from '@/components/globalComponents/Button';
 import Image from '@/components/globalComponents/Image';
-import dynamic from 'next/dynamic';
+import { ScreenContext } from '@/components/providers/Screen';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import media from '@/styles/media';
 
 const LogoCube = dynamic(() => import('./LogoCube'), {
   loading: () => <div style={{ height: '200px' }} />, // Placeholder height
   ssr: false, // Disable SSR for this component since it uses GSAP
 });
-import LightboxBtn from '@/components/LightboxButton';
-import LazySection from '@/components/LazySection';
 import { useRouter } from 'next/navigation';
+
+import LazySection from '@/components/LazySection';
+import LightboxBtn from '@/components/LightboxButton';
 import useMedia from '@/functions/useMedia';
 import text from '@/styles/text';
 
@@ -39,11 +43,10 @@ const Hero = ({ blok }) => {
           customTheme?.background_media?.[1]?.filename ||
             customTheme?.background_media?.[0]?.filename,
           customTheme?.background_media?.[2]?.filename ||
-            customTheme?.background_media?.[0]?.filename,
+            customTheme?.background_media?.[0]?.filename
         )
       : null;
-  const bg_color =
-    backgroundType === 'color' ? customTheme?.background_color?.value : null;
+  const bg_color = backgroundType === 'color' ? customTheme?.background_color?.value : null;
 
   const handleNavigate = (link) => {
     const isExternalLink = link.startsWith('http') || link.startsWith('https');
@@ -57,38 +60,35 @@ const Hero = ({ blok }) => {
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
       <HeroBGWrapper
-        bg_img={bg_img}
-        bg_color={bg_color}
         background_type={backgroundType}
+        bg_color={bg_color}
+        bg_img={bg_img}
         // text_alignment={blok.text_alignment}
       >
         <HeroWrapper
-          layout={blok.hero_layout}
-          gap={blok.gap}
-          spacingOffset={blok.offset_spacing}
-          spacing={blok.section_spacing}
           centered={!blok?.hero_asset[0]}
+          gap={blok.gap}
+          layout={blok.hero_layout}
           // text_alignment={blok.text_alignment}
           socials={blok.socials}
+          spacing={blok.section_spacing}
+          spacingOffset={blok.offset_spacing}
         >
           <ContentWrapper
-            socials={blok.socials}
+            blog_hero={blok.blog_hero}
             centered={!blok?.hero_asset[0] && !blok.socials}
             centered_image={blok.centered_image}
-            blog_hero={blok.blog_hero}
+            socials={blok.socials}
             // text_alignment={blok.text_alignment}
           >
             {blok?.hero_asset[0] && blok.centered_image && (
-              <ImageWrapper
-                {...storyblokEditable(blok)}
-                blog_hero={blok.blog_hero}
-              >
+              <ImageWrapper {...storyblokEditable(blok)} blog_hero={blok.blog_hero}>
                 <Image
+                  fetchPriority="high"
                   images={blok.hero_asset}
                   priority={true}
-                  fetchPriority="high"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   quality={90}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   // borderRadius={blok.hero_asset?.[0]?.border_radius}
                 />
               </ImageWrapper>
@@ -105,47 +105,36 @@ const Hero = ({ blok }) => {
             {!blok?.socials && blok?.button_group?.length > 0 && (
               <ButtonRow>
                 {blok?.button_group?.map(($buttonData) => (
-                  <div
-                    {...storyblokEditable($buttonData)}
-                    key={$buttonData?.link_text}
-                  >
-                    <Button
-                      key={$buttonData?.link_text}
-                      $buttonData={$buttonData}
-                    />
+                  <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
+                    <Button $buttonData={$buttonData} key={$buttonData?.link_text} />
                   </div>
                 ))}
               </ButtonRow>
             )}
             {blok.badges?.length > 0 && (
-              <LazySection threshold={0.2} rootMargin="100px">
+              <LazySection rootMargin="100px" threshold={0.2}>
                 <BadgesSectionContainer>
                   {blok.badge_section_text &&
                     blok.badge_section_text.map((badge_text) => (
-                      <BadgeEyebrow
-                        {...storyblokEditable(badge_text)}
-                        key={badge_text._uid}
-                      >
+                      <BadgeEyebrow {...storyblokEditable(badge_text)} key={badge_text._uid}>
                         <RichTextRenderer
                           document={badge_text?.copy}
-                          responsiveTextStyles={
-                            badge_text?.responsive_text_styles
-                          }
+                          responsiveTextStyles={badge_text?.responsive_text_styles}
                         />
                       </BadgeEyebrow>
                     ))}
                   <BadgesContainer>
                     {blok.badges.map((badge) => (
                       <BadgeLink
-                        key={badge._uid}
                         href={badge.link?.url || '#'}
-                        target={badge.link?.target || '_self'}
+                        key={badge._uid}
                         rel="noopener noreferrer"
+                        target={badge.link?.target || '_self'}
                       >
                         <BadgeImage
-                          src={badge.logo?.filename}
                           alt={badge.logo?.alt || 'Badge'}
                           loading="lazy"
+                          src={badge.logo?.filename}
                         />
                       </BadgeLink>
                     ))}
@@ -153,22 +142,18 @@ const Hero = ({ blok }) => {
                 </BadgesSectionContainer>
               </LazySection>
             )}
-            {blok?.light_box_button &&
-              blok?.light_box_button[0]?.lightbox_text && (
-                <LightboxBtn blok={blok?.light_box_button[0]} />
-              )}
+            {blok?.light_box_button && blok?.light_box_button[0]?.lightbox_text && (
+              <LightboxBtn blok={blok?.light_box_button[0]} />
+            )}
           </ContentWrapper>
           {blok?.hero_asset[0] && !blok.centered_image && (
-            <ImageWrapper
-              {...storyblokEditable(blok)}
-              blog_hero={blok.blog_hero}
-            >
+            <ImageWrapper {...storyblokEditable(blok)} blog_hero={blok.blog_hero}>
               <Image
+                fetchPriority="high"
                 images={blok.hero_asset}
                 priority={true}
-                fetchPriority="high"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 quality={90}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 // borderRadius={blok.hero_asset?.[0]?.border_radius}
               />
             </ImageWrapper>
@@ -178,39 +163,27 @@ const Hero = ({ blok }) => {
               <SocialLogoContainer>
                 <SocialLink href={'https://www.facebook.com/VasionSoftware'}>
                   <SocailLogo
+                    alt="facebook-logo"
                     loading="lazy"
                     src="/images/icons/Facebook.webp"
-                    alt="facebook-logo"
                   />
                 </SocialLink>
-                <SocialLink
-                  href={'https://www.linkedin.com/company/printerlogic/'}
-                >
+                <SocialLink href={'https://www.linkedin.com/company/printerlogic/'}>
                   <SocailLogo
+                    alt="linkedin-logo"
                     loading="lazy"
                     src="/images/icons/LinkedIn.webp"
-                    alt="linkedin-logo"
                   />
                 </SocialLink>
                 <SocialLink href={'https://x.com/VasionSoftware'}>
-                  <SocailLogo
-                    loading="lazy"
-                    src="/images/icons/Twitter.webp"
-                    alt="twitter-logo"
-                  />
+                  <SocailLogo alt="twitter-logo" loading="lazy" src="/images/icons/Twitter.webp" />
                 </SocialLink>
               </SocialLogoContainer>
               {blok?.button_group?.length > 0 && (
                 <ButtonRow socials>
                   {blok?.button_group?.map(($buttonData) => (
-                    <div
-                      {...storyblokEditable($buttonData)}
-                      key={$buttonData?.link_text}
-                    >
-                      <Button
-                        key={$buttonData?.link_text}
-                        $buttonData={$buttonData}
-                      />
+                    <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
+                      <Button $buttonData={$buttonData} key={$buttonData?.link_text} />
                     </div>
                   ))}
                 </ButtonRow>
@@ -218,37 +191,37 @@ const Hero = ({ blok }) => {
             </SocialCTA>
           )}
           {blok.review_buttons && (
-            <LazySection threshold={0.2} rootMargin="100px">
+            <LazySection rootMargin="100px" threshold={0.2}>
               <ReviewButtons>
                 <ReviewButton
-                  src={'/images/reviewButton.webp'}
                   alt={'review-us'}
-                  width="164"
                   height="62"
                   loading="lazy"
+                  src={'/images/reviewButton.webp'}
+                  width="164"
                   onClick={() => handleNavigate('/review-us')}
                 />
                 <ReviewButton
-                  src={'/images/reviewButton-1.webp'}
                   alt={'G2 Reviews'}
-                  width="164"
                   height="62"
                   loading="lazy"
+                  src={'/images/reviewButton-1.webp'}
+                  width="164"
                   onClick={() => handleNavigate('/review-us')}
                 />
                 <ReviewButton
-                  src={'/images/reviewButton-2.webp'}
                   alt={'Review Us'}
-                  width="164"
                   height="62"
                   loading="lazy"
+                  src={'/images/reviewButton-2.webp'}
+                  width="164"
                   onClick={() => handleNavigate('/review-us')}
                 />
                 <AnchorButton href="#reddit-reviews">
                   <ReviewButton
-                    src={'/images/ReviewButton-4.webp'}
                     alt={'Reviews'}
                     loading="lazy"
+                    src={'/images/ReviewButton-4.webp'}
                   />
                 </AnchorButton>
               </ReviewButtons>
@@ -471,11 +444,7 @@ const ContentWrapper = styled.div`
     //     ? 'flex-end'
     //     : 'flex-start';
     // }
-    return props.centered_image
-      ? 'center'
-      : props.centered
-        ? 'center'
-        : 'start';
+    return props.centered_image ? 'center' : props.centered ? 'center' : 'start';
   }};
 
   width: ${(props) => {
@@ -543,8 +512,7 @@ const HeroWrapper = styled.div`
   justify-content: ${(props) => {
     return props.centered ? 'center' : 'space-between';
   }};
-  color: ${(props) =>
-    props.theme.customtheme?.text_color?.value || props.theme.hero.textColor};
+  color: ${(props) => props.theme.customtheme?.text_color?.value || props.theme.hero.textColor};
 
   padding: ${(props) => {
     if (props.spacingOffset === 'top') {

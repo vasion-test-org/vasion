@@ -1,9 +1,11 @@
 'use client';
 import React from 'react';
+
 import styled from 'styled-components';
+
 import media from '@/styles/media';
 
-const Eyebrow = ({ className, children, blok }) => {
+const Eyebrow = ({ blok, children, className }) => {
   return <StyledEyebrow className={className}>{children}</StyledEyebrow>;
 };
 export default Eyebrow;

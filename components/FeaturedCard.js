@@ -1,12 +1,14 @@
 'use client';
 import React from 'react';
+
+import styled from 'styled-components';
+import colors from 'styles/colors';
 import media from 'styles/media';
 import text from 'styles/text';
-import colors from 'styles/colors';
-import styled from 'styled-components';
-import RichTextRenderer from './renderers/RichTextRenderer';
-import Image from './globalComponents/Image';
+
 import Button from './globalComponents/Button';
+import Image from './globalComponents/Image';
+import RichTextRenderer from './renderers/RichTextRenderer';
 // import { ReactComponent as ArrowLinkSVG } from "images/linkArrow.svg";
 
 // import Pill from "components/Pill";
@@ -14,8 +16,7 @@ import Button from './globalComponents/Button';
 const FeaturedCard = ({ blok }) => {
   // console.log(blok);
   const getTagBackgroundColor = (tagContent) => {
-    const tagText =
-      tagContent?.content?.[0]?.content?.[0]?.text?.toLowerCase() || '';
+    const tagText = tagContent?.content?.[0]?.content?.[0]?.text?.toLowerCase() || '';
     if (tagText.includes('trade show')) {
       return 'linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%)';
     }
@@ -26,15 +27,12 @@ const FeaturedCard = ({ blok }) => {
   };
 
   return (
-    <Wrapper spacingOffset={blok.offset_spacing} spacing={blok.section_spacing}>
+    <Wrapper spacing={blok.section_spacing} spacingOffset={blok.offset_spacing}>
       <CardWrapper>
         <RichTextRenderer document={blok?.featured_title} />
         <CardInnerWrapper>
           <ImageWrapper>
-            <Image
-              images={blok.event_image[0].media}
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
+            <Image images={blok.event_image[0].media} sizes="(max-width: 768px) 100vw, 50vw" />
           </ImageWrapper>
           <Content>
             <HeaderAndTag>
@@ -45,11 +43,11 @@ const FeaturedCard = ({ blok }) => {
             </HeaderAndTag>
             <DateAndTime>
               <IconAndText>
-                <Icon src="/images/locationOn.webp" alt={'Nav Pin'} />
+                <Icon alt={'Nav Pin'} src="/images/locationOn.webp" />
                 <RichTextRenderer document={blok?.location} />
               </IconAndText>
               <IconAndText>
-                <Icon src="/images/calendarClock.webp" alt={'Calendar'} />
+                <Icon alt={'Calendar'} src="/images/calendarClock.webp" />
                 <RichTextRenderer document={blok?.date} />
               </IconAndText>
             </DateAndTime>
@@ -194,21 +192,21 @@ const Wrapper = styled.div`
       return props.spacing === 'default'
         ? '3.75vw 0 0'
         : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '3.75vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : '3.75vw 0 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 0 3.75vw'
         : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 3.75vw';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 3.75vw';
     }
     return props.spacing === 'default'
       ? '3.75vw 0'
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0';
+        ? `${props.spacing}px 0`
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
@@ -217,21 +215,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '60px 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+            ? `${props.spacing}px 0 0`
+            : '60px 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 60px'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 60px';
       }
       return props.spacing === 'default'
         ? '60px 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+          ? `${props.spacing}px 0`
+          : '60px 0';
     }};
   }
 
@@ -241,21 +239,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '5.859vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '5.859vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '5.859vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 5.859vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 5.859vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 5.859vw';
       }
       return props.spacing === 'default'
         ? '5.859vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '5.859vw 0';
+          ? `${props.spacing}px 0`
+          : '5.859vw 0';
     }};
   }
 
@@ -265,21 +263,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '12.5vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '12.5vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '12.5vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 12.5vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 12.5vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 12.5vw';
       }
       return props.spacing === 'default'
         ? '12.5vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0';
+          ? `${props.spacing}px 0`
+          : '12.5vw 0';
     }};
   }
 `;

@@ -1,41 +1,43 @@
 'use client';
 import React from 'react';
+
 import styled from 'styled-components';
 import media from 'styles/media';
+
+import ApplePodcastsIcon from '@/assets/svg/pod-apple.svg';
+import RssIcon from '@/assets/svg/pod-rss.svg';
+import SpotifyIcon from '@/assets/svg/pod-spotify.svg';
+import YoutubeIcon from '@/assets/svg/pod-youtube.svg';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import SpotifyIcon from '@/assets/svg/pod-spotify.svg';
-import ApplePodcastsIcon from '@/assets/svg/pod-apple.svg';
-import YoutubeIcon from '@/assets/svg/pod-youtube.svg';
-import RssIcon from '@/assets/svg/pod-rss.svg';
 
 const PodcastSidebar = ({
-  image,
-  title,
-  body,
-  spotifyUrl,
   applePodcastsUrl,
-  youtubeUrl,
-  rssUrl,
+  body,
+  image,
   imageAlt = 'Podcast cover image',
+  rssUrl,
+  spotifyUrl,
+  title,
+  youtubeUrl,
 }) => {
   const socialLinks = [
-    { icon: SpotifyIcon, url: spotifyUrl, label: 'Listen on Spotify' },
+    { icon: SpotifyIcon, label: 'Listen on Spotify', url: spotifyUrl },
     {
       icon: ApplePodcastsIcon,
-      url: applePodcastsUrl,
       label: 'Listen on Apple Podcasts',
+      url: applePodcastsUrl,
     },
-    { icon: YoutubeIcon, url: youtubeUrl, label: 'Watch on YouTube' },
-    { icon: RssIcon, url: rssUrl, label: 'RSS Feed' },
+    { icon: YoutubeIcon, label: 'Watch on YouTube', url: youtubeUrl },
+    { icon: RssIcon, label: 'RSS Feed', url: rssUrl },
   ].filter((link) => link.url);
 
   return (
     <Wrapper>
       {image && (
         <ImageContainer>
-          <PodcastImage src={image} alt={imageAlt} />
+          <PodcastImage alt={imageAlt} src={image} />
         </ImageContainer>
       )}
 
@@ -58,11 +60,11 @@ const PodcastSidebar = ({
           <SocialLinksRow>
             {socialLinks.map((link, index) => (
               <SocialIconLink
-                key={index}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
                 aria-label={link.label}
+                href={link.url}
+                key={index}
+                rel="noopener noreferrer"
+                target="_blank"
                 title={link.label}
               >
                 <link.icon />

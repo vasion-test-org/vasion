@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+
 import { usePageData } from '@/context/PageDataContext';
 
 const PageDataUpdater = React.memo(({ story }) => {

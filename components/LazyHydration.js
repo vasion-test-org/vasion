@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * LazyHydration component that defers hydration until the component is in viewport
@@ -7,10 +7,10 @@ import { useState, useEffect, useRef } from 'react';
  */
 const LazyHydration = ({
   children,
-  threshold = 0.1,
-  rootMargin = '50px',
   fallback = null,
+  rootMargin = '50px',
   ssr = true,
+  threshold = 0.1,
 }) => {
   const [shouldHydrate, setShouldHydrate] = useState(false);
   const [isIntersecting, setIsIntersecting] = useState(false);
@@ -30,8 +30,8 @@ const LazyHydration = ({
         }
       },
       {
-        threshold,
         rootMargin,
+        threshold,
       }
     );
 
@@ -57,7 +57,7 @@ const LazyHydration = ({
   // If intersecting but not hydrated yet, render children without hydration
   if (!shouldHydrate) {
     return (
-      <div ref={elementRef} suppressHydrationWarning>
+      <div suppressHydrationWarning ref={elementRef}>
         {children}
       </div>
     );

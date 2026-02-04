@@ -5,17 +5,12 @@ import LazyLoadWrapper from './LazyLoadWrapper';
 const LazySection = ({
   children,
   className = '',
-  threshold = 0.1,
   rootMargin = '50px',
+  threshold = 0.1,
   ...props
 }) => {
   return (
-    <LazyLoadWrapper
-      threshold={threshold}
-      rootMargin={rootMargin}
-      className={className}
-      {...props}
-    >
+    <LazyLoadWrapper className={className} rootMargin={rootMargin} threshold={threshold} {...props}>
       {children}
     </LazyLoadWrapper>
   );

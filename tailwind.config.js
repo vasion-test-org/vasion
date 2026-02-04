@@ -127,36 +127,36 @@ module.exports = {
       // Renamed: -mob → -sm, -desk → -lg, -tab → -md (removed if same as base)
       fontSize: {
         // Giant - 100px base (same at md)
-        'giant': ['6.25rem', { lineHeight: '6.875rem', fontWeight: '700' }],
+        giant: ['6.25rem', { lineHeight: '6.875rem', fontWeight: '700' }],
         'giant-lg': ['6.944rem', { lineHeight: '7.639rem', fontWeight: '700' }],
-        
+
         // Stat - 48px
-        'stat': ['3rem', { lineHeight: '3.625rem', fontWeight: '500' }],
-        
+        stat: ['3rem', { lineHeight: '3.625rem', fontWeight: '500' }],
+
         // H1 - 46px base (same at md)
-        'h1': ['2.875rem', { lineHeight: '3.5rem', fontWeight: '800' }],
+        h1: ['2.875rem', { lineHeight: '3.5rem', fontWeight: '800' }],
         'h1-lg': ['3.188rem', { lineHeight: '3.875rem', fontWeight: '800' }],
         'h1-sm': ['2.25rem', { lineHeight: '2.813rem', fontWeight: '800' }],
-        
+
         // H2 - 46px base (same at md)
-        'h2': ['2.875rem', { lineHeight: '3.5rem', fontWeight: '700' }],
+        h2: ['2.875rem', { lineHeight: '3.5rem', fontWeight: '700' }],
         'h2-lg': ['3.188rem', { lineHeight: '3.875rem', fontWeight: '700' }],
         'h2-sm': ['2.25rem', { lineHeight: '2.813rem', fontWeight: '700' }],
-        
+
         // H3 - 32px base (same at md)
-        'h3': ['2rem', { lineHeight: '2.5rem', fontWeight: '700' }],
+        h3: ['2rem', { lineHeight: '2.5rem', fontWeight: '700' }],
         'h3-lg': ['2.25rem', { lineHeight: '2.75rem', fontWeight: '700' }],
         'h3-sm': ['1.813rem', { lineHeight: '2.25rem', fontWeight: '700' }],
-        
+
         // H4 - 26px base (same at md)
-        'h4': ['1.625rem', { lineHeight: '2rem', fontWeight: '700' }],
+        h4: ['1.625rem', { lineHeight: '2rem', fontWeight: '700' }],
         'h4-lg': ['1.813rem', { lineHeight: '2.25rem', fontWeight: '700' }],
         'h4-sm': ['1.375rem', { lineHeight: '1.688rem', fontWeight: '700' }],
-        
+
         // H5 - 20px base (same at md), lg and sm are same value
-        'h5': ['1.25rem', { lineHeight: '1.5rem', fontWeight: '700' }],
+        h5: ['1.25rem', { lineHeight: '1.5rem', fontWeight: '700' }],
         'h5-lg': ['1.375rem', { lineHeight: '1.688rem', fontWeight: '700' }],
-        
+
         // Body sizes
         'body-xl': ['1.4375rem', { lineHeight: '1.875rem', fontWeight: '400' }],
         'body-xl-bold': ['1.4375rem', { lineHeight: '1.75rem', fontWeight: '700' }],
@@ -166,26 +166,37 @@ module.exports = {
         'body-md-bold': ['1rem', { lineHeight: '1.375rem', fontWeight: '600' }],
         'body-sm': ['0.875rem', { lineHeight: '1.125rem', fontWeight: '400' }],
         'body-sm-bold': ['0.875rem', { lineHeight: '1.125rem', fontWeight: '700' }],
-        
+
         // Button
-        'button-lg': ['1rem', { lineHeight: '1.0625rem', fontWeight: '700', textTransform: 'uppercase' }],
-        
+        'button-lg': [
+          '1rem',
+          { lineHeight: '1.0625rem', fontWeight: '700', textTransform: 'uppercase' },
+        ],
+
         // Eyebrow
-        'eyebrow': ['0.875rem', { lineHeight: '1.125rem', fontWeight: '700', letterSpacing: '0.175rem', textTransform: 'uppercase' }],
-        
+        eyebrow: [
+          '0.875rem',
+          {
+            lineHeight: '1.125rem',
+            fontWeight: '700',
+            letterSpacing: '0.175rem',
+            textTransform: 'uppercase',
+          },
+        ],
+
         // Tags
-        'tag': ['0.625rem', { lineHeight: '0.75rem', fontWeight: '400' }],
+        tag: ['0.625rem', { lineHeight: '0.75rem', fontWeight: '400' }],
         'tag-bold': ['0.6875rem', { lineHeight: '0.875rem', fontWeight: '600' }],
         'tag-light': ['0.625rem', { lineHeight: '0.75rem', fontWeight: '300' }],
-        
+
         // Subtle
-        'subtle': ['0.875rem', { lineHeight: '1.125rem', fontWeight: '400' }],
-        
+        subtle: ['0.875rem', { lineHeight: '1.125rem', fontWeight: '400' }],
+
         // Menu
-        'm1': ['0.9375rem', { lineHeight: '1rem', fontWeight: '400', textTransform: 'uppercase' }],
-        'm2': ['1.125rem', { lineHeight: '1.25rem', fontWeight: '500', textTransform: 'capitalize' }],
-        'm3': ['1rem', { lineHeight: '1.3125rem', fontWeight: '500' }],
-        
+        m1: ['0.9375rem', { lineHeight: '1rem', fontWeight: '400', textTransform: 'uppercase' }],
+        m2: ['1.125rem', { lineHeight: '1.25rem', fontWeight: '500', textTransform: 'capitalize' }],
+        m3: ['1rem', { lineHeight: '1.3125rem', fontWeight: '500' }],
+
         // PDF
         'pdf-h1': ['3rem', { lineHeight: '3.5rem', fontWeight: '700' }],
         'pdf-h3': ['1.875rem', { lineHeight: '2.25rem', fontWeight: '700' }],
@@ -195,46 +206,46 @@ module.exports = {
       // Common spacing values used in components (converted to rem)
       spacing: {
         // Common values from Hero.js and other components
-        '4.5': '1.125rem',    // 18px
-        '7': '1.8125rem',     // 29px (mobile horizontal padding)
-        '11': '2.8125rem',    // 45px (mobile top padding)
-        '13': '3.25rem',      // 52px
-        '15': '3.75rem',      // 60px
-        '17': '4.1875rem',    // 67px (mobile bottom padding)
-        '18': '4.5rem',       // 72px
-        '22': '5.5rem',       // 88px
-        '25': '6.25rem',      // 100px
-        '30': '7.5rem',       // 120px
-        '37': '9.25rem',      // 148px - common padding
-        '50': '12.5rem',      // 200px
-        '75': '18.75rem',     // 300px
-        '100': '25rem',       // 400px
-        '150': '37.5rem',     // 600px
+        4.5: '1.125rem', // 18px
+        7: '1.8125rem', // 29px (mobile horizontal padding)
+        11: '2.8125rem', // 45px (mobile top padding)
+        13: '3.25rem', // 52px
+        15: '3.75rem', // 60px
+        17: '4.1875rem', // 67px (mobile bottom padding)
+        18: '4.5rem', // 72px
+        22: '5.5rem', // 88px
+        25: '6.25rem', // 100px
+        30: '7.5rem', // 120px
+        37: '9.25rem', // 148px - common padding
+        50: '12.5rem', // 200px
+        75: '18.75rem', // 300px
+        100: '25rem', // 400px
+        150: '37.5rem', // 600px
       },
 
       // Max widths
       maxWidth: {
-        'content': '100rem',  // 1600px - fullWidth breakpoint
-        'narrow': '55rem',    // 880px
-        'wide': '75rem',      // 1200px
-        '326': '81.5rem',     // 1304px - LogoCube card width
+        content: '100rem', // 1600px - fullWidth breakpoint
+        narrow: '55rem', // 880px
+        wide: '75rem', // 1200px
+        326: '81.5rem', // 1304px - LogoCube card width
       },
 
       // Border radius
       borderRadius: {
-        'sm': '0.1875rem',    // 3px
-        'md': '0.5rem',       // 8px
-        'lg': '1rem',         // 16px
-        'xl': '1.5rem',       // 24px
-        '2xl': '1rem',        // 16px (default override)
-        '3xl': '1.5rem',      // 24px
-        '4xl': '1.6875rem',   // 27px (mobile rounded corners)
+        sm: '0.1875rem', // 3px
+        md: '0.5rem', // 8px
+        lg: '1rem', // 16px
+        xl: '1.5rem', // 24px
+        '2xl': '1rem', // 16px (default override)
+        '3xl': '1.5rem', // 24px
+        '4xl': '1.6875rem', // 27px (mobile rounded corners)
       },
 
       // Transitions
       transitionDuration: {
-        '250': '250ms',
-        '350': '350ms',
+        250: '250ms',
+        350: '350ms',
       },
 
       // Background gradients (reference CSS custom properties)
@@ -246,7 +257,7 @@ module.exports = {
         'light-purple': 'var(--gradient-light-purple)',
         'dark-purple': 'var(--gradient-dark-purple)',
         'medium-purple': 'var(--gradient-medium-purple)',
-        'footer': 'var(--gradient-footer)',
+        footer: 'var(--gradient-footer)',
       },
     },
   },

@@ -12,7 +12,7 @@ import { cn } from '@/lib/cn';
  * AccordionItem (Client Component)
  * Interactive accordion item with GSAP animations for expand/collapse.
  * Must be client component due to useState, useRef, and animation logic.
- * 
+ *
  * VW Conversion Notes:
  * - Padding: 1.5vw (desk) / 2.344vw (tab) / 5vw (mob) all = 24px → py-6
  * - Chevron: 1.563vw (desk) / 2.441vw (tab) / 5.208vw (mob) all = 25px → size-6
@@ -33,7 +33,7 @@ const AccordionItem = ({ accordionItem }) => {
 
     if (chevronRef.current) {
       gsap.to(chevronRef.current, {
-        color: isOpen ? '#1B1D21' : '#ff5100', // txt-primary : orange-DEFAULT
+        color: isOpen ? '#1B1D21' : '#ff5100', // txt-primary : orange
         duration: 0.3,
         rotation: isOpen ? 0 : 180,
       });
@@ -70,14 +70,14 @@ const AccordionItem = ({ accordionItem }) => {
     <div
       className={cn(
         'flex flex-col py-6',
-        'border-t border-txt-subtle',
-        'last:border-b last:border-txt-subtle'
+        'border-txt-subtle border-t',
+        'last:border-txt-subtle last:border-b'
       )}
     >
       <button
         className={cn(
-          'w-full cursor-pointer bg-transparent border-none p-0 text-left',
-          'focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-border focus-visible:ring-offset-2 rounded-sm'
+          'w-full cursor-pointer border-none bg-transparent p-0 text-left',
+          'focus-visible:ring-purple-border rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2'
         )}
         aria-controls={`${componentId}-content`}
         aria-expanded={isOpen}
@@ -87,18 +87,15 @@ const AccordionItem = ({ accordionItem }) => {
       >
         {headerContent && (
           <div
-            className="flex justify-between items-center w-full gap-4"
+            className="flex w-full items-center justify-between gap-4"
             {...storyblokEditable(headerContent)}
           >
             <div className="flex-1">
-              <RichTextRenderer
-                className={headerContent.component}
-                document={headerContent.copy}
-              />
+              <RichTextRenderer className={headerContent.component} document={headerContent.copy} />
             </div>
             <div
               aria-hidden="true"
-              className="flex items-center justify-center flex-shrink-0"
+              className="flex shrink-0 items-center justify-center"
               ref={chevronRef}
             >
               <DownChevron className="size-6 transition-transform duration-300" />
@@ -117,10 +114,7 @@ const AccordionItem = ({ accordionItem }) => {
         <div className="pt-6" ref={contentInnerRef}>
           {contentBlocks.map((copy, idx) => (
             <div key={copy._uid || `content-${idx}`} {...storyblokEditable(copy)}>
-              <RichTextRenderer
-                className={copy.component}
-                document={copy.copy}
-              />
+              <RichTextRenderer className={copy.component} document={copy.copy} />
             </div>
           ))}
         </div>

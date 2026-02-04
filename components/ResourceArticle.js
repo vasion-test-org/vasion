@@ -1,10 +1,12 @@
 'use client';
 import React from 'react';
+
 import styled, { ThemeProvider } from 'styled-components';
+
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import { useAvailableThemes } from '@/context/ThemeContext';
-import media from '@/styles/media';
 import colors from '@/styles/colors';
+import media from '@/styles/media';
 
 const ResourceArticle = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -16,25 +18,17 @@ const ResourceArticle = ({ blok }) => {
   }
 
   const backgroundType = customTheme?.background_type;
-  const bg_color =
-    backgroundType === 'color' ? customTheme?.background_color?.value : null;
+  const bg_color = backgroundType === 'color' ? customTheme?.background_color?.value : null;
 
   const text_color = customTheme?.text_color?.value;
   return (
     <ThemeProvider theme={{ ...selectedTheme, customtheme: customTheme }}>
-      <Wrapper
-        spacing={blok.section_spacing}
-        spacingOffset={blok.offset_spacing}
-      >
-        <CopyWrapper
-          bg_color={bg_color}
-          background_type={backgroundType}
-          text_color={text_color}
-        >
+      <Wrapper spacing={blok.section_spacing} spacingOffset={blok.offset_spacing}>
+        <CopyWrapper background_type={backgroundType} bg_color={bg_color} text_color={text_color}>
           {(blok?.copy_sections[0]?.copy || blok?.copy) && (
             <RichTextRenderer
-              document={blok.copy_sections[0]?.copy || blok.copy}
               blok={blok}
+              document={blok.copy_sections[0]?.copy || blok.copy}
               responsiveTextStyles={blok?.responsive_text_styles}
             />
           )}

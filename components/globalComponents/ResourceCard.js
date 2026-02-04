@@ -1,36 +1,39 @@
 import React from 'react';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import styled from 'styled-components';
-import Image from '@/components/globalComponents/Image';
-import Button from '@/components/globalComponents/Button';
+
+import NextLink from 'next/link';
+import { usePathname } from 'next/navigation';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
-import media from '@/styles/media';
+import styled from 'styled-components';
+
+import Button from '@/components/globalComponents/Button';
+import Image from '@/components/globalComponents/Image';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import { getClick } from '@/functions/navigation';
 import colors from '@/styles/colors';
+import media from '@/styles/media';
 import text from '@/styles/text';
-import { usePathname } from 'next/navigation';
-import NextLink from 'next/link';
 
 const resourceImages = {
-  topic: '/images/resources/Pillar-Piece.webp',
-  faq: '/images/resources/FAQ.webp',
   caseStudy1: '/images/resources/Case-Study-Generic-1.webp',
   caseStudy2: '/images/resources/Case-Study-Generic-2.webp',
   caseStudy3: '/images/resources/Case-Study-Generic.webp',
-  whitePaper1: '/images/resources/White-Paper-1.webp',
-  whitePaper2: '/images/resources/White-Paper.webp',
-  whitePaperMedium: '/images/resources/White-Paper-Medium.webp',
-  video1: '/images/resources/Video-1.webp',
-  video2: '/images/resources/Video.webp',
-  solutionBrief: '/images/resources/Solution-Brief.webp',
-  playbook1: '/images/resources/Playbook-1.webp',
-  playbook2: '/images/resources/Playbook-2.webp',
-  playbook3: '/images/resources/Playbook.webp',
+  faq: '/images/resources/FAQ.webp',
+  guide1: '/images/resources/Guide-1.webp',
+  guide2: '/images/resources/Guide.webp',
   infographic1: '/images/resources/Infographic-1.webp',
   infographic2: '/images/resources/Infographic.webp',
   infographicMedium: '/images/resources/Infographic-Medium.webp',
-  guide1: '/images/resources/Guide-1.webp',
-  guide2: '/images/resources/Guide.webp',
+  playbook1: '/images/resources/Playbook-1.webp',
+  playbook2: '/images/resources/Playbook-2.webp',
+  playbook3: '/images/resources/Playbook.webp',
+  solutionBrief: '/images/resources/Solution-Brief.webp',
+  topic: '/images/resources/Pillar-Piece.webp',
+  video1: '/images/resources/Video-1.webp',
+  video2: '/images/resources/Video.webp',
+  whitePaper1: '/images/resources/White-Paper-1.webp',
+  whitePaper2: '/images/resources/White-Paper.webp',
+  whitePaperMedium: '/images/resources/White-Paper-Medium.webp',
 };
 
 const contentTypeTags = [
@@ -48,21 +51,21 @@ const contentTypeTags = [
 // Translation mapping for content type tags
 const getTranslatedTag = (tag, locale) => {
   const tagTranslations = {
-    'white paper': {
-      de: 'Whitepaper',
-      fr: 'Livre blanc',
-    },
     'customer story': {
       de: 'Kundenbericht',
       fr: 'Témoignage client',
+    },
+    faq: {
+      de: 'FAQ',
+      fr: 'FAQ',
     },
     guide: {
       de: 'Leitfaden',
       fr: 'Guide',
     },
-    faq: {
-      de: 'FAQ',
-      fr: 'FAQ',
+    infographic: {
+      de: 'Infografik',
+      fr: 'Infographie',
     },
     playbook: {
       de: 'Playbook',
@@ -72,17 +75,17 @@ const getTranslatedTag = (tag, locale) => {
       de: 'Lösungsübersicht',
       fr: 'Aperçu de solution',
     },
-    video: {
-      de: 'Video',
-      fr: 'Vidéo',
-    },
     topic: {
       de: 'Thema',
       fr: 'Sujet',
     },
-    infographic: {
-      de: 'Infografik',
-      fr: 'Infographie',
+    video: {
+      de: 'Video',
+      fr: 'Vidéo',
+    },
+    'white paper': {
+      de: 'Whitepaper',
+      fr: 'Livre blanc',
     },
   };
 
@@ -91,40 +94,34 @@ const getTranslatedTag = (tag, locale) => {
 
 const getRandomImageForType = (type) => {
   const typeImages = {
-    'white paper': [
-      resourceImages.whitePaper1,
-      resourceImages.whitePaper2,
-      resourceImages.whitePaperMedium,
-    ],
-    guide: [resourceImages.guide1, resourceImages.guide2],
-    faq: [resourceImages.faq],
-    playbook: [
-      resourceImages.playbook1,
-      resourceImages.playbook2,
-      resourceImages.playbook3,
-    ],
-    'solution brief': [resourceImages.solutionBrief],
-    video: [resourceImages.video1, resourceImages.video2],
-    topic: [resourceImages.topic],
-    infographic: [
-      resourceImages.infographic1,
-      resourceImages.infographic2,
-      resourceImages.infographicMedium,
-    ],
     'customer story': [
       resourceImages.caseStudy1,
       resourceImages.caseStudy2,
       resourceImages.caseStudy3,
     ],
+    faq: [resourceImages.faq],
+    guide: [resourceImages.guide1, resourceImages.guide2],
+    infographic: [
+      resourceImages.infographic1,
+      resourceImages.infographic2,
+      resourceImages.infographicMedium,
+    ],
+    playbook: [resourceImages.playbook1, resourceImages.playbook2, resourceImages.playbook3],
+    'solution brief': [resourceImages.solutionBrief],
+    topic: [resourceImages.topic],
+    video: [resourceImages.video1, resourceImages.video2],
+    'white paper': [
+      resourceImages.whitePaper1,
+      resourceImages.whitePaper2,
+      resourceImages.whitePaperMedium,
+    ],
   };
 
   const images = typeImages[type.toLowerCase()] || [];
-  return (
-    images[Math.floor(Math.random() * images.length)] || resourceImages.topic
-  );
+  return images[Math.floor(Math.random() * images.length)] || resourceImages.topic;
 };
 
-const ResourceCard = ({ content, paginated, index, borderradius }) => {
+const ResourceCard = ({ borderradius, content, index, paginated }) => {
   const pathname = usePathname();
 
   // Get current locale from pathname
@@ -144,9 +141,7 @@ const ResourceCard = ({ content, paginated, index, borderradius }) => {
     }
 
     if (content.translated_slugs) {
-      const translation = content.translated_slugs.find(
-        (slug) => slug.lang === currentLocale
-      );
+      const translation = content.translated_slugs.find((slug) => slug.lang === currentLocale);
       return translation?.name || content.name; // Fallback to original name if translation not found
     }
 
@@ -156,10 +151,10 @@ const ResourceCard = ({ content, paginated, index, borderradius }) => {
   // Get the translated button text for the current locale
   const getTranslatedButtonText = () => {
     switch (currentLocale) {
-      case 'fr':
-        return 'Lire maintenant';
       case 'de':
         return 'Jetzt lesen';
+      case 'fr':
+        return 'Lire maintenant';
       default:
         return 'Read Now';
     }
@@ -183,9 +178,7 @@ const ResourceCard = ({ content, paginated, index, borderradius }) => {
     contentTypeTags.includes(tag.toLowerCase())
   );
 
-  const translatedTag = contentTypeTag
-    ? getTranslatedTag(contentTypeTag, currentLocale)
-    : null;
+  const translatedTag = contentTypeTag ? getTranslatedTag(contentTypeTag, currentLocale) : null;
 
   const imageToUse = contentTypeTag
     ? getRandomImageForType(contentTypeTag)
@@ -194,8 +187,7 @@ const ResourceCard = ({ content, paginated, index, borderradius }) => {
   // Build the URL with proper locale routing
   const buildUrl = () => {
     const rawUrl = content.full_slug || '';
-    const isExternal =
-      rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
+    const isExternal = rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
 
     if (isExternal) {
       return rawUrl;
@@ -214,13 +206,13 @@ const ResourceCard = ({ content, paginated, index, borderradius }) => {
   const cardUrl = buildUrl();
 
   return (
-    <StyledNextLink href={cardUrl} passHref>
+    <StyledNextLink passHref href={cardUrl}>
       <CardWrapper paginated={paginated}>
         <ImageWrapper>
           <Image
-            imageAlt={content.Image?.alt || 'Resource Image'}
-            filename={content?.content?.page_thumbnail?.filename || imageToUse}
             borderradius={borderradius || content.image_border}
+            filename={content?.content?.page_thumbnail?.filename || imageToUse}
+            imageAlt={content.Image?.alt || 'Resource Image'}
           />
         </ImageWrapper>
 
@@ -316,7 +308,8 @@ const CardWrapper = styled.div`
   border-radius: 1vw;
 
   &:hover {
-    box-shadow: 0vw 0vw 0.063vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0vw 0vw 0.063vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.125vw 0.25vw 0vw rgba(25, 29, 30, 0.16);
   }
 
@@ -326,7 +319,8 @@ const CardWrapper = styled.div`
     width: clamp(350px, 100%, 408px);
 
     &:hover {
-      box-shadow: 0vw 0px 1px 0px rgba(25, 29, 30, 0.04),
+      box-shadow:
+        0vw 0px 1px 0px rgba(25, 29, 30, 0.04),
         0px 2px 4px 0px rgba(25, 29, 30, 0.16);
     }
   }
@@ -337,7 +331,8 @@ const CardWrapper = styled.div`
     width: clamp(29.102vw, 100%, 44.922vw);
 
     &:hover {
-      box-shadow: 0px 0vw 0.098vw 0vw rgba(25, 29, 30, 0.04),
+      box-shadow:
+        0px 0vw 0.098vw 0vw rgba(25, 29, 30, 0.04),
         0vw 0.195vw 0.391vw 0vw rgba(25, 29, 30, 0.16);
     }
   }
@@ -348,7 +343,8 @@ const CardWrapper = styled.div`
     width: clamp(89.167vw, 100%, 89.167vw);
 
     &:hover {
-      box-shadow: 0px 0vw 0.208vw 0vw rgba(25, 29, 30, 0.04),
+      box-shadow:
+        0px 0vw 0.208vw 0vw rgba(25, 29, 30, 0.04),
         0vw 0.417vw 0.833vw 0vw rgba(25, 29, 30, 0.16);
     }
   }

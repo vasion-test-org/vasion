@@ -1,14 +1,17 @@
 import React from 'react';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import styled from 'styled-components';
-import Image from '@/components/globalComponents/Image';
-import Button from '@/components/globalComponents/Button';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import media from '@/styles/media';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const Card = ({ content, paginated, borderradius }) => {
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled from 'styled-components';
+
+import Button from '@/components/globalComponents/Button';
+import Image from '@/components/globalComponents/Image';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import media from '@/styles/media';
+
+const Card = ({ borderradius, content, paginated }) => {
   const pathname = usePathname();
   const buttonData = content.Button?.[0];
   const isEmail = buttonData?.link_url?.email;
@@ -21,14 +24,10 @@ const Card = ({ content, paginated, borderradius }) => {
 
   const isExternal = rawHref.startsWith('http');
   const alreadyLocalized =
-    rawHref.startsWith('/de') ||
-    rawHref.startsWith('/fr') ||
-    rawHref.startsWith('/en');
+    rawHref.startsWith('/de') || rawHref.startsWith('/fr') || rawHref.startsWith('/en');
 
   const slugParts = pathname.split('/').filter(Boolean);
-  const currentLocale = ['de', 'fr'].includes(slugParts[0])
-    ? slugParts[0]
-    : null;
+  const currentLocale = ['de', 'fr'].includes(slugParts[0]) ? slugParts[0] : null;
 
   const normalizedUrl =
     isEmail || isExternal || alreadyLocalized
@@ -43,9 +42,9 @@ const Card = ({ content, paginated, borderradius }) => {
       {content.Image && (
         <ImageWrapper>
           <Image
-            imageAlt={content.Image.alt}
-            filename={content.Image.filename}
             borderradius={borderradius || content.image_border}
+            filename={content.Image.filename}
+            imageAlt={content.Image.alt}
           />
         </ImageWrapper>
       )}
@@ -67,14 +66,14 @@ const Card = ({ content, paginated, borderradius }) => {
   // Only wrap in Link if there's a valid URL and target is not "_blank"
   if (hasValidUrl && target !== '_blank') {
     return (
-      <Link href={normalizedUrl} passHref legacyBehavior>
+      <Link legacyBehavior passHref href={normalizedUrl}>
         <CardWrapper
           as="a"
           {...storyblokEditable(content)}
-          paginated={paginated}
-          blur={content?.blur_card}
           $canhover={content?.has_hover}
           $clickable={true}
+          blur={content?.blur_card}
+          paginated={paginated}
         >
           {WrapperContent}
         </CardWrapper>
@@ -83,14 +82,14 @@ const Card = ({ content, paginated, borderradius }) => {
   } else if (hasValidUrl && target === '_blank') {
     return (
       <CardWrapper
-        href={normalizedUrl}
-        target={target}
         blur={content?.blur_card}
+        href={normalizedUrl}
         rel={rel}
+        target={target}
         {...storyblokEditable(content)}
-        paginated={paginated}
         $canhover={content?.has_hover}
         $clickable={true}
+        paginated={paginated}
       >
         {WrapperContent}
       </CardWrapper>
@@ -100,10 +99,10 @@ const Card = ({ content, paginated, borderradius }) => {
     return (
       <CardWrapper
         {...storyblokEditable(content)}
-        paginated={paginated}
-        blur={content?.blur_card}
         $canhover={content?.has_hover}
         $clickable={false}
+        blur={content?.blur_card}
+        paginated={paginated}
       >
         {WrapperContent}
       </CardWrapper>
@@ -158,15 +157,14 @@ const CardWrapper = styled.div`
   gap: 1vw;
   border-radius: 1vw;
   background: ${(props) => props.theme.centered.card_bg};
-  box-shadow: 0vw 0vw 0.063vw 0vw rgba(25, 29, 30, 0.04),
+  box-shadow:
+    0vw 0vw 0.063vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.125vw 0.25vw 0vw rgba(25, 29, 30, 0.16);
   transition: background 0.3s ease;
 
   &:hover {
     background: ${(props) =>
-      props.$canhover
-        ? 'linear-gradient(180deg, #7E5FDD 0%, #583F99 100%)'
-        : 'unset'};
+      props.$canhover ? 'linear-gradient(180deg, #7E5FDD 0%, #583F99 100%)' : 'unset'};
   }
 
   ${media.fullWidth} {
@@ -174,7 +172,8 @@ const CardWrapper = styled.div`
     gap: 16px;
     border-radius: 16px;
     width: clamp(350px, 100%, 408px);
-    box-shadow: 0px 0px 1px 0px rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0px 0px 1px 0px rgba(25, 29, 30, 0.04),
       0px 2px 4px 0px rgba(25, 29, 30, 0.16);
   }
 
@@ -183,7 +182,8 @@ const CardWrapper = styled.div`
     gap: 1.563vw;
     border-radius: 1.563vw;
     width: clamp(29.102vw, 100%, 44.922vw);
-    box-shadow: 0vw 0vw 0.098vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0vw 0vw 0.098vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.195vw 0.391vw 0vw rgba(25, 29, 30, 0.16);
   }
 
@@ -192,7 +192,8 @@ const CardWrapper = styled.div`
     gap: 3.333vw;
     border-radius: 3.333vw;
     width: clamp(89.167vw, 100%, 89.167vw);
-    box-shadow: 0vw 0vw 0.208vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0vw 0vw 0.208vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.417vw 0.833vw 0vw rgba(25, 29, 30, 0.16);
   }
 `;

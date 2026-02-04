@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const secret = searchParams.get('secret'); 
-  const slug = searchParams.get('slug') || ''; 
+  const secret = searchParams.get('secret');
+  const slug = searchParams.get('slug') || '';
 
   const PREVIEW_SECRET = process.env.NEXT_PUBLIC_STORYBLOK_PREVIEW_SECRET;
   if (!PREVIEW_SECRET || secret !== PREVIEW_SECRET) {
