@@ -1,11 +1,14 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
+
 import styled from 'styled-components';
-import media from '@/styles/media';
-import colors from '@/styles/colors';
-import text from '@/styles/text';
-import useMedia from '@/functions/useMedia';
+
 import CookieConsentVideo from '@/components/CookieConsentVideo';
+import useMedia from '@/functions/useMedia';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
+
 import RichTextRenderer from './renderers/RichTextRenderer';
 
 const ComparisonSelect = ({ blok }) => {
@@ -27,39 +30,39 @@ const ComparisonSelect = ({ blok }) => {
 
       tl1
         .to(object1Ref.current, {
-          duration: 0.2,
-          scale: 1.03,
-          opacity: 1,
           boxShadow: '-7px 8px 14px -2px rgba(0,0,0,0.68)',
+          duration: 0.2,
+          opacity: 1,
+          scale: 1.03,
           y: 0,
         })
         .to(
           object2Ref.current,
           {
+            boxShadow: 'unset',
             duration: 0.2,
+            opacity: 0.5,
             scale: 1,
             y: -4,
-            opacity: 0.5,
-            boxShadow: 'unset',
           },
           0
         );
 
       tl2
         .to(object2Ref.current, {
-          duration: 0.2,
-          scale: 1.03,
-          opacity: 1,
           boxShadow: '7px 8px 14px -2px rgba(0,0,0,0.68)',
+          duration: 0.2,
+          opacity: 1,
+          scale: 1.03,
           y: 0,
         })
         .to(
           object1Ref.current,
           {
             duration: 0.2,
+            opacity: 0.5,
             scale: 1,
             y: -4,
-            opacity: 0.5,
           },
           0
         );
@@ -94,7 +97,7 @@ const ComparisonSelect = ({ blok }) => {
 
       const handleMouseEnter1 = () => {
         if (activeTl === null) {
-          gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
+          gsap.to(object2Ref.current, { duration: 0.2, opacity: 1 });
         } else if (activeTl !== 'tl1') {
           gsap.to(object1Ref.current, {
             duration: 0.2,
@@ -106,7 +109,7 @@ const ComparisonSelect = ({ blok }) => {
 
       const handleMouseLeave1 = () => {
         if (activeTl === null) {
-          gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
+          gsap.to(object2Ref.current, { duration: 0.2, opacity: 1 });
         } else if (activeTl !== 'tl1') {
           gsap.to(object1Ref.current, {
             duration: 0.2,
@@ -118,7 +121,7 @@ const ComparisonSelect = ({ blok }) => {
 
       const handleMouseEnter2 = () => {
         if (activeTl === null) {
-          gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
+          gsap.to(object2Ref.current, { duration: 0.2, opacity: 1 });
         } else if (activeTl !== 'tl2') {
           gsap.to(object2Ref.current, {
             duration: 0.2,
@@ -130,7 +133,7 @@ const ComparisonSelect = ({ blok }) => {
 
       const handleMouseLeave2 = () => {
         if (activeTl === null) {
-          gsap.to(object2Ref.current, { opacity: 1, duration: 0.2 });
+          gsap.to(object2Ref.current, { duration: 0.2, opacity: 1 });
         } else if (activeTl !== 'tl2') {
           gsap.to(object2Ref.current, {
             duration: 0.2,
@@ -164,18 +167,18 @@ const ComparisonSelect = ({ blok }) => {
 
   const background = {
     desktop: blok?.backgrounds?.[0]?.filename,
-    tablet: blok?.backgrounds?.[1]?.filename,
     mobile: blok?.backgrounds?.[2]?.filename,
+    tablet: blok?.backgrounds?.[1]?.filename,
   };
   return (
-    <Wrapper className="wrapper-div" $bg={background}>
+    <Wrapper $bg={background} className="wrapper-div">
       {blok?.header && <Header>{blok?.header}</Header>}
       {
         <Comparison>
           <Option
             $active={activeTl}
-            ref={object1Ref}
             className={'option-1'}
+            ref={object1Ref}
             onMouseEnter={() => setHoveredOption('option-1')}
             onMouseLeave={() => setHoveredOption(null)}
           >
@@ -188,15 +191,13 @@ const ComparisonSelect = ({ blok }) => {
               alt={blok?.comparison_options[0]?.image?.alt}
             />
             <Body>
-              <RichTextRenderer
-                document={blok?.comparison_options[0].body_copy}
-              />
+              <RichTextRenderer document={blok?.comparison_options[0].body_copy} />
             </Body>
           </Option>
           <ComparisonText>{blok?.comparison_text}</ComparisonText>
           <Option
-            ref={object2Ref}
             className={'option-2'}
+            ref={object2Ref}
             onMouseEnter={() => setHoveredOption('option-2')}
             onMouseLeave={() => setHoveredOption(null)}
           >
@@ -209,23 +210,21 @@ const ComparisonSelect = ({ blok }) => {
               alt={blok?.optionTwo?.image?.altText}
             />
             <Body>
-              <RichTextRenderer
-                document={blok?.comparison_options[1].body_copy}
-              />
+              <RichTextRenderer document={blok?.comparison_options[1].body_copy} />
             </Body>
           </Option>
         </Comparison>
       }
       <CookieConsentVideo
-        url={blok?.video_url?.url}
         controls={true}
+        height={videoHeight}
         light={blok?.video_thumbnail?.filename}
-        playing={true}
-        volume={1}
         muted={false}
         playIcon={<></>}
+        playing={true}
+        url={blok?.video_url?.url}
+        volume={1}
         width={videoWidth}
-        height={videoHeight}
       />
 
       <BottomCopy>

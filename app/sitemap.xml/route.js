@@ -5,8 +5,8 @@ export const revalidate = 21600;
 
 const locales = ['en', 'de', 'fr'];
 const baseUrls = {
-  en: 'https://vasion.com',
   de: 'https://vasion.com/de',
+  en: 'https://vasion.com',
   fr: 'https://vasion.com/fr',
 };
 
@@ -16,15 +16,15 @@ export async function GET() {
 
   for (const locale of locales) {
     const stories = await storyblokApi.getAll('cdn/stories', {
-      version: 'published',
       language: locale,
+      version: 'published',
     });
 
     const urls = stories
       .filter((story) => {
         // Exclude folders
         if (story.is_folder) return false;
-        
+
         // Exclude Next.js internal paths and API routes
         const fullSlug = story.full_slug || '';
         if (
@@ -35,7 +35,7 @@ export async function GET() {
         ) {
           return false;
         }
-        
+
         return true;
       })
       .map((story) => {
@@ -59,9 +59,7 @@ export async function GET() {
 
         // Build the URL with trailing slash
         // If slug is empty after processing, it's the homepage (baseUrl with trailing slash)
-        const loc = slug
-          ? `${baseUrls[locale]}/${slug}/`
-          : `${baseUrls[locale]}/`;
+        const loc = slug ? `${baseUrls[locale]}/${slug}/` : `${baseUrls[locale]}/`;
 
         return `
           <url>
@@ -81,8 +79,8 @@ export async function GET() {
 
   return new Response(xml, {
     headers: {
-      'Content-Type': 'application/xml',
       'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Content-Type': 'application/xml',
     },
   });
 }

@@ -1,10 +1,13 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import styled, { ThemeProvider } from 'styled-components';
+
 import media from '@/styles/media';
 import text from '@/styles/text';
-import RichTextRenderer from './renderers/RichTextRenderer';
+
 import Form from './Form';
+import RichTextRenderer from './renderers/RichTextRenderer';
 
 const MasonryGrid = ({ blok }) => {
   const [columns, setColumns] = useState([]);
@@ -68,34 +71,28 @@ const MasonryGrid = ({ blok }) => {
     const link = image?.link;
 
     const rawUrl = link?.cached_url || link?.url;
-    const isExternal =
-      rawUrl?.startsWith('http://') || rawUrl?.startsWith('https://');
+    const isExternal = rawUrl?.startsWith('http://') || rawUrl?.startsWith('https://');
     const href = isExternal ? rawUrl : `/${rawUrl}`.replace(/\/+/g, '/');
 
     if (rawUrl) {
       return (
         <ImageLink
-          key={`${columnIndex}-${imageIndex}`}
           href={href}
-          target={isExternal ? '_blank' : undefined}
+          key={`${columnIndex}-${imageIndex}`}
           rel={isExternal ? 'noopener noreferrer' : undefined}
+          target={isExternal ? '_blank' : undefined}
         >
-          <Image
-            src={logo?.filename}
-            alt={logo?.alt}
-            loading='lazy'
-            $clickable={true}
-          />
+          <Image $clickable={true} alt={logo?.alt} loading="lazy" src={logo?.filename} />
         </ImageLink>
       );
     } else {
       return (
         <Image
-          key={`${columnIndex}-${imageIndex}`}
-          src={logo?.filename}
-          alt={logo?.alt}
-          loading='lazy'
           $clickable={false}
+          alt={logo?.alt}
+          key={`${columnIndex}-${imageIndex}`}
+          loading="lazy"
+          src={logo?.filename}
         />
       );
     }
@@ -104,9 +101,7 @@ const MasonryGrid = ({ blok }) => {
   const renderColumns = () => {
     return columns.map((column, columnIndex) => (
       <Column key={columnIndex}>
-        {column.map((image, imageIndex) =>
-          renderImage(image, imageIndex, columnIndex)
-        )}
+        {column.map((image, imageIndex) => renderImage(image, imageIndex, columnIndex))}
       </Column>
     ));
   };

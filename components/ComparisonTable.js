@@ -1,39 +1,35 @@
-"use client";
-import React from "react";
-import styled, { ThemeProvider } from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import text from "styles/text";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { storyblokEditable } from "@storyblok/react/rsc";
+'use client';
+import React from 'react';
+
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+import colors from 'styles/colors';
+import media from 'styles/media';
+import text from 'styles/text';
+
+import { useAvailableThemes } from '@/context/ThemeContext';
 
 const ComparisonTable = ({ blok }) => {
   // console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const imagesrc =
-    blok.theme == "default" || blok.theme == "light"
-      ? "/images/check_circle.webp"
-      : "/images/check-circle-orange.webp";
+    blok.theme == 'default' || blok.theme == 'light'
+      ? '/images/check_circle.webp'
+      : '/images/check-circle-orange.webp';
   const tableData = blok?.table_data;
   const headers = tableData?.thead || [];
   const rows = tableData?.tbody || [];
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <Wrapper
-        spacing={blok.section_spacing}
-        spacingOffset={blok.offset_spacing}
-      >
+      <Wrapper spacing={blok.section_spacing} spacingOffset={blok.offset_spacing}>
         <TableContainer>
           <StyledTable>
             <TableHead>
               <tr>
                 {headers.map((header) => (
-                  <TableHeader
-                    key={header._uid}
-                    center={header.value !== "Solution"}
-                  >
+                  <TableHeader center={header.value !== 'Solution'} key={header._uid}>
                     {header.value}
                   </TableHeader>
                 ))}
@@ -41,21 +37,19 @@ const ComparisonTable = ({ blok }) => {
             </TableHead>
             <tbody>
               {rows.map((row, index) => (
-                <TableRow key={row._uid} bg={index % 2}>
+                <TableRow bg={index % 2} key={row._uid}>
                   {row.body.map((cell, cellIndex) => {
                     // First column is the solution name
                     if (cellIndex === 0) {
                       return (
-                        <SolutionName key={`${row._uid}-${cellIndex}`}>
-                          {cell.value}
-                        </SolutionName>
+                        <SolutionName key={`${row._uid}-${cellIndex}`}>{cell.value}</SolutionName>
                       );
                     }
 
                     return (
-                      <TableCell key={`${row._uid}-${cellIndex}`} center>
-                        {cell.value && cell.value.toLowerCase() === "true" && (
-                          <CheckMark src={imagesrc} alt={"checkmark"} />
+                      <TableCell center key={`${row._uid}-${cellIndex}`}>
+                        {cell.value && cell.value.toLowerCase() === 'true' && (
+                          <CheckMark alt={'checkmark'} src={imagesrc} />
                         )}
                       </TableCell>
                     );
@@ -98,8 +92,7 @@ const StyledTable = styled.table`
 
 const TableHead = styled.thead`
   height: 3.375vw;
-  background: ${(props) =>
-    props.theme?.comparison_table?.bg || `${colors.primaryPurple}`};
+  background: ${(props) => props.theme?.comparison_table?.bg || `${colors.primaryPurple}`};
   color: $white;
   color: ${(props) => props.theme?.comparison_table?.text_color};
 
@@ -118,7 +111,7 @@ const TableHead = styled.thead`
 
 const TableHeader = styled.th`
   padding: 1vw !important;
-  text-align: ${(props) => (props.center ? "center" : "left")};
+  text-align: ${(props) => (props.center ? 'center' : 'left')};
   font-weight: 600;
 
   ${media.fullWidth} {
@@ -135,7 +128,7 @@ const TableHeader = styled.th`
 
 const TableRow = styled.tr`
   border-bottom: 1px solid #e0e0e0;
-  background: ${(props) => (props.bg ? `${colors?.lightPurpleGrey}` : "unset")};
+  background: ${(props) => (props.bg ? `${colors?.lightPurpleGrey}` : 'unset')};
   &:hover {
     background-color: #f8f8fc;
   }
@@ -143,7 +136,7 @@ const TableRow = styled.tr`
 
 const TableCell = styled.td`
   padding: 1vw !important;
-  text-align: ${(props) => (props.center ? "center" : "left")};
+  text-align: ${(props) => (props.center ? 'center' : 'left')};
   border-right: 0.083vw solid ${colors.grey100};
   &:last-child {
     border-right: none;
@@ -196,103 +189,102 @@ const Wrapper = styled.div`
   justify-content: center;
   align-self: center;
   justify-self: center;
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   margin-left: auto;
   margin-right: auto;
   width: 81.5vw;
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
           ? `${props.spacing}px 0 0`
-          : "3.75vw 0 0";
+          : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
           ? `0 0 ${props.spacing}px`
-          : "0 0 3.75vw";
+          : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
         ? `${props.spacing}px 0`
-        : "3.75vw 0";
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
     width: 1304px;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+            : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+            : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "60px 0";
+          : '60px 0';
     }};
   }
   ${media.tablet} {
     width: 92.188vw;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.859vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "5.859vw 0 0";
+            : '5.859vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 5.859vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 5.859vw";
+            : '0 0 5.859vw';
       }
-      return props.spacing === "default"
-        ? "5.859vw 0"
+      return props.spacing === 'default'
+        ? '5.859vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "5.859vw 0";
+          : '5.859vw 0';
     }};
   }
   ${media.mobile} {
     width: 92.467vw;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "12.5vw 0 0";
+            : '12.5vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 12.5vw";
+            : '0 0 12.5vw';
       }
-      return props.spacing === "default"
-        ? "12.5vw 0"
+      return props.spacing === 'default'
+        ? '12.5vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "12.5vw 0";
+          : '12.5vw 0';
     }};
   }
 `;

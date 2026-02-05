@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+
 import { usePathname } from 'next/navigation';
 
 /**
@@ -25,10 +26,10 @@ const getLocale = (path) => {
 // Get the correct assistant ID based on locale
 const getAssistantId = (locale) => {
   switch (locale) {
-    case 'fr':
-      return '122197'; // Eloise - French
     case 'de':
       return '122198'; // Clara - German
+    case 'fr':
+      return '122197'; // Eloise - French
     default:
       return '122949'; // Sophie - English
   }
@@ -68,10 +69,7 @@ const ConversicaChat = () => {
     // Clean up any global Conversica objects
     if (typeof window !== 'undefined') {
       try {
-        if (
-          window.Conversica &&
-          typeof window.Conversica.destroy === 'function'
-        ) {
+        if (window.Conversica && typeof window.Conversica.destroy === 'function') {
           window.Conversica.destroy();
         }
       } catch (e) {
@@ -146,10 +144,7 @@ const ConversicaChat = () => {
     window.addEventListener('conversica-locale-change', handleLocaleChange);
 
     return () => {
-      window.removeEventListener(
-        'conversica-locale-change',
-        handleLocaleChange
-      );
+      window.removeEventListener('conversica-locale-change', handleLocaleChange);
     };
   }, [updateChatbot]);
 

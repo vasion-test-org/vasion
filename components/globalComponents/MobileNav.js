@@ -1,37 +1,33 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
+
+import { usePathname, useRouter } from 'next/navigation';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
-import media from 'styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import Button from './Button';
-import text from '@/styles/text';
-import colors from '@/styles/colors';
-import IconRenderer from '@/components/renderers/Icons';
-import Image from './Image';
-import LinkArrow from 'assets/svg/linkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
-import { getStoryblokApi } from '@/lib/storyblok';
+import LinkArrow from 'assets/svg/linkArrow.svg';
+import styled, { ThemeProvider } from 'styled-components';
+import media from 'styles/media';
+
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
+import IconRenderer from '@/components/renderers/Icons';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { getStoryblokApi } from '@/lib/storyblok';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+
+import Button from './Button';
+import Image from './Image';
 const MobileNav = ({ blok }) => {
   const router = useRouter();
   const path = usePathname();
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
   const dropdownIndex = useRef(null);
-  const [currentNavItems, setCurrentNavItems] = useState(
-    blok?.english_nav_items || [],
-  );
+  const [currentNavItems, setCurrentNavItems] = useState(blok?.english_nav_items || []);
   const isOpen = useRef(false);
-  const copycomponents = [
-    'body_copy',
-    'header',
-    'eyebrow',
-    'long_form_text',
-    'copy_block',
-  ];
+  const copycomponents = ['body_copy', 'header', 'eyebrow', 'long_form_text', 'copy_block'];
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipMessage, setTooltipMessage] = useState('');
   const [activeLanguage, setActiveLanguage] = useState('en');
@@ -40,12 +36,8 @@ const MobileNav = ({ blok }) => {
   const mobileOpenRef = useRef(false);
 
   const slugParts = path.split('/').filter(Boolean);
-  const currentLocale = ['de', 'fr'].includes(slugParts[0])
-    ? slugParts[0]
-    : null;
-  const nonHomeSlug = currentLocale
-    ? slugParts.slice(1).join('/')
-    : slugParts.join('/');
+  const currentLocale = ['de', 'fr'].includes(slugParts[0]) ? slugParts[0] : null;
+  const nonHomeSlug = currentLocale ? slugParts.slice(1).join('/') : slugParts.join('/');
 
   useEffect(() => {
     setActiveLanguage(currentLocale ?? 'en');
@@ -76,7 +68,7 @@ const MobileNav = ({ blok }) => {
         setShowLanguageDropdown(false);
         // Animate language items container closing
         const { default: gsap } = await import('gsap');
-        gsap.to('#languageItemsContainer', { width: '0%', duration: 0.35 });
+        gsap.to('#languageItemsContainer', { duration: 0.35, width: '0%' });
       }
     };
 
@@ -92,10 +84,10 @@ const MobileNav = ({ blok }) => {
 
     if (showLanguageDropdown) {
       // Animate language items container closing
-      gsap.to('#languageItemsContainer', { width: '0%', duration: 1 });
+      gsap.to('#languageItemsContainer', { duration: 1, width: '0%' });
     } else {
       // Animate language items container opening
-      gsap.to('#languageItemsContainer', { width: '100%', duration: 2 });
+      gsap.to('#languageItemsContainer', { duration: 2, width: '100%' });
     }
     setShowLanguageDropdown(!showLanguageDropdown);
   };
@@ -110,17 +102,17 @@ const MobileNav = ({ blok }) => {
 
     // Close dropdown with animation
     gsap.to(dropdown, {
-      height: 0,
       duration: 0.4,
       ease: 'power2.inOut',
+      height: 0,
       onComplete: () => gsap.set(dropdown, { display: 'none' }),
     });
 
     // Reset hamburger animation
     if (hamburger) {
-      gsap.to('#slice-0', { top: '0', rotate: 0, duration: 0.3 });
-      gsap.to('#slice-1', { opacity: 1, duration: 0.3 });
-      gsap.to('#slice-2', { top: '0', rotate: 0, duration: 0.3 });
+      gsap.to('#slice-0', { duration: 0.3, rotate: 0, top: '0' });
+      gsap.to('#slice-1', { duration: 0.3, opacity: 1 });
+      gsap.to('#slice-2', { duration: 0.3, rotate: 0, top: '0' });
     }
 
     // Reset state
@@ -132,17 +124,15 @@ const MobileNav = ({ blok }) => {
 
   const handleNavigate = async (locale) => {
     const basePath = locale === 'en' ? '' : `/${locale}`;
-    const newPath = nonHomeSlug
-      ? `${basePath}/${nonHomeSlug}`
-      : basePath || '/';
+    const newPath = nonHomeSlug ? `${basePath}/${nonHomeSlug}` : basePath || '/';
 
     try {
       const storyblokApi = getStoryblokApi();
       const storySlug = nonHomeSlug || 'home';
 
       const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
-        version: 'published',
         language: locale,
+        version: 'published',
       });
 
       if (data.story) {
@@ -159,27 +149,21 @@ const MobileNav = ({ blok }) => {
         setShowLanguageDropdown(false);
         // Animate language items container closing
         const { default: gsap } = await import('gsap');
-        gsap.to('#languageItemsContainer', { width: '0%', duration: 0.35 });
+        gsap.to('#languageItemsContainer', { duration: 0.35, width: '0%' });
         // Dispatch custom event for Conversica chatbot to update
-        window.dispatchEvent(
-          new CustomEvent('conversica-locale-change', { detail: { locale } })
-        );
+        window.dispatchEvent(new CustomEvent('conversica-locale-change', { detail: { locale } }));
         // Close mobile dropdown before navigation
         closeMobileDropdown();
         router.push(newPath);
       } else {
-        setTooltipMessage(
-          'This page is not yet available in the selected language',
-        );
+        setTooltipMessage('This page is not yet available in the selected language');
         setShowTooltip(true);
         setTimeout(() => {
           setShowTooltip(false);
         }, 3000);
       }
     } catch (error) {
-      setTooltipMessage(
-        'This page is not yet available in the selected language',
-      );
+      setTooltipMessage('This page is not yet available in the selected language');
       setShowTooltip(true);
       setTimeout(() => {
         setShowTooltip(false);
@@ -199,9 +183,7 @@ const MobileNav = ({ blok }) => {
         <TabDropdown className="tabDropdowns" id={`tabHeader-${index}`}>
           {item.tab_columns.map((column, colIndex) => (
             <NavItemsDiv key={`column-${colIndex}`}>
-              {column?.column_header && (
-                <ColumnHeader>{column.column_header}</ColumnHeader>
-              )}
+              {column?.column_header && <ColumnHeader>{column.column_header}</ColumnHeader>}
               <NavItemsContainer>
                 {column.nav_items.map((navItem, itemIndex) => {
                   navItemCount++;
@@ -210,9 +192,7 @@ const MobileNav = ({ blok }) => {
                     <IconRenderer iconName={formattedIconString} {...props} />
                   );
                   const rawUrl = navItem.item_link?.cached_url || '#';
-                  const isExternal =
-                    rawUrl.startsWith('http://') ||
-                    rawUrl.startsWith('https://');
+                  const isExternal = rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
                   const normalizedUrl = isExternal
                     ? rawUrl
                     : rawUrl.startsWith('/')
@@ -226,11 +206,7 @@ const MobileNav = ({ blok }) => {
                     closeMobileDropdown();
 
                     if (isExternal) {
-                      window.open(
-                        normalizedUrl,
-                        '_blank',
-                        'noopener,noreferrer',
-                      );
+                      window.open(normalizedUrl, '_blank', 'noopener,noreferrer');
                     } else {
                       window.location.href = normalizedUrl;
                     }
@@ -241,22 +217,17 @@ const MobileNav = ({ blok }) => {
                       <NavItem
                         card={navItem.card}
                         card_size={navItem.card_size}
-                        onClick={handleClick}
                         role="link"
                         tabIndex={0}
+                        onClick={handleClick}
                       >
-                        {navItem.card &&
-                          navItem.card_size &&
-                          navItem.card_size !== 'small' && (
-                            <ImageWrapper card_size={navItem.card_size}>
-                              <Image images={navItem?.card_image?.[0].media} />
-                            </ImageWrapper>
-                          )}
+                        {navItem.card && navItem.card_size && navItem.card_size !== 'small' && (
+                          <ImageWrapper card_size={navItem.card_size}>
+                            <Image images={navItem?.card_image?.[0].media} />
+                          </ImageWrapper>
+                        )}
                         {formattedIconString && (
-                          <NavIconWrapper
-                            card={navItem.card}
-                            card_size={navItem.card_size}
-                          >
+                          <NavIconWrapper card={navItem.card} card_size={navItem.card_size}>
                             <IconComponent />
                           </NavIconWrapper>
                         )}
@@ -264,13 +235,12 @@ const MobileNav = ({ blok }) => {
                           <NavItemCopy card_size={navItem.card_size}>
                             <NavItemTitleWrapper>
                               <RichTextRenderer document={navItem.item_copy} />
-                              {navItem.add_chevron_arrow &&
-                                !navItem.orange_chevron && (
-                                  <ChevronArrow
-                                    src="/images/uiElements/chevron-arrow-label.webp"
-                                    alt={'chevron-orange-link'}
-                                  />
-                                )}
+                              {navItem.add_chevron_arrow && !navItem.orange_chevron && (
+                                <ChevronArrow
+                                  alt={'chevron-orange-link'}
+                                  src="/images/uiElements/chevron-arrow-label.webp"
+                                />
+                              )}
                             </NavItemTitleWrapper>
                             {navItem?.button_group?.map(($buttonData) => {
                               return (
@@ -278,10 +248,7 @@ const MobileNav = ({ blok }) => {
                                   {...storyblokEditable($buttonData)}
                                   key={$buttonData.link_text}
                                 >
-                                  <Button
-                                    key={$buttonData.link_text}
-                                    $buttonData={$buttonData}
-                                  />
+                                  <Button $buttonData={$buttonData} key={$buttonData.link_text} />
                                 </CardButtonContainer>
                               );
                             })}
@@ -289,10 +256,8 @@ const MobileNav = ({ blok }) => {
                           {navItem.card_size === 'medium' && (
                             <Link
                               href={normalizedUrl}
+                              rel={isExternal ? 'noopener noreferrer' : undefined}
                               target={isExternal ? '_blank' : '_self'}
-                              rel={
-                                isExternal ? 'noopener noreferrer' : undefined
-                              }
                               onClick={(e) => e.stopPropagation()}
                             >
                               Learn More
@@ -312,30 +277,16 @@ const MobileNav = ({ blok }) => {
                         (() => {
                           ctaRendered = true;
                           return (
-                            <DropDownCTA
-                              bgimg={
-                                item.cta?.[0]?.media?.[0]?.media?.[0]?.filename
-                              }
-                            >
-                              {item.cta?.[0]?.copy_sections.map(
-                                (ctaItem, ctaIndex) => (
-                                  <div
-                                    key={`cta-item-${ctaIndex}`}
-                                    {...storyblokEditable(ctaItem)}
-                                  >
-                                    {copycomponents.includes(
-                                      ctaItem.component,
-                                    ) ? (
-                                      <RichTextRenderer
-                                        document={ctaItem.copy}
-                                        blok={ctaItem}
-                                      />
-                                    ) : (
-                                      <ComponentRenderer blok={ctaItem} />
-                                    )}
-                                  </div>
-                                ),
-                              )}
+                            <DropDownCTA bgimg={item.cta?.[0]?.media?.[0]?.media?.[0]?.filename}>
+                              {item.cta?.[0]?.copy_sections.map((ctaItem, ctaIndex) => (
+                                <div key={`cta-item-${ctaIndex}`} {...storyblokEditable(ctaItem)}>
+                                  {copycomponents.includes(ctaItem.component) ? (
+                                    <RichTextRenderer blok={ctaItem} document={ctaItem.copy} />
+                                  ) : (
+                                    <ComponentRenderer blok={ctaItem} />
+                                  )}
+                                </div>
+                              ))}
                             </DropDownCTA>
                           );
                         })()}
@@ -354,24 +305,22 @@ const MobileNav = ({ blok }) => {
   if (!currentNavItems || currentNavItems.length === 0) {
     const fallbackNav = [
       {
-        tab_name: 'Test Tab',
         tab_columns: [
           {
             column_header: 'Test Column',
             nav_items: [
               {
                 _uid: 'test-item',
+                icon: 'home',
                 item_copy: {
-                  content: [
-                    { type: 'paragraph', content: [{ text: 'Test Item' }] },
-                  ],
+                  content: [{ content: [{ text: 'Test Item' }], type: 'paragraph' }],
                 },
                 item_link: { cached_url: '#' },
-                icon: 'home',
               },
             ],
           },
         ],
+        tab_name: 'Test Tab',
       },
     ];
 
@@ -383,16 +332,14 @@ const MobileNav = ({ blok }) => {
         <TabDropdown className="tabDropdowns" id={`tabHeader-${index}`}>
           {item.tab_columns.map((column, colIndex) => (
             <NavItemsDiv key={`fallback-column-${colIndex}`}>
-              {column?.column_header && (
-                <ColumnHeader>{column.column_header}</ColumnHeader>
-              )}
+              {column?.column_header && <ColumnHeader>{column.column_header}</ColumnHeader>}
               <NavItemsContainer>
                 {column.nav_items.map((item, itemIndex) => (
                   <NavItem
                     key={`fallback-item-${item._uid}`}
-                    onClick={() => {}}
                     role="link"
                     tabIndex={0}
+                    onClick={() => {}}
                   >
                     <NavCopy>
                       <NavItemCopy>
@@ -415,14 +362,8 @@ const MobileNav = ({ blok }) => {
             <BannerMessage>{blok?.banner || 'Test Banner'}</BannerMessage>
             <BannerLink>
               {blok?.banner_link?.map(($buttonData) => (
-                <div
-                  {...storyblokEditable($buttonData)}
-                  key={$buttonData?.link_text}
-                >
-                  <Button
-                    key={$buttonData?.link_text}
-                    $buttonData={$buttonData}
-                  />
+                <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
+                  <Button $buttonData={$buttonData} key={$buttonData?.link_text} />
                 </div>
               ))}
             </BannerLink>
@@ -430,10 +371,7 @@ const MobileNav = ({ blok }) => {
         </TopNav>
         <MainWrapper className="mainNavWrapper mobileNav">
           <a href="/">
-            <VasionLogo
-              src="/images/logos/vasion-logo-purple.webp"
-              alt="vasion-logo"
-            />
+            <VasionLogo alt="vasion-logo" src="/images/logos/vasion-logo-purple.webp" />
           </a>
           <HamburgerContainer className="hamburger">
             <HamSlice id="slice-0" />
@@ -444,29 +382,23 @@ const MobileNav = ({ blok }) => {
             {fallbackMappedNav}
             <ButtonContainer>
               <LanguageSelectorContainer>
-                <LanguageSelector
-                  id="languageSelector"
-                  className="language-selector"
-                >
-                  <LanguageItems
-                    id="languageItemsContainer"
-                    show={showLanguageDropdown}
-                  >
+                <LanguageSelector className="language-selector" id="languageSelector">
+                  <LanguageItems id="languageItemsContainer" show={showLanguageDropdown}>
                     <LanguageItem
-                      onClick={() => handleNavigate('en')}
                       isActive={activeLanguage === 'en'}
+                      onClick={() => handleNavigate('en')}
                     >
                       English
                     </LanguageItem>
                     <LanguageItem
-                      onClick={() => handleNavigate('fr')}
                       isActive={activeLanguage === 'fr'}
+                      onClick={() => handleNavigate('fr')}
                     >
                       French
                     </LanguageItem>
                     <LanguageItem
-                      onClick={() => handleNavigate('de')}
                       isActive={activeLanguage === 'de'}
+                      onClick={() => handleNavigate('de')}
                     >
                       German
                     </LanguageItem>
@@ -476,11 +408,8 @@ const MobileNav = ({ blok }) => {
                 </LanguageSelector>
               </LanguageSelectorContainer>
               {blok?.button?.map(($buttonData) => (
-                <div
-                  {...storyblokEditable($buttonData)}
-                  key={$buttonData?.link_text}
-                >
-                  <Button $buttonData={$buttonData} stretch />
+                <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
+                  <Button stretch $buttonData={$buttonData} />
                 </div>
               ))}
             </ButtonContainer>
@@ -494,22 +423,22 @@ const MobileNav = ({ blok }) => {
     const initMobileNavAnimations = async () => {
       const { default: gsap } = await import('gsap');
 
-      gsap.set('.tabDropdowns', { height: 0, display: 'none' });
-      gsap.set('.mobileDropdown', { height: 0, display: 'none' });
+      gsap.set('.tabDropdowns', { display: 'none', height: 0 });
+      gsap.set('.mobileDropdown', { display: 'none', height: 0 });
       gsap.set('#languageItemsContainer', { width: '0%' });
 
       const allTabs = gsap.utils.toArray('.tabHeader');
       const hamburger = document.querySelector('.hamburger');
 
-      let tl = gsap.timeline({ paused: true });
+      const tl = gsap.timeline({ paused: true });
 
       const hamburgerTl = gsap
         .timeline({ paused: true, reversed: true })
         .set('#mainDrop', { padding: '4.673vw 0' })
-        .to('#mainDrop', { height: 'auto', duration: 0.5 })
-        .to('#slice-0', { top: '1.95vw', rotate: 45 }, '<')
+        .to('#mainDrop', { duration: 0.5, height: 'auto' })
+        .to('#slice-0', { rotate: 45, top: '1.95vw' }, '<')
         .to('#slice-1', { opacity: 0 }, '<')
-        .to('#slice-2', { top: '-1.075vw', rotate: -45 }, '<');
+        .to('#slice-2', { rotate: -45, top: '-1.075vw' }, '<');
 
       const toggleMobileDropdown = () => {
         const dropdown = document.querySelector('.mobileDropdown');
@@ -520,17 +449,17 @@ const MobileNav = ({ blok }) => {
 
         if (mobileOpenRef.current) {
           gsap.to(dropdown, {
-            height: 0,
             duration: 0.4,
             ease: 'power2.inOut',
+            height: 0,
             onComplete: () => gsap.set(dropdown, { display: 'none' }),
           });
         } else {
           gsap.set(dropdown, { display: 'flex' });
           gsap.to(dropdown, {
-            height: '89vh',
             duration: 0.4,
             ease: 'power2.inOut',
+            height: '89vh',
           });
         }
 
@@ -551,12 +480,9 @@ const MobileNav = ({ blok }) => {
         tl.clear();
 
         if (dropdownIndex.current === index && isOpen.current) {
-          tl.to(`#tabHeader-${index}`, { height: 0 }).set(
-            `#tabHeader-${index}`,
-            {
-              display: 'none',
-            },
-          );
+          tl.to(`#tabHeader-${index}`, { height: 0 }).set(`#tabHeader-${index}`, {
+            display: 'none',
+          });
           isOpen.current = false;
           dropdownIndex.current = null;
           setOpenTabIndex(null);
@@ -580,12 +506,12 @@ const MobileNav = ({ blok }) => {
       const tabClickHandlers = allTabs.map((tab, index) => {
         const handler = () => openDropdown(index);
         tab.addEventListener('click', handler);
-        return { tab, handler };
+        return { handler, tab };
       });
 
       return () => {
         // Clean up tab event listeners
-        tabClickHandlers.forEach(({ tab, handler }) => {
+        tabClickHandlers.forEach(({ handler, tab }) => {
           tab.removeEventListener('click', handler);
         });
 
@@ -601,18 +527,19 @@ const MobileNav = ({ blok }) => {
 
   useEffect(() => {
     const initScrollTrigger = async () => {
-      const [{ default: gsap }, { default: ScrollTrigger }] = await Promise.all(
-        [import('gsap'), import('gsap/ScrollTrigger')],
-      );
+      const [{ default: gsap }, { default: ScrollTrigger }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
 
       gsap.registerPlugin(ScrollTrigger);
 
       ScrollTrigger.create({
-        trigger: '.mobileNav',
-        start: 'top top',
         end: () => `${document.body.scrollHeight - window.innerHeight}px`,
         pin: true,
         pinSpacing: false,
+        start: 'top top',
+        trigger: '.mobileNav',
       });
     };
 
@@ -626,14 +553,8 @@ const MobileNav = ({ blok }) => {
           <BannerMessage>{blok.banner}</BannerMessage>
           <BannerLink>
             {blok?.banner_link?.map(($buttonData) => (
-              <div
-                {...storyblokEditable($buttonData)}
-                key={$buttonData?.link_text}
-              >
-                <Button
-                  key={$buttonData?.link_text}
-                  $buttonData={$buttonData}
-                />
+              <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
+                <Button $buttonData={$buttonData} key={$buttonData?.link_text} />
               </div>
             ))}
           </BannerLink>
@@ -641,10 +562,7 @@ const MobileNav = ({ blok }) => {
       </TopNav>
       <MainWrapper className="mainNavWrapper mobileNav">
         <a href="/">
-          <VasionLogo
-            src="/images/logos/vasion-logo-purple.webp"
-            alt="vasion-logo"
-          />
+          <VasionLogo alt="vasion-logo" src="/images/logos/vasion-logo-purple.webp" />
         </a>
         <HamburgerContainer className="hamburger">
           <HamSlice id="slice-0" />
@@ -655,29 +573,23 @@ const MobileNav = ({ blok }) => {
           {mappedNav}
           <ButtonContainer>
             <LanguageSelectorContainer>
-              <LanguageSelector
-                id="languageSelector"
-                className="language-selector"
-              >
-                <LanguageItems
-                  id="languageItemsContainer"
-                  show={showLanguageDropdown}
-                >
+              <LanguageSelector className="language-selector" id="languageSelector">
+                <LanguageItems id="languageItemsContainer" show={showLanguageDropdown}>
                   <LanguageItem
-                    onClick={() => handleNavigate('en')}
                     isActive={activeLanguage === 'en'}
+                    onClick={() => handleNavigate('en')}
                   >
                     English
                   </LanguageItem>
                   <LanguageItem
-                    onClick={() => handleNavigate('fr')}
                     isActive={activeLanguage === 'fr'}
+                    onClick={() => handleNavigate('fr')}
                   >
                     French
                   </LanguageItem>
                   <LanguageItem
-                    onClick={() => handleNavigate('de')}
                     isActive={activeLanguage === 'de'}
+                    onClick={() => handleNavigate('de')}
                   >
                     German
                   </LanguageItem>
@@ -687,15 +599,8 @@ const MobileNav = ({ blok }) => {
               </LanguageSelector>
             </LanguageSelectorContainer>
             {blok?.button?.map(($buttonData) => (
-              <div
-                {...storyblokEditable($buttonData)}
-                key={$buttonData?.link_text}
-              >
-                <Button
-                  $buttonData={$buttonData}
-                  stretch
-                  onNavigate={closeMobileDropdown}
-                />
+              <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
+                <Button stretch $buttonData={$buttonData} onNavigate={closeMobileDropdown} />
               </div>
             ))}
           </ButtonContainer>
@@ -870,8 +775,7 @@ const NavItemCopy = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-left: ${(props) =>
-      props.card_size === 'large' ? '3.333vw' : 'unset'};
+    margin-left: ${(props) => (props.card_size === 'large' ? '3.333vw' : 'unset')};
   }
 `;
 const NavCopy = styled.div`
@@ -889,10 +793,8 @@ const NavIconWrapper = styled.div`
   flex-shrink: 0;
 
   ${media.mobile} {
-    width: ${(props) =>
-      props.card && props.card_size ? '8.998vw' : '5.208vw'};
-    min-width: ${(props) =>
-      props.card && props.card_size ? '8.998vw' : '5.33vw'};
+    width: ${(props) => (props.card && props.card_size ? '8.998vw' : '5.208vw')};
+    min-width: ${(props) => (props.card && props.card_size ? '8.998vw' : '5.33vw')};
 
     aspect-ratio: 1;
   }
@@ -909,10 +811,8 @@ const NavItem = styled.div`
     cursor: pointer;
     display: flex;
     flex-direction: row;
-    align-items: ${(props) =>
-      props.card_size === 'large' ? 'start' : 'center'};
-    background: ${(props) =>
-      props.card_size === 'medium' ? colors.lightPurpleGrey : 'unset'};
+    align-items: ${(props) => (props.card_size === 'large' ? 'start' : 'center')};
+    background: ${(props) => (props.card_size === 'medium' ? colors.lightPurpleGrey : 'unset')};
 
     box-shadow: ${(props) =>
       props.card && props.card_size === 'large'
@@ -959,8 +859,7 @@ const NavItem = styled.div`
         ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
         : 'unset'};
     path {
-      fill: ${(props) =>
-        props.card ? colors.lightPurple : colors.primaryOrange};
+      fill: ${(props) => (props.card ? colors.lightPurple : colors.primaryOrange)};
     }
 
     g {
@@ -1021,8 +920,7 @@ const TabHeader = styled.div`
   height: 10.833vw;
   /* margin-bottom: 3.333vw; */
   width: 100%;
-  background: ${(props) =>
-    props.isOpen ? 'rgba(61, 37, 98, 0.05)' : colors.white};
+  background: ${(props) => (props.isOpen ? 'rgba(61, 37, 98, 0.05)' : colors.white)};
   cursor: pointer; /* Add cursor pointer for better UX */
 
   ${media.mobile} {
@@ -1031,8 +929,7 @@ const TabHeader = styled.div`
     height: 10.833vw;
     /* margin-bottom: 3.333vw; */
     width: 100%;
-    background: ${(props) =>
-      props.isOpen ? 'rgba(61, 37, 98, 0.05)' : colors.white};
+    background: ${(props) => (props.isOpen ? 'rgba(61, 37, 98, 0.05)' : colors.white)};
   }
 `;
 const Tab = styled.div`
@@ -1127,8 +1024,7 @@ const LanguageIcon = styled(LanguageGlobe)`
 const LanguageItem = styled.div`
   ${media.mobile} {
     ${text.bodySm};
-    color: ${(props) =>
-      props.isActive ? colors.primaryOrange : colors.txtSubtle};
+    color: ${(props) => (props.isActive ? colors.primaryOrange : colors.txtSubtle)};
     padding: 0.208vw;
     border-radius: 0.139vw;
     cursor: pointer;

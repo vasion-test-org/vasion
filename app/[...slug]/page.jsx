@@ -1,14 +1,16 @@
-import { StoryblokStory } from '@storyblok/react/rsc';
-import { notFound } from 'next/navigation';
-import { getStoryblokApi } from '@/lib/storyblok';
 import { headers } from 'next/headers';
-import PageDataUpdater from '@/components/PageDataUpdater';
+import { notFound } from 'next/navigation';
+
+import { StoryblokStory } from '@storyblok/react/rsc';
+
 import ClientSchemaWrapper from '@/components/ClientSchemaWrapper';
+import PageDataUpdater from '@/components/PageDataUpdater';
 import {
-  shouldIncludeSelfReferencingHreflang,
-  buildCanonicalUrl,
   buildAlternateLanguageUrls,
+  buildCanonicalUrl,
+  shouldIncludeSelfReferencingHreflang,
 } from '@/lib/seoUtils';
+import { getStoryblokApi } from '@/lib/storyblok';
 export const revalidate = 3600; // Revalidate every hour for better performance
 
 export async function generateMetadata({ params, searchParams }) {
@@ -29,8 +31,8 @@ export async function generateMetadata({ params, searchParams }) {
 
   if (!story) {
     return {
-      title: 'Page Not Found',
       description: 'The requested page could not be found.',
+      title: 'Page Not Found',
     };
   }
 
@@ -55,8 +57,7 @@ export async function generateMetadata({ params, searchParams }) {
   const canonicalUrl = buildCanonicalUrl(basePath, canonicalPath);
 
   // Check if we should include self-referencing hreflang
-  const includeSelfReferencing =
-    shouldIncludeSelfReferencingHreflang(resolvedSearchParams);
+  const includeSelfReferencing = shouldIncludeSelfReferencingHreflang(resolvedSearchParams);
 
   // Build alternate links using utility function
   const alternateLinks = await buildAlternateLanguageUrls(
@@ -76,21 +77,21 @@ export async function generateMetadata({ params, searchParams }) {
   const shouldNoIndex = content.index === false;
 
   return {
-    title,
-    description,
     alternates: {
       canonical: canonicalUrl,
       languages: alternateLinks,
     },
+    description,
     robots: shouldNoIndex ? 'noindex, nofollow' : undefined,
+    title,
   };
 }
 
 async function fetchStory(slug, locale) {
   const storyblokApi = getStoryblokApi();
   const sbParams = {
-    version: 'published',
     language: locale,
+    version: 'published',
   };
 
   try {
@@ -136,13 +137,11 @@ async function fetchData(slug, locale) {
   const headersList = await headers();
   const host = headersList.get('host');
   const isPreview =
-    host === 'localhost:3010' ||
-    host === 'vasion-ten.vercel.app' ||
-    host === 'vasion.vercel.app';
+    host === 'localhost:3010' || host === 'vasion-ten.vercel.app' || host === 'vasion.vercel.app';
 
   const sbParams = {
-    version: isPreview ? 'draft' : 'published',
     language: locale,
+    version: isPreview ? 'draft' : 'published',
   };
 
   try {
@@ -150,9 +149,7 @@ async function fetchData(slug, locale) {
     return data.story;
   } catch (error) {
     if (!isPreview) {
-      console.error(
-        `[❌ Server] Error fetching published story: ${error.message}`
-      );
+      console.error(`[❌ Server] Error fetching published story: ${error.message}`);
       return null;
     }
 
@@ -161,9 +158,7 @@ async function fetchData(slug, locale) {
       const { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
       return data.story;
     } catch (draftError) {
-      console.error(
-        `[❌ Server] Error fetching draft story: ${draftError.message}`
-      );
+      console.error(`[❌ Server] Error fetching draft story: ${draftError.message}`);
       return null;
     }
   }
@@ -180,15 +175,14 @@ export async function generateStaticParams() {
   for (const story of data.stories) {
     const slug = story.slug;
     const splitSlug = slug === 'home' ? [] : slug.split('/');
-    params.push({ slug: splitSlug, locale: 'en' });
+    params.push({ locale: 'en', slug: splitSlug });
 
     if (story.translated_slugs) {
       for (const translation of story.translated_slugs) {
-        const translatedSlug =
-          translation.path === '' ? [] : translation.path.split('/');
+        const translatedSlug = translation.path === '' ? [] : translation.path.split('/');
         params.push({
-          slug: [translation.lang, ...translatedSlug],
           locale: translation.lang,
+          slug: [translation.lang, ...translatedSlug],
         });
       }
     }

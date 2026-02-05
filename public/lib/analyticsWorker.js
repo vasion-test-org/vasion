@@ -16,12 +16,12 @@ const BATCH_TIMEOUT = 5000; // 5 seconds
  */
 function processBatch() {
   if (isProcessing || eventQueue.length === 0) return;
-  
+
   isProcessing = true;
   const batch = eventQueue.splice(0, BATCH_SIZE);
-  
+
   // Process each event in the batch
-  batch.forEach(event => {
+  batch.forEach((event) => {
     try {
       switch (event.type) {
         case 'gtm':
@@ -43,9 +43,9 @@ function processBatch() {
       console.error('Error processing analytics event:', error);
     }
   });
-  
+
   isProcessing = false;
-  
+
   // Process remaining events if any
   if (eventQueue.length > 0) {
     setTimeout(processBatch, 100);
@@ -80,7 +80,7 @@ function processAdsEvent(data) {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', data.eventName, {
       send_to: data.conversionId,
-      ...data.parameters
+      ...data.parameters,
     });
   }
 }
@@ -100,7 +100,7 @@ function processMarketoEvent(data) {
  */
 function queueEvent(type, data) {
   eventQueue.push({ type, data, timestamp: Date.now() });
-  
+
   // Process immediately if batch is ready
   if (eventQueue.length >= BATCH_SIZE) {
     processBatch();
@@ -124,9 +124,9 @@ setInterval(() => {
 }, BATCH_TIMEOUT);
 
 // Listen for messages from main thread
-self.addEventListener('message', function(e) {
+self.addEventListener('message', function (e) {
   const { type, data, action } = e.data;
-  
+
   switch (action) {
     case 'queue':
       queueEvent(type, data);

@@ -1,16 +1,17 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+
 import styled, { ThemeProvider } from 'styled-components';
+import media from 'styles/media';
+
+import SideArrow from '@/assets/svg/side-arrow.svg';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import { horizontalLoop } from '@/functions/horizontalLoop';
-
-import media from 'styles/media';
-import text from '@/styles/text';
 import colors from '@/styles/colors';
+import text from '@/styles/text';
 
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import Testimonial from './Testimonial';
-import SideArrow from '@/assets/svg/side-arrow.svg';
 
 const TestimonialCarousel = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -27,11 +28,11 @@ const TestimonialCarousel = ({ blok }) => {
       const testimonialsArr = gsap.utils.toArray('.testimonials');
       const testimonialLoop = horizontalLoop(testimonialsArr, {
         centered: true,
-        paused: true,
         onChange: (element) => {
           const index = testimonialsArr.indexOf(element);
           setActiveIndex(index);
         },
+        paused: true,
       });
 
       onNext = () => {
@@ -40,9 +41,7 @@ const TestimonialCarousel = ({ blok }) => {
       };
       onPrev = () => {
         testimonialLoop.previous({ duration: 0.4, ease: 'power1.inOut' });
-        setActiveIndex((prev) =>
-          prev === 0 ? blok.testimonials.length - 1 : prev - 1,
-        );
+        setActiveIndex((prev) => (prev === 0 ? blok.testimonials.length - 1 : prev - 1));
       };
 
       if (nextBtn) nextBtn.addEventListener('click', onNext);
@@ -58,7 +57,7 @@ const TestimonialCarousel = ({ blok }) => {
   }, [blok.testimonials.length]);
 
   const mappedTestimonials = blok.testimonials.map((testimonial, i) => (
-    <TestimonialWrapper key={testimonial._uid || i} className="testimonials">
+    <TestimonialWrapper className="testimonials" key={testimonial._uid || i}>
       <Testimonial blok={testimonial} />
     </TestimonialWrapper>
   ));

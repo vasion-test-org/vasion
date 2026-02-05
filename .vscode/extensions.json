@@ -1,0 +1,23 @@
+{
+  "recommendations": [
+    // Essential
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+
+    // Helpful for development
+    "formulahendry.auto-rename-tag",
+    "christian-kohler.path-intellisense",
+    "usernamehw.errorlens",
+
+    // Git
+    "eamodio.gitlens",
+
+    // React/Next.js
+    "dsznajder.es7-react-js-snippets",
+
+    // Accessibility
+    "deque-systems.vscode-axe-linter"
+  ],
+  "unwantedRecommendations": []
+}

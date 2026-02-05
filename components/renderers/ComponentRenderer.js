@@ -1,18 +1,22 @@
 'use client';
 
 import React from 'react';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import Image from '@/components/globalComponents/Image';
-import styled from 'styled-components';
-import media from '@/styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+
 import dynamic from 'next/dynamic';
-import Video from '@/components/globalComponents/Video';
 import { usePathname } from 'next/navigation';
-import Button from '../globalComponents/Button';
-import Form from '../Form';
-import ContactCard from '../globalComponents/ContactCard';
+
+import { storyblokEditable } from '@storyblok/react/rsc';
 import SmallQuote from 'components/SmallQuote';
+import styled from 'styled-components';
+
+import Image from '@/components/globalComponents/Image';
+import Video from '@/components/globalComponents/Video';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import media from '@/styles/media';
+
+import Form from '../Form';
+import Button from '../globalComponents/Button';
+import ContactCard from '../globalComponents/ContactCard';
 import LightboxButton from '../LightboxButton';
 
 // Dynamic imports for heavy components
@@ -21,20 +25,17 @@ const LogoCube = dynamic(() => import('@/components/LogoCube'), {
   ssr: false,
 });
 
-const OverviewController = dynamic(
-  () => import('../overview/OverviewController'),
-  {
-    loading: () => <div style={{ height: '300px' }} />,
-    ssr: false,
-  },
-);
+const OverviewController = dynamic(() => import('../overview/OverviewController'), {
+  loading: () => <div style={{ height: '300px' }} />,
+  ssr: false,
+});
 
 const ComponentRenderer = ({
   blok,
   extra_copy,
+  isRightForm,
   isSideBySideAsset,
   isSideBySideVideo,
-  isRightForm,
 }) => {
   if (!blok) return null;
   const copycomponents = [
@@ -52,14 +53,11 @@ const ComponentRenderer = ({
   const isGerman = pathname.startsWith('/de');
   const isEnglish = !isFrench && !isGerman;
 
-  if (
-    blok.component === 'personalized_page' &&
-    Array.isArray(blok.personalized_section)
-  ) {
+  if (blok.component === 'personalized_page' && Array.isArray(blok.personalized_section)) {
     return (
       <SectionWrapper {...storyblokEditable(blok)}>
         {blok.personalized_section.map((section) => (
-          <ComponentRenderer key={section._uid} blok={section} />
+          <ComponentRenderer blok={section} key={section._uid} />
         ))}
       </SectionWrapper>
     );
@@ -81,7 +79,7 @@ const ComponentRenderer = ({
     return (
       <SectionWrapper {...storyblokEditable(blok)}>
         {contentBlocks.map((block) => (
-          <ComponentRenderer key={block._uid} blok={block} />
+          <ComponentRenderer blok={block} key={block._uid} />
         ))}
       </SectionWrapper>
     );
@@ -91,11 +89,8 @@ const ComponentRenderer = ({
     case 'assets':
       return (
         <AssetContainer $isSideBySideAsset={isSideBySideAsset}>
-          <ImageWrapper
-            $isSideBySideAsset={isSideBySideAsset}
-            {...storyblokEditable(blok)}
-          >
-            <Image images={blok.media} borderradius={blok.border_radius} />
+          <ImageWrapper $isSideBySideAsset={isSideBySideAsset} {...storyblokEditable(blok)}>
+            <Image borderradius={blok.border_radius} images={blok.media} />
           </ImageWrapper>
           {extra_copy && (
             <>
@@ -103,8 +98,8 @@ const ComponentRenderer = ({
                 <BlockWrapper key={index} {...storyblokEditable(item)}>
                   {copycomponents.includes(item.component) ? (
                     <RichTextRenderer
-                      document={item.copy}
                       blok={item}
+                      document={item.copy}
                       responsiveTextStyles={item?.responsive_text_styles}
                     />
                   ) : (
@@ -116,17 +111,8 @@ const ComponentRenderer = ({
           )}
         </AssetContainer>
       );
-    case 'video_assets':
-      return (
-        <Video
-          videos={blok.media}
-          thumbnails={blok.thumbnails}
-          borderradius={blok.border_radius}
-          isSideBySideVideo={isSideBySideVideo}
-          width={isSideBySideVideo ? '400px' : undefined}
-          height={isSideBySideVideo ? '300px' : undefined}
-        />
-      );
+    case 'contact_card':
+      return <ContactCard blok={blok} />;
     case 'copy_block':
       return (
         <CopyDiv className={isRightForm ? 'preformContent' : undefined}>
@@ -134,8 +120,8 @@ const ComponentRenderer = ({
             <BlockWrapper key={index} {...storyblokEditable(item)}>
               {copycomponents.includes(item.component) ? (
                 <RichTextRenderer
-                  document={item.copy}
                   blok={item}
+                  document={item.copy}
                   responsiveTextStyles={item?.responsive_text_styles}
                 />
               ) : (
@@ -145,8 +131,6 @@ const ComponentRenderer = ({
           ))}
         </CopyDiv>
       );
-    case 'logo_cube':
-      return <LogoCube blok={blok} />;
     case 'form':
       return (
         <div className="form-component">
@@ -157,18 +141,25 @@ const ComponentRenderer = ({
       return <Button $buttonData={blok} />;
     case 'light_box_button':
       return <LightboxButton blok={blok} />;
-    case 'contact_card':
-      return <ContactCard blok={blok} />;
+    case 'logo_cube':
+      return <LogoCube blok={blok} />;
     case 'overview':
       return <OverviewController blok={blok} />;
     case 'small_quote':
       return <SmallQuote short blok={blok} />;
-    default:
+    case 'video_assets':
       return (
-        <BlockWrapper {...storyblokEditable(blok)}>
-          Unknown Component
-        </BlockWrapper>
+        <Video
+          borderradius={blok.border_radius}
+          height={isSideBySideVideo ? '300px' : undefined}
+          isSideBySideVideo={isSideBySideVideo}
+          thumbnails={blok.thumbnails}
+          videos={blok.media}
+          width={isSideBySideVideo ? '400px' : undefined}
+        />
       );
+    default:
+      return <BlockWrapper {...storyblokEditable(blok)}>Unknown Component</BlockWrapper>;
   }
 };
 

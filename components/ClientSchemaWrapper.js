@@ -1,6 +1,7 @@
 'use client';
 
 import { usePageData } from '@/context/PageDataContext';
+
 import ServerSchemaMarkup from './ServerSchemaMarkup';
 
 const ClientSchemaWrapper = () => {

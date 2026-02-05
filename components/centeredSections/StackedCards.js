@@ -1,15 +1,18 @@
 'use client';
-import React, { useContext, useRef, useState, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+
 import { useRive } from '@rive-app/react-canvas';
-import { ScreenContext } from '../providers/Screen';
-import styled from 'styled-components';
-import media from '@/styles/media';
-import colors from '@/styles/colors';
-import text from '@/styles/text';
-import getMedia from '@/functions/getMedia';
-import RichTextRenderer from '../renderers/RichTextRenderer';
-import Button from '@/components/globalComponents/Button';
 import { storyblokEditable } from '@storyblok/react/rsc';
+import styled from 'styled-components';
+
+import Button from '@/components/globalComponents/Button';
+import getMedia from '@/functions/getMedia';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
+
+import { ScreenContext } from '../providers/Screen';
+import RichTextRenderer from '../renderers/RichTextRenderer';
 
 // Module-level state for user interaction detection
 let didUserInteract = false;
@@ -58,15 +61,7 @@ const useConditionalRive = () => {
   return shouldLoadRive;
 };
 
-const RiveAnimation = ({
-  src,
-  index,
-  isActive,
-  tablet,
-  mobile,
-  onRiveInit,
-  shouldLoad = true,
-}) => {
+const RiveAnimation = ({ index, isActive, mobile, onRiveInit, shouldLoad = true, src, tablet }) => {
   const shouldAutoplay = tablet || mobile || index === 0;
   const [isInViewport, setIsInViewport] = useState(false);
   const containerRef = useRef(null);
@@ -82,7 +77,7 @@ const RiveAnimation = ({
           setIsInViewport(true);
         }
       },
-      { threshold: 0.1, rootMargin: '50px' },
+      { rootMargin: '50px', threshold: 0.1 }
     );
 
     observer.observe(containerRef.current);
@@ -90,12 +85,11 @@ const RiveAnimation = ({
   }, []);
 
   // Only load when in viewport, active, explicitly requested, and user has interacted
-  const shouldLoadRive =
-    (isInViewport || isActive) && shouldLoad && conditionalRive;
+  const shouldLoadRive = (isInViewport || isActive) && shouldLoad && conditionalRive;
 
   const { rive, RiveComponent } = useRive({
-    src: shouldLoadRive ? src : null,
     autoplay: shouldAutoplay && shouldLoadRive,
+    src: shouldLoadRive ? src : null,
     // Performance optimizations
     fitCanvasToArtboardHeight: true,
     shouldResizeCanvasToArtboardHeight: true,
@@ -116,9 +110,7 @@ const RiveAnimation = ({
   }, [isActive]);
 
   return (
-    <RiveContainer ref={containerRef}>
-      {shouldLoadRive ? <RiveComponent /> : null}
-    </RiveContainer>
+    <RiveContainer ref={containerRef}>{shouldLoadRive ? <RiveComponent /> : null}</RiveContainer>
   );
 };
 
@@ -169,18 +161,18 @@ const StackedCards = React.memo(({ blok }) => {
           card?.background_image[0]?.filename,
           card?.background_image[0]?.filename,
           card?.background_image[1]?.filename,
-          card?.background_image[2]?.filename,
+          card?.background_image[2]?.filename
         );
 
         return (
           <CardContainer
             {...storyblokEditable(card)}
-            className="stackedCards"
-            key={card._uid || index}
             $active={active}
-            index={index}
             $bgimg={cardImage ? cardImage : card?.background_image[0].filename}
             $last={isLastCard}
+            className="stackedCards"
+            index={index}
+            key={card._uid || index}
             onMouseEnter={() => handleCardMouseEnter(index)}
             onMouseLeave={handleCardMouseLeave}
           >
@@ -196,10 +188,7 @@ const StackedCards = React.memo(({ blok }) => {
 
             <ButtonRow isLastCard={isLastCard}>
               {card?.link?.map(($buttonData) => (
-                <div
-                  {...storyblokEditable($buttonData)}
-                  key={$buttonData?.link_text}
-                >
+                <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
                   <Button $buttonData={$buttonData} />
                 </div>
               ))}
@@ -207,14 +196,14 @@ const StackedCards = React.memo(({ blok }) => {
 
             {index < 3 && (
               <RiveAnimation
-                key={`rive-${index}`}
-                src={card.main_asset[0].filename}
                 index={index}
                 isActive={active === index}
-                tablet={tablet}
+                key={`rive-${index}`}
                 mobile={mobile}
-                onRiveInit={handleRiveInit}
                 shouldLoad={riveLoaded || index === 0}
+                src={card.main_asset[0].filename}
+                tablet={tablet}
+                onRiveInit={handleRiveInit}
               />
             )}
           </CardContainer>
@@ -301,13 +290,7 @@ const Content = styled.div`
 const CardContainer = styled.div`
   display: flex;
   opacity: ${(props) =>
-    props?.$last
-      ? '1'
-      : props.index < 3
-        ? props.$active === props.index
-          ? '1'
-          : '0.5'
-        : '1'};
+    props?.$last ? '1' : props.index < 3 ? (props.$active === props.index ? '1' : '0.5') : '1'};
   transition: opacity 0.3s ease-out;
   flex-direction: column;
   background-image: url(${(props) => props.$bgimg});

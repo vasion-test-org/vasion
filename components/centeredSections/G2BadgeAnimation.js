@@ -1,9 +1,11 @@
 'use client';
-import React, { useRef, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useRef } from 'react';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
-import media from '@/styles/media';
+import styled from 'styled-components';
+
 import getMedia from '@/functions/getMedia';
+import media from '@/styles/media';
 
 const G2BadgeAnimation = ({ blok }) => {
   const leftImageRefs = useRef([]);
@@ -22,12 +24,12 @@ const G2BadgeAnimation = ({ blok }) => {
 
       return (
         <BadgeImage
+          $scale={scale}
+          $zIndex={zIndex}
+          alt={image?.alt || 'g2-badge'}
           key={image.id}
           ref={(el) => (refsArray.current[index] = el)}
           src={image?.filename}
-          alt={image?.alt || 'g2-badge'}
-          $zIndex={zIndex}
-          $scale={scale}
         />
       );
     });
@@ -52,34 +54,34 @@ const G2BadgeAnimation = ({ blok }) => {
 
         entranceTl
           .from(centerImageRef.current, {
-            scale: 0,
-            rotation: 180,
             duration: 0.8,
             ease: 'back.out(1.7)',
+            rotation: 180,
+            scale: 0,
           })
           .from(
             leftImageRefs.current,
             {
-              x: -100,
+              duration: 0.6,
+              ease: 'power3.out',
               opacity: 0,
               rotation: -45,
-              duration: 0.6,
               stagger: 0.15,
-              ease: 'power3.out',
+              x: -100,
             },
-            '-=0.4',
+            '-=0.4'
           )
           .from(
             rightImageRefs.current,
             {
-              x: 100,
+              duration: 0.6,
+              ease: 'power3.out',
               opacity: 0,
               rotation: 45,
-              duration: 0.6,
               stagger: 0.15,
-              ease: 'power3.out',
+              x: 100,
             },
-            '<',
+            '<'
           );
         const INITIAL_FRONT_BADGES = {
           left: 1, // NOTE: Left side starts with second badge (index 1) in front
@@ -88,7 +90,7 @@ const G2BadgeAnimation = ({ blok }) => {
 
         entranceTl.call(() => {
           // Track current front badge
-          let currentFront = { ...INITIAL_FRONT_BADGES };
+          const currentFront = { ...INITIAL_FRONT_BADGES };
 
           const createLoopCycle = () => {
             const currentBack = {
@@ -111,18 +113,12 @@ const G2BadgeAnimation = ({ blok }) => {
             const animConfig = {
               left: {
                 offset: isReturningToOriginal.left ? `-${Offset}` : 0,
-                returningToFront: isReturningToOriginal.left
-                  ? `${GrowthOffset}`
-                  : '0',
-                transitionToMiddle: !isReturningToOriginal.left
-                  ? `${shrinkMax}`
-                  : `${shrinkMin}`,
+                returningToFront: isReturningToOriginal.left ? `${GrowthOffset}` : '0',
+                transitionToMiddle: !isReturningToOriginal.left ? `${shrinkMax}` : `${shrinkMin}`,
               },
               right: {
                 offset: isReturningToOriginal.right ? `${Offset}` : 0,
-                returningToFront: isReturningToOriginal.right
-                  ? `-${GrowthOffset}`
-                  : '0',
+                returningToFront: isReturningToOriginal.right ? `-${GrowthOffset}` : '0',
                 transitionToMiddle: !isReturningToOriginal.right
                   ? `-${shrinkMax}`
                   : `-${shrinkMin}`,
@@ -143,43 +139,43 @@ const G2BadgeAnimation = ({ blok }) => {
               .to(
                 leftImageRefs.current[currentFront.left],
                 {
-                  x: animConfig.left.transitionToMiddle,
-                  scale: 0.85,
                   duration: 1.5,
                   ease: 'power2.inOut',
+                  scale: 0.85,
+                  x: animConfig.left.transitionToMiddle,
                 },
-                0,
+                0
               )
               .to(
                 rightImageRefs.current[currentFront.right],
                 {
-                  x: animConfig.right.transitionToMiddle,
-                  scale: 0.85,
                   duration: 1.5,
                   ease: 'power2.inOut',
+                  scale: 0.85,
+                  x: animConfig.right.transitionToMiddle,
                 },
-                0,
+                0
               )
               // NOTE: Animate back badges scale up AS front badges move away
               .to(
                 leftImageRefs.current[currentBack.left],
                 {
-                  scale: 1,
-                  x: animConfig.left.returningToFront,
                   duration: 1,
                   ease: 'power2.inOut',
+                  scale: 1,
+                  x: animConfig.left.returningToFront,
                 },
-                0,
+                0
               )
               .to(
                 rightImageRefs.current[currentBack.right],
                 {
-                  scale: 1,
-                  x: animConfig.right.returningToFront,
                   duration: 1,
                   ease: 'power2.inOut',
+                  scale: 1,
+                  x: animConfig.right.returningToFront,
                 },
-                0,
+                0
               )
 
               /* NOTE: SWITCH Z-INDEX RIGHT AT CENTER */
@@ -193,20 +189,20 @@ const G2BadgeAnimation = ({ blok }) => {
 
               /* NOTE: Returning badges slide back */
               .to(leftImageRefs.current[currentFront.left], {
-                x: animConfig.left.offset,
-                scale: 0.85,
                 duration: 1,
                 ease: 'power2.inOut',
+                scale: 0.85,
+                x: animConfig.left.offset,
               })
               .to(
                 rightImageRefs.current[currentFront.right],
                 {
-                  x: animConfig.right.offset,
-                  scale: 0.85,
                   duration: 1,
                   ease: 'power2.inOut',
+                  scale: 0.85,
+                  x: animConfig.right.offset,
                 },
-                '<',
+                '<'
               )
 
               /* NOTE: Brief pause before next cycle */
@@ -230,17 +226,13 @@ const G2BadgeAnimation = ({ blok }) => {
   return (
     <Wrapper {...storyblokEditable(blok)}>
       <AnimationWrapper>
-        <LeftImages>
-          {renderImages(blok.left_assets, leftImageRefs, 'left')}
-        </LeftImages>
+        <LeftImages>{renderImages(blok.left_assets, leftImageRefs, 'left')}</LeftImages>
         <CenteredBadge
+          alt={blok?.center_image?.alt || 'centered g2 badge'}
           ref={centerImageRef}
           src={blok?.center_image?.filename}
-          alt={blok?.center_image?.alt || 'centered g2 badge'}
         />
-        <RightImages>
-          {renderImages(blok.right_assets, rightImageRefs, 'right')}
-        </RightImages>
+        <RightImages>{renderImages(blok.right_assets, rightImageRefs, 'right')}</RightImages>
       </AnimationWrapper>
     </Wrapper>
   );

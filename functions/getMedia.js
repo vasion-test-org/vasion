@@ -1,20 +1,20 @@
-import { desktop, tablet, mobile } from "@/styles/media"
+import { desktop, mobile, tablet } from '@/styles/media';
 
 export default function getMedia(fw, d, t, m) {
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     if (window.innerWidth > desktop) {
-      return fw
+      return fw;
     }
     if (window.innerWidth > tablet) {
-      return d
+      return d;
     }
     if (window.innerWidth > mobile) {
-      return t
+      return t;
     }
     if (window.innerWidth <= mobile) {
-      return m
+      return m;
     }
   }
 
-  return d
+  return d;
 }

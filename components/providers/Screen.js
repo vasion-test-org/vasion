@@ -1,14 +1,15 @@
-"use client";
-import React, { createContext, useState, useEffect, useMemo } from "react";
-import { addDebouncedEventListener, isBrowser } from "@/functions/functions";
-import { desktop, tablet, mobile } from "@/styles/media";
+'use client';
+import React, { createContext, useEffect, useMemo, useState } from 'react';
+
+import { addDebouncedEventListener, isBrowser } from '@/functions/functions';
+import { desktop, mobile, tablet } from '@/styles/media';
 
 export const ScreenContext = createContext({
-  fullWidth: false,
   desktop: false,
-  tablet: false,
-  mobile: false,
+  fullWidth: false,
   hydrated: false, // ✅ added
+  mobile: false,
+  tablet: false,
 });
 
 const ScreenProvider = ({ children }) => {
@@ -31,26 +32,17 @@ const ScreenProvider = ({ children }) => {
       setScreenContext();
       setHydrated(true); // ✅ signal hydration complete
 
-      const removeListener = addDebouncedEventListener(
-        window,
-        "resize",
-        setScreenContext,
-        100
-      );
+      const removeListener = addDebouncedEventListener(window, 'resize', setScreenContext, 100);
 
       return removeListener;
     }
   }, []);
 
   const screenValue = useMemo(() => {
-    return { fullWidth: fw, desktop: d, tablet: t, mobile: m, hydrated };
+    return { desktop: d, fullWidth: fw, hydrated, mobile: m, tablet: t };
   }, [d, fw, t, m, hydrated]);
 
-  return (
-    <ScreenContext.Provider value={screenValue}>
-      {children}
-    </ScreenContext.Provider>
-  );
+  return <ScreenContext.Provider value={screenValue}>{children}</ScreenContext.Provider>;
 };
 
 export default ScreenProvider;

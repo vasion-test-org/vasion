@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const ThankYouContext = createContext();
 
@@ -9,32 +9,32 @@ const defaultThankYouCopy = [
     _uid: 'default-header',
     component: 'header',
     copy: {
-      type: 'doc',
       content: [
         {
-          type: 'heading',
           attrs: { level: 1 },
-          content: [{ type: 'text', text: 'Thank you!' }],
+          content: [{ text: 'Thank you!', type: 'text' }],
+          type: 'heading',
         },
       ],
+      type: 'doc',
     },
   },
   {
     _uid: 'default-body',
     component: 'body_copy',
     copy: {
-      type: 'doc',
       content: [
         {
-          type: 'paragraph',
           content: [
             {
-              type: 'text',
               text: 'Your request will be handled immediately',
+              type: 'text',
             },
           ],
+          type: 'paragraph',
         },
       ],
+      type: 'doc',
     },
   },
 ];
@@ -51,10 +51,7 @@ export const ThankYouProvider = ({ children }) => {
             return parsed;
           }
         } catch (error) {
-          console.warn(
-            'Failed to parse thankYouCopy from localStorage:',
-            error
-          );
+          console.warn('Failed to parse thankYouCopy from localStorage:', error);
         }
       }
     }

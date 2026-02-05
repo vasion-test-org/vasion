@@ -1,13 +1,14 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import media from "styles/media";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import Image from "@/components/globalComponents/Image";
-import colors from "@/styles/colors";
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+import media from 'styles/media';
+
+import Image from '@/components/globalComponents/Image';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import colors from '@/styles/colors';
 
 const InfographicSideBySide = ({ blok }) => {
   // console.log(blok);
@@ -17,18 +18,15 @@ const InfographicSideBySide = ({ blok }) => {
     <ThemeProvider theme={selectedTheme}>
       <Wrapper
         {...storyblokEditable(blok)}
-        spacingOffset={blok.offset_spacing}
-        spacing={blok.section_spacing}
         gap={blok.gap}
+        spacing={blok.section_spacing}
+        spacingOffset={blok.offset_spacing}
       >
         {blok.components.map((component) => (
           <React.Fragment key={component.id}>
-            {component.component === "assets" ? (
+            {component.component === 'assets' ? (
               <SideContainer {...storyblokEditable(component)}>
-                <Image
-                  images={component.media}
-                  borderradius={blok.border_radius}
-                />
+                <Image borderradius={blok.border_radius} images={component.media} />
               </SideContainer>
             ) : (
               <InfographicBlok>
@@ -123,119 +121,105 @@ const Wrapper = styled.div`
   width: 100%;
   height: auto;
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
           ? `calc(${props.spacing}px / 1600 * 100vw) 0 0`
-          : "3.75vw 0 0";
+          : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
           ? `0 0 calc(${props.spacing}px / 1600 * 100vw)`
-          : "0 0 3.75vw";
+          : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
         ? `calc(${props.spacing}px / 1600 * 100vw) 0`
-        : "3.75vw 0";
+        : '3.75vw 0';
   }};
 
-  gap: ${(props) =>
-    props.gap === "default"
-      ? "3.75vw"
-      : props.gap
-        ? `${props.gap}px`
-        : "3.75vw"};
+  gap: ${(props) => (props.gap === 'default' ? '3.75vw' : props.gap ? `${props.gap}px` : '3.75vw')};
 
   ${media.fullWidth} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+            : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+            : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "60px 0";
+          : '60px 0';
     }};
-    gap: ${(props) =>
-      props.gap === "default" ? "60px" : props.gap ? `${props.gap}px` : "60px"};
+    gap: ${(props) => (props.gap === 'default' ? '60px' : props.gap ? `${props.gap}px` : '60px')};
   }
 
   ${media.tablet} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "3.906vw 3.906vw 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '3.906vw 3.906vw 0'
           : props.spacing
             ? `${props.spacing}px 3.906vw 0`
-            : "3.906vw 3.906vw 0";
+            : '3.906vw 3.906vw 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 3.906vw 3.906vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 3.906vw 3.906vw'
           : props.spacing
             ? `0 3.906vw ${props.spacing}px`
-            : "0 3.906vw 3.906vw";
+            : '0 3.906vw 3.906vw';
       }
-      return props.spacing === "default"
-        ? "3.906vw 3.906vw"
+      return props.spacing === 'default'
+        ? '3.906vw 3.906vw'
         : props.spacing
           ? `${props.spacing}px 3.906vw`
-          : "3.906vw 3.906vw";
+          : '3.906vw 3.906vw';
     }};
     gap: ${(props) =>
-      props.gap === "default"
-        ? "3.906vw"
-        : props.gap
-          ? `${props.gap}px`
-          : "3.906vw"};
+      props.gap === 'default' ? '3.906vw' : props.gap ? `${props.gap}px` : '3.906vw'};
   }
 
   ${media.mobile} {
     flex-direction: column;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.417vw 5.417vw 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.417vw 5.417vw 0'
           : props.spacing
             ? `${props.spacing}px 5.417vw 0`
-            : "5.417vw 5.417vw 0";
+            : '5.417vw 5.417vw 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 5.417vw 5.417vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 5.417vw 5.417vw'
           : props.spacing
             ? `0 5.417vw ${props.spacing}px`
-            : "0 5.417vw 5.417vw";
+            : '0 5.417vw 5.417vw';
       }
-      return props.spacing === "default"
-        ? "5.417vw 5.417vw"
+      return props.spacing === 'default'
+        ? '5.417vw 5.417vw'
         : props.spacing
           ? `${props.spacing}px 5.417vw`
-          : "5.417vw 5.417vw";
+          : '5.417vw 5.417vw';
     }};
     gap: ${(props) =>
-      props.gap === "default"
-        ? "6.667vw"
-        : props.gap
-          ? `${props.gap}px`
-          : "6.667vw"};
+      props.gap === 'default' ? '6.667vw' : props.gap ? `${props.gap}px` : '6.667vw'};
   }
 `;
 export default InfographicSideBySide;

@@ -1,273 +1,124 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import media from '@/styles/media';
-import { horizontalLoop } from '@/functions/horizontalLoop';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import { optimizeGSAP } from '@/lib/scriptOptimization';
+import Image from 'next/image';
 
+import { storyblokEditable } from '@storyblok/react/rsc';
+import clsx from 'clsx';
+
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+
+import CarouselAnimator from './CarouselAnimator';
+
+/**
+ * LogoCube Component (Server Component)
+ * Displays a carousel of company logos with optional header text.
+ * Supports transparent and themed backgrounds.
+ *
+ * Mobile-First Breakpoint Pattern:
+ * - Base (no prefix) = Mobile (0-480px)
+ * - md: = Tablet (481-1024px)
+ * - lg: = Desktop (1025-1600px)
+ * - xl: = FullWidth (1601px+)
+ */
 const LogoCube = ({ blok }) => {
-  const themes = useAvailableThemes();
-  const selectedTheme = themes[blok.theme] || themes.default;
-  const [gsapLoaded, setGsapLoaded] = useState(false);
+  const isTransparent = blok.transparent_background;
+  const theme = blok.theme || 'default';
+  const offsetSpacing = blok.offset_spacing;
 
   const defaultLogos = [
-    { alt: 'nascar logo', image: '/images/icons/nascar.png' },
-    { alt: 'espn logo', image: '/images/icons/espn.png' },
-    { alt: 'metlife logo', image: '/images/icons/metlife.png' },
-    { alt: 'priceline logo', image: '/images/icons/priceline.png' },
-    { alt: 'jpMorgan logo', image: '/images/icons/jpMorgan.png' },
-    { alt: 'GE logo', image: '/images/icons/GE.png' },
-    { alt: 'Yahoo logo', image: '/images/icons/Yahoo.png' },
-    { alt: 'Aon logo', image: '/images/icons/Aon.png' },
+    { alt: 'NASCAR logo - Professional racing organization', image: '/images/icons/nascar.png' },
+    { alt: 'ESPN logo - Sports entertainment network', image: '/images/icons/espn.png' },
+    { alt: 'MetLife logo - Insurance company', image: '/images/icons/metlife.png' },
+    { alt: 'Priceline logo - Travel booking service', image: '/images/icons/priceline.png' },
+    { alt: 'JPMorgan logo - Financial services company', image: '/images/icons/jpMorgan.png' },
+    { alt: 'GE logo - General Electric corporation', image: '/images/icons/GE.png' },
+    { alt: 'Yahoo logo - Technology company', image: '/images/icons/Yahoo.png' },
+    { alt: 'Aon logo - Professional services firm', image: '/images/icons/Aon.png' },
   ];
 
   const logosToDisplay = blok.logos?.length > 0 ? blok.logos : defaultLogos;
-
-  useEffect(() => {
-    // Load GSAP only when needed
-    optimizeGSAP().then(() => {
-      setGsapLoaded(true);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (gsapLoaded && logosToDisplay?.length >= 7) {
-      const logosArr = window.gsap.utils.toArray('.cubeLogos');
-      horizontalLoop(logosArr, { deep: false, repeat: -1 });
-    }
-  }, [logosToDisplay?.length, gsapLoaded]);
-
-  const allLogos = logosToDisplay.map((logo, index) => (
-    <LogosDiv key={logo.filename || logo.alt || index} className="cubeLogos">
-      <Logo
-        alt={logo.alt || 'Default Logo'}
-        src={logo.filename || logo.image}
-      />
-    </LogosDiv>
-  ));
+  const shouldCenter = logosToDisplay?.length < 6;
+  const shouldAnimate = logosToDisplay?.length >= 7;
 
   return (
-    <ThemeProvider theme={selectedTheme}>
-      <CubeWrapper
+    <>
+      <section
         {...storyblokEditable(blok)}
-        spacingOffset={blok.offset_spacing}
-        spacing={blok.section_spacing}
+        className={clsx(
+          'flex w-full items-center justify-center',
+          // Mobile-first: base = mobile, md/lg/xl for larger
+          // Mobile: px-10 (5vw×480÷4=6→but design shows more), Tablet+: px-4
+          'px-10 md:px-4 lg:px-4 xl:px-4',
+          // Vertical padding based on offset_spacing
+          offsetSpacing === 'top' && 'pt-15 pb-0',
+          offsetSpacing === 'bottom' && 'pt-0 pb-15',
+          !offsetSpacing && 'py-15'
+        )}
+        aria-label="Trusted by leading companies"
       >
-        <CardContainer transparent={blok.transparent_background}>
-          {blok.header && (
-            <RichTextRenderer
-              document={blok.header}
-              blok={blok}
-              responsiveTextStyles={blok?.responsive_text_styles}
-            />
+        <div
+          className={clsx(
+            'mx-auto w-full overflow-hidden',
+            // Background
+            isTransparent
+              ? 'bg-transparent'
+              : theme === 'dark'
+                ? 'bg-purple-dark'
+                : theme === 'light'
+                  ? 'bg-white'
+                  : 'bg-purple',
+            // Text color
+            theme === 'light' ? 'text-txt-primary' : 'text-white',
+            // Max width
+            isTransparent ? 'max-w-full' : 'max-w-326',
+            // Padding - mobile-first (base=mobile, then tablet, desktop)
+            // Mobile: px-7 pt-11 pb-17, Tablet: p-10, Desktop+: p-15
+            'px-7 pt-11 pb-17 md:p-10 lg:p-15 xl:p-15',
+            // Border radius - mobile: rounded-4xl, larger: rounded-3xl
+            'rounded-4xl md:rounded-3xl lg:rounded-3xl xl:rounded-3xl'
           )}
-          <LogoContainer
-            transparent={blok.transparent_background}
-            shouldCenter={logosToDisplay?.length < 6}
-          >
-            {allLogos}
-          </LogoContainer>
-        </CardContainer>
-      </CubeWrapper>
-    </ThemeProvider>
+        >
+          {/* Gap: mobile=9, tablet=5, desktop+=10 */}
+          <div className="flex flex-col items-center justify-center gap-9 md:gap-5 lg:gap-10 xl:gap-10">
+            {blok.header && (
+              <header className="w-full text-center">
+                <RichTextRenderer
+                  blok={blok}
+                  document={blok.header}
+                  responsiveTextStyles={blok?.responsive_text_styles}
+                />
+              </header>
+            )}
+
+            <ul
+              className={clsx(
+                'm-0 flex w-full list-none items-center gap-5 overflow-hidden p-0',
+                shouldCenter ? 'justify-center' : 'justify-start'
+              )}
+              aria-label="Company logos carousel"
+            >
+              {logosToDisplay.map((logo, index) => (
+                <li
+                  className="cubeLogos shrink-0 list-none"
+                  key={logo.filename || logo.alt || index}
+                >
+                  <Image
+                    alt={logo.alt || 'Company logo'}
+                    // Mobile: w-56 h-28, larger: w-50 h-25
+                    className="h-28 w-56 md:h-25 md:w-50 lg:h-25 lg:w-50 xl:h-25 xl:w-50"
+                    height={100}
+                    loading="lazy"
+                    src={logo.filename || logo.image}
+                    width={200}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {shouldAnimate && <CarouselAnimator selector=".cubeLogos" />}
+    </>
   );
 };
-
-const LogosDiv = styled.div`
-  width: auto;
-  height: auto;
-`;
-
-const Logo = styled.img`
-  height: 6.25vw;
-  width: 12.5vw;
-
-  ${media.fullWidth} {
-    height: 100px;
-    width: 200px;
-  }
-
-  ${media.tablet} {
-    height: 9.766vw;
-    width: 19.531vw;
-  }
-
-  ${media.mobile} {
-    height: 23.364vw;
-    width: 46.729vw;
-  }
-`;
-
-const LogoContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: ${(props) => (props.shouldCenter ? 'center' : 'flex-start')};
-  align-items: center;
-  height: auto;
-  overflow: hidden;
-  gap: 1.25vw;
-  width: ${(props) => (props.transparent ? '100%' : '77.188vw')};
-
-  ${media.fullWidth} {
-    width: ${(props) => (props.transparent ? '100%' : '1236px')};
-    gap: 20px;
-  }
-
-  ${media.tablet} {
-    gap: 1.953vw;
-  }
-
-  ${media.mobile} {
-    gap: 4.673vw;
-  }
-`;
-
-const CardContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background: ${(props) =>
-    props.transparent ? 'transparent' : props.theme.logo_cube.cardBg};
-  color: ${(props) => props.theme.logo_cube.textColor};
-  overflow: hidden;
-  width: ${(props) => (props.transparent ? '100%' : '81.5vw')};
-  border-radius: 1.5vw;
-  padding: ${(props) => (props.transparent ? '3.75vw 0vw' : '3.75vw 6vw')};
-  gap: 2.5vw;
-
-  ${media.fullWidth} {
-    width: 1304px;
-    border-radius: 24px;
-    padding: ${(props) => (props.transparent ? '60px 0px' : '60px 96px')};
-    gap: 40px;
-  }
-
-  ${media.tablet} {
-    border-radius: 2.344vw;
-    padding: ${(props) =>
-      props.transparent
-        ? '3.906vw 0vw 5.859vw 0vw'
-        : '3.906vw 3.906vw 5.859vw 3.906vw'};
-    gap: 1.953vw;
-  }
-
-  ${media.mobile} {
-    border-radius: 5.607vw;
-    padding: ${(props) =>
-      props.transparent
-        ? '9.346vw 0vw 14.019vw 0vw'
-        : '9.346vw 6.075vw 14.019vw 6.075vw'};
-    padding: 9.346vw 6.075vw 14.019vw 6.075vw;
-    gap: 7.477vw;
-  }
-`;
-
-const CubeWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  height: auto;
-  width: 100%;
-  padding: ${(props) => {
-    if (props.spacingOffset === 'top') {
-      return props.spacing === 'default'
-        ? '3.75vw 0 0'
-        : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '3.75vw 0 0';
-    }
-    if (props.spacingOffset === 'bottom') {
-      return props.spacing === 'default'
-        ? '0 0 3.75vw'
-        : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 3.75vw';
-    }
-    return props.spacing === 'default'
-      ? '3.75vw 0'
-      : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0';
-  }};
-
-  ${media.fullWidth} {
-    width: 100%;
-    padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '60px 0 0'
-          : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
-      }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 60px'
-          : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
-      }
-      return props.spacing === 'default'
-        ? '60px 0'
-        : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
-    }};
-  }
-
-  ${media.tablet} {
-    padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '5.859vw 0 0'
-          : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '5.859vw 0 0';
-      }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 5.859vw'
-          : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 5.859vw';
-      }
-      return props.spacing === 'default'
-        ? '5.859vw 0'
-        : props.spacing
-        ? `${props.spacing}px 0`
-        : '5.859vw 0';
-    }};
-  }
-
-  ${media.mobile} {
-    padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '12.5vw 0 0'
-          : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '12.5vw 0 0';
-      }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 12.5vw'
-          : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 12.5vw';
-      }
-      return props.spacing === 'default'
-        ? '12.5vw 0'
-        : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0';
-    }};
-  }
-`;
 
 export default LogoCube;

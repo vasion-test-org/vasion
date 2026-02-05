@@ -1,20 +1,22 @@
 'use client';
 import React from 'react';
-import CookieConsentVideo from '@/components/CookieConsentVideo';
+
 import styled from 'styled-components';
-import media from '@/styles/media';
+
+import CookieConsentVideo from '@/components/CookieConsentVideo';
 import useMedia from '@/functions/useMedia';
+import media from '@/styles/media';
 
 const Video = ({
-  videos,
   borderradius,
   filename,
-  thumbnails,
-  isSideBySideVideo = false,
-  width,
   height,
+  isSideBySideVideo = false,
+  thumbnails,
+  videos,
+  width,
 }) => {
-  let videoSrc = filename
+  const videoSrc = filename
     ? filename
     : useMedia(
         videos?.[0]?.filename,
@@ -27,20 +29,19 @@ const Video = ({
 
   return (
     <CookieConsentVideo
-      videos={videos}
       borderradius={borderradius}
-      filename={filename}
-      thumbnails={thumbnails}
-      isSideBySideVideo={isSideBySideVideo}
-      url={videoSrc}
-      width={width || '100%'}
-      height={height || '100%'}
       controls={true}
+      filename={filename}
+      height={height || '100%'}
+      isSideBySideVideo={isSideBySideVideo}
       light={thumbnails?.[0]?.filename}
       playsinline={true}
+      thumbnails={thumbnails}
+      url={videoSrc}
+      videos={videos}
+      width={width || '100%'}
     />
   );
 };
-
 
 export default Video;

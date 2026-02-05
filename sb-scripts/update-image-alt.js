@@ -82,9 +82,7 @@ const updateImageAltText = async () => {
           const altText = parseFilenameToAlt(asset.filename);
 
           if (!altText) {
-            console.log(
-              `⚠️  Skipping - could not generate alt text for: ${asset.filename}`
-            );
+            console.log(`⚠️  Skipping - could not generate alt text for: ${asset.filename}`);
             pageSkipped++;
             continue;
           }
@@ -130,9 +128,7 @@ const updateImageAltText = async () => {
 
         // If we got fewer assets than requested, we've reached the end
         if (assets.length < perPage) {
-          console.log(
-            `📄 Reached end of assets (${assets.length} < ${perPage})`
-          );
+          console.log(`📄 Reached end of assets (${assets.length} < ${perPage})`);
           break;
         }
 
@@ -156,10 +152,7 @@ const updateImageAltText = async () => {
     console.log(`📁 Total Assets Processed: ${totalAssets} assets`);
     console.log(`📄 Total Pages Processed: ${page - 1} pages`);
   } catch (err) {
-    console.error(
-      '❌ Error updating image alt text:',
-      err.response?.statusText || err.message
-    );
+    console.error('❌ Error updating image alt text:', err.response?.statusText || err.message);
   }
 };
 

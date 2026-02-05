@@ -1,11 +1,9 @@
 import { draftMode } from 'next/headers';
-import { getStoryblokApi } from '@/lib/storyblok';
-import StoryRenderer from '@/components/renderers/StoryRenderer';
+
 import PageDataUpdater from '@/components/PageDataUpdater';
-import {
-  shouldIncludeSelfReferencingHreflang,
-  buildCanonicalUrl,
-} from '@/lib/seoUtils';
+import StoryRenderer from '@/components/renderers/StoryRenderer';
+import { buildCanonicalUrl, shouldIncludeSelfReferencingHreflang } from '@/lib/seoUtils';
+import { getStoryblokApi } from '@/lib/storyblok';
 
 export default async function Home() {
   // Next.js 16+: draftMode() must be awaited
@@ -32,15 +30,13 @@ export async function generateMetadata({ searchParams }) {
 
   const { content } = story;
   const title = content.metadata?.title || 'Default Homepage Title';
-  const description =
-    content.metadata?.description || 'Default homepage description.';
+  const description = content.metadata?.description || 'Default homepage description.';
 
   const basePath = 'https://vasion.com';
   const locales = ['en', 'fr', 'de'];
 
   // Check if we should include self-referencing hreflang
-  const includeSelfReferencing =
-    shouldIncludeSelfReferencingHreflang(resolvedSearchParams);
+  const includeSelfReferencing = shouldIncludeSelfReferencingHreflang(resolvedSearchParams);
 
   // Build alternate links for all locales
   const alternateLinks = {};
@@ -62,13 +58,13 @@ export async function generateMetadata({ searchParams }) {
   const shouldNoIndex = content.index === false;
 
   return {
-    title,
-    description,
     alternates: {
       canonical: alternateLinks['en'] || buildCanonicalUrl(basePath),
       languages: alternateLinks,
     },
+    description,
     robots: shouldNoIndex ? 'noindex, nofollow' : undefined,
+    title,
   };
 }
 
@@ -82,8 +78,8 @@ async function fetchStory(slug, locale = 'en') {
   const isPreview = host === 'localhost:3000' || host?.includes('vercel.app');
 
   const sbParams = {
-    version: isPreview ? 'draft' : 'published',
     language: locale,
+    version: isPreview ? 'draft' : 'published',
   };
 
   try {

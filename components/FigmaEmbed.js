@@ -1,25 +1,27 @@
-"use client";
-import React from "react";
-import styled from "styled-components";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
+'use client';
+import React from 'react';
+
+import styled from 'styled-components';
+
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
 
 const FigmaEmbed = ({ blok }) => {
   // console.log(blok);
   const handleNavigate = (link) => {
-    window.open(link, "_blank");
+    window.open(link, '_blank');
   };
   const allButtons = blok.buttons.map((button) => (
     <ButtonImage
+      alt={button.button_image.filename}
       loading="lazy"
       src={button.button_image.filename}
-      alt={button.button_image.filename}
       onClick={() => handleNavigate(button.link_url.url)}
     />
   ));
   return (
-    <Wrapper spacingOffset={blok.offset_spacing} spacing={blok.section_spacing}>
+    <Wrapper spacing={blok.section_spacing} spacingOffset={blok.offset_spacing}>
       <ContentDiv>
         <Header>{blok.header}</Header>
         <BodyCopy>{blok.body_copy}</BodyCopy>
@@ -120,48 +122,48 @@ const Wrapper = styled.div`
   justify-self: center;
   gap: 9.097vw;
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
           ? `${props.spacing}px 0 0`
-          : "3.75vw 0 0";
+          : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
           ? `0 0 ${props.spacing}px`
-          : "0 0 3.75vw";
+          : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
         ? `${props.spacing}px 0`
-        : "3.75vw 0";
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+            : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+            : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "60px 0";
+          : '60px 0';
     }};
 
     gap: 131px;
@@ -169,25 +171,25 @@ const Wrapper = styled.div`
 
   ${media.tablet} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.859vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "5.859vw 0 0";
+            : '5.859vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 5.859vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 5.859vw";
+            : '0 0 5.859vw';
       }
-      return props.spacing === "default"
-        ? "5.859vw 0"
+      return props.spacing === 'default'
+        ? '5.859vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "5.859vw 0";
+          : '5.859vw 0';
     }};
 
     gap: 5.859vw;
@@ -195,25 +197,25 @@ const Wrapper = styled.div`
 
   ${media.mobile} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "12.5vw 0 0";
+            : '12.5vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 12.5vw";
+            : '0 0 12.5vw';
       }
-      return props.spacing === "default"
-        ? "12.5vw 0"
+      return props.spacing === 'default'
+        ? '12.5vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "12.5vw 0";
+          : '12.5vw 0';
     }};
 
     flex-direction: column-reverse;

@@ -18,13 +18,15 @@ This repo has two branches. The [main](https://github.com/storyblok/next.js-13-b
   $ git clone https://github.com/storyblok/next.js-13-boilerplate.git
 ```
 
-### 2. Install all dependecies 
+### 2. Install all dependecies
+
 ```sh
 $  npm install # or yarn
 ```
 
 ### 3. Adding the Access token
-Create a new empty Space and exchange the preview token with your own in ```app/layout.js``` and ```components/StoryblokProvider.js```
+
+Create a new empty Space and exchange the preview token with your own in `app/layout.js` and `components/StoryblokProvider.js`
 
 ```js
 // in app/layout.js
@@ -44,6 +46,7 @@ Create a new empty Space and exchange the preview token with your own in ```app/
 ```
 
 ### 4. Run your project
+
 Set the preview domain in <strong>Storyblok</strong> to `https://localhost:3000/`
 
 ```sh
@@ -56,13 +59,9 @@ $ yarn dev # or npm run dev
 $ yarn build # or npm run build
 ```
 
-
-
 ## Resources
 
 - [Next.js docs](https://nextjs.org/docs/#setup)
 - [Next.js 13 and Storyblok Tutorial](https://www.storyblok.com/tp/add-a-headless-cms-to-next-js-13-in-5-minutes)
-
-
 
   # vasion

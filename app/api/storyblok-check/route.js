@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+
 import { getStoryblokApi } from '@/lib/storyblok';
 
 export async function GET(request) {
@@ -7,17 +8,14 @@ export async function GET(request) {
   const locale = searchParams.get('locale');
 
   if (!slug || !locale) {
-    return NextResponse.json(
-      { error: 'Missing slug or locale parameter' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Missing slug or locale parameter' }, { status: 400 });
   }
 
   try {
     const storyblokApi = getStoryblokApi();
     const { data } = await storyblokApi.get(`cdn/stories/${slug}`, {
-      version: 'published',
       language: locale,
+      version: 'published',
     });
 
     return NextResponse.json({
@@ -27,8 +25,8 @@ export async function GET(request) {
   } catch (error) {
     console.error('Error checking page existence:', error);
     return NextResponse.json({
-      exists: false,
       error: error.message,
+      exists: false,
     });
   }
 }

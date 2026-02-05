@@ -1,12 +1,12 @@
 /**
  * SimpleImage - Optimized wrapper for simple images
- * 
+ *
  * Use this instead of plain <img> tags to automatically get:
  * - Next.js Image optimization (WebP/AVIF conversion)
  * - Lazy loading
  * - Responsive sizing
  * - Better performance
- * 
+ *
  * Usage:
  * <SimpleImage src="/images/logo.webp" alt="Logo" width={100} height={50} />
  * <SimpleImage src={storyblokImage.filename} alt="Description" width={200} height={200} />
@@ -14,20 +14,22 @@
 'use client';
 
 import React from 'react';
+
 import Image from 'next/image';
+
 import styled from 'styled-components';
 
 const SimpleImage = ({
-  src,
   alt = '',
-  width,
-  height,
-  priority = false,
-  loading = 'lazy',
   className,
-  style,
+  height,
+  loading = 'lazy',
+  priority = false,
   quality = 80,
   sizes,
+  src,
+  style,
+  width,
   ...props
 }) => {
   if (!src) return null;
@@ -44,20 +46,20 @@ const SimpleImage = ({
 
     return (
       <Image
-        src={src}
-        alt={alt}
-        width={width || 100}
-        height={height || 100}
-        priority={priority}
-        loading={loading === 'lazy' ? undefined : loading}
-        quality={quality}
-        sizes={defaultSizes}
-        className={className}
         style={{
-          width: '100%',
           height: 'auto',
+          width: '100%',
           ...style,
         }}
+        alt={alt}
+        className={className}
+        height={height || 100}
+        loading={loading === 'lazy' ? undefined : loading}
+        priority={priority}
+        quality={quality}
+        sizes={defaultSizes}
+        src={src}
+        width={width || 100}
         {...props}
       />
     );
@@ -66,17 +68,16 @@ const SimpleImage = ({
   // Fallback for edge cases
   return (
     <img
-      src={src}
       alt={alt}
-      width={width}
+      className={className}
       height={height}
       loading={loading}
-      className={className}
+      src={src}
       style={style}
+      width={width}
       {...props}
     />
   );
 };
 
 export default SimpleImage;
-

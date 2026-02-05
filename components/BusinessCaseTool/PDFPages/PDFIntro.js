@@ -1,41 +1,40 @@
 import React from 'react';
 
-import styled from 'styled-components';
-import media from 'styles/media';
-import colors from 'styles/colors';
-import text from 'styles/text';
-import PDFFooter from './PDFFooter';
 import {
-  formatNumber,
-  Text,
   BodyHeadline,
-  StatTable,
+  currencyConverter,
+  formatNumber,
+  Stat,
+  StatDiv,
   StatHeader,
   StatsContainer,
-  StatDiv,
-  Stat,
-  currencyConverter,
+  StatTable,
+  Text,
 } from 'components/BusinessCaseTool/PDFComponents';
+import styled from 'styled-components';
+import colors from 'styles/colors';
+import media from 'styles/media';
+import text from 'styles/text';
 
-const PDFIntro = ({ savingsFormData, currency }) => {
+import PDFFooter from './PDFFooter';
+
+const PDFIntro = ({ currency, savingsFormData }) => {
   return (
     <Wrapper>
       <Header>Introduction</Header>
       <BodyCopy>
-        Cost-saving strategies are crucial to maintaining a healthy bottom line.
-        However, traditional print environments have consistently been a blurry
-        area where expenses add up but are difficult to pinpoint. Today, cloud
-        initiatives have challenged IT teams to demonstrate the cost reductions
-        of advanced print infrastructures compared to legacy systems. 
+        Cost-saving strategies are crucial to maintaining a healthy bottom line. However,
+        traditional print environments have consistently been a blurry area where expenses add up
+        but are difficult to pinpoint. Today, cloud initiatives have challenged IT teams to
+        demonstrate the cost reductions of advanced print infrastructures compared to legacy
+        systems. 
       </BodyCopy>
       <BodyCopy>That's where we come in. </BodyCopy>
       <BodyCopy>
-        We've captured the complex data for you so you can deliver a compelling
-        business case on the financial impact of traditional print architecture
-        to senior leadership. This detailed guide underscores the benefits of
-        moving to PrinterLogic. It also introduces your potential short- and
-        long-term savings to quantify the impact of your current print
-        environment.
+        We've captured the complex data for you so you can deliver a compelling business case on the
+        financial impact of traditional print architecture to senior leadership. This detailed guide
+        underscores the benefits of moving to PrinterLogic. It also introduces your potential short-
+        and long-term savings to quantify the impact of your current print environment.
       </BodyCopy>
       <Table>
         <TableRow>
@@ -44,48 +43,32 @@ const PDFIntro = ({ savingsFormData, currency }) => {
         </TableRow>
         <TableRow>
           <TableData>How many print servers do you have?</TableData>
-          <TableDataResult>
-            {formatNumber(savingsFormData?.serverQty)}
-          </TableDataResult>
+          <TableDataResult>{formatNumber(savingsFormData?.serverQty)}</TableDataResult>
         </TableRow>
         <TableRow>
-          <TableData>
-            How much does it cost you to procure a print server?
-          </TableData>
+          <TableData>How much does it cost you to procure a print server?</TableData>
           <TableDataResult>
             {currency}
             {formatNumber(savingsFormData?.serverCost)}
           </TableDataResult>
         </TableRow>
         <TableRow>
-          <TableData>
-            How many helpdesk tickets does your team receive yearly?
-          </TableData>
-          <TableDataResult>
-            {formatNumber(savingsFormData?.tickets)}
-          </TableDataResult>
+          <TableData>How many helpdesk tickets does your team receive yearly?</TableData>
+          <TableDataResult>{formatNumber(savingsFormData?.tickets)}</TableDataResult>
         </TableRow>
         <TableRow>
-          <TableData>
-            How long does it take to resolve helpdesk tickets? (in Minutes)
-          </TableData>
-          <TableDataResult>
-            {formatNumber(savingsFormData?.resolveTickets)}
-          </TableDataResult>
+          <TableData>How long does it take to resolve helpdesk tickets? (in Minutes)</TableData>
+          <TableDataResult>{formatNumber(savingsFormData?.resolveTickets)}</TableDataResult>
         </TableRow>
         <TableRow>
-          <TableData>
-            What is the average hourly wage for your IT Helpdesk team members?
-          </TableData>
+          <TableData>What is the average hourly wage for your IT Helpdesk team members?</TableData>
           <TableDataResult>
             {currency}
             {formatNumber(savingsFormData?.itPay)}
           </TableDataResult>
         </TableRow>
         <TableRow>
-          <TableData>
-            What is the average hourly wage for your administrative staff?
-          </TableData>
+          <TableData>What is the average hourly wage for your administrative staff?</TableData>
           <TableDataResult>
             {currency}
             {formatNumber(savingsFormData?.adminPay)}
@@ -93,26 +76,18 @@ const PDFIntro = ({ savingsFormData, currency }) => {
         </TableRow>
         <TableRow>
           <TableData>How many printers do you have?</TableData>
-          <TableDataResult>
-            {formatNumber(savingsFormData?.printerQty)}
-          </TableDataResult>
+          <TableDataResult>{formatNumber(savingsFormData?.printerQty)}</TableDataResult>
         </TableRow>
         <TableRow>
-          <TableData>
-            How much do you spend on each printer over its lifetime?
-          </TableData>
+          <TableData>How much do you spend on each printer over its lifetime?</TableData>
           <TableDataResult>
             {currency}
             {formatNumber(savingsFormData?.printerCost)}
           </TableDataResult>
         </TableRow>
         <TableRow>
-          <TableData>
-            How many pages are printed in your organization per year?
-          </TableData>
-          <TableDataResult>
-            {formatNumber(savingsFormData?.pagesPrinted)}
-          </TableDataResult>
+          <TableData>How many pages are printed in your organization per year?</TableData>
+          <TableDataResult>{formatNumber(savingsFormData?.pagesPrinted)}</TableDataResult>
         </TableRow>
         <TableRow>
           <TableData>What is your average cost per printed page?</TableData>

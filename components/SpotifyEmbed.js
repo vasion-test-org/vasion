@@ -1,6 +1,8 @@
 'use client';
 import React from 'react';
+
 import styled from 'styled-components';
+
 import media from '@/styles/media';
 
 // Helper function to extract attribute value from HTML string using regex
@@ -38,13 +40,13 @@ const SpotifyEmbed = ({ blok }) => {
     <Wrapper>
       <EmbedContainer>
         <StyledIframe
-          src={src}
-          width={width}
-          height={height}
-          frameBorder="0"
           allowFullScreen
           allow={allow}
+          frameBorder="0"
+          height={height}
           loading={loading}
+          src={src}
+          width={width}
         />
       </EmbedContainer>
     </Wrapper>

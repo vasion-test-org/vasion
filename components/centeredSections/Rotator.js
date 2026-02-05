@@ -1,23 +1,20 @@
 'use client';
-import React, { useEffect, useState, useContext } from 'react';
-import styled from 'styled-components';
+import React, { useContext, useEffect, useState } from 'react';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
+import styled from 'styled-components';
 import media from 'styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+
 import { ScreenContext } from '@/components/providers/Screen';
-import colors from '@/styles/colors';
-import ComponentRenderer from '../renderers/ComponentRenderer';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import useMedia from '@/functions/useMedia';
+import colors from '@/styles/colors';
+
+import ComponentRenderer from '../renderers/ComponentRenderer';
 
 const Rotator = ({ rotatorData }) => {
   const { mobile } = useContext(ScreenContext);
-  const copycomponents = [
-    'body_copy',
-    'header',
-    'eyebrow',
-    'long_form_text',
-    'copy_block',
-  ];
+  const copycomponents = ['body_copy', 'header', 'eyebrow', 'long_form_text', 'copy_block'];
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
@@ -26,8 +23,8 @@ const Rotator = ({ rotatorData }) => {
       card.background_images[0],
       card.background_images[0],
       card?.background_images[1],
-      card?.background_images[2] || 'unset',
-    ),
+      card?.background_images[2] || 'unset'
+    )
   );
 
   /*
@@ -79,18 +76,14 @@ const Rotator = ({ rotatorData }) => {
       });
     } else {
       const tl = gsap.timeline({});
-      tl.to('.rotator', { autoAlpha: 0, filter: 'blur(2px)', duration: 0.45 })
+      tl.to('.rotator', { autoAlpha: 0, duration: 0.45, filter: 'blur(2px)' })
         .to(`.rotator-tabs`, { background: 'transparent', duration: 0.25 })
         .to(
           `#rotator-tab-${index}`,
           { background: 'linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%)' },
-          '<',
+          '<'
         )
-        .to(
-          `#rotator-${index}`,
-          { autoAlpha: 1, filter: 'blur(0px)', duration: 0.25 },
-          '<',
-        );
+        .to(`#rotator-${index}`, { autoAlpha: 1, duration: 0.25, filter: 'blur(0px)' }, '<');
     }
   };
 
@@ -118,10 +111,7 @@ const Rotator = ({ rotatorData }) => {
       onClick={() => handleTabClick(index)}
     >
       <TabIcon src={tab.tab_icon.filename} />
-      <RichTextRenderer
-        key={`tab-richtext-${index}`}
-        document={tab.tab[0].copy}
-      />
+      <RichTextRenderer document={tab.tab[0].copy} key={`tab-richtext-${index}`} />
     </Tab>
   ));
 
@@ -131,24 +121,21 @@ const Rotator = ({ rotatorData }) => {
         return (
           <React.Fragment key={`${card.component}-${index}`}>
             <BackgroundImage
-              id={`rotator-${index}`}
-              className="rotator"
               backgroundImage={cardBg.filename}
+              className="rotator"
+              id={`rotator-${index}`}
             >
               <ContentContainer>
                 {card.copy.map((item, itemIndex) =>
                   copycomponents.includes(item.component) ? (
                     <RichTextRenderer
-                      key={`card-richtext-${itemIndex}`}
-                      document={item.copy}
                       blok={item}
+                      document={item.copy}
+                      key={`card-richtext-${itemIndex}`}
                     />
                   ) : (
-                    <ComponentRenderer
-                      key={`component-${itemIndex}`}
-                      blok={item}
-                    />
-                  ),
+                    <ComponentRenderer blok={item} key={`component-${itemIndex}`} />
+                  )
                 )}
               </ContentContainer>
             </BackgroundImage>
@@ -158,31 +145,25 @@ const Rotator = ({ rotatorData }) => {
     : [];
 
   const mobileActiveCard = mobile && rotatorData[activeCardIndex] && (
-    <MobileContainer key={`mobile-${activeCardIndex}`} id="mobile-active-card">
+    <MobileContainer id="mobile-active-card" key={`mobile-${activeCardIndex}`}>
       <ContentContainer>
         {rotatorData[activeCardIndex].copy.map((item) =>
           copycomponents.includes(item.component) ? (
-            <RichTextRenderer
-              key={item._uid}
-              document={item.copy}
-              blok={item}
-            />
+            <RichTextRenderer blok={item} document={item.copy} key={item._uid} />
           ) : (
-            <ComponentRenderer key={item._uid} blok={item} />
-          ),
+            <ComponentRenderer blok={item} key={item._uid} />
+          )
         )}
       </ContentContainer>
 
-      <MobileImage src={backgroundImages[activeCardIndex].filename} alt="" />
+      <MobileImage alt="" src={backgroundImages[activeCardIndex].filename} />
     </MobileContainer>
   );
 
   return (
     <Wrapper>
       <Tabs>{tabMap}</Tabs>
-      <CardBackground mobile={mobile}>
-        {!mobile ? cardMap : mobileActiveCard}
-      </CardBackground>
+      <CardBackground mobile={mobile}>{!mobile ? cardMap : mobileActiveCard}</CardBackground>
     </Wrapper>
   );
 };

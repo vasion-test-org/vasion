@@ -1,16 +1,16 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import media from 'styles/media';
 import colors from 'styles/colors';
+import media from 'styles/media';
 import text from 'styles/text';
+
 import PDFFooter from './PDFFooter';
 
 const TableOfContents = () => {
   const contents = [
     {
       header: 'Your Estimated Savings with PrinterLogic',
-      number: 4,
       list: [
         {
           point: 'Your Total Projected Cost Savings',
@@ -22,10 +22,10 @@ const TableOfContents = () => {
           point: 'Your Total Carbon Emissions Reduction',
         },
       ],
+      number: 4,
     },
     {
       header: 'Eliminating Your Print Servers',
-      number: 5,
       list: [
         {
           point: 'The Average Cost of a Print Server',
@@ -37,10 +37,10 @@ const TableOfContents = () => {
           point: 'The Impact Print Servers Have on Your Carbon Footprint',
         },
       ],
+      number: 5,
     },
     {
       header: 'Minimizing Wasted Productivity',
-      number: 7,
       list: [
         {
           point: 'Productivity Loss from Print-Related Helpdesk Tickets',
@@ -55,10 +55,10 @@ const TableOfContents = () => {
           point: 'The Costs of Print-Related Productivity Loss',
         },
       ],
+      number: 7,
     },
     {
       header: 'Reducing Consumable Waste',
-      number: 10,
       list: [
         {
           point: 'The Impact of Enforcing Print Policies',
@@ -73,10 +73,10 @@ const TableOfContents = () => {
           point: 'The Impact Printers Have on Your Carbon Footprint',
         },
       ],
+      number: 10,
     },
     {
       header: 'Frequently Asked Questions',
-      number: 13,
       list: [
         {
           point: 'Should I eliminate my print servers?',
@@ -91,6 +91,7 @@ const TableOfContents = () => {
           point: 'How does PrinterLogic help me reduce IT helpdesk tickets?',
         },
       ],
+      number: 13,
     },
   ];
 
@@ -110,7 +111,7 @@ const TableOfContents = () => {
   return (
     <Wrapper>
       <HeaderDiv>
-        <Star src='/images/BusinessCaseTool/OrangeStar.webp' alt='Star' />
+        <Star alt="Star" src="/images/BusinessCaseTool/OrangeStar.webp" />
         <Header>Table of Contents</Header>
       </HeaderDiv>
       <TableOfContent>{allContent}</TableOfContent>

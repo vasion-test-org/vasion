@@ -1,19 +1,20 @@
-"use client";
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import CarouselArrow from "@/assets/svg/CarouselArrow.svg";
+'use client';
+import React, { useEffect } from 'react';
 
-import { horizontalLoop } from "@/functions/horizontalLoop";
+import styled from 'styled-components';
+
+import CarouselArrow from '@/assets/svg/CarouselArrow.svg';
+import { horizontalLoop } from '@/functions/horizontalLoop';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
 
 const ImageCarousel = ({ blok }) => {
   const Images = blok.carousel_assets[0].images.map((image, index) => (
     <CarouselImage
-      key={image.filename}
-      className={"carouselImages"}
+      className={'carouselImages'}
       id={`img-${index}`}
+      key={image.filename}
       src={image.filename}
     />
   ));
@@ -22,30 +23,26 @@ const ImageCarousel = ({ blok }) => {
     const initCarousel = async () => {
       const { default: gsap } = await import('gsap');
 
-      const imgArray = gsap.utils.toArray(".carouselImages");
+      const imgArray = gsap.utils.toArray('.carouselImages');
 
       const loop = horizontalLoop(imgArray, {
         deep: true,
-        paused: true,
         paddingRight: 4,
+        paused: true,
       });
 
       imgArray.forEach((img, i) =>
-        img.addEventListener("click", () =>
-          loop.toIndex(i, { duration: 0.8, ease: "power1.inOut" }),
-        ),
+        img.addEventListener('click', () =>
+          loop.toIndex(i, { duration: 0.8, ease: 'power1.inOut' })
+        )
       );
 
       document
-        .querySelector("#rightArrow")
-        .addEventListener("click", () =>
-          loop.next({ duration: 0.4, ease: "power1.inOut" }),
-        );
+        .querySelector('#rightArrow')
+        .addEventListener('click', () => loop.next({ duration: 0.4, ease: 'power1.inOut' }));
       document
-        .querySelector("#leftArrow")
-        .addEventListener("click", () =>
-          loop.previous({ duration: 0.4, ease: "power1.inOut" }),
-        );
+        .querySelector('#leftArrow')
+        .addEventListener('click', () => loop.previous({ duration: 0.4, ease: 'power1.inOut' }));
     };
 
     initCarousel();

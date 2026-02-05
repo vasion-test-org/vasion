@@ -1,18 +1,21 @@
 'use client';
 import React from 'react';
+
 import styled from 'styled-components';
-import RichTextRenderer from './renderers/RichTextRenderer';
+
 import colors from '@/styles/colors';
 import media from '@/styles/media';
+
+import RichTextRenderer from './renderers/RichTextRenderer';
 
 const ReviewBadgeCta = ({ blok }) => {
   // console.log(blok);
   return (
-    <Wrapper spacingOffset={blok.offset_spacing} spacing={blok.section_spacing}>
+    <Wrapper spacing={blok.section_spacing} spacingOffset={blok.offset_spacing}>
       <CardWrapper>
         <CopyDiv>
           {blok.copy.map((item, index) => (
-            <RichTextRenderer key={index} document={item.copy} />
+            <RichTextRenderer document={item.copy} key={index} />
           ))}
         </CopyDiv>
         <Badges>
@@ -124,11 +127,8 @@ const CardWrapper = styled.div`
   justify-content: center;
   text-align: center;
   color: ${colors.white};
-  background: linear-gradient(
-      206deg,
-      rgba(255, 255, 255, 0) 67.76%,
-      #ffffff 99.07%
-    ),
+  background:
+    linear-gradient(206deg, rgba(255, 255, 255, 0) 67.76%, #ffffff 99.07%),
     linear-gradient(143deg, rgba(255, 255, 255, 0) 68.52%, #ffffff 93.57%),
     linear-gradient(150deg, rgba(61, 37, 98, 0) 66.02%, #7e5fdd 100.52%),
     linear-gradient(217deg, rgba(255, 81, 0, 0) 53.9%, #ff5100 132.9%),
@@ -169,21 +169,21 @@ const Wrapper = styled.div`
       return props.spacing === 'default'
         ? '3.75vw 0 0'
         : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '3.75vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : '3.75vw 0 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 0 3.75vw'
         : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 3.75vw';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 3.75vw';
     }
     return props.spacing === 'default'
       ? '3.75vw 0'
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0';
+        ? `${props.spacing}px 0`
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
@@ -192,21 +192,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '60px 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+            ? `${props.spacing}px 0 0`
+            : '60px 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 60px'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 60px';
       }
       return props.spacing === 'default'
         ? '60px 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+          ? `${props.spacing}px 0`
+          : '60px 0';
     }};
   }
 
@@ -216,21 +216,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '5.859vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '5.859vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '5.859vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 5.859vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 5.859vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 5.859vw';
       }
       return props.spacing === 'default'
         ? '5.859vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '5.859vw 0';
+          ? `${props.spacing}px 0`
+          : '5.859vw 0';
     }};
   }
 
@@ -240,21 +240,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '12.5vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '12.5vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '12.5vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 12.5vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 12.5vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 12.5vw';
       }
       return props.spacing === 'default'
         ? '12.5vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0';
+          ? `${props.spacing}px 0`
+          : '12.5vw 0';
     }};
   }
 `;

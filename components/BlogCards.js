@@ -1,14 +1,18 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import { getStoryblokApi, storyblokEditable } from '@storyblok/react/rsc';
-import Card from '@/components/globalComponents/Card';
-import media from '@/styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import PaginatedCards from './PaginatedCards';
+
 import { usePathname } from 'next/navigation';
+
+import { getStoryblokApi, storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+
+import Card from '@/components/globalComponents/Card';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import media from '@/styles/media';
+
+import PaginatedCards from './PaginatedCards';
 
 const BlogCards = ({ blok }) => {
   const [blogs, setBlogs] = useState([]);
@@ -35,12 +39,12 @@ const BlogCards = ({ blok }) => {
 
       while (keepFetching) {
         const { data } = await storyblokApi.get('cdn/stories', {
-          version: 'published',
-          starts_with: 'blog/',
           is_startpage: false,
-          per_page: perPage,
-          page,
           language: currentLocale,
+          page,
+          per_page: perPage,
+          starts_with: 'blog/',
+          version: 'published',
         });
 
         allBlogs = [...allBlogs, ...data.stories];
@@ -54,7 +58,6 @@ const BlogCards = ({ blok }) => {
       }
 
       setBlogs(allBlogs);
-      
     };
 
     fetchAllBlogs();
@@ -64,9 +67,7 @@ const BlogCards = ({ blok }) => {
     <ThemeProvider theme={selectedTheme}>
       <Container {...storyblokEditable(blok)}>
         {blogs.length > 0 && (
-          <PaginatedCards
-            blok={{ ...blok, cards: blogs, card_type: 'resource' }}
-          />
+          <PaginatedCards blok={{ ...blok, card_type: 'resource', cards: blogs }} />
         )}
       </Container>
     </ThemeProvider>

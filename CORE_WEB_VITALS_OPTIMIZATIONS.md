@@ -56,7 +56,7 @@ This document outlines the comprehensive Core Web Vitals optimizations implement
   as="font"
   type="font/woff2"
   crossorigin="anonymous"
-  fetchPriority="high"
+  fetchpriority="high"
 />
 ```
 

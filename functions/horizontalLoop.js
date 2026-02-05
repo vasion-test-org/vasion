@@ -9,19 +9,19 @@ export function horizontalLoop(items, config) {
   let onChange = config.onChange,
     lastIndex = 0,
     tl = gsap.timeline({
-      repeat: config.repeat,
+      defaults: { ease: 'none' },
+      onReverseComplete: () => tl.totalTime(tl.rawTime() + tl.duration() * 100),
       onUpdate:
         onChange &&
         function () {
-          let i = tl.closestIndex();
+          const i = tl.closestIndex();
           if (lastIndex !== i) {
             lastIndex = i;
             onChange(items[i], i);
           }
         },
       paused: config.paused,
-      defaults: { ease: 'none' },
-      onReverseComplete: () => tl.totalTime(tl.rawTime() + tl.duration() * 100),
+      repeat: config.repeat,
     }),
     length = items.length,
     startX = items[0].offsetLeft,
@@ -42,17 +42,14 @@ export function horizontalLoop(items, config) {
     snap = config.snap === false ? (v) => v : gsap.utils.snap(config.snap || 1),
     timeOffset = 0,
     container =
-      center === true
-        ? items[0].parentNode
-        : gsap.utils.toArray(center)[0] || items[0].parentNode,
+      center === true ? items[0].parentNode : gsap.utils.toArray(center)[0] || items[0].parentNode,
     totalWidth,
     getTotalWidth = () =>
       items[length - 1].offsetLeft +
       (xPercents[length - 1] / 100) * widths[length - 1] -
       startX +
       spaceBefore[0] +
-      items[length - 1].offsetWidth *
-        gsap.getProperty(items[length - 1], 'scaleX') +
+      items[length - 1].offsetWidth * gsap.getProperty(items[length - 1], 'scaleX') +
       (parseFloat(config.paddingRight) || 0),
     populateWidths = () => {
       let b1 = container.getBoundingClientRect(),
@@ -61,7 +58,7 @@ export function horizontalLoop(items, config) {
         widths[i] = parseFloat(gsap.getProperty(el, 'width', 'px'));
         xPercents[i] = snap(
           (parseFloat(gsap.getProperty(el, 'x', 'px')) / widths[i]) * 100 +
-            gsap.getProperty(el, 'xPercent'),
+            gsap.getProperty(el, 'xPercent')
         );
         b2 = el.getBoundingClientRect();
         spaceBefore[i] = b2.left - (i ? b1.right : b1.left);
@@ -75,15 +72,11 @@ export function horizontalLoop(items, config) {
     },
     timeWrap,
     populateOffsets = () => {
-      timeOffset = center
-        ? (tl.duration() * (container.offsetWidth / 2)) / totalWidth
-        : 0;
+      timeOffset = center ? (tl.duration() * (container.offsetWidth / 2)) / totalWidth : 0;
       center &&
         times.forEach((t, i) => {
           times[i] = timeWrap(
-            tl.labels['label' + i] +
-              (tl.duration() * widths[i]) / 2 / totalWidth -
-              timeOffset,
+            tl.labels['label' + i] + (tl.duration() * widths[i]) / 2 / totalWidth - timeOffset
           );
         });
     },
@@ -111,30 +104,26 @@ export function horizontalLoop(items, config) {
         item = items[i];
         curX = (xPercents[i] / 100) * widths[i];
         distanceToStart = item.offsetLeft + curX - startX + spaceBefore[0];
-        distanceToLoop =
-          distanceToStart + widths[i] * gsap.getProperty(item, 'scaleX');
+        distanceToLoop = distanceToStart + widths[i] * gsap.getProperty(item, 'scaleX');
         tl.to(
           item,
           {
-            xPercent: snap(((curX - distanceToLoop) / widths[i]) * 100),
             duration: distanceToLoop / pixelsPerSecond,
+            xPercent: snap(((curX - distanceToLoop) / widths[i]) * 100),
           },
-          0,
+          0
         )
           .fromTo(
             item,
             {
-              xPercent: snap(
-                ((curX - distanceToLoop + totalWidth) / widths[i]) * 100,
-              ),
+              xPercent: snap(((curX - distanceToLoop + totalWidth) / widths[i]) * 100),
             },
             {
-              xPercent: xPercents[i],
-              duration:
-                (curX - distanceToLoop + totalWidth - curX) / pixelsPerSecond,
+              duration: (curX - distanceToLoop + totalWidth - curX) / pixelsPerSecond,
               immediateRender: false,
+              xPercent: xPercents[i],
             },
-            distanceToLoop / pixelsPerSecond,
+            distanceToLoop / pixelsPerSecond
           )
           .add('label' + i, distanceToStart / pixelsPerSecond);
         times[i] = distanceToStart / pixelsPerSecond;
@@ -142,14 +131,12 @@ export function horizontalLoop(items, config) {
       timeWrap = gsap.utils.wrap(0, tl.duration());
     },
     refresh = (config) => {
-      let progress = tl.progress();
+      const progress = tl.progress();
       tl.progress(0, true);
       populateWidths();
       populateOffsets();
       config.deep && populateTimeline();
-      config.deep && tl.draggable
-        ? tl.time(times[curIndex], true)
-        : tl.progress(progress, true);
+      config.deep && tl.draggable ? tl.time(times[curIndex], true) : tl.progress(progress, true);
     },
     proxy;
   gsap.set(items, { x: 0 });
@@ -159,8 +146,7 @@ export function horizontalLoop(items, config) {
   window.addEventListener('resize', () => refresh(config));
   function toIndex(index, vars) {
     vars = vars || {};
-    Math.abs(index - curIndex) > length / 2 &&
-      (index += index > curIndex ? -length : length); // always go in the shortest direction
+    Math.abs(index - curIndex) > length / 2 && (index += index > curIndex ? -length : length); // always go in the shortest direction
     let newIndex = gsap.utils.wrap(0, length, index),
       time = times[newIndex];
     if (time > tl.time() !== index > curIndex) {
@@ -180,7 +166,7 @@ export function horizontalLoop(items, config) {
   tl.current = () => curIndex;
   tl.toIndex = (index, vars) => toIndex(index, vars);
   tl.closestIndex = (setCurrent) => {
-    let index = getClosest(times, tl.time(), tl.duration());
+    const index = getClosest(times, tl.time(), tl.duration());
     setCurrent && (curIndex = index);
     return index;
   };
@@ -197,18 +183,15 @@ export function horizontalLoop(items, config) {
       startProgress,
       draggable,
       dragSnap,
-      align = () =>
-        tl.progress(
-          wrap(startProgress + (draggable.startX - draggable.x) * ratio),
-        ),
+      align = () => tl.progress(wrap(startProgress + (draggable.startX - draggable.x) * ratio)),
       syncIndex = () => tl.closestIndex(true);
     typeof InertiaPlugin === 'undefined' &&
       console.warn(
-        'InertiaPlugin required for momentum-based scrolling and snapping. https://greensock.com/club',
+        'InertiaPlugin required for momentum-based scrolling and snapping. https://greensock.com/club'
       );
     draggable = Draggable.create(proxy, {
-      trigger: items[0].parentNode,
-      type: 'x',
+      inertia: true,
+      onDrag: align,
       onPressInit() {
         gsap.killTweensOf(tl);
         startProgress = tl.progress();
@@ -216,20 +199,19 @@ export function horizontalLoop(items, config) {
         ratio = 1 / totalWidth;
         gsap.set(proxy, { x: startProgress / -ratio });
       },
-      onDrag: align,
+      onRelease: syncIndex,
+      onThrowComplete: syncIndex,
       onThrowUpdate: align,
-      inertia: true,
       snap: (value) => {
         let time = -(value * ratio) * tl.duration(),
           wrappedTime = timeWrap(time),
           snapTime = times[getClosest(times, wrappedTime, tl.duration())],
           dif = snapTime - wrappedTime;
-        Math.abs(dif) > tl.duration() / 2 &&
-          (dif += dif < 0 ? tl.duration() : -tl.duration());
+        Math.abs(dif) > tl.duration() / 2 && (dif += dif < 0 ? tl.duration() : -tl.duration());
         return (time + dif) / tl.duration() / -ratio;
       },
-      onRelease: syncIndex,
-      onThrowComplete: syncIndex,
+      trigger: items[0].parentNode,
+      type: 'x',
     })[0];
     tl.draggable = draggable;
   }

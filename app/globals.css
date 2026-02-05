@@ -1,12 +1,247 @@
+@import 'tailwindcss';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* ——— Theme variables (Tailwind v4) ——— */
+@theme {
+  /* Reset default colors to add our own */
+  --color-*: initial;
+
+  /* Base colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+
+  /* Purple palette (Brand Primary) */
+  --color-purple-navy: #090121;
+  --color-purple-dark: #201435;
+  --color-purple: #3d2562;
+  --color-purple-medium: #583f99;
+  --color-purple-light: #7e5fdd;
+  --color-purple-border: #945aee;
+  --color-purple-sysLight: #b19cf1;
+  --color-purple-500: #6a2c6a;
+  --color-purple-400: #8b5b8b;
+  --color-purple-300: #ac8aac;
+  --color-purple-200: #cbbff1;
+  --color-purple-100: #e6dff8;
+  --color-purple-tag: #e5dff8;
+  --color-purple-gray50: #ece9ef;
+  --color-purple-lightGrey: #f5f4f7;
+  --color-purple-reddit: #190c31;
+
+  /* Orange palette */
+  --color-orange-dark: #cc4800;
+  --color-orange: #ff5100;
+  --color-orange-500: #ff612a;
+  --color-orange-400: #ff854d;
+  --color-orange-300: #ffad80;
+  --color-orange-200: #ffcbb2;
+  --color-orange-100: #ffeee5;
+
+  /* Teal palette */
+  --color-teal-dark: #007c77;
+  --color-teal: #00a19b;
+  --color-teal-500: #33b4af;
+  --color-teal-400: #66c7c3;
+  --color-teal-300: #99dad7;
+  --color-teal-200: #cceceb;
+  --color-teal-100: #e5f6f5;
+
+  /* Yellow palette */
+  --color-yellow-dark: #d3a809;
+  --color-yellow: #ffcb04;
+  --color-yellow-500: #ffdb4f;
+  --color-yellow-400: #ffe068;
+  --color-yellow-300: #ffe582;
+  --color-yellow-200: #fff5cd;
+  --color-yellow-100: #fffae6;
+
+  /* Grey palette */
+  --color-grey-800: #191d1e;
+  --color-grey-750: #292b2c;
+  --color-grey-700: #38383d;
+  --color-grey-600: #5e5f61;
+  --color-grey-500: #838587;
+  --color-grey-400: #a8abae;
+  --color-grey-300: #bbbec1;
+  --color-grey-200: #c2c5c7;
+  --color-grey-100: #cfd2d4;
+  --color-grey-ghost: #c8c9ce;
+  --color-grey-75: #dddfe0;
+  --color-grey-50: #ebecec;
+  --color-grey-25: #f6f7f7;
+
+  /* Text colors */
+  --color-txt-primary: #1b1d21;
+  --color-txt-subtle: #808085;
+
+  /* Other colors */
+  --color-pink: #dd5fc1;
+
+  /* Breakpoints (sm/md/lg/xl naming)
+     sm = mobile (max 480px)
+     md = tablet (481-1024px)
+     lg = desktop (1025-1600px)
+     xl = full width (1601px+) */
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 1024px;
+  --breakpoint-lg: 1600px;
+  --breakpoint-xl: 1601px;
+
+  /* Spacing (custom extensions) */
+  --spacing-4_5: 1.125rem;
+  --spacing-7: 1.8125rem;
+  --spacing-11: 2.8125rem;
+  --spacing-13: 3.25rem;
+  --spacing-15: 3.75rem;
+  --spacing-17: 4.1875rem;
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+  --spacing-25: 6.25rem;
+  --spacing-30: 7.5rem;
+  --spacing-37: 9.25rem;
+  --spacing-50: 12.5rem;
+  --spacing-75: 18.75rem;
+  --spacing-100: 25rem;
+  --spacing-150: 37.5rem;
+
+  /* Container sizes */
+  --container-content: 100rem;
+  --container-narrow: 55rem;
+  --container-wide: 75rem;
+  --container-326: 81.5rem;
+
+  /* Border radius */
+  --radius-sm: 0.1875rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-4xl: 1.6875rem;
+
+  /* Fonts */
+  --font-archivo: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-archivo-bold: 'Archivo Bold', ui-sans-serif, system-ui, sans-serif;
+  --font-orbitron: 'Orbitron Regular', ui-sans-serif, system-ui, sans-serif;
+
+  /* Typography scale */
+  --text-h1: 2.875rem;
+  --text-h1--line-height: 3.5rem;
+  --text-h1--font-weight: 800;
+
+  --text-h2: 2.875rem;
+  --text-h2--line-height: 3.5rem;
+  --text-h2--font-weight: 700;
+
+  --text-h3: 2rem;
+  --text-h3--line-height: 2.5rem;
+  --text-h3--font-weight: 700;
+
+  --text-h4: 1.625rem;
+  --text-h4--line-height: 2rem;
+  --text-h4--font-weight: 700;
+
+  --text-h5: 1.25rem;
+  --text-h5--line-height: 1.5rem;
+  --text-h5--font-weight: 700;
+
+  --text-body-xl: 1.4375rem;
+  --text-body-xl--line-height: 1.875rem;
+
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.5rem;
+
+  --text-body-md: 1rem;
+  --text-body-md--line-height: 1.375rem;
+
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.125rem;
+
+  --text-eyebrow: 0.875rem;
+  --text-eyebrow--line-height: 1.125rem;
+  --text-eyebrow--font-weight: 700;
+  --text-eyebrow--letter-spacing: 0.175rem;
+  --text-eyebrow--text-transform: uppercase;
+
+  /* Background images / gradients */
+  --background-image-footer:
+    linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%),
+    linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
+  --background-image-purple-orbital:
+    linear-gradient(107deg, #5101af -20.03%, #2a1844 31.32%, #2a1844 59.09%, #5101af 96.2%),
+    linear-gradient(90deg, #ffeee5 0%, rgba(255, 238, 229, 0) 50%, #ffeee5 100%), #f5f4f7;
+  --background-image-purple-gradient: linear-gradient(
+    270deg,
+    #945aee 0%,
+    rgba(148, 90, 238, 0.4) 100%
+  );
+  --background-image-orange-gradient: linear-gradient(
+    270deg,
+    #ff5100 0%,
+    rgba(255, 81, 0, 0.4) 100%
+  );
+  --background-image-grey-gradient: linear-gradient(270deg, #000000 0%, rgba(0, 0, 0, 0.4) 100%);
+  --background-image-light-purple: linear-gradient(180deg, #f5f4f7 0%, #e8e0eb 100%);
+  --background-image-dark-purple: linear-gradient(180deg, #583f99 0%, #3d2562 100%);
+  --background-image-medium-purple: linear-gradient(180deg, #7e5fdd 0%, #583f99 100%);
+}
+
+/* CSS Custom Properties for Gradients */
+:root {
+  --gradient-purple-orbital:
+    linear-gradient(107deg, #5101af -20.03%, #2a1844 31.32%, #2a1844 59.09%, #5101af 96.2%),
+    linear-gradient(90deg, #ffeee5 0%, rgba(255, 238, 229, 0) 50%, #ffeee5 100%), #f5f4f7;
+  --gradient-purple: linear-gradient(270deg, #945aee 0%, rgba(148, 90, 238, 0.4) 100%);
+  --gradient-orange: linear-gradient(270deg, #ff5100 0%, rgba(255, 81, 0, 0.4) 100%);
+  --gradient-grey: linear-gradient(270deg, #000000 0%, rgba(0, 0, 0, 0.4) 100%);
+  --gradient-light-purple: linear-gradient(180deg, #f5f4f7 0%, #e8e0eb 100%);
+  --gradient-dark-purple: linear-gradient(180deg, #583f99 0%, #3d2562 100%);
+  --gradient-medium-purple: linear-gradient(180deg, #7e5fdd 0%, #583f99 100%);
+  --gradient-footer:
+    linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%),
+    linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
+}
+
+/* Custom utility classes for gradients */
+@utility bg-footer {
+  background:
+    linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%),
+    linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
+}
+
+@utility bg-purple-orbital {
+  background: var(--gradient-purple-orbital);
+}
+
+@utility bg-purple-gradient {
+  background: var(--gradient-purple);
+}
+
+@utility bg-orange-gradient {
+  background: var(--gradient-orange);
+}
+
+@utility bg-grey-gradient {
+  background: var(--gradient-grey);
+}
+
+@utility bg-light-purple {
+  background: var(--gradient-light-purple);
+}
+
+@utility bg-dark-purple {
+  background: var(--gradient-dark-purple);
+}
+
+@utility bg-medium-purple {
+  background: var(--gradient-medium-purple);
+}
 
 @font-face {
   font-family: 'Archivo Bold';
-  src: url('/fonts/Archivo-Bold.woff2') format('woff2'),
-      url('/fonts/Archivo-Bold.woff') format('woff');
+  src:
+    url('/fonts/Archivo-Bold.woff2') format('woff2'),
+    url('/fonts/Archivo-Bold.woff') format('woff');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -14,8 +249,9 @@
 
 @font-face {
   font-family: 'Orbitron Regular';
-  src: url('/fonts/Orbitron-Regular.woff2') format('woff2'),
-      url('/fonts/Orbitron-Regular.woff') format('woff');
+  src:
+    url('/fonts/Orbitron-Regular.woff2') format('woff2'),
+    url('/fonts/Orbitron-Regular.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -23,8 +259,9 @@
 
 @font-face {
   font-family: 'Archivo SemiBold';
-  src: url('/fonts/Archivo-SemiBold.woff2') format('woff2'),
-      url('/fonts/Archivo-SemiBold.woff') format('woff');
+  src:
+    url('/fonts/Archivo-SemiBold.woff2') format('woff2'),
+    url('/fonts/Archivo-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -32,8 +269,9 @@
 
 @font-face {
   font-family: 'Archivo Regular';
-  src: url('/fonts/Archivo-SemiBold.woff2') format('woff2'),
-      url('/fonts/Archivo-SemiBold.woff') format('woff');
+  src:
+    url('/fonts/Archivo-SemiBold.woff2') format('woff2'),
+    url('/fonts/Archivo-SemiBold.woff') format('woff');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -41,8 +279,9 @@
 
 @font-face {
   font-family: 'Archivo SemiBoldItalic';
-  src: url('/fonts/Archivo-SemiBoldItalic.woff2') format('woff2'),
-      url('/fonts/Archivo-SemiBoldItalic.woff') format('woff');
+  src:
+    url('/fonts/Archivo-SemiBoldItalic.woff2') format('woff2'),
+    url('/fonts/Archivo-SemiBoldItalic.woff') format('woff');
   font-weight: 600;
   font-style: italic;
   font-display: swap;
@@ -50,8 +289,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraBold';
-  src: url('/fonts/Archivo-ExtraBold.woff2') format('woff2'),
-      url('/fonts/Archivo-ExtraBold.woff') format('woff');
+  src:
+    url('/fonts/Archivo-ExtraBold.woff2') format('woff2'),
+    url('/fonts/Archivo-ExtraBold.woff') format('woff');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -59,8 +299,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraBold';
-  src: url('/fonts/Archivo-ExtraBold.woff2') format('woff2'),
-      url('/fonts/Archivo-ExtraBold.woff') format('woff');
+  src:
+    url('/fonts/Archivo-ExtraBold.woff2') format('woff2'),
+    url('/fonts/Archivo-ExtraBold.woff') format('woff');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -68,8 +309,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-Light.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-Light.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-Light.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -77,8 +319,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-SemiBoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-SemiBoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-SemiBoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-SemiBoldItalic.woff') format('woff');
   font-weight: 600;
   font-style: italic;
   font-display: swap;
@@ -86,8 +329,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-Black.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-Black.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-Black.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-Black.woff') format('woff');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -95,8 +339,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-Regular.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-Regular.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-Regular.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -104,8 +349,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-Light.woff2') format('woff2'),
-      url('/fonts/Archivo-Light.woff') format('woff');
+  src:
+    url('/fonts/Archivo-Light.woff2') format('woff2'),
+    url('/fonts/Archivo-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -113,8 +359,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-Bold.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-Bold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-Bold.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -122,8 +369,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-ExtraLight.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-ExtraLight.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-ExtraLight.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-ExtraLight.woff') format('woff');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
@@ -131,8 +379,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-Thin.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-Thin.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-Thin.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-Thin.woff') format('woff');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -140,8 +389,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-Black.woff2') format('woff2'),
-      url('/fonts/Archivo-Black.woff') format('woff');
+  src:
+    url('/fonts/Archivo-Black.woff2') format('woff2'),
+    url('/fonts/Archivo-Black.woff') format('woff');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -149,8 +399,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-Thin.woff2') format('woff2'),
-      url('/fonts/Archivo-Thin.woff') format('woff');
+  src:
+    url('/fonts/Archivo-Thin.woff2') format('woff2'),
+    url('/fonts/Archivo-Thin.woff') format('woff');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -158,8 +409,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-ExtraBold.woff2') format('woff2'),
-      url('/fonts/Archivo-ExtraBold.woff') format('woff');
+  src:
+    url('/fonts/Archivo-ExtraBold.woff2') format('woff2'),
+    url('/fonts/Archivo-ExtraBold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -167,8 +419,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-Regular.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-Regular.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-Regular.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -176,8 +429,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-Medium.woff2') format('woff2'),
-      url('/fonts/Archivo-Medium.woff') format('woff');
+  src:
+    url('/fonts/Archivo-Medium.woff2') format('woff2'),
+    url('/fonts/Archivo-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -185,8 +439,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-Thin.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-Thin.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-Thin.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-Thin.woff') format('woff');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -194,8 +449,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-SemiBold.woff2') format('woff2'),
-      url('/fonts/Archivo-SemiBold.woff') format('woff');
+  src:
+    url('/fonts/Archivo-SemiBold.woff2') format('woff2'),
+    url('/fonts/Archivo-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -203,8 +459,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-Thin.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-Thin.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-Thin.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-Thin.woff') format('woff');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -212,8 +469,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-Regular.woff2') format('woff2'),
-      url('/fonts/Archivo-Regular.woff') format('woff');
+  src:
+    url('/fonts/Archivo-Regular.woff2') format('woff2'),
+    url('/fonts/Archivo-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -221,8 +479,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-ExtraBold.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-ExtraBold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-ExtraBold.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-ExtraBold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -230,8 +489,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-BlackItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-BlackItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-BlackItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-BlackItalic.woff') format('woff');
   font-weight: 900;
   font-style: italic;
   font-display: swap;
@@ -239,8 +499,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-Black.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-Black.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-Black.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-Black.woff') format('woff');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -248,8 +509,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-SemiBold.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-SemiBold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-SemiBold.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -257,8 +519,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-Regular.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-Regular.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-Regular.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -266,8 +529,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-Bold.woff2') format('woff2'),
-      url('/fonts/Archivo-Bold.woff') format('woff');
+  src:
+    url('/fonts/Archivo-Bold.woff2') format('woff2'),
+    url('/fonts/Archivo-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -275,8 +539,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-ExtraLight.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-ExtraLight.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-ExtraLight.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-ExtraLight.woff') format('woff');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
@@ -284,8 +549,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-SemiBold.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-SemiBold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-SemiBold.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -293,8 +559,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-Medium.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-Medium.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-Medium.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -302,8 +569,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-Medium.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-Medium.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-Medium.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -311,8 +579,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-ThinItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-ThinItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-ThinItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-ThinItalic.woff') format('woff');
   font-weight: 100;
   font-style: italic;
   font-display: swap;
@@ -320,8 +589,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-MediumItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-MediumItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-MediumItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-MediumItalic.woff') format('woff');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -329,8 +599,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-BoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-BoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-BoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-BoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -338,8 +609,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-Regular.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-Regular.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-Regular.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -347,8 +619,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-ExtraLight.woff2') format('woff2'),
-      url('/fonts/Archivo-ExtraLight.woff') format('woff');
+  src:
+    url('/fonts/Archivo-ExtraLight.woff2') format('woff2'),
+    url('/fonts/Archivo-ExtraLight.woff') format('woff');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
@@ -356,8 +629,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-ExtraLight.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-ExtraLight.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-ExtraLight.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-ExtraLight.woff') format('woff');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
@@ -365,8 +639,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-LightItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-LightItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-LightItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-LightItalic.woff') format('woff');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -374,8 +649,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-Black.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-Black.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-Black.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-Black.woff') format('woff');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -383,8 +659,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-SemiBold.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-SemiBold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-SemiBold.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -392,8 +669,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-ExtraLight.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-ExtraLight.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-ExtraLight.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-ExtraLight.woff') format('woff');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
@@ -401,8 +679,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-Light.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-Light.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-Light.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -410,8 +689,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-Bold.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-Bold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-Bold.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -419,8 +699,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-Bold.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-Bold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-Bold.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -428,8 +709,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-Medium.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-Medium.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-Medium.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -437,8 +719,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-SemiBold.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-SemiBold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-SemiBold.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -446,8 +729,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-Bold.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-Bold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-Bold.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -455,8 +739,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-ExtraBold.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-ExtraBold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-ExtraBold.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-ExtraBold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -464,8 +749,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-Light.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-Light.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-Light.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -473,8 +759,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-MediumItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-MediumItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-MediumItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-MediumItalic.woff') format('woff');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -482,8 +769,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-ExtraLight.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-ExtraLight.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-ExtraLight.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-ExtraLight.woff') format('woff');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
@@ -491,8 +779,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-Light.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-Light.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-Light.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -500,8 +789,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-ExtraLightItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-ExtraLightItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-ExtraLightItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-ExtraLightItalic.woff') format('woff');
   font-weight: 200;
   font-style: italic;
   font-display: swap;
@@ -509,8 +799,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-Italic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-Italic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-Italic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-Italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
   font-display: swap;
@@ -518,8 +809,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-ExtraBold.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-ExtraBold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-ExtraBold.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-ExtraBold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -527,8 +819,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-ExtraBoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-ExtraBoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-ExtraBoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-ExtraBoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -536,8 +829,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-BoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-BoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-BoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-BoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -545,8 +839,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-MediumItalic.woff2') format('woff2'),
-      url('/fonts/Archivo-MediumItalic.woff') format('woff');
+  src:
+    url('/fonts/Archivo-MediumItalic.woff2') format('woff2'),
+    url('/fonts/Archivo-MediumItalic.woff') format('woff');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -554,8 +849,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-LightItalic.woff2') format('woff2'),
-      url('/fonts/Archivo-LightItalic.woff') format('woff');
+  src:
+    url('/fonts/Archivo-LightItalic.woff2') format('woff2'),
+    url('/fonts/Archivo-LightItalic.woff') format('woff');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -563,8 +859,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-Italic.woff2') format('woff2'),
-      url('/fonts/Archivo-Italic.woff') format('woff');
+  src:
+    url('/fonts/Archivo-Italic.woff2') format('woff2'),
+    url('/fonts/Archivo-Italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
   font-display: swap;
@@ -572,8 +869,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-LightItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-LightItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-LightItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-LightItalic.woff') format('woff');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -581,8 +879,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-BoldItalic.woff2') format('woff2'),
-      url('/fonts/Archivo-BoldItalic.woff') format('woff');
+  src:
+    url('/fonts/Archivo-BoldItalic.woff2') format('woff2'),
+    url('/fonts/Archivo-BoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -590,8 +889,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-BlackItalic.woff2') format('woff2'),
-      url('/fonts/Archivo-BlackItalic.woff') format('woff');
+  src:
+    url('/fonts/Archivo-BlackItalic.woff2') format('woff2'),
+    url('/fonts/Archivo-BlackItalic.woff') format('woff');
   font-weight: 900;
   font-style: italic;
   font-display: swap;
@@ -599,8 +899,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-ExtraLightItalic.woff2') format('woff2'),
-      url('/fonts/Archivo-ExtraLightItalic.woff') format('woff');
+  src:
+    url('/fonts/Archivo-ExtraLightItalic.woff2') format('woff2'),
+    url('/fonts/Archivo-ExtraLightItalic.woff') format('woff');
   font-weight: 200;
   font-style: italic;
   font-display: swap;
@@ -608,8 +909,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-SemiBoldItalic.woff2') format('woff2'),
-      url('/fonts/Archivo-SemiBoldItalic.woff') format('woff');
+  src:
+    url('/fonts/Archivo-SemiBoldItalic.woff2') format('woff2'),
+    url('/fonts/Archivo-SemiBoldItalic.woff') format('woff');
   font-weight: 600;
   font-style: italic;
   font-display: swap;
@@ -617,8 +919,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-ExtraBoldItalic.woff2') format('woff2'),
-      url('/fonts/Archivo-ExtraBoldItalic.woff') format('woff');
+  src:
+    url('/fonts/Archivo-ExtraBoldItalic.woff2') format('woff2'),
+    url('/fonts/Archivo-ExtraBoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -626,8 +929,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-ExtraBold.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-ExtraBold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-ExtraBold.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-ExtraBold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -635,8 +939,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-Black.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-Black.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-Black.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-Black.woff') format('woff');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -644,8 +949,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-Thin.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-Thin.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-Thin.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-Thin.woff') format('woff');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -653,8 +959,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-ThinItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-ThinItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-ThinItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-ThinItalic.woff') format('woff');
   font-weight: 100;
   font-style: italic;
   font-display: swap;
@@ -662,8 +969,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-Thin.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-Thin.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-Thin.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-Thin.woff') format('woff');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -671,8 +979,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-BoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-BoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-BoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-BoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -680,8 +989,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-Black.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-Black.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-Black.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-Black.woff') format('woff');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -689,8 +999,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-ExtraBoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-ExtraBoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-ExtraBoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-ExtraBoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -698,8 +1009,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-Regular.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-Regular.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-Regular.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -707,8 +1019,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-Light.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-Light.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-Light.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -716,8 +1029,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-SemiBold.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-SemiBold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-SemiBold.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -725,8 +1039,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-Medium.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-Medium.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-Medium.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -734,8 +1049,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-Medium.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-Medium.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-Medium.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -743,8 +1059,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-Italic.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-Italic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-Italic.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-Italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
   font-display: swap;
@@ -752,8 +1069,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-ThinItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-ThinItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-ThinItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-ThinItalic.woff') format('woff');
   font-weight: 100;
   font-style: italic;
   font-display: swap;
@@ -761,8 +1079,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-SemiBoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-SemiBoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-SemiBoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-SemiBoldItalic.woff') format('woff');
   font-weight: 600;
   font-style: italic;
   font-display: swap;
@@ -770,8 +1089,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-MediumItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-MediumItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-MediumItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-MediumItalic.woff') format('woff');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -779,8 +1099,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-Italic.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-Italic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-Italic.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-Italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
   font-display: swap;
@@ -788,8 +1109,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-ExtraLightItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-ExtraLightItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-ExtraLightItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-ExtraLightItalic.woff') format('woff');
   font-weight: 200;
   font-style: italic;
   font-display: swap;
@@ -797,8 +1119,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-LightItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-LightItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-LightItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-LightItalic.woff') format('woff');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -806,8 +1129,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-SemiBoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-SemiBoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-SemiBoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-SemiBoldItalic.woff') format('woff');
   font-weight: 600;
   font-style: italic;
   font-display: swap;
@@ -815,8 +1139,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-BoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-BoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-BoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-BoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -824,8 +1149,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-BlackItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-BlackItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-BlackItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-BlackItalic.woff') format('woff');
   font-weight: 900;
   font-style: italic;
   font-display: swap;
@@ -833,8 +1159,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-ExtraBoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-ExtraBoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-ExtraBoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-ExtraBoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -842,8 +1169,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-Italic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-Italic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-Italic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-Italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
   font-display: swap;
@@ -851,8 +1179,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-ThinItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-ThinItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-ThinItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-ThinItalic.woff') format('woff');
   font-weight: 100;
   font-style: italic;
   font-display: swap;
@@ -860,8 +1189,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-MediumItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-MediumItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-MediumItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-MediumItalic.woff') format('woff');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -869,8 +1199,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-ThinItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-ThinItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-ThinItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-ThinItalic.woff') format('woff');
   font-weight: 100;
   font-style: italic;
   font-display: swap;
@@ -878,8 +1209,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-SemiBoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-SemiBoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-SemiBoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-SemiBoldItalic.woff') format('woff');
   font-weight: 600;
   font-style: italic;
   font-display: swap;
@@ -887,8 +1219,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-ExtraBoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-ExtraBoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-ExtraBoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-ExtraBoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -896,8 +1229,9 @@
 
 @font-face {
   font-family: 'Archivo SemiExpanded';
-  src: url('/fonts/ArchivoSemiExpanded-BlackItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiExpanded-BlackItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiExpanded-BlackItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiExpanded-BlackItalic.woff') format('woff');
   font-weight: 900;
   font-style: italic;
   font-display: swap;
@@ -905,8 +1239,9 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-LightItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-LightItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-LightItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-LightItalic.woff') format('woff');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -914,8 +1249,9 @@
 
 @font-face {
   font-family: 'Archivo';
-  src: url('/fonts/Archivo-ThinItalic.woff2') format('woff2'),
-      url('/fonts/Archivo-ThinItalic.woff') format('woff');
+  src:
+    url('/fonts/Archivo-ThinItalic.woff2') format('woff2'),
+    url('/fonts/Archivo-ThinItalic.woff') format('woff');
   font-weight: 100;
   font-style: italic;
   font-display: swap;
@@ -923,8 +1259,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-Bold.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-Bold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-Bold.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -932,8 +1269,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-MediumItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-MediumItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-MediumItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-MediumItalic.woff') format('woff');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -941,8 +1279,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-BlackItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-BlackItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-BlackItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-BlackItalic.woff') format('woff');
   font-weight: 900;
   font-style: italic;
   font-display: swap;
@@ -950,8 +1289,9 @@
 
 @font-face {
   font-family: 'Archivo Expanded';
-  src: url('/fonts/ArchivoExpanded-ExtraBold.woff2') format('woff2'),
-      url('/fonts/ArchivoExpanded-ExtraBold.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExpanded-ExtraBold.woff2') format('woff2'),
+    url('/fonts/ArchivoExpanded-ExtraBold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -959,8 +1299,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-BlackItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-BlackItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-BlackItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-BlackItalic.woff') format('woff');
   font-weight: 900;
   font-style: italic;
   font-display: swap;
@@ -968,8 +1309,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-ExtraLightItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-ExtraLightItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-ExtraLightItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-ExtraLightItalic.woff') format('woff');
   font-weight: 200;
   font-style: italic;
   font-display: swap;
@@ -977,8 +1319,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-ExtraBoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-ExtraBoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-ExtraBoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-ExtraBoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -986,8 +1329,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-Italic.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-Italic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-Italic.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-Italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
   font-display: swap;
@@ -995,8 +1339,9 @@
 
 @font-face {
   font-family: 'Archivo Condensed';
-  src: url('/fonts/ArchivoCondensed-ExtraLightItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoCondensed-ExtraLightItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoCondensed-ExtraLightItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoCondensed-ExtraLightItalic.woff') format('woff');
   font-weight: 200;
   font-style: italic;
   font-display: swap;
@@ -1004,8 +1349,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-SemiBoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-SemiBoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-SemiBoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-SemiBoldItalic.woff') format('woff');
   font-weight: 600;
   font-style: italic;
   font-display: swap;
@@ -1013,8 +1359,9 @@
 
 @font-face {
   font-family: 'Archivo ExtraCondensed';
-  src: url('/fonts/ArchivoExtraCondensed-LightItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoExtraCondensed-LightItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoExtraCondensed-LightItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoExtraCondensed-LightItalic.woff') format('woff');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -1022,16 +1369,17 @@
 
 @font-face {
   font-family: 'Archivo SemiCondensed';
-  src: url('/fonts/ArchivoSemiCondensed-BoldItalic.woff2') format('woff2'),
-      url('/fonts/ArchivoSemiCondensed-BoldItalic.woff') format('woff');
+  src:
+    url('/fonts/ArchivoSemiCondensed-BoldItalic.woff2') format('woff2'),
+    url('/fonts/ArchivoSemiCondensed-BoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
 }
 
 button,
-input[type="submit"],
-input[type="reset"] {
+input[type='submit'],
+input[type='reset'] {
   background: none;
   color: inherit;
   border: none;
@@ -1114,8 +1462,18 @@ h1 {
   padding-top: 0;
   margin-bottom: 0;
   color: inherit;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    Fira Sans,
+    Droid Sans,
+    Helvetica Neue,
+    sans-serif;
   font-weight: bold;
   text-rendering: optimizeLegibility;
   font-size: 2.25rem;
@@ -1211,32 +1569,32 @@ button,
 select {
   text-transform: none;
 }
-[type="reset"],
-[type="submit"],
+[type='reset'],
+[type='submit'],
 button,
-html [type="button"] {
+html [type='button'] {
   -webkit-appearance: none;
 }
-a[href^="tel"] {
+a[href^='tel'] {
   color: inherit; /* Inherit text color of parent element. */
   text-decoration: none; /* Remove underline. */
   /* Additional css `propery: value;` pairs here */
 }
-[type="button"]::-moz-focus-inner,
-[type="reset"]::-moz-focus-inner,
-[type="submit"]::-moz-focus-inner,
+[type='button']::-moz-focus-inner,
+[type='reset']::-moz-focus-inner,
+[type='submit']::-moz-focus-inner,
 button::-moz-focus-inner {
   border-style: none;
   padding: 0;
 }
-[type="text"],
-[type="email"],
+[type='text'],
+[type='email'],
 textarea {
   -webkit-appearance: none;
 }
-[type="button"]:-moz-focusring,
-[type="reset"]:-moz-focusring,
-[type="submit"]:-moz-focusring,
+[type='button']:-moz-focusring,
+[type='reset']:-moz-focusring,
+[type='submit']:-moz-focusring,
 button:-moz-focusring {
   outline: none;
 }
@@ -1263,21 +1621,21 @@ legend {
 textarea {
   overflow: auto;
 }
-[type="checkbox"],
-[type="radio"] {
+[type='checkbox'],
+[type='radio'] {
   box-sizing: border-box;
   padding: 0;
 }
-[type="number"]::-webkit-inner-spin-button,
-[type="number"]::-webkit-outer-spin-button {
+[type='number']::-webkit-inner-spin-button,
+[type='number']::-webkit-outer-spin-button {
   height: auto;
 }
-[type="search"] {
+[type='search'] {
   -webkit-appearance: textfield;
   outline-offset: -2px;
 }
-[type="search"]::-webkit-search-cancel-button,
-[type="search"]::-webkit-search-decoration {
+[type='search']::-webkit-search-cancel-button,
+[type='search']::-webkit-search-decoration {
   -webkit-appearance: none;
 }
 ::-webkit-input-placeholder {
@@ -1307,8 +1665,18 @@ h1 {
   padding-top: 0;
   margin-bottom: 0;
   color: inherit;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    Fira Sans,
+    Droid Sans,
+    Helvetica Neue,
+    sans-serif;
   font-weight: bold;
   text-rendering: optimizeLegibility;
   font-size: 1.62671rem;
@@ -1324,8 +1692,18 @@ h2 {
   padding-top: 0;
   margin-bottom: 0;
   color: inherit;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    Fira Sans,
+    Droid Sans,
+    Helvetica Neue,
+    sans-serif;
   font-weight: bold;
   text-rendering: optimizeLegibility;
   font-size: 1.62671rem;
@@ -1341,8 +1719,18 @@ h3 {
   padding-top: 0;
   margin-bottom: 0;
   color: inherit;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    Fira Sans,
+    Droid Sans,
+    Helvetica Neue,
+    sans-serif;
   font-weight: bold;
   text-rendering: optimizeLegibility;
   font-size: 1.38316rem;
@@ -1358,8 +1746,18 @@ h4 {
   padding-top: 0;
   margin-bottom: 0;
   color: inherit;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    Fira Sans,
+    Droid Sans,
+    Helvetica Neue,
+    sans-serif;
   font-weight: bold;
   text-rendering: optimizeLegibility;
   font-size: 1rem;
@@ -1375,8 +1773,18 @@ h5 {
   padding-top: 0;
   margin-bottom: 0;
   color: inherit;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    Fira Sans,
+    Droid Sans,
+    Helvetica Neue,
+    sans-serif;
   font-weight: bold;
   text-rendering: optimizeLegibility;
   font-size: 0.85028rem;
@@ -1392,8 +1800,18 @@ h6 {
   padding-top: 0;
   margin-bottom: 0;
   color: inherit;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    Fira Sans,
+    Droid Sans,
+    Helvetica Neue,
+    sans-serif;
   font-weight: bold;
   text-rendering: optimizeLegibility;
   font-size: 0.78405rem;
@@ -1610,10 +2028,10 @@ td,
 th {
   text-align: left;
   border-bottom: 1px solid hsla(0, 0%, 0%, 0.12);
-  font-feature-settings: "tnum";
-  -moz-font-feature-settings: "tnum";
-  -ms-font-feature-settings: "tnum";
-  -webkit-font-feature-settings: "tnum";
+  font-feature-settings: 'tnum';
+  -moz-font-feature-settings: 'tnum';
+  -ms-font-feature-settings: 'tnum';
+  -webkit-font-feature-settings: 'tnum';
   padding-left: 0;
   padding-right: 0;
   padding-top: 0;
@@ -1631,8 +2049,9 @@ tt,
 code {
   background-color: hsla(0, 0%, 0%, 0.04);
   border-radius: 3px;
-  font-family: "SFMono-Regular", Consolas, "Roboto Mono", "Droid Sans Mono",
-    "Liberation Mono", Menlo, Courier, monospace;
+  font-family:
+    'SFMono-Regular', Consolas, 'Roboto Mono', 'Droid Sans Mono', 'Liberation Mono', Menlo, Courier,
+    monospace;
   padding: 0;
   padding-top: 0;
   padding-bottom: 0;
@@ -1646,13 +2065,13 @@ code:after,
 tt:before,
 tt:after {
   letter-spacing: 0;
-  content: " ";
+  content: ' ';
 }
 pre code:before,
 pre code:after,
 pre tt:before,
 pre tt:after {
-  content: "";
+  content: '';
 }
 
 * {
@@ -1662,7 +2081,6 @@ pre tt:after {
 .mt-4 {
   margin-top: unset;
 }
-
 
 /* .mktoForm input {
   all: unset !important;

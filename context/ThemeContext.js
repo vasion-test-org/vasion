@@ -1,17 +1,19 @@
-'use client'
+'use client';
 
-import { createContext, useContext } from "react";
-import { ThemeProvider } from "styled-components";
-import { defaultTheme, darkTheme, buttonThemes, lightTheme } from "@/styles/theme"; 
+import { createContext, useContext } from 'react';
+
+import { ThemeProvider } from 'styled-components';
+
+import { buttonThemes, darkTheme, defaultTheme, lightTheme } from '@/styles/theme';
 
 const themes = {
-  default: defaultTheme,
-  dark: darkTheme,
   button: buttonThemes,
+  dark: darkTheme,
+  default: defaultTheme,
   light: lightTheme,
 };
 
-const ThemeContext = createContext(themes.default); 
+const ThemeContext = createContext(themes.default);
 
 export const ThemeProviderWrapper = ({ children }) => {
   return <ThemeContext.Provider value={themes}>{children}</ThemeContext.Provider>;

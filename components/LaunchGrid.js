@@ -1,15 +1,18 @@
 'use client';
 import React, { useContext } from 'react';
+
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+
 import Button from '@/components/globalComponents/Button';
 import { ScreenContext } from '@/components/providers/Screen';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import Card from './globalComponents/Card';
-import styled, { ThemeProvider } from 'styled-components';
 import { useAvailableThemes } from '@/context/ThemeContext';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import media from '@/styles/media';
-import colors from '@/styles/colors';
 import useMedia from '@/functions/useMedia';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+
+import Card from './globalComponents/Card';
 
 const LaunchGrid = ({ blok }) => {
   const { mobile } = useContext(ScreenContext);
@@ -29,19 +32,19 @@ const LaunchGrid = ({ blok }) => {
   const cards = blok?.cards?.map((card) => {
     if (!card.Image?.filename) return null;
     const cardContent = {
-      content: card.content,
-      Button: card.Button,
-      Image: card.Image,
-      has_hover: card.has_hover,
-      image_border: card.image_border,
       blur_card: card.blur_card,
+      Button: card.Button,
+      content: card.content,
+      has_hover: card.has_hover,
+      Image: card.Image,
+      image_border: card.image_border,
     };
 
     return (
       <Card
-        key={card._uid}
         blur={card.blur_card}
         content={cardContent}
+        key={card._uid}
         {...storyblokEditable(card)}
       >
         <CardImage src={card.Image.filename} />
@@ -53,11 +56,8 @@ const LaunchGrid = ({ blok }) => {
           ))}
         </CardCopy>
         {card?.Button?.map(($buttonData) => (
-          <ButtonWrapper
-            {...storyblokEditable($buttonData)}
-            key={$buttonData.link_text}
-          >
-            <Button key={$buttonData.link_text} $buttonData={$buttonData} />
+          <ButtonWrapper {...storyblokEditable($buttonData)} key={$buttonData.link_text}>
+            <Button $buttonData={$buttonData} key={$buttonData.link_text} />
           </ButtonWrapper>
         ))}
       </Card>
@@ -71,7 +71,7 @@ const LaunchGrid = ({ blok }) => {
       <CtaCopy {...storyblokEditable(blok?.launch_cta?.[0])}>{ctaCopy}</CtaCopy>
       {blok?.launch_cta?.[0]?.button_group?.map(($buttonData) => (
         <div {...storyblokEditable($buttonData)} key={$buttonData.link_text}>
-          <Button key={$buttonData.link_text} $buttonData={$buttonData} />
+          <Button $buttonData={$buttonData} key={$buttonData.link_text} />
         </div>
       ))}
     </CtaContent>
@@ -79,10 +79,7 @@ const LaunchGrid = ({ blok }) => {
 
   return (
     <ThemeProvider theme={selectedTheme}>
-      <Wrapper
-        spacing={blok.section_spacing}
-        spacingOffset={blok.offset_spacing}
-      >
+      <Wrapper spacing={blok.section_spacing} spacingOffset={blok.offset_spacing}>
         <ContentWrapper>
           {!mobile && <Cta bg={responsiveBackground}>{ctaContent}</Cta>}
           {mobile && (
@@ -327,21 +324,21 @@ const Wrapper = styled.div`
       return props.spacing === 'default'
         ? '3.75vw 0 0'
         : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '3.75vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : '3.75vw 0 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 0 3.75vw'
         : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 3.75vw';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 3.75vw';
     }
     return props.spacing === 'default'
       ? '3.75vw 0'
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0';
+        ? `${props.spacing}px 0`
+        : '3.75vw 0';
   }};
   ${media.fullWidth} {
     gap: 40px;
@@ -350,21 +347,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '60px 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+            ? `${props.spacing}px 0 0`
+            : '60px 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 60px'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 60px';
       }
       return props.spacing === 'default'
         ? '60px 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+          ? `${props.spacing}px 0`
+          : '60px 0';
     }};
   }
   ${media.tablet} {
@@ -374,21 +371,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '5.859vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '5.859vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '5.859vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 5.859vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 5.859vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 5.859vw';
       }
       return props.spacing === 'default'
         ? '5.859vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '5.859vw 0';
+          ? `${props.spacing}px 0`
+          : '5.859vw 0';
     }};
   }
   ${media.mobile} {
@@ -398,21 +395,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '12.5vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '12.5vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '12.5vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 12.5vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 12.5vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 12.5vw';
       }
       return props.spacing === 'default'
         ? '12.5vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0';
+          ? `${props.spacing}px 0`
+          : '12.5vw 0';
     }};
   }
 `;

@@ -1,27 +1,30 @@
 'use client';
 
 import React from 'react';
+
 import Image from 'next/image';
+
 import styled from 'styled-components';
-import media from '@/styles/media';
+
 import useMedia from '@/functions/useMedia';
+import media from '@/styles/media';
 
 const OptimizedImage = ({
-  images,
   borderradius,
-  filename,
-  priority = false,
-  sizes = '100vw',
-  fill = false,
-  width,
-  height,
   className,
-  style,
-  quality = 85,
   fetchPriority,
+  filename,
+  fill = false,
+  height,
+  images,
+  priority = false,
+  quality = 85,
+  sizes = '100vw',
+  style,
+  width,
 }) => {
   // console.log(borderradius)
-  let imageSrc = filename
+  const imageSrc = filename
     ? filename
     : useMedia(
         images?.[0]?.filename,
@@ -56,23 +59,19 @@ const OptimizedImage = ({
   // If fill is true, we need a container with relative positioning
   if (fill) {
     return (
-      <ImageContainer
-        borderradius={borderradius}
-        className={className}
-        style={style}
-      >
+      <ImageContainer borderradius={borderradius} className={className} style={style}>
         <Image
-          src={imageSrc}
-          alt={altText}
           fill
-          priority={priority}
-          sizes={sizes}
-          quality={quality}
-          fetchPriority={fetchPriority || (priority ? 'high' : undefined)}
           style={{
-            objectFit: 'contain',
             borderRadius: `${borderradius || 0}px`,
+            objectFit: 'contain',
           }}
+          alt={altText}
+          fetchPriority={fetchPriority || (priority ? 'high' : undefined)}
+          priority={priority}
+          quality={quality}
+          sizes={sizes}
+          src={imageSrc}
         />
       </ImageContainer>
     );
@@ -81,21 +80,21 @@ const OptimizedImage = ({
   // For non-fill images, use width and height props
   return (
     <Image
-      src={imageSrc}
-      alt={altText}
-      width={width || 800}
-      height={height || 600}
-      priority={priority}
-      sizes={sizes}
-      quality={quality}
-      fetchPriority={fetchPriority || (priority ? 'high' : undefined)}
-      className={className}
       style={{
-        width: '100%',
-        height: 'auto',
         borderRadius: `${borderradius || 0}px`,
+        height: 'auto',
+        width: '100%',
         ...style,
       }}
+      alt={altText}
+      className={className}
+      fetchPriority={fetchPriority || (priority ? 'high' : undefined)}
+      height={height || 600}
+      priority={priority}
+      quality={quality}
+      sizes={sizes}
+      src={imageSrc}
+      width={width || 800}
     />
   );
 };

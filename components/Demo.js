@@ -1,22 +1,24 @@
 'use client';
-import React, { useEffect, useContext, useRef } from 'react';
-import styled from 'styled-components';
-import DemoPrint from 'assets/svg/demoprint.svg';
+import React, { useContext, useEffect, useRef } from 'react';
+
+import { storyblokEditable } from '@storyblok/react/rsc';
 import AI from 'assets/svg/ai.svg';
-import Tune from 'assets/svg/tune.svg';
+import DemoPrint from 'assets/svg/demoprint.svg';
 import DemoStar from 'assets/svg/demostar.svg';
+import Tune from 'assets/svg/tune.svg';
+import Chevron from 'assets/svg/WhiteChevron.svg';
+import styled from 'styled-components';
 
 import Form from '@/components/Form';
+import { ScreenContext } from '@/components/providers/Screen';
+import IconRenderer from '@/components/renderers/Icons';
+import getMedia from '@/functions/getMedia';
 import colors from '@/styles/colors';
 import media from '@/styles/media';
 import text from '@/styles/text';
-import { ScreenContext } from '@/components/providers/Screen';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import Chevron from 'assets/svg/WhiteChevron.svg';
-import getMedia from '@/functions/getMedia';
-import RichTextRenderer from './renderers/RichTextRenderer';
-import IconRenderer from '@/components/renderers/Icons';
+
 import ComponentRenderer from './renderers/ComponentRenderer';
+import RichTextRenderer from './renderers/RichTextRenderer';
 import TestForm from './TestForm';
 
 const Demo = ({ blok }) => {
@@ -329,17 +331,15 @@ const Demo = ({ blok }) => {
   const mappedOptions = blok.cards.map((option, index) => {
     const formattedIconString = option.icon?.replace(/\s+/g, '') || '';
     const IconComponent = formattedIconString
-      ? ({ ...props }) => (
-          <IconRenderer iconName={formattedIconString} {...props} />
-        )
+      ? ({ ...props }) => <IconRenderer iconName={formattedIconString} {...props} />
       : null;
     // console.log(option);
     return (
       <div {...storyblokEditable(option)}>
         <OptionDiv
           className="options preformContent"
-          ref={(el) => (optionRefs.current[index] = el)}
           key={option.header}
+          ref={(el) => (optionRefs.current[index] = el)}
         >
           <OptionIconWrapper classname="icons">
             {IconComponent && <IconComponent />}
@@ -386,8 +386,8 @@ const Demo = ({ blok }) => {
               <div key={index} {...storyblokEditable(item)}>
                 {copycomponents.includes(item.component) ? (
                   <RichTextRenderer
-                    document={item.copy}
                     blok={item}
+                    document={item.copy}
                     responsiveTextStyles={item?.responsive_text_styles}
                   />
                 ) : (
@@ -416,14 +416,16 @@ const FormThankYouContainer = styled.div`
   padding: 2vw;
   width: 35.25vw;
   height: 80vh;
-  box-shadow: 0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
+  box-shadow:
+    0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.25vw 0.5vw 0vw rgba(25, 29, 30, 0.16);
 
   ${media.fullWidth} {
     border-radius: 32px;
     padding: 32px;
     width: 564px;
-    box-shadow: 0px 0px 2px 0px rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0px 0px 2px 0px rgba(25, 29, 30, 0.04),
       0px 4px 8px 0px rgba(25, 29, 30, 0.16);
   }
 
@@ -431,7 +433,8 @@ const FormThankYouContainer = styled.div`
     border-radius: 3.125vw;
     padding: 3.125vw;
     width: 45.313vw;
-    box-shadow: 0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.391vw 0.781vw 0vw rgba(25, 29, 30, 0.16);
   }
 
@@ -439,7 +442,8 @@ const FormThankYouContainer = styled.div`
     border-radius: 6.667vw;
     padding: 6.667vw;
     width: 89.167vw;
-    box-shadow: 0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.833vw 1.667vw 0vw rgba(25, 29, 30, 0.16);
   }
 `;
@@ -675,12 +679,7 @@ const Wrapper = styled.div`
 const BackgroundWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background: linear-gradient(
-    70deg,
-    #da5e24 -65.61%,
-    #190c30 50.18%,
-    #3d2562 104.12%
-  );
+  background: linear-gradient(70deg, #da5e24 -65.61%, #190c30 50.18%, #3d2562 104.12%);
   background-position: center;
   background-size: contain;
 `;

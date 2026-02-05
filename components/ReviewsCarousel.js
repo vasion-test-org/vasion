@@ -1,13 +1,15 @@
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import { horizontalLoop } from "functions/horizontalLoop";
-import text from "styles/text";
-import RichTextRenderer from "./renderers/RichTextRenderer";
-import { storyblokEditable } from "@storyblok/react/rsc";
+import React, { useEffect } from 'react';
+
+import { storyblokEditable } from '@storyblok/react/rsc';
+import { horizontalLoop } from 'functions/horizontalLoop';
+import styled from 'styled-components';
+import colors from 'styles/colors';
+import media from 'styles/media';
+import text from 'styles/text';
+
+import RichTextRenderer from './renderers/RichTextRenderer';
 
 const ReviewsCarousel = ({ blok }) => {
   const redditReviews = blok?.reviews;
@@ -16,9 +18,7 @@ const ReviewsCarousel = ({ blok }) => {
   const hasStats = statsList && statsList?.length > 0;
 
   const clonedReviews = [...redditReviews, ...redditReviews, ...redditReviews];
-  const clonedStats = hasStats
-    ? [...statsList, ...statsList, ...statsList]
-    : [];
+  const clonedStats = hasStats ? [...statsList, ...statsList, ...statsList] : [];
   const dragReviews = clonedReviews.map((rev, index) => {
     const hasValidLink = rev.link?.[0]?.link_url?.url;
 
@@ -26,14 +26,14 @@ const ReviewsCarousel = ({ blok }) => {
       <ReviewItem
         {...(hasValidLink && {
           href: rev.link[0].link_url.url,
-          target: "_blank",
-          rel: "noopener noreferrer",
+          rel: 'noopener noreferrer',
+          target: '_blank',
         })}
+        className="reviewItems"
         haslink={hasValidLink}
         key={index}
-        className="reviewItems"
       >
-        {<Stars src="/images/HomepageStars.webp" alt={"Five Star Rating"} />}
+        {<Stars alt={'Five Star Rating'} src="/images/HomepageStars.webp" />}
         <div {...storyblokEditable(rev)}>
           <RichTextRenderer document={rev?.body_copy} />
         </div>
@@ -49,10 +49,7 @@ const ReviewsCarousel = ({ blok }) => {
               <div {...storyblokEditable(rev.link[0].link_text)}>
                 <RedditText> {rev.link[0].link_text}</RedditText>
               </div>
-              <RedditOpener
-                src="/images/RedditNewTab.webp"
-                alt={"compose-new-tab"}
-              />
+              <RedditOpener alt={'compose-new-tab'} src="/images/RedditNewTab.webp" />
             </>
           )}
         </RedditTextContainer>
@@ -63,7 +60,7 @@ const ReviewsCarousel = ({ blok }) => {
   const dragStats = hasStats
     ? clonedStats.map((statItem, index) => {
         return (
-          <StatDiv key={index} className={"statsDraggable"}>
+          <StatDiv className={'statsDraggable'} key={index}>
             <StyledStat>{statItem?.stat}</StyledStat>
             <div {...storyblokEditable(statItem)}>
               <RichTextRenderer document={statItem.copy[0].copy} />
@@ -75,26 +72,23 @@ const ReviewsCarousel = ({ blok }) => {
 
   useEffect(() => {
     const initCarousel = async () => {
-      const [{ default: gsap }, { default: Draggable }, { default: InertiaPlugin }] = await Promise.all([
-        import('gsap'),
-        import('gsap/Draggable'),
-        import('gsap/InertiaPlugin'),
-      ]);
+      const [{ default: gsap }, { default: Draggable }, { default: InertiaPlugin }] =
+        await Promise.all([import('gsap'), import('gsap/Draggable'), import('gsap/InertiaPlugin')]);
 
       gsap.registerPlugin(Draggable, InertiaPlugin);
 
       horizontalLoop(`.reviewItems`, {
-        repeat: -1,
-        paddingRight: 0,
-        draggable: true,
-        speed: 0.6,
         deep: true,
+        draggable: true,
+        paddingRight: 0,
+        repeat: -1,
+        speed: 0.6,
       });
 
       if (hasStats) {
         horizontalLoop(`.statsDraggable`, {
-          repeat: -1,
           paddingRight: 10,
+          repeat: -1,
           // draggable: true,
           speed: 0.3,
         });
@@ -105,13 +99,9 @@ const ReviewsCarousel = ({ blok }) => {
   }, [hasStats]);
 
   return (
-    <SpacingWrapper   spacingOffset={blok.offset_spacing}
-    spacing={blok.section_spacing}>
+    <SpacingWrapper spacing={blok.section_spacing} spacingOffset={blok.offset_spacing}>
       <Wrapper id="reddit-reviews">
-        <HeaderContainer
-          spacingOffset={blok.offset_spacing}
-          spacing={blok.section_spacing}
-        >
+        <HeaderContainer spacing={blok.section_spacing} spacingOffset={blok.offset_spacing}>
           <div {...storyblokEditable(blok)}>
             <RichTextRenderer document={blok?.header} />
           </div>
@@ -139,10 +129,7 @@ const ReviewsCarousel = ({ blok }) => {
               {dragStats}
               <DecorativeStroke className="decorative-stroke">
                 <LineDecoration />
-                <VasionStar
-                  src="/images/DraggableWhiteVasionStar.webp"
-                  alt={"vasion-star-logo"}
-                />
+                <VasionStar alt={'vasion-star-logo'} src="/images/DraggableWhiteVasionStar.webp" />
               </DecorativeStroke>
             </VisibleStatsContainer>
           </ByTheNumbers>
@@ -321,11 +308,7 @@ const BlurStatLeft = styled.div`
     height: 37.792vw;
     left: -24.583vw;
     bottom: 12.583vw;
-    background: linear-gradient(
-      0deg,
-      #190c31 0.24%,
-      rgba(25, 12, 49, 0) 99.76%
-    );
+    background: linear-gradient(0deg, #190c31 0.24%, rgba(25, 12, 49, 0) 99.76%);
   }
 `;
 
@@ -359,11 +342,7 @@ const BlurStatRight = styled.div`
     right: -24.583vw;
     bottom: 13.583vw;
     top: unset;
-    background: linear-gradient(
-      0deg,
-      #190c31 0.24%,
-      rgba(25, 12, 49, 0) 99.76%
-    );
+    background: linear-gradient(0deg, #190c31 0.24%, rgba(25, 12, 49, 0) 99.76%);
   }
 `;
 
@@ -447,7 +426,7 @@ const Stars = styled.img`
   }
 `;
 const ReviewItem = styled.a`
-  cursor: ${(props) => (props.haslink ? "pointer" : "default")};
+  cursor: ${(props) => (props.haslink ? 'pointer' : 'default')};
   display: flex;
   flex-direction: column;
   color: ${colors?.white};
@@ -554,11 +533,7 @@ const BlurLeft = styled.div`
     top: unset;
     width: 100%;
     bottom: 29.792vw;
-    background: linear-gradient(
-      0deg,
-      #190c31 0.24%,
-      rgba(25, 12, 49, 0) 83.88%
-    );
+    background: linear-gradient(0deg, #190c31 0.24%, rgba(25, 12, 49, 0) 83.88%);
   }
 `;
 
@@ -592,11 +567,7 @@ const BlurRight = styled.div`
     right: -38.875vw;
     width: 100%;
     bottom: 29.792vw;
-    background: linear-gradient(
-      0deg,
-      #190c31 0.24%,
-      rgba(25, 12, 49, 0) 83.88%
-    );
+    background: linear-gradient(0deg, #190c31 0.24%, rgba(25, 12, 49, 0) 83.88%);
   }
 `;
 
@@ -697,97 +668,97 @@ const Wrapper = styled.div`
 
 const SpacingWrapper = styled.div`
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
           ? `${props.spacing}px 0 0`
-          : "3.75vw 0 0";
+          : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
           ? `0 0 ${props.spacing}px`
-          : "0 0 3.75vw";
+          : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
         ? `${props.spacing}px 0`
-        : "3.75vw 0";
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
     gap: 16px;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+            : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+            : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "60px 0";
+          : '60px 0';
     }};
   }
 
   ${media.tablet} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.859vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "5.859vw 0 0";
+            : '5.859vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 5.859vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 5.859vw";
+            : '0 0 5.859vw';
       }
-      return props.spacing === "default"
-        ? "5.859vw 0"
+      return props.spacing === 'default'
+        ? '5.859vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "5.859vw 0";
+          : '5.859vw 0';
     }};
   }
 
   ${media.mobile} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "12.5vw 0 0";
+            : '12.5vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 12.5vw";
+            : '0 0 12.5vw';
       }
-      return props.spacing === "default"
-        ? "12.5vw 0"
+      return props.spacing === 'default'
+        ? '12.5vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "12.5vw 0";
+          : '12.5vw 0';
     }};
   }
 `;

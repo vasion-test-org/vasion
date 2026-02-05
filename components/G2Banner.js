@@ -1,16 +1,18 @@
-"use client";
-import React from "react";
-import styled, { ThemeProvider } from "styled-components";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
+'use client';
+import React from 'react';
+
+import styled, { ThemeProvider } from 'styled-components';
+
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
 
 const G2Banner = ({ blok }) => {
   const headerContent = blok.copy_section?.[0]?.copy ? (
     <RichTextRenderer document={blok.copy_section[0].copy} />
   ) : (
-    "The #1 Print Management Software on G2"
+    'The #1 Print Management Software on G2'
   );
   const spotlightImage = blok.assets?.[0];
   const supportingBadges = blok.assets?.slice(1) || [];
@@ -22,17 +24,17 @@ const G2Banner = ({ blok }) => {
         <FlexContainer>
           {spotlightImage && (
             <SpotLightImage
+              alt={spotlightImage.alt || 'G2 Spotlight Badge'}
               loading="lazy"
-              alt={spotlightImage.alt || "G2 Spotlight Badge"}
               src={spotlightImage.filename}
             />
           )}
           <BadgeContainer>
             {supportingBadges.map((badge, index) => (
               <SupportingBadge
+                alt={badge.alt || `G2 Badge ${index + 1}`}
                 key={badge.id || index}
                 loading="lazy"
-                alt={badge.alt || `G2 Badge ${index + 1}`}
                 src={badge.filename}
               />
             ))}

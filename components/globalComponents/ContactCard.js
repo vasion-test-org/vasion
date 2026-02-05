@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
+
 import styled from 'styled-components';
-import media from 'styles/media';
 import colors from 'styles/colors';
+import media from 'styles/media';
 import text from 'styles/text';
-import RichTextRenderer from '../renderers/RichTextRenderer';
+
 // import emailIcon from "images/EmailIcon.webp";
 // import orangeEmailIcon from "images/orangeEmailIcon.webp";
 import Image from '@/components/globalComponents/Image';
+
+import RichTextRenderer from '../renderers/RichTextRenderer';
 const ContactCard = ({ blok }) => {
   const [active, setActive] = useState(false);
   // console.log(blok.headshot[0].media);
   return (
-    <CardWrapper
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => setActive(false)}
-    >
+    <CardWrapper onMouseEnter={() => setActive(true)} onMouseLeave={() => setActive(false)}>
       <ImageWrapper>
-        <Image images={blok.headshot[0].media} alt={'contact portrait'} />
+        <Image alt={'contact portrait'} images={blok.headshot[0].media} />
       </ImageWrapper>
       <TextContent>
         <NameAndTitle>
           <RichWrapper>
-          <RichTextRenderer document={blok?.contactee} />
+            <RichTextRenderer document={blok?.contactee} />
           </RichWrapper>
           <RichTextRenderer document={blok?.position} />
         </NameAndTitle>
@@ -30,7 +30,7 @@ const ContactCard = ({ blok }) => {
             src={active ? orangeEmailIcon : emailIcon}
             alt={"Email Tag"}
           /> */}
-          <Email href={`mailto:${blok?.email.url}`} $active={active}>
+          <Email $active={active} href={`mailto:${blok?.email.url}`}>
             {blok.email.url}
           </Email>
         </EmailDiv>
@@ -43,7 +43,7 @@ export default ContactCard;
 
 const RichWrapper = styled.div`
   margin-bottom: 0.5vw;
-`
+`;
 const ImageWrapper = styled.div`
   width: 11.25vw;
   height: 11.25vw;
@@ -51,8 +51,7 @@ const ImageWrapper = styled.div`
 const Email = styled.a`
   text-decoration: none;
   ${text.bodySmBold};
-  color: ${(props) =>
-    props.$active ? `${colors.primaryOrange}` : `${colors.grey500}`};
+  color: ${(props) => (props.$active ? `${colors.primaryOrange}` : `${colors.grey500}`)};
 `;
 const EmailIcon = styled.img`
   width: 1.25vw;

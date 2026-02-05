@@ -1,67 +1,63 @@
 'use client';
 import React from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
+import Schedule from 'assets/svg/schedule.svg';
+import styled, { ThemeProvider } from 'styled-components';
+
+import Button from '@/components/globalComponents/Button';
+import Image from '@/components/globalComponents/Image';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import media from '@/styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import Image from '@/components/globalComponents/Image';
-import Button from '@/components/globalComponents/Button';
-import Schedule from 'assets/svg/schedule.svg';
 
 const ResourceAuthor = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok?.theme] || themes.default;
 
   const line_seperators = {
-    top: blok?.top_divider,
     bottom: blok?.lower_divider,
+    top: blok?.top_divider,
   };
 
   return (
     <ThemeProvider theme={selectedTheme}>
       <Wrapper
-        spacingOffset={blok.offset_spacing}
         spacing={blok.section_spacing}
+        spacingOffset={blok.offset_spacing}
         {...storyblokEditable(blok)}
       >
         <Division divider={line_seperators}>
           <AuthorContainer isblogend={blok.blog_end}>
             {blok?.assets && blok.assets?.length > 0 && !blok.blog_end && (
               <AuthorImageWrapper
-                isblogend={blok?.blog_end}
                 buttons={blok.button_group?.length > 0}
+                isblogend={blok?.blog_end}
               >
                 <Image
-                  images={blok.assets}
                   borderradius={50}
-                  width={80}
                   height={80}
+                  images={blok.assets}
                   priority={false}
+                  width={80}
                 />
               </AuthorImageWrapper>
             )}
 
             {blok?.assets && blok.assets?.length > 0 && blok.blog_end && (
-              <AuthorImageWrapper
-                isblogend={blok.blog_end}
-                buttons={blok.button_group?.length > 0}
-              >
+              <AuthorImageWrapper buttons={blok.button_group?.length > 0} isblogend={blok.blog_end}>
                 <Image
-                  images={blok.assets}
                   borderradius={50}
-                  width={40}
                   height={40}
+                  images={blok.assets}
                   priority={false}
+                  width={40}
                 />
               </AuthorImageWrapper>
             )}
             <AuthorTextWrapper>
               {blok?.copy_sections?.map((copy, index) => (
-                <CopyWrapper
-                  key={copy._uid || index}
-                  {...storyblokEditable(copy)}
-                >
+                <CopyWrapper key={copy._uid || index} {...storyblokEditable(copy)}>
                   <RichTextRenderer
                     document={copy?.copy}
                     responsiveTextStyles={copy?.responsive_text_styles}
@@ -78,8 +74,8 @@ const ResourceAuthor = ({ blok }) => {
                         key={$buttonData._uid || $buttonData.link_text}
                       >
                         <Button
-                          key={$buttonData._uid || $buttonData.link_text}
                           $buttonData={$buttonData}
+                          key={$buttonData._uid || $buttonData.link_text}
                         />
                       </div>
                     );
@@ -89,12 +85,9 @@ const ResourceAuthor = ({ blok }) => {
             </AuthorTextWrapper>
             {!blok.blog_end /** Only applies when Author is at the intro of the blog*/ && (
               <AuthorIsOnTopTextWrapper>
-                <Schedule width={20} height={20} />
+                <Schedule height={20} width={20} />
                 {blok?.extended_copy?.map((copy, index) => (
-                  <CopyWrapper
-                    key={copy._uid || index}
-                    {...storyblokEditable(copy)}
-                  >
+                  <CopyWrapper key={copy._uid || index} {...storyblokEditable(copy)}>
                     <RichTextRenderer
                       document={copy?.copy}
                       responsiveTextStyles={copy?.responsive_text_styles}
@@ -200,14 +193,12 @@ const AuthorContainer = styled.div`
   box-sizing: border-box;
   max-width: 46.875vw;
   gap: ${(props) => (props.isblogend ? '1.25vw' : '0.5vw')};
-  padding: ${(props) =>
-    props.isblogend ? '2.5vw 0vw' : '1.25vw 0vw'} !important;
+  padding: ${(props) => (props.isblogend ? '2.5vw 0vw' : '1.25vw 0vw')} !important;
 
   ${media.fullWidth} {
     gap: ${(props) => (props.isblogend ? '20px' : '8px')};
     max-width: 750px;
-    padding: ${(props) =>
-      props.isblogend ? '40px 0px' : '20px 0px'} !important;
+    padding: ${(props) => (props.isblogend ? '40px 0px' : '20px 0px')} !important;
   }
 
   ${media.tablet} {
@@ -219,8 +210,7 @@ const AuthorContainer = styled.div`
   ${media.mobile} {
     gap: ${(props) => (props.isblogend ? '4.167vw' : '1.667vw')};
     max-width: 89.167vw;
-    padding: ${(props) =>
-      props.isblogend ? '8.125vw 0vw' : '4.167vw 0vw'} !important;
+    padding: ${(props) => (props.isblogend ? '8.125vw 0vw' : '4.167vw 0vw')} !important;
   }
 `;
 const Division = styled.div`
@@ -229,30 +219,22 @@ const Division = styled.div`
 
   width: 100%;
 
-  border-top: ${(props) =>
-    props.divider.top ? '0.063vw solid #c8c9ce' : 'unset'};
-  border-bottom: ${(props) =>
-    props.divider.bottom ? '0.063vw solid #c8c9ce' : 'unset'};
+  border-top: ${(props) => (props.divider.top ? '0.063vw solid #c8c9ce' : 'unset')};
+  border-bottom: ${(props) => (props.divider.bottom ? '0.063vw solid #c8c9ce' : 'unset')};
 
   ${media.fullWidth} {
-    border-top: ${(props) =>
-      props.divider.top ? '1px solid #c8c9ce' : 'unset'};
-    border-bottom: ${(props) =>
-      props.divider.bottom ? '1px solid #c8c9ce' : 'unset'};
+    border-top: ${(props) => (props.divider.top ? '1px solid #c8c9ce' : 'unset')};
+    border-bottom: ${(props) => (props.divider.bottom ? '1px solid #c8c9ce' : 'unset')};
   }
 
   ${media.tablet} {
-    border-top: ${(props) =>
-      props.divider.top ? '0.098vw solid #c8c9ce' : 'unset'};
-    border-bottom: ${(props) =>
-      props.divider.bottom ? '0.098vw solid #c8c9ce' : 'unset'};
+    border-top: ${(props) => (props.divider.top ? '0.098vw solid #c8c9ce' : 'unset')};
+    border-bottom: ${(props) => (props.divider.bottom ? '0.098vw solid #c8c9ce' : 'unset')};
   }
 
   ${media.mobile} {
-    border-top: ${(props) =>
-      props.divider.top ? '0.5px solid #c8c9ce' : 'unset'};
-    border-bottom: ${(props) =>
-      props.divider.bottom ? '0.5px solid #c8c9ce' : 'unset'};
+    border-top: ${(props) => (props.divider.top ? '0.5px solid #c8c9ce' : 'unset')};
+    border-bottom: ${(props) => (props.divider.bottom ? '0.5px solid #c8c9ce' : 'unset')};
   }
 `;
 const Wrapper = styled.div`

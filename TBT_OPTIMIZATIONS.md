@@ -216,9 +216,7 @@ Monitor your performance improvements using:
 
 ```javascript
 // Load scripts on first user interaction (optimized)
-deferScriptsOnInteraction([
-  { src: '/analytics.js', options: { strategy: 'afterInteractive' } },
-]);
+deferScriptsOnInteraction([{ src: '/analytics.js', options: { strategy: 'afterInteractive' } }]);
 
 // Load scripts when element becomes visible
 loadScriptsOnIntersection([{ src: '/heavy-component.js' }], '.lazy-component', {

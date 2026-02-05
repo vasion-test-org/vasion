@@ -1,10 +1,13 @@
-"use client";
-import React, { useState, useRef } from "react";
-import styled from "styled-components";
-import media from "styles/media";
-import text from "styles/text";
-import CardModal from "@/components/globalComponents/CardModal";
-import RichTextRenderer from "./renderers/RichTextRenderer";
+'use client';
+import React, { useRef, useState } from 'react';
+
+import styled from 'styled-components';
+import media from 'styles/media';
+import text from 'styles/text';
+
+import CardModal from '@/components/globalComponents/CardModal';
+
+import RichTextRenderer from './renderers/RichTextRenderer';
 
 const ModalCards = ({ blok }) => {
   // console.log("ModalCards", blok);
@@ -24,9 +27,7 @@ const ModalCards = ({ blok }) => {
   };
 
   const allCards = blok?.cards.map((item, index) => {
-    const hasYouTube = /youtube|youtu\.be/.test(
-      item?.asset[0].media[0].filename,
-    );
+    const hasYouTube = /youtube|youtu\.be/.test(item?.asset[0].media[0].filename);
 
     let image = null;
     if (hasYouTube) {
@@ -36,26 +37,22 @@ const ModalCards = ({ blok }) => {
     }
     return (
       <ProfileCard
+        $bg={image}
         $isvideo={hasYouTube}
         key={`modal-card-${index}`}
-        $bg={image}
         onClick={() => handleModal(item)}
         onMouseEnter={() => setIsActive(index)}
         onMouseLeave={() => setIsActive(false)}
       >
         <Title>
-          {item?.person[0]?.copy && (
-            <RichTextRenderer document={item.person[0].copy} />
-          )}
-          {item?.position[0]?.copy && (
-            <RichTextRenderer document={item.position[0].copy} />
-          )}
+          {item?.person[0]?.copy && <RichTextRenderer document={item.person[0].copy} />}
+          {item?.position[0]?.copy && <RichTextRenderer document={item.position[0].copy} />}
         </Title>
 
         <GoToBtn
           $active={index === isActive}
+          alt={'go-to-btn'}
           src="/images/uiElements/GoTo.webp"
-          alt={"go-to-btn"}
         />
       </ProfileCard>
     );
@@ -78,7 +75,7 @@ export default ModalCards;
 
 const GoToBtn = styled.img`
   position: relative;
-  opacity: ${(props) => (props?.$active ? "1" : "0")};
+  opacity: ${(props) => (props?.$active ? '1' : '0')};
   width: 2.75vw;
   height: 2.75vw;
   ${media.fullWidth} {
@@ -141,25 +138,25 @@ const ProfileCard = styled.div`
           180deg,
           rgba(61, 37, 98, 0.02) 0%,
           rgba(88, 63, 153, 0.5) 100%
-        )${props.$bg ? `, url(${props.$bg})` : ""}`
+        )${props.$bg ? `, url(${props.$bg})` : ''}`
         : props.$bg
           ? `url(${props.$bg})`
-          : "none"}; */
+          : 'none'}; */
   }
   background-size: 100%;
-  width: ${(props) => (props?.$isvideo ? "26.125vw" : "19.25vw")};
+  width: ${(props) => (props?.$isvideo ? '26.125vw' : '19.25vw')};
   height: 25.625vw;
   border-radius: 1.5vw;
   padding: 1.625vw;
   ${media.fullWidth} {
-    width: ${(props) => (props?.$isvideo ? "418px" : "308px")};
+    width: ${(props) => (props?.$isvideo ? '418px' : '308px')};
     height: 410px;
     border-radius: 24px;
     padding: 26px;
   }
 
   ${media.tablet} {
-    background-size: ${(props) => (props?.$isvideo ? "cover" : "100%")};
+    background-size: ${(props) => (props?.$isvideo ? 'cover' : '100%')};
     width: 29.102vw;
     height: 38.867vw;
     border-radius: 2.344vw;
@@ -167,7 +164,7 @@ const ProfileCard = styled.div`
   }
 
   ${media.mobile} {
-    background-size: ${(props) => (props?.$isvideo ? "cover" : "100%")};
+    background-size: ${(props) => (props?.$isvideo ? 'cover' : '100%')};
     width: 75vw;
     height: 99.792vw;
     border-radius: 5vw;
@@ -217,50 +214,50 @@ const Wrapper = styled.div`
   gap: 2vw;
 
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
           ? `${props.spacing}px 0 0`
-          : "3.75vw 0 0";
+          : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
           ? `0 0 ${props.spacing}px`
-          : "0 0 3.75vw";
+          : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
         ? `${props.spacing}px 0`
-        : "3.75vw 0";
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
     gap: 32px;
     width: 1304px;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+            : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+            : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "60px 0";
+          : '60px 0';
     }};
   }
 
@@ -268,25 +265,25 @@ const Wrapper = styled.div`
     gap: 3.125vw;
     width: 92.188vw;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.859vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "5.859vw 0 0";
+            : '5.859vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 5.859vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 5.859vw";
+            : '0 0 5.859vw';
       }
-      return props.spacing === "default"
-        ? "5.859vw 0"
+      return props.spacing === 'default'
+        ? '5.859vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "5.859vw 0";
+          : '5.859vw 0';
     }};
   }
 
@@ -295,25 +292,25 @@ const Wrapper = styled.div`
     width: 100%;
     z-index: 1;
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "12.5vw 0 0";
+            : '12.5vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 12.5vw";
+            : '0 0 12.5vw';
       }
-      return props.spacing === "default"
-        ? "12.5vw 0"
+      return props.spacing === 'default'
+        ? '12.5vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "12.5vw 0";
+          : '12.5vw 0';
     }};
   }
 `;

@@ -1,12 +1,14 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import media from "@/styles/media";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import IntegrationBloks from "@/components/globalComponents/IntegrationBloks";
-import { storyblokEditable } from "@storyblok/react/rsc";
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+
+import IntegrationBloks from '@/components/globalComponents/IntegrationBloks';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
 
 const IntegrationsGrid = ({ blok }) => {
   // console.log(blok);
@@ -17,13 +19,13 @@ const IntegrationsGrid = ({ blok }) => {
 
   useEffect(() => {
     setIsMounted(true);
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       const checkMobile = () => {
         setIsMobile(window.innerWidth <= 480);
       };
       checkMobile();
-      window.addEventListener("resize", checkMobile);
-      return () => window.removeEventListener("resize", checkMobile);
+      window.addEventListener('resize', checkMobile);
+      return () => window.removeEventListener('resize', checkMobile);
     }
   }, []);
 
@@ -37,17 +39,17 @@ const IntegrationsGrid = ({ blok }) => {
         if (isOpen) {
           const fullHeight = currentRef.scrollHeight;
           gsap.to(currentRef, {
-            height: fullHeight,
             duration: 1,
-            ease: "sine.out",
+            ease: 'sine.out',
+            height: fullHeight,
           });
         } else {
           gsap.set(currentRef, {
-            height: "70vh",
+            height: '70vh',
           });
         }
       } else {
-        gsap.set(currentRef, { height: "auto" });
+        gsap.set(currentRef, { height: 'auto' });
       }
     };
 
@@ -67,19 +69,12 @@ const IntegrationsGrid = ({ blok }) => {
           <RichTextRenderer document={blok?.body_copy} />
         </Body>
       </Intro>
-      {isMounted && (
-        <IntegrationBloks types={blok?.integration_types} isMobile={isMobile} />
-      )}
+      {isMounted && <IntegrationBloks isMobile={isMobile} types={blok?.integration_types} />}
       {!isOpen && isMobile && (
         <ViewMoreWrapper>
           <MoreAndCarrot>
             <ViewMore onClick={handleViewMore}>View More</ViewMore>
-            <Carrot
-              src={"/images/uiElements/carrot-down"}
-              alt={""}
-              width={"12"}
-              height={"12"}
-            />
+            <Carrot alt={''} height={'12'} src={'/images/uiElements/carrot-down'} width={'12'} />
           </MoreAndCarrot>
         </ViewMoreWrapper>
       )}
@@ -197,21 +192,21 @@ const Wrapper = styled.div`
       return props.spacing === 'default'
         ? '3.75vw 0 0'
         : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '3.75vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : '3.75vw 0 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 0 3.75vw'
         : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 3.75vw';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 3.75vw';
     }
     return props.spacing === 'default'
       ? '3.75vw 0'
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '3.75vw 0';
+        ? `${props.spacing}px 0`
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
@@ -221,21 +216,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '60px 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '60px 0 0';
+            ? `${props.spacing}px 0 0`
+            : '60px 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 60px'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 60px';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 60px';
       }
       return props.spacing === 'default'
         ? '60px 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '60px 0';
+          ? `${props.spacing}px 0`
+          : '60px 0';
     }};
   }
 
@@ -246,21 +241,21 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '5.859vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '5.859vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '5.859vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 5.859vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 5.859vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 5.859vw';
       }
       return props.spacing === 'default'
         ? '5.859vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '5.859vw 0';
+          ? `${props.spacing}px 0`
+          : '5.859vw 0';
     }};
     gap: 1.563vw;
   }
@@ -272,23 +267,22 @@ const Wrapper = styled.div`
         return props.spacing === 'default'
           ? '12.5vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '12.5vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '12.5vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 12.5vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 12.5vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 12.5vw';
       }
       return props.spacing === 'default'
         ? '12.5vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '12.5vw 0';
+          ? `${props.spacing}px 0`
+          : '12.5vw 0';
     }};
     gap: 3.333vw;
   }
-
 `;

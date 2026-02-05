@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
+
 import { batchStateUpdates, deferNonCritical } from '@/lib/performanceUtils';
 
 /**
@@ -9,11 +10,7 @@ import { batchStateUpdates, deferNonCritical } from '@/lib/performanceUtils';
  * @param {Object} options - Configuration options
  */
 export const useOptimizedState = (initialState, options = {}) => {
-  const {
-    batchUpdates = true,
-    deferNonCriticalUpdates = false,
-    throttleMs = 0,
-  } = options;
+  const { batchUpdates = true, deferNonCriticalUpdates = false, throttleMs = 0 } = options;
 
   const [state, setState] = useState(initialState);
   const pendingUpdates = useRef([]);

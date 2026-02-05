@@ -1,13 +1,14 @@
 'use client';
 import React from 'react';
+
 import { usePathname } from 'next/navigation';
 
+import { storyblokEditable } from '@storyblok/react/rsc';
 import styled from 'styled-components';
 
-import { storyblokEditable } from '@storyblok/react/rsc';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import media from '@/styles/media';
 import text from '@/styles/text';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 const BlogInfo = ({ blok }) => {
   // console.log(blok)
@@ -23,14 +24,11 @@ const BlogInfo = ({ blok }) => {
 
   const currentLocale = getCurrentLocale();
 
-  const formattedDate = new Date(blok?.published_date).toLocaleDateString(
-    currentLocale,
-    {
-      year: 'numeric',
-      month: 'long',
-      day: '2-digit',
-    }
-  );
+  const formattedDate = new Date(blok?.published_date).toLocaleDateString(currentLocale, {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
 
   return (
     <BlogInfoWrapper>

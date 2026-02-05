@@ -1,38 +1,41 @@
 'use client';
+import React from 'react';
+
 import {
-  render,
   MARK_STYLED,
   NODE_HEADING,
   NODE_PARAGRAPH,
+  render,
 } from 'storyblok-rich-text-react-renderer';
-import React from 'react';
 import styled from 'styled-components';
-import media from '@/styles/media';
-import Header from '@/components/copyComponents/Header';
+
 import BodyCopy from '@/components/copyComponents/BodyCopy';
 import Eyebrow from '@/components/copyComponents/Eyebrow';
-import useMedia from '@/functions/useMedia';
+import Header from '@/components/copyComponents/Header';
 import CTA from '@/components/CTA';
-import SmallQuote from '../SmallQuote';
-import LogoCube from '../LogoCube';
-import SideBySide from '../SideBySide';
-import CenteredSection from '../CenteredSection';
-import NumberBlock from '../NumberBlock';
-import TwoColumnList from '@/components/TwoColumnList';
-import colors from '@/styles/colors';
-import text from '@/styles/text';
 import GradientText from '@/components/globalComponents/GradientText';
+import ResourceArticle from '@/components/ResourceArticle';
+import ResourceAuthor from '@/components/ResourceAuthor';
 import ResourceCta from '@/components/ResourceCta';
 import ResourceInlineQuote from '@/components/ResourceInlineQuote';
-import ResourceAuthor from '@/components/ResourceAuthor';
-import ResourceArticle from '@/components/ResourceArticle';
+import TwoColumnList from '@/components/TwoColumnList';
+import useMedia from '@/functions/useMedia';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
+
+import CenteredSection from '../CenteredSection';
+import LogoCube from '../LogoCube';
+import NumberBlock from '../NumberBlock';
+import SideBySide from '../SideBySide';
+import SmallQuote from '../SmallQuote';
 
 const RichTextRenderer = ({
-  document,
-  responsiveTextStyles = [],
   blok,
-  gradientText,
+  document,
   featuredCopy = false,
+  gradientText,
+  responsiveTextStyles = [],
 }) => {
   if (!document) return null;
   const extractText = (contentArray) => {
@@ -40,9 +43,9 @@ const RichTextRenderer = ({
     return contentArray.map((node) => node.text || '').join(' ');
   };
   const blokResolvers = {
-    two_column_list: (props) => (
+    centered_section: (props) => (
       <div className="component-wrapper">
-        <TwoColumnList blok={props} />
+        <CenteredSection blok={props} />
       </div>
     ),
     cta: (props) => (
@@ -50,9 +53,9 @@ const RichTextRenderer = ({
         <CTA blok={props} />
       </div>
     ),
-    small_quote: (props) => (
+    infographic_pill: (props) => (
       <div className="component-wrapper">
-        <SmallQuote blok={props} />
+        <InfographicPill blok={props} />
       </div>
     ),
     logo_cube: (props) => (
@@ -60,24 +63,19 @@ const RichTextRenderer = ({
         <LogoCube blok={props} />
       </div>
     ),
-    side_by_side: (props) => (
-      <div className="component-wrapper">
-        <SideBySide blok={props} />
-      </div>
-    ),
-    centered_section: (props) => (
-      <div className="component-wrapper">
-        <CenteredSection blok={props} />
-      </div>
-    ),
     number_block: (props) => (
       <div className="component-wrapper">
         <NumberBlock blok={props} />
       </div>
     ),
-    infographic_pill: (props) => (
+    resource_article: (props) => (
       <div className="component-wrapper">
-        <InfographicPill blok={props} />
+        <ResourceArticle blok={props} />
+      </div>
+    ),
+    resource_author: (props) => (
+      <div className="component-wrapper">
+        <ResourceAuthor blok={props} />
       </div>
     ),
     resource_cta: (props) => (
@@ -90,14 +88,19 @@ const RichTextRenderer = ({
         <ResourceInlineQuote blok={props} />
       </div>
     ),
-    resource_author: (props) => (
+    side_by_side: (props) => (
       <div className="component-wrapper">
-        <ResourceAuthor blok={props} />
+        <SideBySide blok={props} />
       </div>
     ),
-    resource_article: (props) => (
+    small_quote: (props) => (
       <div className="component-wrapper">
-        <ResourceArticle blok={props} />
+        <SmallQuote blok={props} />
+      </div>
+    ),
+    two_column_list: (props) => (
+      <div className="component-wrapper">
+        <TwoColumnList blok={props} />
       </div>
     ),
   };
@@ -116,12 +119,7 @@ const RichTextRenderer = ({
 
       const tabletStyle = responsiveTextStyles[0] || `h${level}`;
       const mobileStyle = responsiveTextStyles[1] || tabletStyle;
-      const selectedHeaderStyle = useMedia(
-        `h${level}`,
-        `h${level}`,
-        tabletStyle,
-        mobileStyle,
-      );
+      const selectedHeaderStyle = useMedia(`h${level}`, `h${level}`, tabletStyle, mobileStyle);
 
       const headerContent = (
         <Header as={selectedHeaderStyle} className={selectedHeaderStyle}>
@@ -129,11 +127,7 @@ const RichTextRenderer = ({
         </Header>
       );
 
-      return gradientText ? (
-        <GradientText>{headerContent}</GradientText>
-      ) : (
-        headerContent
-      );
+      return gradientText ? <GradientText>{headerContent}</GradientText> : headerContent;
     },
 
     [NODE_PARAGRAPH]: (children) => {
@@ -143,11 +137,11 @@ const RichTextRenderer = ({
         className,
         className,
         responsiveTextStyles[0],
-        responsiveTextStyles[1],
+        responsiveTextStyles[1]
       );
       // console.log('selectedClassName', selectedClassName)
       return (
-        <BodyCopy className={selectedClassName} $featured={featuredCopy}>
+        <BodyCopy $featured={featuredCopy} className={selectedClassName}>
           {children}
         </BodyCopy>
       );

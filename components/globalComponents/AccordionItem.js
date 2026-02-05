@@ -1,17 +1,30 @@
-"use client";
-import React, { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import media from "styles/media";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import colors from "@/styles/colors";
-import DownChevron from "@/assets/svg/ChevronDown.svg";
+'use client';
 
+import { useEffect, useRef, useState } from 'react';
+
+import { storyblokEditable } from '@storyblok/react/rsc';
+
+import DownChevron from '@/assets/svg/ChevronDown.svg';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { cn } from '@/lib/cn';
+
+/**
+ * AccordionItem (Client Component)
+ * Interactive accordion item with GSAP animations for expand/collapse.
+ * Must be client component due to useState, useRef, and animation logic.
+ *
+ * VW Conversion Notes:
+ * - Padding: 1.5vw (desk) / 2.344vw (tab) / 5vw (mob) all = 24px → py-6
+ * - Chevron: 1.563vw (desk) / 2.441vw (tab) / 5.208vw (mob) all = 25px → size-6
+ * - Content padding: Same as above → pt-6
+ */
 const AccordionItem = ({ accordionItem }) => {
   const [isOpen, setIsOpen] = useState(false);
   const chevronRef = useRef(null);
   const contentRef = useRef(null);
   const contentInnerRef = useRef(null);
+  // Use accordionItem._uid for deterministic ID that matches parent key
+  const componentId = `accordion-item-${accordionItem._uid}`;
 
   const toggleAccordion = async () => {
     const { default: gsap } = await import('gsap');
@@ -20,9 +33,9 @@ const AccordionItem = ({ accordionItem }) => {
 
     if (chevronRef.current) {
       gsap.to(chevronRef.current, {
-        rotation: isOpen ? 0 : 180,
-        color: isOpen ? colors.txtPrimary : colors.primaryOrange,
+        color: isOpen ? '#1B1D21' : '#ff5100', // txt-primary : orange
         duration: 0.3,
+        rotation: isOpen ? 0 : 180,
       });
     }
   };
@@ -35,12 +48,12 @@ const AccordionItem = ({ accordionItem }) => {
         const contentHeight = isOpen ? contentInnerRef.current.offsetHeight : 0;
 
         gsap.to(contentRef.current, {
-          height: contentHeight,
           duration: 0.4,
-          ease: "power2.out",
+          ease: 'power2.out',
+          height: contentHeight,
           onComplete: () => {
             if (isOpen) {
-              gsap.set(contentRef.current, { height: "auto" });
+              gsap.set(contentRef.current, { height: 'auto' });
             }
           },
         });
@@ -50,137 +63,64 @@ const AccordionItem = ({ accordionItem }) => {
     initAnimation();
   }, [isOpen]);
 
-  const headerContent = accordionItem.copy_blocks[0];
-
-  const contentBlocks = accordionItem.copy_blocks.slice(1);
+  const headerContent = accordionItem.copy_blocks?.[0];
+  const contentBlocks = accordionItem.copy_blocks?.slice(1) || [];
 
   return (
-    <Item $isOpen={isOpen}>
-      <ItemHeader onClick={toggleAccordion}>
-        {headerContent && (
-          <HeaderContent {...storyblokEditable(headerContent)}>
-            <RichTextRenderer
-              className={headerContent.component}
-              document={headerContent.copy}
-            />
-            <ChevronWrapper ref={chevronRef}>
-              <Chevron />
-            </ChevronWrapper>
-          </HeaderContent>
+    <div
+      className={cn(
+        'flex flex-col py-6',
+        'border-txt-subtle border-t',
+        'last:border-txt-subtle last:border-b'
+      )}
+    >
+      <button
+        className={cn(
+          'w-full cursor-pointer border-none bg-transparent p-0 text-left',
+          'focus-visible:ring-purple-border rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2'
         )}
-      </ItemHeader>
+        aria-controls={`${componentId}-content`}
+        aria-expanded={isOpen}
+        id={`${componentId}-header`}
+        type="button"
+        onClick={toggleAccordion}
+      >
+        {headerContent && (
+          <div
+            className="flex w-full items-center justify-between gap-4"
+            {...storyblokEditable(headerContent)}
+          >
+            <div className="flex-1">
+              <RichTextRenderer className={headerContent.component} document={headerContent.copy} />
+            </div>
+            <div
+              aria-hidden="true"
+              className="flex shrink-0 items-center justify-center"
+              ref={chevronRef}
+            >
+              <DownChevron className="size-6 transition-transform duration-300" />
+            </div>
+          </div>
+        )}
+      </button>
 
-      <ContentWrapper ref={contentRef}>
-        <ContentInner ref={contentInnerRef}>
+      <div
+        aria-labelledby={`${componentId}-header`}
+        className="h-0 overflow-hidden"
+        id={`${componentId}-content`}
+        ref={contentRef}
+        role="region"
+      >
+        <div className="pt-6" ref={contentInnerRef}>
           {contentBlocks.map((copy, idx) => (
-            <div key={`${copy.component}-${idx}`} {...storyblokEditable(copy)}>
-              <RichTextRenderer
-                className={copy.component}
-                document={copy.copy}
-              />
+            <div key={copy._uid || `content-${idx}`} {...storyblokEditable(copy)}>
+              <RichTextRenderer className={copy.component} document={copy.copy} />
             </div>
           ))}
-        </ContentInner>
-      </ContentWrapper>
-    </Item>
+        </div>
+      </div>
+    </div>
   );
 };
-
-const ContentInner = styled.div`
-  padding-top: 1.5vw;
-
-  ${media.fullWidth} {
-    padding-top: 24px;
-  }
-
-  ${media.tablet} {
-    padding-top: 2.344vw;
-  }
-
-  ${media.mobile} {
-    padding-top: 5vw;
-  }
-`;
-
-const ChevronWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Chevron = styled(DownChevron)`
-  height: 1.563vw;
-  width: 1.563vw;
-
-  ${media.fullWidth} {
-    height: 25px;
-    width: 25px;
-  }
-
-  ${media.tablet} {
-    height: 2.441vw;
-    width: 2.441vw;
-  }
-
-  ${media.mobile} {
-    height: 5.208vw;
-    width: 5.208vw;
-  }
-`;
-
-const ItemHeader = styled.div`
-  cursor: pointer;
-  width: 100%;
-`;
-
-const HeaderContent = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-`;
-
-const ContentWrapper = styled.div`
-  height: 0;
-  overflow: hidden;
-`;
-
-const Item = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 1.5vw 0;
-  border-top: 0.063vw solid ${colors.txtSubtle};
-
-  &:last-child {
-    border-bottom: 0.063vw solid ${colors.txtSubtle};
-  }
-
-  ${media.fullWidth} {
-    padding: 24px 0;
-    border-top: 1px solid ${colors.txtSubtle};
-
-    &:last-child {
-      border-bottom: 1px solid ${colors.txtSubtle};
-    }
-  }
-
-  ${media.tablet} {
-    padding: 2.344vw 0;
-    border-top: 0.098vw solid ${colors.txtSubtle};
-
-    &:last-child {
-      border-bottom: 0.098vw solid ${colors.txtSubtle};
-    }
-  }
-
-  ${media.mobile} {
-    padding: 5vw 0;
-    border-top: 0.208vw solid ${colors.txtSubtle};
-
-    &:last-child {
-      border-bottom: 0.208vw solid ${colors.txtSubtle};
-    }
-  }
-`;
 
 export default AccordionItem;

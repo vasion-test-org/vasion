@@ -1,16 +1,18 @@
 import React from 'react';
+
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled from 'styled-components';
+
+import Button from '@/components/globalComponents/Button';
+import colors from '@/styles/colors';
 import media from '@/styles/media';
 import text from '@/styles/text';
-import colors from '@/styles/colors';
-import styled from 'styled-components';
-import Button from '@/components/globalComponents/Button';
+
 import RichTextRenderer from '../renderers/RichTextRenderer';
-import { storyblokEditable } from '@storyblok/react/rsc';
 
 const EventCard = ({ content, even }) => {
   const getTagStyles = (tagContent) => {
-    const tagText =
-      tagContent?.content?.[0]?.content?.[0]?.text?.toLowerCase() || '';
+    const tagText = tagContent?.content?.[0]?.content?.[0]?.text?.toLowerCase() || '';
     if (tagText.includes('trade show')) {
       return {
         background: 'linear-gradient(180deg, #F5F4F7 0%, #E8E0EB 100%)',
@@ -48,11 +50,11 @@ const EventCard = ({ content, even }) => {
       <DetailsContainer>
         <Details>
           <DetailDiv>
-            <DetailIcon src='/images/locationOn.webp' />
+            <DetailIcon src="/images/locationOn.webp" />
             <RichTextRenderer document={content.location} />
           </DetailDiv>
           <DetailDiv>
-            <DetailIcon src='/images/calendarClock.webp' />
+            <DetailIcon src="/images/calendarClock.webp" />
             <RichTextRenderer document={content.date} />
           </DetailDiv>
         </Details>
@@ -183,8 +185,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  background: ${(props) =>
-    props.even ? colors.lightPurpleGrey : colors.white};
+  background: ${(props) => (props.even ? colors.lightPurpleGrey : colors.white)};
   width: 100%;
   padding: 2vw 1.5vw;
   gap: 16.25vw;

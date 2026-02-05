@@ -1,16 +1,18 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
+import { storyblokEditable } from '@storyblok/react/rsc';
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
+
+import { useThankYou } from '@/context/ThankYouContext';
 import { useAvailableThemes } from '@/context/ThemeContext';
-import { storyblokEditable } from '@storyblok/react/rsc';
-import media from '@/styles/media';
 import getMedia from '@/functions/getMedia';
 import colors from '@/styles/colors';
+import media from '@/styles/media';
 import text from '@/styles/text';
-import { useThankYou } from '@/context/ThankYouContext';
-import { useRouter } from 'next/navigation';
 
 const TestForm = ({ blok }) => {
   // console.log(blok.redirect_link)
@@ -40,33 +42,6 @@ const TestForm = ({ blok }) => {
     console.log('Event data:', event.data);
 
     switch (event.data.message) {
-      case 'LD_ROUTING_RESPONSE':
-        console.log('Routing response received:', event.data.responseData);
-        dataLayer.push({
-          event: 'lean_data_routing_response',
-          form_id: blok.form_id,
-          routing_response_date: new Date().toISOString(),
-          routing_data: event.data.responseData,
-        });
-        break;
-      case 'LD_ROUTING_TIMED_OUT':
-        console.log('Routing timed out:', event.data.responseData);
-        dataLayer.push({
-          event: 'lean_data_routing_timeout',
-          form_id: blok.form_id,
-          timeout_date: new Date().toISOString(),
-          timeout_data: event.data.responseData,
-        });
-        break;
-      case 'LD_POST_BOOKING_IMMEDIATE':
-        console.log('Booking completed:', event.data.responseData);
-        dataLayer.push({
-          event: 'lean_data_booking_completed',
-          form_id: blok.form_id,
-          booking_date: new Date().toISOString(),
-          booking_data: event.data.responseData,
-        });
-        break;
       case 'LD_POPUP_CLOSED':
         console.log('Popup closed:', event.data.responseData);
         dataLayer.push({
@@ -74,6 +49,33 @@ const TestForm = ({ blok }) => {
           form_id: blok.form_id,
           popup_close_date: new Date().toISOString(),
           popup_data: event.data.responseData,
+        });
+        break;
+      case 'LD_POST_BOOKING_IMMEDIATE':
+        console.log('Booking completed:', event.data.responseData);
+        dataLayer.push({
+          booking_data: event.data.responseData,
+          booking_date: new Date().toISOString(),
+          event: 'lean_data_booking_completed',
+          form_id: blok.form_id,
+        });
+        break;
+      case 'LD_ROUTING_RESPONSE':
+        console.log('Routing response received:', event.data.responseData);
+        dataLayer.push({
+          event: 'lean_data_routing_response',
+          form_id: blok.form_id,
+          routing_data: event.data.responseData,
+          routing_response_date: new Date().toISOString(),
+        });
+        break;
+      case 'LD_ROUTING_TIMED_OUT':
+        console.log('Routing timed out:', event.data.responseData);
+        dataLayer.push({
+          event: 'lean_data_routing_timeout',
+          form_id: blok.form_id,
+          timeout_data: event.data.responseData,
+          timeout_date: new Date().toISOString(),
         });
         break;
       default:
@@ -133,14 +135,10 @@ const TestForm = ({ blok }) => {
         .to('.preformContent', { opacity: contentVisibility })
         .to('.preformContent nondemo', { display: 'none' }, '<')
         .to('.marketoForm', { opacity: 0 }, '<')
-        .to('#formPos', { xPercent: xFormPosition, duration: 1.25 })
-        .to(
-          '#formContainer',
-          { width: formWidth, height: formHeight, duration: 1.25 },
-          '<'
-        )
-        .to('.lines', { width: lineWidth, duration: 1.25 }, '<')
-        .from('.second', { duration: 1.25, background: 'unset' }, '<')
+        .to('#formPos', { duration: 1.25, xPercent: xFormPosition })
+        .to('#formContainer', { duration: 1.25, height: formHeight, width: formWidth }, '<')
+        .to('.lines', { duration: 1.25, width: lineWidth }, '<')
+        .from('.second', { background: 'unset', duration: 1.25 }, '<')
         .to('.marketoForm', { display: 'none' }, '<')
         .set('.bookit-content-container', { display: 'block' })
         .to('.bookit-content-container', { opacity: 1 });
@@ -153,12 +151,12 @@ const TestForm = ({ blok }) => {
         console.log('timeoutLang', languageRef.current);
 
         const initConfig = {
-          calendarTimeoutLength: 900,
           beforeRouting: (formTarget, formData) => {
             console.log('lean data language:', languageRef.current);
             formData['thank_you_language'] = languageRef.current;
             formData['routing_node_trigger'] = routingLang.current;
           },
+          calendarTimeoutLength: 900,
           defaultLanguage: languageRef.current,
           useIframe: blok.animated,
         };
@@ -195,8 +193,8 @@ const TestForm = ({ blok }) => {
               if (window.LDBookItV2) {
                 window.LDBookItV2.saveFormData(submittedValues);
                 window.LDBookItV2.submit({
-                  formData: submittedValues,
                   cb: window.LDBookItV2.getIframeFn('100%', '100%', '300'),
+                  formData: submittedValues,
                 });
                 demoTl.current.play();
                 setStepDone(true);
@@ -249,7 +247,7 @@ const TestForm = ({ blok }) => {
   }, [isLoaded, blok.form_id, blok.redirectLink]);
 
   const loadScript = () => {
-    var s = document.createElement('script');
+    const s = document.createElement('script');
     s.id = 'mktoForms';
     s.type = 'text/javascript';
     s.async = true;
@@ -284,10 +282,7 @@ const TestForm = ({ blok }) => {
             </StepsContainer>
           </>
         )}
-        <MarketoForm
-          className="marketoForm"
-          id={`mktoForm_${blok.form_id}`}
-        ></MarketoForm>
+        <MarketoForm className="marketoForm" id={`mktoForm_${blok.form_id}`}></MarketoForm>
       </FormContainer>
     </ThemeProvider>
   );
@@ -479,14 +474,16 @@ const FormContainer = styled.div`
   border-radius: 2vw;
   padding: 2vw;
   width: 35.25vw;
-  box-shadow: 0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
+  box-shadow:
+    0vw 0vw 0.125vw 0vw rgba(25, 29, 30, 0.04),
     0vw 0.25vw 0.5vw 0vw rgba(25, 29, 30, 0.16);
 
   ${media.fullWidth} {
     border-radius: 32px;
     padding: 32px;
     width: 564px;
-    box-shadow: 0px 0px 2px 0px rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0px 0px 2px 0px rgba(25, 29, 30, 0.04),
       0px 4px 8px 0px rgba(25, 29, 30, 0.16);
   }
 
@@ -494,7 +491,8 @@ const FormContainer = styled.div`
     border-radius: 3.125vw;
     padding: 3.125vw;
     width: 45.313vw;
-    box-shadow: 0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0vw 0vw 0.195vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.391vw 0.781vw 0vw rgba(25, 29, 30, 0.16);
   }
 
@@ -502,7 +500,8 @@ const FormContainer = styled.div`
     border-radius: 6.667vw;
     padding: 6.667vw;
     width: 89.167vw;
-    box-shadow: 0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
+    box-shadow:
+      0vw 0vw 0.417vw 0vw rgba(25, 29, 30, 0.04),
       0vw 0.833vw 1.667vw 0vw rgba(25, 29, 30, 0.16);
   }
 

@@ -1,4 +1,5 @@
 import Script from 'next/script';
+
 import { validateSchemaMarkup } from '@/lib/schemaUtils';
 
 const ServerSchemaMarkup = ({ schemaData }) => {
@@ -14,11 +15,11 @@ const ServerSchemaMarkup = ({ schemaData }) => {
 
   return (
     <Script
-      id='schema-markup'
-      type='application/ld+json'
       dangerouslySetInnerHTML={{
         __html: JSON.stringify(validatedSchema, null, 2),
       }}
+      id="schema-markup"
+      type="application/ld+json"
     />
   );
 };

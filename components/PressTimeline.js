@@ -1,34 +1,36 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState, useRef } from "react";
-import styled from "styled-components";
-import media from "styles/media";
-import colors from "styles/colors";
-import text from "styles/text";
-import RichTextRenderer from "./renderers/RichTextRenderer";
-import { storyblokEditable } from "@storyblok/react";
+import React, { useEffect, useRef, useState } from 'react';
+
+import { storyblokEditable } from '@storyblok/react';
+import styled from 'styled-components';
+import colors from 'styles/colors';
+import media from 'styles/media';
+import text from 'styles/text';
+
+import RichTextRenderer from './renderers/RichTextRenderer';
 
 const PressTimeline = ({ blok }) => {
   const [filteredCards, setFilteredCards] = useState([]);
-  const [selectedRange, setSelectedRange] = useState("2025-2020");
+  const [selectedRange, setSelectedRange] = useState('2025-2020');
   const timelineRef = useRef(null);
   const starRef = useRef(null);
 
   const dateRanges = {
-    "2025-2020": [],
-    "2019-2017": [],
+    '2019-2017': [],
+    '2025-2020': [],
   };
 
   blok.cards.forEach((card) => {
     if (
-      card.date.includes("2021") ||
-      card.date.includes("2020") ||
-      card.date.includes("2024") ||
-      card.date.includes("2025")
+      card.date.includes('2021') ||
+      card.date.includes('2020') ||
+      card.date.includes('2024') ||
+      card.date.includes('2025')
     ) {
-      dateRanges["2025-2020"].push(card);
-    } else if (card.date.includes("2019") || card.date.includes("2017")) {
-      dateRanges["2019-2017"].push(card);
+      dateRanges['2025-2020'].push(card);
+    } else if (card.date.includes('2019') || card.date.includes('2017')) {
+      dateRanges['2019-2017'].push(card);
     }
   });
 
@@ -54,16 +56,16 @@ const PressTimeline = ({ blok }) => {
       gsap.killTweensOf(starElement);
 
       gsap.to(starElement, {
+        ease: 'none',
         scrollTrigger: {
+          end: 'bottom bottom',
+          endTrigger: '#last-element',
           scroller: timelineElement,
-          trigger: timelineElement,
-          start: "top top",
-          endTrigger: "#last-element",
-          end: "bottom bottom",
           scrub: 2,
+          start: 'top top',
+          trigger: timelineElement,
         },
         y: () => timelineElement.offsetHeight - starElement.offsetHeight,
-        ease: "none",
       });
 
       return ScrollTrigger;
@@ -77,7 +79,7 @@ const PressTimeline = ({ blok }) => {
 
     return () => {
       if (ScrollTriggerInstance && ScrollTriggerInstance.getAll) {
-        ScrollTriggerInstance.getAll().forEach(trigger => {
+        ScrollTriggerInstance.getAll().forEach((trigger) => {
           if (trigger.vars?.scroller === timelineElement) {
             trigger.kill();
           }
@@ -94,10 +96,7 @@ const PressTimeline = ({ blok }) => {
     const isLastElement = index === filteredCards.length - 1;
 
     return (
-      <TimelineCardContainer
-        key={card.date}
-        id={isLastElement ? "last-element" : undefined}
-      >
+      <TimelineCardContainer id={isLastElement ? 'last-element' : undefined} key={card.date}>
         <Date>{card.date}</Date>
         <Card {...storyblokEditable(card)}>
           <RichTextRenderer document={card.header} />
@@ -115,9 +114,9 @@ const PressTimeline = ({ blok }) => {
         <ButtonContainer>
           {Object.keys(dateRanges).map((range) => (
             <Button
+              isActive={selectedRange === range}
               key={range}
               onClick={() => handleButtonClick(range)}
-              isActive={selectedRange === range}
             >
               {range}
             </Button>
@@ -127,10 +126,7 @@ const PressTimeline = ({ blok }) => {
       <TimelineContainer>
         <TLGradient />
         <LineDiv>
-          <TimelineStar
-            src="/images/uiElements/VasionStarNewsroom.webp"
-            ref={starRef}
-          />
+          <TimelineStar ref={starRef} src="/images/uiElements/VasionStarNewsroom.webp" />
           <Line />
         </LineDiv>
         <Timeline ref={timelineRef}>
@@ -375,58 +371,48 @@ const TimelineContainer = styled.div`
 const Button = styled.button`
   ${(props) => (props.isActive ? text.bodySmBold : text.bodySm)};
   padding: 0.833vw 1.111vw;
-  border: 0.069vw solid
-    ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
-  background-color: ${(props) =>
-    props.isActive ? colors.purple100 : colors.white};
+  border: 0.069vw solid ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
+  background-color: ${(props) => (props.isActive ? colors.purple100 : colors.white)};
   color: ${(props) => (props.isActive ? colors.black : colors.black)};
 
   ${media.fullWidth} {
     padding: 12px 16px;
-    border: 1px solid
-      ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
+    border: 1px solid ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
   }
 
   ${media.tablet} {
     padding: 1.172vw 1.563vw;
-    border: 0.098vw
-      ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
+    border: 0.098vw ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
   }
 
   ${media.mobile} {
     padding: 2.804vw 3.738vw;
-    border: 0.234vw
-      ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
+    border: 0.234vw ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
   }
 
   &:hover {
-    background-color: ${(props) =>
-      props.isActive ? colors.primaryHover : colors.grey75};
+    background-color: ${(props) => (props.isActive ? colors.primaryHover : colors.grey75)};
   }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  border: 0.069vw solid
-    ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
+  border: 0.069vw solid ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
   border-radius: 0.417vw;
 
   ${media.fullWidth} {
-    border: 1px solid
-      ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
+    border: 1px solid ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
     border-radius: 6px;
   }
 
   ${media.tablet} {
-    border: 0.098vw solid
-      ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
+    border: 0.098vw solid ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
     border-radius: 0.586vw;
   }
 
   ${media.mobile} {
-    border: 0.234vw solid
-      ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
+    border: 0.234vw solid ${(props) => (props.isActive ? colors.borderPurple : colors.grey100)};
     border-radius: 1.402vw;
   }
 `;

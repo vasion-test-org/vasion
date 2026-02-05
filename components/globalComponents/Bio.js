@@ -1,11 +1,12 @@
 'use client';
 import React from 'react';
 
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
 import media from 'styles/media';
+
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
 const Bio = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
@@ -61,27 +62,28 @@ const BioWrapper = styled.div`
 
   ${media.fullWidth} {
     width: 1304px;
-  gap: 30px;
+    gap: 30px;
   }
-  
+
   ${media.tablet} {
     width: 92.188vw;
     gap: 2.93vw;
   }
-  
+
   ${media.mobile} {
     flex-direction: column;
     width: 89.167vw;
     gap: 6.25vw;
   }
 `;
+
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   padding: 3.75vw 0;
-  background: ${props => props.theme.bio.bg};
-  color:  ${props => props.theme.bio.textColor};
+  background: ${(props) => props.theme.bio.bg};
+  color: ${(props) => props.theme.bio.textColor};
 `;
 export default Bio;

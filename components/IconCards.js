@@ -1,11 +1,14 @@
-"use client";
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import RichTextRenderer from "./renderers/RichTextRenderer";
-import { storyblokEditable } from "@storyblok/react";
+'use client';
+import React, { useEffect } from 'react';
+
+import { storyblokEditable } from '@storyblok/react';
+import styled from 'styled-components';
+
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
+
+import RichTextRenderer from './renderers/RichTextRenderer';
 
 const IconCards = ({ blok }) => {
   const cards = blok?.map((card, index) => {
@@ -16,12 +19,7 @@ const IconCards = ({ blok }) => {
             <Counter>{index + 1}</Counter>
             <Title>{card.title}</Title>
           </NumberIntro>
-          <Icon
-            width={90}
-            height={90}
-            src={card?.icon?.filename}
-            alt={card?.icon?.alt}
-          />
+          <Icon alt={card?.icon?.alt} height={90} src={card?.icon?.filename} width={90} />
           <TextContainer>
             <Headline>
               <RichTextRenderer document={card?.headline} />

@@ -1,9 +1,12 @@
 import React from 'react';
+
 import styled from 'styled-components';
-import RichTextRenderer from '../renderers/RichTextRenderer';
-import colors from '@/styles/colors';
+
 import Button from '@/components/globalComponents/Button';
+import colors from '@/styles/colors';
 import media from '@/styles/media';
+
+import RichTextRenderer from '../renderers/RichTextRenderer';
 
 const ReviewCtaCards = ({ blok }) => {
   return (
@@ -11,13 +14,13 @@ const ReviewCtaCards = ({ blok }) => {
       {blok.map((card) => (
         <ReviewCard key={card.id}>
           <ReviewHeaderDiv>
-            <ReviewIcon src={card.icon.filename} alt={card.title} />
+            <ReviewIcon alt={card.title} src={card.icon.filename} />
             <ReviewHeader>
               <RichTextRenderer document={card.header} />
             </ReviewHeader>
           </ReviewHeaderDiv>
           <RatingDiv>
-            <RatingStars src={card.rating.filename} alt={card.rating} />
+            <RatingStars alt={card.rating} src={card.rating.filename} />
             {card.link[0] && <Button $buttonData={card.link[0]} />}
           </RatingDiv>
         </ReviewCard>
@@ -124,16 +127,9 @@ const ReviewCard = styled.div`
   }
 
   &:hover {
-    background: linear-gradient(
-        146deg,
-        rgba(203, 191, 241, 0) 42.69%,
-        rgba(203, 191, 241, 0.7) 98.69%
-      ),
-      linear-gradient(
-        231deg,
-        rgba(255, 168, 128, 0) 45.04%,
-        rgba(255, 168, 128, 0.7) 112.57%
-      ),
+    background:
+      linear-gradient(146deg, rgba(203, 191, 241, 0) 42.69%, rgba(203, 191, 241, 0.7) 98.69%),
+      linear-gradient(231deg, rgba(255, 168, 128, 0) 45.04%, rgba(255, 168, 128, 0.7) 112.57%),
       #201435;
   }
 `;

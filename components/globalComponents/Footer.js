@@ -1,24 +1,38 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
-import { useRouter, usePathname } from 'next/navigation';
-import VasionStarSVG from '@/assets/svg/VasionStarBig.svg';
-import VasionSmall from '@/assets/svg/SmallVasion.svg';
-import colors from '@/styles/colors';
-import media from '@/styles/media';
-import text from '@/styles/text';
-import Button from '@/components/globalComponents/Button';
-import Facebook from '@/assets/svg/footer/Facebook.svg';
-import Twitter from '@/assets/svg/footer/Twitter.svg';
-import LinkedIn from '@/assets/svg/footer/LinkedIn.svg';
+
+import { useEffect, useRef, useState } from 'react';
+
+import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
 
+import Facebook from '@/assets/svg/footer/Facebook.svg';
+import LinkedIn from '@/assets/svg/footer/LinkedIn.svg';
+import Twitter from '@/assets/svg/footer/Twitter.svg';
+import VasionSmall from '@/assets/svg/SmallVasion.svg';
+import VasionStarSVG from '@/assets/svg/VasionStarBig.svg';
+import Button from '@/components/globalComponents/Button';
+import { cn, tw } from '@/lib/cn';
+
+/**
+ * Footer Component - Converted from styled-components
+ *
+ * Tailwind Mobile-First Conversion:
+ * - Base (no prefix) = mobile styles (0-480px)
+ * - md: = tablet styles (481-1024px)
+ * - lg: = desktop styles (1025-1600px)
+ * - xl: = fullWidth styles (1601px+)
+ *
+ * Each breakpoint inherits from smaller breakpoints unless overridden.
+ */
 const Footer = ({ blok }) => {
   const router = useRouter();
   const path = usePathname();
   const [language, setLanguage] = useState('en');
   const [footerColumns, setFooterColumns] = useState(blok.footer_columns);
   const starRef = useRef(null);
+
   useEffect(() => {
     function checkPathLocale(url) {
       const { pathname } = new URL(url, 'https://vasion.com');
@@ -26,20 +40,14 @@ const Footer = ({ blok }) => {
       const supportedLocales = ['en', 'fr', 'de'];
       const defaultLocale = 'en';
 
-      const lang = supportedLocales.includes(pathLocale)
-        ? pathLocale
-        : defaultLocale;
+      const lang = supportedLocales.includes(pathLocale) ? pathLocale : defaultLocale;
       setLanguage(lang);
-      // console.log("lang", lang);
       if (lang === 'de') {
         setFooterColumns(blok.german_footer_columns);
-        // console.log("blok.german_footer_columns", blok.german_footer_columns);
       } else if (lang === 'fr') {
         setFooterColumns(blok.french_footer_columns);
-        // console.log("blok.french_footer_columns", blok.french_footer_columns);
       } else {
         setFooterColumns(blok.footer_columns);
-        // console.log("blok.footer_columns", blok.footer_columns);
       }
     }
 
@@ -47,6 +55,7 @@ const Footer = ({ blok }) => {
       checkPathLocale(path);
     }
   }, [path, blok]);
+
   useEffect(() => {
     const star = starRef.current;
     if (!star) {
@@ -57,10 +66,10 @@ const Footer = ({ blok }) => {
     const handleMouseEnter = async () => {
       const { default: gsap } = await import('gsap');
       spinAnimation = gsap.to(star, {
-        rotation: '+=360',
         duration: 1.5,
-        repeat: -1,
         ease: 'linear',
+        repeat: -1,
+        rotation: '+=360',
       });
     };
 
@@ -87,46 +96,6 @@ const Footer = ({ blok }) => {
       }
     };
   }, [router]);
-  /* THIS CODE BELOW DOES NOTHING SO I COMMENETED IT OUT ON 01/21/2026 Tanner Davison
-
-   useEffect(() => {
-     const canvas = document.getElementById('gradientCanvas');
-
-     if (canvas) {
-     }
-   }, []);
-   console.log("footerColumns", footerColumns);
-*/
-  const allLinksColumns =
-    footerColumns?.map((column) => (
-      <LinkColumn key={column._uid}>
-        <LinkColumnHeader>
-          {column.column_header?.content?.[0]?.content?.[0]?.text || ''}
-        </LinkColumnHeader>
-        {column.links?.map((link) => {
-          const url = link.link?.url || link.link?.cached_url || '';
-          const isExternal =
-            url.startsWith('http://') || url.startsWith('https://');
-
-          const normalizedUrl = isExternal
-            ? url
-            : url.startsWith('/')
-              ? url
-              : `/${url}`;
-
-          return (
-            <LinkName
-              key={link._uid}
-              href={normalizedUrl}
-              target={link.link?.target || (isExternal ? '_blank' : '_self')}
-              rel={isExternal ? 'noopener noreferrer' : undefined}
-            >
-              {link.link_name}
-            </LinkName>
-          );
-        })}
-      </LinkColumn>
-    )) || [];
 
   const handleNavigate = (link) => {
     const isExternalLink = link.startsWith('http') || link.startsWith('https');
@@ -136,6 +105,7 @@ const Footer = ({ blok }) => {
       router.push(link);
     }
   };
+
   useEffect(() => {
     const star = document.getElementById('vasion-star-svg');
     if (!star) {
@@ -147,10 +117,10 @@ const Footer = ({ blok }) => {
     const handleMouseEnter = async () => {
       const { default: gsap } = await import('gsap');
       spinAnimation = gsap.to(star, {
-        rotation: '+=360',
         duration: 1.5,
-        repeat: -1,
         ease: 'linear',
+        repeat: -1,
+        rotation: '+=360',
       });
     };
 
@@ -177,402 +147,223 @@ const Footer = ({ blok }) => {
       }
     };
   }, []);
+
+  // LinkColumn rendered for each footer column
+  // Original: gap: 1.389vw (desktop) | 20px (xl) | 1.953vw (md) | 4.673vw (mobile)
+  // Mobile: 4.673vw × 4.8 = 22px → gap-6
+  // Tablet: 1.953vw × 10.24 = 20px → gap-5
+  // Desktop: 1.389vw × 16 = 22px → gap-6 (same as mobile, no change needed)
+  // FullWidth: 20px → gap-5 (same as tablet)
+  const allLinksColumns =
+    footerColumns?.map((column) => (
+      <div className={tw`flex flex-col gap-6 md:gap-5`} key={column._uid}>
+        <p className="font-archivo text-body-md text-txt-subtle">
+          {column.column_header?.content?.[0]?.content?.[0]?.text || ''}
+        </p>
+        {column.links?.map((link) => {
+          const url = link.link?.url || link.link?.cached_url || '';
+          const isExternal = url.startsWith('http://') || url.startsWith('https://');
+          const normalizedUrl = isExternal ? url : url.startsWith('/') ? url : `/${url}`;
+
+          return (
+            <a
+              className="font-archivo text-body-md hover:text-orange cursor-pointer whitespace-nowrap text-white no-underline focus:outline-none focus:text-orange focus:underline"
+              href={normalizedUrl}
+              key={link._uid}
+              rel={isExternal ? 'noopener noreferrer' : undefined}
+              target={link.link?.target || (isExternal ? '_blank' : '_self')}
+            >
+              {link.link_name}
+            </a>
+          );
+        })}
+      </div>
+    )) || [];
+
   return (
-    <Wrapper className="footer">
-      <MainFooterContainer>
-        <LogoContainer>
-          <Logo onClick={() => handleNavigate('/')} alt="vasion-logo" />
-          <Address>432 S. Tech Ridge Drive, St. George, Utah 84770 USA</Address>
-          <VasionStar ref={starRef} id="vasion-star-svg" />
-        </LogoContainer>
-        <AllLinksContainer>{allLinksColumns}</AllLinksContainer>
-      </MainFooterContainer>
-      <ButtonContainer>
-        <SocialsContainer>
-          <SocialIcon
-            onClick={() =>
-              handleNavigate('https://www.facebook.com/VasionSoftware')
-            }
+    // 1. Wrapper
+    // Mobile: 353.738vw × 4.8 = 1698px → h-425, 7.477vw × 4.8 = 36px → gap-9
+    // Tablet: 124.902vw × 10.24 = 1279px → h-320, 5.078vw × 10.24 = 52px → gap-13
+    // Desktop: 88.806vw × 16 = 1421px → h-355, 3.611vw × 16 = 58px → gap-14
+    // FullWidth: 1279px → h-320, 52px → gap-13
+    <div
+      className={tw`footer bg-footer md:(h-320 gap-13) lg:(h-355 gap-14) xl:(h-320 gap-13) relative bottom-0 flex h-425 flex-col gap-9 overflow-hidden print:hidden`}
+    >
+      {/* 2. MainFooterContainer */}
+      {/* Mobile: flex-col, 9.346vw×4.8=45px→gap-11, pt:18.692vw×4.8=90px→pt-22, px:6.075vw×4.8=29px→px-7, pb:9.813vw×4.8=47px→pb-12 */}
+      {/* Tablet: flex-row, 10.156vw×10.24=104px→gap-26, pt:7.813vw×10.24=80px→pt-20, px:3.125vw×10.24=32px→px-8, pb:4.102vw×10.24=42px→pb-10 */}
+      {/* Desktop: flex-row, 15.694vw×16=251px→gap-63, pt:5.556vw×16=89px→pt-22, px:0, pb:2.917vw×16=47px→pb-12 */}
+      {/* FullWidth: flex-row, 226px→gap-57, pt:80px→pt-20, px:0, pb:42px→pb-10 */}
+      <div
+        className={tw`md:(flex-row pb-10) lg:(gap-63 pb-12) xl:(gap-57 pb-10) relative flex h-auto w-full flex-col items-start justify-center gap-11 px-7 pt-20 pb-12`}
+      >
+        {/* 3. LogoContainer */}
+        {/* Mobile: 4.673vw×4.8=22px→gap-6, 50.467vw×4.8=242px→w-61 */}
+        {/* Tablet: 1.953vw×10.24=20px→gap-5, 23.438vw×10.24=240px→w-60 */}
+        {/* Desktop: 1.389vw×16=22px→gap-6, 16.667vw×16=267px→w-67 */}
+        {/* FullWidth: 20px→gap-5, 240px→w-60 */}
+        <div
+          className={tw`md:(gap-5 w-60) lg:(gap-6 w-67) xl:(gap-5 w-60) flex w-61 flex-col gap-6`}
+        >
+          {/* 4. Logo (VasionSmall) */}
+          {/* Mobile: 42.056vw×4.8=202px→w-50, 5.841vw×4.8=28px→h-7 */}
+          {/* Tablet: 17.578vw×10.24=180px→w-45, 2.441vw×10.24=25px→h-6 */}
+          {/* Desktop: 16.667vw×16=267px→w-67, 2.292vw×16=37px→h-9 */}
+          {/* FullWidth: 240px→w-60, 33px→h-8 */}
+          <VasionSmall
+            alt="vasion-logo"
+            className={tw`md:(w-45 h-6) lg:(w-67 h-9) xl:(w-60 h-8) h-7 w-50 cursor-pointer`}
+            onClick={() => handleNavigate('/')}
+          />
+          {/* 5. Address */}
+          <div className="font-archivo text-body-md text-txt-subtle">
+            432 S. Tech Ridge Drive, St. George, Utah 84770 USA
+          </div>
+          {/* 6. VasionStar */}
+          {/* Mobile: hidden */}
+          {/* Tablet: 4.883vw×10.24=50px→mt-12, 5.859vw×10.24=60px→w-15 h-15 */}
+          {/* Desktop: 3.472vw×16=56px→mt-14, 4.167vw×16=67px→w-17 h-17 */}
+          {/* FullWidth: 50px→mt-12, 60px→w-15 h-15 */}
+          <div
+            className={tw`md:(block h-15) lg:(mt-14 h-17) xl:(mt-12 h-15) mt-12 hidden w-15 cursor-pointer self-start`}
+            id="vasion-star-svg"
+            ref={starRef}
+          >
+            <VasionStarSVG className="h-full w-full" />
+          </div>
+        </div>
+
+        {/* 7. AllLinksContainer */}
+        {/* Mobile: flex-wrap, 14.019vw×4.8=67px→gap-17 */}
+        {/* Tablet: flex-row (no wrap), 5.859vw×10.24=60px→gap-15 */}
+        {/* Desktop: flex-row, 4.167vw×16=67px→gap-17 */}
+        {/* FullWidth: 60px→gap-15 */}
+        <div
+          className={tw`md:(flex-nowrap gap-15) flex flex-row flex-wrap gap-10 lg:gap-17 xl:gap-15`}
+        >
+          {allLinksColumns}
+        </div>
+      </div>
+
+      {/* 11. ButtonContainer */}
+      {/* Mobile: flex-col, items-center, mx:10.278vw×4.8=49px→mx-12, gap:7.477vw×4.8=36px→gap-9, py:7.477vw×4.8=36px→py-9 */}
+      {/* Tablet: flex-row, mx:10.278vw×10.24=105px→mx-26, py:3.125vw×10.24=32px→py-8 */}
+      {/* Desktop: flex-row, mx:10.278vw×16=164px→mx-41, py:2.222vw×16=36px→py-9 */}
+      {/* FullWidth: flex-row, mx:0, w:1244px→w-311, self-center, py:32px→py-8 */}
+      <div
+        className={tw`border-grey-700 md:(flex-row py-8) lg:(mx-41 py-9) xl:(mx-0 py-8) relative z-10 mx-12 flex w-311 flex-col items-center justify-between gap-9 self-center border-y py-9`}
+      >
+        {/* 12. SocialsContainer */}
+        {/* Mobile: 3.271vw×4.8=16px→gap-4 */}
+        {/* Tablet: 1.367vw×10.24=14px→gap-3.5 */}
+        {/* Desktop: 0.972vw×16=16px→gap-4 */}
+        {/* FullWidth: 14px→gap-3.5 */}
+        <div className={tw`flex flex-row items-center gap-4 md:gap-3.5 lg:gap-4 xl:gap-3.5`}>
+          {/* 13. SocialIcon */}
+          {/* Mobile: 7.477vw×4.8=36px→w-9 h-9 */}
+          {/* Tablet: 3.125vw×10.24=32px→w-8 h-8 */}
+          {/* Desktop: 2.222vw×16=36px→w-9 h-9 */}
+          {/* FullWidth: 32px→w-8 h-8 */}
+          <button
+            aria-label="Visit Vasion on Facebook"
+            className={tw`[&_path]:hover:fill-orange md:(w-8 h-8) lg:(w-9 h-9) xl:(w-8 h-8) h-9 w-9 cursor-pointer bg-transparent border-none p-0 focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:ring-offset-purple-dark rounded`}
+            type="button"
+            onClick={() => handleNavigate('https://www.facebook.com/VasionSoftware')}
           >
             <Facebook />
-          </SocialIcon>
-          <SocialIcon
+          </button>
+          <button
+            aria-label="Visit Vasion on X (Twitter)"
+            className={tw`[&_path]:hover:fill-orange md:(w-8 h-8) lg:(w-9 h-9) xl:(w-8 h-8) h-9 w-9 cursor-pointer bg-transparent border-none p-0 focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:ring-offset-purple-dark rounded`}
+            type="button"
             onClick={() =>
-              handleNavigate(
-                'https://x.com/i/flow/login?redirect_after_login=%2FVasionSoftware',
-              )
+              handleNavigate('https://x.com/i/flow/login?redirect_after_login=%2FVasionSoftware')
             }
           >
             <Twitter />
-          </SocialIcon>
-          <SocialIcon
+          </button>
+          <button
+            aria-label="Visit Vasion on LinkedIn"
+            className={tw`[&_path]:hover:fill-orange md:(w-8 h-8) lg:(w-9 h-9) xl:(w-8 h-8) h-9 w-9 cursor-pointer bg-transparent border-none p-0 focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:ring-offset-purple-dark rounded`}
+            type="button"
             onClick={() =>
-              handleNavigate(
-                'https://www.linkedin.com/company/vasion-software/posts/?feedView=all',
-              )
+              handleNavigate('https://www.linkedin.com/company/vasion-software/posts/?feedView=all')
             }
           >
             <LinkedIn />
-          </SocialIcon>
-        </SocialsContainer>
+          </button>
+        </div>
         {blok?.cta_button?.map(($buttonData) => (
           <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
             <Button $buttonData={$buttonData} />
           </div>
         ))}
-      </ButtonContainer>
-      <LegalDiv>
-        <LegalLinks>
-          <LegalLink onClick={() => handleNavigate('/privacy-policy/')}>
+      </div>
+
+      {/* 14. LegalDiv */}
+      {/* Mobile: flex-col, items-center, mx:10.278vw×4.8=49px→mx-12, gap:4.673vw×4.8=22px→gap-6, py:7.477vw×4.8=36px→py-9 */}
+      {/* Tablet: flex-row, mx:10.278vw×10.24=105px→mx-26, py:3.125vw×10.24=32px→py-8 */}
+      {/* Desktop: flex-row, mx:10.278vw×16=164px→mx-41, py:2.222vw×16=36px→py-9 */}
+      {/* FullWidth: flex-row, mx:0, w:1244px→w-311, self-center, py:32px→py-8 */}
+      <div
+        className={tw`font-archivo text-body-md text-txt-subtle md:(flex-row py-8) lg:(mx-41 py-9) xl:(mx-0 py-8) relative z-10 mx-12 flex w-311 flex-col items-center justify-between gap-6 self-center py-9`}
+      >
+        {/* 15. LegalLinks */}
+        {/* Mobile: 1.168vw×4.8=6px→gap-1.5 */}
+        {/* Tablet: 0.488vw×10.24=5px→gap-1 */}
+        {/* Desktop: 0.347vw×16=6px→gap-1.5 */}
+        {/* FullWidth: 5px→gap-1 */}
+        <div className={tw`flex flex-row gap-1.5 md:gap-1 lg:gap-1.5 xl:gap-1`}>
+          <button
+            className="hover:text-orange cursor-pointer no-underline bg-transparent border-none p-0 text-inherit font-inherit focus:outline-none focus:text-orange focus:underline"
+            type="button"
+            onClick={() => handleNavigate('/privacy-policy/')}
+          >
             Privacy Policy
-          </LegalLink>
+          </button>
           |
-          <LegalLink onClick={() => handleNavigate('/imprint/')}>
+          <button
+            className="hover:text-orange cursor-pointer no-underline bg-transparent border-none p-0 text-inherit font-inherit focus:outline-none focus:text-orange focus:underline"
+            type="button"
+            onClick={() => handleNavigate('/imprint/')}
+          >
             Imprint
-          </LegalLink>
+          </button>
           |
-          <LegalLink onClick={() => handleNavigate('/cookie-information/')}>
+          <button
+            className="hover:text-orange cursor-pointer no-underline bg-transparent border-none p-0 text-inherit font-inherit focus:outline-none focus:text-orange focus:underline"
+            type="button"
+            onClick={() => handleNavigate('/cookie-information/')}
+          >
             Cookies
-          </LegalLink>
+          </button>
           |
-          <LegalLink onClick={() => handleNavigate('/legal/')}>Legal</LegalLink>
-        </LegalLinks>
+          <button
+            className="hover:text-orange cursor-pointer no-underline bg-transparent border-none p-0 text-inherit font-inherit focus:outline-none focus:text-orange focus:underline"
+            type="button"
+            onClick={() => handleNavigate('/legal/')}
+          >
+            Legal
+          </button>
+        </div>
         © {new Date().getFullYear()} Vasion. All Rights Reserved
-      </LegalDiv>
-      <VasionFooter
-        src={'/images/uiElements/VasionFooterPNG.png'}
+      </div>
+
+      {/* 17. VasionFooter (Image) */}
+      {/* Mobile: bottom:12.421vw×4.8=60px→bottom-15, height:21.262vw×4.8=102px→h-26 */}
+      {/* Tablet: bottom:16.895vw×10.24=173px→bottom-43, height:17.336vw×10.24=178px→h-44 */}
+      {/* Desktop: bottom:12vw×16=192px→bottom-48, height:13.75vw×16=220px→h-55 */}
+      {/* FullWidth: bottom:173px→bottom-43, height:172px→h-43 */}
+      <Image
+        alt="Vasion footer decoration"
+        className={tw`md:(bottom-43 h-44) lg:(bottom-48 h-55) xl:(bottom-43 h-43) absolute bottom-15 h-26 w-full`}
+        height={220}
         id="vasionfootersvg"
-        alt="vasion-logo"
+        src="/images/uiElements/VasionFooterPNG.png"
+        width={1600}
       />
-    </Wrapper>
+    </div>
   );
 };
-
-const LegalLink = styled.a`
-  cursor: pointer;
-  text-decoration: none;
-
-  &:hover {
-    color: ${colors.primaryOrange};
-  }
-`;
-const LegalLinks = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 0.347vw;
-
-  ${media.fullWidth} {
-    gap: 5px;
-  }
-
-  ${media.tablet} {
-    gap: 0.488vw;
-  }
-
-  ${media.mobile} {
-    gap: 1.168vw;
-  }
-`;
-const LegalDiv = styled.div`
-  ${text.bodyMd};
-  color: ${colors.txtSubtle};
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  z-index: 3;
-  margin: 0 10.278vw;
-  padding: 2.222vw 0;
-
-  ${media.fullWidth} {
-    align-self: center;
-    width: 1244px;
-    padding: 32px 0;
-  }
-
-  ${media.tablet} {
-    padding: 3.125vw 0;
-  }
-
-  ${media.mobile} {
-    flex-direction: column;
-    align-items: center;
-    gap: 4.673vw;
-    padding: 7.477vw 0;
-  }
-`;
-const VasionFooter = styled.img`
-  position: absolute;
-  width: 100%;
-  bottom: 12vw;
-  height: 13.75vw;
-
-  ${media.fullWidth} {
-    bottom: 173px;
-    height: 10.75vw;
-  }
-
-  ${media.tablet} {
-    bottom: 16.895vw;
-    height: 17.336vw;
-  }
-
-  ${media.mobile} {
-    bottom: 12.421vw;
-    height: 21.262vw;
-  }
-`;
-const SocialIcon = styled.div`
-  width: 2.222vw;
-  height: 2.222vw;
-
-  ${media.fullWidth} {
-    width: 32px;
-    height: 32px;
-  }
-
-  ${media.tablet} {
-    width: 3.125vw;
-    height: 3.125vw;
-  }
-
-  ${media.mobile} {
-    width: 7.477vw;
-    height: 7.477vw;
-  }
-
-  cursor: pointer;
-
-  &:hover {
-    path {
-      fill: ${colors.primaryOrange};
-    }
-  }
-`;
-const SocialsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.972vw;
-
-  ${media.fullWidth} {
-    gap: 14px;
-  }
-
-  ${media.tablet} {
-    gap: 1.367vw;
-  }
-
-  ${media.mobile} {
-    gap: 3.271vw;
-  }
-`;
-const ButtonContainer = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  z-index: 3;
-  margin: 0 10.278vw;
-  padding: 2.222vw 0;
-  border-top: 0.069vw solid ${colors.grey700};
-  border-bottom: 0.069vw solid ${colors.grey700};
-
-  ${media.fullWidth} {
-    align-self: center;
-    width: 1244px;
-    padding: 32px 0;
-    border-top: 1px solid ${colors.grey700};
-    border-bottom: 1px solid ${colors.grey700};
-  }
-
-  ${media.tablet} {
-    padding: 3.125vw 0;
-    border-top: 0.098vw solid ${colors.grey700};
-    border-bottom: 0.098vw solid ${colors.grey700};
-  }
-
-  ${media.mobile} {
-    flex-direction: column;
-    align-items: center;
-    gap: 7.477vw;
-    padding: 7.477vw 0;
-    border-top: 0.234vw solid ${colors.grey700};
-    border-bottom: 0.234vw solid ${colors.grey700};
-  }
-`;
-const LinkName = styled.a`
-  ${text.bodyMd};
-  color: ${colors.white};
-  cursor: pointer;
-  text-decoration: none;
-  white-space: nowrap;
-  &:hover {
-    color: ${colors.primaryOrange};
-  }
-`;
-const LinkColumnHeader = styled.p`
-  ${text.bodyMd};
-  color: ${colors.txtSubtle};
-`;
-const LinkColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.389vw;
-
-  ${media.fullWidth} {
-    gap: 20px;
-  }
-
-  ${media.tablet} {
-    gap: 1.953vw;
-  }
-
-  ${media.mobile} {
-    gap: 4.673vw;
-  }
-`;
-const AllLinksContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 4.167vw;
-
-  ${media.fullWidth} {
-    gap: 60px;
-  }
-
-  ${media.tablet} {
-    gap: 5.859vw;
-  }
-
-  ${media.mobile} {
-    flex-wrap: wrap;
-    gap: 14.019vw;
-  }
-`;
-const VasionStar = styled(VasionStarSVG)`
-  cursor: pointer;
-  margin-top: 3.472vw;
-  width: 4.167vw;
-  height: 4.167vw;
-
-  ${media.fullWidth} {
-    margin-top: 50px;
-    width: 60px;
-    height: 60px;
-  }
-
-  ${media.tablet} {
-    margin-top: 4.883vw;
-    width: 5.859vw;
-    height: 5.859vw;
-  }
-
-  ${media.mobile} {
-    display: none;
-  }
-`;
-const Address = styled.div`
-  ${text.bodyMd};
-  color: ${colors.txtSubtle};
-`;
-const Logo = styled(VasionSmall)`
-  width: 16.667vw;
-  height: 2.292vw;
-
-  ${media.fullWidth} {
-    width: 240px;
-    height: 33px;
-  }
-
-  ${media.tablet} {
-    width: 17.578vw;
-    height: 2.441vw;
-  }
-
-  ${media.mobile} {
-    width: 42.056vw;
-    height: 5.841vw;
-  }
-`;
-const LogoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.389vw;
-  width: 16.667vw;
-
-  ${media.fullWidth} {
-    gap: 20px;
-    width: 240px;
-  }
-
-  ${media.tablet} {
-    gap: 1.953vw;
-    width: 23.438vw;
-  }
-
-  ${media.mobile} {
-    gap: 4.673vw;
-    width: 50.467vw;
-  }
-`;
-const MainFooterContainer = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  width: 100%;
-  gap: 15.694vw;
-  padding: 5.556vw 0vw 2.917vw 0vw;
-  height: auto;
-
-  ${media.fullWidth} {
-    gap: 226px;
-    padding: 80px 0px 42px 0px;
-  }
-
-  ${media.tablet} {
-    gap: 10.156vw;
-    padding: 7.813vw 3.125vw 4.102vw 3.125vw;
-  }
-
-  ${media.mobile} {
-    flex-direction: column;
-    gap: 9.346vw;
-    padding: 18.692vw 6.075vw 9.813vw 6.075vw;
-  }
-`;
-const Wrapper = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background:
-    linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%),
-    linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
-  height: 88.806vw;
-  gap: 3.611vw;
-  bottom: 0;
-
-  ${media.fullWidth} {
-    height: 1279px;
-    gap: 52px;
-  }
-
-  ${media.tablet} {
-    height: 124.902vw;
-    gap: 5.078vw;
-  }
-
-  ${media.mobile} {
-    height: 353.738vw;
-    gap: 7.477vw;
-  }
-
-  @media print {
-    display: none;
-  }
-`;
 
 export default Footer;

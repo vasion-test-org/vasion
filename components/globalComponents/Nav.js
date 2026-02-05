@@ -1,31 +1,29 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+
 import NextLink from 'next/link';
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
+import { usePathname, useRouter } from 'next/navigation';
+
 import { storyblokEditable } from '@storyblok/react/rsc';
-import media from 'styles/media';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import Button from './Button';
-import text from '@/styles/text';
-import colors from '@/styles/colors';
-import IconRenderer from '@/components/renderers/Icons';
-import Image from './Image';
-import LinkArrow from 'assets/svg/linkArrow.svg';
 import LanguageGlobe from 'assets/svg/languageglobe.svg';
+import LinkArrow from 'assets/svg/linkArrow.svg';
+import styled, { ThemeProvider } from 'styled-components';
+import media from 'styles/media';
+
 import VasionNavLogo from '@/assets/svg/vasion-nav-logo.svg';
-import { getStoryblokApi } from '@/lib/storyblok';
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
+import IconRenderer from '@/components/renderers/Icons';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { getStoryblokApi } from '@/lib/storyblok';
+import colors from '@/styles/colors';
+import text from '@/styles/text';
+
+import Button from './Button';
+import Image from './Image';
 
 const Nav = ({ blok }) => {
-  const copycomponents = [
-    'body_copy',
-    'header',
-    'eyebrow',
-    'long_form_text',
-    'copy_block',
-  ];
+  const copycomponents = ['body_copy', 'header', 'eyebrow', 'long_form_text', 'copy_block'];
   const router = useRouter();
   const path = usePathname();
   // console.log("blok", blok);
@@ -45,9 +43,7 @@ const Nav = ({ blok }) => {
       const supportedLocales = ['en', 'fr', 'de'];
       const defaultLocale = 'en';
 
-      const lang = supportedLocales.includes(pathLocale)
-        ? pathLocale
-        : defaultLocale;
+      const lang = supportedLocales.includes(pathLocale) ? pathLocale : defaultLocale;
       setLanguage(lang);
 
       if (lang === 'de') {
@@ -65,19 +61,13 @@ const Nav = ({ blok }) => {
   }, [path, blok]);
 
   const slugParts = path.split('/').filter(Boolean);
-  const currentLocale = ['de', 'fr'].includes(slugParts[0])
-    ? slugParts[0]
-    : null;
-  const nonHomeSlug = currentLocale
-    ? slugParts.slice(1).join('/')
-    : slugParts.join('/');
+  const currentLocale = ['de', 'fr'].includes(slugParts[0]) ? slugParts[0] : null;
+  const nonHomeSlug = currentLocale ? slugParts.slice(1).join('/') : slugParts.join('/');
 
   const handleNavigate = async (locale) => {
     // console.log('handleNavigate called with locale:', locale);
     const basePath = locale === 'en' ? '' : `/${locale}`;
-    const newPath = nonHomeSlug
-      ? `${basePath}/${nonHomeSlug}`
-      : basePath || '/';
+    const newPath = nonHomeSlug ? `${basePath}/${nonHomeSlug}` : basePath || '/';
 
     // console.log('Attempting to navigate to:', newPath);
 
@@ -87,8 +77,8 @@ const Nav = ({ blok }) => {
 
       // console.log('Checking story:', storySlug, 'in language:', locale);
       const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`, {
-        version: 'published',
         language: locale,
+        version: 'published',
       });
 
       // console.log('Storyblok response:', data);
@@ -96,15 +86,11 @@ const Nav = ({ blok }) => {
       if (data.story) {
         // console.log('Story exists, navigating...');
         // Dispatch custom event for Conversica chatbot to update
-        window.dispatchEvent(
-          new CustomEvent('conversica-locale-change', { detail: { locale } })
-        );
+        window.dispatchEvent(new CustomEvent('conversica-locale-change', { detail: { locale } }));
         router.push(newPath);
       } else {
         // console.log('Story does not exist, showing tooltip');
-        setTooltipMessage(
-          'This page is not yet available in the selected language',
-        );
+        setTooltipMessage('This page is not yet available in the selected language');
         setShowTooltip(true);
 
         setTimeout(() => {
@@ -112,9 +98,7 @@ const Nav = ({ blok }) => {
         }, 3000);
       }
     } catch (error) {
-      setTooltipMessage(
-        'This page is not yet available in the selected language',
-      );
+      setTooltipMessage('This page is not yet available in the selected language');
       setShowTooltip(true);
       // console.log('Tooltip state updated after error:', { showTooltip: true, message: tooltipMessage });
       setTimeout(() => {
@@ -132,44 +116,33 @@ const Nav = ({ blok }) => {
           <ColumnsWrapper>
             {item.tab_columns.map((column, colIdx) => (
               <Column key={`column.column_header-${colIdx}`}>
-                {column?.column_header && (
-                  <ColumnHeader>{column.column_header}</ColumnHeader>
-                )}
+                {column?.column_header && <ColumnHeader>{column.column_header}</ColumnHeader>}
                 {column.nav_items.map((navItem) => {
-                  const formattedIconString =
-                    navItem.icon?.replace(/\s+/g, '') || '';
+                  const formattedIconString = navItem.icon?.replace(/\s+/g, '') || '';
                   const IconComponent = formattedIconString
-                    ? ({ ...props }) => (
-                        <IconRenderer
-                          iconName={formattedIconString}
-                          {...props}
-                        />
-                      )
+                    ? ({ ...props }) => <IconRenderer iconName={formattedIconString} {...props} />
                     : null;
 
                   const rawUrl = navItem?.item_link?.cached_url || '#';
-                  const isExternal =
-                    rawUrl.startsWith('http://') ||
-                    rawUrl.startsWith('https://');
+                  const isExternal = rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
                   const supportedLocales = ['en', 'fr', 'de'];
                   const rawPathParts = rawUrl.split('/').filter(Boolean);
-                  const alreadyHasLocale = supportedLocales.includes(
-                    rawPathParts[0],
-                  );
+                  const alreadyHasLocale = supportedLocales.includes(rawPathParts[0]);
 
                   const normalizedUrl = isExternal
                     ? rawUrl
-                    : `/${
-                        alreadyHasLocale ? '' : (currentLocale ?? '')
-                      }/${rawUrl}`.replace(/\/+/g, '/');
+                    : `/${alreadyHasLocale ? '' : (currentLocale ?? '')}/${rawUrl}`.replace(
+                        /\/+/g,
+                        '/'
+                      );
 
                   return (
                     <StyledNextLink
-                      href={isExternal ? normalizedUrl : normalizedUrl}
-                      target={isExternal ? '_blank' : undefined}
-                      rel={isExternal ? 'noopener noreferrer' : undefined}
                       passHref
+                      href={isExternal ? normalizedUrl : normalizedUrl}
                       key={`item-${navItem._uid}`}
+                      rel={isExternal ? 'noopener noreferrer' : undefined}
+                      target={isExternal ? '_blank' : undefined}
                     >
                       <NavItem
                         card={navItem.card}
@@ -178,18 +151,13 @@ const Nav = ({ blok }) => {
                         tabIndex={0}
                         {...storyblokEditable(navItem)}
                       >
-                        {navItem.card &&
-                          navItem.card_size &&
-                          navItem.card_size !== 'small' && (
-                            <ImageWrapper card_size={navItem.card_size}>
-                              <Image images={navItem?.card_image?.[0].media} />
-                            </ImageWrapper>
-                          )}
+                        {navItem.card && navItem.card_size && navItem.card_size !== 'small' && (
+                          <ImageWrapper card_size={navItem.card_size}>
+                            <Image images={navItem?.card_image?.[0].media} />
+                          </ImageWrapper>
+                        )}
                         {IconComponent && (
-                          <NavIconWrapper
-                            card={navItem.card}
-                            card_size={navItem.card_size}
-                          >
+                          <NavIconWrapper card={navItem.card} card_size={navItem.card_size}>
                             <IconComponent />
                           </NavIconWrapper>
                         )}
@@ -199,24 +167,22 @@ const Nav = ({ blok }) => {
                             {navItem.add_chevron_arrow &&
                               (navItem.orange_chevron ? (
                                 <ChevronArrow
-                                  src="/images/uiElements/open-link-orange.webp"
-                                  alt={'chevron-link'}
                                   orangearrow
+                                  alt={'chevron-link'}
+                                  src="/images/uiElements/open-link-orange.webp"
                                 />
                               ) : (
                                 <ChevronArrow
-                                  src="/images/uiElements/chevron-arrow-label.webp"
                                   alt={'chevron-orange-link'}
+                                  src="/images/uiElements/chevron-arrow-label.webp"
                                 />
                               ))}
                           </NavItemCopy>
                           {navItem.card_size === 'medium' && (
                             <StyledAnchor
-                              onClick={(e) => e.stopPropagation()}
+                              rel={isExternal ? 'noopener noreferrer' : undefined}
                               target={isExternal ? '_blank' : undefined}
-                              rel={
-                                isExternal ? 'noopener noreferrer' : undefined
-                              }
+                              onClick={(e) => e.stopPropagation()}
                             >
                               Learn More
                             </StyledAnchor>
@@ -234,18 +200,13 @@ const Nav = ({ blok }) => {
           </ColumnsWrapper>
           {item.cta && item.cta?.[0]?.media?.[0]?.media?.[0]?.filename && (
             <>
-              <DropDownCTA
-                bgimg={item.cta?.[0]?.media?.[0]?.media?.[0]?.filename}
-              >
+              <DropDownCTA bgimg={item.cta?.[0]?.media?.[0]?.media?.[0]?.filename}>
                 {item.cta?.[0]?.copy_sections.map((item, index) => (
-                  <div
-                    key={`item.component_${index}`}
-                    {...storyblokEditable(item)}
-                  >
+                  <div key={`item.component_${index}`} {...storyblokEditable(item)}>
                     {copycomponents.includes(item.component) ? (
                       <RichTextRenderer
-                        document={item.copy}
                         blok={item}
+                        document={item.copy}
                         responsiveTextStyles={item?.responsive_text_styles}
                       />
                     ) : (
@@ -267,9 +228,10 @@ const Nav = ({ blok }) => {
     if (!navReady) return;
 
     const loadScrollTrigger = async () => {
-      const [{ default: gsap }, { default: ScrollTrigger }] = await Promise.all(
-        [import('gsap'), import('gsap/ScrollTrigger')],
-      );
+      const [{ default: gsap }, { default: ScrollTrigger }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
 
       gsap.registerPlugin(ScrollTrigger);
 
@@ -279,11 +241,11 @@ const Nav = ({ blok }) => {
       const footerOffset = footer.offsetTop + footer.offsetHeight;
 
       ScrollTrigger.create({
-        trigger: '.desktopNav',
-        start: 'top top',
         end: `${footerOffset}px`,
         pin: true,
         pinSpacing: false,
+        start: 'top top',
+        trigger: '.desktopNav',
       });
     };
 
@@ -293,7 +255,7 @@ const Nav = ({ blok }) => {
   useEffect(() => {
     if (!navReady) return;
 
-    let cleanupFunctions = [];
+    const cleanupFunctions = [];
 
     const initDropdownAnimations = async () => {
       const { default: gsap } = await import('gsap');
@@ -340,7 +302,7 @@ const Nav = ({ blok }) => {
           queuedIndex = index;
         };
         tab.addEventListener('mouseenter', handler);
-        return { tab, handler };
+        return { handler, tab };
       });
 
       const dropdownLeaveHandlers = allDropdowns.map((dropdown) => {
@@ -355,7 +317,7 @@ const Nav = ({ blok }) => {
       }
 
       cleanupFunctions.push(() => {
-        tabEnterHandlers.forEach(({ tab, handler }) => {
+        tabEnterHandlers.forEach(({ handler, tab }) => {
           tab.removeEventListener('mouseenter', handler);
         });
         dropdownLeaveHandlers.forEach(({ dropdown, handler }) => {
@@ -406,7 +368,7 @@ const Nav = ({ blok }) => {
   }, [path, navReady]); // Add path as a dependency to trigger on route changes
 
   useEffect(() => {
-    let cleanupFunctions = [];
+    const cleanupFunctions = [];
 
     const initLanguageAnimations = async () => {
       const { default: gsap } = await import('gsap');
@@ -446,7 +408,7 @@ const Nav = ({ blok }) => {
   useEffect(() => {
     if (!navReady) return;
 
-    let cleanupFunctions = [];
+    const cleanupFunctions = [];
 
     const initBackdropAnimations = async () => {
       const { default: gsap } = await import('gsap');
@@ -459,18 +421,18 @@ const Nav = ({ blok }) => {
       const handleMouseEnter = () => {
         setIsHoveringNav(true);
         gsap.to(backdrop, {
-          opacity: 1,
           duration: 0.3,
           ease: 'power2.out',
+          opacity: 1,
         });
       };
 
       const handleMouseLeave = () => {
         setIsHoveringNav(false);
         gsap.to(backdrop, {
-          opacity: 0,
           duration: 0.3,
           ease: 'power2.in',
+          opacity: 0,
         });
       };
 
@@ -522,25 +484,16 @@ const Nav = ({ blok }) => {
             <Banner>
               <BannerMessage>{blok.banner}</BannerMessage>
               {blok?.banner_link?.map(($buttonData) => (
-                <div
-                  {...storyblokEditable($buttonData)}
-                  key={$buttonData?.link_text}
-                >
+                <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
                   <Button $buttonData={$buttonData} />
                 </div>
               ))}
             </Banner>
             <LanguageSelector id="languageSelector">
               <LanguageItems id="languageItemsContainer">
-                <LanguageItem onClick={() => handleNavigate('en')}>
-                  English
-                </LanguageItem>
-                <LanguageItem onClick={() => handleNavigate('fr')}>
-                  French
-                </LanguageItem>
-                <LanguageItem onClick={() => handleNavigate('de')}>
-                  German
-                </LanguageItem>
+                <LanguageItem onClick={() => handleNavigate('en')}>English</LanguageItem>
+                <LanguageItem onClick={() => handleNavigate('fr')}>French</LanguageItem>
+                <LanguageItem onClick={() => handleNavigate('de')}>German</LanguageItem>
               </LanguageItems>
               <LanguageIcon id="globe" />
 
@@ -557,10 +510,7 @@ const Nav = ({ blok }) => {
               <Tabs>{mappedNav}</Tabs>
             </MainContent>
             {blok?.button?.map(($buttonData) => (
-              <div
-                {...storyblokEditable($buttonData)}
-                key={$buttonData?.link_text}
-              >
+              <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
                 <Button $buttonData={$buttonData} />
               </div>
             ))}
@@ -767,13 +717,7 @@ const Banner = styled.div`
 
 const TopNav = styled.nav`
   background:
-    linear-gradient(
-      90deg,
-      #cc4800 0.11%,
-      #5f47a8 38.75%,
-      rgba(126, 95, 221, 0) 71.55%
-    ),
-    #201435;
+    linear-gradient(90deg, #cc4800 0.11%, #5f47a8 38.75%, rgba(126, 95, 221, 0) 71.55%), #201435;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -813,8 +757,7 @@ const ImageWrapper = styled.div`
   }
 
   ${media.tablet} {
-    min-height: ${(props) =>
-      props.card_size === 'large' ? '17.188vw' : '7.617vw'};
+    min-height: ${(props) => (props.card_size === 'large' ? '17.188vw' : '7.617vw')};
     min-width: ${(props) => (props.card_size === 'large' ? '100%' : '8.496vw')};
   }
 
@@ -856,8 +799,7 @@ const NavItemCopy = styled.div`
 
   ${media.tablet} {
     ${text.bodyMd};
-    margin-left: ${(props) =>
-      props.card_size === 'large' ? '1.563vw' : 'unset'};
+    margin-left: ${(props) => (props.card_size === 'large' ? '1.563vw' : 'unset')};
     gap: 0.781vw;
   }
 
@@ -885,10 +827,8 @@ const NavIconWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-self: ${(props) => (props.card ? 'start' : 'unset')};
-  min-width: ${(props) =>
-    props.card && props.card_size ? '2.375vw' : '1.25vw'};
-  max-width: ${(props) =>
-    props.card && props.card_size ? '2.375vw' : '1.25vw'};
+  min-width: ${(props) => (props.card && props.card_size ? '2.375vw' : '1.25vw')};
+  max-width: ${(props) => (props.card && props.card_size ? '2.375vw' : '1.25vw')};
   height: ${(props) => (props.card && props.card_size ? 'unset' : '1.25vw')};
 
   ${media.fullWidth} {
@@ -898,10 +838,8 @@ const NavIconWrapper = styled.div`
   }
 
   ${media.tablet} {
-    min-width: ${(props) =>
-      props.card && props.card_size ? '3.711vw' : '1.953vw'};
-    max-width: ${(props) =>
-      props.card && props.card_size ? '3.711vw' : '1.953vw'};
+    min-width: ${(props) => (props.card && props.card_size ? '3.711vw' : '1.953vw')};
+    max-width: ${(props) => (props.card && props.card_size ? '3.711vw' : '1.953vw')};
     height: ${(props) => (props.card && props.card_size ? 'unset' : '1.953vw')};
   }
 
@@ -917,17 +855,11 @@ const NavIconWrapper = styled.div`
 const NavItem = styled.div`
   cursor: pointer;
   display: flex;
-  flex-direction: ${(props) =>
-    props.card_size === 'large' ? 'column' : 'row'};
+  flex-direction: ${(props) => (props.card_size === 'large' ? 'column' : 'row')};
   align-items: ${(props) => (props.card_size === 'large' ? 'start' : 'center')};
-  background: ${(props) =>
-    props.card_size === 'medium' ? colors.lightPurpleGrey : 'unset'};
+  background: ${(props) => (props.card_size === 'medium' ? colors.lightPurpleGrey : 'unset')};
   gap: ${(props) =>
-    props.card_size === 'small'
-      ? '1.25vw'
-      : props.card_size === 'medium'
-        ? '0.875vw'
-        : '0.313vw'};
+    props.card_size === 'small' ? '1.25vw' : props.card_size === 'medium' ? '0.875vw' : '0.313vw'};
 
   width: ${(props) =>
     props.card_size === 'small'
@@ -955,11 +887,7 @@ const NavItem = styled.div`
 
   ${media.fullWidth} {
     gap: ${(props) =>
-      props.card_size === 'small'
-        ? '20px'
-        : props.card_size === 'medium'
-          ? '14px'
-          : '5px'};
+      props.card_size === 'small' ? '20px' : props.card_size === 'medium' ? '14px' : '5px'};
 
     width: ${(props) =>
       props.card_size === 'small'
@@ -984,11 +912,7 @@ const NavItem = styled.div`
 
   ${media.tablet} {
     gap: ${(props) =>
-      props.card_size === 'small'
-        ? '1.953vw'
-        : props.card_size === 'medium'
-          ? '1.367vw'
-          : '5px'};
+      props.card_size === 'small' ? '1.953vw' : props.card_size === 'medium' ? '1.367vw' : '5px'};
 
     width: ${(props) =>
       props.card_size === 'small'
@@ -1018,8 +942,7 @@ const NavItem = styled.div`
         : props.card_size === 'medium'
           ? '1px solid ${colors.txtSubtle}'
           : 'unset'};
-    background: ${(props) =>
-      props.card_size === 'large' ? 'unset' : colors.lightPurpleGrey};
+    background: ${(props) => (props.card_size === 'large' ? 'unset' : colors.lightPurpleGrey)};
     box-shadow: ${(props) =>
       props.card_size === 'large'
         ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
@@ -1027,8 +950,7 @@ const NavItem = styled.div`
           ? '0px 0px 1px 0px rgba(25, 29, 30, 0.04), 0px 2px 4px 0px rgba(25, 29, 30, 0.16)'
           : 'unset'};
     path {
-      fill: ${(props) =>
-        props.card ? colors.lightPurple : colors.primaryOrange};
+      fill: ${(props) => (props.card ? colors.lightPurple : colors.primaryOrange)};
     }
 
     g {

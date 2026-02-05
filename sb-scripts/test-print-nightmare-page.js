@@ -58,9 +58,7 @@ const replaceImagesWithThemselves = async (content) => {
 
       // Get the asset from the asset library to ensure we have the latest alt tag
       try {
-        const assetResponse = await Storyblok.get(
-          `spaces/${spaceId}/assets/${content.id}`
-        );
+        const assetResponse = await Storyblok.get(`spaces/${spaceId}/assets/${content.id}`);
 
         const asset = assetResponse.data;
 
@@ -78,14 +76,9 @@ const replaceImagesWithThemselves = async (content) => {
         content.title = asset.title;
         content.copyright = asset.copyright;
 
-        console.log(
-          `✅ Updated image ${content.id} with alt tag: "${asset.alt}"`
-        );
+        console.log(`✅ Updated image ${content.id} with alt tag: "${asset.alt}"`);
       } catch (assetError) {
-        console.error(
-          `❌ Failed to get asset ${content.id}:`,
-          assetError.message
-        );
+        console.error(`❌ Failed to get asset ${content.id}:`, assetError.message);
       }
     } else {
       // Recursively check all properties
@@ -134,9 +127,7 @@ const findAboutUsImages = async () => {
 
       // If we got fewer stories than requested, we've reached the end
       if (stories.length < perPage) {
-        console.log(
-          `📄 Reached end of stories (${stories.length} < ${perPage})`
-        );
+        console.log(`📄 Reached end of stories (${stories.length} < ${perPage})`);
         break;
       }
 
@@ -148,9 +139,7 @@ const findAboutUsImages = async () => {
       return;
     }
 
-    console.log(
-      `✅ Found About Us page: ${aboutUsStory.name} (ID: ${aboutUsStory.id})`
-    );
+    console.log(`✅ Found About Us page: ${aboutUsStory.name} (ID: ${aboutUsStory.id})`);
 
     // Get the full content using CDN API with token as query parameter
     console.log('\n🔍 Getting full content from CDN API...');
@@ -176,9 +165,7 @@ const findAboutUsImages = async () => {
 
       // Replace images with themselves
       console.log('\n🔄 Replacing images with themselves...');
-      const updatedContent = await replaceImagesWithThemselves(
-        fullStory.data.story.content
-      );
+      const updatedContent = await replaceImagesWithThemselves(fullStory.data.story.content);
 
       // Save the updated content using Management API
       console.log('\n💾 Saving updated content...');
@@ -193,10 +180,7 @@ const findAboutUsImages = async () => {
       console.log(`📊 Updated ${images.length} images`);
     } catch (apiError) {
       console.error('❌ API Error:', apiError.message);
-      console.error(
-        '🔍 API Error Details:',
-        apiError.response?.data || 'No response data'
-      );
+      console.error('🔍 API Error Details:', apiError.response?.data || 'No response data');
     }
   } catch (error) {
     console.error('❌ Error:', error.message);

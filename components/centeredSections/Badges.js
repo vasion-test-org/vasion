@@ -1,16 +1,19 @@
-"use client";
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import { horizontalLoop } from "@/functions/horizontalLoop";
-import RichTextRenderer from "../renderers/RichTextRenderer";
+'use client';
+import React, { useEffect } from 'react';
+
+import styled from 'styled-components';
+
+import { horizontalLoop } from '@/functions/horizontalLoop';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
+
+import RichTextRenderer from '../renderers/RichTextRenderer';
 
 const G2Badges = ({ badges }) => {
   function splitBadges(badges, n) {
-    let badgesGroup = [];
-    for (var i = 0, j = 0; i < badges?.length; i++) {
+    const badgesGroup = [];
+    for (let i = 0, j = 0; i < badges?.length; i++) {
       if (i >= n && i % n === 0) j++;
       badgesGroup[j] = badgesGroup[j] || [];
       badgesGroup[j].push(badges[i]);
@@ -20,13 +23,13 @@ const G2Badges = ({ badges }) => {
 
   const badgesArrays = splitBadges(badges?.badge_cards, 3);
   const allBadges = badgesArrays.map((badge, index) => (
-    <BadgesInnerDiv key={index} className="badgeGroup">
+    <BadgesInnerDiv className="badgeGroup" key={index}>
       {badge.map((badge, badge_index) => (
         <BadgeDiv key={badge_index}>
           <BadgeImage
+            alt={badge?.badge_image.alt}
             className="badges"
             src={badge.badge_image.filename}
-            alt={badge?.badge_image.alt}
           />
           <BadgeContent>
             <BadgeTitle>{badge.badge_name}</BadgeTitle>
@@ -49,12 +52,12 @@ const G2Badges = ({ badges }) => {
     const initBadgeAnimations = async () => {
       const { default: gsap } = await import('gsap');
 
-      const badgeGroups = gsap.utils.toArray(".badgeGroup");
+      const badgeGroups = gsap.utils.toArray('.badgeGroup');
 
       const loop = horizontalLoop(badgeGroups, { deep: false, paused: true });
 
       function NextLoop() {
-        loop.next({ duration: 2, ease: "slow" });
+        loop.next({ duration: 2, ease: 'slow' });
       }
 
       const loopTL = gsap.timeline({});
@@ -71,11 +74,11 @@ const G2Badges = ({ badges }) => {
         },
       });
 
-      progressTL.to(".pro-bar", {
+      progressTL.to('.pro-bar', {
         delay: 0.75,
-        stagger: 7,
-        width: "100%",
         repeat: -1,
+        stagger: 7,
+        width: '100%',
       });
     };
 
@@ -183,11 +186,7 @@ const BadgeDiv = styled.div`
   border-radius: 1.667vw;
   width: 24.583vw;
   height: 29.653vw;
-  background: linear-gradient(
-    212deg,
-    rgba(118, 88, 205, 0.8) 0%,
-    rgba(118, 88, 205, 0.1) 101.67%
-  );
+  background: linear-gradient(212deg, rgba(118, 88, 205, 0.8) 0%, rgba(118, 88, 205, 0.1) 101.67%);
   /* border: 0.069vw solid #FFF; */
   box-shadow: 0vw 0.278vw 0.278vw 0vw rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(0.069vw);

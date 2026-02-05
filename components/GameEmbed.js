@@ -1,9 +1,11 @@
 'use client';
-import React, { useRef, useState, useEffect, useContext } from 'react';
-import { ScreenContext } from '@/components/providers/Screen';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+
 import styled from 'styled-components';
-import media from '@/styles/media';
+
+import { ScreenContext } from '@/components/providers/Screen';
 import colors from '@/styles/colors';
+import media from '@/styles/media';
 import text from '@/styles/text';
 
 const GameEmbed = ({ blok }) => {
@@ -34,12 +36,12 @@ const GameEmbed = ({ blok }) => {
 
     iframe.contentWindow.postMessage(
       {
-        type: 'KEY_DOWN',
-        key,
         code,
+        key,
         keyCode,
+        type: 'KEY_DOWN',
       },
-      '*',
+      '*'
     );
   };
 
@@ -49,12 +51,12 @@ const GameEmbed = ({ blok }) => {
 
     iframe.contentWindow.postMessage(
       {
-        type: 'KEY_UP',
-        key,
         code,
+        key,
         keyCode,
+        type: 'KEY_UP',
       },
-      '*',
+      '*'
     );
   };
 
@@ -90,11 +92,11 @@ const GameEmbed = ({ blok }) => {
     <>
       <Wrapper fullwidth={blok.fullwidth}>
         <StyledIframe
-          ref={iframeRef}
-          data-anchor-id={blok.anchor_id}
-          src={blok.embed_link}
           allowFullScreen
           allow="accelerometer; autoplay; encrypted-media; gyroscope"
+          data-anchor-id={blok.anchor_id}
+          ref={iframeRef}
+          src={blok.embed_link}
         />
       </Wrapper>
       {!mobile && !tablet && (
@@ -120,42 +122,38 @@ const GameEmbed = ({ blok }) => {
         <MobileControls>
           <ControlsContainer>
             <StartButton
-              onTouchStart={() => handleSinglePress(' ', 'Space', 32)}
               onClick={() => handleSinglePress(' ', 'Space', 32)}
               onTouchEnd={(e) => e.preventDefault()}
+              onTouchStart={() => handleSinglePress(' ', 'Space', 32)}
             >
               START
             </StartButton>
 
             <DirectionalRow>
               <ControlButton
-                onTouchStart={() => handleKeyDown('ArrowLeft', 'ArrowLeft', 37)}
-                onTouchEnd={() => handleKeyUp('ArrowLeft', 'ArrowLeft', 37)}
                 onMouseDown={() => handleKeyDown('ArrowLeft', 'ArrowLeft', 37)}
-                onMouseUp={() => handleKeyUp('ArrowLeft', 'ArrowLeft', 37)}
                 onMouseLeave={() => handleKeyUp('ArrowLeft', 'ArrowLeft', 37)}
+                onMouseUp={() => handleKeyUp('ArrowLeft', 'ArrowLeft', 37)}
+                onTouchEnd={() => handleKeyUp('ArrowLeft', 'ArrowLeft', 37)}
+                onTouchStart={() => handleKeyDown('ArrowLeft', 'ArrowLeft', 37)}
               >
                 ←
               </ControlButton>
               <ControlButton
-                onTouchStart={() =>
-                  handleKeyDown('ArrowRight', 'ArrowRight', 39)
-                }
-                onTouchEnd={() => handleKeyUp('ArrowRight', 'ArrowRight', 39)}
-                onMouseDown={() =>
-                  handleKeyDown('ArrowRight', 'ArrowRight', 39)
-                }
-                onMouseUp={() => handleKeyUp('ArrowRight', 'ArrowRight', 39)}
+                onMouseDown={() => handleKeyDown('ArrowRight', 'ArrowRight', 39)}
                 onMouseLeave={() => handleKeyUp('ArrowRight', 'ArrowRight', 39)}
+                onMouseUp={() => handleKeyUp('ArrowRight', 'ArrowRight', 39)}
+                onTouchEnd={() => handleKeyUp('ArrowRight', 'ArrowRight', 39)}
+                onTouchStart={() => handleKeyDown('ArrowRight', 'ArrowRight', 39)}
               >
                 →
               </ControlButton>
             </DirectionalRow>
 
             <PauseButton
-              onTouchStart={() => handleSinglePress('Escape', 'Escape', 27)}
               onClick={() => handleSinglePress('Escape', 'Escape', 27)}
               onTouchEnd={(e) => e.preventDefault()}
+              onTouchStart={() => handleSinglePress('Escape', 'Escape', 27)}
             >
               PAUSE
             </PauseButton>
@@ -228,8 +226,7 @@ const Wrapper = styled.div`
   justify-content: center;
   padding: 60px;
   overflow: hidden;
-  background-color: ${(props) =>
-    props.fullwidth ? 'rgb(26, 31, 33)' : 'transparent'};
+  background-color: ${(props) => (props.fullwidth ? 'rgb(26, 31, 33)' : 'transparent')};
   min-height: 707px;
   ${media.fullWidth} {
     min-height: 960px;

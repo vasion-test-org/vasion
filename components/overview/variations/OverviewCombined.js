@@ -1,13 +1,15 @@
-"use client";
-import React from "react";
-import styled from "styled-components";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
-import Button from "components/globalComponents/Button";
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import Parenthesis from "@/assets/svg/Parenthesis.svg";
-import { storyblokEditable } from "@storyblok/react/rsc";
+'use client';
+import React from 'react';
+
+import { storyblokEditable } from '@storyblok/react/rsc';
+import Button from 'components/globalComponents/Button';
+import styled from 'styled-components';
+
+import Parenthesis from '@/assets/svg/Parenthesis.svg';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
 
 const Combined = ({ blok }) => {
   const statlist = blok?.stats?.stat_list?.map((item) => {
@@ -22,40 +24,28 @@ const Combined = ({ blok }) => {
   });
 
   return (
-    <Wrapper spacingOffset={blok.offset_spacing} spacing={blok.section_spacing}>
+    <Wrapper spacing={blok.section_spacing} spacingOffset={blok.offset_spacing}>
       <ContentDiv {...storyblokEditable(blok)}>
         <Quotation />
         <QuoteBlock>
           <QuoteCopy>
-            {blok?.quote?.copy?.find((item) => item.component === "header")
-              ?.copy?.content && (
+            {blok?.quote?.copy?.find((item) => item.component === 'header')?.copy?.content && (
               <Header {...storyblokEditable(item)}>
                 <RichTextRenderer
-                  document={
-                    blok?.quote?.copy?.find(
-                      (item) => item.component === "header",
-                    )?.copy
-                  }
+                  document={blok?.quote?.copy?.find((item) => item.component === 'header')?.copy}
                 />
               </Header>
             )}
 
-            {blok?.quote?.copy?.find((item) => item.component === "body_copy")
-              ?.copy?.content && (
+            {blok?.quote?.copy?.find((item) => item.component === 'body_copy')?.copy?.content && (
               <BodyCopy {...storyblokEditable(blok.quote)}>
                 <RichTextRenderer
-                  document={
-                    blok?.quote?.copy?.find(
-                      (item) => item.component === "body_copy",
-                    )?.copy
-                  }
+                  document={blok?.quote?.copy?.find((item) => item.component === 'body_copy')?.copy}
                 />
               </BodyCopy>
             )}
             {blok.quote?.copy && blok.quote?.copy.length >= 2 && (
-              <Attribution
-                {...storyblokEditable(blok.quote.copy[2] || blok.quote.copy[1])}
-              >
+              <Attribution {...storyblokEditable(blok.quote.copy[2] || blok.quote.copy[1])}>
                 -
                 <RichTextRenderer
                   document={
@@ -70,8 +60,8 @@ const Combined = ({ blok }) => {
           {blok?.quote?.quote_image[0]?.media[0]?.filename && (
             <div {...storyblokEditable(blok.quote.quote_image[0])}>
               <QuoteSideImg
-                src={blok?.quote?.quote_image[0]?.media[0].filename}
                 alt={blok?.quote?.quote_image[0]?.media[0].alt}
+                src={blok?.quote?.quote_image[0]?.media[0].filename}
               />
             </div>
           )}
@@ -85,8 +75,8 @@ const Combined = ({ blok }) => {
           </HeaderDiv>
           {blok?.stats?.stat_logo_header?.filename && (
             <ImageHeadline
-              src={blok?.stats?.stat_logo_header?.filename}
               alt={blok?.stats?.stat_logo_header?.alt}
+              src={blok?.stats?.stat_logo_header?.filename}
             />
           )}
           <StatItemsContainer>{statlist}</StatItemsContainer>
@@ -96,10 +86,10 @@ const Combined = ({ blok }) => {
           <Button
             {...storyblokEditable(blok?.link)}
             $buttonData={{
-              theme: "orange_link",
-              link_url: blok.link.link_url,
+              link_size: 'medium',
               link_text: blok?.link.link_text,
-              link_size: "medium",
+              link_url: blok.link.link_url,
+              theme: 'orange_link',
             }}
           />
         )}
@@ -412,95 +402,95 @@ const Wrapper = styled.div`
   flex-direction: column;
   z-index: 1;
   padding: ${(props) => {
-    if (props.spacingOffset === "top") {
-      return props.spacing === "default"
-        ? "3.75vw 0 0"
+    if (props.spacingOffset === 'top') {
+      return props.spacing === 'default'
+        ? '3.75vw 0 0'
         : props.spacing
           ? `${props.spacing}px 0 0`
-          : "3.75vw 0 0";
+          : '3.75vw 0 0';
     }
-    if (props.spacingOffset === "bottom") {
-      return props.spacing === "default"
-        ? "0 0 3.75vw"
+    if (props.spacingOffset === 'bottom') {
+      return props.spacing === 'default'
+        ? '0 0 3.75vw'
         : props.spacing
           ? `0 0 ${props.spacing}px`
-          : "0 0 3.75vw";
+          : '0 0 3.75vw';
     }
-    return props.spacing === "default"
-      ? "3.75vw 0"
+    return props.spacing === 'default'
+      ? '3.75vw 0'
       : props.spacing
         ? `${props.spacing}px 0`
-        : "3.75vw 0";
+        : '3.75vw 0';
   }};
 
   ${media.fullWidth} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "60px 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '60px 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "60px 0 0";
+            : '60px 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 60px"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 60px'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 60px";
+            : '0 0 60px';
       }
-      return props.spacing === "default"
-        ? "60px 0"
+      return props.spacing === 'default'
+        ? '60px 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "60px 0";
+          : '60px 0';
     }};
   }
   ${media.tablet} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "5.859vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '5.859vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "5.859vw 0 0";
+            : '5.859vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 5.859vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 5.859vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 5.859vw";
+            : '0 0 5.859vw';
       }
-      return props.spacing === "default"
-        ? "5.859vw 0"
+      return props.spacing === 'default'
+        ? '5.859vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "5.859vw 0";
+          : '5.859vw 0';
     }};
   }
 
   ${media.mobile} {
     padding: ${(props) => {
-      if (props.spacingOffset === "top") {
-        return props.spacing === "default"
-          ? "12.5vw 0 0"
+      if (props.spacingOffset === 'top') {
+        return props.spacing === 'default'
+          ? '12.5vw 0 0'
           : props.spacing
             ? `${props.spacing}px 0 0`
-            : "12.5vw 0 0";
+            : '12.5vw 0 0';
       }
-      if (props.spacingOffset === "bottom") {
-        return props.spacing === "default"
-          ? "0 0 12.5vw"
+      if (props.spacingOffset === 'bottom') {
+        return props.spacing === 'default'
+          ? '0 0 12.5vw'
           : props.spacing
             ? `0 0 ${props.spacing}px`
-            : "0 0 12.5vw";
+            : '0 0 12.5vw';
       }
-      return props.spacing === "default"
-        ? "12.5vw 0"
+      return props.spacing === 'default'
+        ? '12.5vw 0'
         : props.spacing
           ? `${props.spacing}px 0`
-          : "12.5vw 0";
+          : '12.5vw 0';
     }};
   }
 `;

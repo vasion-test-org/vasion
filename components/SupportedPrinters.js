@@ -1,29 +1,28 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 
-import styled from 'styled-components';
-import media from 'styles/media';
-import colors from 'styles/colors';
-import text from 'styles/text';
-import axios from 'axios';
-import XSVG from 'assets/svg/Le-X.svg';
 import DownSVG from 'assets/svg/ChevronDown.svg';
+import XSVG from 'assets/svg/Le-X.svg';
+import axios from 'axios';
+import styled from 'styled-components';
+import colors from 'styles/colors';
+import media from 'styles/media';
+import text from 'styles/text';
+
 import RichTextRenderer from './renderers/RichTextRenderer';
 
 const SupportedPrinters = ({ blok }) => {
   const [tableData, setTableData] = useState([]);
   const [searchData, setSearchData] = useState('');
   const initialData = {
-    searchTerm: '',
+    featureInput: '',
     manuInput: '',
     platformInput: '',
-    featureInput: '',
+    searchTerm: '',
   };
   const [filteredData, setFilteredData] = useState(initialData);
   const [manuValue, setManuValue] = useState(blok.table_headers[0].copy);
-  const [platformValue, setPlatformValue] = useState(
-    blok.table_headers[4].copy
-  );
+  const [platformValue, setPlatformValue] = useState(blok.table_headers[4].copy);
   const [featureValue, setFeatureValue] = useState(blok.table_headers[5].copy);
 
   useEffect(() => {
@@ -39,16 +38,16 @@ const SupportedPrinters = ({ blok }) => {
   useEffect(() => {
     const initAlertAnimation = async () => {
       const { default: gsap } = await import('gsap');
-      
+
       const tl = gsap.timeline({});
 
       const closeAlert = () => {
         tl.to('#alertBox', {
-          opacity: 0,
-          height: 0,
-          padding: 0,
-          margin: 0,
           duration: 0.75,
+          height: 0,
+          margin: 0,
+          opacity: 0,
+          padding: 0,
         }).to('#alertBox', {
           display: 'none',
         });
@@ -71,8 +70,8 @@ const SupportedPrinters = ({ blok }) => {
           display: 'flex',
         })
         .to('#manuOptions', {
-          height: 'auto',
           duration: 0.55,
+          height: 'auto',
         });
 
       //platform dropdown timeline
@@ -82,8 +81,8 @@ const SupportedPrinters = ({ blok }) => {
           display: 'flex',
         })
         .to('#platformOptions', {
-          height: 'auto',
           duration: 0.55,
+          height: 'auto',
         });
 
       //feature dropdown timeline
@@ -93,8 +92,8 @@ const SupportedPrinters = ({ blok }) => {
           display: 'flex',
         })
         .to('#featureOptions', {
-          height: 'auto',
           duration: 0.55,
+          height: 'auto',
         });
 
       const handleManuDrop = (e) => {
@@ -121,15 +120,9 @@ const SupportedPrinters = ({ blok }) => {
         platformDropDownTL.reverse();
       };
 
-      document
-        .querySelector('#manuDropdown')
-        .addEventListener('click', handleManuDrop);
-      document
-        .querySelector('#platformDropdown')
-        .addEventListener('click', handlePlatformDrop);
-      document
-        .querySelector('#featureDropdown')
-        .addEventListener('click', handleFeatureDrop);
+      document.querySelector('#manuDropdown').addEventListener('click', handleManuDrop);
+      document.querySelector('#platformDropdown').addEventListener('click', handlePlatformDrop);
+      document.querySelector('#featureDropdown').addEventListener('click', handleFeatureDrop);
     };
 
     initDropdownAnimations();
@@ -197,25 +190,14 @@ const SupportedPrinters = ({ blok }) => {
   };
 
   const filteredTableData = tableData.slice(1).filter((entry) => {
-    const manufacturerMatch = entry[0]
-      .toLowerCase()
-      .includes(filteredData.manuInput.toLowerCase());
+    const manufacturerMatch = entry[0].toLowerCase().includes(filteredData.manuInput.toLowerCase());
     const platformVersionMatch = entry[4]
       .toLowerCase()
       .includes(filteredData.platformInput.toLowerCase());
-    const featureMatch = entry[5]
-      .toLowerCase()
-      .includes(filteredData.featureInput.toLowerCase());
-    const searchTermMatch = entry[2]
-      .toLowerCase()
-      .includes(searchData.toLowerCase());
+    const featureMatch = entry[5].toLowerCase().includes(filteredData.featureInput.toLowerCase());
+    const searchTermMatch = entry[2].toLowerCase().includes(searchData.toLowerCase());
 
-    return (
-      manufacturerMatch &&
-      platformVersionMatch &&
-      searchTermMatch &&
-      featureMatch
-    );
+    return manufacturerMatch && platformVersionMatch && searchTermMatch && featureMatch;
   });
 
   const tableRows = filteredTableData.map((dataPoint) => {
@@ -237,43 +219,37 @@ const SupportedPrinters = ({ blok }) => {
         <SearchHeader>{blok.search_header}</SearchHeader>
         <Search
           placeholder={blok.search_placeholder}
-          type='text'
-          onChange={handleSearchChange}
+          type="text"
           value={searchData}
+          onChange={handleSearchChange}
         />
       </SearchDiv>
 
       <FilterDiv>
         <Filters>
-          <Manufacturer id='manuDropdown'>
+          <Manufacturer id="manuDropdown">
             {manuValue}
             <DownArrow />
-            <OptionsContainer id='manuOptions'>
-              {manufacturers}
-            </OptionsContainer>
+            <OptionsContainer id="manuOptions">{manufacturers}</OptionsContainer>
           </Manufacturer>
 
-          <PlatformVersion id='platformDropdown'>
+          <PlatformVersion id="platformDropdown">
             {platformValue}
             <DownArrow />
-            <OptionsContainer id='platformOptions'>
-              {platformVersions}
-            </OptionsContainer>
+            <OptionsContainer id="platformOptions">{platformVersions}</OptionsContainer>
           </PlatformVersion>
 
-          <Feature id='featureDropdown'>
+          <Feature id="featureDropdown">
             {featureValue}
             <DownArrow />
-            <OptionsContainer id='featureOptions'>{features}</OptionsContainer>
+            <OptionsContainer id="featureOptions">{features}</OptionsContainer>
           </Feature>
         </Filters>
-        <ClearFilter onClick={resetFilters}>
-          {blok.clear_button_text}
-        </ClearFilter>
+        <ClearFilter onClick={resetFilters}>{blok.clear_button_text}</ClearFilter>
       </FilterDiv>
 
-      <AlertBox id='alertBox'>
-        <X id='xsvg' />
+      <AlertBox id="alertBox">
+        <X id="xsvg" />
         <AlertHeader>{blok.notice_header}</AlertHeader>
         <AlertBody>
           <RichTextRenderer document={blok.notice} />
@@ -284,15 +260,15 @@ const SupportedPrinters = ({ blok }) => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead scope='col'>{blok.table_headers[0].copy}</TableHead>
-              <TableHead scope='col'>{blok.table_headers[1].copy}</TableHead>
-              <TableHead scope='col'>{blok.table_headers[2].copy}</TableHead>
-              <TableHead scope='col'>{blok.table_headers[3].copy}</TableHead>
-              <TableHead scope='col'>{blok.table_headers[4].copy}</TableHead>
-              <TableHead scope='col'>{blok.table_headers[5].copy}</TableHead>
+              <TableHead scope="col">{blok.table_headers[0].copy}</TableHead>
+              <TableHead scope="col">{blok.table_headers[1].copy}</TableHead>
+              <TableHead scope="col">{blok.table_headers[2].copy}</TableHead>
+              <TableHead scope="col">{blok.table_headers[3].copy}</TableHead>
+              <TableHead scope="col">{blok.table_headers[4].copy}</TableHead>
+              <TableHead scope="col">{blok.table_headers[5].copy}</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody id='tableBody'>{tableRows}</TableBody>
+          <TableBody id="tableBody">{tableRows}</TableBody>
         </Table>
       </TableContainer>
     </Wrapper>

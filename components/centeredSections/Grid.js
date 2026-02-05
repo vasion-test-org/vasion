@@ -1,21 +1,18 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
-import styled from "styled-components";
-import GridItem from "@/components/globalComponents/GridItem";
-import media from "@/styles/media";
+import styled from 'styled-components';
+
+import GridItem from '@/components/globalComponents/GridItem';
+import media from '@/styles/media';
 // import colors from 'styles/colors';
 // import text from 'styles/text';
-const Grid = ({ gridData, alignment }) => {
+const Grid = ({ alignment, gridData }) => {
   // console.log(gridData);
   return (
     <GridContainer>
       {gridData.map((gridItem, index) => (
-        <GridItem
-          key={`grid-item-${index}`}
-          content={gridItem}
-          alignment={alignment}
-        />
+        <GridItem alignment={alignment} content={gridItem} key={`grid-item-${index}`} />
       ))}
     </GridContainer>
   );
@@ -46,4 +43,3 @@ const GridContainer = styled.div`
     gap: 8.333vw;
   }
 `;
-

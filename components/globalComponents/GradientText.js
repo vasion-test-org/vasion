@@ -66,15 +66,15 @@ const TextContent = styled.div`
 `;
 
 export default function GradientText({
+  animationSpeed = 8,
   children,
   className = '',
-  colors = ["#803235", "#3D2562", "#7E5FDD", "#FF5100"],
-  animationSpeed = 8,
+  colors = ['#803235', '#3D2562', '#7E5FDD', '#FF5100'],
   showBorder = false,
 }) {
   const gradientStyle = {
-    backgroundImage: `linear-gradient(to right, ${colors.join(', ')})`,
     animationDuration: `${animationSpeed}s`,
+    backgroundImage: `linear-gradient(to right, ${colors.join(', ')})`,
   };
 
   return (

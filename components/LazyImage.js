@@ -1,15 +1,16 @@
 'use client';
 
 import Image from '@/components/globalComponents/Image';
+
 import LazyLoadWrapper from './LazyLoadWrapper';
 
 const LazyImage = ({
-  images,
-  filename,
-  priority = false,
-  sizes = '100vw',
-  quality = 85,
   className = '',
+  filename,
+  images,
+  priority = false,
+  quality = 85,
+  sizes = '100vw',
   style = {},
   ...props
 }) => {
@@ -17,12 +18,12 @@ const LazyImage = ({
   if (priority) {
     return (
       <Image
-        images={images}
-        filename={filename}
-        priority={priority}
-        sizes={sizes}
-        quality={quality}
         className={className}
+        filename={filename}
+        images={images}
+        priority={priority}
+        quality={quality}
+        sizes={sizes}
         style={style}
         {...props}
       />
@@ -32,33 +33,29 @@ const LazyImage = ({
   // Create a placeholder div with the same dimensions
   const placeholderElement = (
     <div
-      className={className}
       style={{
+        alignItems: 'center',
         backgroundColor: '#f0f0f0',
         display: 'flex',
-        alignItems: 'center',
         justifyContent: 'center',
         minHeight: '200px',
         ...style,
       }}
+      className={className}
     >
       <div style={{ color: '#999', fontSize: '14px' }}>Loading...</div>
     </div>
   );
 
   return (
-    <LazyLoadWrapper
-      fallback={placeholderElement}
-      threshold={0.1}
-      rootMargin="100px"
-    >
+    <LazyLoadWrapper fallback={placeholderElement} rootMargin="100px" threshold={0.1}>
       <Image
-        images={images}
-        filename={filename}
-        priority={false}
-        sizes={sizes}
-        quality={quality}
         className={className}
+        filename={filename}
+        images={images}
+        priority={false}
+        quality={quality}
+        sizes={sizes}
         style={style}
         {...props}
       />

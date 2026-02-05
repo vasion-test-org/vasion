@@ -1,13 +1,14 @@
 'use client';
 import React from 'react';
 
-import styled from 'styled-components';
 import { storyblokEditable } from '@storyblok/react/rsc';
+import styled from 'styled-components';
 import media from 'styles/media';
-import text from '@/styles/text';
+
+import Button from '@/components/globalComponents/Button';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import colors from '@/styles/colors';
-import Button from '@/components/globalComponents/Button';
+import text from '@/styles/text';
 const StatItem = ({ statItem }) => {
   return (
     <StatItemContainer {...storyblokEditable(statItem)}>
@@ -15,10 +16,7 @@ const StatItem = ({ statItem }) => {
       <RichTextRenderer document={statItem.copy[0].copy} />
       {statItem.link[0] && (
         <ButtonContainer>
-          <Button
-            key={statItem.link[0].link_text}
-            $buttonData={statItem.link[0]}
-          />
+          <Button $buttonData={statItem.link[0]} key={statItem.link[0].link_text} />
         </ButtonContainer>
       )}
     </StatItemContainer>

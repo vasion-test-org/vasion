@@ -1,16 +1,18 @@
 'use client';
 import React from 'react';
+
 import styled from 'styled-components';
+
 import media from '@/styles/media';
 
 const Embed = ({ blok }) => {
   return (
     <Wrapper>
       <StyledIframe
-        data-anchor-id={blok.anchor_id}
-        alt="styled iframe"
-        src={blok.embed_link}
         allowFullScreen
+        alt="styled iframe"
+        data-anchor-id={blok.anchor_id}
+        src={blok.embed_link}
       />
     </Wrapper>
   );

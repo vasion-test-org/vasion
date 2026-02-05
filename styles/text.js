@@ -1,42 +1,6 @@
 import media from '@/styles/media';
 
 const text = {
-  pdfH1: `
-  font-family: Archivo;
-  font-size: 3.333vw;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 3.889vw; 
-
-${media.fullWidth} {
-  font-size: 48px;
-  line-height: 56px; 
-}
-`,
-  pdfH3: `
-  font-family: Archivo;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 2.083vw;
-  line-height: 2.5vw;
-
-${media.fullWidth} {
-  font-size: 30px;
-  line-height: 36px;
-}
-`,
-  pdfBodyHeadline: `
-font-family: Archivo;
-font-style: normal;
-font-weight: 400;
-font-size: 2.222vw;
-line-height: 2.778vw;
-
-${media.fullWidth} {
-font-size: 32px;
-line-height: 40px;
-}
-`,
   giant: `
   font-family: Archivo;
   font-style: normal;
@@ -54,31 +18,6 @@ line-height: 40px;
     font-size: 9.766vw;
     font-weight: 700;
     line-height: 10.742vw;
-  }
-  `,
-  stat: `
-  font-family: 'Orbitron Regular';
-    font-style: normal;
-    font-weight: 500;
-
-  ${media.fullWidth} {
-    font-size: 48px;
-    line-height: 58px;
-  }
-
-  ${media.desktop} {
-    font-size: 3.333vw;
-    line-height: 4.028vw;
-  }
-
-  ${media.tablet} {
-    font-size: 4.688vw;
-    line-height: 5.664vw;
-  }
-
-  ${media.mobile} {
-    font-size: 7.477vw;
-    line-height: 9.346vw;
   }
   `,
   h1: `
@@ -283,83 +222,68 @@ line-height: 40px;
       line-height: 4.907vw;
     }
     `,
-  //body_bold will be new type
-  buttonL: `
-  font-family: 'Archivo';
+  pdfBodyHeadline: `
+font-family: Archivo;
+font-style: normal;
+font-weight: 400;
+font-size: 2.222vw;
+line-height: 2.778vw;
+
+${media.fullWidth} {
+font-size: 32px;
+line-height: 40px;
+}
+`,
+  pdfH1: `
+  font-family: Archivo;
+  font-size: 3.333vw;
   font-style: normal;
   font-weight: 700;
-  text-transform: uppercase;
+  line-height: 3.889vw; 
 
-      ${media.fullWidth} {
-        font-size: 16px;
-        line-height: 17px;
-      }
-
-      ${media.desktop} {
-        font-size: 1.111vw;
-        line-height: 1.181vw;
-      }
-
-      ${media.tablet} {
-        font-size: 1.563vw;
-        line-height: 1.66vw;
-      }
-      
-      ${media.mobile} {
-        font-size: 3.738vw;
-        line-height: 3.972vw;
-      }
-    `,
-  bodyXl: `
-  font-family: 'Archivo';
+${media.fullWidth} {
+  font-size: 48px;
+  line-height: 56px; 
+}
+`,
+  pdfH3: `
+  font-family: Archivo;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 700;
+  font-size: 2.083vw;
+  line-height: 2.5vw;
 
-    ${media.fullWidth} {
-      font-size: 23px;
-      line-height: 30px;
-    }
-    
-    ${media.desktop} {
-      font-size: 1.597vw;
-      line-height: 2.083vw;
-    }
+${media.fullWidth} {
+  font-size: 30px;
+  line-height: 36px;
+}
+`,
+  stat: `
+  font-family: 'Orbitron Regular';
+    font-style: normal;
+    font-weight: 500;
 
-    ${media.tablet} {
-     font-size: 2.246vw;
-      line-height: 2.93vw;
-    }
+  ${media.fullWidth} {
+    font-size: 48px;
+    line-height: 58px;
+  }
 
-    ${media.mobile} {
-      font-size: 5.374vw;
-      line-height: 7.009vw;
-    }
+  ${media.desktop} {
+    font-size: 3.333vw;
+    line-height: 4.028vw;
+  }
+
+  ${media.tablet} {
+    font-size: 4.688vw;
+    line-height: 5.664vw;
+  }
+
+  ${media.mobile} {
+    font-size: 7.477vw;
+    line-height: 9.346vw;
+  }
   `,
-  bodyXLBold: `
-  font-family: 'Archivo';
-  font-style: normal;
-  font-weight: 700;
-
-    ${media.fullWidth} {
-      font-size: 23px;
-      line-height: 28px;
-    }
-    
-    ${media.desktop} {
-       font-size: 1.597vw;
-      line-height: 1.944vw;
-    }
-
-    ${media.tablet} {
-        font-size: 2.246vw;
-      line-height: 2.734vw;
-    }
-
-    ${media.mobile} {
-       font-size: 5.374vw;
-      line-height: 6.542vw;
-    }
-    `,
+  //body_bold will be new type
   bodyLg: `
   font-family: 'Archivo';
   font-style: normal;
@@ -510,6 +434,82 @@ line-height: 40px;
       line-height: 4.206vw;
     }
     `,
+  bodyXl: `
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400;
+
+    ${media.fullWidth} {
+      font-size: 23px;
+      line-height: 30px;
+    }
+    
+    ${media.desktop} {
+      font-size: 1.597vw;
+      line-height: 2.083vw;
+    }
+
+    ${media.tablet} {
+     font-size: 2.246vw;
+      line-height: 2.93vw;
+    }
+
+    ${media.mobile} {
+      font-size: 5.374vw;
+      line-height: 7.009vw;
+    }
+  `,
+  bodyXLBold: `
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+
+    ${media.fullWidth} {
+      font-size: 23px;
+      line-height: 28px;
+    }
+    
+    ${media.desktop} {
+       font-size: 1.597vw;
+      line-height: 1.944vw;
+    }
+
+    ${media.tablet} {
+        font-size: 2.246vw;
+      line-height: 2.734vw;
+    }
+
+    ${media.mobile} {
+       font-size: 5.374vw;
+      line-height: 6.542vw;
+    }
+    `,
+  buttonL: `
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  text-transform: uppercase;
+
+      ${media.fullWidth} {
+        font-size: 16px;
+        line-height: 17px;
+      }
+
+      ${media.desktop} {
+        font-size: 1.111vw;
+        line-height: 1.181vw;
+      }
+
+      ${media.tablet} {
+        font-size: 1.563vw;
+        line-height: 1.66vw;
+      }
+      
+      ${media.mobile} {
+        font-size: 3.738vw;
+        line-height: 3.972vw;
+      }
+    `,
   eyebrow: `
   font-family: 'Archivo';
   text-transform: uppercase;
@@ -539,6 +539,50 @@ line-height: 40px;
         letter-spacing: 0.701vw;
       }
     `,
+  strokeText: `
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  background-size: 100%;
+  background-clip: text;
+  -webkit-text-stroke-width: 0.07vw;
+`,
+  strokeTextTransparent: `
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  background-size: 100%;
+  background-clip: text;
+  -webkit-text-stroke-width: 0.07vw;
+`,
+  subtle: `
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 400;
+    font-size:  14px;
+    line-height: 18px;
+ ${media.fullWidth} {
+    font-size:  14px;
+    line-height: 18px;
+          }
+    
+          ${media.desktop} {
+             font-size:  14px;
+             line-height: 18px;
+          }
+          
+          ${media.tablet} {
+            font-size:  1.367vw;
+            line-height: 1.758vw;
+          }
+          
+          ${media.mobile} {
+            font-size:  2.917vw;
+            line-height: 3.75vw;
+          }
+`,
   tag: `
     font-family: 'Archivo';
     font-weight: 400;
@@ -587,32 +631,6 @@ line-height: 40px;
           line-height: 2.804vw;
           }
         `,
-  subtle: `
-    font-family: 'Archivo';
-    font-style: normal;
-    font-weight: 400;
-    font-size:  14px;
-    line-height: 18px;
- ${media.fullWidth} {
-    font-size:  14px;
-    line-height: 18px;
-          }
-    
-          ${media.desktop} {
-             font-size:  14px;
-             line-height: 18px;
-          }
-          
-          ${media.tablet} {
-            font-size:  1.367vw;
-            line-height: 1.758vw;
-          }
-          
-          ${media.mobile} {
-            font-size:  2.917vw;
-            line-height: 3.75vw;
-          }
-`,
   tagLight: `
       font-family: 'Archivo';
       font-weight: 300;
@@ -644,24 +662,6 @@ line-height: 40px;
   -moz-text-fill-color: transparent;
   background-size: 100%;
   background-clip: text;
-`,
-  strokeText: `
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-  background-size: 100%;
-  background-clip: text;
-  -webkit-text-stroke-width: 0.07vw;
-`,
-  strokeTextTransparent: `
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-  background-size: 100%;
-  background-clip: text;
-  -webkit-text-stroke-width: 0.07vw;
 `,
 };
 export default text;

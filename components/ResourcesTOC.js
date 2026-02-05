@@ -1,14 +1,15 @@
 'use client';
-import React, { useMemo, useState, useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
 import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
 import media from 'styles/media';
+
+import Tools from '@/assets/svg/tools.svg';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
 import colors from '@/styles/colors';
 import text from '@/styles/text';
-import Tools from '@/assets/svg/tools.svg';
 
 const TableOfContent = ({ copy, toc }) => {
   const [isCopied, setIsCopied] = useState(false);
@@ -24,10 +25,7 @@ const TableOfContent = ({ copy, toc }) => {
         const level = node.level || 1;
         const text = node.content
           ? node.content
-              .map(
-                (item) =>
-                  (item && typeof item === 'object' ? item.text : '') || ''
-              )
+              .map((item) => (item && typeof item === 'object' ? item.text : '') || '')
               .join('')
           : '';
 
@@ -49,12 +47,7 @@ const TableOfContent = ({ copy, toc }) => {
               )
           );
 
-        if (
-          text &&
-          typeof text === 'string' &&
-          text.trim() &&
-          !hasIgnoreClass
-        ) {
+        if (text && typeof text === 'string' && text.trim() && !hasIgnoreClass) {
           const id = text
             .toLowerCase()
             .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
@@ -63,8 +56,8 @@ const TableOfContent = ({ copy, toc }) => {
 
           headers.push({
             id,
-            text: text.trim(),
             level,
+            text: text.trim(),
           });
         }
       }
@@ -95,9 +88,8 @@ const TableOfContent = ({ copy, toc }) => {
     } catch {
       // Fallback for older browsers
       const rect = element.getBoundingClientRect();
-      const scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
-      window.scrollTo({ top: rect.top + scrollTop, behavior: 'smooth' });
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      window.scrollTo({ behavior: 'smooth', top: rect.top + scrollTop });
     }
   };
 
@@ -132,9 +124,7 @@ const TableOfContent = ({ copy, toc }) => {
                     scrollToHeader(header.id);
                   }}
                 >
-                  <TOCItemLinkText level={header.level}>
-                    {header.text}
-                  </TOCItemLinkText>
+                  <TOCItemLinkText level={header.level}>{header.text}</TOCItemLinkText>
                 </TOCItemLink>
               </TOCItem>
             ))

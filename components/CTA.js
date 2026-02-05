@@ -1,14 +1,15 @@
 'use client';
 import React from 'react';
 
-import styled, { ThemeProvider } from 'styled-components';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import media from '@/styles/media';
 import { storyblokEditable } from '@storyblok/react/rsc';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import styled, { ThemeProvider } from 'styled-components';
+
 import Button from '@/components/globalComponents/Button';
 import LightboxBtn from '@/components/LightboxButton';
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
 import useMedia from '@/functions/useMedia';
+import media from '@/styles/media';
 
 const CTA = ({ blok }) => {
   const themes = useAvailableThemes();
@@ -17,59 +18,41 @@ const CTA = ({ blok }) => {
     blok?.image?.[0],
     blok?.image?.[0],
     blok?.image?.[1] || blok?.image?.[0],
-    blok?.image?.[2] || blok?.image?.[0],
+    blok?.image?.[2] || blok?.image?.[0]
   );
   const pillBgimg = useMedia(
     blok?.background_image?.[0],
     blok?.background_image?.[0],
     blok?.background_image?.[1] || blok?.background_image?.[0],
-    blok?.background_image?.[2] ||
-      blok?.background_image?.[0] ||
-      blok?.background_image?.[0],
+    blok?.background_image?.[2] || blok?.background_image?.[0] || blok?.background_image?.[0]
   );
 
   // console.log(blok);
   return (
     <ThemeProvider theme={selectedTheme}>
-      <PillContainer
-        spacingOffset={blok.offset_spacing}
-        spacing={blok.section_spacing}
-      >
+      <PillContainer spacing={blok.section_spacing} spacingOffset={blok.offset_spacing}>
         <CtaWrapper
           $bgimg={bgimg?.filename}
-          $pillbgimg={pillBgimg?.filename}
           $ctastyle={blok.cta_style}
           $fullwidth={blok.fullwidth}
+          $pillbgimg={pillBgimg?.filename}
           {...storyblokEditable(blok)}
         >
-          <ContentWrapper
-            $ctastyle={blok.cta_style}
-            $pillbgimg={pillBgimg?.filename}
-          >
+          <ContentWrapper $ctastyle={blok.cta_style} $pillbgimg={pillBgimg?.filename}>
             {blok.copy_sections.map((copy) => (
               <div key={copy.component} {...storyblokEditable(copy)}>
-                <RichTextRenderer
-                  className={copy.component}
-                  document={copy.copy}
-                  $centered
-                />
+                <RichTextRenderer $centered className={copy.component} document={copy.copy} />
               </div>
             ))}
           </ContentWrapper>
           {blok?.button_group?.map(($buttonData) =>
             $buttonData.component === 'light_box_button' ? (
-              <LightboxBtn key="lightbox" blok={$buttonData} />
+              <LightboxBtn blok={$buttonData} key="lightbox" />
             ) : (
-              <div
-                {...storyblokEditable($buttonData)}
-                key={$buttonData?.link_text}
-              >
-                <Button
-                  key={$buttonData?.link_text}
-                  $buttonData={$buttonData}
-                />
+              <div {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
+                <Button $buttonData={$buttonData} key={$buttonData?.link_text} />
               </div>
-            ),
+            )
           )}
         </CtaWrapper>
       </PillContainer>
@@ -78,18 +61,15 @@ const CTA = ({ blok }) => {
 };
 
 const ContentWrapper = styled.div`
-  text-align: ${(props) =>
-    ['pill', 'image'].includes(props.$ctastyle) ? 'left' : 'center'};
+  text-align: ${(props) => (['pill', 'image'].includes(props.$ctastyle) ? 'left' : 'center')};
   display: flex;
   flex-direction: column;
   gap: 1vw;
-  max-width: ${(props) =>
-    props.$ctastyle === 'pill' && props.$pillbgimg ? '392px' : '75vw'};
+  max-width: ${(props) => (props.$ctastyle === 'pill' && props.$pillbgimg ? '392px' : '75vw')};
 
   ${media.fullWidth} {
     gap: 16px;
-    max-width: ${(props) =>
-      props.$ctastyle === 'pill' && props.$pillbgimg ? '392px' : '1200px'};
+    max-width: ${(props) => (props.$ctastyle === 'pill' && props.$pillbgimg ? '392px' : '1200px')};
   }
 
   ${media.tablet} {
@@ -99,11 +79,9 @@ const ContentWrapper = styled.div`
   }
 
   ${media.mobile} {
-    text-align: ${(props) =>
-      ['pill', 'image'].includes(props.$ctastyle) ? 'center' : 'center'};
+    text-align: ${(props) => (['pill', 'image'].includes(props.$ctastyle) ? 'center' : 'center')};
     gap: 3.333vw;
-    max-width: ${(props) =>
-      props.$ctastyle === 'pill' && props.$pillbgimg ? '392px' : '100%'};
+    max-width: ${(props) => (props.$ctastyle === 'pill' && props.$pillbgimg ? '392px' : '100%')};
   }
 `;
 
@@ -120,8 +98,7 @@ const CtaWrapper = styled.div`
 
   background: ${(props) => {
     if (props.$ctastyle === 'image') return `url(${props.$bgimg})`;
-    if (props.$ctastyle === 'pill' && props.$pillbgimg)
-      return `url(${props.$pillbgimg})`;
+    if (props.$ctastyle === 'pill' && props.$pillbgimg) return `url(${props.$pillbgimg})`;
     return props.theme.cta.cardBg;
   }};
 
@@ -140,8 +117,7 @@ const CtaWrapper = styled.div`
     if (props.$ctastyle === 'pill') return 'row';
     return 'column';
   }};
-  gap: ${(props) =>
-    props.$ctastyle === 'pill' && props.$pillbgimg ? '2.5vw' : '3.75vw'};
+  gap: ${(props) => (props.$ctastyle === 'pill' && props.$pillbgimg ? '2.5vw' : '3.75vw')};
   padding: ${(props) =>
     props.$ctastyle === 'pill'
       ? '3.75vw 6vw'
@@ -170,12 +146,10 @@ const CtaWrapper = styled.div`
       : props.$ctastyle === 'pill' || props.$ctastyle === 'image'
         ? '1.5vw'
         : 'unset'};
-  text-align: ${(props) =>
-    ['pill', 'image'].includes(props.$ctastyle) ? 'left' : 'center'};
+  text-align: ${(props) => (['pill', 'image'].includes(props.$ctastyle) ? 'left' : 'center')};
 
   ${media.fullWidth} {
-    gap: ${(props) =>
-      props.$ctastyle === 'pill' && props.$pillbgimg ? '40px' : '60px'};
+    gap: ${(props) => (props.$ctastyle === 'pill' && props.$pillbgimg ? '40px' : '60px')};
     flex-direction: ${(props) =>
       props.$ctastyle === 'pill' && props.$pillbgimg
         ? 'column'
@@ -211,8 +185,7 @@ const CtaWrapper = styled.div`
   }
 
   ${media.tablet} {
-    gap: ${(props) =>
-      props.$ctastyle === 'pill' && props.$pillbgimg ? '40px' : '5.859vw'};
+    gap: ${(props) => (props.$ctastyle === 'pill' && props.$pillbgimg ? '40px' : '5.859vw')};
     width: ${(props) =>
       props.$ctastyle === 'image' && props.$fullwidth
         ? '100%'
@@ -242,8 +215,7 @@ const CtaWrapper = styled.div`
   ${media.mobile} {
     flex-direction: column;
     text-align: center;
-    gap: ${(props) =>
-      props.$ctastyle === 'pill' && props.$pillbgimg ? '40px' : '3.333vw'};
+    gap: ${(props) => (props.$ctastyle === 'pill' && props.$pillbgimg ? '40px' : '3.333vw')};
     width: ${(props) =>
       props.$ctastyle === 'image' && props.$fullwidth
         ? '100%'
@@ -263,9 +235,7 @@ const CtaWrapper = styled.div`
           ? '5vw'
           : 'unset'};
     justify-content: ${(props) =>
-      props.$ctastyle === 'pill' && props.$pillbgimg
-        ? 'flex-start'
-        : 'space-between'};
+      props.$ctastyle === 'pill' && props.$pillbgimg ? 'flex-start' : 'space-between'};
     padding: 8.333vw;
   }
 `;

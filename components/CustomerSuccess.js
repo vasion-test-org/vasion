@@ -1,14 +1,16 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import { useAvailableThemes } from "@/context/ThemeContext";
-import { storyblokEditable } from "@storyblok/react/rsc";
-import Button from "./globalComponents/Button";
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
 
-import RichTextRenderer from "@/components/renderers/RichTextRenderer";
-import media from "@/styles/media";
-import colors from "@/styles/colors";
-import text from "@/styles/text";
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
+
+import Button from './globalComponents/Button';
 
 const FeaturedTestimonials = ({ blok }) => {
   // console.log(blok);
@@ -37,34 +39,34 @@ const FeaturedTestimonials = ({ blok }) => {
 
       const items = itemsRef.current;
       gsap.set(items, { autoAlpha: 0 });
-      gsap.set(items[0], { autoAlpha: 1, display: "flex" });
+      gsap.set(items[0], { autoAlpha: 1, display: 'flex' });
 
       const masterTimeline = gsap.timeline({
-        repeat: -1,
         onRepeat: () => {
           setCurrentIndex(0);
         },
+        repeat: -1,
       });
       const animationConfig = {
         fadeIn: {
           autoAlpha: 1,
           duration: 1,
-          ease: "power2.inOut",
+          ease: 'power2.inOut',
         },
-        fadeOut: { autoAlpha: 0, duration: 1, ease: "power2.inOut" },
-        progress: { width: "100%", duration: 3, ease: "none" },
+        fadeOut: { autoAlpha: 0, duration: 1, ease: 'power2.inOut' },
+        progress: { duration: 3, ease: 'none', width: '100%' },
       };
       items.forEach((item, i) => {
         const slideTimeline = gsap.timeline();
 
         slideTimeline
-          .set(progressBarsRef.current[i], { width: "0%" })
+          .set(progressBarsRef.current[i], { width: '0%' })
           .to(item, {
             ...animationConfig.fadeIn,
             onStart: () => setCurrentIndex(i),
           })
-          .to(progressBarsRef.current[i], animationConfig.progress, "<")
-          .to(item, animationConfig.fadeOut, "+=2");
+          .to(progressBarsRef.current[i], animationConfig.progress, '<')
+          .to(item, animationConfig.fadeOut, '+=2');
 
         masterTimeline.add(slideTimeline, i * 4);
       });
@@ -82,17 +84,17 @@ const FeaturedTestimonials = ({ blok }) => {
   const featured = blok?.testimonials?.map((item, index) => (
     <FeaturedItem
       {...storyblokEditable(item)}
-      key={index}
       href={item?.link?.url}
+      key={index}
       ref={(el) => (itemsRef.current[index] = el)}
-      onMouseOver={() => handleMouseEnter(index)}
       onMouseLeave={handleMouseLeave}
+      onMouseOver={() => handleMouseEnter(index)}
     >
       <ImageContainer>
         <Tag {...storyblokEditable(item)}>
           <RichTextRenderer document={item?.tag} />
         </Tag>
-        <LogoImage src={item?.asset.filename} alt={item?.image?.alt} />
+        <LogoImage alt={item?.image?.alt} src={item?.asset.filename} />
       </ImageContainer>
       <BlocksDiv>
         <TitleAndBody>
@@ -102,9 +104,7 @@ const FeaturedTestimonials = ({ blok }) => {
           <Body {...storyblokEditable(item)}>
             <RichTextRenderer
               document={item.copy_sections[1].copy}
-              responsiveTextStyles={
-                item.copy_sections[1].responsive_text_styles
-              }
+              responsiveTextStyles={item.copy_sections[1].responsive_text_styles}
             />
           </Body>
         </TitleAndBody>
@@ -114,17 +114,17 @@ const FeaturedTestimonials = ({ blok }) => {
         />
       </BlocksDiv>
       <GoTo
+        alt={'Arrow To Link'}
         className="goto-arrow"
-        src={"/images/uiElements/GoToActive.webp"}
-        alt={"Arrow To Link"}
+        src={'/images/uiElements/GoToActive.webp'}
       />
     </FeaturedItem>
   ));
 
   const renderBlock = (item, index) => (
     <BlockItem
-      key={index}
       href={item?.link.url}
+      key={index}
       onMouseEnter={() => setHoveredBlockIndex(index)}
       onMouseLeave={() => setHoveredBlockIndex(null)}
     >
@@ -138,24 +138,21 @@ const FeaturedTestimonials = ({ blok }) => {
         </div>
       </StatAndBodyDiv>
       <StatBlokBottomContainer>
-        <LogoStat src={item?.company_logo.filename} alt={"company-logo"} />
+        <LogoStat alt={'company-logo'} src={item?.company_logo.filename} />
         <ArrowButton
           src={
             hoveredBlockIndex === index
-              ? "/images/uiElements/HoveredArrow.webp"
-              : "/images/uiElements/arrowButtonStat.webp"
+              ? '/images/uiElements/HoveredArrow.webp'
+              : '/images/uiElements/arrowButtonStat.webp'
           }
-          alt={"go-to-arrow-prompt"}
+          alt={'go-to-arrow-prompt'}
         />
       </StatBlokBottomContainer>
     </BlockItem>
   );
   const progressBars = blok?.testimonials?.map((_, index) => (
-    <ProgressBar key={index} $isActive={currentIndex === index}>
-      <ProgressValue
-        className="pro-bar"
-        ref={(el) => (progressBarsRef.current[index] = el)}
-      />
+    <ProgressBar $isActive={currentIndex === index} key={index}>
+      <ProgressValue className="pro-bar" ref={(el) => (progressBarsRef.current[index] = el)} />
     </ProgressBar>
   ));
 
@@ -165,9 +162,7 @@ const FeaturedTestimonials = ({ blok }) => {
         <HeaderContainer>
           <RichTextRenderer document={blok.eyebrow} />
           <RichTextRenderer document={blok.header} />
-          <LinkWrapper>
-            {blok.link[0] && <Button $buttonData={blok.link[0]} />}
-          </LinkWrapper>
+          <LinkWrapper>{blok.link[0] && <Button $buttonData={blok.link[0]} />}</LinkWrapper>
         </HeaderContainer>
         <TestimonialsContainer>
           <Featured theme={selectedTheme}>
@@ -175,9 +170,7 @@ const FeaturedTestimonials = ({ blok }) => {
             {featured}
           </Featured>
           {/*LETS UPDATE THIS MAPPED BLOCK STATS @bubba @tanner*/}
-          <Blocks>
-            {blok?.stat_blocks?.map((item, index) => renderBlock(item, index))}
-          </Blocks>
+          <Blocks>{blok?.stat_blocks?.map((item, index) => renderBlock(item, index))}</Blocks>
           {/*LETS UPDATE THIS MAPPED BLOCK STATS @bubba @tanner*/}
         </TestimonialsContainer>
       </Wrapper>
@@ -213,18 +206,18 @@ const ProgressBarsContainer = styled.div`
 const ProgressBar = styled.div`
   background-color: ${colors.orange100};
   overflow: hidden;
-  width: ${(props) => (props.$isActive ? "1.625vw" : "0.563vw")};
+  width: ${(props) => (props.$isActive ? '1.625vw' : '0.563vw')};
   height: 0.375vw;
   border-radius: 0.25vw;
   transition: width 0.9s ease;
 
   ${media.fullWidth} {
-    width: ${(props) => (props.$isActive ? "26px" : "9px")};
+    width: ${(props) => (props.$isActive ? '26px' : '9px')};
     height: 6px;
     border-radius: 4px;
   }
   ${media.tablet} {
-    width: ${(props) => (props.$isActive ? "2.539vw" : "0.879vw")};
+    width: ${(props) => (props.$isActive ? '2.539vw' : '0.879vw')};
     height: 0.586vw;
     border-radius: 0.391vw;
   }

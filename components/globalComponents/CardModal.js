@@ -1,19 +1,20 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+
 import styled from 'styled-components';
-import media from 'styles/media';
 import colors from 'styles/colors';
+import media from 'styles/media';
 import text from 'styles/text';
+
 import CookieConsentVideo from '@/components/CookieConsentVideo';
 import useMedia from '@/functions/useMedia';
+
 import RichTextRenderer from '../renderers/RichTextRenderer';
 import Video from './Video';
 
 const CardModal = ({ data, setShowModal }) => {
-  const [closeButton, setCloseButton] = useState(
-    '/images/uiElements/closeButton.webp'
-  );
+  const [closeButton, setCloseButton] = useState('/images/uiElements/closeButton.webp');
   const videoWidth = useMedia('1440px', '89.6vw', '89vw', '87.85vw');
   const videoHeight = useMedia('100%', '100%', '51vw', '49.299vw');
   const combinedStyledHeight = useMedia('500px', '51.25vw', '51vw', '49.299vw');
@@ -43,71 +44,44 @@ const CardModal = ({ data, setShowModal }) => {
       <Modal $isvideo={!hasBio}>
         <CloseBtn
           src={closeButton}
-          onMouseEnter={() =>
-            setCloseButton('/images/uiElements/closeButtonActive.webp')
-          }
-          onMouseLeave={() =>
-            setCloseButton('/images/uiElements/closeButton.webp')
-          }
           onClick={handleClose}
+          onMouseEnter={() => setCloseButton('/images/uiElements/closeButtonActive.webp')}
+          onMouseLeave={() => setCloseButton('/images/uiElements/closeButton.webp')}
         />
         {hasBio && (
           <FeaturedContent>
             <Title $mobile>
               <NameAndStar>
-                {data?.person?.[0]?.copy && (
-                  <RichTextRenderer document={data.person[0].copy} />
-                )}
-                <Sparkle
-                  src='/images/uiElements/VasionStarNewsroom.webp'
-                  alt='vasion-sparkle'
-                />
+                {data?.person?.[0]?.copy && <RichTextRenderer document={data.person[0].copy} />}
+                <Sparkle alt="vasion-sparkle" src="/images/uiElements/VasionStarNewsroom.webp" />
               </NameAndStar>
-              {data?.position?.[0]?.copy && (
-                <RichTextRenderer document={data.position[0].copy} />
-              )}
+              {data?.position?.[0]?.copy && <RichTextRenderer document={data.position[0].copy} />}
             </Title>
-            <FeaturePhoto
-              height={342}
-              width={342}
-              src={data?.asset?.[0]?.media?.[0]?.filename}
-            />
-            <TitleAndBioDiv id='modal-scroll-group'>
+            <FeaturePhoto height={342} src={data?.asset?.[0]?.media?.[0]?.filename} width={342} />
+            <TitleAndBioDiv id="modal-scroll-group">
               <Title>
                 <NameAndStar>
-                  {data?.person?.[0]?.copy && (
-                    <RichTextRenderer document={data.person[0].copy} />
-                  )}
-                  <Sparkle
-                    src='/images/uiElements/VasionStarNewsroom.webp'
-                    alt='vasion-sparkle'
-                  />
+                  {data?.person?.[0]?.copy && <RichTextRenderer document={data.person[0].copy} />}
+                  <Sparkle alt="vasion-sparkle" src="/images/uiElements/VasionStarNewsroom.webp" />
                 </NameAndStar>
-                {data?.position?.[0]?.copy && (
-                  <RichTextRenderer document={data.position[0].copy} />
-                )}
+                {data?.position?.[0]?.copy && <RichTextRenderer document={data.position[0].copy} />}
               </Title>
-              {data?.bio?.[0]?.copy && (
-                <RichTextRenderer document={data.bio[0].copy} />
-              )}
+              {data?.bio?.[0]?.copy && <RichTextRenderer document={data.bio[0].copy} />}
 
               {hasBio && data?.asset?.length > 1 && (
                 <VideoContainer hasbio={hasBio}>
                   {data?.asset?.[0]?.thumbnails ? (
-                    <Video
-                      videos={data.asset[0].media[0]}
-                      thumbnails={data.asset[0].thumbnails}
-                    />
+                    <Video thumbnails={data.asset[0].thumbnails} videos={data.asset[0].media[0]} />
                   ) : (
                     <CookieConsentVideo
-                      url={videoSrc}
                       controls={true}
-                      playing={false}
-                      volume={1}
-                      muted={false}
-                      playsinline={true}
-                      width={'100%'}
                       height={combinedStyledHeight}
+                      muted={false}
+                      playing={false}
+                      playsinline={true}
+                      url={videoSrc}
+                      volume={1}
+                      width={'100%'}
                     />
                   )}
                 </VideoContainer>
@@ -118,14 +92,14 @@ const CardModal = ({ data, setShowModal }) => {
         {!data?.position?.[0]?.copy && (
           <VideoContainer>
             <CookieConsentVideo
-              url={videoSrc}
               controls={true}
-              playing={false}
-              volume={1}
-              muted={false}
-              playsinline={true}
-              width={videoWidth}
               height={videoHeight}
+              muted={false}
+              playing={false}
+              playsinline={true}
+              url={videoSrc}
+              volume={1}
+              width={videoWidth}
             />
           </VideoContainer>
         )}
@@ -415,8 +389,7 @@ const Modal = styled.div`
   height: ${(props) => (props?.$isvideo ? '58.125vw' : ' 41.25vw ')};
   background-color: ${colors.white};
   border-radius: 1.75vw;
-  padding: ${(props) =>
-    props?.$isvideo ? '2.3vw 0vw 1.3vw 1.3vw' : '2.5vw 0.313vw 3.75vw 2.5vw'};
+  padding: ${(props) => (props?.$isvideo ? '2.3vw 0vw 1.3vw 1.3vw' : '2.5vw 0.313vw 3.75vw 2.5vw')};
   ${media.fullWidth} {
     border-radius: 28px;
     height: ${(props) => (props?.$isvideo ? '788px' : ' 600px ')};
@@ -427,9 +400,7 @@ const Modal = styled.div`
   ${media.tablet} {
     border-radius: 2.734vw;
     padding: ${(props) =>
-      props?.$isvideo
-        ? ' 1.4vw 0vw 1.4vw 1.4vw'
-        : '0vw 0.391vw 5.762vw 3.809vw'};
+      props?.$isvideo ? ' 1.4vw 0vw 1.4vw 1.4vw' : '0vw 0.391vw 5.762vw 3.809vw'};
     height: ${(props) => (props?.$isvideo ? 'unset' : '66.797vw')};
     width: 92.188vw;
   }
@@ -438,8 +409,7 @@ const Modal = styled.div`
     width: ${(props) => (props?.$isvideo ? '95.167vw' : '89.167vw')};
     height: ${(props) => (props?.$isvideo ? '33vh' : '89vh')};
     border-radius: 5.417vw;
-    padding: ${(props) =>
-      props?.$isvideo ? '9vw 2vw 2vw 2vw' : '5vw 0.5vw 5vw 5vw'};
+    padding: ${(props) => (props?.$isvideo ? '9vw 2vw 2vw 2vw' : '5vw 0.5vw 5vw 5vw')};
     align-items: center;
     justify-content: center;
     z-index: 23;

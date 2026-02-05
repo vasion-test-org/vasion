@@ -1,63 +1,58 @@
 import React from 'react';
 
-import styled from 'styled-components';
-import media from 'styles/media';
-// import StyledLink from 'components/StyledLink';
-import colors from 'styles/colors';
-import text from 'styles/text';
-
 import {
-  PageWrapper,
   BodyHeadline,
-  Strong,
   ListItem,
   OrderedList,
+  PageWrapper,
+  Strong,
   Text,
 } from 'components/BusinessCaseTool/PDFComponents';
+import styled from 'styled-components';
+// import StyledLink from 'components/StyledLink';
+import colors from 'styles/colors';
+import media from 'styles/media';
+import text from 'styles/text';
+
 import PDFFooter from './PDFFooter';
 
 const PDFPage17 = () => {
   return (
     <PageWrapper>
       <BodyHeadline>
-        <Strong>Q:</Strong> How does PrinterLogic help me rationalize my print
-        fleet?
+        <Strong>Q:</Strong> How does PrinterLogic help me rationalize my print fleet?
       </BodyHeadline>
       <CustomStrong>
-        Here are five features from PrinterLogic that can help organizations
-        identify underutilized printers:
+        Here are five features from PrinterLogic that can help organizations identify underutilized
+        printers:
       </CustomStrong>
       <OrderedList>
         <ListItem>
-          <Strong>Printer Usage Reports: </Strong> PrinterLogic offers detailed
-          usage reports that track printer usage across the organization. These
-          reports can help identify underutilized printers that may be
-          candidates for removal or consolidation.
+          <Strong>Printer Usage Reports: </Strong> PrinterLogic offers detailed usage reports that
+          track printer usage across the organization. These reports can help identify underutilized
+          printers that may be candidates for removal or consolidation.
         </ListItem>
         <ListItem>
-          <Strong>Printer Mapping: </Strong> PrinterLogic allows organizations
-          to map printers to specific users or groups. This feature can help
-          identify assigned printers to users who no longer need them or groups
-          that have too many printers assigned to them.
+          <Strong>Printer Mapping: </Strong> PrinterLogic allows organizations to map printers to
+          specific users or groups. This feature can help identify assigned printers to users who no
+          longer need them or groups that have too many printers assigned to them.
         </ListItem>
         <ListItem>
-          <Strong>Centralized Management: </Strong> PrinterLogic provides a
-          centralized management console that allows administrators to manage
-          all their printers from a single interface, making it easy to identify
-          unused printers.
+          <Strong>Centralized Management: </Strong> PrinterLogic provides a centralized management
+          console that allows administrators to manage all their printers from a single interface,
+          making it easy to identify unused printers.
         </ListItem>
         <ListItem>
-          <Strong>Print Queue Management: </Strong> PrinterLogic offers advanced
-          print queue management features that allow administrators to monitor
-          print queues, view job histories, and identify unused printers.
+          <Strong>Print Queue Management: </Strong> PrinterLogic offers advanced print queue
+          management features that allow administrators to monitor print queues, view job histories,
+          and identify unused printers.
         </ListItem>
         <ListItem>
-          <Strong>Automated Printer Deployments: </Strong> PrinterLogic's
-          automated printer deployment feature allows administrators to
-          automatically deploy printers to users or groups based on specific
-          criteria. Admins can set up deployments based on IP address to give
-          users access to printers on the go, which is particularly useful for
-          roaming nurses, students moving between buildings, and hybrid workers.
+          <Strong>Automated Printer Deployments: </Strong> PrinterLogic's automated printer
+          deployment feature allows administrators to automatically deploy printers to users or
+          groups based on specific criteria. Admins can set up deployments based on IP address to
+          give users access to printers on the go, which is particularly useful for roaming nurses,
+          students moving between buildings, and hybrid workers.
         </ListItem>
       </OrderedList>
       {/* <CTASection>

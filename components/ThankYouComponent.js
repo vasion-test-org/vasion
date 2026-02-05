@@ -1,10 +1,12 @@
 'use client';
-import React, { useEffect, useState, useMemo } from 'react';
-import { useThankYou } from '@/context/ThankYouContext';
+import React, { useEffect, useMemo, useState } from 'react';
+
 import styled from 'styled-components';
-import colors from '@/styles/colors';
+
 import ComponentRenderer from '@/components/renderers/ComponentRenderer';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useThankYou } from '@/context/ThankYouContext';
+import colors from '@/styles/colors';
 
 const ThankYouComponent = React.memo(({ className }) => {
   const copycomponents = useMemo(
@@ -45,8 +47,8 @@ const ThankYouComponent = React.memo(({ className }) => {
           <div key={`item.component_${index}`}>
             {copycomponents.includes(item.component) ? (
               <RichTextRenderer
-                document={item.copy}
                 blok={item}
+                document={item.copy}
                 responsiveTextStyles={item?.responsive_text_styles}
               />
             ) : (

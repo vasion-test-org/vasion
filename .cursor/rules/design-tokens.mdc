@@ -1,0 +1,338 @@
+---
+description: Quick reference for all Tailwind design tokens in this project
+globs: ["**/*.{js,jsx,ts,tsx,css}"]
+alwaysApply: true
+---
+
+# Design Token Quick Reference (Tailwind v4)
+
+**All design tokens are defined in `app/globals.css` using the `@theme` directive.**
+
+Use these exact class names when styling components. NEVER use arbitrary values.
+
+## Breakpoints (Mobile-First)
+
+Tailwind uses **min-width** breakpoints. Base classes = mobile, breakpoint prefixes override for larger screens.
+
+| Prefix | Range | Description |
+|--------|-------|-------------|
+| **(none)** | 0-480px | **Mobile (base)** - no prefix needed |
+| `md:` | 481px+ | Tablet and up |
+| `lg:` | 1025px+ | Desktop and up |
+| `xl:` | 1601px+ | Full width and up |
+
+**Key Concept:** Styles cascade UP. A `md:` class applies to tablet, desktop, AND fullWidth unless overridden.
+
+**Usage Pattern:**
+```jsx
+// Mobile base, then add breakpoints for what CHANGES
+className="flex-col w-107 gap-7.5 md:w-236 lg:(flex-row w-326)"
+
+// If value is same across all breakpoints, just use base
+className="gap-6"  // No prefixes needed if gap is always 24px
+```
+
+**Converting styled-components:**
+- `${media.mobile}` → base (no prefix)
+- `${media.tablet}` → `md:`
+- Desktop (base) → `lg:`
+- `${media.fullWidth}` → `xl:`
+
+## Colors (Tailwind v4 - No DEFAULT Suffix)
+
+**IMPORTANT:** In Tailwind v4, colors are used directly without `-DEFAULT` suffix:
+- ✅ `text-orange`, `bg-purple`, `fill-orange`
+- ❌ `text-orange-DEFAULT`, `bg-purple-DEFAULT` (NEVER use this)
+
+### Purple (Brand Primary)
+- `purple-navy` → #090121
+- `purple-dark` → #201435
+- `purple` → #3D2562 (use as `text-purple` or `bg-purple`)
+- `purple-medium` → #583F99
+- `purple-light` → #7E5FDD
+- `purple-border` → #945AEE
+- `purple-sysLight` → #b19cf1
+- `purple-500` → #6A2C6A
+- `purple-400` → #8B5B8B
+- `purple-300` → #AC8AAC
+- `purple-200` → #CBBFF1
+- `purple-100` → #E6DFF8
+- `purple-tag` → #E5DFF8
+- `purple-gray50` → #ECE9EF
+- `purple-lightGrey` → #F5F4F7
+
+### Orange
+- `orange-dark` → #CC4800
+- `orange` → #ff5100 (use as `text-orange`, `bg-orange`, `fill-orange`)
+- `orange-500` → #FF612A
+- `orange-400` → #FF854d
+- `orange-300` → #FFAD80
+- `orange-200` → #FFCBB2
+- `orange-100` → #FFEEE5
+
+### Teal
+- `teal-dark` → #007C77
+- `teal` → #00A19B (use as `text-teal`, `bg-teal`)
+- `teal-500` → #33B4AF
+- `teal-400` → #66C7C3
+- `teal-300` → #99DAD7
+- `teal-200` → #CCECEB
+- `teal-100` → #E5F6F5
+
+### Yellow
+- `yellow-dark` → #D3A809
+- `yellow` → #FFCB04 (use as `text-yellow`, `bg-yellow`)
+- `yellow-500` → #FFDB4F
+- `yellow-400` → #FFE068
+- `yellow-300` → #FFE582
+- `yellow-200` → #FFF5CD
+- `yellow-100` → #FFFAE6
+
+### Grey
+- `grey-800` → #191D1E
+- `grey-750` → #292B2C
+- `grey-700` → #38383D
+- `grey-600` → #5E5F61
+- `grey-500` → #838587
+- `grey-400` → #A8ABAE
+- `grey-300` → #BBBEC1
+- `grey-200` → #C2C5C7
+- `grey-100` → #CFD2D4
+- `grey-ghost` → #C8C9CE
+- `grey-75` → #DDDFE0
+- `grey-50` → #EBECEC
+- `grey-25` → #F6F7F7
+
+### Text Colors
+- `txt-primary` → #1B1D21
+- `txt-subtle` → #808085
+
+### Other
+- `pink` → #DD5FC1 (use as `text-pink`, `bg-pink`)
+
+## Gradients (use as `bg-*`)
+
+Gradients are defined using `@utility` directive in `app/globals.css`:
+
+- `bg-footer` - Footer gradient (purple/orange layers)
+- `bg-purple-orbital` - Purple orbital gradient
+- `bg-purple-gradient` - Purple linear gradient
+- `bg-orange-gradient` - Orange linear gradient
+- `bg-grey-gradient` - Grey linear gradient
+- `bg-light-purple` - Light purple gradient
+- `bg-dark-purple` - Dark purple gradient
+- `bg-medium-purple` - Medium purple gradient
+
+**Adding new gradients:** Use `@utility` in globals.css:
+```css
+@utility bg-custom-gradient {
+  background: linear-gradient(...);
+}
+```
+- `bg-medium-purple` - Medium purple gradient
+
+## Typography
+
+### Headings (use as `text-*`)
+- `text-h1` → 46px, line-height 56px, weight 800
+- `text-h2` → 46px, line-height 56px, weight 700
+- `text-h3` → 32px, line-height 40px, weight 700
+- `text-h4` → 26px, line-height 32px, weight 700
+- `text-h5` → 20px, line-height 24px, weight 700
+
+### Body Text
+- `text-body-xl` → 23px, line-height 30px
+- `text-body-xl-bold` → 23px, line-height 28px, weight 700
+- `text-body-lg` → 18px, line-height 24px
+- `text-body-lg-bold` → 18px, line-height 22px, weight 700
+- `text-body-md` → 16px, line-height 22px
+- `text-body-md-bold` → 16px, line-height 22px, weight 600
+- `text-body-sm` → 14px, line-height 18px
+- `text-body-sm-bold` → 14px, line-height 18px, weight 700
+
+### Special Text
+- `text-eyebrow` → 14px, uppercase, letter-spacing 2.8px, weight 700
+- `text-tag` → 10px
+- `text-tag-bold` → 11px, weight 600
+- `text-tag-light` → 10px, weight 300
+- `text-subtle` → 14px
+- `text-button-lg` → 16px, uppercase, weight 700
+
+### Menu Text
+- `text-m1` → 15px, uppercase
+- `text-m2` → 18px, capitalize, weight 500
+- `text-m3` → 16px, weight 500
+
+### Font Families
+- `font-archivo` → Archivo
+- `font-archivo-bold` → Archivo Bold
+- `font-orbitron` → Orbitron Regular
+
+## Spacing (Custom Extensions)
+
+- `4.5` → 18px (1.125rem)
+- `13` → 52px (3.25rem)
+- `15` → 60px (3.75rem)
+- `18` → 72px (4.5rem)
+- `22` → 88px (5.5rem)
+- `25` → 100px (6.25rem)
+- `30` → 120px (7.5rem)
+- `37` → 148px (9.25rem) - common section padding
+- `50` → 200px (12.5rem)
+- `75` → 300px (18.75rem)
+- `100` → 400px (25rem)
+- `150` → 600px (37.5rem)
+
+## Max Widths
+
+- `max-w-content` → 1600px (100rem)
+- `max-w-narrow` → 880px (55rem)
+- `max-w-wide` → 1200px (75rem)
+
+## Common Patterns
+
+### Centered Card with Max-Width (CRITICAL)
+```jsx
+// ALWAYS include mx-auto when using max-w-* for centering
+className="w-full max-w-326 mx-auto p-15 rounded-3xl bg-purple"
+```
+
+### Mobile-First Responsive Padding
+```jsx
+// Base = mobile, md: = tablet+, lg: = desktop+
+className="px-7 md:px-8 lg:px-16 py-9 md:py-12"
+```
+
+### Button with Focus State
+```jsx
+className="px-4 py-2 rounded-md bg-purple text-white hover:bg-purple-dark focus:outline-none focus:ring-2 focus:ring-purple-border focus:ring-offset-2 transition-colors"
+```
+
+### Responsive Text
+```jsx
+className="text-body-sm md:text-body-md lg:text-body-lg"
+```
+
+### Responsive Heading
+```jsx
+className="text-h1-sm md:text-h1 lg:text-h1-lg"
+```
+
+### Conditional Classes
+```jsx
+import { cn } from '@/lib/cn';
+
+className={cn(
+  'base-classes',
+  isActive && 'bg-purple text-white',
+  isDisabled && 'opacity-50 cursor-not-allowed'
+)}
+```
+
+### Card Pattern
+```jsx
+className="rounded-lg bg-white p-6 shadow-md"
+```
+
+### Section Padding
+```jsx
+className="px-6 py-12 md:px-10 md:py-16 lg:px-37 lg:py-24"
+```
+
+## Styled-Components → Tailwind Mapping (Mobile-First)
+
+**Breakpoint Conversion:**
+| styled-components | Tailwind | Explanation |
+|-------------------|----------|-------------|
+| `${media.mobile} { ... }` | **base (no prefix)** | Mobile = default styles |
+| `${media.tablet} { ... }` | `md:...` | Tablet overrides mobile |
+| Desktop (base in styled) | `lg:...` | Desktop overrides tablet |
+| `${media.fullWidth} { ... }` | `xl:...` | FullWidth overrides desktop |
+
+**Example:**
+```jsx
+// styled-component (desktop-first)
+const Box = styled.div`
+  flex-direction: row;  /* desktop */
+  ${media.mobile} { flex-direction: column; }
+`;
+
+// Tailwind (mobile-first)
+<div className="flex-col lg:flex-row">
+```
+
+**Theme Values:**
+| styled-components | Tailwind Equivalent |
+|-------------------|---------------------|
+| `${text.h1}` | `text-h1 font-archivo` |
+| `${text.bodyLg}` | `text-body-lg font-archivo` |
+| `${text.eyebrow}` | `text-eyebrow font-archivo` |
+| `${colors.primaryPurple}` | `text-purple` or `bg-purple` |
+| `${colors.primaryOrange}` | `text-orange` or `bg-orange` |
+| `${colors.darkPurple}` | `text-purple-dark` or `bg-purple-dark` |
+| `${colors.txtPrimary}` | `text-txt-primary` |
+| `${colors.grey500}` | `text-grey-500` or `bg-grey-500` |
+| `${props.theme.hero.bg}` | Use appropriate gradient: `bg-purple-orbital` |
+
+**Note:** Never use `-DEFAULT` suffix in Tailwind v4. Use `text-orange` not `text-orange-DEFAULT`.
+
+## VW to Tailwind Conversion
+
+**CRITICAL**: Preserve original layout - converted components must look identical!
+
+Based on [pxvwconverter](https://github.com/RJWadley/pxvwconverter) - different vw values per breakpoint target the **same pixel size**.
+
+### Key Insight
+```jsx
+// These all produce 200px:
+width: 12.5vw;   // At 1600px: 12.5 × 16 = 200px
+width: 19.531vw; // At 1024px: 19.531 × 10.24 = 200px  
+width: 41.667vw; // At 480px: 41.667 × 4.8 = 200px
+
+// Convert to ONE Tailwind class:
+className="w-50" // 12.5rem = 200px
+```
+
+### Conversion Formula
+```
+px = vw × (viewportWidth / 100)
+rem = px / 16
+```
+
+### Common Conversions
+
+| Target | Desktop (1600px) | Tablet (1024px) | Mobile (480px) | Tailwind |
+|--------|------------------|-----------------|----------------|----------|
+| 16px | `1vw` | `1.563vw` | `3.333vw` | `4` |
+| 40px | `2.5vw` | `3.906vw` | `8.333vw` | `10` |
+| 80px | `5vw` | `7.813vw` | `16.667vw` | `20` |
+| 100px | `6.25vw` | `9.766vw` | `20.833vw` | `25` |
+| 120px | `7.5vw` | `11.719vw` | `25vw` | `30` |
+| 148px | `9.25vw` | `14.453vw` | `30.833vw` | `37` |
+| 160px | `10vw` | `15.625vw` | `33.333vw` | `40` |
+| 200px | `12.5vw` | `19.531vw` | `41.667vw` | `50` |
+
+### PX to Tailwind Class
+**Tailwind JIT auto-generates any number**: `number × 0.25rem = size`
+
+**Formula**: `px / 4 = Tailwind number`
+
+| Pixels | Calculation | Tailwind Class |
+|--------|-------------|----------------|
+| 1304px | 1304 / 4 | `w-326` |
+| 1236px | 1236 / 4 | `w-309` |
+| 200px | 200 / 4 | `w-50` |
+| 100px | 100 / 4 | `w-25` |
+| 24px | 24 / 4 | `p-6` |
+
+**DO NOT add custom values to tailwind.config.js** - JIT handles it automatically.
+
+### Conversion Utility
+```typescript
+import { vwToRem, vwToPx, detectBreakpoint } from '@/lib/tailwind-utils';
+
+// All produce same 200px = 12.5rem = Tailwind "50"
+vwToRem(12.5, 1600)  // Desktop: 12.5rem
+vwToRem(19.531, 1024) // Tablet: 12.5rem
+vwToRem(41.667, 480)  // Mobile: 12.5rem
+```

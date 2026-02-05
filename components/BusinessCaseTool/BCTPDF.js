@@ -1,14 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+import CoverPage from 'components/BusinessCaseTool/PDFPages/CoverPage';
 import styled from 'styled-components';
-import media from 'styles/media';
 import colors from 'styles/colors';
+import media from 'styles/media';
 import text from 'styles/text';
 
-import CoverPage from 'components/BusinessCaseTool/PDFPages/CoverPage';
 import PDFIntro from './PDFPages/PDFIntro';
-import TableOfContents from './PDFPages/TableOfContents';
 import PDFPage4 from './PDFPages/PDFPage4';
 import PDFPage5 from './PDFPages/PDFPage5';
 import PDFPage6 from './PDFPages/PDFPage6';
@@ -23,23 +22,24 @@ import PDFPage14 from './PDFPages/PDFPage14';
 import PDFPage15 from './PDFPages/PDFPage15';
 import PDFPage16 from './PDFPages/PDFPage16';
 import PDFPage17 from './PDFPages/PDFPage17';
+import TableOfContents from './PDFPages/TableOfContents';
 
-const BCTPDF = ({ contactFormData, savingsFormData, currency }) => {
+const BCTPDF = ({ contactFormData, currency, savingsFormData }) => {
   const handlePrint = async () => {
     // Dynamically load ScrollTrigger only when needed for print
     const { default: ScrollTrigger } = await import('gsap/ScrollTrigger');
 
     // Kill all ScrollTriggers before print
     if (ScrollTrigger && ScrollTrigger.getAll) {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     }
-  
+
     // Wait a tick to let layout stabilize
     setTimeout(() => {
       window.print();
     }, 100); // slight delay to make sure DOM updates
   };
-  
+
   // useEffect(() => {
   //   ScrollTrigger.create({
   //     trigger: '#pdfPrint',
@@ -53,23 +53,23 @@ const BCTPDF = ({ contactFormData, savingsFormData, currency }) => {
   return (
     <Wrapper>
       <CoverPage contactFormData={contactFormData} />
-      <PDFIntro savingsFormData={savingsFormData} currency={currency} />
+      <PDFIntro currency={currency} savingsFormData={savingsFormData} />
       <TableOfContents />
-      <PDFPage4 savingsFormData={savingsFormData} currency={currency} />
-      <PDFPage5 savingsFormData={savingsFormData} currency={currency} />
-      <PDFPage6 savingsFormData={savingsFormData} currency={currency} />
+      <PDFPage4 currency={currency} savingsFormData={savingsFormData} />
+      <PDFPage5 currency={currency} savingsFormData={savingsFormData} />
+      <PDFPage6 currency={currency} savingsFormData={savingsFormData} />
       <PDFPage7 />
       <PDFPage8 currency={currency} />
-      <PDFPage9 savingsFormData={savingsFormData} currency={currency} />
+      <PDFPage9 currency={currency} savingsFormData={savingsFormData} />
       <PDFPage10 currency={currency} />
-      <PDFPage11 savingsFormData={savingsFormData} currency={currency} />
-      <PDFPage12 savingsFormData={savingsFormData} currency={currency} />
+      <PDFPage11 currency={currency} savingsFormData={savingsFormData} />
+      <PDFPage12 currency={currency} savingsFormData={savingsFormData} />
       <PDFPage13 />
       <PDFPage14 />
       <PDFPage15 />
       <PDFPage16 />
       <PDFPage17 />
-      <PrintButton as='button' onClick={handlePrint}>
+      <PrintButton as="button" onClick={handlePrint}>
         Download
       </PrintButton>
     </Wrapper>

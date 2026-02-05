@@ -1,17 +1,18 @@
 'use client';
 import React from 'react';
 
-import styled from 'styled-components';
 import { storyblokEditable } from '@storyblok/react/rsc';
+import styled from 'styled-components';
+
+import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 import media from '@/styles/media';
 import text from '@/styles/text';
-import RichTextRenderer from '@/components/renderers/RichTextRenderer';
 
 const NumberBlock = ({ blok }) => {
   return (
     <NumberBlockContainer
-      spacingOffset={blok.offset_spacing}
       spacing={blok.section_spacing}
+      spacingOffset={blok.offset_spacing}
       {...storyblokEditable(blok.header[0], {
         resolveRelations: [''],
       })}
@@ -23,11 +24,7 @@ const NumberBlock = ({ blok }) => {
       >
         {blok.number}
       </NumberBlockDiv>
-      <RichTextRenderer
-        key={`copy-`}
-        document={blok.header[0].copy}
-        blok={blok}
-      />
+      <RichTextRenderer blok={blok} document={blok.header[0].copy} key={`copy-`} />
     </NumberBlockContainer>
   );
 };
@@ -73,21 +70,21 @@ const NumberBlockContainer = styled.div`
       return props.spacing === 'default'
         ? '3.75vw 0 0'
         : props.spacing
-        ? `${props.spacing}px 0 0`
-        : '1.875vw 0 0';
+          ? `${props.spacing}px 0 0`
+          : '1.875vw 0 0';
     }
     if (props.spacingOffset === 'bottom') {
       return props.spacing === 'default'
         ? '0 0 3.75vw'
         : props.spacing
-        ? `0 0 ${props.spacing}px`
-        : '0 0 1.875vw';
+          ? `0 0 ${props.spacing}px`
+          : '0 0 1.875vw';
     }
     return props.spacing === 'default'
       ? '3.75vw 0'
       : props.spacing
-      ? `${props.spacing}px 0`
-      : '1.875vw 0';
+        ? `${props.spacing}px 0`
+        : '1.875vw 0';
   }};
 
   ${media.fullWidth} {
@@ -97,21 +94,21 @@ const NumberBlockContainer = styled.div`
         return props.spacing === 'default'
           ? '60px 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '30px 0 0';
+            ? `${props.spacing}px 0 0`
+            : '30px 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 60px'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 30px';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 30px';
       }
       return props.spacing === 'default'
         ? '60px 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '30px 0';
+          ? `${props.spacing}px 0`
+          : '30px 0';
     }};
   }
 
@@ -122,21 +119,21 @@ const NumberBlockContainer = styled.div`
         return props.spacing === 'default'
           ? '5.859vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '2.93vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '2.93vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 5.859vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 2.93vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 2.93vw';
       }
       return props.spacing === 'default'
         ? '5.859vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '2.93vw 0';
+          ? `${props.spacing}px 0`
+          : '2.93vw 0';
     }};
   }
 
@@ -147,21 +144,21 @@ const NumberBlockContainer = styled.div`
         return props.spacing === 'default'
           ? '12.5vw 0 0'
           : props.spacing
-          ? `${props.spacing}px 0 0`
-          : '6.25vw 0 0';
+            ? `${props.spacing}px 0 0`
+            : '6.25vw 0 0';
       }
       if (props.spacingOffset === 'bottom') {
         return props.spacing === 'default'
           ? '0 0 12.5vw'
           : props.spacing
-          ? `0 0 ${props.spacing}px`
-          : '0 0 6.25vw';
+            ? `0 0 ${props.spacing}px`
+            : '0 0 6.25vw';
       }
       return props.spacing === 'default'
         ? '12.5vw 0'
         : props.spacing
-        ? `${props.spacing}px 0`
-        : '6.25vw 0';
+          ? `${props.spacing}px 0`
+          : '6.25vw 0';
     }};
   }
 `;

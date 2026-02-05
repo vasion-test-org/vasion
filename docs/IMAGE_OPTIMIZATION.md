@@ -42,12 +42,7 @@ Use the `sizes` prop to help the browser choose the right image size:
 For images that need to fill their container:
 
 ```jsx
-<Image
-  images={images}
-  fill={true}
-  sizes="100vw"
-  style={{ objectFit: 'cover' }}
-/>
+<Image images={images} fill={true} sizes="100vw" style={{ objectFit: 'cover' }} />
 ```
 
 ## Usage Examples

@@ -1,14 +1,17 @@
 'use client';
 import React, { useEffect } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import text from '@/styles/text';
-import LinkArrowSVG from '@/assets/svg/linkArrow.svg';
-import media from '@/styles/media';
 
-const Button = ({ $buttonData, stretch, onNavigate }) => {
+import styled, { ThemeProvider } from 'styled-components';
+
+import LinkArrowSVG from '@/assets/svg/linkArrow.svg';
+import { useAvailableThemes } from '@/context/ThemeContext';
+import media from '@/styles/media';
+import text from '@/styles/text';
+
+const Button = ({ $buttonData, onNavigate, stretch }) => {
   const themes = useAvailableThemes();
   const pathname = usePathname();
   const router = useRouter();
@@ -17,8 +20,7 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
   //   window.scrollTo(0, 0);
   // }, [pathname]);
 
-  const selectedTheme =
-    themes.button?.[$buttonData?.theme] || themes.button.primary;
+  const selectedTheme = themes.button?.[$buttonData?.theme] || themes.button.primary;
 
   const isEmail = $buttonData?.link_url?.email;
   const rawHref = isEmail
@@ -30,14 +32,10 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
 
   const isExternal = rawHref.startsWith('http');
   const alreadyLocalized =
-    rawHref.startsWith('/de') ||
-    rawHref.startsWith('/fr') ||
-    rawHref.startsWith('/en');
+    rawHref.startsWith('/de') || rawHref.startsWith('/fr') || rawHref.startsWith('/en');
 
   const slugParts = pathname.split('/').filter(Boolean);
-  const currentLocale = ['de', 'fr'].includes(slugParts[0])
-    ? slugParts[0]
-    : null;
+  const currentLocale = ['de', 'fr'].includes(slugParts[0]) ? slugParts[0] : null;
 
   let normalizedUrl =
     isEmail || isExternal || alreadyLocalized
@@ -67,9 +65,7 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
 
       // If not found by ID, try to find by data-anchor-id attribute
       if (!anchorElement) {
-        anchorElement = document.querySelector(
-          `[data-anchor-id="${$buttonData.link_url.anchor}"]`
-        );
+        anchorElement = document.querySelector(`[data-anchor-id="${$buttonData.link_url.anchor}"]`);
       }
 
       if (anchorElement) {
@@ -77,19 +73,21 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
         e.preventDefault();
 
         // Dynamically load GSAP only when needed for anchor scrolling
-        const [{ default: gsap }, { default: ScrollToPlugin }] =
-          await Promise.all([import('gsap'), import('gsap/ScrollToPlugin')]);
+        const [{ default: gsap }, { default: ScrollToPlugin }] = await Promise.all([
+          import('gsap'),
+          import('gsap/ScrollToPlugin'),
+        ]);
 
         gsap.registerPlugin(ScrollToPlugin);
 
         gsap.to(window, {
           duration: 1,
-          scrollTo: {
-            y: anchorElement,
-            offsetY: 200,
-            center: true,
-          },
           ease: 'power2.out',
+          scrollTo: {
+            center: true,
+            offsetY: 200,
+            y: anchorElement,
+          },
         });
         return;
       }
@@ -104,9 +102,7 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
         const urlParts = normalizedUrl.split('/').filter(Boolean);
         const locale = ['de', 'fr'].includes(urlParts[0]) ? urlParts[0] : 'en';
         const storySlug =
-          locale === 'en'
-            ? urlParts.join('/')
-            : urlParts.slice(1).join('/') || 'home';
+          locale === 'en' ? urlParts.join('/') : urlParts.slice(1).join('/') || 'home';
 
         // First try to fetch the story in the target locale
         const pageExists = await checkPageExists(storySlug, locale);
@@ -119,10 +115,7 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
           // Page doesn't exist in target locale, try English fallback
           if (locale !== 'en') {
             const englishStorySlug = storySlug === 'home' ? 'home' : storySlug;
-            const englishPageExists = await checkPageExists(
-              englishStorySlug,
-              'en'
-            );
+            const englishPageExists = await checkPageExists(englishStorySlug, 'en');
 
             if (englishPageExists) {
               // English version exists, navigate to English URL
@@ -155,19 +148,10 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
   }
 
   return (
-    <ButtonWrapper
-      layout={$buttonData?.layout}
-      size={$buttonData?.link_size}
-      stretch={stretch}
-    >
+    <ButtonWrapper layout={$buttonData?.layout} size={$buttonData?.link_size} stretch={stretch}>
       <ThemeProvider theme={selectedTheme}>
         {target !== '_blank' ? (
-          <NextLink
-            href={normalizedUrl}
-            passHref
-            onClick={handleClick}
-            stretch={stretch}
-          >
+          <NextLink passHref href={normalizedUrl} stretch={stretch} onClick={handleClick}>
             <StyledSpan stretch={stretch}>
               {$buttonData?.link_text}
               {$buttonData?.theme.includes('link') && (
@@ -178,10 +162,10 @@ const Button = ({ $buttonData, stretch, onNavigate }) => {
         ) : (
           <StyledLink
             href={normalizedUrl}
-            target={target}
             rel={rel}
-            onClick={handleClick}
             stretch={stretch}
+            target={target}
+            onClick={handleClick}
           >
             {$buttonData?.link_text}
             {$buttonData?.theme.includes('link') && (
@@ -213,13 +197,13 @@ const StyledLinkArrow = styled(LinkArrowSVG)`
   }
 
   ${media.tablet} {
-    width: 0.781vw;
-    height: 0.781vw;
+    width: 8px;
+    height: 8px;
   }
 
   ${media.mobile} {
-    width: 1.667vw;
-    height: 1.667vw;
+    width: 8px;
+    height: 8px;
   }
 
   path {
@@ -228,8 +212,7 @@ const StyledLinkArrow = styled(LinkArrowSVG)`
   }
 
   a:hover & path {
-    fill: ${(props) =>
-      props.$themeName === 'link_primary' ? 'orange' : props.theme.textColor};
+    fill: ${(props) => (props.$themeName === 'link_primary' ? 'orange' : props.theme.textColor)};
   }
 `;
 
@@ -302,10 +285,10 @@ const ButtonWrapper = styled.div`
     props.size === 'small'
       ? text.bodySm
       : props.size === 'large'
-      ? text.bodyLg
-      : props.size === 'tiny'
-      ? text.tagLight
-      : text.bodyMd};
+        ? text.bodyLg
+        : props.size === 'tiny'
+          ? text.tagLight
+          : text.bodyMd};
 
   width: ${(props) => (props.stretch ? '100%' : 'max-content')};
 `;

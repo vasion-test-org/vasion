@@ -1,6 +1,8 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
-import { desktop, tablet, mobile } from '@/styles/media';
+
+import { desktop, mobile, tablet } from '@/styles/media';
+
 import { isBrowser } from './functions';
 
 export default function useMedia(fw, d, t, m) {

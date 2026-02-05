@@ -1,20 +1,23 @@
 'use client';
 import React from 'react';
-import styled, { ThemeProvider } from 'styled-components';
-import colors from '@/styles/colors';
-import text from '@/styles/text';
-import media from '@/styles/media';
-import { storyblokEditable } from '@storyblok/react/rsc';
+
 import Link from 'next/link';
 
-const IntegrationBloks = ({ types, isMobile }) => {
+import { storyblokEditable } from '@storyblok/react/rsc';
+import styled, { ThemeProvider } from 'styled-components';
+
+import colors from '@/styles/colors';
+import media from '@/styles/media';
+import text from '@/styles/text';
+
+const IntegrationBloks = ({ isMobile, types }) => {
   const imageList = (icons) => {
     return icons?.map((icon, index) => (
       <Logo
         {...storyblokEditable(icon?.filename)}
+        alt={icon?.alt || ''}
         key={index}
         src={icon?.filename}
-        alt={icon?.alt || ''}
       />
     ));
   };
@@ -173,11 +176,7 @@ const IntegrationItem = styled.div`
     align-items: center;
     justify-content: center;
     width: ${(props) => {
-      if (
-        props.$columns === 0 ||
-        props?.$columns === 1 ||
-        props?.$columns === 6
-      ) {
+      if (props.$columns === 0 || props?.$columns === 1 || props?.$columns === 6) {
         return '88.542vw';
       } else if (props.$columns === 2) {
         return '44.167vw';
