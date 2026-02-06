@@ -28,10 +28,10 @@ This project uses **Tailwind CSS v4** with CSS-based configuration:
 
 ```css
 /* app/globals.css */
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --color-purple: #3D2562;
+  --color-purple: #3d2562;
   --color-orange: #ff5100;
   --spacing-15: 3.75rem;
   --breakpoint-sm: 480px;
@@ -40,6 +40,7 @@ This project uses **Tailwind CSS v4** with CSS-based configuration:
 ```
 
 **Key differences from v3:**
+
 - No `tailwind.config.js` for theme customization (use `@theme` in CSS)
 - Import with `@import "tailwindcss"` instead of `@tailwind base/components/utilities`
 - Custom values defined as CSS custom properties in `@theme` block
@@ -52,8 +53,9 @@ For custom backgrounds, gradients, or complex styles, use `@utility` in `globals
 ```css
 /* app/globals.css */
 @utility bg-footer {
-  background: linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%), 
-              linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
+  background:
+    linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%),
+    linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
 }
 
 @utility bg-purple-orbital {
@@ -62,6 +64,7 @@ For custom backgrounds, gradients, or complex styles, use `@utility` in `globals
 ```
 
 **When to use @utility:**
+
 - Custom gradients (complex backgrounds that can't be expressed as single values)
 - Multi-layer backgrounds
 - Any CSS that needs more than one property
@@ -79,43 +82,41 @@ Tailwind uses **min-width** breakpoints, which means styles cascade UP from mobi
 | `${media.fullWidth}` | `xl:` | 1601px+ |
 
 **How it works:**
+
 - **Base classes** = mobile styles (smallest screen)
 - **md:** = tablet styles (481px+), inherits to larger unless overridden
 - **lg:** = desktop styles (1025px+), inherits to larger unless overridden
 - **xl:** = fullWidth styles (1601px+)
 
 **Example conversion:**
+
 ```jsx
 // Original styled-component (desktop-first with max-width media queries):
 const BioWrapper = styled.div`
   display: flex;
-  flex-direction: row;      /* Desktop default */
-  width: 81.5vw;            /* Desktop: 81.5vw × 16 = 1304px */
-  gap: 1.875vw;             /* Desktop: 1.875vw × 16 = 30px */
+  flex-direction: row; /* Desktop default */
+  width: 81.5vw; /* Desktop: 81.5vw × 16 = 1304px */
+  gap: 1.875vw; /* Desktop: 1.875vw × 16 = 30px */
 
   ${media.fullWidth} {
-    width: 1304px;          /* FullWidth: 1304px */
+    width: 1304px; /* FullWidth: 1304px */
     gap: 30px;
   }
-  
+
   ${media.tablet} {
-    width: 944px;           /* Tablet: 944px */
+    width: 944px; /* Tablet: 944px */
     gap: 30px;
   }
-  
+
   ${media.mobile} {
     flex-direction: column; /* Mobile: changes to column */
-    width: 428px;           /* Mobile: 428px */
+    width: 428px; /* Mobile: 428px */
     gap: 30px;
   }
 `;
 
 // Correct Tailwind conversion (mobile-first):
-<div className={tw`
-  flex flex-col w-107 gap-7.5
-  md:w-236
-  lg:(flex-row w-326)
-`} />
+<div className={tw`lg:(flex-row w-326) flex w-107 flex-col gap-7.5 md:w-236`} />;
 
 // Breakdown:
 // - Base: flex-col (mobile), w-107 (428/4), gap-7.5 (30/4)
@@ -127,6 +128,7 @@ const BioWrapper = styled.div`
 **Key insight:** Only specify what CHANGES at each breakpoint. Unchanged values inherit from smaller breakpoints.
 
 **Common patterns:**
+
 ```jsx
 // Mobile: column, Tablet+: row
 className={tw`flex flex-col md:flex-row`}
@@ -146,6 +148,7 @@ className={tw`h-425 md:h-320 lg:h-355 xl:h-320`}
 ## Converting VW to Tailwind
 
 **Viewport widths for calculation:**
+
 - Mobile (base): 480px → vw × 4.8 = px
 - Tablet (md): 1024px → vw × 10.24 = px
 - Desktop (lg): 1600px → vw × 16 = px
@@ -188,6 +191,7 @@ Result: `className="h-425 md:h-320 lg:h-355 xl:h-320"`
 **To convert px to Tailwind class**: `px / 4 = Tailwind number`
 
 Examples:
+
 - 1304px / 4 = 326 → `w-326` (auto-generates 81.5rem)
 - 1236px / 4 = 309 → `max-w-309` (auto-generates 77.25rem)
 - 200px / 4 = 50 → `w-50`
@@ -202,6 +206,7 @@ import { vwToRem, detectBreakpoint } from '@/lib/tailwind-utils';
 ## Quick Reference
 
 ### Imports to Use
+
 ```jsx
 import { cn, tw } from '@/lib/cn';
 import { cva, type VariantProps } from '@/lib/cva';
@@ -209,6 +214,7 @@ import Image from 'next/image';
 ```
 
 ### Variant Groups with `tw` (Tagged Template)
+
 Use `tw` to group classes by breakpoint/variant:
 
 ```jsx
@@ -226,6 +232,7 @@ className={tw`flex gap-4 md:(flex-row gap-6) lg:(gap-8 p-10)`}
 ```
 
 ### Class Ordering (IMPORTANT)
+
 Prettier **cannot sort inside variant groups**. Manually maintain this order:
 
 ```jsx
@@ -241,6 +248,7 @@ className={tw`
 ```
 
 ### Breakpoints (Mobile-First / min-width)
+
 - **base (no prefix)** - mobile styles (0-480px)
 - `md:` (481px+) - tablet and up
 - `lg:` (1025px+) - desktop and up
@@ -249,7 +257,9 @@ className={tw`
 **Remember:** Base = mobile, then add prefixes for larger screens.
 
 ### Common Colors (Tailwind v4 - no DEFAULT suffix)
+
 In Tailwind v4, colors defined as `--color-orange` are used directly without `-DEFAULT`:
+
 - Purple: `bg-purple`, `bg-purple-dark`, `bg-purple-light`, `border-purple-border`
 - Orange: `bg-orange`, `text-orange`, `fill-orange`, `bg-orange-500`
 - Teal: `bg-teal`, `bg-teal-500`
@@ -259,12 +269,14 @@ In Tailwind v4, colors defined as `--color-orange` are used directly without `-D
 **NEVER use `-DEFAULT` suffix** (e.g., ❌ `text-orange-DEFAULT` → ✅ `text-orange`)
 
 ### Typography
+
 - Headings: `text-h1` through `text-h5`
 - Body: `text-body-xl`, `text-body-lg`, `text-body-md`, `text-body-sm`
 - Special: `text-eyebrow`, `text-tag`, `text-subtle`
 - Font: `font-archivo`, `font-orbitron`
 
 ### Gradients
+
 - `bg-purple-orbital`, `bg-purple-gradient`, `bg-orange-gradient`
 - `bg-light-purple`, `bg-dark-purple`, `bg-medium-purple`
 
@@ -282,7 +294,7 @@ import { cn } from '@/lib/cn';
 
 export default function ComponentName({ variant = 'default', className }) {
   return (
-    <div 
+    <div
       className={cn(
         // Base styles
         'flex flex-col gap-4 p-6',
@@ -297,18 +309,14 @@ export default function ComponentName({ variant = 'default', className }) {
       )}
     >
       {/* Content with proper accessibility */}
-      <Image 
+      <Image
         src="/image.webp"
         alt="Descriptive alt text"
         width={400}
         height={300}
         className="rounded-lg"
       />
-      <button
-        className="px-4 py-2 bg-orange text-white rounded-md
-          hover:bg-orange-dark transition-colors
-          focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-      >
+      <button className="bg-orange hover:bg-orange-dark rounded-md px-4 py-2 text-white transition-colors focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:outline-none">
         Button Text
       </button>
     </div>
@@ -366,12 +374,14 @@ export default function Card({ variant, size, className, children }: CardProps) 
 **DO NOT simplify or "improve" the layout logic.** Match the original exactly.
 
 **Rules:**
+
 1. **Preserve exact HTML structure** - Same containers, same nesting order
 2. **Preserve exact behavior per breakpoint** - If desktop uses margin and fullWidth uses fixed width + centering, convert BOTH approaches exactly as they are
 3. **Never simplify** - Even if CSS seems redundant or could be "cleaner", match the original
 4. **Each breakpoint is independent** - Different breakpoints may have completely different layout logic; preserve ALL of it
 
 **Conversion Process (element by element):**
+
 1. Start at outermost container
 2. Read its styled-component CSS **for ALL breakpoints**
 3. Convert CSS to Tailwind classes **for each breakpoint separately**
@@ -380,6 +390,7 @@ export default function Card({ variant, size, className, children }: CardProps) 
 6. Verify behavior matches at EACH breakpoint (desktop, tablet, mobile, fullWidth)
 
 **Example - CORRECT conversion:**
+
 ```jsx
 // Original styled-components
 const Wrapper = styled.section`padding: 60px;`;
@@ -393,6 +404,7 @@ const Inner = styled.div`display: flex; gap: 40px;`;
 ```
 
 **Example - Preserving different breakpoint behaviors:**
+
 ```jsx
 // Original: Different layout approach at fullWidth vs desktop
 const LegalDiv = styled.div`
@@ -411,6 +423,7 @@ const LegalDiv = styled.div`
 ```
 
 **Example - WRONG conversion:**
+
 ```jsx
 // ❌ WRONG: Removed Container, merged into section
 <section className="p-15 max-w-326 mx-auto">
@@ -423,6 +436,7 @@ const LegalDiv = styled.div`
 ```
 
 ### Step-by-Step Conversion:
+
 1. Remove `import styled from 'styled-components'`
 2. Replace `styled.div` with `<div className="...">`
 3. Convert props-based styles to `cn()` conditionals
@@ -443,12 +457,14 @@ const LegalDiv = styled.div`
 **Always prefer Server Components** - only use `'use client'` when absolutely necessary.
 
 ### When to Use Server Components
+
 - Static content rendering
 - Data fetching
 - Components that don't need interactivity
 - Layout containers and wrappers
 
 ### When Client Components Are Required
+
 - React hooks (`useState`, `useEffect`, `useContext`)
 - Browser APIs (`window`, `document`)
 - Event handlers that modify state
@@ -464,16 +480,18 @@ import CarouselAnimator from './CarouselAnimator';
 
 const ServerComponent = ({ blok }) => {
   const shouldAnimate = blok.logos?.length > 5;
-  
+
   return (
     <>
       {/* Static content renders server-side */}
       <div className="carousel">
         {blok.logos?.map((logo) => (
-          <div className="carousel-item" key={logo.id}>...</div>
+          <div className="carousel-item" key={logo.id}>
+            ...
+          </div>
         ))}
       </div>
-      
+
       {/* Minimal client component for animation only */}
       {shouldAnimate && <CarouselAnimator selector=".carousel-item" />}
     </>
@@ -492,7 +510,7 @@ import CarouselAnimator from '@/components/CarouselAnimator';
 <CarouselAnimator selector=".my-items" />
 
 // With options
-<CarouselAnimator 
+<CarouselAnimator
   selector=".logo-items"
   options={{ speed: 0.5, reversed: true, draggable: true }}
 />
@@ -508,16 +526,17 @@ import CarouselAnimator from '@/components/CarouselAnimator';
 
 ```jsx
 // ✅ CORRECT: Mobile-first (base = mobile, larger breakpoints override)
-className="px-7 md:px-8 lg:px-0"  // mobile → tablet → desktop
+className = 'px-7 md:px-8 lg:px-0'; // mobile → tablet → desktop
 
 // ✅ CORRECT: Value changes only at some breakpoints
-className="flex-col md:flex-row"  // column on mobile, row on tablet+
+className = 'flex-col md:flex-row'; // column on mobile, row on tablet+
 
 // ❌ WRONG: Desktop value as base
-className="px-10 md:px-4"  // Don't put larger value as base
+className = 'px-10 md:px-4'; // Don't put larger value as base
 ```
 
 **Project breakpoints (min-width):**
+
 - **base** → mobile (0-480px) - no prefix needed
 - `md:` → 481px+ (tablet and up)
 - `lg:` → 1025px+ (desktop and up)
@@ -536,12 +555,13 @@ className="px-10 md:px-4"  // Don't put larger value as base
 ```
 
 ### Converting VW Values
+
 **Always calculate px for EACH breakpoint first, then determine if they're the same or different.**
 
 ```jsx
 // Case A: All breakpoints target SAME px → ONE base class
 // Mobile: 5vw × 4.8 = 24px
-// Tablet: 2.344vw × 10.24 = 24px  
+// Tablet: 2.344vw × 10.24 = 24px
 // Desktop: 1.5vw × 16 = 24px
 // All = 24px → py-6 (just base, no breakpoint prefixes needed)
 
@@ -550,7 +570,7 @@ className="px-10 md:px-4"  // Don't put larger value as base
 // Tablet: 124.902vw × 10.24 = 1279px → md:h-320
 // Desktop: 88.806vw × 16 = 1421px → lg:h-355
 // FullWidth: 1279px → xl:h-320
-className="h-425 md:h-320 lg:h-355 xl:h-320"
+className = 'h-425 md:h-320 lg:h-355 xl:h-320';
 ```
 
 ### Theme-Based Styling with Inline Conditionals
@@ -578,7 +598,9 @@ import { cn } from '@/lib/cn';
 ```
 
 ### Lists
+
 Use Tailwind's `list-none` class:
+
 ```jsx
 <ul className="list-none m-0 p-0 flex gap-5">
   <li className="list-none flex-shrink-0">
@@ -639,7 +661,7 @@ const LogoCube = ({ blok }) => {
         <div
           className={cn(
             // CRITICAL: mx-auto for centering with max-width
-            'w-full overflow-hidden mx-auto',
+            'mx-auto w-full overflow-hidden',
             // Theme-based background (inline ternary)
             isTransparent ? 'bg-transparent' : theme === 'dark' ? 'bg-purple-dark' : 'bg-purple',
             // Theme-based text color
@@ -647,7 +669,7 @@ const LogoCube = ({ blok }) => {
             // Conditional max-width
             isTransparent ? 'max-w-full' : 'max-w-326',
             // Padding and border radius
-            'p-15 rounded-3xl'
+            'rounded-3xl p-15'
           )}
         >
           {/* Content */}
@@ -664,17 +686,20 @@ const LogoCube = ({ blok }) => {
 ## Validation
 
 After making changes, remind user to run:
+
 ```bash
 npm run checks
 ```
 
 **IMPORTANT: Clear browser cache after conversions!**
 Tailwind changes may not appear immediately due to caching. Tell the user to:
+
 - Hard refresh (Cmd+Shift+R / Ctrl+Shift+R)
 - Or open in incognito/private window
 - Or clear browser cache
 
 See detailed rules in:
+
 - `.cursor/rules/tailwind-migration.mdc`
 - `.cursor/rules/design-tokens.mdc`
 - `docs/COMPONENT_OPTIMIZATION.md`
