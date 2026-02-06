@@ -26,7 +26,7 @@ This document contains all information needed to understand and execute componen
 - **CMS**: Storyblok
 - **Animations**: GSAP
 - **Utilities**:
-  - `cn()` - Conditional class merging (clsx + tailwind-merge)
+  - `cn()` - Conditional class merging with Tailwind conflict resolution
   - `tw` - Tagged template for variant groups (`md:(px-4 py-2)`)
   - `cva()` - Class Variance Authority for component variants
 
@@ -36,14 +36,15 @@ This document contains all information needed to understand and execute componen
 
 Tailwind uses **min-width** breakpoints. Base (no prefix) = mobile, breakpoint prefixes override for larger screens.
 
-| Prefix      | Range          | Viewport Width       | Use Case                 |
-| ----------- | -------------- | -------------------- | ------------------------ |
-| **(none)**  | 0 - 480px      | 480px                | Mobile (base styles)     |
-| `md:`       | 481px+         | 1024px               | Tablet and up            |
-| `lg:`       | 1025px+        | 1600px               | Desktop and up           |
-| `xl:`       | 1601px+        | 1601px+              | Full width and up        |
+| Prefix     | Range     | Viewport Width | Use Case             |
+| ---------- | --------- | -------------- | -------------------- |
+| **(none)** | 0 - 480px | 480px          | Mobile (base styles) |
+| `md:`      | 481px+    | 1024px         | Tablet and up        |
+| `lg:`      | 1025px+   | 1600px         | Desktop and up       |
+| `xl:`      | 1601px+   | 1601px+        | Full width and up    |
 
 **Converting styled-components (desktop-first) → Tailwind (mobile-first):**
+
 - `${media.mobile}` → base (no prefix)
 - `${media.tablet}` → `md:`
 - Desktop (base in styled) → `lg:`
@@ -54,6 +55,7 @@ Tailwind uses **min-width** breakpoints. Base (no prefix) = mobile, breakpoint p
 ## Color System (Tailwind v4 - No DEFAULT Suffix)
 
 **IMPORTANT:** In Tailwind v4, colors are used directly without `-DEFAULT` suffix:
+
 - ✅ `text-orange`, `bg-purple`, `fill-orange`
 - ❌ `text-orange-DEFAULT`, `bg-purple-DEFAULT` (NEVER use this)
 
@@ -72,11 +74,11 @@ Tailwind uses **min-width** breakpoints. Base (no prefix) = mobile, breakpoint p
 
 ### Orange
 
-| Token   | Hex     | Tailwind Class   |
-| ------- | ------- | ---------------- |
-| Dark    | #CC4800 | `orange-dark`    |
-| Default | #ff5100 | `orange`         |
-| 500     | #FF612A | `orange-500`     |
+| Token   | Hex     | Tailwind Class |
+| ------- | ------- | -------------- |
+| Dark    | #CC4800 | `orange-dark`  |
+| Default | #ff5100 | `orange`       |
+| 500     | #FF612A | `orange-500`   |
 
 ### Teal
 
@@ -230,9 +232,8 @@ When a component needs GSAP animations but should be a Server Component:
 
 ```jsx
 // MyComponent.js - Server Component (NO 'use client')
-import clsx from 'clsx';
-
 import CarouselAnimator from '@/components/CarouselAnimator';
+import { cn, tw } from '@/lib/cn';
 import { tw } from '@/lib/cn';
 
 const MyComponent = ({ blok }) => {
@@ -242,12 +243,12 @@ const MyComponent = ({ blok }) => {
   return (
     <>
       <section
-        className={clsx(
+        className={cn(
           'flex w-full items-center justify-center',
           tw`p-7 md:p-10 lg:p-15`,
           // Theme via conditional Tailwind (no inline styles!)
           theme === 'dark' && 'bg-purple-dark text-white',
-          theme === 'light' && 'bg-white text-txt-primary',
+          theme === 'light' && 'text-txt-primary bg-white',
           theme === 'default' && 'bg-purple text-white'
         )}
       >
@@ -270,6 +271,7 @@ const MyComponent = ({ blok }) => {
 ## Pure Tailwind Pattern (REQUIRED)
 
 **NEVER use these:**
+
 - ❌ Inline `style` attributes
 - ❌ Scoped `<style>` tags
 - ❌ CSS-in-JS or styled-components for new code
@@ -277,9 +279,7 @@ const MyComponent = ({ blok }) => {
 **ALWAYS use Tailwind utilities with `cn()` and `tw`:**
 
 ```jsx
-import clsx from 'clsx';
-
-import { tw } from '@/lib/cn';
+import { cn, tw } from '@/lib/cn';
 
 const MyComponent = ({ blok }) => {
   const isTransparent = blok.transparent_background;
@@ -287,16 +287,12 @@ const MyComponent = ({ blok }) => {
 
   return (
     <div
-      className={clsx(
+      className={cn(
         'flex w-full items-center justify-center',
         // Responsive padding using tw for grouped variants
         tw`p-7 md:p-10 lg:p-15 xl:p-15`,
         // Conditional background (no inline styles!)
-        isTransparent
-          ? 'bg-transparent'
-          : theme === 'dark'
-            ? 'bg-purple-dark'
-            : 'bg-purple',
+        isTransparent ? 'bg-transparent' : theme === 'dark' ? 'bg-purple-dark' : 'bg-purple',
         // Border radius (responsive)
         'rounded-4xl md:rounded-3xl lg:rounded-3xl xl:rounded-3xl'
       )}
@@ -536,7 +532,7 @@ npm run checks:perf      # Performance
 ### Phase 2: Convert Styles (Pure Tailwind)
 
 - [ ] Use `tw` utility for grouped responsive classes
-- [ ] Use `cn()` or `clsx()` for conditional classes
+- [ ] Use `cn()` for conditional classes (NOT clsx directly)
 - [ ] Convert vw → px → Tailwind (px / 4)
 - [ ] Use `list-none` class on ul/li elements
 - [ ] **NEVER** use inline `style` or `<style>` tags
@@ -559,21 +555,21 @@ npm run checks:perf      # Performance
 ## Styled-Components to Tailwind Mapping (Mobile-First)
 
 **Breakpoint Conversion:**
-| styled-components            | Tailwind           | Explanation                      |
+| styled-components | Tailwind | Explanation |
 | ---------------------------- | ------------------ | -------------------------------- |
-| `${media.mobile} { ... }`    | base (no prefix)   | Mobile = default Tailwind styles |
-| `${media.tablet} { ... }`    | `md:...`           | Tablet overrides mobile          |
-| Desktop (base in styled)     | `lg:...`           | Desktop overrides tablet         |
-| `${media.fullWidth} { ... }` | `xl:...`           | FullWidth overrides desktop      |
+| `${media.mobile} { ... }` | base (no prefix) | Mobile = default Tailwind styles |
+| `${media.tablet} { ... }` | `md:...` | Tablet overrides mobile |
+| Desktop (base in styled) | `lg:...` | Desktop overrides tablet |
+| `${media.fullWidth} { ... }` | `xl:...` | FullWidth overrides desktop |
 
 **Theme Values:**
-| styled-components            | Tailwind                           |
+| styled-components | Tailwind |
 | ---------------------------- | ---------------------------------- |
-| `${text.h1}`                 | `text-h1 font-archivo`             |
-| `${text.bodyLg}`             | `text-body-lg font-archivo`        |
-| `${colors.primaryPurple}`    | `bg-purple` or `text-purple`       |
-| `${colors.primaryOrange}`    | `bg-orange` or `text-orange`       |
-| `${colors.txtPrimary}`       | `text-txt-primary`                 |
+| `${text.h1}` | `text-h1 font-archivo` |
+| `${text.bodyLg}` | `text-body-lg font-archivo` |
+| `${colors.primaryPurple}` | `bg-purple` or `text-purple` |
+| `${colors.primaryOrange}` | `bg-orange` or `text-orange` |
+| `${colors.txtPrimary}` | `text-txt-primary` |
 
 **Note:** Never use `-DEFAULT` suffix in Tailwind v4. Use `text-orange` not `text-orange-DEFAULT`.
 

@@ -10,5 +10,5 @@
   "endOfLine": "lf",
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindConfig": "./tailwind.config.js",
-  "tailwindFunctions": ["cn", "clsx", "twMerge", "cva", "cx"]
+  "tailwindFunctions": ["cn", "clsx", "twMerge", "cva", "cx", "tw"]
 }

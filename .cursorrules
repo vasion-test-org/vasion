@@ -20,7 +20,7 @@ Wait for the user's response before proceeding. If a Figma link is provided, use
 4. **NO arbitrary px values** - No `w-[450px]`, use rem or closest Tailwind value
 5. **ALWAYS use design tokens** - Defined in `@theme` block in `app/globals.css`
 6. **ALWAYS ensure ADA compliance** - Alt text, focus states, semantic HTML
-7. **Use `cn()` or `clsx()`** - Import from `@/lib/cn` or `clsx` for conditional classes
+7. **Use `cn()` for conditionals** - Import from `@/lib/cn` (handles Tailwind conflicts)
 
 ## Tailwind v4 Configuration
 
@@ -223,6 +223,21 @@ className={tw`hover:(bg-purple text-white) focus:(ring-2 outline-none)`}
 
 // Mix with regular classes:
 className={tw`flex gap-4 md:(flex-row gap-6) lg:(gap-8 p-10)`}
+```
+
+### Class Ordering (IMPORTANT)
+Prettier **cannot sort inside variant groups**. Manually maintain this order:
+
+```jsx
+// Correct order: base → md → lg → xl → state variants
+className={tw`
+  h-9 w-9 p-0 rounded bg-transparent      // 1. Base classes
+  md:(h-8 w-8)                             // 2. Tablet
+  lg:(h-9 w-9)                             // 3. Desktop
+  xl:(h-8 w-8)                             // 4. FullWidth
+  hover:bg-purple                          // 5. Hover state
+  focus:(outline-none ring-2 ring-purple)  // 6. Focus state
+`}
 ```
 
 ### Breakpoints (Mobile-First / min-width)
@@ -540,13 +555,13 @@ className="h-425 md:h-320 lg:h-355 xl:h-320"
 
 ### Theme-Based Styling with Inline Conditionals
 
-Use ternary operators directly in `clsx()` for cleaner code:
+Use ternary operators directly in `cn()` for cleaner code:
 
 ```jsx
-import clsx from 'clsx';
+import { cn } from '@/lib/cn';
 
 <div
-  className={clsx(
+  className={cn(
     'w-full overflow-hidden mx-auto',
     // Background - inline ternary
     isTransparent ? 'bg-transparent' : theme === 'dark' ? 'bg-purple-dark' : 'bg-purple',
@@ -597,9 +612,10 @@ When converting a styled-component:
 This is the gold standard for converted components:
 
 ```jsx
-import clsx from 'clsx';
 import Image from 'next/image';
+
 import CarouselAnimator from './CarouselAnimator';
+import { cn } from '@/lib/cn';
 
 const LogoCube = ({ blok }) => {
   const isTransparent = blok.transparent_background;
@@ -610,7 +626,7 @@ const LogoCube = ({ blok }) => {
     <>
       <section
         aria-label="Trusted by leading companies"
-        className={clsx(
+        className={cn(
           'flex w-full items-center justify-center',
           // Mobile-first padding (base = mobile, md: = tablet+)
           'px-7 md:px-10',
@@ -621,7 +637,7 @@ const LogoCube = ({ blok }) => {
         )}
       >
         <div
-          className={clsx(
+          className={cn(
             // CRITICAL: mx-auto for centering with max-width
             'w-full overflow-hidden mx-auto',
             // Theme-based background (inline ternary)

@@ -104,9 +104,7 @@ function runESLintA11y(targetPaths) {
           }
         }
       } catch (parseError) {
-        console.log(
-          `${COLORS.yellow}Note: Could not parse ESLint output${COLORS.reset}`
-        );
+        console.log(`${COLORS.yellow}Note: Could not parse ESLint output${COLORS.reset}`);
       }
     }
   } catch (error) {
@@ -341,15 +339,35 @@ function checkSemanticStructure(content, filePath) {
 function checkColorContrast(content, filePath) {
   // Light text on light backgrounds (project colors)
   const lightTextClasses = [
-    'text-grey-100', 'text-grey-200', 'text-grey-300', 'text-grey-400',
-    'text-white', 'text-yellow-100', 'text-yellow-200', 'text-yellow-300',
-    'text-purple-100', 'text-purple-200', 'text-orange-100', 'text-orange-200',
-    'text-teal-100', 'text-teal-200',
+    'text-grey-100',
+    'text-grey-200',
+    'text-grey-300',
+    'text-grey-400',
+    'text-white',
+    'text-yellow-100',
+    'text-yellow-200',
+    'text-yellow-300',
+    'text-purple-100',
+    'text-purple-200',
+    'text-orange-100',
+    'text-orange-200',
+    'text-teal-100',
+    'text-teal-200',
   ];
   const lightBgClasses = [
-    'bg-white', 'bg-grey-25', 'bg-grey-50', 'bg-grey-75', 'bg-grey-100',
-    'bg-yellow-100', 'bg-yellow-200', 'bg-purple-100', 'bg-purple-lightGrey',
-    'bg-purple-gray50', 'bg-orange-100', 'bg-teal-100', 'bg-teal-200',
+    'bg-white',
+    'bg-grey-25',
+    'bg-grey-50',
+    'bg-grey-75',
+    'bg-grey-100',
+    'bg-yellow-100',
+    'bg-yellow-200',
+    'bg-purple-100',
+    'bg-purple-lightGrey',
+    'bg-purple-gray50',
+    'bg-orange-100',
+    'bg-teal-100',
+    'bg-teal-200',
   ];
 
   // Check for problematic combinations
@@ -373,12 +391,20 @@ function checkColorContrast(content, filePath) {
 
   // Dark text on dark backgrounds
   const darkTextClasses = [
-    'text-grey-700', 'text-grey-800', 'text-purple-dark', 'text-purple-navy',
-    'text-purple', 'text-txt-primary',
+    'text-grey-700',
+    'text-grey-800',
+    'text-purple-dark',
+    'text-purple-navy',
+    'text-purple',
+    'text-txt-primary',
   ];
   const darkBgClasses = [
-    'bg-grey-700', 'bg-grey-800', 'bg-purple-dark', 'bg-purple-navy',
-    'bg-purple', 'bg-purple-DEFAULT',
+    'bg-grey-700',
+    'bg-grey-800',
+    'bg-purple-dark',
+    'bg-purple-navy',
+    'bg-purple',
+    'bg-purple-DEFAULT',
   ];
 
   for (const textClass of darkTextClasses) {
@@ -815,9 +841,7 @@ function run() {
   console.log(
     `\n${COLORS.bold}${COLORS.blue}♿ Running WCAG 2.1 AA Compliance Checks...${COLORS.reset}`
   );
-  console.log(
-    `${COLORS.cyan}Checks: ESLint jsx-a11y + Custom Pattern Analysis${COLORS.reset}`
-  );
+  console.log(`${COLORS.cyan}Checks: ESLint jsx-a11y + Custom Pattern Analysis${COLORS.reset}`);
 
   if (targetPaths) {
     console.log(`${COLORS.cyan}Target: ${targetPaths.join(', ')}${COLORS.reset}\n`);
@@ -869,7 +893,9 @@ function run() {
     console.log(`${COLORS.red}${COLORS.bold}❌ Errors (${errors.length}):${COLORS.reset}\n`);
     errors.forEach((issue) => {
       console.log(`  ${COLORS.red}[${issue.category}]${COLORS.reset} ${issue.message}`);
-      console.log(`  ${COLORS.blue}File:${COLORS.reset} ${issue.file}${issue.line ? `:${issue.line}` : ''}`);
+      console.log(
+        `  ${COLORS.blue}File:${COLORS.reset} ${issue.file}${issue.line ? `:${issue.line}` : ''}`
+      );
       if (issue.code) console.log(`  ${COLORS.yellow}Code:${COLORS.reset} ${issue.code}`);
       if (issue.ruleId) console.log(`  ${COLORS.cyan}Rule:${COLORS.reset} ${issue.ruleId}`);
       console.log('');
@@ -882,7 +908,9 @@ function run() {
     );
     warnings.forEach((issue) => {
       console.log(`  ${COLORS.yellow}[${issue.category}]${COLORS.reset} ${issue.message}`);
-      console.log(`  ${COLORS.blue}File:${COLORS.reset} ${issue.file}${issue.line ? `:${issue.line}` : ''}`);
+      console.log(
+        `  ${COLORS.blue}File:${COLORS.reset} ${issue.file}${issue.line ? `:${issue.line}` : ''}`
+      );
       if (issue.code) console.log(`  ${COLORS.yellow}Code:${COLORS.reset} ${issue.code}`);
       if (issue.ruleId) console.log(`  ${COLORS.cyan}Rule:${COLORS.reset} ${issue.ruleId}`);
       console.log('');

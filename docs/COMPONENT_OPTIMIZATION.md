@@ -96,12 +96,12 @@ Our design tokens from `styles/colors.js`, `styles/text.js`, and `styles/media.j
 
 Tailwind uses **min-width** breakpoints. Base classes = mobile, breakpoint prefixes override for larger screens.
 
-| Prefix      | Range          | Usage                              |
-| ----------- | -------------- | ---------------------------------- |
-| **(none)**  | 0 - 480px      | Mobile styles (base, no prefix)    |
-| `md:`       | 481px+         | Tablet and up                      |
-| `lg:`       | 1025px+        | Desktop and up                     |
-| `xl:`       | 1601px+        | Full width and up                  |
+| Prefix     | Range     | Usage                           |
+| ---------- | --------- | ------------------------------- |
+| **(none)** | 0 - 480px | Mobile styles (base, no prefix) |
+| `md:`      | 481px+    | Tablet and up                   |
+| `lg:`      | 1025px+   | Desktop and up                  |
+| `xl:`      | 1601px+   | Full width and up               |
 
 **Key Concept:** Styles cascade UP. A `md:` class applies to tablet, desktop, AND fullWidth unless overridden.
 
@@ -116,6 +116,7 @@ Tailwind uses **min-width** breakpoints. Base classes = mobile, breakpoint prefi
 ```
 
 **Converting styled-components (desktop-first) → Tailwind (mobile-first):**
+
 - `${media.mobile}` → base (no prefix)
 - `${media.tablet}` → `md:`
 - Desktop (base in styled) → `lg:`
@@ -124,6 +125,7 @@ Tailwind uses **min-width** breakpoints. Base classes = mobile, breakpoint prefi
 ### Colors (Tailwind v4 - No DEFAULT Suffix)
 
 **IMPORTANT:** In Tailwind v4, colors are used directly without `-DEFAULT` suffix:
+
 - ✅ `text-orange`, `bg-purple`, `fill-orange`
 - ❌ `text-orange-DEFAULT`, `bg-purple-DEFAULT` (NEVER use this)
 
@@ -208,11 +210,13 @@ className = 'font-orbitron'; // Orbitron (for stats)
 ### CRITICAL: Pure Tailwind Only
 
 **NEVER use these in components:**
+
 - ❌ Inline `style` attributes (`style={{ padding: '20px' }}`)
 - ❌ Scoped `<style>` tags (`<style>{`.class { ... }`}</style>`)
 - ❌ CSS-in-JS or styled-components for new code
 
 **ALWAYS use:**
+
 - ✅ Tailwind utility classes
 - ✅ `cn()` for conditional classes
 - ✅ `tw` tagged template for variant groups (cleaner responsive code)
@@ -260,6 +264,7 @@ import { tw } from '@/lib/cn';
 ```
 
 **How it works:**
+
 - `md:(px-8 py-4 gap-6)` expands to `md:px-8 md:py-4 md:gap-6`
 - Works with any variant: `hover:`, `focus:`, `lg:`, `xl:`, etc.
 
@@ -286,9 +291,35 @@ import { tw } from '@/lib/cn';
 ```
 
 **When to use which:**
+
 - `tw` - When you have multiple responsive breakpoints (cleaner syntax)
 - `cn()` - When you have conditional classes based on props/state
 - Both together - Complex components with responsive + conditional styles
+
+### Class Ordering Convention
+
+**IMPORTANT:** Prettier can sort standard Tailwind classes, but it **cannot sort inside variant groups** like `md:(...)`. When using `tw`, manually maintain this order:
+
+```jsx
+// Correct order: base → md → lg → xl → state variants
+className={tw`
+  h-9 w-9 p-0 rounded bg-transparent      // 1. Base/default classes
+  md:(h-8 w-8)                             // 2. Tablet overrides
+  lg:(h-9 w-9)                             // 3. Desktop overrides
+  xl:(h-8 w-8)                             // 4. FullWidth overrides
+  hover:bg-purple                          // 5. State variants (hover, focus, active)
+  focus:(outline-none ring-2 ring-purple)  // 6. Focus states (can also be grouped)
+`}
+```
+
+**Within each breakpoint group**, follow Tailwind's standard order:
+
+1. Layout (flex, grid, position)
+2. Sizing (w, h)
+3. Spacing (p, m, gap)
+4. Visual (bg, border, rounded, shadow)
+5. Typography (text, font)
+6. Other utilities
 
 ### Class Variance Authority (CVA)
 
@@ -426,7 +457,7 @@ Prettier automatically sorts Tailwind classes when you save. The order follows T
 The plugin recognizes classes in:
 
 - `className` attributes
-- `cn()`, `clsx()`, `twMerge()` function calls
+- `cn()`, `tw()`, `twMerge()` function calls
 
 ### ESLint - Code Quality
 
@@ -465,7 +496,8 @@ Run `npm run checks` to scan the codebase:
 
 Our ADA check combines **ESLint jsx-a11y** (AST-level analysis) with **custom pattern checks** for comprehensive WCAG 2.1 AA coverage:
 
-*ESLint jsx-a11y Rules (automatically integrated):*
+_ESLint jsx-a11y Rules (automatically integrated):_
+
 - `alt-text` - Images must have alt props
 - `click-events-have-key-events` - Interactive elements need keyboard handlers
 - `no-static-element-interactions` - Non-native interactive elements need roles
@@ -476,7 +508,8 @@ Our ADA check combines **ESLint jsx-a11y** (AST-level analysis) with **custom pa
 - `interactive-supports-focus` - Interactive elements are focusable
 - And 20+ more rules covering all WCAG principles
 
-*Custom Pattern Checks:*
+_Custom Pattern Checks:_
+
 - Potential color contrast issues (Tailwind class combinations)
 - Focus ring visibility (non-text contrast)
 - Skip navigation for pages
@@ -549,9 +582,8 @@ npm run checks -- components/MyComponent.js  # Check specific file
 // MyComponent.js - NO 'use client'
 import Image from 'next/image';
 
-import clsx from 'clsx';
-
 import CarouselAnimator from '@/components/CarouselAnimator';
+import { cn, tw } from '@/lib/cn';
 import { tw } from '@/lib/cn';
 
 const MyComponent = ({ blok }) => {
@@ -562,16 +594,16 @@ const MyComponent = ({ blok }) => {
   return (
     <>
       <section
-        className={clsx(
+        className={cn(
           'flex w-full items-center justify-center',
           // Mobile-first responsive padding using tw for variant groups
           tw`p-7 md:p-10 lg:p-15 xl:p-15`,
           // Max width
-          'max-w-326 mx-auto'
+          'mx-auto max-w-326'
         )}
       >
         <div
-          className={clsx(
+          className={cn(
             'w-full overflow-hidden rounded-3xl',
             // Background based on theme (pure Tailwind, no inline styles)
             isTransparent
@@ -603,8 +635,9 @@ export default MyComponent;
 ```
 
 **Key patterns:**
+
 - ❌ No `<style>` tags - use Tailwind responsive classes
-- ❌ No `style={{ }}` inline - use conditional Tailwind classes via `clsx()`
+- ❌ No `style={{ }}` inline - use conditional Tailwind classes via `cn()`
 - ✅ Use `tw` for grouped responsive classes
 - ✅ Use ternary/conditional for theme-based styling
 
@@ -619,12 +652,12 @@ import styled from 'styled-components';
 
 **Map styled-components (desktop-first) → Tailwind (mobile-first):**
 
-| Styled-Component              | Tailwind        | Explanation                      |
-| ----------------------------- | --------------- | -------------------------------- |
-| `${media.mobile} { ... }`     | base (no prefix)| Mobile = default Tailwind styles |
-| `${media.tablet} { ... }`     | `md:...`        | Tablet overrides mobile          |
-| Desktop (base in styled)      | `lg:...`        | Desktop overrides tablet         |
-| `${media.fullWidth} { ... }`  | `xl:...`        | FullWidth overrides desktop      |
+| Styled-Component             | Tailwind         | Explanation                      |
+| ---------------------------- | ---------------- | -------------------------------- |
+| `${media.mobile} { ... }`    | base (no prefix) | Mobile = default Tailwind styles |
+| `${media.tablet} { ... }`    | `md:...`         | Tablet overrides mobile          |
+| Desktop (base in styled)     | `lg:...`         | Desktop overrides tablet         |
+| `${media.fullWidth} { ... }` | `xl:...`         | FullWidth overrides desktop      |
 
 **Example conversion:**
 
@@ -646,13 +679,13 @@ const Box = styled.div`
 // Mobile: 41.667vw × 4.8 = 200px
 // Tablet: 19.531vw × 10.24 = 200px
 // Desktop: 12.5vw × 16 = 200px
-className="w-50" // 200px / 4 = 50
+className = 'w-50'; // 200px / 4 = 50
 
 // If breakpoints target DIFFERENT px → separate classes
 // Mobile: 353.738vw × 4.8 = 1698px → w-425 (base)
 // Tablet: 124.902vw × 10.24 = 1279px → md:w-320
 // Desktop: 88.806vw × 16 = 1421px → lg:w-355
-className="w-425 md:w-320 lg:w-355"
+className = 'w-425 md:w-320 lg:w-355';
 ```
 
 ### Step 5: Run Compliance Checks
@@ -690,7 +723,7 @@ Verify at: mobile (480px), tablet (1024px), desktop (1600px), fullWidth (1601px+
 **Phase 2: Convert Styles (Pure Tailwind)**
 
 - [ ] Use `tw` utility for grouped responsive classes
-- [ ] Use `cn()` or `clsx()` for conditional classes
+- [ ] Use `cn()` for conditional classes (NOT clsx directly)
 - [ ] Convert vw → px → Tailwind number (px / 4)
 - [ ] Use `list-none` class on ul/li elements (not inline style)
 - [ ] **NEVER use** inline `style` attributes or `<style>` tags
@@ -786,16 +819,16 @@ For complex animations (GSAP, etc.), extract to minimal client components.
 **Use conditional Tailwind classes based on theme prop:**
 
 ```jsx
-import clsx from 'clsx';
+import { cn } from '@/lib/cn';
 
 const ThemedComponent = ({ theme = 'default' }) => {
   return (
     <div
-      className={clsx(
-        'p-6 rounded-lg',
+      className={cn(
+        'rounded-lg p-6',
         // Background per theme
         theme === 'dark' && 'bg-purple-dark text-white',
-        theme === 'light' && 'bg-white text-txt-primary',
+        theme === 'light' && 'text-txt-primary bg-white',
         theme === 'default' && 'bg-purple text-white'
       )}
     >

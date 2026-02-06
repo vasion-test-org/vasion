@@ -38,11 +38,7 @@ export const buttonVariants = cva(
     variants: {
       // Visual style variants
       variant: {
-        primary: [
-          'bg-purple text-white',
-          'hover:bg-purple-dark',
-          'focus:ring-purple-border',
-        ],
+        primary: ['bg-purple text-white', 'hover:bg-purple-dark', 'focus:ring-purple-border'],
         secondary: [
           'border-purple-border text-purple border-2 bg-transparent',
           'hover:bg-purple-100',

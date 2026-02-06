@@ -1,9 +1,9 @@
 import Image from 'next/image';
 
 import { storyblokEditable } from '@storyblok/react/rsc';
-import clsx from 'clsx';
 
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { cn } from '@/lib/cn';
 
 import CarouselAnimator from './CarouselAnimator';
 
@@ -42,7 +42,7 @@ const LogoCube = ({ blok }) => {
     <>
       <section
         {...storyblokEditable(blok)}
-        className={clsx(
+        className={cn(
           'flex w-full items-center justify-center',
           // Mobile-first: base = mobile, md/lg/xl for larger
           // Mobile: px-10 (5vw×480÷4=6→but design shows more), Tablet+: px-4
@@ -55,7 +55,7 @@ const LogoCube = ({ blok }) => {
         aria-label="Trusted by leading companies"
       >
         <div
-          className={clsx(
+          className={cn(
             'mx-auto w-full overflow-hidden',
             // Background
             isTransparent
@@ -89,7 +89,7 @@ const LogoCube = ({ blok }) => {
             )}
 
             <ul
-              className={clsx(
+              className={cn(
                 'm-0 flex w-full list-none items-center gap-5 overflow-hidden p-0',
                 shouldCenter ? 'justify-center' : 'justify-start'
               )}

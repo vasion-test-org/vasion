@@ -155,28 +155,14 @@ export default [
       'jsx-a11y/no-static-element-interactions': [
         'error',
         {
-          handlers: [
-            'onClick',
-            'onMouseDown',
-            'onMouseUp',
-            'onKeyPress',
-            'onKeyDown',
-            'onKeyUp',
-          ],
+          handlers: ['onClick', 'onMouseDown', 'onMouseUp', 'onKeyPress', 'onKeyDown', 'onKeyUp'],
           allowExpressionValues: true,
         },
       ],
       'jsx-a11y/no-noninteractive-element-interactions': [
         'error',
         {
-          handlers: [
-            'onClick',
-            'onMouseDown',
-            'onMouseUp',
-            'onKeyPress',
-            'onKeyDown',
-            'onKeyUp',
-          ],
+          handlers: ['onClick', 'onMouseDown', 'onMouseUp', 'onKeyPress', 'onKeyDown', 'onKeyUp'],
         },
       ],
       'jsx-a11y/no-noninteractive-tabindex': [
@@ -190,15 +176,7 @@ export default [
       'jsx-a11y/interactive-supports-focus': [
         'error',
         {
-          tabbable: [
-            'button',
-            'checkbox',
-            'link',
-            'searchbox',
-            'spinbutton',
-            'switch',
-            'textbox',
-          ],
+          tabbable: ['button', 'checkbox', 'link', 'searchbox', 'spinbutton', 'switch', 'textbox'],
         },
       ],
 
