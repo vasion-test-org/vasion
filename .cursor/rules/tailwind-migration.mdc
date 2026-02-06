@@ -6,6 +6,8 @@ alwaysApply: true
 
 # Tailwind CSS v4 Migration Guidelines
 
+**When converting or creating components:** Execute the **Component Conversion Playbook** first (`.cursor/rules/component-conversion-playbook.mdc`). Follow its steps in order. This file provides detailed examples, explanations, and ADA/SEO rules that support the playbook.
+
 This project uses **Tailwind CSS v4** with CSS-based configuration. We are migrating from styled-components for improved performance. Follow these rules when creating or modifying components.
 
 ## Tailwind v4 Configuration
@@ -313,9 +315,10 @@ Examples:
 - Use spacing tokens: `p-4`, `gap-6`, `m-8` (avoid arbitrary values)
 
 ### Conditional Classes
-- Use the `cn()` utility from `@/lib/cn` for conditional class merging
-- Import: `import { cn } from '@/lib/cn'`
-- Example: `className={cn('base-classes', condition && 'conditional-class')}`
+- **Use `cn()` only for conditional classes** (theme, props). Use `tw` for static and breakpoint-only classes.
+- Import: `import { cn, tw } from '@/lib/cn'`
+- When only breakpoints (no conditionals): `className={tw`base md:(changes) lg:(changes) xl:(changes)`}` so values cascade naturally.
+- When conditionals: `className={cn(tw`base md:(...)`, condition && 'class')}` or `className={cn(condition ? 'a' : 'b')}`.
 
 ### Variant Groups with `tw` (Tagged Template)
 - Use the `tw` utility from `@/lib/cn` to group classes by breakpoint/variant
@@ -768,6 +771,8 @@ Use Tailwind's `list-none` class on both ul and li:
 ## Migration Checklist
 
 When converting a styled-component file to Tailwind:
+
+**Reference example:** Use `components/LogoCube.js` as the pattern for structure, `cn()` usage, mobile-first breakpoints, and client-extraction (CarouselAnimator).
 
 ### 0. Ask for Figma Reference (BEFORE starting)
 

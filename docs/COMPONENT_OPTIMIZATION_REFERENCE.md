@@ -2,6 +2,8 @@
 
 This document contains all information needed to understand and execute component optimization, including Tailwind CSS styling, Server Component patterns, and compliance standards. Use this as a reference for creating documentation, training materials, or AI assistant rules.
 
+**For AI / conversions:** When converting or creating components, follow **`.cursor/rules/component-conversion-playbook.mdc`** first (in order); use **`components/LogoCube.js`** as the example. This reference doc supports the playbook and rule files.
+
 ---
 
 ## Project Overview

@@ -1,217 +1,99 @@
-'use client';
-import React, { useEffect } from 'react';
-
 import { storyblokEditable } from '@storyblok/react/rsc';
-import styled, { ThemeProvider } from 'styled-components';
 
 import Image from '@/components/globalComponents/Image';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import { useAvailableThemes } from '@/context/ThemeContext';
-import media from '@/styles/media';
-import text from '@/styles/text';
+import { cn, tw } from '@/lib/cn';
 
 import Button from './globalComponents/Button';
 
+/**
+ * Map section_spacing to Tailwind padding (mobile-first).
+ * When spacing is a number, map to closest py-* class.
+ */
+function getSectionPaddingClasses(spacing) {
+  if (spacing === 'default' || !spacing) {
+    return 'pt-5 pb-0 md:py-10 lg:py-15';
+  }
+  const n = Number(spacing);
+  if (Number.isNaN(n)) return 'pt-5 pb-0 md:py-10 lg:py-15';
+  if (n <= 40) return 'py-10';
+  if (n <= 60) return 'py-15';
+  if (n <= 80) return 'py-20';
+  if (n <= 100) return 'py-25';
+  return 'py-25';
+}
+
+/**
+ * Testimonial Component (Server Component)
+ * Preserves exact structure: wrapper → card → content + image.
+ * Mobile-first: base = mobile, md = tablet, lg = desktop, xl = fullWidth.
+ */
 const Testimonial = ({ blok }) => {
-  const themes = useAvailableThemes();
-  const selectedTheme = themes[blok.theme] || themes.default;
-  // console.log('TESTIMONIAL', blok);
+  const themeKey = blok.theme || 'default';
+  const isDark = themeKey === 'dark';
+  const layout = blok.layout || 'row';
+  const hasMedia = Boolean(blok?.media?.[0]);
 
   return (
-    <ThemeProvider theme={selectedTheme}>
-      <TestimonialWrapper layout={blok.layout} spacing={blok.section_spacing}>
-        <TestimonialCard>
-          <TestimonialContent>
-            <TestimonialEyebrow>{blok?.eyebrow || Testimonial}</TestimonialEyebrow>
-            {blok.quote.map((copy) => (
-              <div {...storyblokEditable(copy)} key={copy.component}>
-                <RichTextRenderer document={copy.copy} />
-              </div>
-            ))}
-            {blok?.quote_source_info && (
-              <SourceWrapper>
-                {blok.quote_source_info.map((sourceInfo) => (
-                  <div
-                    {...storyblokEditable(sourceInfo)}
-                    key={sourceInfo._uid || sourceInfo.component}
-                  >
-                    <RichTextRenderer document={sourceInfo?.copy} />
-                  </div>
-                ))}
-                {blok?.link?.map(($buttonData) => (
-                  <ButtonWrapper {...storyblokEditable($buttonData)} key={$buttonData?.link_text}>
-                    <Button $buttonData={$buttonData} key={$buttonData?.link_text} />
-                  </ButtonWrapper>
-                ))}
-              </SourceWrapper>
-            )}
-          </TestimonialContent>
-          {blok?.media[0] && (
-            <ImageWrapper {...storyblokEditable(blok)}>
-              <Image images={blok.media[0]?.media} />
-            </ImageWrapper>
+    <section
+      {...storyblokEditable(blok)}
+      aria-label="Testimonial"
+      className={cn(getSectionPaddingClasses(blok.section_spacing), tw`flex w-full flex-col items-center justify-center`)}
+    >
+      <div
+        className={cn(
+          tw`mx-auto flex h-auto w-full flex-col gap-10 rounded-none p-6 md:(gap-15 w-236 rounded-3xl p-10) lg:(w-326 p-15)`,
+          layout === 'column' ? 'flex-col' : 'lg:flex-row',
+          isDark ? 'bg-testimonial-dark text-white' : 'bg-purple-lightGrey text-txt-primary'
+        )}
+      >
+        <div
+          className={cn(
+            'max-w-full text-left',
+            hasMedia ? tw`w-95 md:(w-206) lg:(max-w-326)` : 'w-full'
           )}
-        </TestimonialCard>
-      </TestimonialWrapper>
-    </ThemeProvider>
+        >
+          {blok?.eyebrow && (
+            <p className={tw`mb-2.5 font-archivo text-eyebrow md:(mb-8)`}>{blok.eyebrow}</p>
+          )}
+          {blok.quote?.map((copy) => (
+            <div {...storyblokEditable(copy)} key={copy.component}>
+              <RichTextRenderer document={copy.copy} />
+            </div>
+          ))}
+          {blok?.quote_source_info && (
+            <div className={tw`mt-4.5 md:(mt-15)`}>
+              {blok.quote_source_info.map((sourceInfo) => (
+                <div
+                  {...storyblokEditable(sourceInfo)}
+                  key={sourceInfo._uid || sourceInfo.component}
+                >
+                  <RichTextRenderer document={sourceInfo?.copy} />
+                </div>
+              ))}
+              {blok?.link?.map(($buttonData) => (
+                <div
+                  {...storyblokEditable($buttonData)}
+                  className={tw`mt-5`}
+                  key={$buttonData?.link_text}
+                >
+                  <Button $buttonData={$buttonData} key={$buttonData?.link_text} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        {blok?.media?.[0] && (
+          <div
+            {...storyblokEditable(blok)}
+            className={tw`shrink-0 grow-0 content-center overflow-hidden rounded-md w-107 md:(rounded-xl w-84) xl:(rounded-2xl w-96)`}
+          >
+            <Image alt="" images={blok.media[0]?.media} />
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
-
-const ButtonWrapper = styled.div`
-  margin-top: 1.25vw;
-  ${media.fullWidth} {
-    margin-top: 20px;
-  }
-
-  ${media.tablet} {
-    margin-top: 1.953vw;
-  }
-
-  ${media.mobile} {
-    margin-top: 4.167vw;
-  }
-`;
-
-const SourceWrapper = styled.div`
-  margin-top: 3.75vw;
-
-  ${media.fullWidth} {
-    margin-top: 60px;
-  }
-
-  ${media.tablet} {
-    margin-top: 5.859vw;
-  }
-
-  ${media.mobile} {
-  }
-`;
-
-const ImageWrapper = styled.div`
-  align-content: center;
-  min-width: 24vw;
-  max-width: 24vw;
-  overflow: hidden;
-  border-radius: 1.25vw;
-
-  ${media.fullWidth} {
-    min-width: 384px;
-    max-width: 384px;
-  }
-
-  ${media.tablet} {
-    min-width: 32.813vw;
-    max-width: 32.813vw;
-  }
-
-  ${media.mobile} {
-    min-width: 89.167vw;
-    max-width: 89.167vw;
-  }
-`;
-
-const TestimonialEyebrow = styled.p`
-  margin-bottom: 2vw;
-  ${text.eyebrow};
-
-  ${media.fullWidth} {
-    margin-bottom: 32px;
-  }
-
-  ${media.tablet} {
-    margin-bottom: 3.125vw;
-  }
-
-  ${media.mobile} {
-  }
-`;
-
-const TestimonialContent = styled.div`
-  text-align: left;
-  max-width: 81.5vw;
-
-  ${media.fullWidth} {
-    max-width: 1304px;
-  }
-
-  ${media.tablet} {
-    width: 80.703vw;
-  }
-
-  ${media.mobile} {
-    width: 79.167vw;
-  }
-`;
-const TestimonialCard = styled.div`
-  background: ${(props) => props.theme.testimonial.bg};
-  display: flex;
-  flex-direction: ${(props) => `${props.layout || 'row'}`};
-  height: auto;
-  border-radius: 1.5vw;
-  width: 81.5vw;
-  gap: 3.75vw;
-  padding: 3.75vw;
-
-  ${media.fullWidth} {
-    border-radius: 24px;
-    width: 1304px;
-    gap: 60px;
-    padding: 60px;
-  }
-
-  ${media.tablet} {
-    border-radius: 2.344vw;
-    width: 92.188vw;
-    gap: 5.859vw;
-    padding: 3.906vw;
-  }
-
-  ${media.mobile} {
-    flex-direction: column;
-    border-radius: unset;
-    width: 100%;
-    gap: 8.333vw;
-    padding: 15.667vw 5.417vw;
-  }
-`;
-const TestimonialWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: ${(props) =>
-    props.spacing === 'default'
-      ? '3.75vw 0vw'
-      : props.spacing
-        ? `calc(${props.spacing} / 1600 * 100vw) 0vw`
-        : '3.75vw 0vw'};
-
-  ${media.fullWidth} {
-    padding: ${(props) =>
-      props.spacing === 'default'
-        ? '60px 0px'
-        : props.spacing
-          ? `calc(${props.spacing} / 1600 * 1600px) 0px`
-          : '60px 0px'};
-  }
-
-  ${media.tablet} {
-    padding: ${(props) =>
-      props.spacing === 'default'
-        ? '3.906vw 0vw'
-        : props.spacing
-          ? `calc(${props.spacing} / 1024 * 100vw) 0vw`
-          : '3.906vw 0vw'};
-  }
-
-  ${media.mobile} {
-    padding: ${(props) =>
-      props.spacing === 'default'
-        ? '3.906vw 0vw 0vw 0vw'
-        : props.spacing
-          ? `calc(${props.spacing} / 428 * 100vw) 0vw`
-          : '3.906vw 0vw 0vw 0vw'};
-  }
-`;
 
 export default Testimonial;

@@ -1,0 +1,74 @@
+---
+description: Single source of truth for converting or creating components. Follow this playbook in order for every conversion/component request.
+globs: ["**/components/**/*.{js,jsx,ts,tsx}", "**/*.js", "**/*.jsx"]
+alwaysApply: true
+---
+
+# Component Conversion Playbook
+
+**For every request about converting or creating components:** Execute this playbook in order. Do not skip steps.
+
+## Reference file (copy patterns from here)
+
+**`components/LogoCube.js`** — Use this file as the example for: Server Component (no `'use client'`), mobile-first breakpoints, `cn()` for theme/props, `mx-auto` + `max-w-*`, `list-none` on lists, conditional `CarouselAnimator`, semantic HTML and `aria-label`.
+
+---
+
+## Step 1: Figma (before writing code)
+
+Ask: *"Do you have a Figma MCP link for this component? I can use it to ensure pixel-perfect implementation."*  
+If the user provides a link, use Figma MCP tools to extract specs before converting.
+
+---
+
+## Step 2: Analyze
+
+- **Count containers** in the original component. Note the exact number and nesting. You will preserve this.
+- **Identify props** that affect layout (e.g. `transparent_background`, `theme`, `offset_spacing`, `section_spacing`). All must be handled in the converted component.
+- **Server vs client:** Can the component render without `'use client'`? If it uses hooks, GSAP, or browser APIs, plan to extract that logic into a small client-only component (e.g. `CarouselAnimator`) and keep the main component as a Server Component.
+
+---
+
+## Step 3: Convert structure (element by element)
+
+- **Preserve exact structure.** Do not add, remove, or merge containers. Convert the outermost container first, then each child in order.
+- For each element: read its styles **for every breakpoint** (mobile, tablet, desktop, fullWidth). Convert to Tailwind using **mobile-first:** base = mobile, `md:` = tablet, `lg:` = desktop, `xl:` = fullWidth.
+- **Breakpoint map:** `${media.mobile}` → base (no prefix) | `${media.tablet}` → `md:` | Desktop (base in styled) → `lg:` | `${media.fullWidth}` → `xl:`.
+- **VW → Tailwind:** For each breakpoint compute `px = vw × (viewport/100)` (mobile 480, tablet 1024, desktop 1600), then `Tailwind number = px / 4`. If same px at all breakpoints → one class; if different → use base + `md:`/`lg:`/`xl:` as needed.
+- **Always** use `mx-auto` when using `max-w-*`. Use `list-none` on `ul` and `li`. Use only Tailwind classes (no inline styles, no `<style>` tags). Use design tokens from `app/globals.css` / `.cursor/rules/design-tokens.mdc`; no arbitrary values (no `w-[450px]`).
+
+---
+
+## Step 4: Style with `tw` and `cn()` (tokens)
+
+- **Use `cn()` only when there are conditional classes** (theme, props, e.g. `isDark ? 'bg-testimonial-dark' : 'bg-purple-lightGrey'`). Use plain `className={tw`...`}` when classes are static or only breakpoint-based.
+- **Use `tw` for static and breakpoint-based classes.** Pattern: base (mobile) first, then only what changes at each breakpoint. Values cascade from smaller to larger breakpoints—only specify a value at a breakpoint when it differs from the previous one (e.g. if gap-15 at md and lg, put it only in md; lg inherits it).
+  - **Pattern:** `tw`base classes md:(values that change from mobile) lg:(values that change from tablet) xl:(values that change from desktop)`
+  - **Example (no conditionals):** `className={tw`max-w-full text-left w-95 md:(w-206) lg:(max-w-326)`}`
+  - **Example (with conditionals):** `className={cn(tw`flex gap-10 p-6 md:(p-10) lg:(p-15)`, isDark && 'bg-purple-dark text-white')}`
+- **Import:** `import { cn, tw } from '@/lib/cn'`.
+- **Order in `tw`:** base → `md:` → `lg:` → `xl:` → hover/focus.
+
+---
+
+## Step 5: Client logic (if needed)
+
+- If the component needs GSAP or other client-only code: extract to a minimal client component (e.g. `CarouselAnimator`). Render it conditionally (e.g. `{shouldAnimate && <CarouselAnimator selector=".className" />}`). Remove `'use client'` from the main component so it stays a Server Component.
+
+---
+
+## Step 6: Accessibility and validation
+
+- **ADA:** Meaningful images have descriptive `alt`; decorative images `alt=""`. Interactive elements have visible focus: `focus:outline-none focus:ring-2 focus:ring-purple-border focus:ring-offset-2`. Use semantic HTML and `aria-label` where appropriate.
+- **Final check:** Container count matches original. All breakpoints and props behave as before. Run `npm run checks`. Remind user to clear browser cache (hard refresh or incognito) after conversion.
+
+---
+
+## Where to look for details
+
+| Need | Where |
+|------|--------|
+| Full conversion examples, ADA/SEO details | `.cursor/rules/tailwind-migration.mdc` |
+| Token list (colors, typography, spacing) | `.cursor/rules/design-tokens.mdc` |
+| Example component | `components/LogoCube.js` |
+| Human-facing guide | `docs/COMPONENT_OPTIMIZATION.md` |

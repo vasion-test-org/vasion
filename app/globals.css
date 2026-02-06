@@ -237,6 +237,10 @@
   background: var(--gradient-medium-purple);
 }
 
+@utility bg-testimonial-dark {
+  background: linear-gradient(278deg, #803235 -1.77%, #190c30 32.97%, #3d2562 87.16%);
+}
+
 @font-face {
   font-family: 'Archivo Bold';
   src:

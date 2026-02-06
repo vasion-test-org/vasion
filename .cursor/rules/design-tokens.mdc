@@ -6,6 +6,8 @@ alwaysApply: true
 
 # Design Token Quick Reference (Tailwind v4)
 
+**Use with the Component Conversion Playbook** (`.cursor/rules/component-conversion-playbook.mdc`) when converting or creating components.
+
 **All design tokens are defined in `app/globals.css` using the `@theme` directive.**
 
 Use these exact class names when styling components. NEVER use arbitrary values.

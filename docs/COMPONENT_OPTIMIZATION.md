@@ -2,6 +2,8 @@
 
 This document explains our component optimization strategy, Tailwind CSS setup, and compliance standards for accessibility, SEO, and performance.
 
+**For AI / conversions:** Follow **`.cursor/rules/component-conversion-playbook.mdc`** first; reference **`components/LogoCube.js`**. See also `.cursor/rules/tailwind-migration.mdc` and `.cursor/rules/design-tokens.mdc`.
+
 ## Table of Contents
 
 - [Overview](#overview)
