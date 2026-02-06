@@ -329,11 +329,35 @@ className={tw`flex gap-4 md:(flex-row gap-6) lg:(gap-8 p-10)`}
 // Group by state
 className={tw`bg-white hover:(bg-purple text-white) focus:(ring-2 outline-none)`}
 
-// Mix tw() inside clsx() for conditionals
-className={clsx(
+// Mix tw() inside cn() for conditionals
+className={cn(
   tw`flex md:(flex-row gap-6)`,
   isActive && 'bg-purple'
 )}
+```
+
+### Class Ordering (CRITICAL)
+**Prettier cannot sort inside variant groups.** Manually maintain this order:
+
+1. **Base classes first** (no prefix) - sizing, spacing, visual
+2. **md: variant groups** - tablet overrides
+3. **lg: variant groups** - desktop overrides  
+4. **xl: variant groups** - fullWidth overrides
+5. **State variants last** - hover:, focus:, active:
+
+```jsx
+// ✅ Correct order
+className={tw`
+  h-9 w-9 p-0 rounded bg-transparent      // 1. Base
+  md:(h-8 w-8)                             // 2. Tablet
+  lg:(h-9 w-9)                             // 3. Desktop
+  xl:(h-8 w-8)                             // 4. FullWidth
+  hover:bg-purple                          // 5. Hover
+  focus:(outline-none ring-2 ring-purple)  // 6. Focus
+`}
+
+// ❌ Wrong order
+className={tw`md:(h-8 w-8) h-9 w-9 hover:bg-purple lg:(h-9 w-9)`}
 ```
 
 ### Component Variants (CVA)
@@ -380,9 +404,8 @@ className={clsx(
 // MyComponent.js - Server Component (NO 'use client')
 import Image from 'next/image';
 
-import clsx from 'clsx';
-
 import CarouselAnimator from '@/components/CarouselAnimator';
+import { cn, tw } from '@/lib/cn';
 import { tw } from '@/lib/cn';
 
 const MyComponent = ({ blok }) => {
@@ -393,7 +416,7 @@ const MyComponent = ({ blok }) => {
     <>
       {/* All static content renders on server - PURE TAILWIND only */}
       <section
-        className={clsx(
+        className={cn(
           'flex w-full items-center justify-center',
           tw`p-7 md:p-10 lg:p-15`,
           // Theme via conditional Tailwind (NO inline styles!)
@@ -690,13 +713,13 @@ className="h-425 md:h-320 lg:h-355 xl:h-320"
 
 ### Theme-Based Styling with Inline Conditionals
 
-Use ternary operators directly in `clsx()` for cleaner, more readable code:
+Use ternary operators directly in `cn()` for cleaner, more readable code:
 
 ```jsx
-import clsx from 'clsx';
+import { cn } from '@/lib/cn';
 
 <div
-  className={clsx(
+  className={cn(
     // CRITICAL: mx-auto for centering
     'w-full overflow-hidden mx-auto',
     // Background - inline ternary chain
@@ -719,7 +742,7 @@ Map offset_spacing prop to Tailwind classes with mobile-first approach:
 
 ```jsx
 <section
-  className={clsx(
+  className={cn(
     'flex w-full items-center justify-center',
     // Mobile-first horizontal padding (base = mobile, md: = tablet+)
     'px-7 md:px-10',
@@ -771,7 +794,7 @@ If a Figma link is provided:
 9. [ ] **Verify container count matches original** - must be exactly the same
 
 ### 3. Handle Styling
-10. [ ] Convert dynamic styles (props) to conditional Tailwind classes using `clsx()`
+10. [ ] Convert dynamic styles (props) to conditional Tailwind classes using `cn()`
 11. [ ] **Calculate vw→px for EACH breakpoint separately:**
     - Desktop: vw × 16 = px
     - Tablet: vw × 10.24 = px
@@ -780,7 +803,7 @@ If a Figma link is provided:
 12. [ ] **Check if px values are SAME or DIFFERENT** - use ONE base class if same, SEPARATE classes if different
 13. [ ] **Use mobile-first breakpoint prefixes**: base (mobile), `md:` (tablet+), `lg:` (desktop+), `xl:` (fullWidth+)
 13. [ ] **Add `mx-auto` when using `max-w-*`** to center content
-14. [ ] Use inline ternary operators in `clsx()` for theme-based styling
+14. [ ] Use inline ternary operators in `cn()` for theme-based styling
 15. [ ] Add `list-none` class to all ul/li elements
 16. [ ] **NEVER use inline styles or scoped `<style>` tags**
 

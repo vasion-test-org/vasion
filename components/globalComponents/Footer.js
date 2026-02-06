@@ -167,7 +167,7 @@ const Footer = ({ blok }) => {
 
           return (
             <a
-              className="font-archivo text-body-md hover:text-orange cursor-pointer whitespace-nowrap text-white no-underline focus:outline-none focus:text-orange focus:underline"
+              className="font-archivo text-body-md hover:text-orange focus:text-orange cursor-pointer whitespace-nowrap text-white no-underline focus:underline focus:outline-none"
               href={normalizedUrl}
               key={link._uid}
               rel={isExternal ? 'noopener noreferrer' : undefined}
@@ -266,7 +266,7 @@ const Footer = ({ blok }) => {
           {/* FullWidth: 32px→w-8 h-8 */}
           <button
             aria-label="Visit Vasion on Facebook"
-            className={tw`[&_path]:hover:fill-orange md:(w-8 h-8) lg:(w-9 h-9) xl:(w-8 h-8) h-9 w-9 cursor-pointer bg-transparent border-none p-0 focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:ring-offset-purple-dark rounded`}
+            className={tw`md:(h-8 w-8) lg:(h-9 w-9) xl:(h-8 w-8) [&_path]:hover:fill-orange focus:(outline-none ring-orange ring-offset-purple-dark) h-9 w-9 cursor-pointer rounded border-none bg-transparent p-0 ring-2 ring-offset-2`}
             type="button"
             onClick={() => handleNavigate('https://www.facebook.com/VasionSoftware')}
           >
@@ -274,7 +274,7 @@ const Footer = ({ blok }) => {
           </button>
           <button
             aria-label="Visit Vasion on X (Twitter)"
-            className={tw`[&_path]:hover:fill-orange md:(w-8 h-8) lg:(w-9 h-9) xl:(w-8 h-8) h-9 w-9 cursor-pointer bg-transparent border-none p-0 focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:ring-offset-purple-dark rounded`}
+            className={tw`md:(h-8 w-8) lg:(h-9 w-9) xl:(h-8 w-8) [&_path]:hover:fill-orange focus:(outline-none ring-orange ring-offset-purple-dark) h-9 w-9 cursor-pointer rounded border-none bg-transparent p-0 ring-2 ring-offset-2`}
             type="button"
             onClick={() =>
               handleNavigate('https://x.com/i/flow/login?redirect_after_login=%2FVasionSoftware')
@@ -284,7 +284,7 @@ const Footer = ({ blok }) => {
           </button>
           <button
             aria-label="Visit Vasion on LinkedIn"
-            className={tw`[&_path]:hover:fill-orange md:(w-8 h-8) lg:(w-9 h-9) xl:(w-8 h-8) h-9 w-9 cursor-pointer bg-transparent border-none p-0 focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:ring-offset-purple-dark rounded`}
+            className={tw`md:(h-8 w-8) lg:(h-9 w-9) xl:(h-8 w-8) [&_path]:hover:fill-orange focus:(outline-none ring-orange ring-offset-purple-dark) h-9 w-9 cursor-pointer rounded border-none bg-transparent p-0 ring-2 ring-offset-2`}
             type="button"
             onClick={() =>
               handleNavigate('https://www.linkedin.com/company/vasion-software/posts/?feedView=all')
@@ -315,7 +315,7 @@ const Footer = ({ blok }) => {
         {/* FullWidth: 5px→gap-1 */}
         <div className={tw`flex flex-row gap-1.5 md:gap-1 lg:gap-1.5 xl:gap-1`}>
           <button
-            className="hover:text-orange cursor-pointer no-underline bg-transparent border-none p-0 text-inherit font-inherit focus:outline-none focus:text-orange focus:underline"
+            className="hover:text-orange font-inherit focus:text-orange cursor-pointer border-none bg-transparent p-0 text-inherit no-underline focus:underline focus:outline-none"
             type="button"
             onClick={() => handleNavigate('/privacy-policy/')}
           >
@@ -323,7 +323,7 @@ const Footer = ({ blok }) => {
           </button>
           |
           <button
-            className="hover:text-orange cursor-pointer no-underline bg-transparent border-none p-0 text-inherit font-inherit focus:outline-none focus:text-orange focus:underline"
+            className="hover:text-orange font-inherit focus:text-orange cursor-pointer border-none bg-transparent p-0 text-inherit no-underline focus:underline focus:outline-none"
             type="button"
             onClick={() => handleNavigate('/imprint/')}
           >
@@ -331,7 +331,7 @@ const Footer = ({ blok }) => {
           </button>
           |
           <button
-            className="hover:text-orange cursor-pointer no-underline bg-transparent border-none p-0 text-inherit font-inherit focus:outline-none focus:text-orange focus:underline"
+            className="hover:text-orange font-inherit focus:text-orange cursor-pointer border-none bg-transparent p-0 text-inherit no-underline focus:underline focus:outline-none"
             type="button"
             onClick={() => handleNavigate('/cookie-information/')}
           >
@@ -339,7 +339,7 @@ const Footer = ({ blok }) => {
           </button>
           |
           <button
-            className="hover:text-orange cursor-pointer no-underline bg-transparent border-none p-0 text-inherit font-inherit focus:outline-none focus:text-orange focus:underline"
+            className="hover:text-orange font-inherit focus:text-orange cursor-pointer border-none bg-transparent p-0 text-inherit no-underline focus:underline focus:outline-none"
             type="button"
             onClick={() => handleNavigate('/legal/')}
           >

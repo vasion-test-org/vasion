@@ -426,7 +426,10 @@ function checkRobotsDirectives(content, filePath) {
   }
 
   // Check for nofollow
-  if (/robots:\s*['"]nofollow/gi.test(content) || /robots:\s*\{\s*follow:\s*false/gi.test(content)) {
+  if (
+    /robots:\s*['"]nofollow/gi.test(content) ||
+    /robots:\s*\{\s*follow:\s*false/gi.test(content)
+  ) {
     issues.push({
       category: 'Indexing',
       file: filePath,
@@ -499,11 +502,11 @@ function checkUrlStructure(content, filePath) {
  */
 function checkBreadcrumbs(content, filePath) {
   const isPageFile = filePath.includes('/page.');
-  
+
   if (isPageFile) {
     // Check for breadcrumb structured data or components
-    const hasBreadcrumbs = 
-      content.includes('BreadcrumbList') || 
+    const hasBreadcrumbs =
+      content.includes('BreadcrumbList') ||
       content.includes('breadcrumb') ||
       content.includes('Breadcrumb');
 
