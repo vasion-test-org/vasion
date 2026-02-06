@@ -45,7 +45,7 @@ const Testimonial = ({ blok }) => {
     >
       <div
         className={cn(
-          tw`md:(gap-15 p-10) lg:(w-326 p-15) mx-auto flex h-auto w-236 w-full flex-col gap-10 rounded-3xl p-6`,
+          tw`md:(gap-15 p-10 rounded-none) lg:(w-326 p-15) mx-auto flex h-auto w-236 w-full flex-col gap-10 rounded-3xl p-6`,
           layout === 'column' ? 'flex-col' : 'lg:flex-row',
           isDark ? 'bg-testimonial-dark text-white' : 'bg-purple-lightGrey text-txt-primary'
         )}
