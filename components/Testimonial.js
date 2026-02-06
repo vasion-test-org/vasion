@@ -37,12 +37,15 @@ const Testimonial = ({ blok }) => {
   return (
     <section
       {...storyblokEditable(blok)}
+      className={cn(
+        getSectionPaddingClasses(blok.section_spacing),
+        tw`flex w-full flex-col items-center justify-center`
+      )}
       aria-label="Testimonial"
-      className={cn(getSectionPaddingClasses(blok.section_spacing), tw`flex w-full flex-col items-center justify-center`)}
     >
       <div
         className={cn(
-          tw`mx-auto flex h-auto w-full flex-col gap-10 rounded-none p-6 md:(gap-15 w-236 rounded-3xl p-10) lg:(w-326 p-15)`,
+          tw`md:(gap-15 p-10) lg:(w-326 p-15) mx-auto flex h-auto w-236 w-full flex-col gap-10 rounded-3xl rounded-none p-6`,
           layout === 'column' ? 'flex-col' : 'lg:flex-row',
           isDark ? 'bg-testimonial-dark text-white' : 'bg-purple-lightGrey text-txt-primary'
         )}
@@ -50,11 +53,11 @@ const Testimonial = ({ blok }) => {
         <div
           className={cn(
             'max-w-full text-left',
-            hasMedia ? tw`w-95 md:(w-206) lg:(max-w-326)` : 'w-full'
+            hasMedia ? tw`md:(w-206) lg:(max-w-326) w-95` : 'w-full'
           )}
         >
           {blok?.eyebrow && (
-            <p className={tw`mb-2.5 font-archivo text-eyebrow md:(mb-8)`}>{blok.eyebrow}</p>
+            <p className={tw`font-archivo text-eyebrow md:(mb-8) mb-2.5`}>{blok.eyebrow}</p>
           )}
           {blok.quote?.map((copy) => (
             <div {...storyblokEditable(copy)} key={copy.component}>
@@ -62,7 +65,7 @@ const Testimonial = ({ blok }) => {
             </div>
           ))}
           {blok?.quote_source_info && (
-            <div className={tw`mt-4.5 md:(mt-15)`}>
+            <div className={tw`md:(mt-15) mt-4.5`}>
               {blok.quote_source_info.map((sourceInfo) => (
                 <div
                   {...storyblokEditable(sourceInfo)}
@@ -86,7 +89,7 @@ const Testimonial = ({ blok }) => {
         {blok?.media?.[0] && (
           <div
             {...storyblokEditable(blok)}
-            className={tw`shrink-0 grow-0 content-center overflow-hidden rounded-md w-107 md:(rounded-xl w-84) xl:(rounded-2xl w-96)`}
+            className={tw`md:(rounded-xl w-84) xl:(rounded-2xl w-96) w-107 shrink-0 grow-0 content-center overflow-hidden rounded-md`}
           >
             <Image alt="" images={blok.media[0]?.media} />
           </div>
