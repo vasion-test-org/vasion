@@ -152,7 +152,7 @@ const Form = ({ blok }) => {
 
         const initConfig = {
           beforeRouting: (formTarget, formData) => {
-            console.log('lean data language:', languageRef.current);
+            // console.log('lean data language:', languageRef.current);
             formData['thank_you_language'] = languageRef.current;
             formData['routing_node_trigger'] = routingLang.current;
           },
