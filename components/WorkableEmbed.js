@@ -1,8 +1,8 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import styled from 'styled-components';
-
+import { ScreenContext } from '@/components/providers/Screen';
 import getMedia from '@/functions/getMedia';
 import colors from '@/styles/colors';
 import media from '@/styles/media';
@@ -17,6 +17,7 @@ function JobList() {
   const [isOn, setIsOn] = useState(false);
   const [allLocations, setAllLocations] = useState([]);
   const [allDepartments, setAllDepartments] = useState([]);
+  const { mobile } = useContext(ScreenContext);
 
   const filteredJobs = jobs.filter((job) => {
     const location = `${job.city != '' ? job.city : ''} ${
@@ -163,7 +164,8 @@ function JobList() {
                 {job?.state && job.country ? job.state + ',' : job.countryCode}
                 {job.country}
               </Location>
-              <Department>{job.function}</Department>
+              {!mobile && <Department>{job.function}</Department>}
+              {job.function && mobile && <Department>{job.function}</Department>}
               <Link href={job.url} target="_blank">
                 Apply Now &#8250;
               </Link>
@@ -196,7 +198,7 @@ function JobList() {
         <FilterDiv>
           {allLocations && (
             <SelectFilter
-              name="location"
+              name="location (all)"
               value={selectedLocation}
               onChange={(e) => setSelectedLocation(e.target.value)}
             >
@@ -254,27 +256,35 @@ const Heading = styled.h3`
   ${text.h3};
 `;
 const SearchInput = styled.input`
-  width: 90vw;
   ${text.bodyLg};
+  width: 89vw;
+  height: 2.4vw;
   border-radius: 0.347vw;
   border: ${colors.grey200} 0.069vw solid;
+  padding-left: 1.042vw;
 
   ${media.fullWidth} {
+    height: 38px;
     width: 1440px;
     border-radius: 5px;
     border: ${colors.grey200} 1px solid;
+    padding-left: 16px;
   }
 
   ${media.tablet} {
     width: 90vw;
+    height: 3.711vw;
     border-radius: 0.488vw;
     border: ${colors.grey200} 0.098vw solid;
+    padding-left: 1vw;
   }
 
   ${media.mobile} {
     width: 90vw;
+    height: 8.75vw;
     border-radius: 5px;
     border: ${colors.grey200} 1px solid;
+    padding-left: 1.333vw;
   }
 `;
 const FilterDiv = styled.div`
@@ -308,12 +318,14 @@ const SelectFilter = styled.select`
   border: ${colors.grey200} 0.069vw solid;
   color: ${colors.grey500};
   padding: 0.486vw 0;
+  padding-left: 1.042vw;
 
   ${media.fullWidth} {
     width: 620px;
     border-radius: 5px;
     border: ${colors.grey200} 1px solid;
     padding: 7px 0;
+    padding-left: 16px;
   }
 
   ${media.tablet} {
@@ -321,6 +333,7 @@ const SelectFilter = styled.select`
     border-radius: 0.488vw;
     border: ${colors.grey200} 0.098vw solid;
     padding: 0.684vw 0;
+    padding-left: 1vw;
   }
 
   ${media.mobile} {
@@ -328,6 +341,7 @@ const SelectFilter = styled.select`
     border-radius: 1.168vw;
     border: ${colors.grey200} 0.234vw solid;
     padding: 1.636vw 0;
+    padding-left: 1.333vw;
   }
 `;
 const ToggleText = styled.p`
@@ -394,7 +408,7 @@ const ToggleButton = styled.div`
 const Results = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: space-around;
+  align-items: space-between;
   width: 90vw;
 
   ${media.fullWidth} {
@@ -410,11 +424,12 @@ const Results = styled.div`
   }
 `;
 const JobItem = styled.div`
+  position: relative;
   font-family: 'Archivo', sans-serif;
   display: flex;
   align-items: center;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-evenly;
   border-bottom: 0.069vw solid ${colors.grey200};
   padding: 1.042vw 0;
 
@@ -431,6 +446,7 @@ const JobItem = styled.div`
   ${media.mobile} {
     flex-direction: column;
     justify-content: flex-start;
+    align-items: flex-start;
     padding: 3.505vw 0;
     align-items: flex-start;
     gap: 3.505vw;
@@ -457,6 +473,9 @@ const ColumnContainer = styled.div`
     width: 90vw;
     gap: 2.336vw;
   }
+  p {
+    ${text.bodyMd};
+  }
 `;
 const SelectOption = styled.option``;
 
@@ -470,7 +489,7 @@ const HeadingLink = styled.a`
     width: 24.414vw;
   }
   ${media.mobile} {
-    width: 90vw;
+    width: 55vw;
   }
 
   ${media.hover} {
@@ -479,18 +498,20 @@ const HeadingLink = styled.a`
     }
   }
 `;
-const JobTitle = styled.h4`
-  ${text.h4};
+const JobTitle = styled.h5`
+  ${text.h5};
 `;
 const JobType = styled.p`
+  ${text.bodyMd};
   text-align: center;
   background-color: ${colors.orange200};
   border-radius: 1.389vw;
   padding: 0.417vw 0.694vw;
-  width: 4.861vw ${media.fullWidth} {
+  width: 6.861vw;
+  ${media.fullWidth} {
     border-radius: 20px;
     padding: 5px;
-    width: 70px;
+    width: 109px;
   }
 
   ${media.tablet} {
@@ -500,6 +521,9 @@ const JobType = styled.p`
   }
 
   ${media.mobile} {
+    position: absolute;
+    top: 12px;
+    right: 11px;
     border-radius: 4.673vw;
     padding: 1.402vw 3.336vw;
     width: 24.355vw;
@@ -507,43 +531,71 @@ const JobType = styled.p`
 `;
 
 const Department = styled.p`
-  width: 22.5vw;
+  ${text.bodyLg}
+  width: 6.5vw;
   text-align: left;
 
   ${media.fullWidth} {
-    width: 324px;
+    width: 115px;
   }
 
   ${media.tablet} {
-    width: 20.641vw;
+    width: 7.641vw;
   }
 
   ${media.mobile} {
     width: 90vw;
+
+    &:before {
+      ${text.bodySm}
+      display: flex;
+      content: ' Job Title: ';
+      color: ${colors.txtSubtle};
+    }
   }
 `;
 const Location = styled.p`
-  width: 22.5vw;
+  width: 13.5vw;
   text-align: left;
-
+  padding-left: 1.042vw;
   ${media.fullWidth} {
-    width: 324px;
+    width: 216px;
   }
 
   ${media.tablet} {
-    width: 0.641vw;
+    ${text.bodyLg};
+    width: 21vw;
   }
 
   ${media.mobile} {
-    width: 90vw;
+    ${text.bodyLg}
+    width: 46vw;
+    &:before {
+      ${text.bodySm}
+      display: flex;
+      content: 'Location: ';
+      color: ${colors.txtSubtle};
+    }
   }
 `;
 const Link = styled.a`
   color: ${colors.primaryOrange};
-  ${media.hover} {
-    &:hover {
-      text-decoration: underline;
-    }
+  ${text.bodyMd};
+  ${media.mobile} {
+    ${text.bodySm}
+    border-top-left-radius:3.125vw;
+    border-bottom-left-radius: 3.125vw;
+    border-top-right-radius: 5.208vw;
+    border-bottom-right-radius: 5.208vw;
+    padding: 2.083vw;
+    background-color: ${colors.primaryOrange};
+    color: white;
+  }
+
+  &:hover {
+    transition: all 0.4s ease;
+    transform: scale(1.1);
+    text-decoration: underline;
   }
 `;
 const Wrapper = styled.div`
