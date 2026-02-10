@@ -408,7 +408,6 @@ const ToggleButton = styled.div`
 const Results = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: space-between;
   width: 90vw;
 
   ${media.fullWidth} {
@@ -549,7 +548,7 @@ const Department = styled.p`
     &:before {
       ${text.bodySm}
       display: flex;
-      content: ' Job Title: ';
+      content: ' Department: ';
       color: ${colors.txtSubtle};
     }
   }
