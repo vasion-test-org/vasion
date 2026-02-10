@@ -10,7 +10,6 @@ const CriticalCSS = () => {
       link.rel = 'stylesheet';
       link.href = href;
       link.media = media;
-
       // Use the media="print" trick for non-critical CSS
       if (media === 'all') {
         link.media = 'print';
