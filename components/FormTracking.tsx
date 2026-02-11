@@ -17,23 +17,42 @@ function FormTrackingComponent() {
     }
   }, []);
 
-  // Load reCAPTCHA after Marketo's form is ready so the g-recaptcha
-  // div exists in the DOM before the API scans for it.
-  // Uses recaptcha.net instead of google.com to bypass CookieYes blocking.
+  // Load reCAPTCHA from recaptcha.net (bypasses CookieYes google.com block).
+  // Uses render=explicit with an onload callback so we control when the
+  // widget renders — we poll for Marketo's g-recaptcha div before calling
+  // grecaptcha.render(), ensuring a client exists before form submission.
   useEffect(() => {
-    if (!window.MktoForms2) return;
+    if (document.getElementById('recaptcha-script')) return;
 
-    window.MktoForms2.whenReady(() => {
-      if (document.getElementById('recaptcha-script')) return;
+    window.onRecaptchaLoaded = () => {
+      const renderWhenReady = () => {
+        const el = document.querySelector('.g-recaptcha');
+        if (el && window.grecaptcha && !el.hasChildNodes()) {
+          try {
+            window.grecaptcha.render(el, {
+              sitekey: el.getAttribute('data-sitekey'),
+              size: el.getAttribute('data-size') || 'invisible',
+              callback: el.getAttribute('data-callback'),
+              'expired-callback': el.getAttribute('data-expired-callback'),
+            });
+          } catch (e) {
+            console.warn('reCAPTCHA render skipped:', e.message);
+          }
+        } else if (!el) {
+          // Form not ready yet, retry
+          setTimeout(renderWhenReady, 500);
+        }
+      };
+      renderWhenReady();
+    };
 
-      const script = document.createElement('script');
-      script.id = 'recaptcha-script';
-      script.src = 'https://www.recaptcha.net/recaptcha/api.js';
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-    });
-  }, [isLoaded]);
+    const script = document.createElement('script');
+    script.id = 'recaptcha-script';
+    script.src = 'https://www.recaptcha.net/recaptcha/api.js?onload=onRecaptchaLoaded&render=explicit';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
