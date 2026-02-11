@@ -9,7 +9,6 @@ function FormTrackingComponent() {
   const [domain, setDomain] = useState('www.vasion.com');
   const [language, setLanguage] = useState('en');
   const [isLoaded, setIsLoaded] = useState(false);
-  const [shouldLoadRecaptcha, setShouldLoadRecaptcha] = useState(false);
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -18,36 +17,23 @@ function FormTrackingComponent() {
     }
   }, []);
 
-  // Detect if forms are present and load reCAPTCHA only when needed
+  // Load reCAPTCHA after Marketo's form is ready so the g-recaptcha
+  // div exists in the DOM before the API scans for it.
+  // Uses recaptcha.net instead of google.com to bypass CookieYes blocking.
   useEffect(() => {
-    const checkForForms = () => {
-      const hasForms =
-        document.querySelector('form') ||
-        document.querySelector('.mktoForm') ||
-        document.querySelector('[id*="mktoForm"]');
+    if (!window.MktoForms2) return;
 
-      if (hasForms && !shouldLoadRecaptcha) {
-        setShouldLoadRecaptcha(true);
-        // Dynamically load reCAPTCHA only when forms are detected
-        if (!document.getElementById('recaptcha-script')) {
-          const script = document.createElement('script');
-          script.id = 'recaptcha-script';
-          script.src = 'https://www.recaptcha.net/recaptcha/api.js';
-          script.async = true;
-          script.defer = true;
-          document.head.appendChild(script);
-        }
-      }
-    };
+    window.MktoForms2.whenReady(() => {
+      if (document.getElementById('recaptcha-script')) return;
 
-    // Check immediately
-    checkForForms();
-
-    // Also check after a delay to catch dynamically loaded forms
-    const timer = setTimeout(checkForForms, 1000);
-
-    return () => clearTimeout(timer);
-  }, [shouldLoadRecaptcha]);
+      const script = document.createElement('script');
+      script.id = 'recaptcha-script';
+      script.src = 'https://www.recaptcha.net/recaptcha/api.js';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    });
+  }, [isLoaded]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
