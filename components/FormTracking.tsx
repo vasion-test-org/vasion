@@ -9,7 +9,6 @@ function FormTrackingComponent() {
   const [domain, setDomain] = useState('www.vasion.com');
   const [language, setLanguage] = useState('en');
   const [isLoaded, setIsLoaded] = useState(false);
-  const [shouldLoadRecaptcha, setShouldLoadRecaptcha] = useState(false);
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -18,36 +17,42 @@ function FormTrackingComponent() {
     }
   }, []);
 
-  // Detect if forms are present and load reCAPTCHA only when needed
+  // Load reCAPTCHA from recaptcha.net (bypasses CookieYes google.com block).
+  // Uses render=explicit with an onload callback so we control when the
+  // widget renders — we poll for Marketo's g-recaptcha div before calling
+  // grecaptcha.render(), ensuring a client exists before form submission.
   useEffect(() => {
-    const checkForForms = () => {
-      const hasForms =
-        document.querySelector('form') ||
-        document.querySelector('.mktoForm') ||
-        document.querySelector('[id*="mktoForm"]');
+    if (document.getElementById('recaptcha-script')) return;
 
-      if (hasForms && !shouldLoadRecaptcha) {
-        setShouldLoadRecaptcha(true);
-        // Dynamically load reCAPTCHA only when forms are detected
-        if (!document.getElementById('recaptcha-script')) {
-          const script = document.createElement('script');
-          script.id = 'recaptcha-script';
-          script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
-          script.async = true;
-          script.defer = true;
-          document.head.appendChild(script);
+    window.onRecaptchaLoaded = () => {
+      const renderWhenReady = () => {
+        const el = document.querySelector('.g-recaptcha');
+        if (el && window.grecaptcha && !el.hasChildNodes()) {
+          try {
+            window.grecaptcha.render(el, {
+              sitekey: el.getAttribute('data-sitekey'),
+              size: el.getAttribute('data-size') || 'invisible',
+              callback: el.getAttribute('data-callback'),
+              'expired-callback': el.getAttribute('data-expired-callback'),
+            });
+          } catch (e) {
+            console.warn('reCAPTCHA render skipped:', e.message);
+          }
+        } else if (!el) {
+          // Form not ready yet, retry
+          setTimeout(renderWhenReady, 500);
         }
-      }
+      };
+      renderWhenReady();
     };
 
-    // Check immediately
-    checkForForms();
-
-    // Also check after a delay to catch dynamically loaded forms
-    const timer = setTimeout(checkForForms, 1000);
-
-    return () => clearTimeout(timer);
-  }, [shouldLoadRecaptcha]);
+    const script = document.createElement('script');
+    script.id = 'recaptcha-script';
+    script.src = 'https://www.recaptcha.net/recaptcha/api.js?onload=onRecaptchaLoaded&render=explicit';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
