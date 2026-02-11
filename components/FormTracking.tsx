@@ -3,13 +3,11 @@
 import { Suspense, useEffect, useState } from 'react';
 
 import { useSearchParams } from 'next/navigation';
-import Script from 'next/script';
 
 function FormTrackingComponent() {
   const [domain, setDomain] = useState('www.vasion.com');
   const [language, setLanguage] = useState('en');
   const [isLoaded, setIsLoaded] = useState(false);
-  const [shouldLoadRecaptcha, setShouldLoadRecaptcha] = useState(false);
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -18,36 +16,10 @@ function FormTrackingComponent() {
     }
   }, []);
 
-  // Detect if forms are present and load reCAPTCHA only when needed
-  useEffect(() => {
-    const checkForForms = () => {
-      const hasForms =
-        document.querySelector('form') ||
-        document.querySelector('.mktoForm') ||
-        document.querySelector('[id*="mktoForm"]');
-
-      if (hasForms && !shouldLoadRecaptcha) {
-        setShouldLoadRecaptcha(true);
-        // Dynamically load reCAPTCHA only when forms are detected
-        if (!document.getElementById('recaptcha-script')) {
-          const script = document.createElement('script');
-          script.id = 'recaptcha-script';
-          script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
-          script.async = true;
-          script.defer = true;
-          document.head.appendChild(script);
-        }
-      }
-    };
-
-    // Check immediately
-    checkForForms();
-
-    // Also check after a delay to catch dynamically loaded forms
-    const timer = setTimeout(checkForForms, 1000);
-
-    return () => clearTimeout(timer);
-  }, [shouldLoadRecaptcha]);
+  // NOTE: reCAPTCHA is handled by Marketo's forms2.js automatically.
+  // Do NOT manually load recaptcha/api.js here — it causes
+  // "No reCAPTCHA clients exist" errors by loading the API in explicit
+  // mode without ever calling grecaptcha.render().
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
