@@ -32,7 +32,7 @@ function FormTrackingComponent() {
         if (!document.getElementById('recaptcha-script')) {
           const script = document.createElement('script');
           script.id = 'recaptcha-script';
-          script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+          script.src = 'https://www.recaptcha.net/recaptcha/api.js';
           script.async = true;
           script.defer = true;
           document.head.appendChild(script);
