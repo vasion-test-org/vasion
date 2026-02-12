@@ -223,7 +223,7 @@ const Footer = ({ blok }) => {
       >
         {/*prettier-ignore*/}
         <div
-        className="flex w-75 items-start justify-start gap-6 sm:flex-row md:flex-col md:w-60 md:gap-5 lg:flex-col lg:w-67 lg:gap-6 xl:flex-col xl:w-60 xl:gap-5"
+        className="flex w-75 flex-col items-start justify-start gap-6 sm:flex-row md:flex-col md:w-60 md:gap-5 lg:flex-col lg:w-67 lg:gap-6 xl:flex-col xl:w-60 xl:gap-5"
         >
           {/* Inner column for logo + address */}
           <div className={tw`flex flex-col gap-6`}>
