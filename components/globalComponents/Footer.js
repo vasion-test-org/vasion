@@ -105,7 +105,7 @@ const Footer = ({ blok }) => {
     };
 
     const handleClick = () => {
-      router.push('/component-testing');
+      router.push('/games/ticket-crunch');
     };
 
     star.addEventListener('mouseenter', handleMouseEnter);
