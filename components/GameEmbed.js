@@ -89,26 +89,25 @@ const GameEmbed = ({ blok }) => {
   };
 
   return (
-    <>
-      <Wrapper fullwidth={blok.fullwidth}>
+    <Wrapper>
+      <IframeWrapper fullwidth={blok.fullwidth}>
         <StyledIframe
           allowFullScreen
           allow="accelerometer; autoplay; encrypted-media; gyroscope"
           data-anchor-id={blok.anchor_id}
           ref={iframeRef}
           src={blok.embed_link}
+          scrolling="no"
         />
-      </Wrapper>
+      </IframeWrapper>
       {!mobile && !tablet && (
         <DesktopInstructions>
           <InstructionsCard>
             <ControllerTitle>Game Controls</ControllerTitle>
-            <br />
             <ControlsText>Use keyboard arrows </ControlsText>
             <ControlsText>
               <strong>← / →</strong> or <strong>A / D</strong> to move
             </ControlsText>
-            <br />
             <ControlsText>
               Press <strong>SPACE BAR</strong> to start
             </ControlsText>
@@ -160,7 +159,7 @@ const GameEmbed = ({ blok }) => {
           </ControlsContainer>
         </MobileControls>
       }
-    </>
+    </Wrapper>
   );
 };
 
@@ -172,120 +171,73 @@ const ControlsText = styled.p`
   ${text.bodyMd};
 `;
 const StyledIframe = styled.iframe`
-  width: 480px;
-  height: 480px;
+  width: 50vw;
+  height: 50vw;
+  border-top-right-radius: 0.75vw;
+  border-top-left-radius: 0.75vw;
   border: none;
-  border-radius: 0.75vw;
   overflow: hidden;
-  transform: scale(1.4);
   transform-origin: center;
+  aspect-ratio: 1/1;
+  overflow: hidden;
 
   ${media.fullWidth} {
-    transform: scale(2);
-    border-radius: 12px;
+    width: 980px;
+    height: 980px;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
   }
 
   ${media.tablet} {
-    border-radius: 1.172vw;
-    transform: scale(1.3);
+    width: 80.875vw;
+    height: 80.875vw;
+    border-top-right-radius: 1.72vw;
+    border-top-left-radius: 1.72vw;
   }
   ${media.mobile} {
-    width: 480px;
-    height: 480px;
-    transform: scale(0.75);
+    width: 100vw;
+    height: 100vw;
     transform-origin: top left;
-    border-radius: 0vw;
-    @media (min-width: 375px) {
-      transform: scale(0.785);
-    }
-    @media (min-width: 390px) {
-      transform: scale(0.819);
-    }
-
-    @media (min-width: 412px) {
-      transform: scale(0.86);
-    }
-    /*Above iphone 12 pro*/
-    @media (min-width: 430px) {
-      transform: scale(0.85);
-    }
-
-    @media (min-width: 420px) {
-      transform: scale(0.9);
-    }
-
-    @media (min-width: 440px) {
-      transform: scale(0.91);
-    }
+    border-top-right-radius: 0.75vw;
+    border-top-left-radius: 0.75vw;
   }
 `;
-const Wrapper = styled.div`
+const IframeWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60px;
   overflow: hidden;
   background-color: ${(props) => (props.fullwidth ? 'rgb(26, 31, 33)' : 'transparent')};
-  min-height: 707px;
-  ${media.fullWidth} {
-    min-height: 960px;
-  }
-  ${media.tablet} {
-    min-height: 720px;
-  }
-
-  ${media.mobile} {
-    min-height: 480px;
-    height: 480px;
-    display: inline-block;
-    padding: 0px;
-  }
 `;
 
 const MobileControls = styled.div`
   position: relative;
   z-index: 100;
+
   ${media.desktop} {
     display: none;
   }
-
+  ${media.fullWidth}{
+  display:none;
+  }
   ${media.tablet} {
+    justify-self:center;
+    width: 80.875vw;
     padding: 4.167vw;
     background: #1b1d21;
     backdrop-filter: blur(10px);
-    border-top: 2px solid rgba(255, 255, 255, 0.1);
+    border-bottom-left-radius: 1.563vw;
+    border-bottom-right-radius: 1.563vw;
   }
   ${media.mobile} {
-    bottom: 23.167vw;
+    width:100vw;
     padding: 4.167vw;
     background: #1b1d21;
     backdrop-filter: blur(10px);
     border-top: 2px solid rgba(255, 255, 255, 0.1);
-
-    @media (min-width: 375px) {
-      bottom: 29.167vw;
-    }
-
-    /* Iphone XE*/
-    @media (min-width: 415px) {
-      bottom: 17.167vw;
-    }
-
-    /* Iphone 12 pro*/
-    @media (min-width: 390px) {
-      bottom: 23.167vw;
-    }
-    /*Adjustments for larger phones*/
-
-    @media (min-width: 420px) {
-      bottom: 21vw;
-    }
-
-    @media (min-width: 430px) {
-      bottom: 12vw;
-    }
-  }
+border-bottom-left-radius:unset;
+border-bottom-right-radius:unset;
 `;
 
 const ControlsContainer = styled.div`
@@ -371,18 +323,29 @@ const PauseButton = styled(ControlButton)`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  &:active {
-    background: ${colors.darkPurple};
-  }
 `;
+
 const DesktopInstructions = styled.div`
+  padding: 2.5vw 0vw;
+  margin: 0vw 2.5vw;
+  margin-bottom: 2.5vw;
+  border-bottom-left-radius: 1.563vw;
+  border-bottom-right-radius: 1.563vw;
+  width: 50vw;
+  background-color: rgb(26, 31, 33);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px;
-  background-color: rgb(26, 31, 33);
+  justify-self: center;
 
+  ${media.fullWidth} {
+    padding: 40px 0px;
+    margin: 0px 40px;
+    margin-bottom: 40px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    width: 980px;
+  }
   ${media.tablet} {
     display: none;
   }
@@ -394,11 +357,10 @@ const DesktopInstructions = styled.div`
 
 const InstructionsCard = styled.div`
   background: white;
-
   text-align: center;
-  padding: 2.5vw 3.75vw;
+  padding: 1.5vw 1.75vw;
   border-radius: 0.5vw;
-  max-width: 31.25vw;
+  width: 38.25vw;
   h2 {
     ${text.h2};
   }
@@ -413,14 +375,31 @@ const InstructionsCard = styled.div`
   }
 
   ${media.fullWidth} {
-    padding: 40px 60px;
+    padding: 24px 28px;
     border-radius: 8px;
-    max-width: 500px;
+    width: 25.25vw;
   }
   ${media.tablet} {
     display: none;
   }
   ${media.mobile} {
     display: none;
+  }
+`;
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+  flex-direction: column;
+
+  ${media.fullWidth} {
+    margin: 20px;
+  }
+  ${media.tablet} {
+    margin: 1.953vw;
+  }
+  ${media.mobile} {
+    margin: unset;
   }
 `;
