@@ -121,6 +121,7 @@ const Footer = ({ blok }) => {
       }
     };
   }, [router]);
+
   const handleNavigate = (link) => {
     const isExternalLink = link.startsWith('http') || link.startsWith('https');
     if (isExternalLink) {
@@ -129,48 +130,6 @@ const Footer = ({ blok }) => {
       router.push(link);
     }
   };
-
-  useEffect(() => {
-    const star = document.getElementById('vasion-star-svg');
-    if (!star) {
-      return;
-    }
-
-    let spinAnimation;
-
-    const handleMouseEnter = async () => {
-      const { default: gsap } = await import('gsap');
-      spinAnimation = gsap.to(star, {
-        duration: 1.5,
-        ease: 'linear',
-        repeat: -1,
-        rotation: '+=360',
-      });
-    };
-
-    const handleMouseLeave = () => {
-      if (spinAnimation) {
-        spinAnimation.kill();
-      }
-    };
-
-    const handleClick = () => {
-      router.push('/component-testing');
-    };
-
-    star.addEventListener('mouseenter', handleMouseEnter);
-    star.addEventListener('mouseleave', handleMouseLeave);
-    star.addEventListener('click', handleClick);
-
-    return () => {
-      star.removeEventListener('mouseenter', handleMouseEnter);
-      star.removeEventListener('mouseleave', handleMouseLeave);
-      star.removeEventListener('click', handleClick);
-      if (spinAnimation) {
-        spinAnimation.kill();
-      }
-    };
-  }, []);
 
   // LinkColumn rendered for each footer column
   // Original: gap: 1.389vw (desktop) | 20px (xl) | 1.953vw (md) | 4.673vw (mobile)
