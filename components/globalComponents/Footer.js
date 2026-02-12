@@ -27,6 +27,8 @@ import { cn, tw } from '@/lib/cn';
  * Each breakpoint inherits from smaller breakpoints unless overridden.
  */
 const Footer = ({ blok }) => {
+  const testClasses = tw`md:(flex-col w-60) lg:(flex-col w-67) xl:(flex-col w-60) flex w-75 flex-row items-start justify-start gap-5 gap-6`;
+  console.log('Generated classes:', testClasses);
   const router = useRouter();
   const path = usePathname();
   const [language, setLanguage] = useState('en');
@@ -65,6 +67,11 @@ const Footer = ({ blok }) => {
 
     const handleMouseEnter = async () => {
       const { default: gsap } = await import('gsap');
+      // Kill any existing animation
+      if (spinAnimation) {
+        spinAnimation.kill();
+      }
+      // Start infinite spin
       spinAnimation = gsap.to(star, {
         duration: 1.5,
         ease: 'linear',
@@ -73,10 +80,28 @@ const Footer = ({ blok }) => {
       });
     };
 
-    const handleMouseLeave = () => {
+    const handleMouseLeave = async () => {
+      const { default: gsap } = await import('gsap');
       if (spinAnimation) {
         spinAnimation.kill();
       }
+
+      // Get current rotation
+      const currentRotation = gsap.getProperty(star, 'rotation');
+
+      // Calculate nearest full rotation (0, 360, 720, etc.)
+      const targetRotation = Math.round(currentRotation / 360) * 360;
+
+      // Smoothly decelerate back to original position
+      spinAnimation = gsap.to(star, {
+        rotation: targetRotation,
+        duration: 1.5,
+        ease: 'power2.out', // Smooth deceleration
+        onComplete: () => {
+          // Reset to 0 to prevent accumulated values
+          gsap.set(star, { rotation: 0 });
+        },
+      });
     };
 
     const handleClick = () => {
@@ -96,7 +121,6 @@ const Footer = ({ blok }) => {
       }
     };
   }, [router]);
-
   const handleNavigate = (link) => {
     const isExternalLink = link.startsWith('http') || link.startsWith('https');
     if (isExternalLink) {
@@ -197,17 +221,18 @@ const Footer = ({ blok }) => {
       <div
         className={tw`md:(flex-row pb-10) lg:(gap-63 pb-12) xl:(gap-57 pb-10) relative flex h-auto w-full flex-col items-start justify-center gap-11 px-7 pt-20 pb-12`}
       >
+        {/*prettier-ignore*/}
         <div
-          className={tw`flex w-75 flex-row gap-6 ${tw`md:(flex-col w-60) lg:(gap-6 w-67) xl:(gap-5 w-60) gap-5`}`}
+        className="flex w-75 items-start justify-start gap-6 sm:flex-row md:flex-col md:w-60 md:gap-5 lg:flex-col lg:w-67 lg:gap-6 xl:flex-col xl:w-60 xl:gap-5"
         >
           {/* Inner column for logo + address */}
           <div className={tw`flex flex-col gap-6`}>
             {/* 4. Logo (VasionSmall) */}
-            <VasionSmall
-              alt="vasion-logo"
-              className={tw`h-7 w-50 cursor-pointer ${tw`md:(w-45 h-6) lg:(w-67 h-9) xl:(w-60 h-8)`}`}
-              onClick={() => handleNavigate('/')}
-            />
+          <VasionSmall
+            alt="vasion-logo"
+            className={tw`h-7 w-50 cursor-pointer md:(w-45 h-6) lg:(w-67 h-9) xl:(w-60 h-8)`}
+            onClick={() => handleNavigate('/')}
+          />
             {/* 5. Address */}
             <div className={tw`font-archivo text-body-md text-txt-subtle`}>
               432 S. Tech Ridge Drive, St. George, Utah 84770 USA
