@@ -189,8 +189,8 @@ const StyledIframe = styled.iframe`
   }
 
   ${media.tablet} {
-    width: 75.875vw;
-    height: 75.875vw;
+    width: 80.875vw;
+    height: 80.875vw;
     border-top-right-radius: 1.72vw;
     border-top-left-radius: 1.72vw;
   }
@@ -209,11 +209,6 @@ const IframeWrapper = styled.div`
   justify-content: center;
   overflow: hidden;
   background-color: ${(props) => (props.fullwidth ? 'rgb(26, 31, 33)' : 'transparent')};
-  ${media.mobile} {
-    min-height: 480px;
-    height: 480px;
-    display: inline-block;
-  }
 `;
 
 const MobileControls = styled.div`
@@ -228,7 +223,7 @@ const MobileControls = styled.div`
   }
   ${media.tablet} {
     justify-self:center;
-    width: 75.875vw;
+    width: 80.875vw;
     padding: 4.167vw;
     background: #1b1d21;
     backdrop-filter: blur(10px);
@@ -237,13 +232,12 @@ const MobileControls = styled.div`
   }
   ${media.mobile} {
     width:100vw;
-    bottom: 23.167vw;
     padding: 4.167vw;
     background: #1b1d21;
     backdrop-filter: blur(10px);
     border-top: 2px solid rgba(255, 255, 255, 0.1);
-    border-bottom-left-radius: 1.563vw;
-    border-bottom-right-radius: 1.563vw;
+border-bottom-left-radius:unset;
+border-bottom-right-radius:unset;
 `;
 
 const ControlsContainer = styled.div`
@@ -398,4 +392,14 @@ const Wrapper = styled.div`
   justify-content: center;
   margin: 20px;
   flex-direction: column;
+
+  ${media.fullWidth} {
+    margin: 20px;
+  }
+  ${media.tablet} {
+    margin: 1.953vw;
+  }
+  ${media.mobile} {
+    margin: unset;
+  }
 `;
