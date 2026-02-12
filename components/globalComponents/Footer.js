@@ -197,47 +197,34 @@ const Footer = ({ blok }) => {
       <div
         className={tw`md:(flex-row pb-10) lg:(gap-63 pb-12) xl:(gap-57 pb-10) relative flex h-auto w-full flex-col items-start justify-center gap-11 px-7 pt-20 pb-12`}
       >
-        {/* 3. LogoContainer */}
-        {/* Mobile: 4.673vw×4.8=22px→gap-6, 50.467vw×4.8=242px→w-61 */}
-        {/* Tablet: 1.953vw×10.24=20px→gap-5, 23.438vw×10.24=240px→w-60 */}
-        {/* Desktop: 1.389vw×16=22px→gap-6, 16.667vw×16=267px→w-67 */}
-        {/* FullWidth: 20px→gap-5, 240px→w-60 */}
         <div
-          className={tw`md:(gap-5 w-60) lg:(gap-6 w-67) xl:(gap-5 w-60) flex w-61 flex-col gap-6`}
+          className={tw`flex w-75 flex-row gap-6 ${tw`md:(flex-col w-60) lg:(gap-6 w-67) xl:(gap-5 w-60) gap-5`}`}
         >
-          {/* 4. Logo (VasionSmall) */}
-          {/* Mobile: 42.056vw×4.8=202px→w-50, 5.841vw×4.8=28px→h-7 */}
-          {/* Tablet: 17.578vw×10.24=180px→w-45, 2.441vw×10.24=25px→h-6 */}
-          {/* Desktop: 16.667vw×16=267px→w-67, 2.292vw×16=37px→h-9 */}
-          {/* FullWidth: 240px→w-60, 33px→h-8 */}
-          <VasionSmall
-            alt="vasion-logo"
-            className={tw`md:(w-45 h-6) lg:(w-67 h-9) xl:(w-60 h-8) h-7 w-50 cursor-pointer`}
-            onClick={() => handleNavigate('/')}
-          />
-          {/* 5. Address */}
-          <div className="font-archivo text-body-md text-txt-subtle">
-            432 S. Tech Ridge Drive, St. George, Utah 84770 USA
+          {/* Inner column for logo + address */}
+          <div className={tw`flex flex-col gap-6`}>
+            {/* 4. Logo (VasionSmall) */}
+            <VasionSmall
+              alt="vasion-logo"
+              className={tw`h-7 w-50 cursor-pointer ${tw`md:(w-45 h-6) lg:(w-67 h-9) xl:(w-60 h-8)`}`}
+              onClick={() => handleNavigate('/')}
+            />
+            {/* 5. Address */}
+            <div className={tw`font-archivo text-body-md text-txt-subtle`}>
+              432 S. Tech Ridge Drive, St. George, Utah 84770 USA
+            </div>
           </div>
-          {/* 6. VasionStar */}
-          {/* Mobile: hidden */}
-          {/* Tablet: 4.883vw×10.24=50px→mt-12, 5.859vw×10.24=60px→w-15 h-15 */}
-          {/* Desktop: 3.472vw×16=56px→mt-14, 4.167vw×16=67px→w-17 h-17 */}
-          {/* FullWidth: 50px→mt-12, 60px→w-15 h-15 */}
+
+          {/* 6. VasionStar - right side on mobile, below on tablet+ */}
+
+          {/*prettier-ignore*/}
           <div
-            className={tw`md:(block h-15) lg:(mt-14 h-17) xl:(mt-12 h-15) mt-12 hidden w-15 cursor-pointer self-start`}
+            className={tw`md:(mt-12 h-15 w-15) lg:(mt-14 h-17 w-17) xl:(mt-12 h-15 w-15) block h-18 w-18 cursor-pointer self-start`}
             id="vasion-star-svg"
             ref={starRef}
           >
-            <VasionStarSVG className="h-full w-full" />
+            <VasionStarSVG className={tw`h-full w-full`} />
           </div>
         </div>
-
-        {/* 7. AllLinksContainer */}
-        {/* Mobile: flex-wrap, 14.019vw×4.8=67px→gap-17 */}
-        {/* Tablet: flex-row (no wrap), 5.859vw×10.24=60px→gap-15 */}
-        {/* Desktop: flex-row, 4.167vw×16=67px→gap-17 */}
-        {/* FullWidth: 60px→gap-15 */}
         <div
           className={tw`md:(flex-nowrap gap-15) flex flex-row flex-wrap gap-10 lg:gap-17 xl:gap-15`}
         >
