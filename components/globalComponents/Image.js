@@ -10,6 +10,7 @@ import useMedia from '@/functions/useMedia';
 import media from '@/styles/media';
 
 const OptimizedImage = ({
+  alt,
   borderradius,
   className,
   fetchPriority,
@@ -55,7 +56,7 @@ const OptimizedImage = ({
     return 'Image';
   };
 
-  const altText = getAltText();
+  const altText = alt ?? getAltText();
   // If fill is true, we need a container with relative positioning
   if (fill) {
     return (

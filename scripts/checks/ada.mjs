@@ -333,6 +333,28 @@ function checkSemanticStructure(content, filePath) {
 }
 
 /**
+ * Escape special regex characters in a class name for use in RegExp
+ */
+function escapeRegexForClass(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Build a pattern that matches two class names as whole tokens (not substrings).
+ * E.g. "bg-purple" should not match "bg-purple-lightGrey"
+ */
+function contrastPattern(textClass, bgClass) {
+  const t = escapeRegexForClass(textClass);
+  const b = escapeRegexForClass(bgClass);
+  // Match whole class names only (not substrings): boundary = start/space/quote/paren
+  const bdy = '(?:^|[\\s"\'(])';
+  return new RegExp(
+    `${bdy}${t}(?![a-zA-Z0-9-])[^"']*${bdy}${b}(?![a-zA-Z0-9-])|${bdy}${b}(?![a-zA-Z0-9-])[^"']*${bdy}${t}(?![a-zA-Z0-9-])`,
+    'gi'
+  );
+}
+
+/**
  * 1.4.3 Contrast (Minimum) - Check for potential contrast issues
  * Uses project-specific Tailwind class patterns
  */
@@ -370,10 +392,10 @@ function checkColorContrast(content, filePath) {
     'bg-teal-200',
   ];
 
-  // Check for problematic combinations
+  // Check for problematic combinations (whole class names only, not substrings)
   for (const textClass of lightTextClasses) {
     for (const bgClass of lightBgClasses) {
-      const pattern = new RegExp(`${textClass}[^"']*${bgClass}|${bgClass}[^"']*${textClass}`, 'gi');
+      const pattern = contrastPattern(textClass, bgClass);
       const matches = content.match(pattern);
       if (matches) {
         matches.forEach((match) => {
@@ -409,7 +431,7 @@ function checkColorContrast(content, filePath) {
 
   for (const textClass of darkTextClasses) {
     for (const bgClass of darkBgClasses) {
-      const pattern = new RegExp(`${textClass}[^"']*${bgClass}|${bgClass}[^"']*${textClass}`, 'gi');
+      const pattern = contrastPattern(textClass, bgClass);
       const matches = content.match(pattern);
       if (matches) {
         matches.forEach((match) => {

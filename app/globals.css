@@ -200,6 +200,12 @@
   --gradient-footer:
     linear-gradient(180deg, #201435 52%, rgba(32, 20, 53, 0) 100%),
     linear-gradient(270deg, #cc4800 1.74%, #5f47a8 99.26%), #201435;
+  --gradient-testimonial-dark: linear-gradient(
+    278deg,
+    #803235 -1.77%,
+    #190c30 32.97%,
+    #3d2562 87.16%
+  );
 }
 
 /* Custom utility classes for gradients */
@@ -235,6 +241,10 @@
 
 @utility bg-medium-purple {
   background: var(--gradient-medium-purple);
+}
+
+@utility bg-testimonial-dark {
+  background: var(--gradient-testimonial-dark);
 }
 
 @font-face {
