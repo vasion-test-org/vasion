@@ -15,7 +15,6 @@ const Testimonial = ({ blok }) => {
   const isDark = themeKey === 'dark';
   const layout = blok.layout;
   const spacing = blok.section_spacing;
-
   const spacingClasses =
     spacing === 'default' || !spacing
       ? tw`py-4.5 md:py-10 lg:py-15`
