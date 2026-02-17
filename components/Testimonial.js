@@ -41,7 +41,7 @@ const Testimonial = ({ blok }) => {
           layout === 'column' ? 'flex-col' : tw`flex-col lg:flex-row`
         )}
       >
-        <div className="w-92 text-left sm:w-165 md:w-375 lg:max-w-480">
+        <div className="w-90 text-left sm:w-165 md:w-375 lg:max-w-480">
           <p className="font-archivo text-eyebrow !mb-3.5 uppercase md:!mb-4 lg:!mb-4">
             {blok?.eyebrow || 'Testimonial'}
           </p>

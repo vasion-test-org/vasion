@@ -109,7 +109,7 @@ const TestimonialCarousel = ({ blok }) => {
           <SideArrow aria-hidden className="rotate-180" />
         </div>
       </div>
-      <div id="wrapper" className="flex w-107 overflow-hidden sm:w-175 md:w-236 lg:w-326">
+      <div id="wrapper" className="flex w-100 overflow-hidden sm:w-175 md:w-236 lg:w-326">
         {mappedTestimonials}
       </div>
     </div>
