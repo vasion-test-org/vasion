@@ -97,7 +97,7 @@ const TestimonialCarousel = ({ blok }) => {
           tabIndex={0}
           onKeyDown={handlePrevKeyDown}
         >
-          <SideArrow aria-hidden />
+          <SideArrow aria-hidden="true" />
         </div>
         <div
           aria-label="Next testimonial"
@@ -106,10 +106,10 @@ const TestimonialCarousel = ({ blok }) => {
           tabIndex={0}
           onKeyDown={handleNextKeyDown}
         >
-          <SideArrow aria-hidden className="rotate-180" />
+          <SideArrow aria-hidden="true" className="rotate-180" />
         </div>
       </div>
-      <div id="wrapper" className="flex w-100 overflow-hidden sm:w-175 md:w-236 lg:w-326">
+      <div className="flex w-100 overflow-hidden sm:w-175 md:w-236 lg:w-326" id="wrapper">
         {mappedTestimonials}
       </div>
     </div>
