@@ -15,16 +15,15 @@ const Testimonial = ({ blok }) => {
   const isDark = themeKey === 'dark';
   const layout = blok.layout;
   const spacing = blok.section_spacing;
+  const spacingMap = {
+    40: 'py-10',
+    60: 'py-15',
+    80: 'py-20',
+  };
   const spacingClasses =
     spacing === 'default' || !spacing
       ? tw`py-4.5 md:py-10 lg:py-15`
-      : spacing === 60
-        ? 'py-15'
-        : spacing === 80
-          ? 'py-20'
-          : spacing === 40
-            ? 'py-10'
-            : tw`py-4.5 md:py-10 lg:py-15`;
+      : spacingMap[spacing] ?? tw`py-4.5 md:py-10 lg:py-15`;
 
   return (
     <div className={cn('flex flex-col items-center justify-center', spacingClasses)}>
@@ -64,9 +63,9 @@ const Testimonial = ({ blok }) => {
                 <div
                   className="mt-5"
                   {...storyblokEditable($buttonData)}
-                  key={$buttonData?.link_text}
+                  key={$buttonData?._uid || $buttonData?.link_text}
                 >
-                  <Button $buttonData={$buttonData} key={$buttonData?.link_text} />
+                  <Button $buttonData={$buttonData} />
                 </div>
               ))}
             </div>

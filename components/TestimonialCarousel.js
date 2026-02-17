@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import SideArrow from '@/assets/svg/side-arrow.svg';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
@@ -14,10 +14,10 @@ const TestimonialCarousel = ({ blok }) => {
   const isDark = themeKey === 'dark';
   const [activeIndex, setActiveIndex] = useState(0);
   const tagTopics = blok.testimonials?.[activeIndex]?.tag_topics;
+  const nextBtnRef = useRef(null);
+  const prevBtnRef = useRef(null);
 
   useEffect(() => {
-    const nextBtn = document.querySelector('.next');
-    const prevBtn = document.querySelector('.prev');
     let onNext, onPrev;
 
     const initCarousel = async () => {
@@ -41,6 +41,8 @@ const TestimonialCarousel = ({ blok }) => {
         setActiveIndex((prev) => (prev === 0 ? blok.testimonials.length - 1 : prev - 1));
       };
 
+      const nextBtn = nextBtnRef.current;
+      const prevBtn = prevBtnRef.current;
       if (nextBtn) nextBtn.addEventListener('click', onNext);
       if (prevBtn) prevBtn.addEventListener('click', onPrev);
     };
@@ -48,19 +50,14 @@ const TestimonialCarousel = ({ blok }) => {
     initCarousel();
 
     return () => {
+      const nextBtn = nextBtnRef.current;
+      const prevBtn = prevBtnRef.current;
       if (nextBtn && onNext) nextBtn.removeEventListener('click', onNext);
       if (prevBtn && onPrev) prevBtn.removeEventListener('click', onPrev);
     };
   }, [blok.testimonials.length]);
 
-  const handlePrevKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      e.currentTarget.click();
-    }
-  };
-
-  const handleNextKeyDown = (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       e.currentTarget.click();
@@ -91,20 +88,22 @@ const TestimonialCarousel = ({ blok }) => {
           </div>
         )}
         <div
+          ref={prevBtnRef}
           aria-label="Previous testimonial"
           className="prev bg-orange focus:ring-purple-border inline-flex cursor-pointer items-center justify-center rounded-full p-2 focus:ring-2 focus:ring-offset-2 focus:outline-none"
           role="button"
           tabIndex={0}
-          onKeyDown={handlePrevKeyDown}
+          onKeyDown={handleKeyDown}
         >
           <SideArrow aria-hidden="true" />
         </div>
         <div
+          ref={nextBtnRef}
           aria-label="Next testimonial"
           className="next bg-orange focus:ring-purple-border inline-flex cursor-pointer items-center justify-center rounded-full p-2 focus:ring-2 focus:ring-offset-2 focus:outline-none"
           role="button"
           tabIndex={0}
-          onKeyDown={handleNextKeyDown}
+          onKeyDown={handleKeyDown}
         >
           <SideArrow aria-hidden="true" className="rotate-180" />
         </div>
