@@ -1,23 +1,20 @@
 'use client';
-import React, { useEffect, useState } from 'react';
 
-import styled, { ThemeProvider } from 'styled-components';
-import media from 'styles/media';
+import React, { useEffect, useState } from 'react';
 
 import SideArrow from '@/assets/svg/side-arrow.svg';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import { useAvailableThemes } from '@/context/ThemeContext';
 import { horizontalLoop } from '@/functions/horizontalLoop';
-import colors from '@/styles/colors';
-import text from '@/styles/text';
+import { cn } from '@/lib/cn';
 
 import Testimonial from './Testimonial';
 
 const TestimonialCarousel = ({ blok }) => {
-  const themes = useAvailableThemes();
-  const selectedTheme = themes[blok.theme] || themes.default;
+  const themeKey = blok.theme || 'default';
+  const isDark = themeKey === 'dark';
   const [activeIndex, setActiveIndex] = useState(0);
   const tagTopics = blok.testimonials?.[activeIndex]?.tag_topics;
+
   useEffect(() => {
     const nextBtn = document.querySelector('.next');
     const prevBtn = document.querySelector('.prev');
@@ -56,156 +53,67 @@ const TestimonialCarousel = ({ blok }) => {
     };
   }, [blok.testimonials.length]);
 
+  const handlePrevKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      e.currentTarget.click();
+    }
+  };
+
+  const handleNextKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      e.currentTarget.click();
+    }
+  };
+
   const mappedTestimonials = blok.testimonials.map((testimonial, i) => (
-    <TestimonialWrapper className="testimonials" key={testimonial._uid || i}>
+    <div className="testimonials" key={testimonial._uid || i}>
       <Testimonial blok={testimonial} />
-    </TestimonialWrapper>
+    </div>
   ));
 
   return (
-    <ThemeProvider theme={selectedTheme}>
-      <Wrapper>
-        <Buttons>
-          {tagTopics?.content && tagTopics.content.length > 0 && (
-            <Tag key={activeIndex}>
-              {' '}
-              <RichTextRenderer document={tagTopics} />
-            </Tag>
-          )}
-          <Button className="prev">
-            <SideArrow />
-          </Button>
-          <Button className="next">
-            <NextSideArrow />
-          </Button>
-        </Buttons>
-        <Testimonials>{mappedTestimonials}</Testimonials>
-      </Wrapper>
-    </ThemeProvider>
+    <div
+      className={cn(
+        'relative flex w-full flex-col items-center justify-center',
+        isDark ? 'bg-testimonial-dark' : 'bg-purple-lightGrey',
+        'p-6 md:p-10 lg:px-37 lg:py-15'
+      )}
+    >
+      <div className="absolute top-13 right-6 z-10 flex flex-row items-center justify-center gap-5 md:top-18 md:right-38 md:gap-5 lg:top-28 lg:right-60 lg:gap-5">
+        {tagTopics?.content && tagTopics.content.length > 0 && (
+          <div
+            className="bg-purple-tag font-archivo text-body-sm text-purple flex items-center rounded-xl px-3 py-0.5 font-semibold md:rounded-3xl md:px-3 md:py-1"
+            key={activeIndex}
+          >
+            <RichTextRenderer document={tagTopics} />
+          </div>
+        )}
+        <div
+          aria-label="Previous testimonial"
+          className="prev bg-orange focus:ring-purple-border inline-flex cursor-pointer items-center justify-center rounded-full p-2 focus:ring-2 focus:ring-offset-2 focus:outline-none"
+          role="button"
+          tabIndex={0}
+          onKeyDown={handlePrevKeyDown}
+        >
+          <SideArrow aria-hidden />
+        </div>
+        <div
+          aria-label="Next testimonial"
+          className="next bg-orange focus:ring-purple-border inline-flex cursor-pointer items-center justify-center rounded-full p-2 focus:ring-2 focus:ring-offset-2 focus:outline-none"
+          role="button"
+          tabIndex={0}
+          onKeyDown={handleNextKeyDown}
+        >
+          <SideArrow aria-hidden className="rotate-180" />
+        </div>
+      </div>
+      <div id="wrapper" className="flex w-107 overflow-hidden sm:w-175 md:w-236 lg:w-326">
+        {mappedTestimonials}
+      </div>
+    </div>
   );
 };
-
-const Tag = styled.div`
-  ${text.tagBold};
-  display: flex;
-  align-items: center;
-  background-color: ${colors.purpleTag};
-  color: ${colors.primaryPurple};
-  padding: 0.313vw 0.813vw;
-  border-radius: 1.5vw;
-
-  ${media.fullWidth} {
-    border-radius: 24px;
-    padding: 5px 12px;
-  }
-  ${media.tablet} {
-    border-radius: 2.344vw;
-    padding: 0.7vw 1.172vw;
-  }
-  ${media.mobile} {
-    border-radius: 5vw;
-    padding: 0.7vw 2.5vw;
-  }
-`;
-
-const NextSideArrow = styled(SideArrow)`
-  rotate: 180deg;
-`;
-
-const Button = styled.div`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  background: ${colors.primaryOrange};
-  padding: 0.5vw;
-  border-radius: 100%;
-
-  ${media.fullWidth} {
-    padding: 8px;
-  }
-
-  ${media.tablet} {
-    padding: 0.781vw;
-  }
-
-  ${media.mobile} {
-    padding: 1.667vw;
-  }
-`;
-
-const Buttons = styled.div`
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-  top: 7vw;
-  right: 15vw;
-  gap: 1.25vw;
-
-  ${media.fullWidth} {
-    top: 112px;
-    right: 240px;
-    gap: 20px;
-  }
-
-  ${media.tablet} {
-    top: 7vw;
-    right: 15vw;
-    gap: 1.953vw;
-  }
-
-  ${media.mobile} {
-    top: 11vw;
-    right: 5vw;
-    gap: 4.167vw;
-  }
-`;
-
-const TestimonialWrapper = styled.div``;
-
-const Testimonials = styled.div`
-  display: flex;
-  overflow: hidden;
-  width: 81.5vw;
-
-  ${media.fullWidth} {
-    width: 1304px;
-  }
-
-  ${media.tablet} {
-    width: 92.188vw;
-  }
-
-  ${media.mobile} {
-    width: 89.167vw;
-  }
-`;
-
-const Wrapper = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: auto;
-  width: 100%;
-  background: ${(props) => props.theme.testimonial.bg};
-  padding: 3.75vw 9.25vw;
-
-  ${media.fullWidth} {
-    padding: 60px 148px;
-  }
-
-  ${media.tablet} {
-    padding: 3.906vw;
-  }
-
-  ${media.mobile} {
-    padding: 5.417vw;
-  }
-`;
 
 export default TestimonialCarousel;
