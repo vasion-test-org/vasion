@@ -63,16 +63,24 @@ function FormTrackingComponent() {
     });
 
     // Populate hidden fields in Marketo form
-    if (window.MktoForms2) {
-      window.MktoForms2.whenReady((form) => {
-        form.getFields().forEach((field) => {
-          if (field.element.type === 'hidden') {
-            const cookieValue = getCookie(field.name);
-            if (cookieValue) field.val(cookieValue);
-          }
+    // Poll for MktoForms2 since it loads asynchronously and may not be ready
+    // when this effect fires (silent bail on the old `if` was causing blank UTM fields)
+    function registerUTMPopulation(attempts = 0) {
+      if (attempts > 20) return; // give up after ~6 seconds
+      if (window.MktoForms2) {
+        window.MktoForms2.whenReady((form) => {
+          form.getFields().forEach((field) => {
+            if (field.element.type === 'hidden') {
+              const cookieValue = getCookie(field.name);
+              if (cookieValue) field.val(cookieValue);
+            }
+          });
         });
-      });
+      } else {
+        setTimeout(() => registerUTMPopulation(attempts + 1), 300);
+      }
     }
+    registerUTMPopulation();
 
     function getCookie(name) {
       const value = `; ${document.cookie}`;
