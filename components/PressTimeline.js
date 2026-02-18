@@ -29,7 +29,7 @@ const PressTimeline = ({ blok }) => {
       card.date.includes('2025') ||
       card.date.includes('2026')
     ) {
-      dateRanges['2026-2020'].push(card);
+      dateRanges['2020-2026'].push(card);
     } else if (card.date.includes('2019') || card.date.includes('2017')) {
       dateRanges['2019-2017'].push(card);
     }
