@@ -17,7 +17,7 @@ const PressTimeline = ({ blok }) => {
   const starRef = useRef(null);
 
   const dateRanges = {
-    '2019-2017': [],
+    '2017-2019': [],
     '2020-2026': [],
   };
 
@@ -31,7 +31,7 @@ const PressTimeline = ({ blok }) => {
     ) {
       dateRanges['2020-2026'].push(card);
     } else if (card.date.includes('2019') || card.date.includes('2017')) {
-      dateRanges['2019-2017'].push(card);
+      dateRanges['2017-2019'].push(card);
     }
   });
 
