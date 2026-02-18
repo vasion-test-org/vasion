@@ -12,27 +12,26 @@ import RichTextRenderer from './renderers/RichTextRenderer';
 
 const PressTimeline = ({ blok }) => {
   const [filteredCards, setFilteredCards] = useState([]);
-  const [selectedRange, setSelectedRange] = useState('2020-2026');
   const timelineRef = useRef(null);
   const starRef = useRef(null);
 
-  const dateRanges = {
-    '2017-2019': [],
-    '2020-2026': [],
-  };
+  // Define ranges numerically — add a new entry here to support future year ranges
+  const rangeDefinitions = [
+    { label: '2017-2019', min: 2017, max: 2019 },
+    { label: '2020-2026', min: 2020, max: 2026 },
+  ];
+
+  const defaultRange = rangeDefinitions[rangeDefinitions.length - 1].label;
+  const [selectedRange, setSelectedRange] = useState(defaultRange);
+
+  // Parse year from card.date and bucket into ranges numerically
+  const dateRanges = Object.fromEntries(rangeDefinitions.map((r) => [r.label, []]));
 
   blok.cards.forEach((card) => {
-    if (
-      card.date.includes('2021') ||
-      card.date.includes('2020') ||
-      card.date.includes('2024') ||
-      card.date.includes('2025') ||
-      card.date.includes('2026')
-    ) {
-      dateRanges['2020-2026'].push(card);
-    } else if (card.date.includes('2019') || card.date.includes('2017')) {
-      dateRanges['2017-2019'].push(card);
-    }
+    const year = parseInt(card.date?.match(/\d{4}/)?.[0], 10);
+    if (!year) return;
+    const range = rangeDefinitions.find((r) => year >= r.min && year <= r.max);
+    if (range) dateRanges[range.label].push(card);
   });
 
   useEffect(() => {
