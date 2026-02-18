@@ -18,7 +18,7 @@ const PressTimeline = ({ blok }) => {
 
   const dateRanges = {
     '2019-2017': [],
-    '2026-2020': [],
+    '2020-2026': [],
   };
 
   blok.cards.forEach((card) => {
