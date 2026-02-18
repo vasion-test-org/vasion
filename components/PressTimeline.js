@@ -12,13 +12,13 @@ import RichTextRenderer from './renderers/RichTextRenderer';
 
 const PressTimeline = ({ blok }) => {
   const [filteredCards, setFilteredCards] = useState([]);
-  const [selectedRange, setSelectedRange] = useState('2025-2020');
+  const [selectedRange, setSelectedRange] = useState('2026-2020');
   const timelineRef = useRef(null);
   const starRef = useRef(null);
 
   const dateRanges = {
     '2019-2017': [],
-    '2025-2020': [],
+    '2026-2020': [],
   };
 
   blok.cards.forEach((card) => {
@@ -26,9 +26,10 @@ const PressTimeline = ({ blok }) => {
       card.date.includes('2021') ||
       card.date.includes('2020') ||
       card.date.includes('2024') ||
-      card.date.includes('2025')
+      card.date.includes('2025') ||
+      card.date.includes('2026')
     ) {
-      dateRanges['2025-2020'].push(card);
+      dateRanges['2026-2020'].push(card);
     } else if (card.date.includes('2019') || card.date.includes('2017')) {
       dateRanges['2019-2017'].push(card);
     }
