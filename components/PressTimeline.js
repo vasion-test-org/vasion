@@ -12,7 +12,7 @@ import RichTextRenderer from './renderers/RichTextRenderer';
 
 const PressTimeline = ({ blok }) => {
   const [filteredCards, setFilteredCards] = useState([]);
-  const [selectedRange, setSelectedRange] = useState('2026-2020');
+  const [selectedRange, setSelectedRange] = useState('2020-2026');
   const timelineRef = useRef(null);
   const starRef = useRef(null);
 
