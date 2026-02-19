@@ -1,5 +1,4 @@
 'use client';
-
 import React from 'react';
 
 import { storyblokEditable } from '@storyblok/react/rsc';
@@ -7,10 +6,14 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import Button from '@/components/globalComponents/Button';
 import LightboxBtn from '@/components/LightboxButton';
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
+import { useAvailableThemes } from '@/context/ThemeContext';
 import useMedia from '@/functions/useMedia';
-import { cn, tw } from '@/lib/cn';
+import { cn } from '@/lib/cn';
 
 const CTA = ({ blok }) => {
+  const themes = useAvailableThemes();
+  const selectedTheme = themes[blok.theme] || themes.default;
+
   const bgimg = useMedia(
     blok?.image?.[0],
     blok?.image?.[0],
@@ -21,95 +24,126 @@ const CTA = ({ blok }) => {
     blok?.background_image?.[0],
     blok?.background_image?.[0],
     blok?.background_image?.[1] || blok?.background_image?.[0],
-    blok?.background_image?.[2] || blok?.background_image?.[0] || blok?.background_image?.[0]
+    blok?.background_image?.[2] || blok?.background_image?.[0]
   );
 
   const ctaStyle = blok.cta_style;
   const fullwidth = blok.fullwidth;
-  const isPillWithBg = ctaStyle === 'pill' && pillBgimg?.filename;
+  const isPill = ctaStyle === 'pill';
   const isImage = ctaStyle === 'image';
   const isCentered = ctaStyle === 'centered';
-  const isPill = ctaStyle === 'pill';
-
-  const themeName = blok.theme || 'default';
-  const themeCtaBg =
-    themeName === 'dark'
-      ? 'bg-cta-dark'
-      : themeName === 'light'
-        ? 'bg-purple-lightGrey'
-        : 'bg-purple';
-  const themeCtaText =
-    themeName === 'light' ? 'text-txt-primary' : 'text-white';
+  const isPillWithBg = isPill && pillBgimg?.filename;
 
   const spacing = blok.section_spacing;
   const spacingOffset = blok.offset_spacing;
+  const hasCustomSpacing = spacing && spacing !== 'default';
 
-  const pillContainerPadding = cn(
-    'flex w-full items-center justify-center',
-    spacingOffset === 'top' &&
-      (spacing === 'default' ? 'pt-15 pb-0' : typeof spacing === 'number' ? `pt-[${spacing}px] pb-0` : 'pt-15 pb-0'),
-    spacingOffset === 'bottom' &&
-      (spacing === 'default' ? 'pt-0 pb-15' : typeof spacing === 'number' ? `pb-[${spacing}px] pt-0` : 'pt-0 pb-15'),
-    !spacingOffset &&
-      (spacing === 'default' ? 'py-15' : typeof spacing === 'number' ? `py-[${spacing}px]` : 'py-15')
-  );
+  // Theme-driven classes via useAvailableThemes (mirrors original ThemeProvider usage)
+  const themeTextColor = selectedTheme?.cta?.textColorClass ?? 'text-white';
+  const themeCardBg = selectedTheme?.cta?.cardBgClass ?? 'bg-purple';
 
-  const contentWrapperClasses = cn(
-    'flex flex-col gap-4',
-    isPillWithBg ? 'max-w-98' : 'max-w-full md:max-w-200 xl:max-w-300',
-    ['pill', 'image'].includes(ctaStyle) ? 'lg:text-left' : 'text-center'
-  );
-
-  const ctaWrapperBg =
+  const ctaBgImage =
     isImage && bgimg?.filename
       ? { backgroundImage: `url(${bgimg.filename})` }
-      : isPillWithBg && pillBgimg?.filename
+      : isPillWithBg
         ? { backgroundImage: `url(${pillBgimg.filename})` }
         : undefined;
 
   return (
-    <div className={pillContainerPadding}>
+    <div
+      className={cn(
+        'flex w-full items-center justify-center',
+        // Vertical padding – spacingOffset top
+        spacingOffset === 'top' && !hasCustomSpacing && 'pt-[3.75vw] pb-0 md:pt-[5.859vw] xl:pt-15',
+        // Vertical padding – spacingOffset bottom
+        spacingOffset === 'bottom' &&
+          !hasCustomSpacing &&
+          'pt-0 pb-[3.75vw] md:pb-[5.859vw] xl:pb-15',
+        // Vertical padding – both
+        !spacingOffset && !hasCustomSpacing && 'py-[3.75vw] md:py-[5.859vw] xl:py-15'
+      )}
+      style={
+        hasCustomSpacing
+          ? {
+              paddingTop: spacingOffset === 'bottom' ? 0 : `${spacing}px`,
+              paddingBottom: spacingOffset === 'top' ? 0 : `${spacing}px`,
+            }
+          : undefined
+      }
+    >
       <div
         {...storyblokEditable(blok)}
         className={cn(
-          'flex flex-col overflow-hidden text-center',
-          themeCtaText,
-          !ctaWrapperBg && themeCtaBg,
-          ctaWrapperBg && 'bg-no-repeat',
-          isPillWithBg && 'bg-[length:100%_100%]',
-          !isPillWithBg && 'bg-cover',
+          'flex flex-col overflow-hidden',
+          themeTextColor,
+          !ctaBgImage && themeCardBg,
+          ctaBgImage && 'bg-no-repeat',
+          isPillWithBg ? 'bg-[length:100%_100%]' : 'bg-cover',
+
+          // Text align
+          ['pill', 'image'].includes(ctaStyle) ? 'text-left max-sm:text-center' : 'text-center',
+
+          // Align / justify
           isPillWithBg ? 'items-start justify-start' : 'items-center justify-between',
-          isPill && !isPillWithBg && 'lg:flex-row',
-          isPillWithBg ? 'gap-10' : tw`gap-4 md:gap-4 lg:gap-15`,
-          ['pill', 'image'].includes(ctaStyle) && 'lg:text-left',
-          // Padding - mobile first, then md, then xl
-          isPill && tw`py-4.5 px-7 md:(py-15 px-10) xl:(py-15 px-24)`,
+
+          // Flex direction
+          isPill && !isPillWithBg ? 'lg:flex-row' : 'flex-col',
+
+          // Gap
+          isPillWithBg
+            ? 'gap-[2.5vw] xl:gap-10'
+            : 'gap-[3.75vw] max-sm:gap-[3.333vw] md:gap-[5.859vw] xl:gap-15',
+
+          // Padding
+          isPill && 'px-[6vw] py-[3.75vw] md:px-[3.906vw] md:py-[5.859vw] xl:px-24 xl:py-15',
           isImage &&
-            tw`pt-7 pr-4.5 pb-11 pl-68 md:(pt-24 pr-15 pb-37 pl-118) xl:(pt-24 pr-15 pb-37 pl-225)`,
-          isCentered && tw`py-11 px-7 md:(py-15 px-10) xl:(py-24 px-0)`,
-          !isPill && !isImage && !isCentered && tw`py-7 px-0 md:(py-15 px-10) xl:(py-24 px-0)`,
+            'pt-[6vw] pr-[3.75vw] pb-[9.25vw] pl-[56.25vw] md:pt-[9.375vw] md:pr-[5.859vw] md:pb-[14.453vw] md:pl-[46.094vw] xl:pt-24 xl:pr-15 xl:pb-[148px] xl:pl-[900px]',
+          isCentered && 'px-[9.25vw] py-[6vw] md:px-[3.906vw] md:py-[5.859vw] xl:px-0 xl:py-24',
+          !isPill &&
+            !isImage &&
+            !isCentered &&
+            'px-0 py-[6vw] md:px-[3.906vw] md:py-[5.859vw] xl:px-0 xl:py-24',
+          // Mobile padding override (all styles)
+          'max-sm:p-[8.333vw]',
+
           // Width
+          isPill && 'w-[81.5vw] md:w-[92.188vw] xl:w-[1304px]',
+          isImage && !fullwidth && 'w-[88vw] md:w-[92.188vw] xl:w-[1408px]',
           isImage && fullwidth && 'w-full',
-          isPill && 'w-107 md:w-236 lg:w-326',
-          isImage && !fullwidth && 'w-107 md:w-236 lg:w-352',
-          (isCentered || (isImage && fullwidth)) && 'w-full',
+          isCentered && 'w-full md:w-full',
           !isPill && !isImage && 'w-full',
+
           // Min-height
-          isPillWithBg && 'min-h-154 md:min-h-66 xl:min-h-76',
-          isImage && fullwidth && 'min-h-42 md:min-h-89 xl:min-h-139',
-          // Border-radius
+          isPillWithBg &&
+            'min-h-[18.875vw] max-sm:min-h-[128.125vw] md:min-h-[25.586vw] xl:min-h-[302px]',
+          isImage && fullwidth && 'min-h-[34.722vw]',
+
+          // Border radius
           isImage && fullwidth && 'rounded-none',
-          (isPill || isImage) && !(isImage && fullwidth) && 'rounded-2xl'
+          (isPill || isImage) &&
+            !(isImage && fullwidth) &&
+            'rounded-[1.5vw] max-sm:rounded-[5vw] md:rounded-[2.344vw] xl:rounded-2xl'
         )}
-        style={ctaWrapperBg}
+        style={ctaBgImage}
       >
-        <div className={contentWrapperClasses}>
+        {/* ContentWrapper */}
+        <div
+          className={cn(
+            'flex flex-col',
+            'gap-[1vw] max-sm:gap-[3.333vw] md:gap-[1.563vw] xl:gap-4',
+            isPillWithBg
+              ? 'max-w-[392px]'
+              : 'max-w-[75vw] max-sm:max-w-full md:max-w-[78.125vw] xl:max-w-[1200px]',
+            ['pill', 'image'].includes(ctaStyle) ? 'text-left max-sm:text-center' : 'text-center'
+          )}
+        >
           {blok.copy_sections?.map((copy) => (
             <div key={copy.component} {...storyblokEditable(copy)}>
-              <RichTextRenderer className={copy.component} document={copy.copy} />
+              <RichTextRenderer $centered className={copy.component} document={copy.copy} />
             </div>
           ))}
         </div>
+
         {blok?.button_group?.map(($buttonData) =>
           $buttonData.component === 'light_box_button' ? (
             <LightboxBtn blok={$buttonData} key="lightbox" />
