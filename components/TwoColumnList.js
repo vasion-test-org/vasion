@@ -1,310 +1,143 @@
 'use client';
+
 import React from 'react';
 
 import { storyblokEditable } from '@storyblok/react/rsc';
-import styled, { ThemeProvider } from 'styled-components';
-import media from 'styles/media';
+import Image from 'next/image';
+
+import { useAvailableThemes } from '@/context/ThemeContext';
+import { cn, tw } from '@/lib/cn';
 
 import RichTextRenderer from '@/components/renderers/RichTextRenderer';
-import { useAvailableThemes } from '@/context/ThemeContext';
+
 const TwoColumnList = ({ blok }) => {
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
+  const isDarkTheme = selectedTheme?.two_column_list?.bg === themes.dark?.two_column_list?.bg;
+  const spacing = blok.spacing;
+  const spacingOffset = blok.spacing_offset;
+  const isDefaultSpacing = spacing === 'default' || spacing == null;
+  const customSpacingPx = !isDefaultSpacing && spacing != null ? Number(spacing) : null;
 
   const introMap = blok?.intro_content?.map((item, index) => (
     <RichTextRenderer document={item.copy} key={index} />
   ));
 
   const column1 = blok?.column_1?.map((item, index) => (
-    <ColumnItem key={`col1-item-${index}`}>
-      {item?.icon?.filename && <ItemIcon small_icon={item.small_icon} src={item.icon.filename} />}
-      <ColumnCopy>
-        {item?.copy?.map((item, columnIndex) => (
-          <RichTextRenderer document={item.copy} key={columnIndex} />
-        ))}
-      </ColumnCopy>
-    </ColumnItem>
+    <div
+      key={`col1-item-${index}`}
+      className={tw`flex flex-row items-start gap-2 md:items-center md:gap-3`}
+    >
+      {item?.icon?.filename && (
+        <Image
+          src={item.icon.filename}
+          alt=""
+          width={item.small_icon ? 32 : 48}
+          height={item.small_icon ? 32 : 48}
+          className={cn(
+            'shrink-0',
+            item.small_icon ? 'h-6 w-6 md:h-6 md:w-6 lg:h-8 lg:w-8' : 'h-12 w-12'
+          )}
+          aria-hidden
+        />
+      )}
+      <div className="flex flex-col justify-center gap-3">
+        {columnCopyItems(item?.copy, `col1-${index}`)}
+      </div>
+    </div>
   ));
 
   const column2 = blok?.column_2?.map((item, index) => (
-    <ColumnItem key={`col2-item-${index}`}>
+    <div
+      key={`col2-item-${index}`}
+      className={tw`flex flex-row items-start gap-2 md:items-center md:gap-3`}
+    >
       {item?.icon?.filename && (
-        <ItemIcon small_icon={item?.small_icon} src={item?.icon?.filename} />
+        <Image
+          src={item.icon.filename}
+          alt=""
+          width={item?.small_icon ? 32 : 48}
+          height={item?.small_icon ? 32 : 48}
+          className={cn(
+            'shrink-0',
+            item?.small_icon ? 'h-6 w-6 md:h-6 md:w-6 lg:h-8 lg:w-8' : 'h-12 w-12'
+          )}
+          aria-hidden
+        />
       )}
-      <ColumnCopy>
-        {item?.copy?.map((copyItem, copyIndex) => (
-          <RichTextRenderer document={copyItem.copy} key={`col2-copy-${index}-${copyIndex}`} />
-        ))}
-      </ColumnCopy>
-    </ColumnItem>
+      <div className="flex flex-col justify-center gap-3">
+        {columnCopyItems(item?.copy, `col2-${index}`)}
+      </div>
+    </div>
   ));
 
-  // console.log('column 2',column2)
+  const hasTwoColumns = column2?.length > 0;
+
   return (
-    <ComponentWrapper spacing={blok.spacing} spacingOffset={blok.spacing_offset}>
-      <ThemeProvider theme={selectedTheme}>
-        <Wrapper {...storyblokEditable(blok)}>
-          {blok.intro_content && <IntroContent alignment={blok.alignment}>{introMap}</IntroContent>}
-          <ColumnContainer comparison={blok.comparison}>
-            <Column doublecolumn={column2.length < 0}>{column1}</Column>
-            {column2.length > 0 && <Column>{column2}</Column>}
-          </ColumnContainer>
-        </Wrapper>
-      </ThemeProvider>
-    </ComponentWrapper>
+    <section
+      className={cn(
+        'w-full',
+        isDefaultSpacing && spacingOffset === 'top' && 'pt-4.5 md:pt-15',
+        isDefaultSpacing && spacingOffset === 'bottom' && 'pb-4.5 md:pb-15',
+        isDefaultSpacing && !spacingOffset && 'py-4.5 md:py-15',
+        customSpacingPx != null && spacingOffset === 'top' && `pt-[${customSpacingPx}px]`,
+        customSpacingPx != null && spacingOffset === 'bottom' && `pb-[${customSpacingPx}px]`,
+        customSpacingPx != null && !spacingOffset && `py-[${customSpacingPx}px]`
+      )}
+    >
+      <div
+        {...storyblokEditable(blok)}
+        className={cn(
+          'flex w-full flex-col items-center justify-center gap-10',
+          'py-5 md:py-10',
+          isDarkTheme ? 'bg-purple-lightGrey' : 'bg-white',
+          'text-txt-primary'
+        )}
+      >
+        {blok.intro_content && (
+          <div
+            className={cn(
+              'flex flex-col gap-5 md:gap-3',
+              'w-100 md:w-236 xl:w-326',
+              blok.alignment === 'center' && 'text-center',
+              blok.alignment === 'right' && 'text-right',
+              !blok.alignment && 'text-left'
+            )}
+          >
+            {introMap}
+          </div>
+        )}
+        <div
+          className={cn(
+            'flex flex-col gap-10 md:gap-4 lg:flex-row lg:gap-7 xl:gap-7',
+            'self-end',
+            blok.comparison ? 'w-max' : 'w-107 md:w-236 xl:w-326'
+          )}
+        >
+          <div
+            className={cn(
+              'flex flex-col gap-5',
+              hasTwoColumns ? 'w-100 md:w-116 lg:w-160 xl:w-160' : 'w-full'
+            )}
+          >
+            {column1}
+          </div>
+          {hasTwoColumns && (
+            <div className="flex flex-col gap-5 w-100 md:w-116 lg:w-160 xl:w-160">
+              {column2}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
   );
 };
 
-const ColumnCopy = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.75vw;
+function columnCopyItems(copyItems, keyPrefix = 'col') {
+  if (!copyItems?.length) return null;
+  return copyItems.map((item, columnIndex) => (
+    <RichTextRenderer document={item.copy} key={keyPrefix ? `${keyPrefix}-${columnIndex}` : columnIndex} />
+  ));
+}
 
-  ${media.fullWidth} {
-    gap: 12px;
-  }
-
-  ${media.tablet} {
-    gap: 1.172vw;
-  }
-
-  ${media.mobile} {
-    gap: 2.5vw;
-  }
-`;
-const ItemIcon = styled.img`
-  padding: unset !important;
-  width: ${(props) => (props.small_icon ? '2vw' : '3vw')};
-  height: ${(props) => (props.small_icon ? '2vw' : '3vw')};
-
-  ${media.fullWidth} {
-    width: ${(props) => (props.small_icon ? '32px' : '48px')};
-    height: ${(props) => (props.small_icon ? '32px' : '48px')};
-  }
-
-  ${media.tablet} {
-    width: ${(props) => (props.small_icon ? '2.353vw' : '4.688vw')};
-    height: ${(props) => (props.small_icon ? '2.353vw' : '4.688vw')};
-  }
-
-  ${media.mobile} {
-    width: ${(props) => (props.small_icon ? '5vw' : '10vw')};
-    height: ${(props) => (props.small_icon ? '5vw' : '10vw')};
-  }
-`;
-const ColumnItem = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  gap: 0.75vw;
-
-  ${media.fullWidth} {
-    gap: 12px;
-  }
-
-  ${media.tablet} {
-    gap: 1.172vw;
-  }
-
-  ${media.mobile} {
-    align-items: unset;
-    gap: 1.5vw;
-  }
-`;
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.25vw;
-  width: ${(props) => (props.doublecolumn ? '39.938vw' : '100%')};
-
-  ${media.fullWidth} {
-    gap: 20px;
-    width: ${(props) => (props.doublecolumn ? '639px' : '100%')};
-  }
-
-  ${media.tablet} {
-    gap: 1.953vw;
-    width: ${(props) => (props.doublecolumn ? '45.313vw' : '100%')};
-  }
-
-  ${media.mobile} {
-    gap: 4.167vw;
-    width: ${(props) => (props.doublecolumn ? '83.333vw' : '100%')};
-  }
-`;
-const ColumnContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1.625vw;
-  align-self: flex-end
-  /* margin-left: 21.875vw; */
-  width: ${(props) => (props.comparison ? 'max-content' : '81.5vw')};
-
-  ${media.fullWidth} {
-    gap: 26px;
-    width: ${(props) => (props.comparison ? 'max-content' : '1304px')};
-    /* margin-left: 350px; */
-  }
-
-  ${media.tablet} {
-    gap: 1.563vw;
-    width: ${(props) => (props.comparison ? 'max-content' : '92.188vw')};
-    /* margin-left: 18vw; */
-  }
-
-  ${media.mobile} {
-    flex-direction: column;
-    gap: 8.167vw;
-    width: ${(props) => (props.comparison ? 'max-content' : '89.167vw')};
-  }
-`;
-const IntroContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.75vw;
-  /* margin-bottom: 2.5vw; */
-  width: 81.5vw;
-  text-align: ${(props) => (props.alignment ? props.alignment : 'left')};
-
-  ${media.fullWidth} {
-    gap: 12px;
-    /* margin-bottom: 40px; */
-    width: 1304px;
-  }
-
-  ${media.tablet} {
-    gap: 12px;
-    /* margin-bottom: 40px; */
-    width: 92.188vw;
-  }
-
-  ${media.mobile} {
-    gap: 4.167vw;
-    /* margin-bottom: 8.333vw; */
-    width: 83.333vw;
-  }
-`;
-const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background: ${(props) => props.theme.two_column_list.bg};
-  justify-self: center;
-  align-items: center;
-  justify-content: center;
-  gap: 2.5vw;
-  color: ${(props) => props.theme.two_column_list.textColor};
-  padding: 3vw 0vw;
-
-  ${media.fullWidth} {
-    gap: 40px;
-    padding: 40px 0px;
-  }
-
-  ${media.tablet} {
-    gap: 3.906vw;
-    padding: 3.859vw 0vw;
-  }
-
-  ${media.mobile} {
-    gap: 8.333vw;
-    padding: 4.333vw 0vw;
-  }
-`;
-const ComponentWrapper = styled.div`
-  padding: ${(props) => {
-    if (props.spacingOffset === 'top') {
-      return props.spacing === 'default'
-        ? '3.75vw 0 0 0'
-        : props.spacing
-          ? `${props.spacing}px 0 0 0`
-          : '3.75vw 0 0 0';
-    }
-    if (props.spacingOffset === 'bottom') {
-      return props.spacing === 'default'
-        ? '0 0 3.75vw 0'
-        : props.spacing
-          ? `0 0 ${props.spacing}px 0`
-          : '0 0 3.75vw 0';
-    }
-    return props.spacing === 'default'
-      ? '3.75vw 0 3.75vw 0'
-      : props.spacing
-        ? `${props.spacing}px 0 ${props.spacing}px 0`
-        : '3.75vw 0 3.75vw 0';
-  }};
-
-  ${media.fullWidth} {
-    padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '60px 0 0 0'
-          : props.spacing
-            ? `${props.spacing}px 0 0 0`
-            : '60px 0 0 0';
-      }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 60px 0'
-          : props.spacing
-            ? `0 0 ${props.spacing}px 0`
-            : '0 0 60px 0';
-      }
-      return props.spacing === 'default'
-        ? '60px 0 60px 0'
-        : props.spacing
-          ? `${props.spacing}px 0 ${props.spacing}px 0`
-          : '60px 0 60px 0';
-    }};
-  }
-
-  ${media.tablet} {
-    padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '5.859vw 0 0 0'
-          : props.spacing
-            ? `${props.spacing}px 0 0 0`
-            : '5.859vw 0 0 0';
-      }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 5.859vw 0'
-          : props.spacing
-            ? `0 0 ${props.spacing}px 0`
-            : '0 0 5.859vw 0';
-      }
-      return props.spacing === 'default'
-        ? '5.859vw 0 5.859vw 0'
-        : props.spacing
-          ? `${props.spacing}px 0 ${props.spacing}px 0`
-          : '5.859vw 0 5.859vw 0';
-    }};
-  }
-
-  ${media.mobile} {
-    padding: ${(props) => {
-      if (props.spacingOffset === 'top') {
-        return props.spacing === 'default'
-          ? '12.5vw 0 0 0'
-          : props.spacing
-            ? `${props.spacing}px 0 0 0`
-            : '12.5vw 0 0 0';
-      }
-      if (props.spacingOffset === 'bottom') {
-        return props.spacing === 'default'
-          ? '0 0 12.5vw 0'
-          : props.spacing
-            ? `0 0 ${props.spacing}px 0`
-            : '0 0 12.5vw 0';
-      }
-      return props.spacing === 'default'
-        ? '12.5vw 0 12.5vw 0'
-        : props.spacing
-          ? `${props.spacing}px 0 ${props.spacing}px 0`
-          : '12.5vw 0 12.5vw 0';
-    }};
-  }
-`;
 export default TwoColumnList;
