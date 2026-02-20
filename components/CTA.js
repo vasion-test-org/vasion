@@ -78,7 +78,7 @@ const CTA = ({ blok }) => {
           themeTextColor,
           !ctaBgImage && themeCardBg,
           ctaBgImage && 'bg-no-repeat',
-          isPillWithBg ? 'bg-[length:100%_100%]' : 'bg-cover',
+          isPillWithBg ? 'bg-size-[100%_100%]' : 'bg-cover',
 
           // Text align
           ['pill', 'image'].includes(ctaStyle) ? 'text-left max-sm:text-center' : 'text-center',
@@ -97,7 +97,7 @@ const CTA = ({ blok }) => {
           // Padding
           isPill && 'px-[6vw] py-[3.75vw] md:px-[3.906vw] md:py-[5.859vw] xl:px-24 xl:py-15',
           isImage &&
-            'pt-[6vw] pr-[3.75vw] pb-[9.25vw] pl-[56.25vw] md:pt-[9.375vw] md:pr-[5.859vw] md:pb-[14.453vw] md:pl-[46.094vw] xl:pt-24 xl:pr-15 xl:pb-[148px] xl:pl-[900px]',
+            'pt-[6vw] pr-[3.75vw] pb-[9.25vw] pl-[56.25vw] md:pt-[9.375vw] md:pr-[5.859vw] md:pb-[14.453vw] md:pl-[46.094vw] xl:pt-24 xl:pr-15 xl:pb-37 xl:pl-225',
           isCentered && 'px-[9.25vw] py-[6vw] md:px-[3.906vw] md:py-[5.859vw] xl:px-0 xl:py-24',
           !isPill &&
             !isImage &&
@@ -107,15 +107,15 @@ const CTA = ({ blok }) => {
           'max-sm:p-[8.333vw]',
 
           // Width
-          isPill && 'w-[81.5vw] md:w-[92.188vw] xl:w-[1304px]',
-          isImage && !fullwidth && 'w-[88vw] md:w-[92.188vw] xl:w-[1408px]',
+          isPill && 'w-[81.5vw] md:w-[92.188vw] xl:w-326',
+          isImage && !fullwidth && 'w-[88vw] md:w-[92.188vw] xl:w-352',
           isImage && fullwidth && 'w-full',
           isCentered && 'w-full md:w-full',
           !isPill && !isImage && 'w-full',
 
           // Min-height
           isPillWithBg &&
-            'min-h-[18.875vw] max-sm:min-h-[128.125vw] md:min-h-[25.586vw] xl:min-h-[302px]',
+            'min-h-[18.875vw] max-sm:min-h-[128.125vw] md:min-h-[25.586vw] xl:min-h-75.5',
           isImage && fullwidth && 'min-h-[34.722vw]',
 
           // Border radius
@@ -132,8 +132,8 @@ const CTA = ({ blok }) => {
             'flex flex-col',
             'gap-[1vw] max-sm:gap-[3.333vw] md:gap-[1.563vw] xl:gap-4',
             isPillWithBg
-              ? 'max-w-[392px]'
-              : 'max-w-[75vw] max-sm:max-w-full md:max-w-[78.125vw] xl:max-w-[1200px]',
+              ? 'max-w-98'
+              : 'xl:max-w-wide max-w-[75vw] max-sm:max-w-full md:max-w-[78.125vw]',
             ['pill', 'image'].includes(ctaStyle) ? 'text-left max-sm:text-center' : 'text-center'
           )}
         >
