@@ -54,13 +54,13 @@ const CTA = ({ blok }) => {
       className={cn(
         'flex w-full items-center justify-center',
         // Vertical padding – spacingOffset top
-        spacingOffset === 'top' && !hasCustomSpacing && 'pt-[3.75vw] pb-0 md:pt-[5.859vw] xl:pt-15',
+        spacingOffset === 'top' && !hasCustomSpacing && 'pt-4.5 pb-0 md:pt-15',
         // Vertical padding – spacingOffset bottom
         spacingOffset === 'bottom' &&
           !hasCustomSpacing &&
-          'pt-0 pb-[3.75vw] md:pb-[5.859vw] xl:pb-15',
+          'pt-0 pb-4.5 md:pb-15',
         // Vertical padding – both
-        !spacingOffset && !hasCustomSpacing && 'py-[3.75vw] md:py-[5.859vw] xl:py-15'
+        !spacingOffset && !hasCustomSpacing && 'py-4.5 md:py-15'
       )}
       style={
         hasCustomSpacing
@@ -90,38 +90,38 @@ const CTA = ({ blok }) => {
           isPill && !isPillWithBg ? 'lg:flex-row' : 'flex-col',
           // Gap
           isPillWithBg
-            ? 'gap-[2.5vw] xl:gap-10'
-            : 'gap-[3.75vw] max-sm:gap-[3.333vw] md:gap-[5.859vw] xl:gap-15',
+            ? 'gap-3 xl:gap-10'
+            : 'gap-4.5 max-sm:gap-4 md:gap-15',
 
           // Padding
-          isPill && 'px-[6vw] py-[3.75vw] md:px-[3.906vw] md:py-[5.859vw] xl:px-24 xl:py-15',
+          isPill && 'px-7 py-4.5 md:px-10 md:py-15 xl:px-24',
           isImage &&
-            'pt-[6vw] pr-[3.75vw] pb-[9.25vw] pl-[56.25vw] md:pt-[9.375vw] md:pr-[5.859vw] md:pb-[14.453vw] md:pl-[46.094vw] xl:pt-24 xl:pr-15 xl:pb-37 xl:pl-225',
-          isCentered && 'px-[9.25vw] py-[6vw] md:px-[3.906vw] md:py-[5.859vw] xl:px-0 xl:py-24',
+            'pt-7 pr-4.5 pb-11 pl-67.5 md:pt-24 md:pr-15 md:pb-37 md:pl-118',
+          isCentered && 'px-11 py-7 md:px-10 md:py-15 xl:px-0 xl:py-24',
           !isPill &&
             !isImage &&
             !isCentered &&
-            'px-0 py-[6vw] md:px-[3.906vw] md:py-[5.859vw] xl:px-0 xl:py-24',
+            'px-0 py-7 md:px-10 md:py-15 xl:px-0 xl:py-24',
           // Mobile padding override (all styles)
-          'max-sm:p-[8.333vw]',
+          'max-sm:p-10',
 
           // Width
-          isPill && 'w-[81.5vw] md:w-[92.188vw] xl:w-326',
-          isImage && !fullwidth && 'w-[88vw] md:w-[92.188vw] xl:w-352',
+          isPill && 'w-98 md:w-236 xl:w-326',
+          isImage && !fullwidth && 'w-106 md:w-236 xl:w-352',
           isImage && fullwidth && 'w-full',
           isCentered && 'w-full md:w-full',
           !isPill && !isImage && 'w-full',
 
           // Min-height
           isPillWithBg &&
-            'min-h-[18.875vw] max-sm:min-h-[128.125vw] md:min-h-[25.586vw] xl:min-h-75.5',
-          isImage && fullwidth && 'min-h-[34.722vw]',
+            'min-h-22.5 max-sm:min-h-154 md:min-h-65.5 xl:min-h-75.5',
+          isImage && fullwidth && 'min-h-41.5',
 
           // Border radius
           isImage && fullwidth && 'rounded-none',
           (isPill || isImage) &&
             !(isImage && fullwidth) &&
-            'rounded-[1.5vw] max-sm:rounded-[5vw] md:rounded-[2.344vw] xl:rounded-2xl'
+            'rounded-2 max-sm:rounded-6 md:rounded-6 xl:rounded-2xl'
         )}
         style={ctaBgImage}
       >
@@ -129,10 +129,10 @@ const CTA = ({ blok }) => {
         <div
           className={cn(
             'flex flex-col',
-            'gap-[1vw] max-sm:gap-[3.333vw] md:gap-[1.563vw] xl:gap-4',
+            'gap-1.25 max-sm:gap-4 md:gap-4',
             isPillWithBg
               ? 'max-w-98'
-              : 'xl:max-w-wide max-w-[75vw] max-sm:max-w-full md:max-w-[78.125vw]',
+              : 'max-w-90 max-sm:max-w-full md:max-w-200 xl:max-w-wide',
             ['pill', 'image'].includes(ctaStyle) ? 'text-left max-sm:text-center' : 'text-center'
           )}
         >
