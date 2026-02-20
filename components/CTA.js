@@ -88,7 +88,6 @@ const CTA = ({ blok }) => {
 
           // Flex direction
           isPill && !isPillWithBg ? 'lg:flex-row' : 'flex-col',
-
           // Gap
           isPillWithBg
             ? 'gap-[2.5vw] xl:gap-10'
