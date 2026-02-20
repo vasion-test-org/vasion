@@ -15,6 +15,7 @@ const Testimonial = ({ blok }) => {
   const isDark = themeKey === 'dark';
   const layout = blok.layout;
   const spacing = blok.section_spacing;
+
   const spacingMap = {
     40: 'py-10',
     60: 'py-15',
@@ -23,7 +24,7 @@ const Testimonial = ({ blok }) => {
   const spacingClasses =
     spacing === 'default' || !spacing
       ? tw`py-4.5 md:py-10 lg:py-15`
-      : spacingMap[spacing] ?? tw`py-4.5 md:py-10 lg:py-15`;
+      : (spacingMap[spacing] ?? tw`py-4.5 md:py-10 lg:py-15`);
 
   return (
     <div className={cn('flex flex-col items-center justify-center', spacingClasses)}>

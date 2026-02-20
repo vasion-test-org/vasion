@@ -206,6 +206,7 @@
     #190c30 32.97%,
     #3d2562 87.16%
   );
+  --gradient-cta-dark: linear-gradient(180deg, #190c30 -0.27%, #3d2562 126.67%);
 }
 
 /* Custom utility classes for gradients */
@@ -245,6 +246,10 @@
 
 @utility bg-testimonial-dark {
   background: var(--gradient-testimonial-dark);
+}
+
+@utility bg-cta-dark {
+  background: var(--gradient-cta-dark);
 }
 
 @font-face {
