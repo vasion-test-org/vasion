@@ -26,14 +26,14 @@ const TwoColumnList = ({ blok }) => {
   const column1 = blok?.column_1?.map((item, index) => (
     <div
       key={`col1-item-${index}`}
-      className={tw`flex flex-row items-start gap-2 md:items-center md:gap-3`}
+      className={tw`flex w-80 flex-row items-center gap-2 md:w-auto md:items-center md:gap-3`}
     >
       {item?.icon?.filename && (
         <Image
           src={item.icon.filename}
           alt=""
-          width={item.small_icon ? 32 : 48}
-          height={item.small_icon ? 32 : 48}
+          width={item?.small_icon ? 32 : 48}
+          height={item?.small_icon ? 32 : 48}
           className={cn(
             'shrink-0',
             item.small_icon ? 'h-6 w-6 md:h-6 md:w-6 lg:h-8 lg:w-8' : 'h-12 w-12'
@@ -50,7 +50,7 @@ const TwoColumnList = ({ blok }) => {
   const column2 = blok?.column_2?.map((item, index) => (
     <div
       key={`col2-item-${index}`}
-      className={tw`flex flex-row items-start gap-2 md:items-center md:gap-3`}
+      className={tw`flex flex-row items-center gap-2 md:items-center md:gap-3`}
     >
       {item?.icon?.filename && (
         <Image
@@ -76,7 +76,7 @@ const TwoColumnList = ({ blok }) => {
   return (
     <section
       className={cn(
-        'w-full',
+        'w-full overflow-hidden',
         isDefaultSpacing && spacingOffset === 'top' && 'pt-4.5 md:pt-15',
         isDefaultSpacing && spacingOffset === 'bottom' && 'pb-4.5 md:pb-15',
         isDefaultSpacing && !spacingOffset && 'py-4.5 md:py-15',
@@ -109,8 +109,8 @@ const TwoColumnList = ({ blok }) => {
         )}
         <div
           className={cn(
-            'flex flex-col gap-10 md:flex-row md:gap-4 lg:gap-7 xl:gap-7',
-            'self-end',
+            'relative left-7 flex flex-col gap-10 sm:left-15 sm:flex-row sm:gap-0 md:left-35 md:flex-row md:gap-4 lg:left-45 lg:gap-7 xl:gap-7',
+            'center',
             blok.comparison ? 'w-max' : 'w-107 md:w-236 xl:w-326'
           )}
         >
@@ -123,9 +123,7 @@ const TwoColumnList = ({ blok }) => {
             {column1}
           </div>
           {hasTwoColumns && (
-            <div className="flex flex-col gap-5 w-100 md:w-116 lg:w-160 xl:w-160">
-              {column2}
-            </div>
+            <div className="flex w-100 flex-col gap-5 md:w-116 lg:w-160 xl:w-160">{column2}</div>
           )}
         </div>
       </div>
@@ -136,7 +134,10 @@ const TwoColumnList = ({ blok }) => {
 function columnCopyItems(copyItems, keyPrefix = 'col') {
   if (!copyItems?.length) return null;
   return copyItems.map((item, columnIndex) => (
-    <RichTextRenderer document={item.copy} key={keyPrefix ? `${keyPrefix}-${columnIndex}` : columnIndex} />
+    <RichTextRenderer
+      document={item.copy}
+      key={keyPrefix ? `${keyPrefix}-${columnIndex}` : columnIndex}
+    />
   ));
 }
 
