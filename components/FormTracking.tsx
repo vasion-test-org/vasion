@@ -27,22 +27,22 @@ interface TouchData {
 const STORAGE_KEY = 'vasion_attribution';
 
 const ORGANIC_PATTERNS: Record<string, { source: string; medium: string }> = {
-  'google.com':        { source: 'google',      medium: 'organic' },
-  'bing.com':          { source: 'bing',         medium: 'organic' },
-  'yahoo.com':         { source: 'yahoo',        medium: 'organic' },
-  'duckduckgo.com':    { source: 'duckduckgo',   medium: 'organic' },
-  'linkedin.com':      { source: 'linkedin',     medium: 'organic-social' },
-  'twitter.com':       { source: 'twitter',      medium: 'organic-social' },
-  'x.com':             { source: 'twitter',      medium: 'organic-social' },
-  'facebook.com':      { source: 'facebook',     medium: 'organic-social' },
-  'reddit.com':        { source: 'reddit',       medium: 'organic-social' },
-  'perplexity.ai':     { source: 'perplexity',   medium: 'ai-referral' },
-  'chat.openai.com':   { source: 'chatgpt',      medium: 'ai-referral' },
-  'claude.ai':         { source: 'claude',       medium: 'ai-referral' },
-  'gemini.google.com': { source: 'gemini',       medium: 'ai-referral' },
-  'g2.com':            { source: 'g2',           medium: 'review-site' },
-  'trustradius.com':   { source: 'trustradius',  medium: 'review-site' },
-  'capterra.com':      { source: 'capterra',     medium: 'review-site' },
+  'google.com': { source: 'google', medium: 'organic' },
+  'bing.com': { source: 'bing', medium: 'organic' },
+  'yahoo.com': { source: 'yahoo', medium: 'organic' },
+  'duckduckgo.com': { source: 'duckduckgo', medium: 'organic' },
+  'linkedin.com': { source: 'linkedin', medium: 'organic-social' },
+  'twitter.com': { source: 'twitter', medium: 'organic-social' },
+  'x.com': { source: 'twitter', medium: 'organic-social' },
+  'facebook.com': { source: 'facebook', medium: 'organic-social' },
+  'reddit.com': { source: 'reddit', medium: 'organic-social' },
+  'perplexity.ai': { source: 'perplexity', medium: 'ai-referral' },
+  'chat.openai.com': { source: 'chatgpt', medium: 'ai-referral' },
+  'claude.ai': { source: 'claude', medium: 'ai-referral' },
+  'gemini.google.com': { source: 'gemini', medium: 'ai-referral' },
+  'g2.com': { source: 'g2', medium: 'review-site' },
+  'trustradius.com': { source: 'trustradius', medium: 'review-site' },
+  'capterra.com': { source: 'capterra', medium: 'review-site' },
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -52,9 +52,7 @@ function inferFromReferrer(referrer: string): Partial<UTMData> | null {
 
   try {
     const { hostname } = new URL(referrer);
-    const match = Object.entries(ORGANIC_PATTERNS).find(([domain]) =>
-      hostname.includes(domain)
-    );
+    const match = Object.entries(ORGANIC_PATTERNS).find(([domain]) => hostname.includes(domain));
     if (match) {
       const [, { source, medium }] = match;
       return { utm_source: source, utm_medium: medium, referrer };
@@ -71,18 +69,30 @@ function buildUTMData(
   referrer: string,
   landingPage: string
 ): UTMData | null {
-  const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_sfdc_id'];
+  const utmKeys = [
+    'utm_source',
+    'utm_medium',
+    'utm_campaign',
+    'utm_term',
+    'utm_content',
+    'utm_sfdc_id',
+  ];
   const fromParams: Partial<UTMData> = {};
 
   utmKeys.forEach((key) => {
     const val = searchParams.get(key);
-    if (val) fromParams[key as keyof UTMData] = val;
+    if (val) fromParams[key as keyof UTMData] = val.toLowerCase().trim();
   });
 
   const hasUTMs = Object.keys(fromParams).length > 0;
 
   if (hasUTMs) {
-    return { ...fromParams, referrer, landing_page: landingPage, timestamp: new Date().toISOString() };
+    return {
+      ...fromParams,
+      referrer,
+      landing_page: landingPage,
+      timestamp: new Date().toISOString(),
+    };
   }
 
   // No UTM params — try to infer from referrer
@@ -92,7 +102,12 @@ function buildUTMData(
   }
 
   // Truly direct — still record it so we know
-  return { utm_source: 'direct', utm_medium: 'none', landing_page: landingPage, timestamp: new Date().toISOString() };
+  return {
+    utm_source: 'direct',
+    utm_medium: 'none',
+    landing_page: landingPage,
+    timestamp: new Date().toISOString(),
+  };
 }
 
 function getStoredAttribution(): TouchData {
@@ -109,7 +124,7 @@ function saveAttribution(data: UTMData) {
     const stored = getStoredAttribution();
     const updated: TouchData = {
       first_touch: stored.first_touch ?? data, // never overwrite first touch
-      last_touch: data,                         // always update last touch
+      last_touch: data, // always update last touch
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
   } catch {
@@ -130,22 +145,22 @@ function populateMarketoFields(form: any) {
 
   const fieldMap: Record<string, string> = {
     // First touch
-    UTM_Source_First__c:    ft?.utm_source   ?? '',
-    UTM_Medium_First__c:    ft?.utm_medium   ?? '',
-    UTM_Campaign_First__c:  ft?.utm_campaign ?? '',
-    UTM_Term_First__c:      ft?.utm_term     ?? '',
-    UTM_Content_First__c:   ft?.utm_content  ?? '',
-    UTM_SFDC_ID_First__c:   ft?.utm_sfdc_id  ?? '',
+    UTM_Source_First__c: ft?.utm_source ?? '',
+    UTM_Medium_First__c: ft?.utm_medium ?? '',
+    UTM_Campaign_First__c: ft?.utm_campaign ?? '',
+    UTM_Term_First__c: ft?.utm_term ?? '',
+    UTM_Content_First__c: ft?.utm_content ?? '',
+    UTM_SFDC_ID_First__c: ft?.utm_sfdc_id ?? '',
     // Last touch
-    UTM_Source__c:          lt?.utm_source   ?? '',
-    UTM_Medium__c:          lt?.utm_medium   ?? '',
-    UTM_Campaign__c:        lt?.utm_campaign ?? '',
-    UTM_Term__c:            lt?.utm_term     ?? '',
-    UTM_Content__c:         lt?.utm_content  ?? '',
-    UTM_SFDC_ID__c:         lt?.utm_sfdc_id  ?? '',
+    UTM_Source__c: lt?.utm_source ?? '',
+    UTM_Medium__c: lt?.utm_medium ?? '',
+    UTM_Campaign__c: lt?.utm_campaign ?? '',
+    UTM_Term__c: lt?.utm_term ?? '',
+    UTM_Content__c: lt?.utm_content ?? '',
+    UTM_SFDC_ID__c: lt?.utm_sfdc_id ?? '',
     // Extra context
-    Landing_Page__c:        ft?.landing_page ?? '',
-    Referrer__c:            ft?.referrer     ?? '',
+    Landing_Page__c: ft?.landing_page ?? '',
+    Referrer__c: ft?.referrer ?? '',
   };
 
   form.getFields().forEach((field: any) => {
@@ -217,7 +232,8 @@ function FormTrackingComponent() {
 
     const script = document.createElement('script');
     script.id = 'recaptcha-script';
-    script.src = 'https://www.recaptcha.net/recaptcha/api.js?onload=onRecaptchaLoaded&render=explicit';
+    script.src =
+      'https://www.recaptcha.net/recaptcha/api.js?onload=onRecaptchaLoaded&render=explicit';
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
