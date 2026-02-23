@@ -111,7 +111,7 @@ const TwoColumnList = ({ blok }) => {
         <div
           className={cn(
             'flex min-w-0 flex-col gap-10 md:flex-row md:gap-4 lg:gap-7 xl:gap-7',
-            'self-end',
+            hasTwoColumns ? 'self-end' : 'self-start',
             blok.comparison ? 'w-max max-w-full' : 'w-full max-w-full md:max-w-236 xl:max-w-326'
           )}
         >
