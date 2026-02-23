@@ -56,9 +56,7 @@ const CTA = ({ blok }) => {
         // Vertical padding – spacingOffset top
         spacingOffset === 'top' && !hasCustomSpacing && 'pt-4.5 pb-0 md:pt-15',
         // Vertical padding – spacingOffset bottom
-        spacingOffset === 'bottom' &&
-          !hasCustomSpacing &&
-          'pt-0 pb-4.5 md:pb-15',
+        spacingOffset === 'bottom' && !hasCustomSpacing && 'pt-0 pb-4.5 md:pb-15',
         // Vertical padding – both
         !spacingOffset && !hasCustomSpacing && 'py-4.5 md:py-15'
       )}
@@ -86,42 +84,33 @@ const CTA = ({ blok }) => {
           // Align / justify
           isPillWithBg ? 'items-start justify-start' : 'items-center justify-between',
 
-          // Flex direction
-          isPill && !isPillWithBg ? 'lg:flex-row' : 'flex-col',
+          // Flex direction: pill without bg — column on mobile only, row from sm up
+          isPill && !isPillWithBg ? 'max-sm:flex-col sm:flex-row' : 'flex-col',
           // Gap
-          isPillWithBg
-            ? 'gap-3 xl:gap-10'
-            : 'gap-4.5 max-sm:gap-4 md:gap-15',
+          isPillWithBg ? 'gap-3 xl:gap-10' : 'gap-4.5 max-sm:gap-4 md:gap-15',
 
           // Padding
           isPill && 'px-7 py-4.5 md:px-10 md:py-15 xl:px-24',
-          isImage &&
-            'pt-7 pr-4.5 pb-11 pl-67.5 md:pt-24 md:pr-15 md:pb-37 md:pl-118',
+          isImage && 'pt-7 pr-4.5 pb-11 pl-67.5 md:pt-24 md:pr-15 md:pb-37 md:pl-118',
           isCentered && 'px-11 py-7 md:px-10 md:py-15 xl:px-0 xl:py-24',
-          !isPill &&
-            !isImage &&
-            !isCentered &&
-            'px-0 py-7 md:px-10 md:py-15 xl:px-0 xl:py-24',
+          !isPill && !isImage && !isCentered && 'px-0 py-7 md:px-10 md:py-15 xl:px-0 xl:py-24',
           // Mobile padding override (all styles)
           'max-sm:p-10',
 
           // Width
-          isPill && 'w-98 md:w-236 xl:w-326',
+          isPill && 'w-100 md:w-236 xl:w-326',
           isImage && !fullwidth && 'w-106 md:w-236 xl:w-352',
           isImage && fullwidth && 'w-full',
           isCentered && 'w-full md:w-full',
           !isPill && !isImage && 'w-full',
 
           // Min-height
-          isPillWithBg &&
-            'min-h-22.5 max-sm:min-h-154 md:min-h-65.5 xl:min-h-75.5',
+          isPillWithBg && 'min-h-22.5 max-sm:min-h-154 md:min-h-65.5 xl:min-h-75.5',
           isImage && fullwidth && 'min-h-41.5',
 
-          // Border radius
+          // Border radius: pill and image (when not image+fullwidth) get radius at all breakpoints
           isImage && fullwidth && 'rounded-none',
-          (isPill || isImage) &&
-            !(isImage && fullwidth) &&
-            'rounded-2 max-sm:rounded-6 md:rounded-6 xl:rounded-2xl'
+          (isPill || isImage) && !(isImage && fullwidth) && 'rounded-2xl'
         )}
         style={ctaBgImage}
       >
@@ -130,9 +119,7 @@ const CTA = ({ blok }) => {
           className={cn(
             'flex flex-col',
             'gap-1.25 max-sm:gap-4 md:gap-4',
-            isPillWithBg
-              ? 'max-w-98'
-              : 'max-w-90 max-sm:max-w-full md:max-w-200 xl:max-w-wide',
+            isPillWithBg ? 'max-w-98' : 'xl:max-w-wide max-w-107 max-sm:max-w-full md:max-w-200',
             ['pill', 'image'].includes(ctaStyle) ? 'text-left max-sm:text-center' : 'text-center'
           )}
         >
