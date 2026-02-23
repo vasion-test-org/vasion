@@ -39,7 +39,7 @@ const TwoColumnList = ({ blok }) => {
           height={item.small_icon ? 40 : 64}
           className={cn(
             'shrink-0 !p-0',
-            item.small_icon ? 'h-auto w-8 md:w-8 lg:w-10' : 'h-auto w-14 md:w-14 lg:w-16'
+            blok.small_icons ? 'h-auto w-8 md:w-8 lg:w-10' : 'h-auto w-14 md:w-14 lg:w-16'
           )}
           aria-hidden
         />
@@ -60,7 +60,7 @@ const TwoColumnList = ({ blok }) => {
           height={item?.small_icon ? 40 : 64}
           className={cn(
             'shrink-0 !p-0',
-            item?.small_icon ? 'h-auto w-8 md:w-8 lg:w-10' : 'h-auto w-14 md:w-14 lg:w-16'
+            blok?.small_icons ? 'h-auto w-8 md:w-8 lg:w-10' : 'h-auto w-14 md:w-14 lg:w-16'
           )}
           aria-hidden
         />
