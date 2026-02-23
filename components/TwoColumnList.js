@@ -92,7 +92,7 @@ const TwoColumnList = ({ blok }) => {
           'rounded-2xl'
         )}
       >
-        {blok.intro_content && (
+        {blok?.intro_content?.length > 0 && (
           <div
             className={cn(
               'flex min-w-0 flex-col gap-5 md:gap-3',
