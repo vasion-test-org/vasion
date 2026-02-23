@@ -26,17 +26,17 @@ const TwoColumnList = ({ blok }) => {
   const column1 = blok?.column_1?.map((item, index) => (
     <div
       key={`col1-item-${index}`}
-      className={tw`flex w-80 flex-row items-center gap-2 md:w-auto md:items-center md:gap-3`}
+      className={tw`flex w-80 flex-row items-start gap-2 md:w-auto md:gap-3`}
     >
       {item?.icon?.filename && (
         <Image
           src={item.icon.filename}
           alt=""
-          width={item?.small_icon ? 32 : 48}
-          height={item?.small_icon ? 32 : 48}
+          width={item.small_icon ? 40 : 64}
+          height={item.small_icon ? 40 : 64}
           className={cn(
             'shrink-0',
-            item.small_icon ? 'h-6 w-6 md:h-6 md:w-6 lg:h-8 lg:w-8' : 'h-12 w-12'
+            item.small_icon ? 'h-8 w-8 md:h-8 md:w-8 lg:h-10 lg:w-10' : 'h-14 w-14 md:h-14 md:w-14 lg:h-16 lg:w-16'
           )}
           aria-hidden
         />
@@ -50,17 +50,17 @@ const TwoColumnList = ({ blok }) => {
   const column2 = blok?.column_2?.map((item, index) => (
     <div
       key={`col2-item-${index}`}
-      className={tw`flex flex-row items-center gap-2 md:items-center md:gap-3`}
+      className={tw`flex flex-row items-start gap-2 md:gap-3`}
     >
       {item?.icon?.filename && (
         <Image
           src={item.icon.filename}
           alt=""
-          width={item?.small_icon ? 32 : 48}
-          height={item?.small_icon ? 32 : 48}
+          width={item?.small_icon ? 40 : 64}
+          height={item?.small_icon ? 40 : 64}
           className={cn(
             'shrink-0',
-            item?.small_icon ? 'h-6 w-6 md:h-6 md:w-6 lg:h-8 lg:w-8' : 'h-12 w-12'
+            item?.small_icon ? 'h-8 w-8 md:h-8 md:w-8 lg:h-10 lg:w-10' : 'h-14 w-14 md:h-14 md:w-14 lg:h-16 lg:w-16'
           )}
           aria-hidden
         />
