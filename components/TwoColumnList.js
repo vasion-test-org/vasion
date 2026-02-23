@@ -36,7 +36,7 @@ const TwoColumnList = ({ blok }) => {
           height={item.small_icon ? 40 : 64}
           className={cn(
             'shrink-0',
-            item.small_icon ? 'h-8 w-8 md:h-8 md:w-8 lg:h-10 lg:w-10' : 'h-14 w-14 md:h-14 md:w-14 lg:h-16 lg:w-16'
+            item.small_icon ? 'lg: h-auto w-8 md:w-8 lg:w-10' : 'lg: h-auto w-14 md:w-14 lg:w-16'
           )}
           aria-hidden
         />
@@ -48,10 +48,7 @@ const TwoColumnList = ({ blok }) => {
   ));
 
   const column2 = blok?.column_2?.map((item, index) => (
-    <div
-      key={`col2-item-${index}`}
-      className={tw`flex flex-row items-start gap-2 md:gap-3`}
-    >
+    <div key={`col2-item-${index}`} className={tw`flex flex-row items-start gap-2 md:gap-3`}>
       {item?.icon?.filename && (
         <Image
           src={item.icon.filename}
@@ -60,7 +57,9 @@ const TwoColumnList = ({ blok }) => {
           height={item?.small_icon ? 40 : 64}
           className={cn(
             'shrink-0',
-            item?.small_icon ? 'h-8 w-8 md:h-8 md:w-8 lg:h-10 lg:w-10' : 'h-14 w-14 md:h-14 md:w-14 lg:h-16 lg:w-16'
+            item?.small_icon
+              ? 'h-auto w-8 md:h-8 md:w-8 lg:h-10 lg:w-10'
+              : 'h-auto w-14 md:h-14 md:w-14 lg:h-16 lg:w-16'
           )}
           aria-hidden
         />
@@ -88,7 +87,7 @@ const TwoColumnList = ({ blok }) => {
       <div
         {...storyblokEditable(blok)}
         className={cn(
-          'flex w-full flex-col items-center justify-center gap-10',
+          'flex w-full flex-col justify-center gap-10',
           'py-5 md:py-10',
           isDarkTheme ? 'bg-purple-lightGrey' : 'bg-white',
           'text-txt-primary'
