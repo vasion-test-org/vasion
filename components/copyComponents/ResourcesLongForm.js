@@ -154,6 +154,7 @@ const ResourcesLongFormContainer = styled.div`
 
   img {
     border-radius: 24px;
+    padding: unset;
   }
 
   div:empty {
