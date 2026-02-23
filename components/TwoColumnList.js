@@ -19,24 +19,27 @@ const TwoColumnList = ({ blok }) => {
   const isDefaultSpacing = spacing === 'default' || spacing == null;
   const customSpacingPx = !isDefaultSpacing && spacing != null ? Number(spacing) : null;
 
-  const introMap = blok?.intro_content?.map((item, index) => (
+  const introItemsWithContent = blok?.intro_content?.filter(
+    (item) => item?.copy && hasRichTextContent(item.copy)
+  );
+  const introMap = introItemsWithContent?.map((item, index) => (
     <RichTextRenderer document={item.copy} key={index} />
   ));
 
   const column1 = blok?.column_1?.map((item, index) => (
     <div
       key={`col1-item-${index}`}
-      className={tw`flex w-80 flex-row items-center gap-2 md:w-auto md:items-center md:gap-3`}
+      className={tw`flex w-80 flex-row items-start gap-2 md:w-auto md:gap-3`}
     >
       {item?.icon?.filename && (
         <Image
           src={item.icon.filename}
           alt=""
-          width={item?.small_icon ? 32 : 48}
-          height={item?.small_icon ? 32 : 48}
+          width={blok.small_icon ? 40 : 64}
+          height={blok.small_icon ? 40 : 64}
           className={cn(
-            'shrink-0',
-            item.small_icon ? 'h-6 w-6 md:h-6 md:w-6 lg:h-8 lg:w-8' : 'h-12 w-12'
+            'shrink-0 !p-0',
+            blok.small_icons ? 'h-auto w-8 md:w-8 lg:w-10' : 'h-auto w-14 md:w-14 lg:w-16'
           )}
           aria-hidden
         />
@@ -48,19 +51,16 @@ const TwoColumnList = ({ blok }) => {
   ));
 
   const column2 = blok?.column_2?.map((item, index) => (
-    <div
-      key={`col2-item-${index}`}
-      className={tw`flex flex-row items-center gap-2 md:items-center md:gap-3`}
-    >
+    <div key={`col2-item-${index}`} className={tw`flex flex-row items-start gap-2 md:gap-3`}>
       {item?.icon?.filename && (
         <Image
           src={item.icon.filename}
           alt=""
-          width={item?.small_icon ? 32 : 48}
-          height={item?.small_icon ? 32 : 48}
+          width={blok?.small_icon ? 40 : 64}
+          height={blok?.small_icon ? 40 : 64}
           className={cn(
-            'shrink-0',
-            item?.small_icon ? 'h-6 w-6 md:h-6 md:w-6 lg:h-8 lg:w-8' : 'h-12 w-12'
+            'shrink-0 !p-0',
+            blok?.small_icons ? 'h-auto w-8 md:w-8 lg:w-10' : 'h-auto w-14 md:w-14 lg:w-16'
           )}
           aria-hidden
         />
@@ -76,7 +76,7 @@ const TwoColumnList = ({ blok }) => {
   return (
     <section
       className={cn(
-        'w-full overflow-hidden',
+        'w-full max-w-full overflow-hidden',
         isDefaultSpacing && spacingOffset === 'top' && 'pt-4.5 md:pt-15',
         isDefaultSpacing && spacingOffset === 'bottom' && 'pb-4.5 md:pb-15',
         isDefaultSpacing && !spacingOffset && 'py-4.5 md:py-15',
@@ -88,17 +88,18 @@ const TwoColumnList = ({ blok }) => {
       <div
         {...storyblokEditable(blok)}
         className={cn(
-          'flex w-full flex-col items-center justify-center gap-10',
-          'py-5 md:py-10',
+          'flex w-full max-w-full flex-col items-center justify-center gap-10',
+          'px-6 py-5 md:px-10 md:py-10',
           isDarkTheme ? 'bg-purple-lightGrey' : 'bg-white',
-          'text-txt-primary'
+          'text-txt-primary',
+          'rounded-2xl'
         )}
       >
-        {blok.intro_content && (
+        {introItemsWithContent?.length > 0 && (
           <div
             className={cn(
-              'flex flex-col gap-5 md:gap-3',
-              'w-100 md:w-236 xl:w-326',
+              'flex min-w-0 flex-col gap-5 md:gap-3',
+              'w-full max-w-full md:max-w-236 xl:max-w-326',
               blok.alignment === 'center' && 'text-center',
               blok.alignment === 'right' && 'text-right',
               !blok.alignment && 'text-left'
@@ -109,27 +110,38 @@ const TwoColumnList = ({ blok }) => {
         )}
         <div
           className={cn(
-            'relative left-7 flex flex-col gap-10 sm:left-15 sm:flex-row sm:gap-0 md:left-35 md:flex-row md:gap-4 lg:left-45 lg:gap-7 xl:gap-7',
-            'center',
-            blok.comparison ? 'w-max' : 'w-107 md:w-236 xl:w-326'
+            'flex min-w-0 flex-col gap-10 md:flex-row md:gap-4 lg:gap-7 xl:gap-7',
+            hasTwoColumns ? 'self-end' : 'self-start',
+            blok.comparison ? 'w-max max-w-full' : 'w-full max-w-full md:max-w-236 xl:max-w-326'
           )}
         >
           <div
             className={cn(
-              'flex flex-col gap-5',
-              hasTwoColumns ? 'w-100 md:w-116 lg:w-160 xl:w-160' : 'w-full'
+              'flex min-w-0 flex-col gap-5',
+              hasTwoColumns ? 'w-full max-w-full md:max-w-116 lg:max-w-160 xl:max-w-160' : 'w-full'
             )}
           >
             {column1}
           </div>
           {hasTwoColumns && (
-            <div className="flex w-100 flex-col gap-5 md:w-116 lg:w-160 xl:w-160">{column2}</div>
+            <div className="flex w-full max-w-full min-w-0 flex-col gap-5 md:max-w-116 lg:max-w-160 xl:max-w-160">
+              {column2}
+            </div>
           )}
         </div>
       </div>
     </section>
   );
 };
+
+function hasRichTextContent(doc) {
+  if (!doc?.content?.length) return false;
+  return doc.content.some((node) => {
+    if (typeof node?.text === 'string' && node.text.trim().length > 0) return true;
+    if (node?.content?.length) return hasRichTextContent({ content: node.content });
+    return false;
+  });
+}
 
 function columnCopyItems(copyItems, keyPrefix = 'col') {
   if (!copyItems?.length) return null;
