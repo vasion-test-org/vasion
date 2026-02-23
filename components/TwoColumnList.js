@@ -19,7 +19,10 @@ const TwoColumnList = ({ blok }) => {
   const isDefaultSpacing = spacing === 'default' || spacing == null;
   const customSpacingPx = !isDefaultSpacing && spacing != null ? Number(spacing) : null;
 
-  const introMap = blok?.intro_content?.map((item, index) => (
+  const introItemsWithContent = blok?.intro_content?.filter(
+    (item) => item?.copy && hasRichTextContent(item.copy)
+  );
+  const introMap = introItemsWithContent?.map((item, index) => (
     <RichTextRenderer document={item.copy} key={index} />
   ));
 
@@ -92,7 +95,7 @@ const TwoColumnList = ({ blok }) => {
           'rounded-2xl'
         )}
       >
-        {blok?.intro_content?.length > 0 && (
+        {introItemsWithContent?.length > 0 && (
           <div
             className={cn(
               'flex min-w-0 flex-col gap-5 md:gap-3',
@@ -130,6 +133,15 @@ const TwoColumnList = ({ blok }) => {
     </section>
   );
 };
+
+function hasRichTextContent(doc) {
+  if (!doc?.content?.length) return false;
+  return doc.content.some((node) => {
+    if (typeof node?.text === 'string' && node.text.trim().length > 0) return true;
+    if (node?.content?.length) return hasRichTextContent({ content: node.content });
+    return false;
+  });
+}
 
 function columnCopyItems(copyItems, keyPrefix = 'col') {
   if (!copyItems?.length) return null;
