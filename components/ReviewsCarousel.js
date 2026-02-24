@@ -72,6 +72,7 @@ const ReviewsCarousel = ({ blok }) => {
     : null;
 
   useEffect(() => {
+    let handleWheel;
     const initCarousel = async () => {
       const [{ default: gsap }, { default: Draggable }, { default: InertiaPlugin }] =
         await Promise.all([import('gsap'), import('gsap/Draggable'), import('gsap/InertiaPlugin')]);
@@ -104,6 +105,20 @@ const ReviewsCarousel = ({ blok }) => {
       const scrubProgress = (x) => {
         reviewLoop.progress(gsap.utils.wrap(0, 1, startProgress - x * ratio));
       };
+
+      // Handle two-finger trackpad swipe via wheel event
+      handleWheel = (e) => {
+        if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return; // ignore vertical scroll
+        e.preventDefault();
+        reviewLoop.timeScale(0);
+        const currentProgress = reviewLoop.progress();
+        reviewLoop.progress(
+          gsap.utils.wrap(0, 1, currentProgress + e.deltaX * ratio * 0.5)
+        );
+        reviewLoop.timeScale(1);
+      };
+
+      carouselRef.current.addEventListener('wheel', handleWheel, { passive: false });
 
       Draggable.create(proxy, {
         type: 'x',
@@ -149,6 +164,10 @@ const ReviewsCarousel = ({ blok }) => {
     };
 
     initCarousel();
+
+    return () => {
+      if (handleWheel) carouselRef.current?.removeEventListener('wheel', handleWheel);
+    };
   }, [hasStats]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
