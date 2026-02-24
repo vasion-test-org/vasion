@@ -112,13 +112,14 @@ const ReviewsCarousel = ({ blok }) => {
         e.preventDefault();
         reviewLoop.timeScale(0);
         const currentProgress = reviewLoop.progress();
+        const WHEEL_SCROLL_SENSITIVITY = 1.5;
         reviewLoop.progress(
-          gsap.utils.wrap(0, 1, currentProgress + e.deltaX * ratio * 1.5) // speed when on wheel (touchpad)
+          gsap.utils.wrap(0, 1, currentProgress + e.deltaX * ratio * WHEEL_SCROLL_SENSITIVITY)
         );
         reviewLoop.timeScale(1);
       };
 
-      carouselRef.current.addEventListener('wheel', handleWheel, { passive: false });
+      carouselRef.current?.addEventListener('wheel', handleWheel, { passive: false });
 
       Draggable.create(proxy, {
         type: 'x',
