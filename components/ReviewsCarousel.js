@@ -91,38 +91,48 @@ const ReviewsCarousel = ({ blok }) => {
       let startProgress;
       let isDragging = false;
 
+      // Calculate ratio from the actual total carousel width — same approach as horizontalLoop internally
+      // totalWidth is the real pixel width of one full loop cycle
+      const items = gsap.utils.toArray('.reviewItems');
+      const totalWidth =
+        items[items.length - 1].offsetLeft +
+        items[items.length - 1].offsetWidth -
+        items[0].offsetLeft;
+      const ratio = 1 / totalWidth;
+
+      // Shared helper to scrub progress from proxy x — avoids duplication across onDrag/onThrowUpdate
+      const scrubProgress = (x) => {
+        reviewLoop.progress(gsap.utils.wrap(0, 1, startProgress - x * ratio));
+      };
+
       Draggable.create(proxy, {
         type: 'x',
         inertia: true,
         trigger: carouselRef.current,
-        minimumMovement: 6, // px threshold before a drag is recognized
+        minimumMovement: 6,
         onPress() {
           reviewLoop.timeScale(0);
           startProgress = reviewLoop.progress();
           gsap.set(proxy, { x: 0 });
-          this.update(); // sync Draggable's internal position with the reset proxy
+          this.update();
           isDragging = false;
         },
         onDrag() {
           if (!isDragging) {
-            // First drag frame — re-anchor startProgress and reset proxy x here
-            // so the initial minimumMovement offset doesn't cause a jump
+            // Re-anchor on first drag frame to absorb the minimumMovement offset
             isDragging = true;
             startProgress = reviewLoop.progress();
             gsap.set(proxy, { x: 0 });
+            this.update();
             return;
           }
-          reviewLoop.progress(
-            gsap.utils.wrap(0, 1, startProgress - this.x / (window.innerWidth * 12))
-          );
+          scrubProgress(this.x);
         },
         onDragEnd() {
           reviewLoop.timeScale(1);
         },
         onThrowUpdate() {
-          reviewLoop.progress(
-            gsap.utils.wrap(0, 1, startProgress - this.x / (window.innerWidth * 12))
-          );
+          scrubProgress(this.x);
         },
         onThrowComplete() {
           reviewLoop.timeScale(1);
