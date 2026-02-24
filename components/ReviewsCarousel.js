@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { storyblokEditable } from '@storyblok/react/rsc';
 import { horizontalLoop } from 'functions/horizontalLoop';
@@ -12,6 +12,7 @@ import text from 'styles/text';
 import RichTextRenderer from './renderers/RichTextRenderer';
 
 const ReviewsCarousel = ({ blok }) => {
+  const carouselRef = useRef(null);
   const redditReviews = blok?.reviews;
   const statsList = blok?.stats;
 
@@ -77,26 +78,68 @@ const ReviewsCarousel = ({ blok }) => {
 
       gsap.registerPlugin(Draggable, InertiaPlugin);
 
-      horizontalLoop(`.reviewItems`, {
+      const reviewLoop = horizontalLoop(`.reviewItems`, {
         deep: true,
-        draggable: true,
+        draggable: false, // disable built-in draggable — handled manually below
         paddingRight: 0,
         repeat: -1,
         speed: 0.6,
+      });
+
+      // Use an invisible proxy so Draggable never physically moves the container
+      const proxy = document.createElement('div');
+      let startProgress;
+      let isDragging = false;
+
+      Draggable.create(proxy, {
+        type: 'x',
+        inertia: true,
+        trigger: carouselRef.current,
+        minimumMovement: 6, // px threshold before a drag is recognized
+        onPress() {
+          reviewLoop.timeScale(0);
+          startProgress = reviewLoop.progress();
+          gsap.set(proxy, { x: 0 });
+          this.update(); // sync Draggable's internal position with the reset proxy
+          isDragging = false;
+        },
+        onDrag() {
+          if (!isDragging) {
+            // First drag frame — re-anchor startProgress and reset proxy x here
+            // so the initial minimumMovement offset doesn't cause a jump
+            isDragging = true;
+            startProgress = reviewLoop.progress();
+            gsap.set(proxy, { x: 0 });
+            return;
+          }
+          reviewLoop.progress(
+            gsap.utils.wrap(0, 1, startProgress - this.x / (window.innerWidth * 12))
+          );
+        },
+        onDragEnd() {
+          reviewLoop.timeScale(1);
+        },
+        onThrowUpdate() {
+          reviewLoop.progress(
+            gsap.utils.wrap(0, 1, startProgress - this.x / (window.innerWidth * 12))
+          );
+        },
+        onThrowComplete() {
+          reviewLoop.timeScale(1);
+        },
       });
 
       if (hasStats) {
         horizontalLoop(`.statsDraggable`, {
           paddingRight: 10,
           repeat: -1,
-          // draggable: true,
           speed: 0.3,
         });
       }
     };
 
     initCarousel();
-  }, [hasStats]);
+  }, [hasStats]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <SpacingWrapper spacing={blok.section_spacing} spacingOffset={blok.offset_spacing}>
@@ -109,7 +152,7 @@ const ReviewsCarousel = ({ blok }) => {
             <RichTextRenderer document={blok?.subheader} />
           </div>
         </HeaderContainer>
-        <VisibleContainer>
+        <VisibleContainer ref={carouselRef}>
           <BlurLeft />
           <BlurRight />
           <MasonryBlocks>{dragReviews}</MasonryBlocks>
