@@ -113,7 +113,7 @@ const ReviewsCarousel = ({ blok }) => {
         reviewLoop.timeScale(0);
         const currentProgress = reviewLoop.progress();
         reviewLoop.progress(
-          gsap.utils.wrap(0, 1, currentProgress + e.deltaX * ratio * 0.5)
+          gsap.utils.wrap(0, 1, currentProgress + e.deltaX * ratio * 1.5) // speed when on wheel (touchpad)
         );
         reviewLoop.timeScale(1);
       };
