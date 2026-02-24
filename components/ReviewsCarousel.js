@@ -98,7 +98,7 @@ const ReviewsCarousel = ({ blok }) => {
         items[items.length - 1].offsetLeft +
         items[items.length - 1].offsetWidth -
         items[0].offsetLeft;
-      const ratio = 1 / totalWidth;
+      const ratio = 1 / (totalWidth * 2);
 
       // Shared helper to scrub progress from proxy x — avoids duplication across onDrag/onThrowUpdate
       const scrubProgress = (x) => {
