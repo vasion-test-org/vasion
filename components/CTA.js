@@ -98,7 +98,8 @@ const CTA = ({ blok }) => {
           'max-sm:p-10',
 
           // Width
-          isPill && 'w-100 md:w-236 xl:w-326',
+
+          isPill && 'max-sm:w-90 sm:w-180 md:w-275 xl:w-352',
           isImage && !fullwidth && 'w-106 md:w-236 xl:w-352',
           isImage && fullwidth && 'w-full',
           isCentered && 'w-full md:w-full',
