@@ -76,7 +76,7 @@ const CTA = ({ blok }) => {
           themeTextColor,
           !ctaBgImage && themeCardBg,
           ctaBgImage && 'bg-no-repeat',
-          isPillWithBg ? 'bg-size-[100%_100%]' : 'bg-cover',
+          isPillWithBg ? 'bg-size-[100%_100%]' : 'bg-contain',
 
           // Text align
           ['pill', 'image'].includes(ctaStyle) ? 'text-left max-sm:text-center' : 'text-center',
@@ -91,7 +91,8 @@ const CTA = ({ blok }) => {
 
           // Padding
           isPill && 'px-7 py-4.5 md:px-10 md:py-15 xl:px-24',
-          isImage && 'pt-7 pr-4.5 pb-11 pl-67.5 md:pt-24 md:pr-15 md:pb-37 md:pl-118',
+          isImage &&
+            'items-start justify-start pt-7 pr-4.5 pb-11 pl-67.5 md:gap-4 md:pt-24 md:pr-15 md:pb-37 md:pl-118',
           isCentered && 'px-11 py-7 md:px-10 md:py-15 xl:px-0 xl:py-24',
           !isPill && !isImage && !isCentered && 'px-0 py-7 md:px-10 md:py-15 xl:px-0 xl:py-24',
           // Mobile padding override (all styles)
