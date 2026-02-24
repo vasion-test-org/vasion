@@ -92,7 +92,7 @@ const CTA = ({ blok }) => {
           // Padding
           isPill && 'px-7 py-4.5 md:px-10 md:py-15 lg:px-16 xl:px-24',
           isImage &&
-            'items-center pt-7 pr-4.5 pb-11 pl-67.5 sm:items-start sm:pl-[50vw] md:pt-24 md:pr-15 md:pb-37 md:pl-125 lg:pl-[25vw] xl:pl-[20vw]',
+            'items-center pt-7 pr-4.5 pb-11 pl-67.5 sm:items-start sm:pl-[50vw] md:pt-24 md:pr-15 md:pb-37 md:pl-125 lg:pl-120 xl:pl-200',
           isCentered && 'px-11 py-7 md:px-10 md:py-15 lg:px-18 xl:px-0 xl:py-24',
           !isPill &&
             !isImage &&
