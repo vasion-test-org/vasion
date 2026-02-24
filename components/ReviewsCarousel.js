@@ -118,7 +118,7 @@ const ReviewsCarousel = ({ blok }) => {
         reviewLoop.timeScale(1);
       };
 
-      carouselRef.current.addEventListener('wheel', handleWheel, { passive: false });
+      carouselRef.current?.addEventListener('wheel', handleWheel, { passive: false });
 
       Draggable.create(proxy, {
         type: 'x',
