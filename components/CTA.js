@@ -76,7 +76,7 @@ const CTA = ({ blok }) => {
           themeTextColor,
           !ctaBgImage && themeCardBg,
           ctaBgImage && 'bg-no-repeat',
-          isPillWithBg ? 'bg-size-[100%_100%]' : 'bg-contain',
+          isPillWithBg ? 'bg-size-[100%_100%]' : 'bg-cover md:bg-contain xl:bg-cover',
 
           // Text align
           ['pill', 'image'].includes(ctaStyle) ? 'text-left max-sm:text-center' : 'text-center',
@@ -87,12 +87,12 @@ const CTA = ({ blok }) => {
           // Flex direction: pill without bg — column on mobile only, row from sm up
           isPill && !isPillWithBg ? 'max-sm:flex-col sm:flex-row' : 'flex-col',
           // Gap
-          isPillWithBg ? 'gap-3 xl:gap-10' : 'gap-4.5 max-sm:gap-4 md:gap-15',
+          isPillWithBg ? 'gap-3 xl:gap-10' : 'gap-4.5 max-sm:gap-4 md:gap-4',
 
           // Padding
           isPill && 'px-7 py-4.5 md:px-10 md:py-15 xl:px-24',
           isImage &&
-            'items-start justify-start pt-7 pr-4.5 pb-11 pl-67.5 md:gap-4 md:pt-24 md:pr-15 md:pb-37 md:pl-118',
+            'items-center pt-7 pr-4.5 pb-11 pl-67.5 sm:items-start sm:pl-[50vw] md:pt-24 md:pr-15 md:pb-37 md:pl-118 xl:pl-[30vw]',
           isCentered && 'px-11 py-7 md:px-10 md:py-15 xl:px-0 xl:py-24',
           !isPill && !isImage && !isCentered && 'px-0 py-7 md:px-10 md:py-15 xl:px-0 xl:py-24',
           // Mobile padding override (all styles)
@@ -101,7 +101,7 @@ const CTA = ({ blok }) => {
           // Width
 
           isPill && 'max-sm:w-90 sm:w-180 md:w-275 xl:w-352',
-          isImage && !fullwidth && 'w-106 md:w-236 xl:w-352',
+          isImage && !fullwidth && 'w-106 sm:w-[85vw] md:w-236 xl:w-300',
           isImage && fullwidth && 'w-full',
           isCentered && 'w-full md:w-full',
           !isPill && !isImage && 'w-full',
