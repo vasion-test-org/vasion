@@ -76,7 +76,7 @@ const CTA = ({ blok }) => {
           themeTextColor,
           !ctaBgImage && themeCardBg,
           ctaBgImage && 'bg-no-repeat',
-          isPillWithBg ? 'bg-size-[100%_100%]' : 'bg-cover md:bg-contain xl:bg-cover',
+          isPillWithBg ? 'bg-size-[100%_100%]' : 'bg-cover',
 
           // Text align
           ['pill', 'image'].includes(ctaStyle) ? 'text-left max-sm:text-center' : 'text-center',
@@ -90,24 +90,27 @@ const CTA = ({ blok }) => {
           isPillWithBg ? 'gap-3 xl:gap-10' : 'gap-4.5 max-sm:gap-4 md:gap-4',
 
           // Padding
-          isPill && 'px-7 py-4.5 md:px-10 md:py-15 xl:px-24',
+          isPill && 'px-7 py-4.5 md:px-10 md:py-15 lg:px-16 xl:px-24',
           isImage &&
-            'items-center pt-7 pr-4.5 pb-11 pl-67.5 sm:items-start sm:pl-[50vw] md:pt-24 md:pr-15 md:pb-37 md:pl-118 xl:pl-[30vw]',
-          isCentered && 'px-11 py-7 md:px-10 md:py-15 xl:px-0 xl:py-24',
-          !isPill && !isImage && !isCentered && 'px-0 py-7 md:px-10 md:py-15 xl:px-0 xl:py-24',
+            'items-center pt-7 pr-4.5 pb-11 pl-67.5 sm:items-start sm:pl-[50vw] md:pt-24 md:pr-15 md:pb-37 md:pl-118 lg:pl-[25vw] xl:pl-[30vw]',
+          isCentered && 'px-11 py-7 md:px-10 md:py-15 lg:px-18 xl:px-0 xl:py-24',
+          !isPill &&
+            !isImage &&
+            !isCentered &&
+            'px-0 py-7 md:px-10 md:py-15 lg:px-18 xl:px-0 xl:py-24',
           // Mobile padding override (all styles)
           'max-sm:p-10',
 
           // Width
 
-          isPill && 'max-sm:w-90 sm:w-180 md:w-275 xl:w-352',
-          isImage && !fullwidth && 'w-106 sm:w-[85vw] md:w-236 xl:w-300',
+          isPill && 'max-sm:w-90 sm:w-180 md:w-275 lg:w-310 xl:w-352',
+          isImage && !fullwidth && 'w-106 sm:w-[85vw] md:w-236 lg:w-268 xl:w-325',
           isImage && fullwidth && 'w-full',
           isCentered && 'w-full md:w-full',
           !isPill && !isImage && 'w-full',
 
           // Min-height
-          isPillWithBg && 'min-h-22.5 max-sm:min-h-154 md:min-h-65.5 xl:min-h-75.5',
+          isPillWithBg && 'min-h-22.5 max-sm:min-h-154 md:min-h-65.5 lg:min-h-70 xl:min-h-75.5',
           isImage && fullwidth && 'min-h-41.5',
 
           // Border radius: pill and image (when not image+fullwidth) get radius at all breakpoints
