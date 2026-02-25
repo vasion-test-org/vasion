@@ -346,7 +346,6 @@ const VideoWrapper = styled.div`
     height: 100%;
   }
 `;
-
 const CookieConsentContainer = styled.div`
   display: flex;
   flex-direction: column;
