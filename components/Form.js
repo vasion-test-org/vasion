@@ -799,6 +799,24 @@ const FormContainer = styled.div`
       }
     }
 
+    &#MSP_Initial_Printers_Supported__c,
+    &#MSP_Total_Printers_Supported__c,
+    &#MSP_Number_of_Users_Supported__c {
+      width: 15vw !important;
+
+      ${media.fullWidth} {
+        width: 240px !important;
+      }
+
+      ${media.tablet} {
+        width: 18.555vw !important;
+      }
+
+      ${media.mobile} {
+        width: 35.833vw !important;
+      }
+    }
+
     &#Company,
     &#Address,
     &#City,

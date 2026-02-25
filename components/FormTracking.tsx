@@ -163,12 +163,15 @@ function populateMarketoFields(form: any) {
     Referrer__c: ft?.referrer ?? '',
   };
 
-  form.getFields().forEach((field: any) => {
-    if (field.element.type === 'hidden') {
-      const val = fieldMap[field.name];
-      if (val) field.val(val);
-    }
-  });
+  // Filter out empty values so we don't overwrite existing Marketo data with blank strings
+  const valuesToSet = Object.fromEntries(
+    Object.entries(fieldMap).filter(([, val]) => val !== '')
+  );
+
+  if (Object.keys(valuesToSet).length > 0) {
+    form.vals(valuesToSet);
+    console.log('UTM values passed to Marketo:', valuesToSet);
+  }
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
