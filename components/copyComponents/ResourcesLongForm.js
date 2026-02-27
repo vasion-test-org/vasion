@@ -108,7 +108,7 @@ const ResourcesLongForm = ({ blok }) => {
   return (
     <ThemeProvider theme={selectedTheme}>
       <Wrapper toc={showSidebar}>
-        <ResourcesLongFormContainer id="resources-long-form">
+        <ResourcesLongFormContainer id="resources-long-form" $centered={!showSidebar}>
           {blok.spotify_embed && <SpotifyEmbed blok={blok.spotify_embed} />}
           <RichTextRenderer
             blok={blok}
@@ -143,6 +143,7 @@ const ResourcesLongFormContainer = styled.div`
   justify-content: center;
   min-width: 46.875vw;
   margin: 2.5vw 1.5vw 2.5vw 0;
+  ${(props) => props.$centered && 'margin-left: auto; margin-right: auto;'};
 
   h1,
   h2,
