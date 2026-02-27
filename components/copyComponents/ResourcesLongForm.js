@@ -186,11 +186,13 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: ${(props) => (props.toc ? 'left' : 'center')};
+  justify-content: ${(props) => (props.toc ? 'flex-start' : 'center')};
   justify-self: center;
   height: auto;
   width: 63.125vw;
   min-width: 46.875vw;
+  margin-left: auto;
+  margin-right: auto;
 
   ${media.fullWidth} {
     width: 1010px;
