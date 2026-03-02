@@ -305,29 +305,28 @@ const RichWrapper = styled.div`
       content: '';
       position: absolute;
       left: -1vw;
-      top: 0.4vw;
+      /* Center bullet with first line of text */
+      top: 0.7em;
       width: 0.35vw;
       height: 0.35vw;
       border-radius: 50%;
       background: ${colors.txtPrimary};
+      transform: translateY(-50%);
 
       ${media.fullWidth} {
         left: -16px;
-        top: 6px;
         width: 6px;
         height: 6px;
       }
 
       ${media.tablet} {
         left: -1.563vw;
-        top: 0.586vw;
         width: 0.586vw;
         height: 0.586vw;
       }
 
       ${media.mobile} {
         left: -3.333vw;
-        top: 1.25vw;
         width: 1.25vw;
         height: 1.25vw;
       }
