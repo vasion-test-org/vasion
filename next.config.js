@@ -263,6 +263,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/himss',
+        destination: '/go/events/himss',
+        permanent: true,
+      },
+      {
         source: '/cpa/',
         destination: '/print/printer-apps/',
         permanent: true,
