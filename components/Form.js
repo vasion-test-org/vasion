@@ -10,6 +10,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { useThankYou } from '@/context/ThankYouContext';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import getMedia from '@/functions/getMedia';
+import { applyMspFormCustomizations } from '@/lib/msp-form-customizations';
 import colors from '@/styles/colors';
 import media from '@/styles/media';
 import text from '@/styles/text';
@@ -188,6 +189,13 @@ const Form = ({ blok }) => {
         '338-HTA-134',
         blok.form_id,
         (form) => {
+          // MSP demo customizations: labels, disclaimer, hide past dates (after form is in DOM)
+          setTimeout(() => {
+            const container = document.getElementById(`mktoForm_${blok.form_id}`);
+            const formEl = container?.querySelector('form');
+            if (formEl) applyMspFormCustomizations(formEl);
+          }, 200);
+
           form.onSuccess(function (submittedValues) {
             if (blok.animated) {
               if (window.LDBookItV2) {
@@ -540,6 +548,32 @@ const FormContainer = styled.div`
     ${media.mobile} {
       max-height: none !important;
     }
+  }
+
+  /* MSP qualification questions: allow multi-line labels and full-width layout */
+  .mktoFieldDescriptor:has(#MSP_Initial_Printers_Supported__c),
+  .mktoFieldDescriptor:has(#MSP_Total_Printers_Supported__c),
+  .mktoFieldDescriptor:has(#MSP_Number_of_Users_Supported__c) {
+    max-height: none !important;
+
+    ${media.fullWidth} {
+      max-height: none !important;
+    }
+
+    ${media.tablet} {
+      max-height: none !important;
+    }
+
+    ${media.mobile} {
+      max-height: none !important;
+    }
+  }
+
+  .mktoFieldWrap:has(#MSP_Initial_Printers_Supported__c) label,
+  .mktoFieldWrap:has(#MSP_Total_Printers_Supported__c) label,
+  .mktoFieldWrap:has(#MSP_Number_of_Users_Supported__c) label {
+    width: 100% !important;
+    max-width: 100%;
   }
 
   .mktoCaptchaDisclaimer {
@@ -938,6 +972,16 @@ const FormContainer = styled.div`
 
   .mktoAsterix {
     display: none !important;
+  }
+
+  .msp-demo-date-disclaimer {
+    ${text.bodySm};
+    margin: 0.5rem 0 0 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    color: ${(props) => props.theme.form.textColor};
+    opacity: 0.9;
   }
 `;
 export default Form;
