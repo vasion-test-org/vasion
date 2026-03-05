@@ -23,7 +23,7 @@ These components were never imported outside their own file and have been delete
 | File | Reason |
 |------|--------|
 | `lib/gtmOptimization.js` | Zero imports in any source file. Logic is essentially duplicated by `GTMPerformanceMonitor.js`. An earlier approach that was replaced by the component. |
-| `lib/tailwind-utils.ts` | Not imported by any source file. Only mentioned in `.cursorrules` docs as a suggested utility, but no code actually uses it. |
+| ~~`lib/tailwind-utils.ts`~~ | ~~Not imported by any source file. Only mentioned in `.cursorrules` docs as a suggested utility, but no code actually uses it.~~ **Restored** — file was recreated with `vwToPx`, `vwToRem`, `pxToTailwind`, `vwToTailwind`, and `detectBreakpoint`. Referenced throughout `.cursorrules`, `design-tokens.mdc`, and `tailwind-migration.mdc` as the standard conversion utility for styled-components → Tailwind migrations. |
 | `hooks/useOptimizedState.js` | Not imported by any component. Only referenced in `REACT_SCHEDULER_OPTIMIZATIONS.md`. |
 | `lib/performanceUtils.js` | Only imported by `hooks/useOptimizedState.js`, which is itself unused. Effectively dead. |
 
@@ -104,7 +104,7 @@ Not blocking, but worth cleaning during the styled-components migration:
 - `components/LazyHydration.js`
 - `components/ContentWidth.js`
 - `lib/gtmOptimization.js`
-- `lib/tailwind-utils.ts`
+- ~~`lib/tailwind-utils.ts`~~ ← **Restored** (see section 2)
 - `hooks/useOptimizedState.js`
 - `lib/performanceUtils.js`
 - `test-tw.js`
