@@ -30,6 +30,9 @@ const Form = ({ blok }) => {
   const demoTl = useRef(null);
 
   const handleLeanDataMessage = (event) => {
+    if (!event.origin.endsWith('leandata.com')) return;
+    if (!event.data || typeof event.data !== 'object') return;
+
     switch (event.data.message) {
       case 'LD_POPUP_CLOSED':
         dataLayer.push({

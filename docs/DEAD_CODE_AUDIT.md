@@ -5,6 +5,42 @@
 
 ---
 
+## ⚠️ Security Fix — postMessage Origin Validation
+
+**Severity: High**
+**Status: Fixed**
+**Files: `components/Form.js`, `components/TestForm.js`**
+
+### Vulnerability
+
+The `handleLeanDataMessage` function in both files was registered as a global `window.addEventListener('message', ...)` handler with no origin validation. Any page — including malicious third-party websites — could send a crafted `postMessage` and trigger arbitrary `dataLayer.push()` calls, poisoning GTM analytics data or spoofing conversion events.
+
+```js
+// BEFORE — vulnerable: accepts messages from any origin
+const handleLeanDataMessage = (event) => {
+  switch (event.data.message) { // event.data could be null, a string, or from any site
+    case 'LD_POST_BOOKING_IMMEDIATE':
+      dataLayer.push({ event: 'lean_data_booking_completed', ... });
+```
+
+### Fix Applied
+
+Two guards added at the top of `handleLeanDataMessage` in both files:
+
+```js
+// AFTER — safe: strict origin + type validation
+const handleLeanDataMessage = (event) => {
+  if (!event.origin.endsWith('leandata.com')) return;   // reject all non-LeanData origins
+  if (!event.data || typeof event.data !== 'object') return; // reject null / primitive payloads
+  switch (event.data.message) { ... }
+};
+```
+
+- **Origin check** — `event.origin.endsWith('leandata.com')` allows any subdomain of `leandata.com` (e.g. `app.leandata.com`, `cdn.leandata.com`) and silently rejects everything else. If LeanData ever confirms a single canonical iframe origin, this should be tightened to an exact `===` match.
+- **Type guard** — prevents a `TypeError` crash if `event.data` is `null`, `undefined`, or a primitive (e.g. a string-only `postMessage` from another browser extension or library).
+
+---
+
 ## 1. Unused Components
 
 These components were never imported outside their own file and have been deleted.
