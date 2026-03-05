@@ -80,7 +80,6 @@ const CookieConsentVideo = ({
       // In test environments, allow videos by default (for testing purposes)
       // Unless forceConsentMessage is true
       if (isTestEnvironment && !forceConsentMessage) {
-        console.log('Test environment detected - allowing videos for testing');
         setCookiesAccepted(true);
         setIsChecking(false);
         return;
@@ -304,24 +303,6 @@ const CookieConsentVideo = ({
               url: url || videoSrc,
               userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : 'SSR',
             });
-          }}
-          onLoad={() => {
-            console.log('ReactPlayer v3 load completed - URL:', url || videoSrc);
-          }}
-          onLoadStart={() => {
-            console.log('ReactPlayer v3 loading started - URL:', url || videoSrc);
-          }}
-          onPause={() => {
-            console.log('ReactPlayer v3 paused');
-          }}
-          onPlay={() => {
-            console.log('ReactPlayer v3 playing');
-          }}
-          onReady={() => {
-            console.log('ReactPlayer v3 ready - URL:', url || videoSrc);
-          }}
-          onStart={() => {
-            console.log('ReactPlayer v3 started playing');
           }}
           {...otherProps}
         />

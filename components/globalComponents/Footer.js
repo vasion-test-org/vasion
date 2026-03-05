@@ -27,8 +27,6 @@ import { cn, tw } from '@/lib/cn';
  * Each breakpoint inherits from smaller breakpoints unless overridden.
  */
 const Footer = ({ blok }) => {
-  const testClasses = tw`md:(flex-col w-60) lg:(flex-col w-67) xl:(flex-col w-60) flex w-75 flex-row items-start justify-start gap-5 gap-6`;
-  console.log('Generated classes:', testClasses);
   const router = useRouter();
   const path = usePathname();
   const [language, setLanguage] = useState('en');
