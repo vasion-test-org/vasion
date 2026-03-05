@@ -5,7 +5,6 @@ import { VWOScript } from 'vwo-smartcode-nextjs';
 
 import Config from '@/components/Config';
 import ConversicaChat from '@/components/ConversicaChat';
-import CriticalCSS from '@/components/CriticalCSS';
 import FormTracking from '@/components/FormTracking';
 
 import './globals.css';
@@ -188,7 +187,6 @@ export default async function RootLayout({ children }) {
                 <ThankYouProvider>
                   <PageDataProvider>
                     <FormTracking />
-                    <CriticalCSS />
                     <PerformanceMonitor />
                     <GTMPerformanceMonitor />
                     <Config>
