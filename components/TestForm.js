@@ -3,20 +3,18 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { storyblokEditable } from '@storyblok/react/rsc';
 import gsap from 'gsap';
 import styled, { ThemeProvider } from 'styled-components';
 
 import { useThankYou } from '@/context/ThankYouContext';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import getMedia from '@/functions/getMedia';
-import { applyMspFormCustomizations } from '@/lib/msp-form-customizations';
+import { applyMspFormCustomizations } from '@/components/Form';
 import colors from '@/styles/colors';
 import media from '@/styles/media';
 import text from '@/styles/text';
 
 const TestForm = ({ blok }) => {
-  // console.log(blok.redirect_link)
   const { thankYouCopy, updateThankYouCopy } = useThankYou();
   const router = useRouter();
   const themes = useAvailableThemes();
@@ -27,24 +25,14 @@ const TestForm = ({ blok }) => {
   const formHeight = getMedia('733px', '50.875vw', '77.137vw', '288.084vw');
   const lineWidth = getMedia('220px', '15.278vw', '19.531vw', '7.187vw');
   const xFormPosition = getMedia(0, 0, -27, 0);
-  // const yFormPosition = getMedia(-277, -277, -27, 0);
   const contentVisibility = getMedia(0, 0, 0, 1);
   const languageRef = useRef('en');
   const routingLang = useRef('Demo Request - EN');
   const demoTl = useRef(null);
 
-  // Add handler for LeanData events
   const handleLeanDataMessage = (event) => {
-    // Only process messages from LeanData
-    // if (event.origin !== 'https://cdn.leandata.com') return;
-
-    console.log('Full event data:', event);
-    console.log('Event origin:', event.origin);
-    console.log('Event data:', event.data);
-
     switch (event.data.message) {
       case 'LD_POPUP_CLOSED':
-        console.log('Popup closed:', event.data.responseData);
         dataLayer.push({
           event: 'lean_data_popup_closed',
           form_id: blok.form_id,
@@ -53,7 +41,6 @@ const TestForm = ({ blok }) => {
         });
         break;
       case 'LD_POST_BOOKING_IMMEDIATE':
-        console.log('Booking completed:', event.data.responseData);
         dataLayer.push({
           booking_data: event.data.responseData,
           booking_date: new Date().toISOString(),
@@ -62,7 +49,6 @@ const TestForm = ({ blok }) => {
         });
         break;
       case 'LD_ROUTING_RESPONSE':
-        console.log('Routing response received:', event.data.responseData);
         dataLayer.push({
           event: 'lean_data_routing_response',
           form_id: blok.form_id,
@@ -71,7 +57,6 @@ const TestForm = ({ blok }) => {
         });
         break;
       case 'LD_ROUTING_TIMED_OUT':
-        console.log('Routing timed out:', event.data.responseData);
         dataLayer.push({
           event: 'lean_data_routing_timeout',
           form_id: blok.form_id,
@@ -84,15 +69,12 @@ const TestForm = ({ blok }) => {
     }
   };
 
-  //gets thank you copy for dynamic thank you page
   useEffect(() => {
     if (blok?.thank_you_copy) {
       updateThankYouCopy(blok?.thank_you_copy);
-      // console.log(thankYouCopy, blok?.thank_you_copy);
     }
   }, [thankYouCopy, blok?.thank_you_copy]);
 
-  //checking for pathname to set routing language and path
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const pathname = window.location.pathname;
@@ -100,21 +82,14 @@ const TestForm = ({ blok }) => {
 
       if (['de', 'fr'].includes(pathLocale)) {
         languageRef.current = pathLocale;
-        if (pathLocale === 'de') {
-          routingLang.current = 'Demo Request - DE';
-        } else if (pathLocale === 'fr') {
-          routingLang.current = 'Demo Request - FR';
-        } else {
-          routingLang.current = 'Demo Request - EN';
-        }
+        routingLang.current =
+          pathLocale === 'de' ? 'Demo Request - DE' : 'Demo Request - FR';
       } else {
         languageRef.current = 'en';
       }
     }
-    console.log(routingLang.current);
   }, []);
 
-  //checks script is loadedfor marketo form
   useEffect(() => {
     if (!document.getElementById('mktoForms')) {
       loadScript();
@@ -123,13 +98,11 @@ const TestForm = ({ blok }) => {
     }
   }, []);
 
-  //loads script for bookit form and gsap animations for form
   useEffect(() => {
     demoTl.current = gsap.timeline({ paused: true });
     gsap.set('.bookit-content-container', { display: 'none', opacity: 0 });
 
     if (blok.animated) {
-      // Add event listener for LeanData messages
       window.addEventListener('message', handleLeanDataMessage);
 
       demoTl.current
@@ -149,11 +122,8 @@ const TestForm = ({ blok }) => {
       script.async = false;
 
       script.addEventListener('load', () => {
-        console.log('timeoutLang', languageRef.current);
-
         const initConfig = {
           beforeRouting: (formTarget, formData) => {
-            console.log('lean data language:', languageRef.current);
             formData['thank_you_language'] = languageRef.current;
             formData['routing_node_trigger'] = routingLang.current;
           },
@@ -176,7 +146,6 @@ const TestForm = ({ blok }) => {
 
       return () => {
         document.body.removeChild(script);
-        // Clean up the event listener when component unmounts
         window.removeEventListener('message', handleLeanDataMessage);
       };
     }
@@ -189,12 +158,16 @@ const TestForm = ({ blok }) => {
         '338-HTA-134',
         blok.form_id,
         (form) => {
-          // MSP demo customizations: labels, disclaimer, hide past dates (after form is in DOM)
-          setTimeout(() => {
+          const runMspCustomizations = () => {
             const container = document.getElementById(`mktoForm_${blok.form_id}`);
             const formEl = container?.querySelector('form');
             if (formEl) applyMspFormCustomizations(formEl);
-          }, 200);
+          };
+          // Stagger retries to handle Marketo's asynchronous rendering
+          setTimeout(runMspCustomizations, 200);
+          setTimeout(runMspCustomizations, 800);
+          setTimeout(runMspCustomizations, 1500);
+          setTimeout(runMspCustomizations, 2500);
 
           form.onSuccess(function (submittedValues) {
             if (blok.animated) {
@@ -211,12 +184,8 @@ const TestForm = ({ blok }) => {
                   form_id: blok.form_id,
                   form_submission_date: new Date().toISOString(),
                 });
-
-                console.log('Thank You');
-                console.log('Form submitted successfully:', submittedValues);
                 return false;
               } else {
-                console.error('LDBookItV2 not available, booking may fail');
                 alert(
                   'There was a problem connecting to our scheduling system. Please contact support.'
                 );
@@ -236,7 +205,6 @@ const TestForm = ({ blok }) => {
                   ? blok.redirect_link
                   : blok.redirect_link?.cached_url || '/thank-you';
 
-              // 👇 Ensure root-relative if internal
               if (!isExternal(redirectUrl) && !redirectUrl.startsWith('/')) {
                 redirectUrl = '/' + redirectUrl;
               }
@@ -317,8 +285,6 @@ const Step = styled.div`
     gap: 0.391vw;
   }
 
-  ${media.mobile} {
-  }
 `;
 const StepText = styled.p`
   ${text.bodySm};
@@ -564,11 +530,42 @@ const FormContainer = styled.div`
     }
   }
 
+  .mktoFieldDescriptor.msp-demo-date-row {
+    max-height: none !important;
+
+    select {
+      ${text.bodySm};
+      width: 100% !important;
+      max-width: 100%;
+      box-sizing: border-box;
+
+      ${media.fullWidth} {
+        width: 100% !important;
+        max-width: 500px;
+      }
+
+      ${media.tablet} {
+        width: 100% !important;
+        max-width: 39.063vw;
+      }
+
+      ${media.mobile} {
+        width: 100% !important;
+        max-width: 75.833vw;
+      }
+    }
+  }
+
   .mktoFieldWrap:has(#MSP_Initial_Printers_Supported__c) label,
   .mktoFieldWrap:has(#MSP_Total_Printers_Supported__c) label,
   .mktoFieldWrap:has(#MSP_Number_of_Users_Supported__c) label {
     width: 100% !important;
     max-width: 100%;
+  }
+
+  /* Spacing above first MSP question ("How many printers will you need to initially support...") */
+  .mktoFormRow:has(#MSP_Initial_Printers_Supported__c) {
+    margin-top: 1rem;
   }
 
   .mktoCaptchaDisclaimer {
@@ -602,7 +599,6 @@ const FormContainer = styled.div`
   .mktoGutter {
     width: unset !important;
   }
-  /* Checkbox styles - fixed version */
   .mktoCheckboxList {
     width: 100% !important;
     display: flex !important;
@@ -789,63 +785,27 @@ const FormContainer = styled.div`
     padding: 1vw !important;
     border-radius: 0.25vw;
     height: 3.375vw;
+    width: 31.25vw !important;
 
     ${media.fullWidth} {
       padding: 16px !important;
       border-radius: 4px;
       height: 54px;
+      width: 500px !important;
     }
 
     ${media.tablet} {
       padding: 1.563vw !important;
       border-radius: 0.391vw;
       height: 5.273vw;
+      width: 39.063vw !important;
     }
 
     ${media.mobile} {
       padding: 3.333vw !important;
       border-radius: 0.833vw;
       min-height: 11.25vw;
-    }
-
-    &#Email,
-    &#Phone,
-    &#FirstName,
-    &#LastName {
-      width: 15vw !important;
-
-      ${media.fullWidth} {
-        width: 240px !important;
-      }
-
-      ${media.tablet} {
-        width: 18.555vw !important;
-      }
-
-      ${media.mobile} {
-        width: 35.833vw !important;
-      }
-    }
-
-    &#Company,
-    &#Address,
-    &#City,
-    &#PostalCode,
-    &#How_did_you_hear_about_us__c,
-    &#Number_of_Printer__c {
-      width: 31.25vw !important;
-
-      ${media.fullWidth} {
-        width: 500px !important;
-      }
-
-      ${media.tablet} {
-        width: 39.063vw !important;
-      }
-
-      ${media.mobile} {
-        width: 75.833vw !important;
-      }
+      width: 75.833vw !important;
     }
   }
 
@@ -911,14 +871,8 @@ const FormContainer = styled.div`
   }
   .mktoFieldWrap {
     display: flex !important;
-
-    ${media.fullWidth} {
-    }
-    ${media.tablet} {
-    }
-    ${media.mobile} {
-      gap: 1.042vw;
-    }
+    position: relative;
+    gap: 0.2rem;
 
     .mktoLabel {
       ${text.bodyMd};
@@ -952,14 +906,25 @@ const FormContainer = styled.div`
     display: none !important;
   }
 
-  .msp-demo-date-disclaimer {
-    ${text.bodySm};
-    margin: 0.5rem 0 0 0;
-    padding: 0;
-    width: 100%;
-    max-width: 100%;
-    color: ${(props) => props.theme.form.textColor};
-    opacity: 0.9;
+  .mktoHtmlText span {
+    position: absolute;
+    top: 19px;
+    width: 75.833vw;
+
+    ${media.tablet} {
+      top: 25px;
+      width: 39.063vw;
+    }
+
+    ${media.desktop} {
+      top: 25px;
+      width: 30.833vw;
+    }
+
+    ${media.fullWidth} {
+      top: 30px;
+      width: 500px;
+    }
   }
 `;
 export default TestForm;
