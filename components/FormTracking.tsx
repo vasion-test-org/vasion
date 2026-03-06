@@ -28,22 +28,20 @@ function parseMspOptionDate(str: string): { month: number; day: number; year: nu
 }
 
 function filterPastDemoDates(): void {
-  console.warn('[MSP] filterPastDemoDates called');
   const selectEl: HTMLSelectElement | null =
     (document.getElementById('mSPGroupDemoDate') as HTMLSelectElement | null) ??
     (() => {
       const mktoForm = document.querySelector('.mktoForm');
       if (!mktoForm) return null;
       for (const sel of mktoForm.querySelectorAll('select')) {
-        const selectEl = sel as HTMLSelectElement;
-        for (const opt of selectEl.options) {
-          if (opt.value && /^\d{1,2}\/\d{1,2}\/\d{4}/.test(opt.value)) return selectEl;
+        const s = sel as HTMLSelectElement;
+        for (const opt of s.options) {
+          if (opt.value && /^\d{1,2}\/\d{1,2}\/\d{4}/.test(opt.value)) return s;
         }
       }
       return null;
     })();
 
-  console.warn('[MSP] selectEl:', selectEl?.id ?? 'null', '| options:', selectEl?.options.length);
   if (!selectEl) return;
 
   const now = new Date();
@@ -57,7 +55,6 @@ function filterPastDemoDates(): void {
     if (isNaN(month) || isNaN(day) || isNaN(year)) continue;
     const optionDateStr = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     if (optionDateStr < todayStr) {
-      console.warn('[MSP] removing past date option:', opt.text, '|', optionDateStr, '<', todayStr);
       selectEl.remove(i);
     }
   }
@@ -265,7 +262,6 @@ function FormTrackingComponent() {
           setTimeout(filterPastDemoDates, 200);
           setTimeout(filterPastDemoDates, 800);
           const formEl: HTMLElement | null = form.getFormElem?.()?.[0] ?? null;
-          console.warn('[MSP] whenReady FormTracking, formEl:', formEl?.tagName ?? 'null');
           if (formEl) {
             let debounceTimer: ReturnType<typeof setTimeout>;
             const observer = new MutationObserver(() => {

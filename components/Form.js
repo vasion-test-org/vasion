@@ -958,25 +958,19 @@ function parseMspOptionDate(str) {
 
 function findMspDateSelect() {
   const byId = document.getElementById('mSPGroupDemoDate');
-  if (byId) { console.warn('[MSP] found select by id'); return byId; }
+  if (byId) return byId;
   const form = document.querySelector('.mktoForm');
-  console.warn('[MSP] .mktoForm found:', !!form, '| selects:', form?.querySelectorAll('select').length);
   if (!form) return null;
   for (const select of form.querySelectorAll('select')) {
     for (const opt of select.options) {
-      if (opt.value && /^\d{1,2}\/\d{1,2}\/\d{4}/.test(opt.value)) {
-        console.warn('[MSP] found date select via fallback, id:', select.id);
-        return select;
-      }
+      if (opt.value && /^\d{1,2}\/\d{1,2}\/\d{4}/.test(opt.value)) return select;
     }
   }
   return null;
 }
 
 export function filterPastDemoDates() {
-  console.warn('[MSP] filterPastDemoDates called');
   const selectEl = findMspDateSelect();
-  console.warn('[MSP] selectEl:', selectEl?.id ?? 'null', '| options count:', selectEl?.options.length);
   if (!selectEl) return;
 
   const now = new Date();
@@ -998,7 +992,6 @@ export function filterPastDemoDates() {
 }
 
 export function applyMspFormCustomizations(formEl) {
-  console.warn('[MSP] applyMspFormCustomizations called, formEl:', formEl?.tagName ?? 'null');
   if (!formEl) return;
   filterPastDemoDates();
   // Watch for Marketo revealing conditional fields. Marketo may either toggle
