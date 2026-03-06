@@ -9,7 +9,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { useThankYou } from '@/context/ThankYouContext';
 import { useAvailableThemes } from '@/context/ThemeContext';
 import getMedia from '@/functions/getMedia';
-import { applyMspFormCustomizations } from '@/components/Form';
+import { applyMspFormCustomizations, filterPastDemoDates } from '@/components/Form';
 import colors from '@/styles/colors';
 import media from '@/styles/media';
 import text from '@/styles/text';
@@ -101,6 +101,38 @@ const TestForm = ({ blok }) => {
     }
   }, []);
 
+  // Hook into MktoForms2.whenReady (same reliable path used by FormTracking.tsx)
+  // to filter past MSP demo dates whenever any form becomes ready and whenever
+  // the form's visibility changes (user selects "Yes" for MSP partner question).
+  useEffect(() => {
+    console.warn('[MSP] useEffect boot, MktoForms2 present:', !!window?.MktoForms2);
+    function registerMspFilter(attempts = 0) {
+      console.warn('[MSP] registerMspFilter attempt', attempts, '| MktoForms2:', !!window?.MktoForms2);
+      if (attempts > 20) return;
+      if (window.MktoForms2) {
+        window.MktoForms2.whenReady((form) => {
+          // Initial filter
+          setTimeout(filterPastDemoDates, 100);
+          setTimeout(filterPastDemoDates, 500);
+          // Re-filter on any field change so Marketo conditional visibility is covered
+          const formEl = form.getFormElem()?.[0];
+          console.warn('[MSP] whenReady fired, formEl:', formEl?.tagName ?? 'null');
+          if (formEl) {
+            let debounceTimer;
+            const observer = new MutationObserver(() => {
+              clearTimeout(debounceTimer);
+              debounceTimer = setTimeout(filterPastDemoDates, 300);
+            });
+            observer.observe(formEl, { subtree: true, attributes: true, childList: true });
+          }
+        });
+      } else {
+        setTimeout(() => registerMspFilter(attempts + 1), 300);
+      }
+    }
+    registerMspFilter();
+  }, []);
+
   useEffect(() => {
     demoTl.current = gsap.timeline({ paused: true });
     gsap.set('.bookit-content-container', { display: 'none', opacity: 0 });
@@ -164,6 +196,7 @@ const TestForm = ({ blok }) => {
           const runMspCustomizations = () => {
             const container = document.getElementById(`mktoForm_${blok.form_id}`);
             const formEl = container?.querySelector('form');
+            console.warn('[MSP] runMspCustomizations: form_id=', blok.form_id, '| container=', !!container, '| formEl=', !!formEl);
             if (formEl) applyMspFormCustomizations(formEl);
           };
           // Stagger retries to handle Marketo's asynchronous rendering

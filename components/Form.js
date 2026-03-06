@@ -933,31 +933,84 @@ const FormContainer = styled.div`
   }
 `;
 
-function filterPastDemoDates() {
-  const selectEl = document.getElementById('mSPGroupDemoDate');
+const MSP_MONTH_NAMES = {
+  january: 1, february: 2, march: 3, april: 4, may: 5, june: 6,
+  july: 7, august: 8, september: 9, october: 10, november: 11, december: 12,
+};
+
+function parseMspOptionDate(str) {
+  if (!str) return null;
+  // Format: MM/DD/YYYY [optional time, e.g. "1:00 PM MDT"]
+  const slashMatch = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (slashMatch) {
+    return { month: +slashMatch[1], day: +slashMatch[2], year: +slashMatch[3] };
+  }
+  // Format: "Wednesday, February 25, 2026 at 1:00 PM MDT" or "February 25, 2026"
+  const textMatch = str.match(/\b([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})\b/);
+  if (textMatch) {
+    const month = MSP_MONTH_NAMES[textMatch[1].toLowerCase()];
+    if (month) {
+      return { month, day: +textMatch[2], year: +textMatch[3] };
+    }
+  }
+  return null;
+}
+
+function findMspDateSelect() {
+  const byId = document.getElementById('mSPGroupDemoDate');
+  if (byId) { console.warn('[MSP] found select by id'); return byId; }
+  const form = document.querySelector('.mktoForm');
+  console.warn('[MSP] .mktoForm found:', !!form, '| selects:', form?.querySelectorAll('select').length);
+  if (!form) return null;
+  for (const select of form.querySelectorAll('select')) {
+    for (const opt of select.options) {
+      if (opt.value && /^\d{1,2}\/\d{1,2}\/\d{4}/.test(opt.value)) {
+        console.warn('[MSP] found date select via fallback, id:', select.id);
+        return select;
+      }
+    }
+  }
+  return null;
+}
+
+export function filterPastDemoDates() {
+  console.warn('[MSP] filterPastDemoDates called');
+  const selectEl = findMspDateSelect();
+  console.warn('[MSP] selectEl:', selectEl?.id ?? 'null', '| options count:', selectEl?.options.length);
   if (!selectEl) return;
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
   // Iterate backwards so removing by index doesn't shift unvisited options
   for (let i = selectEl.options.length - 1; i >= 0; i--) {
-    const val = selectEl.options[i].value;
-    if (!val) continue;
-    const parts = val.split('/');
-    if (parts.length === 3) {
-      const optionDate = new Date(parts[2], parts[0] - 1, parts[1]);
-      optionDate.setHours(0, 0, 0, 0);
-      if (optionDate < today) {
-        selectEl.remove(i);
-      }
+    const opt = selectEl.options[i];
+    // Try the value attribute first, fall back to the visible label text
+    const parsed = parseMspOptionDate(opt.value) || parseMspOptionDate(opt.text);
+    if (!parsed) continue;
+    const { month, day, year } = parsed;
+    if (isNaN(month) || isNaN(day) || isNaN(year)) continue;
+    const optionDateStr = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    if (optionDateStr < todayStr) {
+      selectEl.remove(i);
     }
   }
 }
 
 export function applyMspFormCustomizations(formEl) {
+  console.warn('[MSP] applyMspFormCustomizations called, formEl:', formEl?.tagName ?? 'null');
   if (!formEl) return;
   filterPastDemoDates();
+  // Watch for Marketo revealing conditional fields. Marketo may either toggle
+  // style/class attributes OR dynamically insert field rows into the DOM, so
+  // watch both attribute changes and childList mutations. The 300ms debounce
+  // lets Marketo finish fully populating/resetting option values before we filter.
+  let debounceTimer;
+  const observer = new MutationObserver(() => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(filterPastDemoDates, 300);
+  });
+  observer.observe(formEl, { subtree: true, attributes: true, childList: true });
 }
 
 export default Form;
