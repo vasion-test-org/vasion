@@ -39,6 +39,36 @@ const Demo = ({ blok }) => {
     'overview_controller',
     'small_quote',
   ];
+
+  // LeanData BookIt v2 – load script and initialize based on URL params
+  useEffect(() => {
+    const _ld_scriptEl = document.createElement('script');
+    _ld_scriptEl.src = 'https://cdn.leandata.com/js-snippet/ld-book-v2.js';
+    _ld_scriptEl.addEventListener('load', function () {
+      if (typeof window.LDBookItV2 === 'undefined') return;
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('aliId')) {
+        window.LDBookItV2.initialize(
+          '00DE0000000bt64MAA',
+          'Demo Request - MSP Test',
+          'LD_BookIt_Log_ID__c'
+        );
+        window.LDBookItV2.submit();
+      } else {
+        window.LDBookItV2.initialize(
+          '00DE0000000bt64MAA',
+          'Demo Request - MSP Test',
+          'LD_BookIt_Log_ID__c'
+        );
+        window.LDBookItV2.setFormProvider('marketo');
+      }
+    });
+    document.body.appendChild(_ld_scriptEl);
+    return () => {
+      _ld_scriptEl.remove();
+    };
+  }, []);
+
   // useEffect(() => {
   //   const tl = gsap.timeline({});
   //   gsap.set(optionRefs.current[0], { height: "auto" });

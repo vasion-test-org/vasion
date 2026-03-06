@@ -17,13 +17,7 @@ const GTMPerformanceMonitor = () => {
       const observer = new PerformanceObserver((list) => {
         list.getEntries().forEach((entry) => {
           if (entry.name.includes('googletagmanager.com')) {
-            console.log(`GTM Script Load Time: ${entry.duration}ms`);
-
-            // Warn if GTM takes too long
             if (entry.duration > 100) {
-              console.warn('GTM script loading is slow, consider further optimization');
-
-              // Send performance data to analytics if available
               if (window.gtag) {
                 window.gtag('event', 'gtm_performance_warning', {
                   event_category: 'Performance',
@@ -40,7 +34,6 @@ const GTMPerformanceMonitor = () => {
         observer.observe({ entryTypes: ['resource'] });
         performanceObserver = observer;
       } catch (error) {
-        console.log('Performance Observer not supported');
       }
     };
 
@@ -57,20 +50,11 @@ const GTMPerformanceMonitor = () => {
               const contentLength = response.headers.get('content-length');
               if (contentLength) {
                 totalSize += parseInt(contentLength);
-                console.log(`GTM Script Size: ${contentLength} bytes`);
               }
             })
-            .catch((error) => {
-              console.log('Could not fetch GTM script size');
-            })
+            .catch(() => {})
             .finally(() => {
               completedRequests++;
-              if (completedRequests === gtmScripts.length) {
-                console.log(`Total GTM Container Size: ${totalSize} bytes`);
-                if (totalSize > 200000) {
-                  console.warn('GTM container size is large, consider optimization');
-                }
-              }
             });
         }
       });
@@ -84,13 +68,6 @@ const GTMPerformanceMonitor = () => {
 
         window.dataLayer.push = function (...args) {
           pushCount++;
-          console.log(`DataLayer push #${pushCount}:`, args);
-
-          // Warn if too many pushes
-          if (pushCount > 50) {
-            console.warn('High number of dataLayer pushes detected');
-          }
-
           return originalDataLayerPush.apply(this, args);
         };
       }

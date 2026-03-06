@@ -3,6 +3,63 @@
 import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 
+
+// ─── MSP Date Filter ─────────────────────────────────────────────────────────
+
+const MSP_MONTH_NAMES: Record<string, number> = {
+  january: 1, february: 2, march: 3, april: 4, may: 5, june: 6,
+  july: 7, august: 8, september: 9, october: 10, november: 11, december: 12,
+};
+
+function parseMspOptionDate(str: string): { month: number; day: number; year: number } | null {
+  if (!str) return null;
+  const slashMatch = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (slashMatch) {
+    return { month: +slashMatch[1], day: +slashMatch[2], year: +slashMatch[3] };
+  }
+  const textMatch = str.match(/\b([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})\b/);
+  if (textMatch) {
+    const month = MSP_MONTH_NAMES[textMatch[1].toLowerCase()];
+    if (month) {
+      return { month, day: +textMatch[2], year: +textMatch[3] };
+    }
+  }
+  return null;
+}
+
+function filterPastDemoDates(): void {
+  const selectEl: HTMLSelectElement | null =
+    (document.getElementById('mSPGroupDemoDate') as HTMLSelectElement | null) ??
+    (() => {
+      const mktoForm = document.querySelector('.mktoForm');
+      if (!mktoForm) return null;
+      for (const sel of mktoForm.querySelectorAll('select')) {
+        const s = sel as HTMLSelectElement;
+        for (const opt of s.options) {
+          if (opt.value && /^\d{1,2}\/\d{1,2}\/\d{4}/.test(opt.value)) return s;
+        }
+      }
+      return null;
+    })();
+
+  if (!selectEl) return;
+
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+  for (let i = selectEl.options.length - 1; i >= 0; i--) {
+    const opt = selectEl.options[i];
+    const parsed = parseMspOptionDate(opt.value) || parseMspOptionDate(opt.text);
+    if (!parsed) continue;
+    const { month, day, year } = parsed;
+    if (isNaN(month) || isNaN(day) || isNaN(year)) continue;
+    const optionDateStr = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    if (optionDateStr < todayStr) {
+      selectEl.remove(i);
+    }
+  }
+}
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 interface UTMData {
@@ -199,6 +256,20 @@ function FormTrackingComponent() {
       if (window.MktoForms2) {
         window.MktoForms2.whenReady((form: any) => {
           populateMarketoFields(form);
+
+          // Filter past MSP demo dates on initial load and whenever the form changes
+          // (the date field is conditional and only appears after user interaction)
+          setTimeout(filterPastDemoDates, 200);
+          setTimeout(filterPastDemoDates, 800);
+          const formEl: HTMLElement | null = form.getFormElem?.()?.[0] ?? null;
+          if (formEl) {
+            let debounceTimer: ReturnType<typeof setTimeout>;
+            const observer = new MutationObserver(() => {
+              clearTimeout(debounceTimer);
+              debounceTimer = setTimeout(filterPastDemoDates, 300);
+            });
+            observer.observe(formEl, { subtree: true, attributes: true, childList: true });
+          }
         });
       } else {
         setTimeout(() => registerFieldPopulation(attempts + 1), 300);

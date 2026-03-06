@@ -19,8 +19,6 @@ const PerformanceMonitor = () => {
         });
       }
 
-      // Log to console for debugging
-      console.log('Web Vital:', metric);
     };
 
     // Import and initialize web-vitals
@@ -32,21 +30,12 @@ const PerformanceMonitor = () => {
         getLCP(reportWebVitals);
         getTTFB(reportWebVitals);
       })
-      .catch((error) => {
-        console.warn('Failed to load web-vitals:', error);
-      });
+      .catch(() => {});
 
     // Monitor resource loading performance
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
         if (entry.entryType === 'navigation') {
-          const navTiming = entry;
-          console.log('Navigation timing:', {
-            domContentLoaded:
-              navTiming.domContentLoadedEventEnd - navTiming.domContentLoadedEventStart,
-            loadComplete: navTiming.loadEventEnd - navTiming.loadEventStart,
-            totalTime: navTiming.loadEventEnd - navTiming.fetchStart,
-          });
         }
       }
     });

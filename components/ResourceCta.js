@@ -11,7 +11,6 @@ import useMedia from '@/functions/useMedia';
 import media from '@/styles/media';
 
 const ResourceCta = ({ blok }) => {
-  console.log(blok);
   const themes = useAvailableThemes();
   const selectedTheme = themes[blok.theme] || themes.default;
 
